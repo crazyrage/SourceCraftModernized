@@ -9,11 +9,11 @@
 #define PLUGIN_VERSION "1.2"
 #define MAX_ENTITIES 2097152
 
-new Handle:g_hEnabled;
+Handle g_hEnabled;
 
-new g_iArrow[MAX_ENTITIES] = -1;
+int g_iArrow[MAX_ENTITIES] = -1;
 
-public Plugin:myinfo = {
+public Plugin myinfo = {
     name = "[TF2] Burning Arrow Light",
     author = "Leonardo", // based on Mecha the Slag's Ignite Light
     description = "Adds dynamic lighting to a burning arrows",
@@ -23,7 +23,7 @@ public Plugin:myinfo = {
 
 public OnPluginStart()
 {
-	decl String:strModName[32];
+	char strModName[32];
 	GetGameFolderName(strModName, sizeof(strModName));
 	if(!StrEqual(strModName, "tf"))
 		SetFailState("This plugin is only for Team Fortress 2.");
@@ -33,11 +33,11 @@ public OnPluginStart()
 
 public OnMapStart()
 {
-	for(new iEntity = (MaxClients+1); iEntity < MAX_ENTITIES; iEntity++)
+	for(int iEntity= (MaxClients+1); iEntity < MAX_ENTITIES; iEntity++)
 		g_iArrow[iEntity] = -1;
 }
 
-public OnEntityCreated(iEntity, const String:sClassName[])
+public OnEntityCreated(iEntity, const char[] sClassName)
 {
 	if(g_hEnabled)
 		if(StrEqual("tf_projectile_arrow", sClassName))
@@ -45,15 +45,15 @@ public OnEntityCreated(iEntity, const String:sClassName[])
 				CreateTimer(0.05, Timer_EntitySpawned, EntIndexToEntRef(iEntity));
 }
 
-public Action:Timer_EntitySpawned(Handle:hTimer, any:iEntRef)
+public Action Timer_EntitySpawned(Handle hTimer, any:iEntRef)
 {
-	new iEntity = EntRefToEntIndex(iEntRef);
+	int iEntity = EntRefToEntIndex(iEntRef);
 	if(IsValidEntity(iEntity))
 	{
-		new bool:bBurning = bool:GetEntProp(iEntity, Prop_Send, "m_bArrowAlight");
+		bool bBurning = bool GetEntProp(iEntity, Prop_Send, "m_bArrowAlight");
 		if(bBurning)
 		{
-			new iLightEntity = CreateLightEntity(iEntity);
+			int iLightEntity = CreateLightEntity(iEntity);
 			if(iLightEntity > 0)
 				g_iArrow[iEntity] = EntIndexToEntRef(iLightEntity);
 		}
@@ -66,7 +66,7 @@ public OnEntityDestroyed(iEntity)
 	if (iEntity > 0 && iEntity < sizeof(g_iArrow) &&
 	    g_iArrow[iEntity] != -1)
 	{
-		new iLightEntity = EntRefToEntIndex(g_iArrow[iEntity]);
+		int iLightEntity = EntRefToEntIndex(g_iArrow[iEntity]);
 		if (iLightEntity > 0)
 			RemoveEdict(iLightEntity);
 		g_iArrow[iEntity] = -1;
@@ -81,7 +81,7 @@ stock _:CreateLightEntity(iEntity)
 	if (!IsValidEdict(iEntity))
 		return -1;
 	
-	new iLightEntity = CreateEntityByName("light_dynamic");
+	int iLightEntity = CreateEntityByName("light_dynamic");
 	if (IsValidEntity(iLightEntity))
 	{
 		DispatchKeyValue(iLightEntity, "inner_cone", "0");
@@ -94,11 +94,11 @@ stock _:CreateLightEntity(iEntity)
 		DispatchKeyValue(iLightEntity, "style", "5");
 		DispatchSpawn(iLightEntity);
 		
-		decl Float:fPos[3];
-		decl Float:fAngle[3];
-		decl Float:fAngle2[3];
-		decl Float:fForward[3];
-		decl Float:fOrigin[3];
+		decl float fPos[3];
+		decl float fAngle[3];
+		decl float fAngle2[3];
+		decl float fForward[3];
+		decl float fOrigin[3];
 		GetEntPropVector(iEntity, Prop_Send, "m_vecOrigin", fPos);
 		GetEntPropVector(iEntity, Prop_Send, "m_angRotation", fAngle);
 		GetEntPropVector(iEntity, Prop_Send, "m_angRotation", fAngle2);
@@ -113,7 +113,7 @@ stock _:CreateLightEntity(iEntity)
 		fAngle[0] += 90.0;
 		TeleportEntity(iLightEntity, fOrigin, fAngle, NULL_VECTOR);
 
-		decl String:strName[32];
+		char strName[32];
 		Format(strName, sizeof(strName), "target%i", iEntity);
 		DispatchKeyValue(iEntity, "targetname", strName);
 				
@@ -126,14 +126,14 @@ stock _:CreateLightEntity(iEntity)
 }
 
 #if !defined _entlimit_included
-stock bool:IsEntLimitReached(warn=20, critical=16, client=0, const String:message[]="entity not created")
+stock bool IsEntLimitReached(warn=20, critical=16, client=0, const char[] message="entity not created")
 	return EntitiesAvailable(warn, critical, client, message) < warn;
 
-stock _:EntitiesAvailable(warn=20, critical=16, client=0, const String:message[]="entity not created")
+stock _:EntitiesAvailable(warn=20, critical=16, client=0, const char[] message="entity not created")
 {
-	new max = GetMaxEntities();
-	new count = GetEntityCount();
-	new remaining = max - count;
+	int max = GetMaxEntities();
+	int count = GetEntityCount();
+	int remaining = max - count;
 	if(remaining <= critical)
 	{
 		PrintToServer("Warning: Entity limit is nearly reached! Please switch or reload the map!");

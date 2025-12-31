@@ -16,4 +16,4 @@
 #define PlasmaHaloSprite()      PrepareModel(g_plasmaHaloModel, g_plasmaHaloSprite)
 
 stock g_plasmaHaloSprite;
-stock const String:g_plasmaHaloModel[] = "materials/sprites/plasmahalo.vmt";
+static const char g_plasmaHaloModel[] = "materials/sprites/plasmahalo.vmt";

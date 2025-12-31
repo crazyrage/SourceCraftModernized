@@ -134,7 +134,7 @@ public int OnSourceCraftReady()
 
     cloakID   = AddUpgrade(raceID, "distortion", .cost_crystals=30);
 
-    cfgAllowInvisibility = bool:GetConfigNum("allow_invisibility", true);
+    cfgAllowInvisibility = bool GetConfigNum("allow_invisibility", true);
     if (!cfgAllowInvisibility)
     {
         SetUpgradeDisabled(raceID, cloakID, true);
@@ -173,9 +173,9 @@ public int OnSourceCraftReady()
     GetConfigFloatArray("shields_amount", g_InitialShields, sizeof(g_InitialShields),
                         g_InitialShields, raceID, shieldsID);
 
-    for (new level=0; level < sizeof(g_ShieldsPercent); level++)
+    for(int level=0; level < sizeof(g_ShieldsPercent); level++)
     {
-        decl String:key[32];
+        char key[32];
         Format(key, sizeof(key), "shields_percent_level_%d", level);
         GetConfigFloatArray(key, g_ShieldsPercent[level], sizeof(g_ShieldsPercent[]),
                             g_ShieldsPercent[level], raceID, shieldsID);
@@ -200,7 +200,7 @@ public int OnSourceCraftReady()
                         g_MindControlRange, raceID, controlID);
 }
 
-public void OnLibraryAdded(const char [] name)
+public void OnLibraryAdded(const char[] [] name)
 {
     if (StrEqual(name, "rollermine"))
         IsRollermineAvailable(true);
@@ -210,7 +210,7 @@ public void OnLibraryAdded(const char [] name)
         IsSidewinderAvailable(true);
 }
 
-public void OnLibraryRemoved(const char [] name)
+public void OnLibraryRemoved(const char[] [] name)
 {
     if (StrEqual(name, "rollermine"))
         m_RollermineAvailable = false;
@@ -277,7 +277,7 @@ public Action OnRaceSelected(int client, int oldrace, int newrace)
     {
         m_ScarabAttackTime[client] = 0.0;
 
-        new shields_level = GetUpgradeLevel(client,raceID,shieldsID);
+        int shields_level = GetUpgradeLevel(client,raceID,shieldsID);
         SetupShields(client, shields_level, g_InitialShields, g_ShieldsPercent);
 
         if (IsValidClientAlive(client))
@@ -392,7 +392,7 @@ public int OnUltimateCommand(int client, int race, bool pressed, int arg)
                         {
                             PrepareAndEmitSoundToClient(client,deniedWav);
 
-                            decl String:upgradeName[64];
+                            char upgradeName[64];
                             GetUpgradeName(raceID, mineID, upgradeName, sizeof(upgradeName), client);
                             DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
                         }
@@ -413,7 +413,7 @@ public int OnUltimateCommand(int client, int race, bool pressed, int arg)
                     }
                     else
                     {
-                        decl String:upgradeName[64];
+                        char upgradeName[64];
                         GetUpgradeName(raceID, mineID, upgradeName, sizeof(upgradeName), client);
                         PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
                     }
@@ -430,7 +430,7 @@ public int OnUltimateCommand(int client, int race, bool pressed, int arg)
                         {
                             PrepareAndEmitSoundToClient(client,deniedWav);
 
-                            decl String:upgradeName[64];
+                            char upgradeName[64];
                             GetUpgradeName(raceID, mineID, upgradeName, sizeof(upgradeName), client);
                             DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
                         }
@@ -456,7 +456,7 @@ public int OnUltimateCommand(int client, int race, bool pressed, int arg)
                     }
                     else
                     {
-                        decl String:upgradeName[64];
+                        char upgradeName[64];
                         GetUpgradeName(raceID, mineID, upgradeName, sizeof(upgradeName), client);
                         PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
                     }
@@ -467,7 +467,7 @@ public int OnUltimateCommand(int client, int race, bool pressed, int arg)
                 int ult_level=GetUpgradeLevel(client,raceID,controlID);
                 if (ult_level > 0)
                 {
-                    decl String:upgradeName[64];
+                    char upgradeName[64];
                     GetUpgradeName(raceID, controlID, upgradeName, sizeof(upgradeName), client);
 
                     if (!m_MindControlAvailable)
@@ -528,7 +528,7 @@ public int OnPlayerSpawnEvent(Handle event, int client, int race)
             PrepareAndEmitSoundToAll(cloakReadyWav,client);
         }
 
-        new shields_level = GetUpgradeLevel(client,raceID,shieldsID);
+        int shields_level = GetUpgradeLevel(client,raceID,shieldsID);
         SetupShields(client, shields_level, g_InitialShields, g_ShieldsPercent);
 
         new detecting_level=GetUpgradeLevel(client,raceID,sensorID);
@@ -556,7 +556,7 @@ public Action OnPlayerHurtEvent(Handle event, int victim_index, int victim_race,
     return Plugin_Continue;
 }
 
-public Action OnPlayerAssistEvent(Handle:event, int victim_index, int victim_race,
+public Action OnPlayerAssistEvent(Handle event, int victim_index, int victim_race,
                                   int assister_index, int assister_race, int damage,
                                   int absorbed)
 {
@@ -572,7 +572,7 @@ public Action OnPlayerAssistEvent(Handle:event, int victim_index, int victim_rac
 public int OnPlayerDeathEvent(Handle event, int victim_index, int victim_race,
                               int attacker_index, int attacker_race,
                               int assister_index, int assister_race,
-                              int damage, const char [] weapon,
+                              int damage, const char[] [] weapon,
                               bool is_equipment, int customkill,
                               bool headshot, bool backstab, bool melee)
 {
@@ -591,7 +591,7 @@ public int OnPlayerDeathEvent(Handle event, int victim_index, int victim_race,
     }
 }
 
-public int EventRoundOver(Handle event, const char [] name, bool dontBroadcast)
+public int EventRoundOver(Handle event, const char[] [] name, bool dontBroadcast)
 {
     for (int index=1;index<=MaxClients;index++)
     {
@@ -700,8 +700,8 @@ public Action CloakingAndDetector(Handle timer, any userid)
 
                 int count=0;
                 int alt_count=0;
-                int[] list = new int[MaxClients+1];
-                int[] alt_list = new int[MaxClients+1];
+                int[] list = int int[MaxClients+1];
+                int[] alt_list = int int[MaxClients+1];
                 int team = GetClientTeam(client);
                 bool isSpyCloaked = TF2_IsPlayerCloaked(client);
                 for (int index=1;index<=MaxClients;index++)

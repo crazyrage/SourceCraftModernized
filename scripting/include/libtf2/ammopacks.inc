@@ -16,7 +16,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of the Ammopacks plugin.
  * @return		    	none
  */
-native ControlAmmopacks(bool:plugin_only=true);
+native ControlAmmopacks(bool plugin_only=true);
 
 /**
  * Enable Ammopacks for the player
@@ -35,7 +35,7 @@ native SetAmmopack(client,enable=3);
  * @param charge    Set to amount of metal to use for ammopack (-1=use actual metal level).
  * @return			true if a ammopack was successfully dropped
  */
-native bool:DropAmmopack(client,charge=-1);
+native bool DropAmmopack(client,charge=-1);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

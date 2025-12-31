@@ -14,7 +14,7 @@
 
 stock g_smokeSprite;
 
-stock const String:g_smokeModel[] = "materials/sprites/smoke.vmt";
+static const char g_smokeModel[] = "materials/sprites/smoke.vmt";
 
 #define SetupSmokeSprite()    SetupModel(g_smokeModel, g_smokeSprite)
 #define SmokeSprite()         PrepareModel(g_smokeModel, g_smokeSprite)

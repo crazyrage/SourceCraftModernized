@@ -10,51 +10,51 @@
 #endif
 #define plugins_included
 
-stock bool:m_ROFAvailable = false;
-stock bool:m_TNTAvailable = false;
-stock bool:m_GasAvailable = false;
-stock bool:m_NadesAvailable = false;
-stock bool:m_GravgunAvailable = false;
-stock bool:m_JetpackAvailable = false;
-stock bool:m_FireminesAvailable = false;
-stock bool:m_TripminesAvailable = false;
-stock bool:m_RollermineAvailable = false;
-stock bool:m_HGRSourceAvailable = false;
-stock bool:m_PiggybackAvailable = false;
-stock bool:m_FlamethrowerAvailable = false;
+stock bool m_ROFAvailable = false;
+stock bool m_TNTAvailable = false;
+stock bool m_GasAvailable = false;
+stock bool m_NadesAvailable = false;
+stock bool m_GravgunAvailable = false;
+stock bool m_JetpackAvailable = false;
+stock bool m_FireminesAvailable = false;
+stock bool m_TripminesAvailable = false;
+stock bool m_RollermineAvailable = false;
+stock bool m_HGRSourceAvailable = false;
+stock bool m_PiggybackAvailable = false;
+stock bool m_FlamethrowerAvailable = false;
 
-stock bool:m_DodAmmoAvailable = false;
-stock bool:m_HealthkitAvailable = false;
-stock bool:m_MedicClassAvailable = false;
+stock bool m_DodAmmoAvailable = false;
+stock bool m_HealthkitAvailable = false;
+stock bool m_MedicClassAvailable = false;
 
-stock bool:m_InfiniteAmmoAvailable = false;
-stock bool:m_PlagueInfectAvailable = false;
-stock bool:m_MindControlAvailable = false;
-stock bool:m_UberChargerAvailable = false;
-stock bool:m_BeHorsemannAvailable = false;
-stock bool:m_UberShieldAvailable = false;
-stock bool:m_SidewinderAvailable = false;
-stock bool:m_TeleporterAvailable = false;
-stock bool:m_HorsemannAvailable = false;
-stock bool:m_MonoculusAvailable = false;
-stock bool:m_WrangleyeAvailable = false;
-stock bool:m_FakeDeathAvailable = false;
-stock bool:m_InfectionAvailable = false;
-stock bool:m_AmmopacksAvailable = false;
-stock bool:m_MedipacksAvailable = false;
-stock bool:m_AmpNodeAvailable = false;
-stock bool:m_RemoteAvailable = false;
+stock bool m_InfiniteAmmoAvailable = false;
+stock bool m_PlagueInfectAvailable = false;
+stock bool m_MindControlAvailable = false;
+stock bool m_UberChargerAvailable = false;
+stock bool m_BeHorsemannAvailable = false;
+stock bool m_UberShieldAvailable = false;
+stock bool m_SidewinderAvailable = false;
+stock bool m_TeleporterAvailable = false;
+stock bool m_HorsemannAvailable = false;
+stock bool m_MonoculusAvailable = false;
+stock bool m_WrangleyeAvailable = false;
+stock bool m_FakeDeathAvailable = false;
+stock bool m_InfectionAvailable = false;
+stock bool m_AmmopacksAvailable = false;
+stock bool m_MedipacksAvailable = false;
+stock bool m_AmpNodeAvailable = false;
+stock bool m_RemoteAvailable = false;
 
 // Build and Remote are in the same plugin
 #define m_BuildAvailable m_RemoteAvailable
 #define IsBuildAvailable IsRemoteAvailable
 
-//new const String:shieldWav[]            = "sc/tvedef00.wav";    // UberShield (Defensive Matrix) sound
-stock const String:shieldStopWav[]        = "sc/tvedefstop.wav";  // UberShield stop sound
-stock const String:shieldStartWav[]       = "sc/tvedefstart.wav"; // UberShield start sound
-stock const String:shieldActiveWav[]      = "sc/tvedefloop.wav";  // UberShield active(loop) sound
+//new const char shieldWav[]            = "sc/tvedef00.wav";    // UberShield (Defensive Matrix) sound
+stock const char shieldStopWav[]        = "sc/tvedefstop.wav";  // UberShield stop sound
+stock const char shieldStartWav[]       = "sc/tvedefstart.wav"; // UberShield start sound
+stock const char shieldActiveWav[]      = "sc/tvedefloop.wav";  // UberShield active(loop) sound
 
-stock bool:IsROFAvailable(bool:force=false)
+stock bool IsROFAvailable(bool force=false)
 {
     if (!m_ROFAvailable && (force || LibraryExists("RateOfFire")))
     {
@@ -64,7 +64,7 @@ stock bool:IsROFAvailable(bool:force=false)
     return m_ROFAvailable;
 }
 
-stock bool:IsTNTAvailable(bool:force=false)
+stock bool IsTNTAvailable(bool force=false)
 {
     if (!m_TNTAvailable && (force || LibraryExists("sm_tnt")))
     {
@@ -74,7 +74,7 @@ stock bool:IsTNTAvailable(bool:force=false)
     return m_TNTAvailable;
 }
 
-stock bool:IsGasAvailable(bool:force=false)
+stock bool IsGasAvailable(bool force=false)
 {
     if (!m_GasAvailable && (force || LibraryExists("sm_gas")))
     {
@@ -84,7 +84,7 @@ stock bool:IsGasAvailable(bool:force=false)
     return m_GasAvailable;
 }
 
-stock bool:IsHGRSourceAvailable(bool:force=false)
+stock bool IsHGRSourceAvailable(bool force=false)
 {
     if (!m_HGRSourceAvailable && (force || LibraryExists("hgrsource")))
     {
@@ -94,7 +94,7 @@ stock bool:IsHGRSourceAvailable(bool:force=false)
     return m_HGRSourceAvailable;
 }
 
-stock bool:IsGravgunAvailable(bool:force=false)
+stock bool IsGravgunAvailable(bool force=false)
 {
     if (!m_GravgunAvailable && (force || LibraryExists("ztf2grab")))
     {
@@ -104,7 +104,7 @@ stock bool:IsGravgunAvailable(bool:force=false)
     return m_GravgunAvailable;
 }
 
-stock bool:IsNadesAvailable(bool:force=false)
+stock bool IsNadesAvailable(bool force=false)
 {
     if (!m_NadesAvailable && (force || LibraryExists("ztf2nades")))
     {
@@ -114,7 +114,7 @@ stock bool:IsNadesAvailable(bool:force=false)
     return m_NadesAvailable;
 }
 
-stock bool:IsFireminesAvailable(bool:force=false)
+stock bool IsFireminesAvailable(bool force=false)
 {
     if (!m_FireminesAvailable && (force || LibraryExists("firemines")))
     {
@@ -124,7 +124,7 @@ stock bool:IsFireminesAvailable(bool:force=false)
     return m_FireminesAvailable;
 }
 
-stock bool:IsTripminesAvailable(bool:force=false)
+stock bool IsTripminesAvailable(bool force=false)
 {
     if (!m_TripminesAvailable && (force || LibraryExists("tripmines")))
     {
@@ -135,7 +135,7 @@ stock bool:IsTripminesAvailable(bool:force=false)
 }
 
 
-stock bool:IsRollermineAvailable(bool:force=false)
+stock bool IsRollermineAvailable(bool force=false)
 {
     if (!m_RollermineAvailable && (force || LibraryExists("rollermine")))
     {
@@ -145,7 +145,7 @@ stock bool:IsRollermineAvailable(bool:force=false)
     return m_RollermineAvailable;
 }
 
-stock bool:IsJetpackAvailable(bool:force=false)
+stock bool IsJetpackAvailable(bool force=false)
 {
     if (!m_JetpackAvailable && (force || LibraryExists("jetpack")))
     {
@@ -157,7 +157,7 @@ stock bool:IsJetpackAvailable(bool:force=false)
     return m_JetpackAvailable;
 }
 
-stock bool:IsPiggybackAvailable(bool:force=false)
+stock bool IsPiggybackAvailable(bool force=false)
 {
     if (!m_PiggybackAvailable && 
         (force || LibraryExists("piggyback")))
@@ -168,7 +168,7 @@ stock bool:IsPiggybackAvailable(bool:force=false)
     return m_PiggybackAvailable;
 }
 
-stock bool:IsFlamethrowerAvailable(bool:force=false)
+stock bool IsFlamethrowerAvailable(bool force=false)
 {
     if (!m_FlamethrowerAvailable && 
         (force || LibraryExists("sm_flame")))
@@ -179,7 +179,7 @@ stock bool:IsFlamethrowerAvailable(bool:force=false)
     return m_FlamethrowerAvailable;
 }
 
-stock bool:IsDodAmmoAvailable(bool:force=false)
+stock bool IsDodAmmoAvailable(bool force=false)
 {
     if (!m_DodAmmoAvailable && GetGameType() == dod && 
         (force || LibraryExists("dodammo")))
@@ -190,7 +190,7 @@ stock bool:IsDodAmmoAvailable(bool:force=false)
     return m_DodAmmoAvailable;
 }
 
-stock bool:IsHealthkitAvailable(bool:force=false)
+stock bool IsHealthkitAvailable(bool force=false)
 {
     if (!m_HealthkitAvailable && GetGameType() == dod && 
         (force || LibraryExists("dodammo")))
@@ -201,7 +201,7 @@ stock bool:IsHealthkitAvailable(bool:force=false)
     return m_HealthkitAvailable;
 }
 
-stock bool:IsMedicClassAvailable(bool:force=false)
+stock bool IsMedicClassAvailable(bool force=false)
 {
     if (!m_MedicClassAvailable && GetGameType() == dod && 
         (force || LibraryExists("medic_class")))
@@ -212,7 +212,7 @@ stock bool:IsMedicClassAvailable(bool:force=false)
     return m_MedicClassAvailable;
 }
 
-stock bool:IsPlagueInfectAvailable(bool:force=false)
+stock bool IsPlagueInfectAvailable(bool force=false)
 {
     if (!m_PlagueInfectAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("PlagueInfect")))
@@ -222,7 +222,7 @@ stock bool:IsPlagueInfectAvailable(bool:force=false)
     return m_PlagueInfectAvailable;
 }
 
-stock bool:IsMindControlAvailable(bool:force=false)
+stock bool IsMindControlAvailable(bool force=false)
 {
     if (!m_MindControlAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("MindControl")))
@@ -232,7 +232,7 @@ stock bool:IsMindControlAvailable(bool:force=false)
     return m_MindControlAvailable;
 }
 
-stock bool:IsInfiniteAmmoAvailable(bool:force=false)
+stock bool IsInfiniteAmmoAvailable(bool force=false)
 {
     if (!m_InfiniteAmmoAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("aia")))
@@ -243,7 +243,7 @@ stock bool:IsInfiniteAmmoAvailable(bool:force=false)
     return m_InfiniteAmmoAvailable;
 }
 
-stock bool:IsSidewinderAvailable(bool:force=false)
+stock bool IsSidewinderAvailable(bool force=false)
 {
     if (!m_SidewinderAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("sidewinder")))
@@ -254,7 +254,7 @@ stock bool:IsSidewinderAvailable(bool:force=false)
     return m_SidewinderAvailable;
 }
 
-stock bool:IsUberChargerAvailable(bool:force=false)
+stock bool IsUberChargerAvailable(bool force=false)
 {
     if (!m_UberChargerAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("ubercharger")))
@@ -265,7 +265,7 @@ stock bool:IsUberChargerAvailable(bool:force=false)
     return m_UberChargerAvailable;
 }
 
-stock bool:IsRemoteAvailable(bool:force=false)
+stock bool IsRemoteAvailable(bool force=false)
 {
     if (!m_RemoteAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("remote")))
@@ -277,7 +277,7 @@ stock bool:IsRemoteAvailable(bool:force=false)
     return m_RemoteAvailable;
 }
 
-stock bool:IsAmpNodeAvailable(bool:force=false)
+stock bool IsAmpNodeAvailable(bool force=false)
 {
     if (!m_AmpNodeAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("amp_node")))
@@ -288,7 +288,7 @@ stock bool:IsAmpNodeAvailable(bool:force=false)
     return m_AmpNodeAvailable;
 }
 
-stock bool:IsUberShieldAvailable(bool:force=false)
+stock bool IsUberShieldAvailable(bool force=false)
 {
     if (!m_UberShieldAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("ubershield")))
@@ -301,7 +301,7 @@ stock bool:IsUberShieldAvailable(bool:force=false)
     return m_UberShieldAvailable;
 }
 
-stock bool:IsAmmopacksAvailable(bool:force=false)
+stock bool IsAmmopacksAvailable(bool force=false)
 {
     if (!m_AmmopacksAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("ammopacks")))
@@ -312,7 +312,7 @@ stock bool:IsAmmopacksAvailable(bool:force=false)
     return m_AmmopacksAvailable;
 }
 
-stock bool:IsMedipacksAvailable(bool:force=false)
+stock bool IsMedipacksAvailable(bool force=false)
 {
     if (!m_MedipacksAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("medipacks")))
@@ -323,7 +323,7 @@ stock bool:IsMedipacksAvailable(bool:force=false)
     return m_MedipacksAvailable;
 }
 
-stock bool:IsTeleporterAvailable(bool:force=false)
+stock bool IsTeleporterAvailable(bool force=false)
 {
     if (!m_TeleporterAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("teleporter")))
@@ -334,7 +334,7 @@ stock bool:IsTeleporterAvailable(bool:force=false)
     return m_TeleporterAvailable;
 }
 
-stock bool:IsFakeDeathAvailable(bool:force=false)
+stock bool IsFakeDeathAvailable(bool force=false)
 {
     if (!m_FakeDeathAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("FakeDeath")))
@@ -345,7 +345,7 @@ stock bool:IsFakeDeathAvailable(bool:force=false)
     return m_FakeDeathAvailable;
 }
 
-stock bool:IsInfectionAvailable(bool:force=false)
+stock bool IsInfectionAvailable(bool force=false)
 {
     if (!m_InfectionAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("MedicInfect")))
@@ -357,7 +357,7 @@ stock bool:IsInfectionAvailable(bool:force=false)
     return m_InfectionAvailable;
 }
 
-stock bool:IsHorsemannAvailable(bool:force=false)
+stock bool IsHorsemannAvailable(bool force=false)
 {
     if (!m_HorsemannAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("horsemann")))
@@ -368,7 +368,7 @@ stock bool:IsHorsemannAvailable(bool:force=false)
     return m_HorsemannAvailable;
 }
 
-stock bool:IsMonoculusAvailable(bool:force=false)
+stock bool IsMonoculusAvailable(bool force=false)
 {
     if (!m_MonoculusAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("MonoSpawn")))
@@ -379,7 +379,7 @@ stock bool:IsMonoculusAvailable(bool:force=false)
     return m_MonoculusAvailable;
 }
 
-stock bool:IsBeHorsemannAvailable(bool:force=false)
+stock bool IsBeHorsemannAvailable(bool force=false)
 {
     if (!m_BeHorsemannAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("behorsemann")))
@@ -390,7 +390,7 @@ stock bool:IsBeHorsemannAvailable(bool:force=false)
     return m_BeHorsemannAvailable;
 }
 
-stock bool:IsWrangleyeAvailable(bool:force=false)
+stock bool IsWrangleyeAvailable(bool force=false)
 {
     if (!m_WrangleyeAvailable && GetGameType() == tf2 && 
         (force || LibraryExists("wrangleye")))

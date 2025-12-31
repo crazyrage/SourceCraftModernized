@@ -16,7 +16,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of the Gas plugin.
  * @return		    	none
  */
-native ControlGas(bool:plugin_only=true);
+native ControlGas(bool plugin_only=true);
 
 /**
  * Give a player access to Gas attacks
@@ -45,7 +45,7 @@ native TakeGas(client);
  * @param enable    Set to true to enable gas attacks, false to disable them
  * @return			none
  */
-native EnableGas(client,bool:enable=false);
+native EnableGas(client,bool enable=false);
 
 /**
  * Returns how many gas attacks a player has (or is allowed).
@@ -54,7 +54,7 @@ native EnableGas(client,bool:enable=false);
  * @param allowed   Set to  true to return number allowed, otherwise
  * @return			returns number of remaining gas attacks.
  */
-native HasGas(client,bool:allowed=false);
+native HasGas(client,bool allowed=false);
 
 /**
  * Returns if gas is enabled or disabled

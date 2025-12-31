@@ -36,8 +36,8 @@
  * @param cost_crystals:    Amount of crystals required to purchase Bunker for 1 map. (default is 10)
  * @return                  The return value will be the upgrade index or -1 if there was a problem.
  */
-stock AddBunkerUpgrade(raceId, category=2, required_level=8, Float:energy=30.0,
-                       Float:cooldown=5.0, cost_crystals=10)
+stock AddBunkerUpgrade(int raceId, int category=2, int required_level=8, float energy=30.0,
+                       float cooldown=5.0, int cost_crystals=10)
 {
     LoadTranslations("sc.bunker.phrases.txt");
 
@@ -53,7 +53,7 @@ stock AddBunkerUpgrade(raceId, category=2, required_level=8, Float:energy=30.0,
  * @param armor:    The amount of additional armor provided by the Bunker.
  * @return			none
  */
-stock EnterBunker(client, armor, raceId, upgradeId)
+stock EnterBunker(int client, int armor, int raceId, int upgradeId)
 {
     if (InBunker(client))
     {

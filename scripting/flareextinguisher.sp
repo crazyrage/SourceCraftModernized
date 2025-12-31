@@ -32,10 +32,10 @@
 
 #define VERSION		    "1.2"
 
-new Handle:g_cvars[CVAR_NUM_CVARS];
-new Handle:g_timer = INVALID_HANDLE;
+Handle g_cvars[CVAR_NUM_CVARS];
+Handle g_timer = null;
 
-public Plugin:myinfo = {
+public Plugin myinfo = {
     name = "Flare Extinguisher",
     author = "Ryan \"FLOOR_MASTER\" Mannion",
     description = "Periodically remove flares from the game",
@@ -62,25 +62,25 @@ public OnPluginStart() {
 }
 
 public OnConfigsExecuted() {
-    new Float:time = GetConVarFloat(g_cvars[CVAR_RATE]);
-    if (g_timer == INVALID_HANDLE && time > 0.0) {
+    float time = GetConVarFloat(g_cvars[CVAR_RATE]);
+    if (g_timer == null && time > 0.0) {
 	g_timer = CreateTimer(time, Timer_ExtinguishFlares, _, TIMER_REPEAT);
     }
 }
 
 public OnPluginEnd() {
-    if (g_timer != INVALID_HANDLE) {
+    if (g_timer != null) {
 	CloseHandle(g_timer);
-	g_timer = INVALID_HANDLE;
+	g_timer = null;
     }
 }
 
-public OnRateChange(Handle:cvar, const String:oldVal[], const String:newVal[]) {
-    new Float:time = StringToFloat(newVal);
+public OnRateChange(Handle cvar, const char[] oldVal, const char[] newVal) {
+    float time = StringToFloat(newVal);
 
-    if (g_timer != INVALID_HANDLE) {
+    if (g_timer != null) {
 	CloseHandle(g_timer);
-	g_timer = INVALID_HANDLE;
+	g_timer = null;
     }
 
     if (time > 0.0) {
@@ -89,32 +89,32 @@ public OnRateChange(Handle:cvar, const String:oldVal[], const String:newVal[]) {
     }
 }
 
-public Action:Command_ExtinguishFlares(client, args) {
+public Action Command_ExtinguishFlares(int client, int args) {
     ExtinguishFlares();
     ReplyToCommand(client, "[FE] Extinguishing flares");
 }
 
-public Action:Timer_ExtinguishFlares(Handle:timer) {
+public Action Timer_ExtinguishFlares(Handle timer) {
     ExtinguishFlares();
 }
 
 stock ExtinguishFlares() {
-    new ent = -1;
+    int ent = -1;
 
-    new Handle:flares = CreateArray();
+    Handle flares = CreateArray();
     while ((ent = FindEntityByClassname(ent, "tf_projectile_flare")) >= 0) {
 	PushArrayCell(flares, ent);
     }
     CreateTimer(2.0, Timer_ExtinguishFlares2, flares);
 }
 
-public Action:Timer_ExtinguishFlares2(Handle:timer, Handle:flares) {
-    new size = GetArraySize(flares);
-    decl String:class[32];
-    new edict = 0;
-    new count = 0;
+public Action Timer_ExtinguishFlares2(Handle timer, Handle flares) {
+    int size = GetArraySize(flares);
+    char class[32];
+    int edict = 0;
+    int count = 0;
 
-    for (new i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
 	edict = GetArrayCell(flares, i);
 
 	if (IsValidEdict(edict)) {

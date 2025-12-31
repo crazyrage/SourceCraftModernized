@@ -16,4 +16,4 @@
 #define LaserSprite()      PrepareModel(g_laserModel, g_laserSprite)
 
 stock g_laserSprite;
-stock const String:g_laserModel[] = "materials/models/props_lab/airlock_laser.vmt";
+static const char g_laserModel[] = "materials/models/props_lab/airlock_laser.vmt";

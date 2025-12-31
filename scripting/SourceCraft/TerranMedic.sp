@@ -42,44 +42,44 @@
 #include "effect/HaloSprite"
 #include "effect/SendEffects"
 
-//new const String:healWav[]    = "sc/tmedheal.wav";
-new const String:restWav[]      = "sc/tmedrest.mp3";
-new const String:flareWav[]     = "sc/tmedflsh.mp3";
+//static const charhealWav[]    = "sc/tmedheal.wav";
+static const charrestWav[]      = "sc/tmedrest.mp3";
+static const charflareWav[]     = "sc/tmedflsh.mp3";
 
-new const String:g_ArmorName[]  = "Armor";
-new Float:g_InitialArmor[]      = { 0.0, 0.10, 0.20, 0.30, 0.40 };
-new Float:g_ArmorPercent[][2]   = { {0.00, 0.00},
+static const char[] g_ArmorName[]  = "Armor";
+float g_InitialArmor[]      = { 0.0, 0.10, 0.20, 0.30, 0.40 };
+floatg_ArmorPercent[][2]   = { {0.00, 0.00},
                                    {0.00, 0.10},
                                    {0.00, 0.30},
                                    {0.10, 0.40},
                                    {0.20, 0.50} };
 
-new g_JetpackFuel[]             = { 0, 40, 50, 70, 90 };
-new Float:g_JetpackRefuelTime[] = { 0.0, 45.0, 35.0, 25.0, 15.0 };
+	int g_JetpackFuel[]             = { 0, 40, 50, 70, 90 };
+floatg_JetpackRefuelTime[] = { 0.0, 45.0, 35.0, 25.0, 15.0 };
 
-new Float:g_BunkerPercent[]     = { 0.00, 0.10, 0.20, 0.30, 0.40 };
+floatg_BunkerPercent[]     = { 0.00, 0.10, 0.20, 0.30, 0.40 };
 
-new Float:g_FlareRange[]        = { 0.0, 150.0, 300.0, 450.0, 600.0 };
+floatg_FlareRange[]        = { 0.0, 150.0, 300.0, 450.0, 600.0 };
 
-new g_MedipackCharge[]          = { 0, 0, 10, 25, 50 };
+	int g_MedipackCharge[]          = { 0, 0, 10, 25, 50 };
 
-new g_RegenerationAmount[]      = { 0, 1, 2, 3, 4 };
+	int g_RegenerationAmount[]      = { 0, 1, 2, 3, 4 };
 
-new g_HealingAmount[]           = { 0, 1, 2, 3, 4 };
-new Float:g_HealingRange[]      = { 0.0, 150.0, 300.0, 450.0, 600.0 };
+	int g_HealingAmount[]           = { 0, 1, 2, 3, 4 };
+floatg_HealingRange[]      = { 0.0, 150.0, 300.0, 450.0, 600.0 };
 
-new Float:g_RestoreRange[]      = { 0.0, 150.0, 300.0, 450.0, 600.0 };
+floatg_RestoreRange[]      = { 0.0, 150.0, 300.0, 450.0, 600.0 };
 
-new g_MedicHeal[]               = { 35,  45,  50,  55,   60   };
-new g_MedicNades[]              = { 0,   1,   2,   2,    2    };
-new g_MedicWeapon[]             = { 0,   0,   0,   1,    1    };
-new Float:g_MedicSpeed[]        = { 1.0, 1.1, 1.1, 1.15, 1.15 };
-new Float:g_MedicWeight[]       = { 1.0, 1.0, 1.1, 1.1,  1.15 };
+	int g_MedicHeal[]               = { 35,  45,  50,  55,   60   };
+	int g_MedicNades[]              = { 0,   1,   2,   2,    2    };
+	int g_MedicWeapon[]             = { 0,   0,   0,   1,    1    };
+floatg_MedicSpeed[]        = { 1.0, 1.1, 1.1, 1.15, 1.15 };
+floatg_MedicWeight[]       = { 1.0, 1.0, 1.1, 1.1,  1.15 };
 
 new raceID, regenerationID, healingID, chargeID, armorID, medipackID, infectID;
 new restoreID, flareID, jetpackID, combatID, medicID, bunkerID;
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "SourceCraft Race - Terran Medic",
     author = "-=|JFH|=-Naris",
@@ -88,7 +88,7 @@ public Plugin:myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.restore.phrases.txt");
     LoadTranslations("sc.common.phrases.txt");
@@ -207,9 +207,9 @@ public OnSourceCraftReady()
     GetConfigFloatArray("armor_amount", g_InitialArmor, sizeof(g_InitialArmor),
                         g_InitialArmor, raceID, armorID);
 
-    for (new level=0; level < sizeof(g_ArmorPercent); level++)
+    for (intlevel=0; level < sizeof(g_ArmorPercent); level++)
     {
-        decl String:key[32];
+        charkey[32];
         Format(key, sizeof(key), "armor_percent_level_%d", level);
         GetConfigFloatArray(key, g_ArmorPercent[level], sizeof(g_ArmorPercent[]),
                             g_ArmorPercent[level], raceID, armorID);
@@ -263,7 +263,7 @@ public OnSourceCraftReady()
     }
 }
 
-public OnLibraryAdded(const String:name[])
+public void OnLibraryAdded(const char[] name)
 {
     if (StrEqual(name, "PlagueInfect"))
         IsPlagueInfectAvailable(true);
@@ -281,7 +281,7 @@ public OnLibraryAdded(const String:name[])
         IsJetpackAvailable(true);
 }
 
-public OnLibraryRemoved(const String:name[])
+public void OnLibraryRemoved(const char[] name)
 {
     if (StrEqual(name, "PlagueInfect"))
         m_PlagueInfectAvailable = false;
@@ -299,7 +299,7 @@ public OnLibraryRemoved(const String:name[])
         m_JetpackAvailable = false;
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupLightning();
     SetupBeamSprite();
@@ -313,17 +313,17 @@ public OnMapStart()
     //SetupSound(healWav);
 }
 
-public OnMapEnd()
+public void OnMapEnd()
 {
     ResetAllClientTimers();
 }
 
-public OnClientDisconnect(client)
+public void OnClientDisconnect(client)
 {
     KillClientTimer(client);
 }
 
-public Action:OnRaceDeselected(client,oldrace,newrace)
+public ActionOnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
@@ -355,43 +355,43 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
         return Plugin_Continue;
 }
 
-public Action:OnRaceSelected(client,oldrace,newrace)
+public ActionOnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
-        new armor_level = GetUpgradeLevel(client,raceID,armorID);
+        intarmor_level = GetUpgradeLevel(client,raceID,armorID);
         SetupArmor(client, armor_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        new jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
+        intjetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
         SetupJetpack(client, jetpack_level);
 
-        new medipack_level = GetUpgradeLevel(client,raceID,medipackID);
+        intmedipack_level = GetUpgradeLevel(client,raceID,medipackID);
         if (medipack_level > 0)
             SetupMedipack(client, medipack_level);
 
-        new infect_level = GetUpgradeLevel(client,raceID,infectID);
+        intinfect_level = GetUpgradeLevel(client,raceID,infectID);
         if (infect_level > 0)
             SetupInfection(client, infect_level);
 
         if (GameType == dod)
         {
-            new medic_level = GetUpgradeLevel(client,raceID,medicID);
-            new combat_level = GetUpgradeLevel(client,raceID,combatID);
+            intmedic_level = GetUpgradeLevel(client,raceID,medicID);
+            intcombat_level = GetUpgradeLevel(client,raceID,combatID);
             SetupMedicClass(client, medic_level, combat_level);
         }
         else if (GameType == tf2)
         {
-            new charge_level = GetUpgradeLevel(client,raceID,chargeID);
+            intcharge_level = GetUpgradeLevel(client,raceID,chargeID);
             if (charge_level > 0)
                 SetupUberCharger(client, charge_level);
         }
 
         if (IsValidClientAlive(client))
         {
-            new restore_level=GetUpgradeLevel(client,raceID,restoreID);
-            new healing_aura_level=GetUpgradeLevel(client,raceID,healingID);
-            new regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
+            intrestore_level=GetUpgradeLevel(client,raceID,restoreID);
+            inthealing_aura_level=GetUpgradeLevel(client,raceID,healingID);
+            intregeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
             if (restore_level > 0 || healing_aura_level > 0 || regeneration_level > 0)
             {
                 CreateClientTimer(client, 2.0, Healing,
@@ -425,12 +425,12 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
         }
         else if (upgrade==medicID)
         {
-            new combat_level = GetUpgradeLevel(client,raceID,combatID);
+            intcombat_level = GetUpgradeLevel(client,raceID,combatID);
             SetupMedicClass(client, new_level, combat_level);
         }
         else if (upgrade==combatID)
         {
-            new medic_level = GetUpgradeLevel(client,raceID,medicID);
+            intmedic_level = GetUpgradeLevel(client,raceID,medicID);
             SetupMedicClass(client, medic_level, new_level);
         }
         else if (upgrade==restoreID)
@@ -478,7 +478,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
     }
 }
 
-public OnUltimateCommand(client,race,bool:pressed,arg)
+public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (race==raceID && IsValidClientAlive(client))
     {
@@ -492,27 +492,27 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                         MedicHeal(client);
                     else
                     {
-                        new flare_level=GetUpgradeLevel(client,race,flareID);
+                        intflare_level=GetUpgradeLevel(client,race,flareID);
                         if (flare_level > 0)
                             OpticFlare(client, flare_level);
                         else
                         {
-                            new restore_level = GetUpgradeLevel(client,race,restoreID);
+                            intrestore_level = GetUpgradeLevel(client,race,restoreID);
                             if (restore_level > 0)
                                 Restore(client, restore_level);
                             else
                             {
-                                new bunker_level = GetUpgradeLevel(client,race,bunkerID);
+                                intbunker_level = GetUpgradeLevel(client,race,bunkerID);
                                 if (bunker_level > 0)
                                 {
-                                    new armor = RoundToNearest(float(GetPlayerMaxHealth(client))
+                                    intarmor = RoundToNearest(float(GetPlayerMaxHealth(client))
                                               * g_BunkerPercent[bunker_level]);
 
                                     EnterBunker(client, armor, raceID, bunkerID);
                                 }
                                 else
                                 {
-                                    new medipack_level = (m_MedipacksAvailable) ? GetUpgradeLevel(client,race,medipackID) : 0;
+                                    intmedipack_level = (m_MedipacksAvailable) ? GetUpgradeLevel(client,race,medipackID) : 0;
                                     if (medipack_level > 0)
                                         DropPack(client, medipack_level);
                                 }
@@ -525,20 +525,20 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             {
                 if (pressed)
                 {
-                    new restore_level = GetUpgradeLevel(client,race,restoreID);
+                    intrestore_level = GetUpgradeLevel(client,race,restoreID);
                     if (restore_level > 0)
                         Restore(client, restore_level);
                     else
                     {
-                        new flare_level=GetUpgradeLevel(client,race,flareID);
+                        intflare_level=GetUpgradeLevel(client,race,flareID);
                         if (flare_level > 0)
                             OpticFlare(client, flare_level);
                         else
                         {
-                            new bunker_level = GetUpgradeLevel(client,race,bunkerID);
+                            intbunker_level = GetUpgradeLevel(client,race,bunkerID);
                             if (bunker_level > 0)
                             {
-                                new armor = RoundToNearest(float(GetPlayerMaxHealth(client))
+                                intarmor = RoundToNearest(float(GetPlayerMaxHealth(client))
                                           * g_BunkerPercent[bunker_level]);
 
                                 EnterBunker(client, armor, raceID, bunkerID);
@@ -553,22 +553,22 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             {
                 if (pressed)
                 {
-                    new bunker_level = GetUpgradeLevel(client,race,bunkerID);
+                    intbunker_level = GetUpgradeLevel(client,race,bunkerID);
                     if (bunker_level > 0)
                     {
-                        new armor = RoundToNearest(float(GetPlayerMaxHealth(client))
+                        intarmor = RoundToNearest(float(GetPlayerMaxHealth(client))
                                   * g_BunkerPercent[bunker_level]);
 
                         EnterBunker(client, armor, raceID, bunkerID);
                     }
                     else
                     {
-                        new restore_level = GetUpgradeLevel(client,race,restoreID);
+                        intrestore_level = GetUpgradeLevel(client,race,restoreID);
                         if (restore_level > 0)
                             Restore(client, restore_level);
                         else
                         {
-                            new flare_level=GetUpgradeLevel(client,race,flareID);
+                            intflare_level=GetUpgradeLevel(client,race,flareID);
                             if (flare_level > 0)
                                 OpticFlare(client, flare_level);
                             else if (m_MedicClassAvailable)
@@ -579,27 +579,27 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             }
             default:
             {
-                new jetpack_level = GetUpgradeLevel(client,race,jetpackID);
+                intjetpack_level = GetUpgradeLevel(client,race,jetpackID);
                 if (jetpack_level > 0)
                     Jetpack(client, pressed);
                 else if (pressed)
                 {
-                    new bunker_level = GetUpgradeLevel(client,race,bunkerID);
+                    intbunker_level = GetUpgradeLevel(client,race,bunkerID);
                     if (bunker_level > 0)
                     {
-                        new armor = RoundToNearest(float(GetPlayerMaxHealth(client))
+                        intarmor = RoundToNearest(float(GetPlayerMaxHealth(client))
                                                    * g_BunkerPercent[bunker_level]);
 
                         EnterBunker(client, armor, raceID, bunkerID);
                     }
                     else
                     {
-                        new restore_level = GetUpgradeLevel(client,race,restoreID);
+                        intrestore_level = GetUpgradeLevel(client,race,restoreID);
                         if (restore_level > 0)
                             Restore(client, restore_level);
                         else
                         {
-                            new flare_level=GetUpgradeLevel(client,race,flareID);
+                            intflare_level=GetUpgradeLevel(client,race,flareID);
                             if (flare_level > 0)
                                 OpticFlare(client, flare_level);
                             else if (m_MedicClassAvailable)
@@ -613,9 +613,9 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
 }
 
 // Events
-public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public PlayerSpawnEvent(Handle event,const char[]name[],bool dontBroadcast)
 {
-    new client = GetClientOfUserId(GetEventInt(event,"userid"));
+    intclient = GetClientOfUserId(GetEventInt(event,"userid"));
     if (client > 0)
     {
         SetVisibility(client, NormalVisibility); // Make sure infected players don't stay green!
@@ -623,47 +623,47 @@ public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
 
         if (GetRace(client) == raceID)
         {
-            new armor_level = GetUpgradeLevel(client,raceID,armorID);
+            intarmor_level = GetUpgradeLevel(client,raceID,armorID);
             SetupArmor(client, armor_level, g_InitialArmor,
                        g_ArmorPercent, g_ArmorName);
 
-            new jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
+            intjetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
             SetupJetpack(client, jetpack_level);
 
-            new medipack_level = GetUpgradeLevel(client,raceID,medipackID);
+            intmedipack_level = GetUpgradeLevel(client,raceID,medipackID);
             if (medipack_level > 0)
                 SetupMedipack(client, medipack_level);
 
             if (GameType == dod)
             {
-                new medic_level = GetUpgradeLevel(client,raceID,medicID);
-                new combat_level = GetUpgradeLevel(client,raceID,combatID);
+                intmedic_level = GetUpgradeLevel(client,raceID,medicID);
+                intcombat_level = GetUpgradeLevel(client,raceID,combatID);
                 SetupMedicClass(client, medic_level, combat_level);
             }
             else if (GameType == tf2)
             {
-                new charge_level = GetUpgradeLevel(client,raceID,chargeID);
+                intcharge_level = GetUpgradeLevel(client,raceID,chargeID);
                 if (charge_level > 0)
                     SetupUberCharger(client, charge_level);
             }
 
-            new restore_level = GetUpgradeLevel(client,raceID,restoreID);
-            new healing_aura_level=GetUpgradeLevel(client,raceID,healingID);
-            new regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
+            intrestore_level = GetUpgradeLevel(client,raceID,restoreID);
+            inthealing_aura_level=GetUpgradeLevel(client,raceID,healingID);
+            intregeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
             if (restore_level > 0 || healing_aura_level > 0 || regeneration_level > 0)
                 CreateClientTimer(client, 2.0, Healing, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
         }
     }
 }
 
-public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacker_index,
-                                attacker_race, damage, absorbed, bool:from_sc)
+public ActionOnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
+                                attacker_race, damage, absorbed, bool from_sc)
 {
     if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index &&
         attacker_race == raceID)
     {
-        new infect_level = GetUpgradeLevel(attacker_index,raceID,infectID);
+        intinfect_level = GetUpgradeLevel(attacker_index,raceID,infectID);
         if (GetRandomInt(1,100)<=infect_level*25)
         {
             if (!GetRestriction(attacker_index,Restriction_NoUpgrades) &&
@@ -687,13 +687,13 @@ public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacke
 }
 
 
-public Action:OnPlayerAssistEvent(Handle:event, victim_index, victim_race,
+public ActionOnPlayerAssistEvent(Handle event, victim_index, victim_race,
                                   assister_index, assister_race, damage,
                                   absorbed)
 {
     if (assister_race == raceID)
     {
-        new infect_level = GetUpgradeLevel(assister_index,raceID,infectID);
+        intinfect_level = GetUpgradeLevel(assister_index,raceID,infectID);
         if (GetRandomInt(1,100)<=infect_level*25)
         {
             if (IsClient(victim_index) && !IsInvulnerable(victim_index) &&
@@ -718,17 +718,17 @@ public Action:OnPlayerAssistEvent(Handle:event, victim_index, victim_race,
     return Plugin_Continue;
 }
 
-public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_index,
+public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_index,
                           attacker_race, assister_index, assister_race, damage,
-                          const String:weapon[], bool:is_equipment, customkill,
-                          bool:headshot, bool:backstab, bool:melee)
+                          const char[]weapon[], bool is_equipment, customkill,
+                          bool headshot, bool backstab, bool melee)
 {
     KillClientTimer(victim_index);
     SetVisibility(victim_index, NormalVisibility); // Make sure infected players don't stay green!
     SetImmunity(victim_index,Immunity_Restore, false); // Also Make sure Restore goes away!
 }
 
-public Action:OnInfected(victim,infector,source,bool:infected,const color[4])
+public ActionOnInfected(victim,infector,source,bool infected,const color[4])
 {
     if (infected && (IsInvulnerable(victim) ||
         GetImmunity(victim,Immunity_HealthTaking) ||
@@ -740,7 +740,7 @@ public Action:OnInfected(victim,infector,source,bool:infected,const color[4])
     else
     {
         // Only subtract energy for initial infection
-        new medic = (source > 0) ? source : infector;
+        intmedic = (source > 0) ? source : infector;
         if (medic > 0 && GetRace(medic) == raceID)
         {
             if (!CanInvokeUpgrade(medic, raceID, infectID, .notify=false))
@@ -753,7 +753,7 @@ public Action:OnInfected(victim,infector,source,bool:infected,const color[4])
     return Plugin_Continue;
 }
 
-public Action:OnInfectionHurt(victim,infector,&amount)
+public ActionOnInfectionHurt(victim,infector,&amount)
 {
     if (IsInvulnerable(victim) ||
         GetImmunity(victim,Immunity_HealthTaking) ||
@@ -766,9 +766,9 @@ public Action:OnInfectionHurt(victim,infector,&amount)
         return Plugin_Continue;
 }
 
-public Action:ResetRestore(Handle:timer,any:userid)
+public ActionResetRestore(Handle timer,any:userid)
 {
-    new client = GetClientOfUserId(userid);
+    intclient = GetClientOfUserId(userid);
     if (client > 0 && GetImmunity(client,Immunity_Restore))
     {
         SetImmunity(client, Immunity_Restore, false);
@@ -778,13 +778,13 @@ public Action:ResetRestore(Handle:timer,any:userid)
     return Plugin_Stop;
 }
 
-public Action:OnMedicHealed(client, patient, amount)
+public ActionOnMedicHealed(client, patient, amount)
 {
     if (GetRace(client) == raceID)
     {
-        new xp = (amount / 2);
-        new crystals = (amount / 5);
-        new vespene = (amount / 10);
+        intxp = (amount / 2);
+        intcrystals = (amount / 5);
+        intvespene = (amount / 10);
         SetXP(client, raceID, GetXP(client, raceID)+xp);
         SetCrystals(client, GetCrystals(client)+crystals);
         SetVespene(client, GetVespene(client)+vespene);
@@ -800,42 +800,42 @@ public Action:OnMedicHealed(client, patient, amount)
     }
 }
 
-public Action:Healing(Handle:timer, any:userid)
+public ActionHealing(Handle timer, any:userid)
 {
-    new client = GetClientOfUserId(userid);
+    intclient = GetClientOfUserId(userid);
     if (IsValidClientAlive(client))
     {
         if (GetRace(client) == raceID &&
             !GetRestriction(client,Restriction_NoUpgrades) &&
             !GetRestriction(client,Restriction_Stunned))
         {
-            new regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
+            intregeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
             if (regeneration_level > 0)
                 HealPlayer(client,g_RegenerationAmount[regeneration_level]);
 
-            new restore_level = GetUpgradeLevel(client,raceID,restoreID);
-            new healing_aura_level=GetUpgradeLevel(client,raceID,healingID);
+            intrestore_level = GetUpgradeLevel(client,raceID,restoreID);
+            inthealing_aura_level=GetUpgradeLevel(client,raceID,healingID);
             if (restore_level > 0 || healing_aura_level > 0)
             {
                 static const restoreColor[4] = { 64, 245, 208, 255 };
                 static const healingColor[4] = { 0, 255, 0, 255 };
 
-                new Float:distance;
-                new Float:indexLoc[3];
-                new Float:clientLoc[3];
+                floatdistance;
+                floatindexLoc[3];
+                floatclientLoc[3];
                 GetClientAbsOrigin(client, clientLoc);
                 clientLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
-                new Float:restore_range = g_RestoreRange[restore_level];
-                new Float:healing_range = g_HealingRange[healing_aura_level];
-                new healing_amount = g_HealingAmount[healing_aura_level];
+                floatrestore_range = g_RestoreRange[restore_level];
+                floathealing_range = g_HealingRange[healing_aura_level];
+                inthealing_amount = g_HealingAmount[healing_aura_level];
 
-                new count=0;
-                new alt_count=0;
-                new list[MaxClients+1];
-                new alt_list[MaxClients+1];
-                new team=GetClientTeam(client);
-                for (new index=1;index<=MaxClients;index++)
+                intcount=0;
+                intalt_count=0;
+                intlist[MaxClients+1];
+                intalt_list[MaxClients+1];
+                intteam=GetClientTeam(client);
+                for (intindex=1;index<=MaxClients;index++)
                 {
                     if (index != client && IsClientInGame(index) &&
                         IsPlayerAlive(index) && GetClientTeam(index) == team)
@@ -937,7 +937,7 @@ public Action:Healing(Handle:timer, any:userid)
     return Plugin_Continue;
 }
 
-Jetpack(client, bool:pressed)
+Jetpack(client, bool pressed)
 {
     if (m_JetpackAvailable)
     {
@@ -958,7 +958,7 @@ Jetpack(client, bool:pressed)
     }
     else if (pressed)
     {
-        decl String:upgradeName[64];
+        charupgradeName[64];
         GetUpgradeName(raceID, jetpackID, upgradeName, sizeof(upgradeName), client);
         PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
     }
@@ -1010,7 +1010,7 @@ SetupMedicClass(client, medic_level, combat_level)
 {
     if (m_MedicClassAvailable)
     {
-        new bool:all_weapons = (combat_level >= 4);
+        boolall_weapons = (combat_level >= 4);
 
         AssignMedic(client, all_weapons, all_weapons, g_MedicSpeed[medic_level],
                     g_MedicWeight[medic_level], .heal=g_MedicHeal[medic_level],
@@ -1045,7 +1045,7 @@ Restore(client,restore_level)
     if (GetRestriction(client,Restriction_NoUltimates) ||
         GetRestriction(client,Restriction_Stunned))
     {
-        decl String:upgradeName[64];
+        charupgradeName[64];
         GetUpgradeName(raceID, restoreID, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
         PrepareAndEmitSoundToClient(client,deniedWav);
@@ -1061,7 +1061,7 @@ Restore(client,restore_level)
 
         SetImmunity(client, Immunity_Restore, true);
 
-        new Float:time = 2.0 * float(restore_level);
+        floattime = 2.0 * float(restore_level);
         CreateTimer(time,ResetRestore,GetClientUserId(client),TIMER_FLAG_NO_MAPCHANGE);
         PrintHintText(client, "%t", "RestoreActive", time);
         HudMessage(client, "%t", "RestoreHud");
@@ -1073,7 +1073,7 @@ OpticFlare(client,ultlevel)
     if (GetRestriction(client,Restriction_NoUltimates) ||
         GetRestriction(client,Restriction_Stunned))
     {
-        decl String:upgradeName[64];
+        charupgradeName[64];
         GetUpgradeName(raceID, flareID, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
         PrepareAndEmitSoundToClient(client,deniedWav);
@@ -1086,14 +1086,14 @@ OpticFlare(client,ultlevel)
                 TF2_RemovePlayerDisguise(client);
         }
 
-        new Float:clientLoc[3];
+        floatclientLoc[3];
         GetClientAbsOrigin(client, clientLoc);
         clientLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
-        new count=0;
-        new duration = ultlevel*100;
-        new team = GetClientTeam(client);
-        new Float:range = g_FlareRange[ultlevel];
+        intcount=0;
+        intduration = ultlevel*100;
+        intteam = GetClientTeam(client);
+        floatrange = g_FlareRange[ultlevel];
         for(new index=1;index<=MaxClients;index++)
         {
             if (client != index && IsClientInGame(index) &&
@@ -1104,7 +1104,7 @@ OpticFlare(client,ultlevel)
                     !GetImmunity(index,Immunity_Blindness) &&
                     !GetImmunity(index,Immunity_Restore))
                 {
-                    new Float:indexLoc[3];
+                    floatindexLoc[3];
                     GetClientAbsOrigin(index, indexLoc);
                     if (IsPointInRange(clientLoc, indexLoc, range) &&
                         TraceTargetIndex(client, index, clientLoc, indexLoc))
@@ -1117,7 +1117,7 @@ OpticFlare(client,ultlevel)
             }
         }
         
-        decl String:upgradeName[64];
+        charupgradeName[64];
         GetUpgradeName(raceID, flareID, upgradeName, sizeof(upgradeName), client);
 
         if (count)

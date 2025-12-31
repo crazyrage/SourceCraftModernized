@@ -19,7 +19,7 @@
 #define BloodDrop()      PrepareModel(g_bloodDropModel, g_bloodDrop)
 
 stock g_bloodSpray;
-stock const String:g_bloodSprayModel[] = "sprites/blood.vmt";
+static const char g_bloodSprayModel[] = "sprites/blood.vmt";
 
 stock g_bloodDrop;
-stock const String:g_bloodDropModel[] = "sprites/blood.vmt";
+static const char g_bloodDropModel[] = "sprites/blood.vmt";

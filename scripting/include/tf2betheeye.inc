@@ -12,14 +12,14 @@
  *
  * @return				True or false
  **/
-native bool:TF2BTE_IsPlayerEye( iClient );
+native bool TF2BTE_IsPlayerEye( iClient );
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /**
  * Return Plugin_Handled or Plugin_Stop to prevent.
  **/
-forward Action:TF2BTE_CanPlayAsEye( iClient );
+forward Action TF2BTE_CanPlayAsEye( iClient );
 
 /**
  * Cannot be prevented.

@@ -14,18 +14,18 @@
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #if !defined SOURCECRAFT // Not Implemented yet!
-// Create new attributes
+// Create int attributes
 
-native War3_RegisterAttribute(String:sAttributeName[], String: sAttributeShortName[], any:DefaultVal);
+native War3_RegisterAttribute(char[] sAttributeName, String: sAttributeShortName[], any:DefaultVal);
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Getters to access the data structure
 
-native War3_GetAttributeName(attributeId, String:sName[], iBufferSize);
-native War3_GetAttributeShortname(attributeId, String:sShortname[], iBufferSize);
-native War3_GetAttributeIDByShortname(String:sAttributeShortName[]);
-native War3_GetAttributeDescription(client, attributeId, any:value, String:sDescription[], iBufferSize);
+native War3_GetAttributeName(attributeId, char[] sName, iBufferSize);
+native War3_GetAttributeShortname(attributeId, char[] sShortname, iBufferSize);
+native War3_GetAttributeIDByShortname(char[] sAttributeShortName);
+native War3_GetAttributeDescription(client, attributeId, any:value, char[] sDescription, iBufferSize);
 native any:War3_GetAttributeValue(client, attributeId);
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -46,6 +46,6 @@ native War3_SetAttribute(client, attributeId, any:value);
 // Events
 
 forward War3_OnAttributeChanged(client, attributeId, any:oldValue, any:newValue);
-forward War3_OnAttributeDescriptionRequested(client, attributeId, any:value, String:sDescription[], iBufferSize);
+forward War3_OnAttributeDescriptionRequested(client, attributeId, any:value, char[] sDescription, iBufferSize);
 
 #endif

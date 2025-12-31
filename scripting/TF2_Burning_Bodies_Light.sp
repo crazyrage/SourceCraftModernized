@@ -9,12 +9,12 @@
 
 #define PLUGIN_VERSION "1.0"
 
-new Handle:g_hEnabled;
-new g_iOffsetPlayerCond = -1;
+Handle g_hEnabled;
+int g_iOffsetPlayerCond = -1;
 
-new g_iBody[MAXPLAYERS+1] = -1;
+int g_iBody[MAXPLAYERS+1] = -1;
 
-public Plugin:myinfo = {
+public Plugin myinfo = {
     name = "[TF2] Burning Bodies Light",
     author = "Leonardo", // based on Mecha the Slag's Ignite Light
     description = "Adds dynamic lighting to a burning players",
@@ -24,7 +24,7 @@ public Plugin:myinfo = {
 
 public OnPluginStart()
 {
-	decl String:strModName[32];
+	char strModName[32];
 	GetGameFolderName(strModName, sizeof(strModName));
 	if(!StrEqual(strModName, "tf"))
 		SetFailState("This plugin is only for Team Fortress 2.");
@@ -37,18 +37,18 @@ public OnPluginStart()
 
 public OnMapStart()
 {
-	for(new iClient = 0; iClient <= MAXPLAYERS; iClient++)
+	for(int iClient= 0; iClient <= MAXPLAYERS; iClient++)
 		g_iBody[iClient] = -1;
 }
 
 public OnGameFrame()
 {
-	for(new iClient = 1; iClient <= MaxClients; iClient++)
+	for(int iClient= 1; iClient <= MaxClients; iClient++)
 		if(IsClientInGame(iClient) && IsPlayerAlive(iClient) && (GetEntData(iClient, g_iOffsetPlayerCond) & TF_CONDFLAG_ONFIRE)==TF_CONDFLAG_ONFIRE && GetConVarBool(g_hEnabled))
 		{
 			if(g_iBody[iClient] == -1)
 			{
-				new iLightEntity = CreateLightEntity(iClient);
+				int iLightEntity = CreateLightEntity(iClient);
 				if(iLightEntity > 0)
 					g_iBody[iClient] = EntIndexToEntRef(iLightEntity);
 			}
@@ -57,7 +57,7 @@ public OnGameFrame()
 		{
 			if(g_iBody[iClient] != -1)
 			{
-				new iLightEntity = EntRefToEntIndex(g_iBody[iClient]);
+				int iLightEntity = EntRefToEntIndex(g_iBody[iClient]);
 				if(iLightEntity > 0)
 					RemoveEdict(iLightEntity);
 				g_iBody[iClient] = -1;
@@ -65,7 +65,7 @@ public OnGameFrame()
 		}
 }
 
-stock _:CreateLightEntity(iEntity, bool:bRagdoll=false)
+stock _:CreateLightEntity(iEntity, bool bRagdoll=false)
 {
 	if (IsEntLimitReached())
 		return -1;
@@ -73,7 +73,7 @@ stock _:CreateLightEntity(iEntity, bool:bRagdoll=false)
 	if (!IsValidEdict(iEntity))
 		return -1;
 	
-	new iLightEntity = CreateEntityByName("light_dynamic");
+	int iLightEntity = CreateEntityByName("light_dynamic");
 	if (IsValidEntity(iLightEntity))
 	{
 		DispatchKeyValue(iLightEntity, "inner_cone", "0");
@@ -86,13 +86,13 @@ stock _:CreateLightEntity(iEntity, bool:bRagdoll=false)
 		DispatchKeyValue(iLightEntity, "style", "5");
 		DispatchSpawn(iLightEntity);
 		
-		decl Float:fOrigin[3];
+		decl float fOrigin[3];
 		GetEntPropVector(iEntity, Prop_Send, "m_vecOrigin", fOrigin);
         
 		fOrigin[2] += 40.0;
 		TeleportEntity(iLightEntity, fOrigin, NULL_VECTOR, NULL_VECTOR);
 
-		decl String:strName[32];
+		char strName[32];
 		Format(strName, sizeof(strName), "target%i", iEntity);
 		DispatchKeyValue(iEntity, "targetname", strName);
 				
@@ -105,14 +105,14 @@ stock _:CreateLightEntity(iEntity, bool:bRagdoll=false)
 }
 
 #if !defined _entlimit_included
-stock bool:IsEntLimitReached(warn=20, critical=16, client=0, const String:message[]="entity not created")
+stock bool IsEntLimitReached(warn=20, critical=16, client=0, const char[] message="entity not created")
 	return EntitiesAvailable(warn, critical, client, message) < warn;
 
-stock _:EntitiesAvailable(warn=20, critical=16, client=0, const String:message[]="entity not created")
+stock _:EntitiesAvailable(warn=20, critical=16, client=0, const char[] message="entity not created")
 {
-	new max = GetMaxEntities();
-	new count = GetEntityCount();
-	new remaining = max - count;
+	int max = GetMaxEntities();
+	int count = GetEntityCount();
+	int remaining = max - count;
 	if(remaining <= critical)
 	{
 		PrintToServer("Warning: Entity limit is nearly reached! Please switch or reload the map!");

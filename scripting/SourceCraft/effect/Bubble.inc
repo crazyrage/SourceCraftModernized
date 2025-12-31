@@ -14,7 +14,7 @@
 
 stock g_bubbleModel;
 
-stock const String:g_bubbleModelName[] = "materials/effects/bubble.vmt";
+static const char g_bubbleModelName[] = "materials/effects/bubble.vmt";
 
 #define SetupBubbleModel() SetupModel(g_bubbleModelName, g_bubbleModel)
 #define BubbleModel()      PrepareModel(g_bubbleModelName, g_bubbleModel)

@@ -1,7 +1,7 @@
 #include <sourcemod>
 #include "W3SIncs/War3Source_Interface"
 
-public Plugin:myinfo = 
+public Plugin myinfo =
 {
     name = "War3Source - Engine - EasyBuff",
     author = "War3Source Team",
@@ -11,20 +11,20 @@ public Plugin:myinfo =
 
 
 // EasyBuffs for skills
-new Handle:g_hSkillBuffs = INVALID_HANDLE; // Holds the W3Buff
-new Handle:g_hBuffSkillValues = INVALID_HANDLE; // Holds the values
-new Handle:g_hBuffRace = INVALID_HANDLE; // Holds the race id
-new Handle:g_hBuffSkill = INVALID_HANDLE; // Holds the skill id
+Handle g_hSkillBuffs = null; // Holds the W3Buff
+Handle g_hBuffSkillValues = null; // Holds the values
+Handle g_hBuffRace = null; // Holds the race id
+Handle g_hBuffSkill = null; // Holds the skill id
 
 // EasyBuffs auras
-new Handle:g_hAuraId = INVALID_HANDLE;
+Handle g_hAuraId = null;
 
 // EasyBuffs for items
-new Handle:g_hItemBuffs = INVALID_HANDLE;  // Holds the W3Buff
-new Handle:g_hItemBuffValue = INVALID_HANDLE; // Holds the value
-new Handle:g_hBuffItem = INVALID_HANDLE; // Holds the item id
+Handle g_hItemBuffs = null;  // Holds the W3Buff
+Handle g_hItemBuffValue = null; // Holds the value
+Handle g_hBuffItem = null; // Holds the item id
 
-public bool:InitNativesForwards()
+public bool InitNativesForwards()
 {
     CreateNative("War3_AddSkillBuff", Native_War3_AddSkillBuff);
     CreateNative("War3_AddAuraSkillBuff", Native_War3_AddSkillAuraBuff);
@@ -33,7 +33,7 @@ public bool:InitNativesForwards()
     return true;
 }
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     g_hSkillBuffs = CreateArray(1);
     g_hBuffSkillValues = CreateArray(32); // If your skill has more than 32 levels you're out of luck 
@@ -47,13 +47,13 @@ public OnPluginStart()
     g_hItemBuffValue = CreateArray(1);
 }
 
-bool:AddSkillBuff()
+bool AddSkillBuff()
 {
-    new iRace = GetNativeCell(1);
-    new iSkill = GetNativeCell(2);
-    new W3Buff:buff = GetNativeCell(3);
-    
-    for(new i = 0; i < GetArraySize(g_hSkillBuffs); i++)
+    int iRace = GetNativeCell(1);
+    int iSkill = GetNativeCell(2);
+    W3Buff buff = GetNativeCell(3);
+
+    for(int i = 0; i < GetArraySize(g_hSkillBuffs); i++)
     {
         if(GetArrayCell(g_hBuffRace, i) == iRace && 
            GetArrayCell(g_hBuffSkill, i) == iSkill &&
@@ -67,10 +67,10 @@ bool:AddSkillBuff()
     PushArrayCell(g_hBuffRace, iRace);
     PushArrayCell(g_hBuffSkill, iSkill);
     PushArrayCell(g_hSkillBuffs, buff);
-    
-    new iSkillMaxLevel = W3GetRaceSkillMaxLevel(iRace, iSkill) + 1;
-    
-    new any:values[iSkillMaxLevel];
+
+    int iSkillMaxLevel = W3GetRaceSkillMaxLevel(iRace, iSkill) + 1;
+
+    any values[iSkillMaxLevel];
     GetNativeArray(4, values, iSkillMaxLevel);
 
     PushArrayArray(g_hBuffSkillValues, values);
@@ -80,7 +80,7 @@ bool:AddSkillBuff()
     return true;
 }
 
-public Native_War3_AddSkillBuff(Handle:plugin, numParams)
+public int Native_War3_AddSkillBuff(Handle plugin, int numParams)
 {
     if(AddSkillBuff())
     {
@@ -89,28 +89,28 @@ public Native_War3_AddSkillBuff(Handle:plugin, numParams)
     }
 }
 
-public Native_War3_AddSkillAuraBuff(Handle:plugin, numParams)
+public int Native_War3_AddSkillAuraBuff(Handle plugin, int numParams)
 {
     if(AddSkillBuff())
     {
-        decl String:auraShortName[32];
+        char auraShortName[32];
         GetNativeString(5, auraShortName, sizeof(auraShortName));
-        new Float:distance = GetNativeCell(6);
-        new bool:bTrackOtherTeam = GetNativeCell(7);
-        
-        new iAuraID = W3RegisterAura(auraShortName, distance, bTrackOtherTeam);
+        float distance = GetNativeCell(6);
+        bool bTrackOtherTeam = GetNativeCell(7);
+
+        int iAuraID = W3RegisterAura(auraShortName, distance, bTrackOtherTeam);
         PushArrayCell(g_hAuraId, iAuraID);
         
         War3_LogInfo("[AURA] Registered aura ID %i", iAuraID);
     }
 }
 
-public Native_War3_AddItemBuff(Handle:plugin, numParams)
+public int Native_War3_AddItemBuff(Handle plugin, int numParams)
 {
-    new iItem = GetNativeCell(1);
-    new W3Buff:buff = GetNativeCell(2);
-    
-    for(new i = 0; i < GetArraySize(g_hItemBuffs); i++)
+    int iItem = GetNativeCell(1);
+    W3Buff buff = GetNativeCell(2);
+
+    for(int i = 0; i < GetArraySize(g_hItemBuffs); i++)
     {
         if(GetArrayCell(g_hBuffItem, i) == iItem && 
            GetArrayCell(g_hItemBuffs, i) == buff)
@@ -122,8 +122,8 @@ public Native_War3_AddItemBuff(Handle:plugin, numParams)
     
     PushArrayCell(g_hBuffItem, iItem);
     PushArrayCell(g_hItemBuffs, buff);
-    
-    new any:value = GetNativeCell(3);
+
+    any value = GetNativeCell(3);
     PushArrayCell(g_hItemBuffValue, value);
     
     War3_LogInfo("[ITEM] Created buff %i for item \"{item %i}\"", buff, iItem);
@@ -131,7 +131,7 @@ public Native_War3_AddItemBuff(Handle:plugin, numParams)
 
 /* SKILLS */
 
-public OnWar3EventSpawn(client)
+public void OnWar3EventSpawn(client)
 {
     InitSkills(client, War3_GetRace(client));
 }
@@ -141,7 +141,7 @@ public OnSkillLevelChanged(client, race, skill, newskilllevel)
     InitSkills(client, race);
 }
 
-public OnWar3EventDeath(victim, client, deathrace)
+public void OnWar3EventDeath(victim, client, deathrace)
 {
     ResetSkills(victim, deathrace);
 }
@@ -153,17 +153,17 @@ public OnRaceChanged(client, oldrace, newrace)
 	InitSkills(client, newrace);
 }
 
-ResetSkills(client, race)
+void ResetSkills(client, race)
 {
-    for(new i = 0; i < GetArraySize(g_hSkillBuffs); i++)
+    for(int i = 0; i < GetArraySize(g_hSkillBuffs); i++)
     {
         if(GetArrayCell(g_hBuffRace, i) == race)
         {
-            new iAuraID = GetArrayCell(g_hAuraId, i);
-            
+            int iAuraID = GetArrayCell(g_hAuraId, i);
+
             if (iAuraID == -1)
             {
-                new W3Buff:buff = W3Buff:GetArrayCell(g_hSkillBuffs, i);
+                W3Buff buff = W3Buff GetArrayCell(g_hSkillBuffs, i);
                 War3_LogInfo("[SKILL] Resetting the buff %i from race \"{race %i}\" on \"{client %i}\"", buff, race, client);
     
                 W3ResetBuffRace(client, buff, race);
@@ -178,21 +178,21 @@ ResetSkills(client, race)
     }
 }
 
-InitSkills(client, race)
+void InitSkills(client, race)
 {
-    for(new i = 0; i < GetArraySize(g_hSkillBuffs); i++)
+    for(int i = 0; i < GetArraySize(g_hSkillBuffs); i++)
     {
         if(GetArrayCell(g_hBuffRace, i) == race)
         {
-            new iAuraID = GetArrayCell(g_hAuraId, i);
-            new iSkill = GetArrayCell(g_hBuffSkill, i);
-            new iLevel = War3_GetSkillLevel(client, race, iSkill);
-            
+            int iAuraID = GetArrayCell(g_hAuraId, i);
+            int iSkill = GetArrayCell(g_hBuffSkill, i);
+            int iLevel = War3_GetSkillLevel(client, race, iSkill);
+
             // Not a aura
             if (iAuraID == -1)
             {
-                new W3Buff:buff = W3Buff:GetArrayCell(g_hSkillBuffs, i);
-                new any:value = GetArrayCell(g_hBuffSkillValues, i, iLevel);
+                W3Buff buff = W3Buff GetArrayCell(g_hSkillBuffs, i);
+                any value = GetArrayCell(g_hBuffSkillValues, i, iLevel);
                 War3_LogInfo("[SKILL] Giving buff %i with a magnitude of %f to player \"{client %i}\" (Playing race \"{race %i}\" with skill \"{skill %i}\" at level %i)", buff, value, client, race, iSkill, iLevel);
 
                 War3_SetBuff(client, buff, race, value);
@@ -207,19 +207,19 @@ InitSkills(client, race)
     }
 }
 
-public OnW3PlayerAuraStateChanged(client, tAuraID, bool:inAura, level)
+public OnW3PlayerAuraStateChanged(client, tAuraID, bool inAura, level)
 {
-    for(new i = 0; i < GetArraySize(g_hSkillBuffs); i++)
+    for(int i = 0; i < GetArraySize(g_hSkillBuffs); i++)
     {
         if(GetArrayCell(g_hAuraId, i) == tAuraID)
         {
-            new race = GetArrayCell(g_hBuffRace, i);
-            new W3Buff:buff = W3Buff:GetArrayCell(g_hSkillBuffs, i);
-            new iSkill = GetArrayCell(g_hBuffSkill, i);
-            
+            int race = GetArrayCell(g_hBuffRace, i);
+            W3Buff buff = W3Buff GetArrayCell(g_hSkillBuffs, i);
+            int iSkill = GetArrayCell(g_hBuffSkill, i);
+
             if(inAura)
             {
-                new any:value = GetArrayCell(g_hBuffSkillValues, i, level);
+                any value = GetArrayCell(g_hBuffSkillValues, i, level);
                 
                 War3_SetBuff(client, buff, race, value);
                 War3_LogInfo("[AURA] Giving buff %i with a magnitude of %f to player \"{client %i}\" (Aura from skill \"{skill %i}\" of race \"{race %i}\" at level %i)", buff, value, client, iSkill, race, level);
@@ -245,13 +245,13 @@ public OnItemLost(client, item)
     ResetItems(client, item);
 }
 
-ResetItems(client, item)
+void ResetItems(client, item)
 {
-    for(new i = 0; i < GetArraySize(g_hItemBuffs); i++)
+    for(int i = 0; i < GetArraySize(g_hItemBuffs); i++)
     {
         if(GetArrayCell(g_hBuffItem, i) == item)
         {
-            new W3Buff:buff = W3Buff:GetArrayCell(g_hItemBuffs, i);
+            W3Buff buff = W3Buff GetArrayCell(g_hItemBuffs, i);
             War3_LogInfo("[ITEM] Resetting the buff %i from item \"{item %i}\" on \"{client %i}\"", buff, item, client);
 
             W3ResetBuffItem(client, buff, item);
@@ -259,14 +259,14 @@ ResetItems(client, item)
     }
 }
 
-InitItems(client, item)
+void InitItems(client, item)
 {
-    for(new i = 0; i < GetArraySize(g_hItemBuffs); i++)
+    for(int i = 0; i < GetArraySize(g_hItemBuffs); i++)
     {
         if(GetArrayCell(g_hBuffItem, i) == item)
         {
-            new any:value = GetArrayCell(g_hItemBuffValue, i);
-            new W3Buff:buff = W3Buff:GetArrayCell(g_hItemBuffs, i);
+            any value = GetArrayCell(g_hItemBuffValue, i);
+            W3Buff buff = W3Buff GetArrayCell(g_hItemBuffs, i);
             
             War3_LogInfo("[ITEM] Giving buff %i with a magnitude of %f to player \"{client %i}\" (Owning item \"{item %i}\")", buff, value, client, item);
             War3_SetBuffItem(client, buff, item, value);

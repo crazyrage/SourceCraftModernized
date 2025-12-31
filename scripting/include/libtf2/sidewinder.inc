@@ -81,8 +81,8 @@ enum SidewinderClientFlags (<<= 1)
  * @param syringe_track_crit    If control is false, value for sm_syringe_crit_tracker
  * @noreturn
  */
-native SidewinderControl(bool:control=true, bool:sentry_crit=false,
-                         bool:track_crits=false, bool:target_head=false,
+native SidewinderControl(bool control=true, bool sentry_crit=false,
+                         bool track_crits=false, bool target_head=false,
                          SidewinderEnableFlags:enable=SidewinderDisabled);
 
 /**
@@ -94,7 +94,7 @@ native SidewinderControl(bool:control=true, bool:sentry_crit=false,
  *                          status bits == (cloaked, detected, designated)
  * @noreturn
  */
-native SidewinderFlags(client, SidewinderClientFlags:flags, bool:setStatusBits=false);
+native SidewinderFlags(client, SidewinderClientFlags:flags, bool setStatusBits=false);
 
 /**
  * Sets chance that a rocket will track targets
@@ -122,7 +122,7 @@ native SidewinderSentryCritChance(client, chance);
  * @param value     Set to true to designate the client as a priority target.
  * @noreturn
  */
-native SidewinderDesignateClient(client, bool:value);
+native SidewinderDesignateClient(client, bool value);
 
 /**
  * Cloaks or uncloaks clients from guided rockets
@@ -131,7 +131,7 @@ native SidewinderDesignateClient(client, bool:value);
  * @param value     Set to true to cloak the target from rockets.
  * @noreturn
  */
-native SidewinderCloakClient(client, bool:value);
+native SidewinderCloakClient(client, bool value);
 
 /**
  * Detects or undetects clients for guided rockets
@@ -140,7 +140,7 @@ native SidewinderCloakClient(client, bool:value);
  * @param value     Set to true to detect the target for rockets.
  * @noreturn
  */
-native SidewinderDetectClient(client, bool:value);
+native SidewinderDetectClient(client, bool value);
 
 /**
  * @brief Called whenever Sidewinder needs to query if a shot should be made a seeker
@@ -151,7 +151,7 @@ native SidewinderDetectClient(client, bool:value);
  * @param critical      True if the projectile is critical.
  * @return			    Plugin_Stop or Plugin_Handled to block tracking.
  */
-forward Action:OnSidewinderSeek(client, target, projectile, bool:critical);
+forward Action OnSidewinderSeek(client, target, projectile, bool critical);
 
 /**
  * Do not edit below this line!

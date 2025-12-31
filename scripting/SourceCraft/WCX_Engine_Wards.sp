@@ -1,7 +1,7 @@
 #include <sourcemod>
 #include "W3SIncs/War3Source_Interface"
 
-public Plugin:myinfo = 
+public Plugin myinfo =
 {
     name = "War3Source - Warcraft Extended - Generic ward skills",
     author = "War3Source Team",
@@ -15,9 +15,9 @@ enum {
     BEHAVIOR_LAST, // not a real ward behavior, just for indexing
 }
 
-new BehaviorIndex[BEHAVIOR_LAST];
+int BehaviorIndex[BEHAVIOR_LAST];
 
-public OnWar3LoadRaceOrItemOrdered2(num)
+public void OnWar3LoadRaceOrItemOrdered2(num)
 {
     if (num == 0)
     {
@@ -34,8 +34,8 @@ public OnWardPulse(wardindex, behavior)
         return;
     }
     
-    new beamcolor[4];
-    new team = GetClientTeam(War3_GetWardOwner(wardindex));
+    int beamcolor[4];
+    int team = GetClientTeam(War3_GetWardOwner(wardindex));
 
     if(War3_GetWardUseDefaultColor(wardindex)) 
     {
@@ -61,10 +61,10 @@ public OnWardPulse(wardindex, behavior)
     War3_WardVisualEffect(wardindex, beamcolor);
 }
 
-public OnWardTrigger(wardindex, victim, owner, behavior) 
+public OnWardTrigger(wardindex, victim, owner, behavior)
 {
-    decl data[MAXWARDDATA];
-    decl Float:VictimPos[3];
+    int data[MAXWARDDATA];
+    float VictimPos[3];
     
     War3_GetWardData(wardindex, data);
     GetClientAbsOrigin(victim, VictimPos);
@@ -77,7 +77,7 @@ public OnWardTrigger(wardindex, victim, owner, behavior)
         }
         else
         {
-            new damage = data[War3_GetSkillLevel(owner, War3_GetRace(owner), War3_GetWardSkill(wardindex))];
+            int damage = data[War3_GetSkillLevel(owner, War3_GetRace(owner), War3_GetWardSkill(wardindex))];
             
             War3_DealDamage(victim, damage, owner, _, "weapon_wards");
             VictimPos[2] += 65.0;
@@ -87,7 +87,7 @@ public OnWardTrigger(wardindex, victim, owner, behavior)
     
     else if (behavior == BehaviorIndex[BEHAVIOR_HEAL]) 
     {
-        new healAmount = data[War3_GetSkillLevel(owner, War3_GetRace(owner), War3_GetWardSkill(wardindex))];
+        int healAmount = data[War3_GetSkillLevel(owner, War3_GetRace(owner), War3_GetWardSkill(wardindex))];
 
         if (War3_HealToMaxHP(victim, healAmount))
         {

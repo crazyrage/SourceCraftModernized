@@ -16,7 +16,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of the Healthkits plugin.
  * @return		    	none
  */
-native ControlHealthkits(bool:plugin_only=true);
+native ControlHealthkits(bool plugin_only=true);
 
 /**
  * Enable Healthkits for a player.

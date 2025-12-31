@@ -24,10 +24,10 @@
  * @param weapon_desc: The description of the weapon used to infect the client.
  * @noreturn
  */
-native PlagueInfect(inflicter, index, duration=1, amount=1,
-                    PlagueType:type=NormalPlague,
-                    const String:weapon_name[]="sc_plague",
-                    const String:weapon_desc[]="");
+native PlagueInfect(int inflicter, int index, int duration=1, int amount=1,
+                    PlagueType type=NormalPlague,
+                    const char[] weapon_name="sc_plague",
+                    const char[] weapon_desc="");
 
 /**
  * Explode a Player
@@ -44,9 +44,9 @@ native PlagueInfect(inflicter, index, duration=1, amount=1,
  * @param weapon_desc: The description of the weapon used for the explosion.
  * @noreturn
  */
-native ExplodePlayer(client, inflicter=0, team=0, Float:radius=500.0, damage=800,
-                     building=800, ExplosionType:type=NormalExplosion|UltimateExplosion,
-                     xp=10, const String:weapon_name[]="sc_explode", const String:weapon_desc[]="");
+native ExplodePlayer(int client, int inflicter=0, int team=0, float radius=500.0, int damage=800,
+                     int building=800, ExplosionType type=NormalExplosion|UltimateExplosion,
+                     int xp=10, const char[] weapon_name="sc_explode", const char[] weapon_desc="");
 
 /**
  * Returns true if the given client has been exploded
@@ -54,7 +54,7 @@ native ExplodePlayer(client, inflicter=0, team=0, Float:radius=500.0, damage=800
  * @param client:      The client to check
  * @return             Returns true if the client has exploded.
  */
-native bool:HasPlayerExploded(client);
+native bool HasPlayerExploded(int client);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

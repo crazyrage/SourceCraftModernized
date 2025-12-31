@@ -32,23 +32,23 @@
 #include "effect/FlashScreen"
 #include "effect/TPBeamSprite"
 
-new const String:entangleSound[]="sc/entanglingrootsdecay1.wav";
+static const char[] entangleSound[]="sc/entanglingrootsdecay1.wav";
 
-new g_EvasionChance[]           = { 0, 5, 10, 15, 20 };
+	int g_EvasionChance[]           = { 0, 5, 10, 15, 20 };
 
-new g_ThornsChance[]            = { 0, 5, 10, 15, 20 };
-new Float:g_ThornsPercent[]     = { 0.0, 0.05, 0.10, 0.15, 0.20 };
+	int g_ThornsChance[]            = { 0, 5, 10, 15, 20 };
+float g_ThornsPercent[]     = { 0.0, 0.05, 0.10, 0.15, 0.20 };
 
-new g_TrueshotChance[]          = { 0, 5, 10, 15, 20 };
-new Float:g_TrueshotPercent[]   = { 0.0, 0.05, 0.10, 0.15, 0.20 };
+	int g_TrueshotChance[]          = { 0, 5, 10, 15, 20 };
+float g_TrueshotPercent[]   = { 0.0, 0.05, 0.10, 0.15, 0.20 };
 
-new Float:g_RootsRange[]        = { 0.0, 300.0, 450.0, 650.0, 800.0};
+float g_RootsRange[]        = { 0.0, 300.0, 450.0, 650.0, 800.0};
 
-new Float:g_EntangleDuration[]  = { 0.0, 2.0, 5.0, 7.0, 10.0 };
+float g_EntangleDuration[]  = { 0.0, 2.0, 5.0, 7.0, 10.0 };
 
 new raceID, evasionID, thornsID, trueshotID, rootsID;
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "SourceCraft Race - Night Elf",
     author = "-=|JFH|=-Naris with credits to PimpinJuice",
@@ -57,7 +57,7 @@ public Plugin:myinfo =
     url = "http://www.jigglysfunhouse.net/"
 };
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.common.phrases.txt");
     LoadTranslations("sc.nightelf.phrases.txt");
@@ -104,7 +104,7 @@ public OnSourceCraftReady()
                         g_EntangleDuration, raceID, rootsID);
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupLightning();
     SetupBeamSprite();
@@ -116,11 +116,11 @@ public OnMapStart()
     SetupSound(entangleSound);
 }
 
-public Action:OnPlayerTakeDamage(victim,&attacker,&inflictor,&Float:damage,&damagetype)
+public Action OnPlayerTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype)
 {
     if (GetRace(victim) == raceID)
     {
-        new evasion_level = GetUpgradeLevel(victim,raceID,evasionID);
+        int evasion_level = GetUpgradeLevel(victim,raceID,evasionID);
         if (evasion_level > 0 &&
             !GetRestriction(victim,Restriction_NoUpgrades) &&
             !GetRestriction(victim,Restriction_Stunned))
@@ -141,10 +141,10 @@ public Action:OnPlayerTakeDamage(victim,&attacker,&inflictor,&Float:damage,&dama
                 if (attacker > 0 && attacker <= MaxClients &&
                     GameType == tf2 && GetMode() != MvM)
                 {
-                    new entities = EntitiesAvailable(200, .message="Reducing Effects");
+                    int entities = EntitiesAvailable(200, .message="Reducing Effects");
                     if (entities > 50)
                     {
-                        decl Float:pos[3];
+                        decl float pos[3];
                         GetClientEyePosition(victim, pos);
                         pos[2] += 4.0;
                         TE_SetupParticle("miss_text", pos);
@@ -158,10 +158,10 @@ public Action:OnPlayerTakeDamage(victim,&attacker,&inflictor,&Float:damage,&dama
     return Plugin_Continue;
 }
 
-public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacker_index,
-                                attacker_race, damage, absorbed, bool:from_sc)
+public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
+                                attacker_race, damage, absorbed, bool from_sc)
 {
-    new Action:returnCode = Plugin_Continue;
+    new Action returnCode = Plugin_Continue;
 
     if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index)
@@ -188,7 +188,7 @@ public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacke
     return returnCode;
 }
 
-public Action:OnPlayerAssistEvent(Handle:event, victim_index, victim_race,
+public Action OnPlayerAssistEvent(Handle event, victim_index, victim_race,
                                   assister_index, assister_race, damage,
                                   absorbed)
 {
@@ -201,9 +201,9 @@ public Action:OnPlayerAssistEvent(Handle:event, victim_index, victim_race,
     return Plugin_Continue;
 }
 
-public bool:ThornsAura(Handle:event, damage, victim_index, index)
+public bool ThornsAura(Handle event, damage, victim_index, index)
 {
-    new thorns_level = GetUpgradeLevel(victim_index,raceID,thornsID);
+    int thorns_level = GetUpgradeLevel(victim_index,raceID,thornsID);
     if (thorns_level > 0)
     {
         if (!GetRestriction(index, Restriction_NoUpgrades) &&
@@ -212,19 +212,19 @@ public bool:ThornsAura(Handle:event, damage, victim_index, index)
             !GetImmunity(index, Immunity_Upgrades) &&
             !IsInvulnerable(index))
         {
-            new dmgamt = RoundToNearest(damage * GetRandomFloat(0.30,g_ThornsPercent[thorns_level]));
+            int dmgamt = RoundToNearest(damage * GetRandomFloat(0.30,g_ThornsPercent[thorns_level]));
             if (dmgamt > 0 && GetRandomInt(1,100) <= g_ThornsChance[thorns_level] &&
                 CanInvokeUpgrade(index, raceID, thornsID, .notify=false))
             {
-                decl Float:indexPos[3];
+                decl float indexPos[3];
                 GetClientAbsOrigin(index, indexPos); 
                 indexPos[2]+=35.0;
 
-                new Float:victimPos[3];
+                float victimPos[3];
                 GetEntityAbsOrigin(victim_index, victimPos);
                 victimPos[2] += 40;
 
-                new beamSprite = TPBeamSprite();
+                int beamSprite = TPBeamSprite();
                 TE_SetupBeamPoints(indexPos, victimPos, beamSprite, beamSprite, 0, 45, 1.0, 10.0, 10.0, 0, 0.5, {255,35,15,255}, 30);
                 TE_SendEffectToAll();
 
@@ -250,9 +250,9 @@ public bool:ThornsAura(Handle:event, damage, victim_index, index)
     return false;
 }
 
-public bool:TrueshotAura(damage, victim_index, index)
+public bool TrueshotAura(damage, victim_index, index)
 {
-    new trueshot_level = GetUpgradeLevel(index,raceID,trueshotID);
+    int trueshot_level = GetUpgradeLevel(index,raceID,trueshotID);
     if (trueshot_level > 0 && !IsInvulnerable(victim_index) &&
         !GetRestriction(index, Restriction_NoUpgrades) &&
         !GetRestriction(index, Restriction_Stunned) &&
@@ -264,7 +264,7 @@ public bool:TrueshotAura(damage, victim_index, index)
             new dmgamt=RoundFloat(float(damage)*g_TrueshotPercent[trueshot_level]);
             if (dmgamt > 0 && CanInvokeUpgrade(index, raceID,trueshotID, .notify=false))
             {
-                new Float:victimPos[3];
+                float victimPos[3];
                 GetEntityAbsOrigin(victim_index, victimPos);
                 victimPos[2] += 5;
 
@@ -281,7 +281,7 @@ public bool:TrueshotAura(damage, victim_index, index)
     return false;
 }
 
-public OnUltimateCommand(client,race,bool:pressed,arg)
+public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (pressed && race==raceID && IsValidClientAlive(client))
     {
@@ -291,7 +291,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             if (GetRestriction(client,Restriction_NoUltimates) ||
                 GetRestriction(client,Restriction_Stunned))
             {
-                decl String:upgradeName[64];
+                char upgradeName[64];
                 GetUpgradeName(raceID, rootsID, upgradeName, sizeof(upgradeName), client);
                 DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
                 PrepareAndEmitSoundToClient(client,deniedWav);
@@ -305,8 +305,8 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                         TF2_RemovePlayerDisguise(client);
                 }
 
-                new Float:indexLoc[3];
-                new Float:clientLoc[3];
+                float indexLoc[3];
+                float clientLoc[3];
                 GetClientAbsOrigin(client, clientLoc);
                 clientLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
@@ -316,15 +316,15 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                 static const entangleFlash[]    = {  0, 255, 200,  3 };
 
                 new lightning  = Lightning();
-                new beamSprite = BeamSprite();
-                new haloSprite = HaloSprite();
-                new Float:range = g_RootsRange[ult_level];
-                new Float:duration = g_EntangleDuration[ult_level];
+                int beamSprite = BeamSprite();
+                int haloSprite = HaloSprite();
+                float range = g_RootsRange[ult_level];
+                float duration = g_EntangleDuration[ult_level];
 
                 new b_count=0;
                 new alt_count=0;
-                new list[MaxClients+1];
-                new alt_list[MaxClients+1];
+                int list[MaxClients+1];
+                int alt_list[MaxClients+1];
                 SetupOBeaconLists(list, alt_list, b_count, alt_count, client);
 
                 if (b_count > 0)
@@ -344,9 +344,9 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                 }
 
 
-                new bool:playSound = PrepareSound(entangleSound);
+                bool playSound = PrepareSound(entangleSound);
 
-                new count = 0;
+                int count = 0;
                 new team  = GetClientTeam(client);
                 for (new index=1;index<=MaxClients;index++)
                 {
@@ -412,7 +412,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                 }
                 else
                 {
-                    decl String:upgradeName[64];
+                    char upgradeName[64];
                     GetUpgradeName(raceID, rootsID, upgradeName, sizeof(upgradeName), client);
                     DisplayMessage(client,Display_Ultimate, "%t", "WithoutEffect", upgradeName);
                 }

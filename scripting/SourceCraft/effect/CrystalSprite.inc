@@ -16,4 +16,4 @@
 #define CrystalSprite()      PrepareModel(g_crystalModel, g_crystalSprite)
 
 stock g_crystalSprite;
-stock const String:g_crystalModel[] = "materials/sprites/crystal_beam1.vmt";
+static const char g_crystalModel[] = "materials/sprites/crystal_beam1.vmt";

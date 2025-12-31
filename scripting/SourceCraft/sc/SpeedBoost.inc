@@ -22,7 +22,7 @@ stock SetupSpeed()
     SetupSmokeSprite();
 }
 
-stock SpeedBoost(client, Float:speed, bool:apply)
+stock SpeedBoost(client, float speed, bool apply)
 {
     if (speed >= 0.0 && speed != 1.0)
     {
@@ -39,7 +39,7 @@ stock SpeedBoost(client, Float:speed, bool:apply)
 
         if (IsValidClientAlive(client))
         {
-            new Float:start[3];
+            float start[3];
             GetClientAbsOrigin(client, start);
 
             static const color[4] = { 255, 100, 0, 255 };
@@ -52,10 +52,10 @@ stock SpeedBoost(client, Float:speed, bool:apply)
         SetSpeed(client,-1.0,apply);
 }
 
-stock LookupSpeedBoost(client, level, bool:apply, const Float:speedLevels[], maxLevel)
+stock LookupSpeedBoost(client, level, bool apply, const float speedLevels[], maxLevel)
 {
     // speedLevels is an array of speed % modifiers / level such as:
-    // new const Float:speedLevels[] = { 1.0, 1.05, 1.10, 1.15, 1.20 };
+    // new const float speedLevels[] = { 1.0, 1.05, 1.10, 1.15, 1.20 };
     if ( level > maxLevel)
         SpeedBoost(client,speedLevels[maxLevel], apply);
     else if (level >= 0)

@@ -5,35 +5,35 @@
  * Author(s): -=|JFH|=-Naris
  */
 
-new Handle:attrArray = INVALID_HANDLE;
-new Handle:attrTrie[MAXPLAYERS+1]  = INVALID_HANDLE;
-new Handle:attrDataArray[MAXPLAYERS+1]  = INVALID_HANDLE;
+Handle attrArray = null;
+Handle attrTrie[MAXPLAYERS+1]  = null;
+Handle attrDataArray[MAXPLAYERS+1]  = null;
 
-bool:HasAttribute(client, const String:attrName[], &Handle:data)
+bool HasAttribute(client, const char[] attrName, Handle &data)
 {
-    if (attrTrie[client] != INVALID_HANDLE)
+    if (attrTrie[client] != null)
         return GetTrieValue(attrTrie[client], attrName, data);
     else
         return false;
 }
 
-bool:AssignAttribute(client, const String:attrName[], Handle:data)
+bool AssignAttribute(client, const char[] attrName, Handle data)
 {
-    if (attrTrie[client] == INVALID_HANDLE)
+    if (attrTrie[client] == null)
         attrTrie[client] = CreateTrie();
 
-    if (attrDataArray[client] == INVALID_HANDLE)
+    if (attrDataArray[client] == null)
         attrDataArray[client] = CreateArray();
 
-    new Handle:value = INVALID_HANDLE;
-    if (GetTrieValue(attrTrie[client], attrName, value) && value != INVALID_HANDLE)
+    Handle value = null;
+    if (GetTrieValue(attrTrie[client], attrName, value) && value != null)
     {
         CloseHandle(value);
 
-        new Handle:attrData = attrDataArray[client];
-        if (attrData != INVALID_HANDLE)
+        Handle attrData = attrDataArray[client];
+        if (attrData != null)
         {
-            new index = FindValueInArray(attrData, value);
+            int index = FindValueInArray(attrData, value);
             if (index >= 0)
                 RemoveFromArray(attrData, index);
         }
@@ -43,19 +43,19 @@ bool:AssignAttribute(client, const String:attrName[], Handle:data)
     return SetTrieValue(attrTrie[client], attrName, data);
 }
 
-RemoveAttribute(client, const String:attrName[])
+RemoveAttribute(client, const char[] attrName)
 {
-    if (attrTrie[client] != INVALID_HANDLE)
+    if (attrTrie[client] != null)
     {
-        new Handle:value = INVALID_HANDLE;
-        if (GetTrieValue(attrTrie[client], attrName, value) && value != INVALID_HANDLE)
+        Handle value = null;
+        if (GetTrieValue(attrTrie[client], attrName, value) && value != null)
         {
             CloseHandle(value);
 
-            new Handle:attrData = attrDataArray[client];
-            if (attrData != INVALID_HANDLE)
+            Handle attrData = attrDataArray[client];
+            if (attrData != null)
             {
-                new index = FindValueInArray(attrData, value);
+                int index = FindValueInArray(attrData, value);
                 if (index >= 0)
                     RemoveFromArray(attrData, index);
             }
@@ -69,27 +69,27 @@ RemoveAttribute(client, const String:attrName[])
 
 RemoveAllAttributes(client)
 {
-    new Handle:attrData = attrDataArray[client];
-    if (attrData != INVALID_HANDLE)
+    Handle attrData = attrDataArray[client];
+    if (attrData != null)
     {
-        new size = GetArraySize(attrData);
-        for (new i =0; i < size; i++)
+        int size = GetArraySize(attrData);
+        for (int i =0; i < size; i++)
         {
-            new Handle:data = Handle:GetArrayCell(attrData, i);
-            if (data != INVALID_HANDLE)
+            Handle data = Handle:GetArrayCell(attrData, i);
+            if (data != null)
                 CloseHandle(data);
         }
         ClearArray(attrData);
     }
 
-    if (attrTrie[client] != INVALID_HANDLE)
+    if (attrTrie[client] != null)
         ClearTrie(attrTrie[client]);
 }
 
-CreateAttribute(const String:name[])
+CreateAttribute(const char[] name)
 {
-    new attrId = -1;
-    if (attrArray == INVALID_HANDLE)
+    int attrId = -1;
+    if (attrArray == null)
         attrArray = CreateArray(ByteCountToCells(NAME_STRING_LENGTH));
     else        
         attrId = FindStringInArray(attrArray, name);
@@ -100,11 +100,11 @@ CreateAttribute(const String:name[])
     return attrId;
 }
 
-bool:HasAttributeId(client, attrId, &Handle:data)
+bool HasAttributeId(client, int attrId, Handle &data)
 {
-    if (attrTrie[client] != INVALID_HANDLE)
+    if (attrTrie[client] != null)
     {
-        decl String:attrName[NAME_STRING_LENGTH];
+        char attrName[NAME_STRING_LENGTH];
         if (GetArrayString(attrArray, attrId, attrName, sizeof(attrName)))
             return GetTrieValue(attrTrie[client], attrName, data);
         else
@@ -114,18 +114,18 @@ bool:HasAttributeId(client, attrId, &Handle:data)
         return false;
 }
 
-bool:AssignAttributeId(client, attrId, Handle:data)
+bool AssignAttributeId(client, int attrId, Handle data)
 {
-    decl String:attrName[NAME_STRING_LENGTH];
+    char attrName[NAME_STRING_LENGTH];
     if (GetArrayString(attrArray, attrId, attrName, sizeof(attrName)))
         return AssignAttribute(client, attrName, data);
     else
         return false;
 }
 
-RemoveAttributeId(client, attrId)
+RemoveAttributeId(client, int attrId)
 {
-    decl String:attrName[NAME_STRING_LENGTH];
+    char attrName[NAME_STRING_LENGTH];
     if (GetArrayString(attrArray, attrId, attrName, sizeof(attrName)))
         return RemoveAttribute(client, attrName);
     else
@@ -161,7 +161,7 @@ native War3_CreateGenericSkill(String:gskillname[]);
 
 public NWar3_CreateGenericSkill(Handle:plugin,numParams)
 {
-	new String:tempgenskillname[32];
+	chartempgenskillname[32];
 	GetNativeString(1,tempgenskillname,32);
 	
 	//find existing
@@ -186,9 +186,9 @@ native War3_UseGenericSkill(raceid,String:gskillname[],Handle:genericSkillData,S
 public NWar3_UseGenericSkill(Handle:plugin,numParams)
 {
 	new raceid=GetNativeCell(1);
-	new String:genskillname[32];
+	chargenskillname[32];
 	GetNativeString(2,genskillname,sizeof(genskillname));
-	new Handle:genericSkillData=Handle:GetNativeCell(3);
+	HandlegenericSkillData=Handle:GetNativeCell(3);
 	//start from 1
 	for(new i=1;i<=genericskillcount;i++)
     {
@@ -199,16 +199,16 @@ public NWar3_UseGenericSkill(Handle:plugin,numParams)
 			if(raceid>0)
             {
 				//DP("3");
-				new String:raceskillname[2001];
-				new String:raceskilldesc[2001];
+				charraceskillname[2001];
+				charraceskilldesc[2001];
 				GetNativeString(4,raceskillname,sizeof(raceskillname));
 				GetNativeString(5,raceskilldesc,sizeof(raceskilldesc));
 				
-				//new bool:istranaslated=GetNativeCell(6);
+				//bool istranaslated=GetNativeCell(6);
 				
 				//native War3_UseGenericSkill(raceid,String:gskillname[],Handle:genericSkillData,String:yourskillname[],String:untranslatedSkillDescription[],bool:translated=false,bool:isUltimate=false,maxskilllevel=DEF_MAX_SKILL_LEVEL,any:...);
 
-				new bool:isult=GetNativeCell(7);
+				boolisult=GetNativeCell(7);
 				new tmaxskilllevel=GetNativeCell(8);
 				
 				//W3Log("add skill %s %s",skillname,skilldesc);
@@ -228,7 +228,7 @@ public NWar3_UseGenericSkill(Handle:plugin,numParams)
 					if( GenericSkill[i][redirectedfromrace][j]==raceid &&
 					    GenericSkill[i][redirectedfromskill][j]==newskillnum)
                     {
-						if(GenericSkill[i][raceskilldatahandle][j]!=INVALID_HANDLE &&
+						if(GenericSkill[i][raceskilldatahandle][j]!=null &&
                            GenericSkill[i][raceskilldatahandle][j] !=genericSkillData)
                         {
 							//DP("ERROR POSSIBLE HANDLE LEAK, NEW GENERIC SKILL DATA HANDLE PASSED, CLOSING OLD GENERIC DATA HANDLE");

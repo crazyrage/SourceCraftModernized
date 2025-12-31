@@ -18,7 +18,7 @@
  * @param thirdPerson   true to change view to 3rd person (default to use convar)
  * @return			    Returns 0 if a horsemann was spawned successfully
  */
-native MakeHorsemann(client, health=-1, bool:thirdPerson=bool:-1);
+native MakeHorsemann(client, health=-1, bool thirdPerson=bool:-1);
 
 /**
  * Returns true if the client is a Horsemann
@@ -42,7 +42,7 @@ native HorsemannScare(client);
  * @param plugin_only 	Set to 1 to assume control and disable admin functions.
  * @return		    	none
  */
-native ControlBeHorsemann(bool:plugin_only=true);
+native ControlBeHorsemann(bool plugin_only=true);
 
 /**
  * Gets called when the Horsemann scares someone
@@ -51,7 +51,7 @@ native ControlBeHorsemann(bool:plugin_only=true);
  * @param target:   The index of the player that is being scared (0 means scare was invoked, before targets are identified)
  * @return		    Plugin_Stop will prevent the client from being affected.
  */
-forward Action:OnHorsemannScare(client,target);
+forward Action OnHorsemannScare(client,target);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

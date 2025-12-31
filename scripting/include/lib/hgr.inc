@@ -23,7 +23,7 @@
  * @param client     Player index.
  * @return           Plugin_Handled; to stop the player from hooking.
  */
-forward Action:HGR_OnClientHook(client);
+forward Action HGR_OnClientHook(client);
 
 /**
  * Called when a player tries to search for a grab target.
@@ -31,7 +31,7 @@ forward Action:HGR_OnClientHook(client);
  * @param client     Player index.
  * @return           Plugin_Handled; to stop the player from searching.
  */
-forward Action:HGR_OnClientGrabSearch(client);
+forward Action HGR_OnClientGrabSearch(client);
 
 /**
  * Called when a player stops grabbing (drops) the target.
@@ -39,7 +39,7 @@ forward Action:HGR_OnClientGrabSearch(client);
  * @param client     Player index.
  * @return           Plugin_Handled; has no effect.
  */
-forward Action:HGR_OnClientGrabStop(client);
+forward Action HGR_OnClientGrabStop(client);
 
 /**
  * Called when a player tries to grab a valid target.
@@ -47,7 +47,7 @@ forward Action:HGR_OnClientGrabStop(client);
  * @param client     Player index.
  * @return           Plugin_Handled; to stop the player from grabbing.
  */
-forward Action:HGR_OnClientGrab(client);
+forward Action HGR_OnClientGrab(client);
 
 /**
  * Called when a player tries to rope.
@@ -55,7 +55,7 @@ forward Action:HGR_OnClientGrab(client);
  * @param client     Player index.
  * @return           Plugin_Handled; to stop the player from roping.
  */
-forward Action:HGR_OnClientRope(client);
+forward Action HGR_OnClientRope(client);
 
 /**
  * Gives or removes group access to hook, grab, or rope.
@@ -66,7 +66,7 @@ forward Action:HGR_OnClientRope(client);
  * @param action     0 - Hook, 1 - Grab, 2 - Rope (integer)
  * @return           The number of players whose access was set.
  */
-native HGR_Access(const String:target[], access, action);
+native HGR_Access(const char[] target, access, action);
 
 /**
  * Gives or removes client access to hook, grab, or rope.
@@ -78,7 +78,7 @@ native HGR_Access(const String:target[], access, action);
  * @return           True if successful, false if client is a bot.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_ClientAccess(client, access, action);
+native bool HGR_ClientAccess(client, access, action);
 
 /**
  * Gives or removes client access to hook, grab, or rope.
@@ -90,7 +90,7 @@ native bool:HGR_ClientAccess(client, access, action);
  * @return           True if successful, false if client is a bot.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_TimedClientAccess(client, Float:duration, action);
+native bool HGR_TimedClientAccess(client, Float duration, action);
 
 /**
  * Returns whether or not a client is using the hook.
@@ -99,7 +99,7 @@ native bool:HGR_TimedClientAccess(client, Float:duration, action);
  * @return           True if player is hooking, false otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_IsHooking(client);
+native bool HGR_IsHooking(client);
 
 /**
  * Returns whether or not a client is using the grab.
@@ -108,7 +108,7 @@ native bool:HGR_IsHooking(client);
  * @return           True if player is grabbing, false otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_IsGrabbing(client);
+native bool HGR_IsGrabbing(client);
 
 /**
  * Returns whether or not a client is being grabbed.
@@ -117,7 +117,7 @@ native bool:HGR_IsGrabbing(client);
  * @return           True if player is being grabbed, false otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_IsBeingGrabbed(client);
+native bool HGR_IsBeingGrabbed(client);
 
 /**
  * Returns whether or not a client is using the rope.
@@ -126,7 +126,7 @@ native bool:HGR_IsBeingGrabbed(client);
  * @return           True if player is using the rope, false otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_IsRoping(client);
+native bool HGR_IsRoping(client);
 
 /**
  * Returns whether or not a client is hooking backward
@@ -135,7 +135,7 @@ native bool:HGR_IsRoping(client);
  * @return           True if player is hooking backward, false otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_IsPushing(client);
+native bool HGR_IsPushing(client);
 
 /**
  * Returns whether or not a client is attracting a grab target
@@ -144,7 +144,7 @@ native bool:HGR_IsPushing(client);
  * @return           True if player is attracting grab target, false otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_IsAttracting(client);
+native bool HGR_IsAttracting(client);
 
 /**
  * Returns whether or not a client is repelling a grab target
@@ -153,7 +153,7 @@ native bool:HGR_IsAttracting(client);
  * @return           True if player is repelling grab target, false otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_IsRepelling(client);
+native bool HGR_IsRepelling(client);
 
 /**
  * Returns whether or not a client is ascending a rope
@@ -162,7 +162,7 @@ native bool:HGR_IsRepelling(client);
  * @return           True if player is ascending a rope, false otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_IsAscending(client);
+native bool HGR_IsAscending(client);
 
 /**
  * Returns whether or not a client is descending a rope
@@ -171,7 +171,7 @@ native bool:HGR_IsAscending(client);
  * @return           True if player is descending a rope, false otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_IsDescending(client);
+native bool HGR_IsDescending(client);
 
 /**
  * Retrieves the location where a client's hook is attached.
@@ -181,7 +181,7 @@ native bool:HGR_IsDescending(client);
  * @return           True if player is hooking, false otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_GetHookLocation(client, Float:buffer[3]);
+native bool HGR_GetHookLocation(client, Float buffer[3]);
 
 /**
  * Retrieves the location where a client's grab is attached.
@@ -191,7 +191,7 @@ native bool:HGR_GetHookLocation(client, Float:buffer[3]);
  * @return           True if player is grabbing, false otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_GetGrabLocation(client, Float:buffer[3]);
+native bool HGR_GetGrabLocation(client, Float buffer[3]);
 
 /**
  * Retrieves the location where a client's rope is attached.
@@ -201,7 +201,7 @@ native bool:HGR_GetGrabLocation(client, Float:buffer[3]);
  * @return           True if player is using the rope, false otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_GetRopeLocation(client, Float:buffer[3]);
+native bool HGR_GetRopeLocation(client, Float buffer[3]);
 
 /**
  * Retrieves the location opposite of where a client's hook is attached.
@@ -211,7 +211,7 @@ native bool:HGR_GetRopeLocation(client, Float:buffer[3]);
  * @return           True if player is using the hook, false otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_GetPushLocation(client, Float:buffer[3]);
+native bool HGR_GetPushLocation(client, Float buffer[3]);
 
 /**
  * Retrieves the distance between the client and where their hook landed
@@ -220,7 +220,7 @@ native bool:HGR_GetPushLocation(client, Float:buffer[3]);
  * @return           Hook distance, or -1 if client is not hooking.
  * @error            Player index is out of bounds.
  */
-native Float:HGR_GetHookDistance(client);
+native Float HGR_GetHookDistance(client);
 
 /**
  * Retrieves the distance between the client and their grab target
@@ -229,7 +229,7 @@ native Float:HGR_GetHookDistance(client);
  * @return           Grab distance, or -1 if client is not hooking.
  * @error            Player index is out of bounds.
  */
-native Float:HGR_GetGrabDistance(client);
+native Float HGR_GetGrabDistance(client);
 
 /**
  * Retrieves the distance between the client and where their rope landed
@@ -238,7 +238,7 @@ native Float:HGR_GetGrabDistance(client);
  * @return           Rope distance, or -1 if client is not hooking.
  * @error            Player index is out of bounds.
  */
-native Float:HGR_GetRopeDistance(client);
+native Float HGR_GetRopeDistance(client);
 
 /**
  * Retrieves the distance between the client and the location opposite of where their hook landed
@@ -247,7 +247,7 @@ native Float:HGR_GetRopeDistance(client);
  * @return           Push distance, or -1 if client is not hooking.
  * @error            Player index is out of bounds.
  */
-native Float:HGR_GetPushDistance(client);
+native Float HGR_GetPushDistance(client);
 
 /**
  * Retrieves the entity index of a client's hook target.
@@ -292,7 +292,7 @@ native HGR_GetPushTarget(client);
  * @return           False if player is performing an action and unable to hook, true otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_ForceHook(client);
+native bool HGR_ForceHook(client);
 
 /**
  * Forces a client to use their grab.
@@ -301,7 +301,7 @@ native bool:HGR_ForceHook(client);
  * @return           False if player is performing an action and unable to grab, true otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_ForceGrab(client);
+native bool HGR_ForceGrab(client);
 
 /**
  * Forces a client to use their rope.
@@ -310,7 +310,7 @@ native bool:HGR_ForceGrab(client);
  * @return           False if player is performing an action and unable to rope, true otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_ForceRope(client);
+native bool HGR_ForceRope(client);
 
 /**
  * Forces a client to use their hook push.
@@ -319,7 +319,7 @@ native bool:HGR_ForceRope(client);
  * @return           False if player is performing an action and unable to push, true otherwise.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_ForcePush(client);
+native bool HGR_ForcePush(client);
 
 /**
  * Stops a client hook in progress.
@@ -328,7 +328,7 @@ native bool:HGR_ForcePush(client);
  * @return           True if successful, false if player is not hooking.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_StopHook(client);
+native bool HGR_StopHook(client);
 
 /**
  * Stops a client grab in progress.
@@ -337,7 +337,7 @@ native bool:HGR_StopHook(client);
  * @return           True if successful, false if player is not grabbing.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_StopGrab(client);
+native bool HGR_StopGrab(client);
 
 /**
  * Stops a client rope in progress.
@@ -346,7 +346,7 @@ native bool:HGR_StopGrab(client);
  * @return           True if successful, false if player is not roping.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_StopRope(client);
+native bool HGR_StopRope(client);
 
 /**
  * Stops a client hook push in progress.
@@ -355,7 +355,7 @@ native bool:HGR_StopRope(client);
  * @return           True if successful, false if player is not pushing.
  * @error            Player index is out of bounds.
  */
-native bool:HGR_StopPush(client);
+native bool HGR_StopPush(client);
 
 public SharedPlugin:__pl_hookgrabrope =
 {

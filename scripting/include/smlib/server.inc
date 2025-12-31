@@ -17,18 +17,18 @@
  * @param public		Set to true to retrieve the server's public/external IP, false otherwise.
  * @return				Long IP or 0 if the IP couldn't be retrieved.
  */
-stock Server_GetIP(bool:public_=true)
+stock Server_GetIP(bool public_=true)
 {
 	new ip = 0;
 
-	static Handle:cvHostip = INVALID_HANDLE;
+	static Handle cvHostip = null;
 
-	if (cvHostip == INVALID_HANDLE) {
+	if (cvHostip == null) {
 		cvHostip = FindConVar("hostip");
 		MarkNativeAsOptional("Steam_GetPublicIP");
 	}
 
-	if (cvHostip != INVALID_HANDLE) {
+	if (cvHostip != null) {
 		ip = GetConVarInt(cvHostip);
 	}
 
@@ -72,7 +72,7 @@ stock Server_GetIP(bool:public_=true)
  * @param public		Set to true to retrieve the server's public/external IP, false otherwise.
  * @return				True on success, false otherwise.
  */
-stock bool:Server_GetIPString(String:buffer[], size, bool:public_=true)
+stock bool Server_GetIPString(char[] buffer, size, bool public_=true)
 {
 	new ip;
 
@@ -94,13 +94,13 @@ stock bool:Server_GetIPString(String:buffer[], size, bool:public_=true)
  */
 stock Server_GetPort()
 {
-	static Handle:cvHostport = INVALID_HANDLE;
+	static Handle cvHostport = null;
 
-	if (cvHostport == INVALID_HANDLE) {
+	if (cvHostport == null) {
 		cvHostport = FindConVar("hostport");
 	}
 
-	if (cvHostport == INVALID_HANDLE) {
+	if (cvHostport == null) {
 		return 0;
 	}
 
@@ -116,15 +116,15 @@ stock Server_GetPort()
  * @param size			String buffer size
  * @return				True on success, false otherwise.
  */
-stock bool:Server_GetHostName(String:buffer[], size)
+stock bool Server_GetHostName(char[] buffer, size)
 {
-	static Handle:cvHostname = INVALID_HANDLE;
+	static Handle cvHostname = null;
 
-	if (cvHostname == INVALID_HANDLE) {
+	if (cvHostname == null) {
 		cvHostname = FindConVar("hostname");
 	}
 
-	if (cvHostname == INVALID_HANDLE) {
+	if (cvHostname == null) {
 		buffer[0] = '\0';
 		return false;
 	}

@@ -16,7 +16,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of the Firemines plugin.
  * @return		    	none
  */
-native ControlDeath(bool:plugin_only=true);
+native ControlDeath(bool plugin_only=true);
 
 /**
  * Give a player one or more Fake Deaths to perpetrate
@@ -26,7 +26,7 @@ native ControlDeath(bool:plugin_only=true);
  * @param dissolve 	Dissolve ragdolls (0 = disabled | 1 = enabled)
  * @return			none
  */
-native GiveDeath(client,number=1, bool:dissolve=false);
+native GiveDeath(client,number=1, bool dissolve=false);
 
 /**
  * Removes a player's ability to Fake Deaths.

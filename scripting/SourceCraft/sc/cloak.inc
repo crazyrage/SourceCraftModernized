@@ -21,15 +21,15 @@
 
 #define SetupCloak SetupLightning
 
-stock bool:cfgAllowInvisibility = true;
+stock bool cfgAllowInvisibility = true;
 
 stock g_cloakItem = -1;
 
-stock Cloak(client, level, bool:apply=false)
+stock Cloak(client, level, bool apply=false)
 {
     static const alphaTable[]          = { 0, 255, 235, 215, 200};
-    static const Float:delayTable[]    = { 0.0, 2.0, 1.5, 1.0, 0.5 };
-    static const Float:durationTable[] = { 0.0, 5.0, 10.0, 15.0, 20.0 }
+    static const float delayTable[]    = { 0.0, 2.0, 1.5, 1.0, 0.5 };
+    static const float durationTable[] = { 0.0, 5.0, 10.0, 15.0, 20.0 }
 
     static const RenderFx:fx[] = { RENDERFX_NONE,
                                    RENDERFX_FLICKER_FAST,
@@ -39,8 +39,8 @@ stock Cloak(client, level, bool:apply=false)
     if (level > 0)
     {
         new alpha = alphaTable[level];
-        new Float:delay = delayTable[level];
-        new Float:duration = durationTable[level];
+        float delay = delayTable[level];
+        float duration = durationTable[level];
 
         /* If the Player also has the Cloak of Shadows,
          * Decrease the delay and Increase the duration.
@@ -55,7 +55,7 @@ stock Cloak(client, level, bool:apply=false)
             duration *= 1.10;
         }
 
-        new Float:start[3];
+        float start[3];
         GetClientAbsOrigin(client, start);
 
         new lightning = Lightning();
@@ -84,16 +84,16 @@ stock Cloak(client, level, bool:apply=false)
     }
 }
 
-stock AlphaCloak(client, level, bool:allowInvisibility, bool:apply=false)
+stock AlphaCloak(client, level, bool allowInvisibility, bool apply=false)
 {
     static const alphaTable[]        = { 0, 215, 190, 140, 100};
-    static const Float:factorTable[] = { 0.0, 0.9, 0.8, 0.7, 0.6 };
+    static const float factorTable[] = { 0.0, 0.9, 0.8, 0.7, 0.6 };
 
     if (level > 0)
     {
         new alpha = alphaTable[level];
-        new Float:melee = factorTable[level];
-        new Float:movement = factorTable[level];
+        float melee = factorTable[level];
+        float movement = factorTable[level];
 
         /* If the Player also has the Cloak of Shadows,
          * Decrease the delay and Increase the duration.
@@ -106,7 +106,7 @@ stock AlphaCloak(client, level, bool:allowInvisibility, bool:apply=false)
             movement *= 1.10;
         }
 
-        new Float:start[3];
+        float start[3];
         GetClientAbsOrigin(client, start);
 
         new lightning = Lightning();

@@ -17,13 +17,13 @@
 #include "sc/plugins"
 #include "sc/sounds"
 
-stock const String:stimpacksExpireWav[] = "sc/tmapss01.wav";
-stock const String:stimpacksWav[][] = { "sc/tmasti00.mp3",  // Stimpack sounds
+stock const char stimpacksExpireWav[] = "sc/tmapss01.wav";
+stock const char stimpacksWav[][] = { "sc/tmasti00.mp3",  // Stimpack sounds
                                         "sc/tmasti01.mp3" };
 
 stock stimpacksID;
 
-stock bool:m_StimpacksActive[MAXPLAYERS+1];
+stock bool m_StimpacksActive[MAXPLAYERS+1];
 
 stock SetupStimpacks()
 {
@@ -40,7 +40,7 @@ stock Stimpacks(client, level, raceId, upgradeId)
     {
         if (!m_ROFAvailable)
         {
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, upgradeId, upgradeName, sizeof(upgradeName), client);
             PrintHintText(client,"%t", "AreNotAvailable", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -48,7 +48,7 @@ stock Stimpacks(client, level, raceId, upgradeId)
         else if (GetRestriction(client,Restriction_NoUltimates) ||
                  GetRestriction(client,Restriction_Stunned))
         {
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, upgradeId, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -83,7 +83,7 @@ stock Stimpacks(client, level, raceId, upgradeId)
     }
 }
 
-public Action:EndStimpack(Handle:timer,any:userid)
+public Action EndStimpack(Handle timer,any:userid)
 {
     new client = GetClientOfUserId(userid);
     if (client > 0)
@@ -94,7 +94,7 @@ public Action:EndStimpack(Handle:timer,any:userid)
 
         if (IsClientInGame(client) && IsPlayerAlive(client))
         {
-            decl String:message[64];
+            char message[64];
             Format(message, sizeof(message), "%T", "StimpackHud", client);
             ReplaceString(message, sizeof(message), "*", "");
             ReplaceString(message, sizeof(message), " ", "");

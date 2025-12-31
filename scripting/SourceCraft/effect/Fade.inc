@@ -22,8 +22,8 @@
 
 stock Fade(clients[], numClients, duration,time,const color[4], code=FFADE_IN)
 {
-    new Handle:hBf=StartMessage("Fade", clients, numClients);
-    if(hBf!=INVALID_HANDLE)
+    Handle hBf=StartMessage("Fade", clients, numClients);
+    if(hBf!=null)
     {
         BfWriteShort(hBf,duration); //*400);
         BfWriteShort(hBf,time); //*400);
@@ -40,8 +40,8 @@ stock FadeOne(client, duration,time,const color[4], code=FFADE_IN)
 {
     if (IsClient(client))
     {
-        new Handle:hBf=StartMessageOne("Fade", client);
-        if(hBf!=INVALID_HANDLE)
+        Handle hBf=StartMessageOne("Fade", client);
+        if(hBf!=null)
         {
             BfWriteShort(hBf,duration); //*400);
             BfWriteShort(hBf,time); //*400);
@@ -57,8 +57,8 @@ stock FadeOne(client, duration,time,const color[4], code=FFADE_IN)
 
 stock FadeAll(duration,time,const color[4], code=FFADE_IN)
 {
-    new Handle:hBf=StartMessageAllLiving("Fade");
-    if(hBf!=INVALID_HANDLE)
+    Handle hBf=StartMessageAllLiving("Fade");
+    if(hBf!=null)
     {
         BfWriteShort(hBf,duration); //*400);
         BfWriteShort(hBf,time); //*400);
@@ -73,11 +73,11 @@ stock FadeAll(duration,time,const color[4], code=FFADE_IN)
 
 stock FadeVulerable(duration,time,const color[4], code=FFADE_IN)
 {
-    new total = 0;
-    new altTotal = 0;
-    new clients[MaxClients];
-    new altClients[MaxClients];
-    for (new i=1; i<=MaxClients; i++)
+    int total = 0;
+    int altTotal = 0;
+    int clients[MaxClients];
+    int altClients[MaxClients];
+    for (int i=1; i<=MaxClients; i++)
     {
         if (IsClientInGame(i) && IsPlayerAlive(i) && !IsFakeClient(i))
         {

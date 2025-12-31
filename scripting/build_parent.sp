@@ -17,7 +17,7 @@
 #define PLUGIN_VERSION "1.0.0"
 
 // Plugin definitions
-public Plugin:myinfo =
+public Plugin myinfo =
 {
 	name = "Buildable Parenting",
 	author = "WoZeR - Teddy Ruxpin",
@@ -31,21 +31,21 @@ public OnPluginStart()
 	HookEvent("player_builtobject", Event_player_builtobject);
 }
 
-public Action:Event_player_builtobject(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Event_player_builtobject(Handle event, const char[] name, bool dontBroadcast)
 {
-    decl String:strClassName[64];
-    new Float:vecObjectPos[3];
-    new Float:vecCheckBelow[3];
-    new MaxEntities = GetEntityCount();
+    char strClassName[64];
+    float vecObjectPos[3];
+    float vecCheckBelow[3];
+    int MaxEntities = GetEntityCount();
     
-    for (new i=1;i <= MaxEntities; i++)
+    for(int i=1;i <= MaxEntities; i++)
     {
         if (IsValidEntity(i))
         {
             GetEntityNetClass(i, strClassName, sizeof(strClassName));
-            if (strcmp(String:strClassName, "CObjectSentrygun", true) == 0 ||
-                strcmp(String:strClassName, "CObjectDispenser", true) == 0 ||
-                strcmp(String:strClassName, "CObjectTeleporter", true) == 0)
+            if (strcmp(strClassName, "CObjectSentrygun", true) == 0 ||
+                strcmp(strClassName, "CObjectDispenser", true) == 0 ||
+                strcmp(strClassName, "CObjectTeleporter", true) == 0)
             {
                 //Get the object's position
                 GetEntDataVector(i, FindSendPropInfo("CPhysicsProp", "m_vecOrigin"), vecObjectPos);
@@ -58,18 +58,18 @@ public Action:Event_player_builtobject(Handle:event, const String:name[], bool:d
                 //Check for colliding entities
                 TR_TraceRayFilter(vecObjectPos, vecCheckBelow, MASK_PLAYERSOLID, RayType_EndPoint, TraceRayDontHitSelf, i);
 
-                if (TR_DidHit(INVALID_HANDLE))
+                if (TR_DidHit(null))
                 {
-                    new TRIndex = TR_GetEntityIndex(INVALID_HANDLE);
+                    int TRIndex = TR_GetEntityIndex(null);
                     if (TRIndex > 32) //Don't attach to players
                     {
                         GetEntityNetClass(TRIndex, strClassName, sizeof(strClassName));
-                        if (strcmp(String:strClassName, "CObjectSentrygun", true) != 0 &&
-                            strcmp(String:strClassName, "CObjectDispenser", true) != 0 &&
-                            strcmp(String:strClassName, "CObjectTeleporter", true) != 0)
+                        if (strcmp(strClassName, "CObjectSentrygun", true) != 0 &&
+                            strcmp(strClassName, "CObjectDispenser", true) != 0 &&
+                            strcmp(strClassName, "CObjectTeleporter", true) != 0)
                         {
                             //This part can be redone since BAILOPIN added the ability to read a string_t
-                            new String:strTargetName[64];
+                            char strTargetName[64];
                             IntToString(TRIndex, strTargetName, 64);
 
                             DispatchKeyValue(TRIndex, "targetname", strTargetName);
@@ -88,7 +88,7 @@ public Action:Event_player_builtobject(Handle:event, const String:name[], bool:d
     return Plugin_Continue;
 }
 
-public bool:TraceRayDontHitSelf(entity, mask, any:data)
+public bool TraceRayDontHitSelf(entity, mask, any:data)
 {
     return (entity != data); // Check if the TraceRay hit the owning entity.
 }

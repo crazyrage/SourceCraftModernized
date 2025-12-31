@@ -17,7 +17,7 @@
  * @param filename		File that will be added to downloadables table.
  * @noreturn
  */
-stock W3AddFile(const String:filename[])
+stock W3AddFile(const char filename[])
 {
 	if (FileExists(filename)) {
 		AddFileToDownloadsTable(filename);
@@ -34,10 +34,10 @@ stock W3AddFile(const String:filename[])
  * @param preload		If preload is true the file will be precached before level startup.
  * @return Returns the sound index if precache is true, 0 for error or precache is false. 
  */
-stock W3AddSound(const String:sound[], bool:precache = false, bool:preload = false)
+stock W3AddSound(const char sound[], bool precache = false, bool preload = false)
 {
 #if !defined SOURCECRAFT
-	decl String:path[PLATFORM_MAX_PATH];
+	char path[PLATFORM_MAX_PATH];
 	Format(path, sizeof(path), "sound/%s", sound);
 	if (FileExists(path)) {
 		AddFileToDownloadsTable(path);
@@ -65,15 +65,15 @@ stock W3AddSound(const String:sound[], bool:precache = false, bool:preload = fal
 
 #define PrecacheModel          WC3PrecacheModel
 
-stock WC3PrecacheModel(const String:model[], bool:preload=false)
+stock WC3PrecacheModel(const char model[], bool preload=false)
 {
 	return SetupModel(model, .precache=true, .preload=preload);
 }
 
 #else
-stock bool:War3_PrecacheSound(String:sound[]){
+stock bool War3_PrecacheSound(char[] sound){
 
-	new String:longsound[512];
+	char longsound[512];
 	
 	Format(longsound,sizeof(longsound), "sound/%s", sound);
 	
@@ -105,7 +105,7 @@ stock bool:War3_PrecacheSound(String:sound[]){
  * @param preload		If preload is true the file will be precached before level startup.
  * @return Returns the model index if precache is true, 0 for error or precache is false. 
  */
-stock W3AddModel(const String:model[], bool:precache = true, bool:preload = true)
+stock W3AddModel(const char model[], bool precache = true, bool preload = true)
 {
 #if !defined SOURCECRAFT
 	if (FileExists(model)) {
@@ -130,7 +130,7 @@ stock W3AddModel(const String:model[], bool:precache = true, bool:preload = true
  * @param preload		If preload is true the file will be precached before level startup.
  * @return Returns the Decal index if precache is true, 0 for error or precache is false. 
  */
-stock W3AddDecal(const String:decal[], bool:precache = true, bool:preload = true)
+stock W3AddDecal(const char decal[], bool precache = true, bool preload = true)
 {
 #if !defined SOURCECRAFT
 	if (FileExists(decal)) {
@@ -148,7 +148,7 @@ stock W3AddDecal(const String:decal[], bool:precache = true, bool:preload = true
 
 //precache particle    doesn't add to download table
 //Revan: Just something I found while searching tru the sm forums
-stock War3_PrecacheParticle( const String:p_strEffectName[] )
+stock War3_PrecacheParticle( const char p_strEffectName[] )
 {
 	static s_numStringTable = INVALID_STRING_TABLE;
 	if ( s_numStringTable == INVALID_STRING_TABLE  )
@@ -157,11 +157,11 @@ stock War3_PrecacheParticle( const String:p_strEffectName[] )
 }
 
 //probably usefull since it allready gots a getbyshortname brother
-stock War3_GetRaceIDByName(const String:racename[64]) {
-	new RacesLoaded = War3_GetRacesLoaded();
-	decl String:buffer[64],id;
+stock War3_GetRaceIDByName(const char racename[64]) {
+	int RacesLoaded = War3_GetRacesLoaded();
+	char buffer[64],id;
 	id=-1;//so.. -1 means invalid/not found
-	for(new x=1;x<=RacesLoaded;x++)
+	for(int x=1;x<=RacesLoaded;x++)
 	{
 		War3_GetRaceName(x,buffer,sizeof(buffer));
 		if(StrEqual(buffer,racename)) {

@@ -202,7 +202,7 @@ enum SocketOption {
  */
 funcenum SocketConnectCB
 {
-    public(Handle:socket, any:arg)
+    public(Handle socket, any arg)
 };
 
 /**
@@ -218,7 +218,7 @@ funcenum SocketConnectCB
  */
 funcenum SocketIncomingCB
 {
-    public(Handle:socket, Handle:newSocket, const String:remoteIP[], remotePort, any:arg)
+    public(Handle socket, Handle newSocket, const char[] remoteIP, remotePort, any arg)
 };
 
 /**
@@ -237,7 +237,7 @@ funcenum SocketIncomingCB
  */
 funcenum SocketReceiveCB
 {
-    public(Handle:socket, const String:receiveData[], const dataSize, any:arg)
+    public(Handle socket, const char[] receiveData, const dataSize, any arg)
 };
 
 /**
@@ -249,7 +249,7 @@ funcenum SocketReceiveCB
  */
 funcenum SocketSendqueueEmptyCB
 {
-    public(Handle:socket, any:arg)
+    public(Handle socket, any arg)
 };
 
 /**
@@ -263,7 +263,7 @@ funcenum SocketSendqueueEmptyCB
  */
 funcenum SocketDisconnectCB
 {
-    public(Handle:socket, any:arg)
+    public(Handle socket, any arg)
 };
 
 /**
@@ -279,7 +279,7 @@ funcenum SocketDisconnectCB
  */
 funcenum SocketErrorCB
 {
-    public(Handle:socket, const errorType, const errorNum, any:arg)
+    public(Handle socket, const errorType, const errorNum, any arg)
 };
 
 
@@ -294,7 +294,7 @@ funcenum SocketErrorCB
  * @param	socket	Socket handle to check
  * @return	bool	The connection status
  */
-native bool:SocketIsConnected(Handle:socket);
+native bool SocketIsConnected(Handle socket);
 
 
 /**
@@ -304,18 +304,19 @@ native bool:SocketIsConnected(Handle:socket);
  *
  * @param SocketType	protocol	The protocol to use, SOCKET_TCP is default
  * @param SocketErrorCB efunc		The error callback
- * @return Handle					The socket handle. Returns INVALID_HANDLE on failure
+ * @return Handle					The socket handle. Returns null on failure
  */
-native Handle:SocketCreate(SocketType:protocol=SOCKET_TCP, SocketErrorCB:efunc);
+native Handle SocketCreate(SocketType:protocol=SOCKET_TCP, SocketErrorCB:efunc);
 
 /**
  * Binds the socket to a local address
  *
- * @param Handle	socket		The handle of the socket to be used. * @param String	hostname	The hostname (or IP) to bind the socket to.
+ * @param Handle	socket		The handle of the socket to be used.
+ * @param String	hostname	The hostname (or IP) to bind the socket to.
  * @param cell_t	port		The port to bind the socket to.
  * @return bool 				true on success
  */
-native bool:SocketBind(Handle:socket, const String:hostname[], port);
+native bool SocketBind(Handle socket, const char[] hostname, port);
 
 /**
  * Connects a socket
@@ -327,11 +328,12 @@ native bool:SocketBind(Handle:socket, const String:hostname[], port);
  * @param Handle				socket		The handle of the socket to be used.
  * @param SocketConnectCB		cfunc		The connect callback
  * @param SocketReceiveCB		rfunc		The receive callback
- * @param SocketDisconnectCB	dfunc		The disconnect callback * @param String				hostname	The hostname (or IP) to connect to.
+ * @param SocketDisconnectCB	dfunc		The disconnect callback
+ * @param String				hostname	The hostname (or IP) to connect to.
  * @param cell_t				port		The port to connect to.
  * @noreturn
  */
-native SocketConnect(Handle:socket, SocketConnectCB:cfunc, SocketReceiveCB:rfunc, SocketDisconnectCB:dfunc, const String:hostname[], port);
+native SocketConnect(Handle socket, SocketConnectCB:cfunc, SocketReceiveCB:rfunc, SocketDisconnectCB:dfunc, const char[] hostname, port);
 
 /**
  * Disconnects a socket
@@ -341,7 +343,7 @@ native SocketConnect(Handle:socket, SocketConnectCB:cfunc, SocketReceiveCB:rfunc
  *
  * @noreturn
  */
-native bool:SocketDisconnect(Handle:socket);
+native bool SocketDisconnect(Handle socket);
 
 /**
  * Makes a socket listen for incoming connections
@@ -350,7 +352,7 @@ native bool:SocketDisconnect(Handle:socket);
  * @param SocketIncomingCB	ifunc	The callback for incoming connections
  * @return bool 					true on success
  */
-native bool:SocketListen(Handle:socket, SocketIncomingCB:ifunc);
+native bool SocketListen(Handle socket, SocketIncomingCB:ifunc);
 
 /**
  * Sends data through the socket.
@@ -364,10 +366,12 @@ native bool:SocketListen(Handle:socket, SocketIncomingCB:ifunc);
  *
  * @param Handle	socket	The handle of the socket to be used.
  * @param String	data	The data to send.
- * @noreturn */
-native SocketSend(Handle:socket, const String:data[], size=-1);
+ * @noreturn
+ */
+native SocketSend(Handle socket, const char[] data, size=-1);
 
-/** * Sends UDP data through the socket to a specific destination.
+/**
+ * Sends UDP data through the socket to a specific destination.
  *
  * @note specify size for binary safe operation
  * @note if size is not specified the \0 terminator will not be included
@@ -380,17 +384,19 @@ native SocketSend(Handle:socket, const String:data[], size=-1);
  * @param String	data	The data to send.
  * @param String	hostname	The hostname (or IP) to send to.
  * @param cell_t	port		The port to send to.
- * @noreturn */
-native SocketSendTo(Handle:socket, const String:data[], size=-1, const String:hostname[], port);
+ * @noreturn
+ */
+native SocketSendTo(Handle socket, const char[] data, size=-1, const char[] hostname, port);
 
 /**
  * Set a socket option.
  *
- * @param Handle		socket	The handle of the socket to be used. May be INVALID_HANDLE if not essential.
+ * @param Handle		socket	The handle of the socket to be used. May be null if not essential.
  * @param SocketOption	option	The option to modify (see enum SocketOption for details).
  * @param cellt_		value	The value to set the option to.
- * @return cell_t			1 on success. */
-native SocketSetOption(Handle:socket, SocketOption:option, value);
+ * @return cell_t			1 on success.
+ */
+native SocketSetOption(Handle socket, SocketOption:option, value);
 
 
 /**
@@ -403,7 +409,7 @@ native SocketSetOption(Handle:socket, SocketOption:option, value);
  * @param SocketReceiveCB	rfunc	The receive callback
  * @noreturn
  */
-native SocketSetReceiveCallback(Handle:socket, SocketReceiveCB:rfunc);
+native SocketSetReceiveCallback(Handle socket, SocketReceiveCB:rfunc);
 
 /**
  * Defines the callback function for when the socket sent all items in its send queue
@@ -416,7 +422,7 @@ native SocketSetReceiveCallback(Handle:socket, SocketReceiveCB:rfunc);
  * @param SocketDisconnectCB	dfunc	The disconnect callback
  * @noreturn
  */
-native SocketSetSendqueueEmptyCallback(Handle:socket, SocketSendqueueEmptyCB:sfunc);
+native SocketSetSendqueueEmptyCallback(Handle socket, SocketSendqueueEmptyCB:sfunc);
 
 /**
  * Defines the callback function for when the socket was properly disconnected by the remote side
@@ -428,7 +434,7 @@ native SocketSetSendqueueEmptyCallback(Handle:socket, SocketSendqueueEmptyCB:sfu
  * @param SocketDisconnectCB	dfunc	The disconnect callback
  * @noreturn
  */
-native SocketSetDisconnectCallback(Handle:socket, SocketDisconnectCB:dfunc);
+native SocketSetDisconnectCallback(Handle socket, SocketDisconnectCB:dfunc);
 
 /**
  * Defines the callback function for when the socket triggered an error
@@ -440,7 +446,7 @@ native SocketSetDisconnectCallback(Handle:socket, SocketDisconnectCB:dfunc);
  * @param SocketErrorCB efunc	The error callback
  * @noreturn
  */
-native SocketSetErrorCallback(Handle:socket, SocketErrorCB:efunc);
+native SocketSetErrorCallback(Handle socket, SocketErrorCB:efunc);
 
 
 /**
@@ -450,7 +456,7 @@ native SocketSetErrorCallback(Handle:socket, SocketErrorCB:efunc);
  * @param any		arg		The argument to set
  * @noreturn
  */
-native SocketSetArg(Handle:socket, any:arg);
+native SocketSetArg(Handle socket, any arg);
 
 /**
  * Retrieve the local system's hostname as the command "hostname" does.
@@ -460,7 +466,7 @@ native SocketSetArg(Handle:socket, any:arg);
  *
  * @return			1 on success
  */
-native SocketGetHostName(String:dest[], destLen);
+native SocketGetHostName(char[] dest, destLen);
 
 /**
  * _________________Do not edit below this line!_______________________

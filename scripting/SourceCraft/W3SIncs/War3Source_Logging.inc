@@ -35,7 +35,7 @@ enum War3_LogLevel
  * Log a info message. Info messages are mainly for debugging.
  */
 #if !defined _trace_included
-native War3_LogInfo(const String:fmt[], any:...);
+native War3_LogInfo(const char fmt[], any ...);
 #else
 #define War3_LogInfo        TraceInfo
 #endif
@@ -44,7 +44,7 @@ native War3_LogInfo(const String:fmt[], any:...);
  * Log a warning message. No error yet, but what's happening could lead to an error!
  */
 #if !defined _trace_included
-native War3_LogWarning(const String:fmt[], any:...);
+native War3_LogWarning(const char fmt[], any ...);
 #else
 #define War3_LogWarning     TraceWarning
 #endif
@@ -53,7 +53,7 @@ native War3_LogWarning(const String:fmt[], any:...);
  * Log a error message. Something has gone wrong, but we can still continue.
  */
 #if !defined _trace_included
-native War3_LogError(const String:fmt[], any:...);
+native War3_LogError(const char fmt[], any ...);
 #else
 #define War3_LogError       TraceError
 #endif
@@ -63,7 +63,7 @@ native War3_LogError(const String:fmt[], any:...);
  * Also writes the message to the Sourcemod error log
  */
 #if !defined _trace_included
-native War3_LogCritical(const String:fmt[], any:...);
+native War3_LogCritical(const char fmt[], any ...);
 #else
 #define War3_LogCritical    TraceCritical
 #endif

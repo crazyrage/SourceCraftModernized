@@ -42,21 +42,21 @@
 #include "effect/FlashScreen"
 #include "effect/Shake"
 
-new Float:g_SpeedLevels[]           = { -1.0, 1.05,  1.10,   1.16, 1.23  };
-new Float:g_LevitationLevels[]      = { 1.0,  0.92, 0.733, 0.5466, 0.36  };
-new Float:g_VampiricAuraPercent[]   = { 0.0,  0.12,  0.18,   0.24, 0.30  };
-new Float:g_BombRadius[]            = { 0.0, 200.0, 250.0,  300.0, 350.0 };
-new g_SucideBombDamage[]            = {   0,   300,   350,    400, 500   };
+float g_SpeedLevels[]           = { -1.0, 1.05,  1.10,   1.16, 1.23  };
+float g_LevitationLevels[]      = { 1.0,  0.92, 0.733, 0.5466, 0.36  };
+float g_VampiricAuraPercent[]   = { 0.0,  0.12,  0.18,   0.24, 0.30  };
+float g_BombRadius[]            = { 0.0, 200.0, 250.0,  300.0, 350.0 };
+	int g_SucideBombDamage[]            = {   0,   300,   350,    400, 500   };
 
 new raceID, vampiricID, unholyID, levitationID, suicideID, necroID;
 
-new g_necroRace = -1;
+	int g_necroRace = -1;
 
 // Suicide bomber check
-new bool:m_Suicided[MAXPLAYERS+1];
-new Float:m_VampiricAuraTime[MAXPLAYERS+1];
+bool m_Suicided[MAXPLAYERS+1];
+float m_VampiricAuraTime[MAXPLAYERS+1];
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "SourceCraft Race - Undead Scourge",
     author = "-=|JFH|=-Naris with credits to PimpinJuice",
@@ -66,7 +66,7 @@ public Plugin:myinfo =
 };
 
 // War3Source Functions
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.common.phrases.txt");
     LoadTranslations("sc.undead.phrases.txt");
@@ -127,7 +127,7 @@ public OnSourceCraftReady()
                    g_SucideBombDamage, raceID, suicideID);
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     g_necroRace = -1;
 
@@ -147,25 +147,25 @@ public OnPlayerAuthed(client)
     m_VampiricAuraTime[client] = 0.0;
 }
 
-public OnUltimateCommand(client,race,bool:pressed,arg)
+public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (pressed && race == raceID && IsValidClientAlive(client))
     {
         if (arg >= 2)
         {
-            new necro_level = GetUpgradeLevel(client,race,necroID);
+            int necro_level = GetUpgradeLevel(client,race,necroID);
             if (necro_level > 0)
                 SummonNecromancer(client);
         }
         else
         {
-            new level = GetUpgradeLevel(client, race, suicideID);
+            int level = GetUpgradeLevel(client, race, suicideID);
             if (level > 0)
             {
                 if (GetRestriction(client,Restriction_NoUltimates) ||
                     GetRestriction(client,Restriction_Stunned))
                 {
-                    decl String:upgradeName[NAME_STRING_LENGTH];
+                    char upgradeName[NAME_STRING_LENGTH];
                     GetUpgradeName(raceID, suicideID, upgradeName, sizeof(upgradeName), client);
                     DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
                     PrepareAndEmitSoundToClient(client,deniedWav);
@@ -184,7 +184,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             }
             else
             {
-                new necro_level = GetUpgradeLevel(client,race,necroID);
+                int necro_level = GetUpgradeLevel(client,race,necroID);
                 if (necro_level > 0)
                     SummonNecromancer(client);
             }
@@ -215,28 +215,28 @@ public OnItemPurchase(client,item)
 
         if (item == g_bootsItem)
         {
-            new unholy_level = GetUpgradeLevel(client,raceID,unholyID);
+            int unholy_level = GetUpgradeLevel(client,raceID,unholyID);
             if (unholy_level > 0)
                 SetSpeedBoost(client, unholy_level, true, g_SpeedLevels);
         }
         else if (item == g_sockItem)
         {
-            new levitation_level = GetUpgradeLevel(client,raceID,levitationID);
+            int levitation_level = GetUpgradeLevel(client,raceID,levitationID);
             SetLevitation(client, levitation_level, true, g_LevitationLevels);
         }
     }
 }
 
-public Action:OnDropPlayer(client, target)
+public Action OnDropPlayer(client, target)
 {
     if (IsValidClient(target) && GetRace(target) == raceID)
     {
-        new levitation_level = GetUpgradeLevel(target,raceID,levitationID);
+        int levitation_level = GetUpgradeLevel(target,raceID,levitationID);
         SetLevitation(target, levitation_level, true, g_LevitationLevels);
     }
     return Plugin_Continue;
 }
-public Action:OnRaceDeselected(client,oldrace,newrace)
+public Action OnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
@@ -249,14 +249,14 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
         return Plugin_Continue;
 }
 
-public Action:OnRaceSelected(client,oldrace,newrace)
+public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
-        new levitation_level = GetUpgradeLevel(client,raceID,levitationID);
+        int levitation_level = GetUpgradeLevel(client,raceID,levitationID);
         SetLevitation(client, levitation_level, false, g_LevitationLevels);
 
-        new unholy_level = GetUpgradeLevel(client,raceID,unholyID);
+        int unholy_level = GetUpgradeLevel(client,raceID,unholyID);
         SetSpeedBoost(client, unholy_level, false, g_SpeedLevels);
 
         if (unholy_level > 0 || levitation_level > 0)
@@ -268,17 +268,17 @@ public Action:OnRaceSelected(client,oldrace,newrace)
         return Plugin_Continue;
 }
 
-public OnPlayerSpawnEvent(Handle:event, client, race)
+public OnPlayerSpawnEvent(Handle event, client, race)
 {
     if (race==raceID)
     {
         m_VampiricAuraTime[client] = 0.0;
         m_Suicided[client]=false;
 
-        new levitation_level = GetUpgradeLevel(client,raceID,levitationID);
+        int levitation_level = GetUpgradeLevel(client,raceID,levitationID);
         SetLevitation(client, levitation_level, false, g_LevitationLevels);
 
-        new unholy_level = GetUpgradeLevel(client,raceID,unholyID);
+        int unholy_level = GetUpgradeLevel(client,raceID,unholyID);
         SetSpeedBoost(client, unholy_level, false, g_SpeedLevels);
 
         if (unholy_level > 0 || levitation_level > 0)
@@ -286,17 +286,17 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
     }
 }
 
-public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_index,
+public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_index,
                           attacker_race, assister_index, assister_race, damage,
-                          const String:weapon[], bool:is_equipment, customkill,
-                          bool:headshot, bool:backstab, bool:melee)
+                          const char[] weapon, bool is_equipment, customkill,
+                          bool headshot, bool backstab, bool melee)
 {
     if (victim_race == raceID)
     {
         if (!m_Suicided[victim_index] &&
             !IsChangingClass(victim_index))
         {
-            new level = GetUpgradeLevel(victim_index,raceID,suicideID);
+            int level = GetUpgradeLevel(victim_index,raceID,suicideID);
             if (level > 0)
             {
                 ExplodePlayer(victim_index, victim_index, GetClientTeam(victim_index),
@@ -308,8 +308,8 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
     }
 }
 
-public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacker_index,
-                                attacker_race, damage, absorbed, bool:from_sc)
+public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
+                                attacker_race, damage, absorbed, bool from_sc)
 {
     if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index &&
@@ -322,7 +322,7 @@ public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacke
     return Plugin_Continue;
 }
 
-public Action:OnPlayerAssistEvent(Handle:event, victim_index, victim_race,
+public Action OnPlayerAssistEvent(Handle event, victim_index, victim_race,
                                   assister_index, assister_race, damage,
                                   absorbed)
 {
@@ -335,31 +335,31 @@ public Action:OnPlayerAssistEvent(Handle:event, victim_index, victim_race,
     return Plugin_Continue;
 }
 
-bool:VampiricAura(damage, index, victim_index)
+bool VampiricAura(damage, index, victim_index)
 {
-    new level = GetUpgradeLevel(index, raceID, vampiricID);
+    int level = GetUpgradeLevel(index, raceID, vampiricID);
     if (level > 0 && GetRandomInt(1,10) <= 6 && IsValidClientAlive(index) &&
         !GetRestriction(index, Restriction_NoUpgrades) &&
         !GetRestriction(index, Restriction_Stunned))
     {
-        new bool:victimIsNPC    = (victim_index > MaxClients);
-        new bool:victimIsPlayer = !victimIsNPC && IsValidClientAlive(victim_index) &&
+        bool victimIsNPC    = (victim_index > MaxClients);
+        bool victimIsPlayer = !victimIsNPC && IsValidClientAlive(victim_index) &&
                                   !GetImmunity(victim_index,Immunity_HealthTaking) &&
                                   !GetImmunity(victim_index,Immunity_Upgrades) &&
                                   !IsInvulnerable(victim_index);
 
         if (victimIsPlayer || victimIsNPC)
         {
-            new Float:lastTime = m_VampiricAuraTime[index];
-            new Float:interval = GetGameTime() - lastTime;
+            float lastTime = m_VampiricAuraTime[index];
+            float interval = GetGameTime() - lastTime;
             if ((lastTime == 0.0 || interval > 0.25) &&
                 CanInvokeUpgrade(index, raceID, vampiricID, .notify=false))
             {
-                new Float:start[3];
+                float start[3];
                 GetClientAbsOrigin(index, start);
                 start[2] += 1620;
 
-                new Float:end[3];
+                float end[3];
                 GetClientAbsOrigin(index, end);
                 end[2] += 20;
 
@@ -376,13 +376,13 @@ bool:VampiricAura(damage, index, victim_index)
                 if (leechhealth <= 0)
                     leechhealth = 1;
 
-                new health = GetClientHealth(index) + leechhealth;
+                int health = GetClientHealth(index) + leechhealth;
                 if (health <= GetMaxHealth(index))
                 {
                     ShowHealthParticle(index);
                     SetEntityHealth(index,health);
 
-                    decl String:upgradeName[NAME_STRING_LENGTH];
+                    char upgradeName[NAME_STRING_LENGTH];
                     GetUpgradeName(raceID, vampiricID, upgradeName, sizeof(upgradeName), index);
 
                     if (victimIsPlayer)
@@ -399,7 +399,7 @@ bool:VampiricAura(damage, index, victim_index)
 
                 if (victimIsPlayer)
                 {
-                    new victim_health = GetClientHealth(victim_index);
+                    int victim_health = GetClientHealth(victim_index);
                     if (victim_health <= leechhealth)
                         KillPlayer(victim_index, index, "sc_vampiric_aura");
                     else
@@ -408,12 +408,12 @@ bool:VampiricAura(damage, index, victim_index)
 
                         if (GameType != tf2 || GetMode() != MvM)
                         {
-                            new entities = EntitiesAvailable(200, .message="Reducing Effects");
+                            int entities = EntitiesAvailable(200, .message="Reducing Effects");
                             if (entities > 50)
                                 CreateParticle("blood_impact_red_01_chunk", 0.1, victim_index, Attach, "head");
                         }
 
-                        decl String:upgradeName[NAME_STRING_LENGTH];
+                        char upgradeName[NAME_STRING_LENGTH];
                         GetUpgradeName(raceID, vampiricID, upgradeName, sizeof(upgradeName), victim_index);
                         DisplayMessage(victim_index, Display_Injury, "%t", "HasLeeched",
                                        index, leechhealth, upgradeName);
@@ -432,7 +432,7 @@ bool:VampiricAura(damage, index, victim_index)
     return false;
 }
 
-public EventRoundOver(Handle:event,const String:name[],bool:dontBroadcast)
+public EventRoundOver(Handle event,const char[] name,bool dontBroadcast)
 {
     for (new index=1;index<=MaxClients;index++)
     {
@@ -451,7 +451,7 @@ SummonNecromancer(client)
 
     if (g_necroRace < 0)
     {
-        decl String:upgradeName[NAME_STRING_LENGTH];
+        char upgradeName[NAME_STRING_LENGTH];
         GetUpgradeName(raceID, necroID, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "IsNotAvailable", upgradeName);
         LogError("***The Necromancer race is not Available!");
@@ -465,7 +465,7 @@ SummonNecromancer(client)
     }
     else if (HasCooldownExpired(client, raceID, necroID))
     {
-        new Float:clientLoc[3];
+        float clientLoc[3];
         GetClientAbsOrigin(client, clientLoc);
         clientLoc[2] += 40.0; // Adjust position to the middle
 

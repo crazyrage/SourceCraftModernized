@@ -15,9 +15,9 @@
 #include "effect/SendEffects"
 #include "effect/FlashScreen"
 
-stock bool:MeleeAttack(race, upgrade, level, Handle:event, damage, victim_index, index,
-                       const Float:meleeAttackPercent[], const String:meleeAttackSound[],
-                       const String:meleeAttackShort[], const String:meleeAttackName[]="")
+stock bool MeleeAttack(race, upgrade, level, Handle event, damage, victim_index, index,
+                       const float meleeAttackPercent[], const char meleeAttackSound[],
+                       const char meleeAttackShort[], const char meleeAttackName[]="")
 {
     if (!GetRestriction(index, Restriction_NoUpgrades) &&
         !GetRestriction(index, Restriction_Stunned) &&
@@ -25,8 +25,8 @@ stock bool:MeleeAttack(race, upgrade, level, Handle:event, damage, victim_index,
         !GetImmunity(victim_index, Immunity_Upgrades) &&
         !IsInvulnerable(victim_index))
     {
-        decl String:weapon[64];
-        new bool:is_equipment=GetWeapon(event,index,weapon,sizeof(weapon));
+        char weapon[64];
+        bool is_equipment=GetWeapon(event,index,weapon,sizeof(weapon));
         if (IsMelee(weapon, is_equipment, index, victim_index))
         {
             new dmgamt = RoundFloat(float(damage)*meleeAttackPercent[level]);
@@ -34,7 +34,7 @@ stock bool:MeleeAttack(race, upgrade, level, Handle:event, damage, victim_index,
             {
                 if (CanInvokeUpgrade(index, race, upgrade, .notify=false))
                 {
-                    new Float:Origin[3];
+                    float Origin[3];
                     GetEntityAbsOrigin(victim_index, Origin);
                     Origin[2] += 5;
 
@@ -54,15 +54,15 @@ stock bool:MeleeAttack(race, upgrade, level, Handle:event, damage, victim_index,
     return false;
 }
 
-stock bool:UberMeleeAttack(race, upgrade, level, Handle:event, damage, victim_index, index,
-                           const Float:meleeAttackPercent[], const String:meleeAttackSound[],
-                           const String:meleeAttackShort[], const String:meleeAttackName[]="")
+stock bool UberMeleeAttack(race, upgrade, level, Handle event, damage, victim_index, index,
+                           const float meleeAttackPercent[], const char meleeAttackSound[],
+                           const char meleeAttackShort[], const char meleeAttackName[]="")
 {
-    decl String:weapon[64];
-    new bool:is_equipment=GetWeapon(event,index,weapon,sizeof(weapon));
+    char weapon[64];
+    bool is_equipment=GetWeapon(event,index,weapon,sizeof(weapon));
     if (IsMelee(weapon, is_equipment, index, victim_index))
     {
-        new bool:isUber = IsInvulnerable(victim_index);
+        bool isUber = IsInvulnerable(victim_index);
         if (!GetRestriction(index, Restriction_NoUpgrades) &&
             !GetRestriction(index, Restriction_Stunned) &&
             (level >= 3 ||
@@ -79,7 +79,7 @@ stock bool:UberMeleeAttack(race, upgrade, level, Handle:event, damage, victim_in
 
                 if (CanInvokeUpgrade(index, race, upgrade, .notify=false))
                 {
-                    new Float:Origin[3];
+                    float Origin[3];
                     GetEntityAbsOrigin(victim_index, Origin);
                     Origin[2] += 5;
 

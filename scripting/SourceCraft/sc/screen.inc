@@ -16,8 +16,8 @@
 
 stock Fade(const clients[], numClients, duration,time,const color[4], code=FADE_IN)
 {
-    new Handle:hBf=StartMessage("Fade", clients, numClients);
-    if(hBf!=INVALID_HANDLE)
+    Handle hBf=StartMessage("Fade", clients, numClients);
+    if(hBf!=null)
     {
         BfWriteShort(hBf,duration); //*400);
         BfWriteShort(hBf,time); //*400);
@@ -32,8 +32,8 @@ stock Fade(const clients[], numClients, duration,time,const color[4], code=FADE_
 
 stock FadeOne(client, duration,time,const color[4], code=FADE_IN)
 {
-    new Handle:hBf=StartMessageOne("Fade", client);
-    if(hBf!=INVALID_HANDLE)
+    Handle hBf=StartMessageOne("Fade", client);
+    if(hBf!=null)
     {
         BfWriteShort(hBf,duration); //*400);
         BfWriteShort(hBf,time); //*400);
@@ -48,8 +48,8 @@ stock FadeOne(client, duration,time,const color[4], code=FADE_IN)
 
 stock FadeAll(duration,time,const color[4], code=FADE_IN)
 {
-    new Handle:hBf=StartMessageAll("Fade");
-    if(hBf!=INVALID_HANDLE)
+    Handle hBf=StartMessageAll("Fade");
+    if(hBf!=null)
     {
         BfWriteShort(hBf,duration); //*400);
         BfWriteShort(hBf,time); //*400);
@@ -62,10 +62,10 @@ stock FadeAll(duration,time,const color[4], code=FADE_IN)
     }
 }
 
-stock Shake(const clients[],numClients,on_off,Float:amplitude,Float:duration,Float:frequency)
+stock Shake(const clients[],numClients,on_off,float amplitude,float duration,float frequency)
 {
-    new Handle:hBf=StartMessage("Shake", clients, numClients);
-    if(hBf!=INVALID_HANDLE)
+    Handle hBf=StartMessage("Shake", clients, numClients);
+    if(hBf!=null)
     {
         BfWriteByte(hBf, on_off);
         BfWriteFloat(hBf,amplitude);
@@ -75,10 +75,10 @@ stock Shake(const clients[],numClients,on_off,Float:amplitude,Float:duration,Flo
     }
 }
 
-stock ShakeOne(client,on_off,Float:amplitude,Float:duration,Float:frequency)
+stock ShakeOne(client,on_off,float amplitude,float duration,float frequency)
 {
-    new Handle:hBf=StartMessageOne("Shake", client);
-    if(hBf!=INVALID_HANDLE)
+    Handle hBf=StartMessageOne("Shake", client);
+    if(hBf!=null)
     {
         BfWriteByte(hBf, on_off);
         BfWriteFloat(hBf,amplitude);
@@ -88,10 +88,10 @@ stock ShakeOne(client,on_off,Float:amplitude,Float:duration,Float:frequency)
     }
 }
 
-stock ShakeAll(on_off,Float:amplitude,Float:duration,Float:frequency)
+stock ShakeAll(on_off,float amplitude,float duration,float frequency)
 {
-    new Handle:hBf=StartMessageAll("Shake");
-    if(hBf!=INVALID_HANDLE)
+    Handle hBf=StartMessageAll("Shake");
+    if(hBf!=null)
     {
         BfWriteByte(hBf, on_off);
         BfWriteFloat(hBf,amplitude);

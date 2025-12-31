@@ -18,9 +18,9 @@
  * @param lost_upon_death: If true the item will automatically be removed when the player dies. Defaults to true
  * @return The return value will be the item index or -1 if there was a problem.
  */
-native War3_CreateShopItem2(String:name[], String:shortname[], String:desc[], cost, bool:lost_upon_death=true);
+native War3_CreateShopItem2(char[] name, char[] shortname, char[] desc, cost, bool lost_upon_death=true);
 //translated
-native War3_CreateShopItem2T(String:shortname[], cost, bool:lost_upon_death=true);
+native War3_CreateShopItem2T(char[] shortname, cost, bool lost_upon_death=true);
 
 //see W3ItemProp enum for available properties
 native War3_SetItem2Property(itemid,W3ItemProp:ITEM_PROPERTY,value);
@@ -28,20 +28,20 @@ native War3_GetItem2Property(itemid,W3ItemProp:ITEM_PROPERTY);
 
 //remember itemid that is valid is more than 0
 //returns -1 if not found
-native War3_GetItem2IdByShortname(String:itemshortname[]);
+native War3_GetItem2IdByShortname(char[] itemshortname);
 
-native W3GetItem2Name(itemid,String:ret[],maxlen);
-native W3GetItem2Shortname(itemid,String:ret[],maxlen);
-native W3GetItem2Desc(itemid,String:ret[],maxlen);
+native W3GetItem2Name(itemid,char[] ret,maxlen);
+native W3GetItem2Shortname(itemid,char[] ret,maxlen);
+native W3GetItem2Desc(itemid,char[] ret,maxlen);
 
 native W3GetItem2Cost(itemid);
 native W3GetItem2Order(itemid);
-native W3Item2HasFlag(itemid,String:flagsearch[]);
-native W3GetItem2Category(itemid,String:retcatagorystr[],maxlen);
+native W3Item2HasFlag(itemid,char[] flagsearch);
+native W3GetItem2Category(itemid,char[] retcatagorystr,maxlen);
 native W3GetItems2Loaded(); //how many items are loaded?
 
-native bool:W3IsItem2DisabledGlobal(itemid);
-native bool:W3IsItem2DisabledForRace(race,itemid);
+native bool W3IsItem2DisabledGlobal(itemid);
+native bool W3IsItem2DisabledForRace(race,itemid);
 
 /**
  * Gets if the player owns a specific item.
@@ -50,7 +50,7 @@ native bool:W3IsItem2DisabledForRace(race,itemid);
  * @return The return value will be 1 if they own it, if 0 they don't, if -1 then it failed.
  */
 native War3_GetOwnsItem2(client, item);
-native War3_SetOwnsItem2(client,item,bool:ownsitem);
+native War3_SetOwnsItem2(client,item,bool ownsitem);
 
 
 native GetClientItems2Owned(client);

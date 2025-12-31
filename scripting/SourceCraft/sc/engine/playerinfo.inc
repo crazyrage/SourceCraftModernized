@@ -130,21 +130,21 @@ enum PlayerStatus
     PlayerActive
 }
 
-new playerArray[MAXPLAYERS+1][ClientInfo];
-new String:playerPrevName[MAXPLAYERS+1][NAME_STRING_LENGTH];
-new String:playerName[MAXPLAYERS+1][NAME_STRING_LENGTH];
-new String:playerID[MAXPLAYERS+1][CLASS_STRING_LENGTH];
+int playerArray[MAXPLAYERS+1][ClientInfo];
+char playerPrevName[MAXPLAYERS+1][NAME_STRING_LENGTH];
+char playerName[MAXPLAYERS+1][NAME_STRING_LENGTH];
+char playerID[MAXPLAYERS+1][CLASS_STRING_LENGTH];
 
-new Display:g_ClientDisplayBits[MAXPLAYERS+1];
-new Settings:g_ClientSettingsBits[MAXPLAYERS+1];
+Displayg_ClientDisplayBits[MAXPLAYERS+1];
+Settingsg_ClientSettingsBits[MAXPLAYERS+1];
 
-new bool:m_IsChangingClass[MAXPLAYERS+1];
+bool m_IsChangingClass[MAXPLAYERS+1];
 
-new m_Armor[MAXPLAYERS+1];
-new m_MaxShields[MAXPLAYERS+1];
-new Float:m_ArmorPercent[MAXPLAYERS+1][2];
-new ArmorFlags:m_ArmorFlags[MAXPLAYERS+1];
-new String:m_ArmorName[MAXPLAYERS+1][NAME_STRING_LENGTH];
+int m_Armor[MAXPLAYERS+1];
+int m_MaxShields[MAXPLAYERS+1];
+float m_ArmorPercent[MAXPLAYERS+1][2];
+ArmorFlagsm_ArmorFlags[MAXPLAYERS+1];
+char m_ArmorName[MAXPLAYERS+1][NAME_STRING_LENGTH];
 
 // Accessor Macros for IsChangingClass
 #define IsChangingClass(%1)                     m_IsChangingClass[%1]
@@ -423,16 +423,16 @@ new String:m_ArmorName[MAXPLAYERS+1][NAME_STRING_LENGTH];
     #define GetRaceInfo(%1,%2)                  GetArrayCell(GetRaceData(%1),%2)
 #endif
 
-stock Handle:GetRaceInfoHandle(client,race)
+stock Handle GetRaceInfoHandle(client,int race)
 {
     TraceInto("PlayerInfo", "GetRaceInfo", "client=%d:%N, race=%d", \
               client, ValidClientIndex(client), race);
 
-    new Handle:raceInfo = INVALID_HANDLE;
+    Handle raceInfo = null;
     if (race >= 0) // && GetRaceCount() > 1)
     {
-        new Handle:raceData = GetRaceData(client);
-        if (raceData != INVALID_HANDLE)
+        Handle raceData = GetRaceData(client);
+        if (raceData != null)
             raceInfo=GetArrayCell(raceData,race);
         else
         {
@@ -457,16 +457,16 @@ stock Handle:GetRaceInfoHandle(client,race)
     #define GetTechInfo(%1,%2)                  GetArrayCell(GetTechData(%1),_:%2)
 #endif
 
-stock Handle:GetTechInfoHandle(client,Faction:techId)
+stock Handle GetTechInfoHandle(client,Faction techId)
 {
     TraceInto("PlayerInfo", "GetTechInfo", "client=%d:%N, techId=%d", \
               client, ValidClientIndex(client), techId);
 
-    new Handle:techInfo = INVALID_HANDLE;
+    Handle techInfo = null;
     if (techId >= Generic)
     {
-        new Handle:techData = GetTechData(client);
-        if (techData != INVALID_HANDLE)
+        Handle techData = GetTechData(client);
+        if (techData != null)
         techInfo = GetArrayCell(techData,_:techId);
     }
 
@@ -520,9 +520,9 @@ stock SetOverallLevel(client,level)
     SetDatabaseSaved(client, false);
 }
 
-stock SetImmunity(client,Immunity:imm,bool:imm_state)
+stock SetImmunity(client,Immunity imm,bool imm_state)
 {
-    new Immunity:immunities = GetImmunityBits(client);
+    Immunityimmunities = GetImmunityBits(client);
 
     if (imm_state)
         immunities |= imm;
@@ -538,9 +538,9 @@ stock SetImmunity(client,Immunity:imm,bool:imm_state)
     TraceReturn();
 }
 
-stock SetRestriction(client,Restriction:restrict,bool:restrict_state)
+stock SetRestriction(client,Restriction restrict,bool restrict_state)
 {
-    new Restriction:restrictions = GetRestrictionBits(client);
+    Restrictionrestrictions = GetRestrictionBits(client);
 
     if (restrict_state)
         restrictions |= restrict;
@@ -556,9 +556,9 @@ stock SetRestriction(client,Restriction:restrict,bool:restrict_state)
     TraceReturn();
 }
 
-stock SetAttribute(client,Attribute:attrib,bool:attrib_state)
+stock SetAttribute(client,Attribute attrib,bool attrib_state)
 {
-    new Attribute:attributes = GetAttributeBits(client);
+    Attributeattributes = GetAttributeBits(client);
 
     if (attrib_state)
         attributes |= attrib;

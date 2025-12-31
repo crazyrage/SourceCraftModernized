@@ -18,7 +18,7 @@
 
 #include "sc/burrow"
 
-stock FreezeEntity(entity, id=0)
+stock FreezeEntity(int entity, int id=0)
 {
     if (entity <= MAXPLAYERS)
     {
@@ -29,7 +29,7 @@ stock FreezeEntity(entity, id=0)
         SetEntityMoveType(entity,MOVETYPE_NONE);
 }
 
-stock UnFreezeEntity(entity, id=0)
+stock UnFreezeEntity(int entity, int id=0)
 {
     if (entity <= MAXPLAYERS)
     {
@@ -42,9 +42,9 @@ stock UnFreezeEntity(entity, id=0)
         SetEntityMoveType(entity,MOVETYPE_DEFAULT);
 }
 
-public Action:UnfreezePlayer(Handle:timer,any:userid)
+public Action UnfreezePlayer(Handle timer,any userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (client)
         UnFreezeEntity(client);
 

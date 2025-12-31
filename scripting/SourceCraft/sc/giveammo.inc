@@ -12,13 +12,13 @@
 
 #include <gametype>
 
-stock Handle:hGiveAmmo = INVALID_HANDLE;
+stock Handle hGiveAmmo = null;
 
-stock GiveAmmo(client,ammotype,amount,bool:suppress)
+stock GiveAmmo(client,ammotype,amount,bool suppress)
 {
     if (GetGameType() == tf2)
     {
-        if (hGiveAmmo == INVALID_HANDLE)
+        if (hGiveAmmo == null)
         {
             StartPrepSDKCall(SDKCall_Entity);
             PrepSDKCall_SetFromConf(hGameConf,SDKConf_Signature,"GiveAmmo");
@@ -28,7 +28,7 @@ stock GiveAmmo(client,ammotype,amount,bool:suppress)
             hGiveAmmo=EndPrepSDKCall();
         }
 
-        if (hGiveAmmo != INVALID_HANDLE)
+        if (hGiveAmmo != null)
             SDKCall(hGiveAmmo,client,amount,ammotype,suppress);
         else
             LogError("Unable to GiveAmmo!");

@@ -16,7 +16,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of the Rate Of Fire plugin.
  * @return		    	none
  */
-native ControlROF(bool:plugin_only=true);
+native ControlROF(bool plugin_only=true);
 
 /**
  * Set the Rate Of Fire for a player.
@@ -26,7 +26,7 @@ native ControlROF(bool:plugin_only=true);
  * @param energy 	Amount SourceCraft Energy required per shot (if any).
  * @return			none
  */
-native SetROF(client,Float:rof=-1.0, Float:energy=0.0);
+native SetROF(int client,float rof=-1.0, float energy=0.0);
 
 /**
  * Get the Rate Of Fire (and energy required) for a player.
@@ -35,7 +35,7 @@ native SetROF(client,Float:rof=-1.0, Float:energy=0.0);
  * @param energy 	Amount SourceCraft Energy required per shot (if any).
  * @return			Rate Of Fire multiplier. (-1.0 = use convar, 1.0 = normal)
  */
-native Float:GetROF(client, &Float:energy=0.0);
+native float GetROF(int client, float &energy=0.0);
 
 /**
  * Disarm a player
@@ -44,14 +44,14 @@ native Float:GetROF(client, &Float:energy=0.0);
  * @param disarmed 	Set true to prevent client for shooting
  * @return			none
  */
-native DisarmPlayer(client,bool:disarmed=true);
+native DisarmPlayer(int client,bool disarmed=true);
 
 /**
  * Gets called when a player fires their weapon
  * @param index 	Client index
  * @noreturn
  */
-forward OnWeaponFired(index);
+forward OnWeaponFired(int index);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

@@ -12,9 +12,9 @@
 
 //#define TRACK_DAMAGE
 #if defined TRACK_DAMAGE
-#define ResetHealthTimer(%1) g_HealthTimers[%1] = INVALID_HANDLE
+#define ResetHealthTimer(%1) g_HealthTimers[%1] = null
 
-stock Handle:g_HealthTimers[MAXPLAYERS+1];
+Handle g_HealthTimers[MAXPLAYERS+1];
 stock g_savedHealth[MAXPLAYERS+1];
 
 stock SaveHealth(client)
@@ -49,18 +49,18 @@ stock SaveAllHealth()
 
 stock CreateHealthTimer(client)
 {
-    if (g_HealthTimers[client] == INVALID_HANDLE)
+    if (g_HealthTimers[client] == null)
         g_HealthTimers[client] = CreateTimer(0.1,Timer_SaveHealth,client,
                                              TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 }
 
 stock KillHealthTimer(client)
 {
-    new Handle:timer=g_HealthTimers[client];
-    if (timer != INVALID_HANDLE)
+    Handle timer=g_HealthTimers[client];
+    if (timer != null)
     {
         KillTimer(timer);
-        g_HealthTimers[client] = INVALID_HANDLE;	
+        g_HealthTimers[client] = null;
     }
 }
 
@@ -76,7 +76,7 @@ stock ResetAllHealthTimers()
         ResetHealthTimer(i);
 }
 
-public Action:Timer_SaveHealth(Handle:timer, any:client)
+public Action Timer_SaveHealth(Handle timer, any client)
 {
     g_savedHealth[client] = GetClientHealth(client);
 }

@@ -22,7 +22,7 @@ stock SetupLevitation()
     SetupHaloSprite();
 }
 
-stock Levitation(client, Float:gravity, bool:apply=false)
+stock Levitation(client, float gravity, bool apply=false)
 {
     if (gravity >= 0.0 && gravity != 1.0)
     {
@@ -39,7 +39,7 @@ stock Levitation(client, Float:gravity, bool:apply=false)
 
         if (IsValidClientAlive(client))
         {
-            new Float:start[3];
+            float start[3];
             GetClientAbsOrigin(client, start);
 
             static const color[4] = { 0, 20, 100, 255 };
@@ -52,10 +52,10 @@ stock Levitation(client, Float:gravity, bool:apply=false)
         SetGravity(client,-1.0,apply);
 }
 
-stock LookupLevitation(client, level, bool:apply, const Float:levitationLevels[], maxLevel)
+stock LookupLevitation(client, level, bool apply, const float levitationLevels[], maxLevel)
 {
     // speedLevels is an array of gravity % modifiers / level such as:
-    // static const Float:levitationLevels[] = { 0.92, 0.733, 0.5466, 0.36, 0.26 };
+    // static const float levitationLevels[] = { 0.92, 0.733, 0.5466, 0.36, 0.26 };
     if (level > maxLevel)
         Levitation(client,levitationLevels[maxLevel], apply);
     else if (level >= 0)

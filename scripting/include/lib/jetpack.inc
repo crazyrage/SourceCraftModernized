@@ -17,7 +17,7 @@
  * @param announce 		Announce status changes to the player.
  * @return		    	none
  */
-native ControlJetpack(bool:plugin_only=true);
+native ControlJetpack(bool plugin_only=true);
 
 /**
  * Get the jetpack indicator of the player
@@ -25,7 +25,7 @@ native ControlJetpack(bool:plugin_only=true);
  * @param index 	Client index
  * @return			true if the player has a jetpack
  */
-native bool:HasJetpack(client);
+native bool HasJetpack(client);
 
 /**
  * Returns if the player's jetpack is on
@@ -33,7 +33,7 @@ native bool:HasJetpack(client);
  * @param index 	Client index
  * @return			true if the player's jetpack is on
  */
-native bool:IsJetpackOn(client);
+native bool IsJetpackOn(client);
 
 /**
  * Get the jetpack fuel amount of the player
@@ -57,7 +57,7 @@ native GetJetpackRate(client);
  * @param index 	Client index
  * @return			Refueling time for the jetpack
  */
-native Float:GetJetpackRefuelingTime(client);
+native Float GetJetpackRefuelingTime(client);
 
 /**
  * Set fuel for the jetpack of the player
@@ -85,7 +85,7 @@ native SetJetpackRate(client, rate=-1);
  * @param time	 	Refueling time for the jetpack
  * @return			none
  */
-native SetJetpackRefuelingTime(client, Float:fuel);
+native SetJetpackRefuelingTime(client, Float fuel);
 
 /**
  * Give a jetpack to the player
@@ -99,8 +99,8 @@ native SetJetpackRefuelingTime(client, Float:fuel);
  * @param burn              jetpack burns enemies if true
  * @return			        amount of fuel the jetpack has
  */
-native GiveJetpack(client, fuel=-1, Float:refueling_time=0.0, max_refuels=-1,
-                   rate=-1, bool:explode=false, bool:burn=false);
+native GiveJetpack(client, fuel=-1, Float refueling_time=0.0, max_refuels=-1,
+                   rate=-1, bool explode=false, bool burn=false);
 
 /**
  * Take the jetpack from the player
@@ -152,7 +152,7 @@ native StopJetpack(client);
  * @param client: The index of the client that used the jetpack.
  * @return		  Plugin_Stop will prevent the jetpack from starting.
  */
-forward Action:OnJetpack(client);
+forward Action OnJetpack(client);
 
 /**
  * Gets called when a Jetpack burns someone
@@ -162,7 +162,7 @@ forward Action:OnJetpack(client);
  * @param damage: The damage to be done to the victim, can be changed.
  * @return		  Plugin_Stop will prevent the jetpack from burning the victim.
  */
-forward Action:OnJetpackBurn(victim, client, &damage);
+forward Action OnJetpackBurn(victim, client, &damage);
 
 /**
  * Gets called when a Jetpack explodes
@@ -172,7 +172,7 @@ forward Action:OnJetpackBurn(victim, client, &damage);
  * @param damage: The damage to be done to the victim, can be changed.
  * @return		  Plugin_Stop will prevent the jetpack from injuring the victim.
  */
-forward Action:OnJetpackExplode(victim, client, &damage);
+forward Action OnJetpackExplode(victim, client, &damage);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

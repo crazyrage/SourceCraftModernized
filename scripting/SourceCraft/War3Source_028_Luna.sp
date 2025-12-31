@@ -3,44 +3,44 @@
 #include "W3SIncs/War3Source_Interface"
 #include <sdktools>
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "War3Source - Race - Luna Moonfang",
     author = "War3Source Team",
     description = "The Luna Moonfang race for War3Source."
 };
 
-new thisRaceID;
-new String:beamsnd[256]; // = "war3source/moonqueen/beam.mp3";
-new String:lunasnd2[256]; // = "weapons/flashbang/flashbang_explode2.wav";
+	int thisRaceID;
+new char beamsnd[256]; // = "war3source/moonqueen/beam.mp3";
+new char lunasnd2[256]; // = "weapons/flashbang/flashbang_explode2.wav";
 
 //skill is auto cast via chance
-//new Float:LucentChance[5] = {0.00,0.05,0.11,0.22,0.30};
-new LucentBeamMin[5] = {0, 3, 4, 5, 6};
-new LucentBeamMax[5] = {0, 7, 8, 9, 10};
+//new float LucentChance[5] = {0.00,0.05,0.11,0.22,0.30};
+	int LucentBeamMin[5] = {0, 3, 4, 5, 6};
+	int LucentBeamMax[5] = {0, 7, 8, 9, 10};
 
-new Float:GlaiveRadius[5] = {0.0,250.0,300.0,350.0,400.0};
-new Float:GlaiveChance = 0.22;
-new GlaiveDamage[5] = {0,4,6,8,12};
+new float GlaiveRadius[5] = {0.0,250.0,300.0,350.0,400.0};
+new float GlaiveChance = 0.22;
+	int GlaiveDamage[5] = {0,4,6,8,12};
 
-new Float:BlessingRadius = 280.0;
-new BlessingIncrease[5] = {0,1,2,2,3};
+new float BlessingRadius = 280.0;
+	int BlessingIncrease[5] = {0,1,2,2,3};
 
-new Float:EclipseRadius=500.0;
-new EclipseAmount[5]= {0,4,6,8,10};
+new float EclipseRadius=500.0;
+	int EclipseAmount[5]= {0,4,6,8,10};
 
 new SKILL_MOONBEAM,SKILL_BOUNCE,SKILL_AURA,ULT;
-new LightModel;
+	int LightModel;
 new XBeamSprite,CoreSprite,MoonSprite,HaloSprite;
 //new BlueSprite;
 
 #if !defined SOURCECRAFT
-new Handle:ultCooldownCvar = INVALID_HANDLE;
+new Handle ultCooldownCvar = null;
 #endif
 
-new AuraID;
+	int AuraID;
 
-public OnPluginStart()
+public void OnPluginStart()
 {
 #if !defined SOURCECRAFT
     ultCooldownCvar=CreateConVar("war3_luna_ultimate_cooldown","20","Luna Moonfangs ultimate cooldown (ultimate)");
@@ -50,7 +50,7 @@ public OnPluginStart()
     LoadTranslations("w3s.race.luna.phrases");
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     War3_AddSoundFolder(beamsnd, sizeof(beamsnd), "moonqueen/beam.mp3");
     War3_AddSoundFolder(lunasnd2, sizeof(lunasnd2), "flashbang_explode2.mp3");
@@ -78,7 +78,7 @@ public OnMapStart()
     }
 }
 
-public OnWar3LoadRaceOrItemOrdered(num)
+public void OnWar3LoadRaceOrItemOrdered(num)
 {
     if(num==280)
     {
@@ -144,7 +144,7 @@ public OnWar3LoadRaceOrItemOrdered(num)
     }
 }
 
-public OnW3PlayerAuraStateChanged(client,aura,bool:inAura,level)
+public OnW3PlayerAuraStateChanged(client,aura,bool inAura,level)
 {
     if(aura == AuraID)
     {
@@ -152,7 +152,7 @@ public OnW3PlayerAuraStateChanged(client,aura,bool:inAura,level)
         {
             if(inAura == true && ValidPlayer(client, true)) 
             {
-                decl Float:client_pos[3];
+                decl float client_pos[3];
                 GetClientAbsOrigin(client, client_pos);
                 TE_SetupGlowSprite(client_pos, LightModel, 2.0, 1.0, 255);
                 TE_SendToAll();
@@ -161,17 +161,17 @@ public OnW3PlayerAuraStateChanged(client,aura,bool:inAura,level)
     }
 }
 
-public OnW3TakeDmgBullet( victim, attacker, Float:damage )
+public OnW3TakeDmgBullet( victim, attacker, float damage )
 {
     if( IS_PLAYER( victim ) && IS_PLAYER( attacker ) && victim > 0 && attacker > 0 && attacker != victim )
     {
-        new vteam = GetClientTeam( victim );
-        new ateam = GetClientTeam( attacker );
+        int vteam = GetClientTeam( victim );
+        int ateam = GetClientTeam( attacker );
         if( vteam != ateam )
         {
-            new race_attacker = War3_GetRace( attacker );
-            new skill_level = War3_GetSkillLevel( attacker, thisRaceID, SKILL_MOONBEAM );
-            new skill_level2 = War3_GetSkillLevel( attacker, thisRaceID, SKILL_BOUNCE );
+            int race_attacker = War3_GetRace( attacker );
+            int skill_level = War3_GetSkillLevel( attacker, thisRaceID, SKILL_MOONBEAM );
+            int skill_level2 = War3_GetSkillLevel( attacker, thisRaceID, SKILL_BOUNCE );
             if( race_attacker == thisRaceID &&!Hexed(attacker))
             {
 
@@ -179,8 +179,8 @@ public OnW3TakeDmgBullet( victim, attacker, Float:damage )
                 {
                     MoonBeamDamageAndEffect(victim, attacker, LucentBeamMin[skill_level], LucentBeamMax[skill_level]);
 
-                    /*        decl Float:start_pos[3];
-                     decl Float:target_pos[3];
+                    /*        decl float start_pos[3];
+                     decl float target_pos[3];
                      GetClientAbsOrigin(attacker,start_pos);
                      GetClientAbsOrigin(victim,target_pos);
                      target_pos[2]+=60.0;
@@ -189,7 +189,7 @@ public OnW3TakeDmgBullet( victim, attacker, Float:damage )
                      TE_SendToAll();
                      TE_SetupBeamPoints(target_pos, start_pos, BlueSprite, HaloSprite, 0, 100, 2.0, 3.0, 5.0, 0, 0.0, {128,0,255,255}, 30);
                      TE_SendToAll(2.0);    
-                     //TE_SetupBeamRingPoint(const Float:center[3], Float:Start_Radius, Float:End_Radius, ModelIndex(Precache), HaloIndex(Precache), StartFrame, FrameRate, Float:Life, Float:Width, Float:Amplitude, const Color[4], Speed, Flags);
+                     //TE_SetupBeamRingPoint(const float center[3], float Start_Radius, float End_Radius, ModelIndex(Precache), HaloIndex(Precache), StartFrame, FrameRate, float Life, float Width, float Amplitude, const Color[4], Speed, Flags);
                      TE_SetupBeamRingPoint(target_pos, 20.0, 90.0, XBeamSprite, HaloSprite, 0, 1, 1.0, 90.0, 0.0, {128,0,255,255}, 10, 0);
                      TE_SendToAll(2.0);                
                      TE_SetupBeamPoints(target_pos, start_pos, BlueSprite, HaloSprite, 0, 100, 2.0, 5.0, 7.0, 0, 0.0, {128,0,255,255}, 70);
@@ -198,7 +198,7 @@ public OnW3TakeDmgBullet( victim, attacker, Float:damage )
                      TE_SendToAll(9.0);
                      */
 #if defined SOURCECRAFT
-                    new Float:cooldown= GetUpgradeCooldown(thisRaceID,SKILL_MOONBEAM);
+                    new float cooldown= GetUpgradeCooldown(thisRaceID,SKILL_MOONBEAM);
                     War3_CooldownMGR(attacker,cooldown,thisRaceID,SKILL_MOONBEAM,true,false);
 #else
                     War3_CooldownMGR(attacker,3.0,thisRaceID,SKILL_MOONBEAM,true,false);
@@ -211,21 +211,21 @@ public OnW3TakeDmgBullet( victim, attacker, Float:damage )
                     if (CanInvokeUpgrade(attacker,thisRaceID,SKILL_BOUNCE, .notify=false))
                     {
 #endif
-                    new lunadmg = GlaiveDamage[skill_level2];
-                    new Float:sparkdir[3] = {0.0,0.0,90.0};
-                    new Float:maxdist = GlaiveRadius[skill_level2];
-                    decl Float:start_pos[3];
-                    decl Float:end_pos2[3];
+                    int lunadmg = GlaiveDamage[skill_level2];
+                    new float sparkdir[3] = {0.0,0.0,90.0};
+                    new float maxdist = GlaiveRadius[skill_level2];
+                    decl float start_pos[3];
+                    decl float end_pos2[3];
                     GetClientAbsOrigin(victim,start_pos);
                     GetClientAbsOrigin(victim,end_pos2);
                     end_pos2[2]+=1000.0;
-                    //TE_SetupBeamPoints(start_pos,end_pos2,XBeamSprite, HaloSprite, 0, 1, Float:2.0,  Float:3.0, 3.0, 1, 0.0, {255,255,255,255}, 0);
+                    //TE_SetupBeamPoints(start_pos,end_pos2,XBeamSprite, HaloSprite, 0, 1, float 2.0,  float 3.0, 3.0, 1, 0.0, {255,255,255,255}, 0);
                     //TE_SendToAll(0.0);
                     //TE_SetupBeamRingPoint(start_pos, 20.0, maxdist+10.0, XBeamSprite, HaloSprite, 0, 1, 1.0, 90.0, 0.0, {128,0,255,255}, 10, 0);
                     //TE_SendToAll(2.0);
-                    for (new i = 1; i <= MaxClients; i++) {
+                    for (int i = 1; i <= MaxClients; i++) {
                         if(ValidPlayer(i,true) && GetClientTeam(i) != GetClientTeam(attacker)&&!W3HasImmunity(i,Immunity_Wards)) {
-                            decl Float:TargetPos[3];
+                            decl float TargetPos[3];
                             GetClientAbsOrigin(i, TargetPos);
                             if (GetVectorDistance(start_pos, TargetPos) <= maxdist) {
                                 TE_SetupSparks(TargetPos, sparkdir, 90, 90);
@@ -250,13 +250,13 @@ public OnW3TakeDmgBullet( victim, attacker, Float:damage )
     }
 }
 
-new EclipseOwner[MAXPLAYERSCUSTOM];
-new EclipseAmountLeft[MAXPLAYERSCUSTOM];
-public OnUltimateCommand( client, race, bool:pressed )
+	int EclipseOwner[MAXPLAYERSCUSTOM];
+	int EclipseAmountLeft[MAXPLAYERSCUSTOM];
+public OnUltimateCommand( client, race, bool pressed )
 {
     if( race == thisRaceID && pressed && IsPlayerAlive( client ) && !Silenced( client ) )
     {
-        new level = War3_GetSkillLevel( client, race, ULT );
+        int level = War3_GetSkillLevel( client, race, ULT );
         if( level > 0)
         {
             if( War3_SkillNotInCooldown( client, thisRaceID, ULT, true ) )
@@ -265,7 +265,7 @@ public OnUltimateCommand( client, race, bool:pressed )
 
                 CreateTimer( 0.15, Timer_EclipseLoop, client);
 
-                decl Float:StartPos[3];
+                decl float StartPos[3];
                 GetClientAbsOrigin(client, StartPos);
                 StartPos[2]+=400.0;
                 TE_SetupGlowSprite(StartPos, MoonSprite, 5.0, 3.0, 255);
@@ -291,7 +291,7 @@ public OnUltimateCommand( client, race, bool:pressed )
                 TE_SendToAll(3.0);
 
 #if defined SOURCECRAFT
-                new Float:cooldown= GetUpgradeCooldown(thisRaceID,ULT);
+                new float cooldown= GetUpgradeCooldown(thisRaceID,ULT);
                 War3_CooldownMGR(client,cooldown,thisRaceID,ULT,true,true);
 #else
                 War3_CooldownMGR(client,GetConVarFloat(ultCooldownCvar),thisRaceID,ULT,true,true);
@@ -303,20 +303,20 @@ public OnUltimateCommand( client, race, bool:pressed )
     }
 }
 
-public Action:Timer_EclipseLoop( Handle:timer, any:attacker )
+public Action Timer_EclipseLoop( Handle timer, any:attacker )
 {
 
     EclipseAmountLeft[attacker]--;
     if( ValidPlayer(attacker,true))
     {
         //get list of players
-        new playerlist[MAXPLAYERSCUSTOM];
+        int playerlist[MAXPLAYERSCUSTOM];
         new playercount=0;
         new teamattacker=GetClientTeam(attacker);
-        decl Float:AttackerPos[3];
+        decl float AttackerPos[3];
         GetClientAbsOrigin(attacker,AttackerPos);
-        decl Float:TargetPos[3];
-        for (new i = 1; i <= MaxClients; i++) {
+        decl float TargetPos[3];
+        for (int i = 1; i <= MaxClients; i++) {
 
             if(ValidPlayer(i,true)&&!W3HasImmunity( i, Immunity_Ultimates )&&teamattacker != GetClientTeam(i) && teamattacker!=GetApparentTeam(i) && W3LOS(attacker,i)) {
 
@@ -329,8 +329,8 @@ public Action:Timer_EclipseLoop( Handle:timer, any:attacker )
         }
         //DP("%d",playercount);
         if(playercount > 0) { //get randomplayer and deal damage
-            new index = GetRandomInt(0, playercount - 1);
-            new victim = playerlist[index];
+            int index = GetRandomInt(0, playercount - 1);
+            int victim = playerlist[index];
 
             // Use level 4 damage values for the ultimate
             MoonBeamDamageAndEffect(victim, attacker, LucentBeamMin[4], LucentBeamMax[4]);
@@ -343,24 +343,24 @@ public Action:Timer_EclipseLoop( Handle:timer, any:attacker )
     }
 }
 
-public Action:Timer_EclipseStop(Handle:timer, any:victim)
+public Action Timer_EclipseStop(Handle timer, any:victim)
 {
     EclipseOwner[victim] = -1;
 }
 
 MoonBeamDamageAndEffect(victim, attacker, min, max) {
-    decl Float:start_pos[3];
-    decl Float:end_pos2[3];
+    decl float start_pos[3];
+    decl float end_pos2[3];
 
     GetClientAbsOrigin(victim, start_pos);
     GetClientAbsOrigin(victim, end_pos2);
 
     end_pos2[2] += 10000.0;
-    //TE_SetupBeamPoints(const Float:start[3], const Float:end[3], ModelIndex, HaloIndex, StartFrame, FrameRate, Float:Life, Float:Width, Float:EndWidth, FadeLength, Float:Amplitude, const Color[4], Speed)
-    TE_SetupBeamPoints(start_pos, end_pos2, XBeamSprite, HaloSprite, 0, 30, Float:1.0, Float:20.0, 20.0, 0, 0.0, {255,255,255,255}, 300);
+    //TE_SetupBeamPoints(const float start[3], const float end[3], ModelIndex, HaloIndex, StartFrame, FrameRate, float Life, float Width, float EndWidth, FadeLength, float Amplitude, const Color[4], Speed)
+    TE_SetupBeamPoints(start_pos, end_pos2, XBeamSprite, HaloSprite, 0, 30, float 1.0, float 20.0, 20.0, 0, 0.0, {255,255,255,255}, 300);
     TE_SendToAll(0.0);
 
-    //TE_SetupBeamRingPoint(const Float:center[3], Float:Start_Radius, Float:End_Radius, ModelIndex, HaloIndex, StartFrame, FrameRate, Float:Life, Float:Width, Float:Amplitude, const Color[4], Speed, Flags)
+    //TE_SetupBeamRingPoint(const float center[3], float Start_Radius, float End_Radius, ModelIndex, HaloIndex, StartFrame, FrameRate, float Life, float Width, float Amplitude, const Color[4], Speed, Flags)
     TE_SetupBeamRingPoint(start_pos, 20.0, 99.0, XBeamSprite, HaloSprite, 0, 1, 0.5, 30.0, 0.0, {255,255,255,255}, 10, 0);
     TE_SendToAll(0.3);
 

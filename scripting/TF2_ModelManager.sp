@@ -136,60 +136,60 @@
 // *********************************************************************************
 
 // ---- Player variables -----------------------------------------------------------
-new g_iPlayerItem[MAXPLAYERS+1];
-new g_iPlayerFlags[MAXPLAYERS+1];
-new g_iPlayerBGroups[MAXPLAYERS+1];
-new bool:g_bRotationTauntSet[MAXPLAYERS + 1] = { false, ... };
+int g_iPlayerItem[MAXPLAYERS+1];
+int g_iPlayerFlags[MAXPLAYERS+1];
+int g_iPlayerBGroups[MAXPLAYERS+1];
+bool g_bRotationTauntSet[MAXPLAYERS + 1] = { false, ... };
 new TFClassType:g_iPlayerSpawnClass[MAXPLAYERS + 1] = { TFClass_Unknown, ... };
 
 // ---- Item variables -------------------------------------------------------------
 //new g_iSlotsCount;
-//new String:g_strSlots[MAX_SLOTS][MAX_LENGTH];			// In a future, perhaps? I THINK NOT.
+//char g_strSlots[MAX_SLOTS][MAX_LENGTH];			// In a future, perhaps? I THINK NOT.
 
-new g_iItemCount;
-new String:g_strItemName[MAX_ITEMS][MAX_LENGTH];
-new String:g_strItemModel[MAX_ITEMS][MAX_LENGTH];
-new g_iItemFlags[MAX_ITEMS];
-new g_iItemBodygroupFlags[MAX_ITEMS];
-new g_iItemClasses[MAX_ITEMS];
-new g_iItemTeams[MAX_ITEMS];
-new String:g_strItemSteamID[MAX_ITEMS][2048];
+int g_iItemCount;
+char g_strItemName[MAX_ITEMS][MAX_LENGTH];
+char g_strItemModel[MAX_ITEMS][MAX_LENGTH];
+int g_iItemFlags[MAX_ITEMS];
+int g_iItemBodygroupFlags[MAX_ITEMS];
+int g_iItemClasses[MAX_ITEMS];
+int g_iItemTeams[MAX_ITEMS];
+char g_strItemSteamID[MAX_ITEMS][2048];
 
 // ---- Cvars ----------------------------------------------------------------------
-new Handle:g_hCvarVersion			  = INVALID_HANDLE;
-new Handle:g_hCvarAdminOnly			= INVALID_HANDLE;
-new Handle:g_hCvarAdminFlags		   = INVALID_HANDLE;
-new Handle:g_hCvarAdminOverride		= INVALID_HANDLE;
-new Handle:g_hCvarAnnounce			 = INVALID_HANDLE;
-new Handle:g_hCvarAnnouncePlugin	   = INVALID_HANDLE;
-new Handle:g_hCvarForceDefaultOnUsers  = INVALID_HANDLE;
-new Handle:g_hCvarForceDefaultOnAdmins = INVALID_HANDLE;
-new Handle:g_hCvarDelayOnSpawn		 = INVALID_HANDLE;
-new Handle:g_hCvarBlockTriggers		= INVALID_HANDLE;
-new Handle:g_hCvarFileList			= INVALID_HANDLE;
+Handle g_hCvarVersion			  = null;
+Handle g_hCvarAdminOnly			= null;
+Handle g_hCvarAdminFlags		   = null;
+Handle g_hCvarAdminOverride		= null;
+Handle g_hCvarAnnounce			 = null;
+Handle g_hCvarAnnouncePlugin	   = null;
+Handle g_hCvarForceDefaultOnUsers  = null;
+Handle g_hCvarForceDefaultOnAdmins = null;
+Handle g_hCvarDelayOnSpawn		 = null;
+Handle g_hCvarBlockTriggers		= null;
+Handle g_hCvarFileList			= null;
 
 // ---- Others ---------------------------------------------------------------------
-new Handle:g_hCookies[TFClassType] = { INVALID_HANDLE, ... };
+Handle g_hCookies[TFClassType] = { null, ... };
 
-new bool:g_bAdminOnly	  = false;
-new bool:g_bAdminOverride  = false;
-new bool:g_bAnnounce	   = false;
-new bool:g_bAnnouncePlugin = false;
-new bool:g_bForceUsers	 = false;
-new bool:g_bForceAdmins	= false;
-new bool:g_bBlockTriggers  = false;
-new Float:g_fSpawnDelay	= 0.0;
-new String:g_strAdminFlags[32];
-new String:g_strConfigFilePath[PLATFORM_MAX_PATH];
+bool g_bAdminOnly	  = false;
+bool g_bAdminOverride  = false;
+bool g_bAnnounce	   = false;
+bool g_bAnnouncePlugin = false;
+bool g_bForceUsers	 = false;
+bool g_bForceAdmins	= false;
+bool g_bBlockTriggers  = false;
+float g_fSpawnDelay	= 0.0;
+char g_strAdminFlags[32];
+char g_strConfigFilePath[PLATFORM_MAX_PATH];
 
-new Handle:g_hMenuMain   = INVALID_HANDLE;
-//new Handle:g_hMenuEquip  = INVALID_HANDLE;
-//new Handle:g_hMenuRemove = INVALID_HANDLE;
+Handle g_hMenuMain   = null;
+//Handle g_hMenuEquip  = null;
+//Handle g_hMenuRemove = null;
 
 // *********************************************************************************
 // PLUGIN
 // *********************************************************************************
-public Plugin:myinfo =
+public Plugin myinfo =
 {
 	name		= PLUGIN_NAME,
 	author	  = PLUGIN_AUTHOR,
@@ -216,7 +216,7 @@ public OnPluginStart()
 	LoadTranslations("common.phrases");
 
 	// Plugin is TF2 only, so make sure it's ran on TF
-	decl String:strModName[32]; GetGameFolderName(strModName, sizeof(strModName));
+	char strModName[32]; GetGameFolderName(strModName, sizeof(strModName));
 	if (!StrEqual(strModName, "tf"))
 	{
 		SetFailState("[SM] TF2 Model Manager is only for, of course, TF2.");
@@ -317,7 +317,7 @@ public OnPluginStart()
 public OnPluginEnd()
 {
 	// Destroy all entities for everyone, if possible.
-	for (new client=1; client<=MaxClients; client++)
+	for(int client=1; client<=MaxClients; client++)
 	{
 		if (!IsValidClient(client)) continue;
 		SetVariantString("");
@@ -331,9 +331,9 @@ public OnPluginEnd()
 // On player's death destroy the entity that's meant to be visible for the
 // other players.
 // ------------------------------------------------------------------------
-public Event_RemoveItem(Handle:hEvent, String:strName[], bool:bDontBroadcast)
+public Event_RemoveItem(Handle hEvent, char strName[], bool bDontBroadcast)
 {
-	new client = GetClientOfUserId(GetEventInt(hEvent, "userid"));
+	int client = GetClientOfUserId(GetEventInt(hEvent, "userid"));
 	Item_Remove(client);
 }
 
@@ -343,7 +343,7 @@ public Event_RemoveItem(Handle:hEvent, String:strName[], bool:bDontBroadcast)
 public OnConfigsExecuted()
 {
 	// Determine if the version of the cfg is the correct one
-	new String:strVersion[16]; GetConVarString(g_hCvarVersion, strVersion, sizeof(strVersion));
+	char strVersion[16]; GetConVarString(g_hCvarVersion, strVersion, sizeof(strVersion));
 	if (StrEqual(strVersion, PLUGIN_VERSION) == false)
 	{
 		LogError("[TF2] Model Manager: WARNING- Your config file might be outdated! This may lead to conflicts with \
@@ -352,13 +352,13 @@ public OnConfigsExecuted()
 	}
 	SetConVarString(g_hCvarVersion, PLUGIN_VERSION);
 	// Force Cfg update
-	Cvar_UpdateCfg(INVALID_HANDLE, "", "");
+	Cvar_UpdateCfg(null, "", "");
 }
 
 // ------------------------------------------------------------------------
 // UpdateCfg()
 // ------------------------------------------------------------------------
-public Cvar_UpdateCfg(Handle:hHandle, String:strOldVal[], String:strNewVal[])
+public Cvar_UpdateCfg(Handle hHandle, char strOldVal[], char strNewVal[])
 {
 	g_bAdminOnly	  = GetConVarBool(g_hCvarAdminOnly);
 	g_bAdminOverride  = GetConVarBool(g_hCvarAdminOverride);
@@ -369,7 +369,7 @@ public Cvar_UpdateCfg(Handle:hHandle, String:strOldVal[], String:strNewVal[])
 	g_fSpawnDelay	 = GetConVarFloat(g_hCvarDelayOnSpawn);
 	g_bBlockTriggers  = GetConVarBool(g_hCvarBlockTriggers);
 	GetConVarString(g_hCvarAdminFlags, g_strAdminFlags, sizeof(g_strAdminFlags));
-	for (new i = 1; i <= MaxClients; i++)
+	for(int i= 1; i <= MaxClients; i++)
 	{
 		if (!IsValidClient(i)) continue;
 		OnClientPostAdminCheck(i);
@@ -387,7 +387,7 @@ public Cvar_UpdateCfg(Handle:hHandle, String:strOldVal[], String:strNewVal[])
 public OnMapStart()
 {
 	// Reset player's slots
-	for (new client=1; client<=MaxClients; client++)
+	for(int client=1; client<=MaxClients; client++)
 	{
 		g_iPlayerFlags[client] = 0;
 
@@ -410,9 +410,9 @@ public OnMapStart()
 public OnMapEnd()
 {
 	// Destroy menus
-	if (g_hMenuMain   != INVALID_HANDLE) { CloseHandle(g_hMenuMain);   g_hMenuMain   = INVALID_HANDLE; }
-//	if (g_hMenuEquip  != INVALID_HANDLE) { CloseHandle(g_hMenuEquip);  g_hMenuEquip  = INVALID_HANDLE; }
-//	if (g_hMenuRemove != INVALID_HANDLE) { CloseHandle(g_hMenuRemove); g_hMenuRemove = INVALID_HANDLE; }
+	if (g_hMenuMain   != null) { CloseHandle(g_hMenuMain);   g_hMenuMain   = null; }
+//	if (g_hMenuEquip  != null) { CloseHandle(g_hMenuEquip);  g_hMenuEquip  = null; }
+//	if (g_hMenuRemove != null) { CloseHandle(g_hMenuRemove); g_hMenuRemove = null; }
 }
 
 // ------------------------------------------------------------------------
@@ -443,7 +443,7 @@ public OnClientPutInServer(client)
 public OnClientPostAdminCheck(client)
 {
 	// Retrieve needed flags and determine if the player is an admin.
-	new ibFlags = ReadFlagString(g_strAdminFlags);
+	int ibFlags = ReadFlagString(g_strAdminFlags);
 
 	// Test and setup flag if so.
 	new AdminId:admin = GetUserAdmin(client);
@@ -473,10 +473,10 @@ public TF2_OnConditionRemoved(client, TFCond:condition)
 // requip the items the player had selected. If none are found, we also check
 // if we should force one upon the player.
 // ------------------------------------------------------------------------
-public Event_EquipItem(Handle:hEvent, String:strName[], bool:bDontBroadcast)
+public Event_EquipItem(Handle hEvent, char strName[], bool bDontBroadcast)
 {
-	new userid = GetEventInt(hEvent, "userid");
-	new client = GetClientOfUserId(userid);
+	int userid = GetEventInt(hEvent, "userid");
+	int client = GetClientOfUserId(userid);
 	if (IsValidClient(client))
 	{
 		new TFClassType:class = TF2_GetPlayerClass(client);
@@ -490,9 +490,9 @@ public Event_EquipItem(Handle:hEvent, String:strName[], bool:bDontBroadcast)
 	}
 }
 
-public Action:Timer_EquipItem(Handle:hTimer, any:userid)
+public Action Timer_EquipItem(Handle hTimer, any:userid)
 {
-	new client = GetClientOfUserId(userid);
+	int client = GetClientOfUserId(userid);
 	if (!IsValidClient(client)) return Plugin_Continue;
 	if (!IsPlayerAlive(client)) return Plugin_Continue;
 
@@ -622,7 +622,7 @@ Item_Equip_Admin_Force(client, iItem)
 // ------------------------------------------------------------------------
 // Remove the item equipped at the selected slot.
 // ------------------------------------------------------------------------
-Item_Remove(client, bool:bCheck = true)
+Item_Remove(client, bool bCheck = true)
 {
 	// Assert if the player is alive.
 	if (bCheck == true && !IsValidClient(client)) return;
@@ -648,11 +648,11 @@ Item_ParseList()
 {
 	// Parse the objects list key values text to acquire all the possible
 	// wearable items.
-	new Handle:kvItemList = CreateKeyValues("TF2_ModelManager");
-	new Handle:hStream = INVALID_HANDLE;
-	new String:strLocation[256];
-	new String:strDependencies[256];
-	new String:strLine[256];
+	Handle kvItemList = CreateKeyValues("TF2_ModelManager");
+	Handle hStream = null;
+	char strLocation[256];
+	char strDependencies[256];
+	char strLine[256];
 
 	// Load the key files.
 
@@ -718,7 +718,7 @@ Item_ParseList()
 
 				// Open stream, if possible
 				hStream = OpenFile(strDependencies, "r");
-				if (hStream == INVALID_HANDLE) { LogError("[TF2] Model Manager: Error, can't read file containing model dependencies (\"%s.dep\").", g_strItemModel[g_iItemCount]); return; }
+				if (hStream == null) { LogError("[TF2] Model Manager: Error, can't read file containing model dependencies (\"%s.dep\").", g_strItemModel[g_iItemCount]); return; }
 
 				while(!IsEndOfFile(hStream))
 				{
@@ -760,7 +760,7 @@ Item_ParseList()
 	LogMessage("}");
 	#endif
 }
-stock bool:CheckOfficialValveModel(String:model[])
+stock bool CheckOfficialValveModel(char model[])
 {
 	if (strncmp(model, "models/player/items", 19, false) != 0) return false;
 	if (StrContains(model, "shield", false) != -1) return false;
@@ -775,9 +775,9 @@ stock bool:CheckOfficialValveModel(String:model[])
 // ------------------------------------------------------------------------
 // Parses the items flags, duh.
 // ------------------------------------------------------------------------
-Item_ParseFlags(String:strFlags[])
+Item_ParseFlags(char strFlags[])
 {
-	new Flags;
+	int Flags;
 	if (StrContains(strFlags, "USER_DEFAULT", false)			!= -1) 	Flags |= FLAG_USER_DEFAULT;
 	if (StrContains(strFlags, "ADMIN_DEFAULT", false)			!= -1) 	Flags |= FLAG_ADMIN_DEFAULT;
 	if (StrContains(strFlags, "ADMIN_ONLY", false)				!= -1) 	Flags |= FLAG_ADMIN_ONLY;
@@ -790,9 +790,9 @@ Item_ParseFlags(String:strFlags[])
 	return Flags;
 }
 
-Item_ParseBodygroupFlags(String:strFlags[])
+Item_ParseBodygroupFlags(char strFlags[])
 {
-	new bgFlags;
+	int bgFlags;
 	if (StrContains(strFlags, "HIDE_SCOUT_HAT", false)			!= -1)	bgFlags |= FLAG_HIDE_SCOUT_HAT;
 	if (StrContains(strFlags, "HIDE_SCOUT_HEADPHONES", false)	!= -1)	bgFlags |= FLAG_HIDE_SCOUT_HEADPHONES;
 	if (StrContains(strFlags, "HIDE_SCOUT_FEET", false)			!= -1)	bgFlags |= FLAG_HIDE_SCOUT_FEET;
@@ -828,9 +828,9 @@ Item_ParseBodygroupFlags(String:strFlags[])
 // ------------------------------------------------------------------------
 // Parses the wearable classes, duh.
 // ------------------------------------------------------------------------
-Item_ParseClasses(String:strClasses[])
+Item_ParseClasses(char strClasses[])
 {
-	new iFlags;
+	int iFlags;
 	if (StrContains(strClasses, "SCOUT",	false)	!= -1) iFlags |= CLASS_SCOUT;
 	if (StrContains(strClasses, "SNIPER",	false)	!= -1) iFlags |= CLASS_SNIPER;
 	if (StrContains(strClasses, "SOLDIER",	false)	!= -1) iFlags |= CLASS_SOLDIER;
@@ -849,9 +849,9 @@ Item_ParseClasses(String:strClasses[])
 // ------------------------------------------------------------------------
 // Parses the wearable teams, duh.
 // ------------------------------------------------------------------------
-Item_ParseTeams(String:strTeams[])
+Item_ParseTeams(char strTeams[])
 {
-	new iFlags;
+	int iFlags;
 	if (StrContains(strTeams, "RED", false) != -1 ) iFlags |= TEAM_RED;
 	if (StrContains(strTeams, "BLU", false) != -1) iFlags |= TEAM_BLU;
 	if (StrContains(strTeams, "ALL", false) != -1)  iFlags |= TEAM_RED|TEAM_BLU;
@@ -886,7 +886,7 @@ Item_IsWearable(client, Item)
 	if (!(Client_ClassFlags(client) & g_iItemClasses[Item])) return 0;
 	if (!(Client_TeamFlags(client) & g_iItemTeams[Item]))	return 0;
 
-	decl String:strSteamID[20]; GetClientAuthString(client, strSteamID, sizeof(strSteamID));
+	char strSteamID[20]; GetClientAuthString(client, strSteamID, sizeof(strSteamID));
 	if ((g_iItemFlags[Item] & FLAG_REQUIRES_STEAMID) && (StrContains(g_strItemSteamID[Item], strSteamID, false) == -1)) return 0;
 
 	// Success!
@@ -902,7 +902,7 @@ Item_IsWearable_Admin_Force(client,Item)
 	if (!(Client_ClassFlags(client) & g_iItemClasses[Item]))	return 0;
 	if (!(Client_TeamFlags(client) & g_iItemTeams[Item]))	return 0;
 
-//	decl String:strSteamID[20]; GetClientAuthString(client, strSteamID, sizeof(strSteamID));
+//	char strSteamID[20]; GetClientAuthString(client, strSteamID, sizeof(strSteamID));
 //	if ((g_iItemFlags[Item] & FLAG_REQUIRES_STEAMID) && (StrContains(g_strItemSteamID[Item], strSteamID, false) == -1)) return 0;
 
 	// Success!
@@ -913,13 +913,13 @@ Item_IsWearable_Admin_Force(client,Item)
 // ------------------------------------------------------------------------
 Item_FindDefaultItem(client)
 {
-	new iFlagsFilter;
+	int iFlagsFilter;
 	if (g_bForceAdmins && (g_iPlayerFlags[client] & PLAYER_ADMIN))	iFlagsFilter = FLAG_ADMIN_DEFAULT;
 	else if (g_bForceUsers)									iFlagsFilter = FLAG_USER_DEFAULT;
 
 	if (iFlagsFilter)
 	{
-		for (new j=0; j<g_iItemCount; j++)
+		for(int j=0; j<g_iItemCount; j++)
 		{
 			if (!(g_iItemFlags[j] & iFlagsFilter)) continue;
 			if (!Item_IsWearable(client, j))	  continue;
@@ -937,13 +937,13 @@ Item_FindDefaultItem(client)
 /*Item_DetermineBodyGroups(client)
 {
 	// Determine bodygroups across all the equiped items
-	new BodyGroups = 0;
-	for (new Slot=0; Slot<MAX_SLOTS; Slot++)
+	int BodyGroups = 0;
+	for(int Slot=0; Slot<MAX_SLOTS; Slot++)
 	{
-		new Item = g_iPlayerItem[client][Slot];
+		int Item = g_iPlayerItem[client][Slot];
 		if (Item == -1) continue;
 
-		new Flags = g_iItemFlags[Item];
+		int Flags = g_iItemFlags[Item];
 
 		switch(TF2_GetPlayerClass(client))
 		{
@@ -986,7 +986,7 @@ Item_RetrieveSlotCookie(client)
 	if (Class == TFClass_Unknown) return -1;
 
 	// Retrieve the class cookie
-	decl String:strCookie[64];
+	char strCookie[64];
 	GetClientCookie(client, g_hCookies[Class], strCookie, sizeof(strCookie));
 
 	// If it's void, return -1
@@ -1012,7 +1012,7 @@ Item_SetSlotCookie(client)
 	if (Class == TFClass_Unknown) return;
 
 	// Set the class cookie
-	decl String:strCookie[64];
+	char strCookie[64];
 	IntToString(g_iPlayerItem[client], strCookie, sizeof(strCookie));	//Format(strCookie, sizeof(strCookie), "%i", g_iPlayerItem[client]);
 	SetClientCookie(client, g_hCookies[Class], strCookie);
 }
@@ -1066,10 +1066,10 @@ Client_TeamFlags(client)
 // Builds the main menu, displaying the options for the wearable
 // items.
 // ------------------------------------------------------------------------
-Handle:Menu_BuildMain()
+Handle Menu_BuildMain()
 {
 	// Create menu handle
-	new Handle:hMenu = CreateMenu(Menu_Manager, MenuAction_DisplayItem|MenuAction_Display);
+	Handle hMenu = CreateMenu(Menu_Manager, MenuAction_DisplayItem|MenuAction_Display);
 
 	// Add the different options
 	AddMenuItem(hMenu, "", "Menu_Equip");
@@ -1086,10 +1086,10 @@ Handle:Menu_BuildMain()
 // ------------------------------------------------------------------------
 // Builds the select slots menu. Nothing fancy, just the slots.
 // ------------------------------------------------------------------------
-/*Handle:Menu_BuildSlots(String:StrTitle[])
+/*Handle Menu_BuildSlots(char StrTitle[])
 {
 	// Create menu handle
-	new Handle:hMenu = CreateMenu(Menu_Manager, MenuAction_Display);
+	Handle hMenu = CreateMenu(Menu_Manager, MenuAction_Display);
 
 	AddMenuItem(hMenu, "", "There's only one model slot!");
 
@@ -1104,14 +1104,14 @@ Handle:Menu_BuildMain()
 // This method builds and specific menu for the client, based on it's
 // current state, class and flags.
 // ------------------------------------------------------------------------
-Handle:Menu_BuildItemList(client)
+Handle Menu_BuildItemList(client)
 {
 	// Create the menu Handle
-	new Handle:Menu = CreateMenu(Menu_Manager);
-	new String:strBuffer[64];
+	Handle Menu = CreateMenu(Menu_Manager);
+	char strBuffer[64];
 
 	// Add all objects
-	for (new i=0; i<g_iItemCount; i++)
+	for(int i=0; i<g_iItemCount; i++)
 	{
 		// Skip if not a correct item
 		if (!Item_IsWearable(client, i)) continue;
@@ -1133,9 +1133,9 @@ Handle:Menu_BuildItemList(client)
 // The master menu manager. Manages the different menu usages and
 // makes sure to translate the options when necessary.
 // ------------------------------------------------------------------------
-public Menu_Manager(Handle:hMenu, MenuAction:maState, iParam1, iParam2)
+public Menu_Manager(Handle hMenu, MenuAction maState, iParam1, iParam2)
 {
-	new String:strBuffer[64];
+	char strBuffer[64];
 
 	switch(maState)
 	{
@@ -1150,7 +1150,7 @@ public Menu_Manager(Handle:hMenu, MenuAction:maState, iParam1, iParam2)
 				{
 					case 0:
 					{
-						new Handle:hListMenu = Menu_BuildItemList(iParam1);
+						Handle hListMenu = Menu_BuildItemList(iParam1);
 						DisplayMenu(hListMenu, iParam1, MENU_TIME_FOREVER);
 					}
 //						DisplayMenu(g_hMenuEquip,  iParam1, MENU_TIME_FOREVER);
@@ -1165,7 +1165,7 @@ public Menu_Manager(Handle:hMenu, MenuAction:maState, iParam1, iParam2)
 			}
 //			else if (hMenu == g_hMenuEquip)
 //			{
-//				new Handle:hListMenu = Menu_BuildItemList(iParam1);
+//				Handle hListMenu = Menu_BuildItemList(iParam1);
 //				DisplayMenu(hListMenu,  iParam1, MENU_TIME_FOREVER);
 //			}
 //			else if (hMenu == g_hMenuRemove)
@@ -1177,7 +1177,7 @@ public Menu_Manager(Handle:hMenu, MenuAction:maState, iParam1, iParam2)
 			else
 			{
 				GetMenuItem(hMenu, iParam2, strBuffer, sizeof(strBuffer));
-				new Item = StringToInt(strBuffer);
+				int Item = StringToInt(strBuffer);
 				Item_Equip(iParam1, Item);
 				Item_SetSlotCookie(iParam1);
 				CPrintToChat(iParam1, "%t", "Message_EquippedItem", g_strItemName[Item]);
@@ -1187,18 +1187,18 @@ public Menu_Manager(Handle:hMenu, MenuAction:maState, iParam1, iParam2)
 		case MenuAction_DisplayItem:
 		{
 			// Get the display string, we'll use it as a translation phrase
-			decl String:strDisplay[64]; GetMenuItem(hMenu, iParam2, "", 0, _, strDisplay, sizeof(strDisplay));
-			decl String:strTranslation[255]; Format(strTranslation, sizeof(strTranslation), "%T", strDisplay, iParam1);
+			char strDisplay[64]; GetMenuItem(hMenu, iParam2, "", 0, _, strDisplay, sizeof(strDisplay));
+			char strTranslation[255]; Format(strTranslation, sizeof(strTranslation), "%T", strDisplay, iParam1);
 			return RedrawMenuItem(strTranslation);
 		}
 
 		case MenuAction_Display:
 		{
 			// Retrieve panel
-			new Handle:Panel = Handle:iParam2;
+			Handle Panel = Handle iParam2;
 
 			// Translate title
-			decl String:strTranslation[255];
+			char strTranslation[255];
 			if (hMenu == g_hMenuMain)		{ Format(strTranslation, sizeof(strTranslation), "%T", "Menu_Main",   iParam1); }
 //			else if (hMenu == g_hMenuEquip)	{ Format(strTranslation, sizeof(strTranslation), "%T", "Menu_Equip",  iParam1); }
 //			else if (hMenu == g_hMenuRemove)	{ Format(strTranslation, sizeof(strTranslation), "%T", "Menu_Remove", iParam1); }
@@ -1220,14 +1220,14 @@ public Menu_Manager(Handle:hMenu, MenuAction:maState, iParam1, iParam2)
 // ------------------------------------------------------------------------
 // Cmd_BlockTriggers()
 // ------------------------------------------------------------------------
-public Action:Cmd_BlockTriggers(client, String:command[], args)
+public Action Cmd_BlockTriggers(client, char command[], args)
 {
 	if (!g_bBlockTriggers) return Plugin_Continue;
 	if (client < 1 || client > MaxClients) return Plugin_Continue;
 	if (args < 1) return Plugin_Continue;
 
 	// Retrieve the first argument and check it's a valid trigger
-	decl String:strArgument[64]; GetCmdArg(1, strArgument, sizeof(strArgument));
+	char strArgument[64]; GetCmdArg(1, strArgument, sizeof(strArgument));
 	if (StrEqual(strArgument, "!tf_models", true)) return Plugin_Handled;
 	if (StrEqual(strArgument, "!equip", true)) return Plugin_Handled;
 	if (StrEqual(strArgument, "!equipmodels", true)) return Plugin_Handled;
@@ -1244,7 +1244,7 @@ public Action:Cmd_BlockTriggers(client, String:command[], args)
 // Shows menu to clients, if the client is able to: The plugin isn't set
 // to admin only or his equipment is locked.
 // ------------------------------------------------------------------------
-public Action:Cmd_Menu(client, args)
+public Action Cmd_Menu(client, args)
 {
 	// Not allowed if not ingame.
 	if (!IsValidClient(client)) { ReplyToCommand(client, "[TF2] Command is in-game only."); return Plugin_Handled; }
@@ -1274,23 +1274,23 @@ public Action:Cmd_Menu(client, args)
 // ------------------------------------------------------------------------
 // Force a client to equip an specific items.
 // ------------------------------------------------------------------------
-public Action:Cmd_EquipItem(client, args)
+public Action Cmd_EquipItem(client, args)
 {
 	if (args < 2) { ReplyToCommand(client, "[TF2] Usage: tf_models_equip <#id|name> <item name>."); return Plugin_Handled; }
-	decl String:strArgs[128]; GetCmdArgString(strArgs, sizeof(strArgs));
+	char strArgs[128]; GetCmdArgString(strArgs, sizeof(strArgs));
 	// Retrieve arguments
-	decl String:strTarget[32];
-	new position = BreakString(strArgs, strTarget, sizeof(strTarget));
+	char strTarget[32];
+	int position = BreakString(strArgs, strTarget, sizeof(strTarget));
 	if (position == -1) { ReplyToCommand(client, "[TF2] Usage: tf_models_equip <#id|name> <item name>."); return Plugin_Handled; }
-	new String:strItem[128];
+	char strItem[128];
 	strcopy(strItem, sizeof(strItem), strArgs[position]);
 
-	new iItem = -1;
+	int iItem = -1;
 
 	// Check if item exists and if so, grab index
-	new foundcount = 0;
-	new String:names[128];
-	for (new i=0; i<g_iItemCount; i++)
+	int foundcount = 0;
+	char names[128];
+	for(int i=0; i<g_iItemCount; i++)
 	{
 		if (StrEqual(g_strItemName[i], strItem, false))
 		{
@@ -1305,7 +1305,7 @@ public Action:Cmd_EquipItem(client, args)
 			if (foundcount == 1) strcopy(names, sizeof(names), g_strItemName[i]);
 			else
 			{
-				decl String:buffer[32];
+				char buffer[32];
 				Format(buffer, sizeof(buffer), ", %s", g_strItemName[i]);
 				StrCat(names, sizeof(names), buffer);
 			}
@@ -1319,9 +1319,9 @@ public Action:Cmd_EquipItem(client, args)
 	}
 
 	// Process the targets
-	decl String:strTargetName[MAX_TARGET_LENGTH];
+	char strTargetName[MAX_TARGET_LENGTH];
 	decl iTargetList[MAXPLAYERS], iTargetCount;
-	decl bool:bTargetTranslate;
+	decl bool bTargetTranslate;
 
 	if ((iTargetCount = ProcessTargetString(strTarget, client, iTargetList, MAXPLAYERS, COMMAND_FILTER_CONNECTED,
 	strTargetName, sizeof(strTargetName), bTargetTranslate)) <= 0)
@@ -1331,13 +1331,13 @@ public Action:Cmd_EquipItem(client, args)
 	}
 
 	// Apply to all targets
-	for (new i = 0; i < iTargetCount; i++)
+	for(int i= 0; i < iTargetCount; i++)
 	{
 		if (!IsValidClient(iTargetList[i])) continue;
 
 		// If item isn't wearable, for the client.
 		if (!Item_IsWearable_Admin_Force(iTargetList[i], iItem)) {
-//			decl String:strName[64]; GetClientName(iTargetList[i], strName, sizeof(strName));
+//			char strName[64]; GetClientName(iTargetList[i], strName, sizeof(strName));
 			CPrintToChat(client, "%t", "Error_CantWear", iTargetList[i]);
 			continue;
 		}
@@ -1354,18 +1354,18 @@ public Action:Cmd_EquipItem(client, args)
 // ------------------------------------------------------------------------
 // Cmd_RemoveItem()
 // ------------------------------------------------------------------------
-public Action:Cmd_RemoveItem(client, args)
+public Action Cmd_RemoveItem(client, args)
 {
 	// Determine if the number of arguments is valid
 	if (args < 1) { ReplyToCommand(client, "[TF2] Usage: tf_models_remove <#id|name>."); return Plugin_Handled; }
 
 	// Retrieve arguments
-	decl String:strTarget[32]; GetCmdArg(1, strTarget, sizeof(strTarget));
+	char strTarget[32]; GetCmdArg(1, strTarget, sizeof(strTarget));
 
 	// Process the targets
-	decl String:strTargetName[MAX_TARGET_LENGTH];
+	char strTargetName[MAX_TARGET_LENGTH];
 	decl iTargetList[MAXPLAYERS], iTargetCount;
-	decl bool:bTargetTranslate;
+	decl bool bTargetTranslate;
 
 	if ((iTargetCount = ProcessTargetString(strTarget, client, iTargetList, MAXPLAYERS, COMMAND_FILTER_CONNECTED,
 	strTargetName, sizeof(strTargetName), bTargetTranslate)) <= 0)
@@ -1375,7 +1375,7 @@ public Action:Cmd_RemoveItem(client, args)
 	}
 
 	// Apply to all targets
-	for (new i = 0; i < iTargetCount; i++)
+	for(int i= 0; i < iTargetCount; i++)
 	{
 		if (!IsValidClient(iTargetList[i])) continue;
 
@@ -1391,19 +1391,19 @@ public Action:Cmd_RemoveItem(client, args)
 // ------------------------------------------------------------------------
 // Cmd_LockEquipment()
 // ------------------------------------------------------------------------
-public Action:Cmd_LockEquipment(client, args)
+public Action Cmd_LockEquipment(client, args)
 {
 	// Determine if the number of arguments is valid
 	if (args < 2) { ReplyToCommand(client, "[TF2] Usage: tf_models_lock <#id|name> <state>"); return Plugin_Handled; }
 
 	// Retrieve arguments
-	decl String:strTarget[32]; GetCmdArg(1, strTarget, sizeof(strTarget));
-	decl String:strState[8];   GetCmdArg(2, strState,  sizeof(strState));
+	char strTarget[32]; GetCmdArg(1, strTarget, sizeof(strTarget));
+	char strState[8];   GetCmdArg(2, strState,  sizeof(strState));
 
 	// Process the targets
-	decl String:strTargetName[MAX_TARGET_LENGTH];
+	char strTargetName[MAX_TARGET_LENGTH];
 	decl iTargetList[MAXPLAYERS], iTargetCount;
-	decl bool:bTargetTranslate;
+	decl bool bTargetTranslate;
 
 	if ((iTargetCount = ProcessTargetString(strTarget, client, iTargetList, MAXPLAYERS, COMMAND_FILTER_CONNECTED,
 	strTargetName, sizeof(strTargetName), bTargetTranslate)) <= 0)
@@ -1413,9 +1413,9 @@ public Action:Cmd_LockEquipment(client, args)
 	}
 
 	// Apply to all targets
-	new State = StringToInt(strState);
+	int State = StringToInt(strState);
 	if (State == 1)
-		for (new i = 0; i < iTargetCount; i++)
+		for(int i= 0; i < iTargetCount; i++)
 	{
 		if (!IsValidClient(iTargetList[i])) continue;
 		if (g_iPlayerFlags[iTargetList[i]] & PLAYER_ADMIN) continue;
@@ -1424,7 +1424,7 @@ public Action:Cmd_LockEquipment(client, args)
 		CPrintToChat(iTargetList[i], "%t", "Message_Locked");
 	}
 	else
-	for (new i = 0; i < iTargetCount; i++)
+	for(int i= 0; i < iTargetCount; i++)
 	{
 		if (!IsValidClient(iTargetList[i])) continue;
 //		g_iPlayerFlags[iTargetList[i]] &= ~PLAYER_LOCK;
@@ -1441,19 +1441,19 @@ public Action:Cmd_LockEquipment(client, args)
 // ------------------------------------------------------------------------
 // Cmd_OverrideEquipment()
 // ------------------------------------------------------------------------
-public Action:Cmd_OverrideEquipment(client, args)
+public Action Cmd_OverrideEquipment(client, args)
 {
 	// Determine if the number of arguments is valid
 	if (args < 2) { ReplyToCommand(client, "[TF2] Usage: tf_models_override <#id|name> <state>"); return Plugin_Handled; }
 
 	// Retrieve arguments
-	decl String:strTarget[32]; GetCmdArg(1, strTarget, sizeof(strTarget));
-	decl String:strState[8];   GetCmdArg(2, strState,  sizeof(strState));
+	char strTarget[32]; GetCmdArg(1, strTarget, sizeof(strTarget));
+	char strState[8];   GetCmdArg(2, strState,  sizeof(strState));
 
 	// Process the targets
-	decl String:strTargetName[MAX_TARGET_LENGTH];
+	char strTargetName[MAX_TARGET_LENGTH];
 	decl iTargetList[MAXPLAYERS], iTargetCount;
-	decl bool:bTargetTranslate;
+	decl bool bTargetTranslate;
 
 	if ((iTargetCount = ProcessTargetString(strTarget, client, iTargetList, MAXPLAYERS, COMMAND_FILTER_CONNECTED,
 	strTargetName, sizeof(strTargetName), bTargetTranslate)) <= 0)
@@ -1463,10 +1463,10 @@ public Action:Cmd_OverrideEquipment(client, args)
 	}
 
 	// Apply to all targets
-	new iState = StringToInt(strState);
+	int iState = StringToInt(strState);
 
 	if (iState == 1)
-		for (new i = 0; i < iTargetCount; i++)
+		for(int i= 0; i < iTargetCount; i++)
 	{
 		if (!IsValidClient(iTargetList[i])) continue;
 
@@ -1474,7 +1474,7 @@ public Action:Cmd_OverrideEquipment(client, args)
 		CPrintToChat(iTargetList[i], "%t", "Message_Override_On");
 	}
 	else
-	for (new i = 0; i < iTargetCount; i++)
+	for(int i= 0; i < iTargetCount; i++)
 	{
 		if (!IsValidClient(iTargetList[i])) continue;
 
@@ -1489,14 +1489,14 @@ public Action:Cmd_OverrideEquipment(client, args)
 // ------------------------------------------------------------------------
 // Cmd_Reload()
 // ------------------------------------------------------------------------
-public Action:Cmd_Reload(client, args)
+public Action Cmd_Reload(client, args)
 {
 	GetConVarString(g_hCvarFileList, g_strConfigFilePath, sizeof(g_strConfigFilePath));
 	// Reparse item list
 	Item_ParseList();
 
 	// Re-read admins flags
-	new ibFlags = ReadFlagString(g_strAdminFlags);
+	int ibFlags = ReadFlagString(g_strAdminFlags);
 	for (client=1; client <= MaxClients; client++)
 	{
 		if (!IsValidClient(client)) continue;
@@ -1513,9 +1513,9 @@ public Action:Cmd_Reload(client, args)
 // ------------------------------------------------------------------------
 // Timer_Welcome
 // ------------------------------------------------------------------------
-public Action:Timer_Welcome(Handle:hTimer, any:userid)
+public Action Timer_Welcome(Handle hTimer, any:userid)
 {
-	new client = GetClientOfUserId(userid);
+	int client = GetClientOfUserId(userid);
 	if (!IsValidClient(client)) return Plugin_Stop;
 
 	CPrintToChat(client, "%t", "Announce_Plugin", PLUGIN_NAME, PLUGIN_VERSION, PLUGIN_AUTHOR);
@@ -1525,13 +1525,13 @@ public Action:Timer_Welcome(Handle:hTimer, any:userid)
 // ------------------------------------------------------------------------
 // Timer_Announce
 // ------------------------------------------------------------------------
-public Action:Timer_Announce(Handle:hTimer)
+public Action Timer_Announce(Handle hTimer)
 {
 	if (!g_bAnnounce) return Plugin_Continue;
 
 	if (g_bAdminOnly)
 	{
-		for (new client=1; client<=MaxClients; client++)
+		for(int client=1; client<=MaxClients; client++)
 		{
 			if (!IsValidClient(client)) continue;
 			if (!(g_iPlayerFlags[client] & PLAYER_ADMIN)) continue;
@@ -1547,11 +1547,11 @@ public Action:Timer_Announce(Handle:hTimer)
 // ------------------------------------------------------------------------
 // CleanString
 // ------------------------------------------------------------------------
-stock CleanString(String:strBuffer[])
+stock CleanString(char strBuffer[])
 {
 	// Cleanup any illegal characters
-	new Length = strlen(strBuffer);
-	for (new iPos=0; iPos<Length; iPos++)
+	int Length = strlen(strBuffer);
+	for(int iPos=0; iPos<Length; iPos++)
 	{
 		switch(strBuffer[iPos])
 		{
@@ -1568,7 +1568,7 @@ stock CleanString(String:strBuffer[])
 // ------------------------------------------------------------------------
 // IsValidClient
 // ------------------------------------------------------------------------
-stock bool:IsValidClient(client)
+stock bool IsValidClient(client)
 {
 	if (client <= 0) return false;
 	if (client > MaxClients) return false;
@@ -1580,7 +1580,7 @@ stock bool:IsValidClient(client)
 // ------------------------------------------------------------------------
 // By Exvel
 // ------------------------------------------------------------------------
-stock FindEntityByClassnameSafe(iStart, const String:strClassname[])
+stock FindEntityByClassnameSafe(iStart, const char[] strClassname)
 {
 	while (iStart > -1 && !IsValidEntity(iStart)) iStart--;
 	return FindEntityByClassname(iStart, strClassname);
@@ -1591,8 +1591,8 @@ stock FindEntityByClassnameSafe(iStart, const String:strClassname[])
 // ------------------------------------------------------------------------
 CalculateBodyGroups(client)
 {
-	new iBodyGroups = g_iPlayerBGroups[client];
-	new iItemGroups = 0;
+	int iBodyGroups = g_iPlayerBGroups[client];
+	int iItemGroups = 0;
 
 	if (g_iPlayerItem[client] != -1)
 		iItemGroups |= g_iItemBodygroupFlags[g_iPlayerItem[client]];
@@ -1650,15 +1650,15 @@ CalculateBodyGroups(client)
 	return iBodyGroups;
 }
 
-stock RemoveValveHat(client, bool:unhide = false)
+stock RemoveValveHat(client, bool unhide = false)
 {
-	new edict = MaxClients+1;
+	int edict = MaxClients+1;
 	while((edict = FindEntityByClassnameSafe(edict, "tf_wearable")) != -1)
 	{
-		decl String:netclass[32];
+		char netclass[32];
 		if (GetEntityNetClass(edict, netclass, sizeof(netclass)) && strcmp(netclass, "CTFWearable") == 0)
 		{
-			new idx = GetEntProp(edict, Prop_Send, "m_iItemDefinitionIndex");
+			int idx = GetEntProp(edict, Prop_Send, "m_iItemDefinitionIndex");
 			if (idx != 57 && idx != 133 && idx != 231 && idx != 444 && idx != 405 && idx != 608 && GetEntPropEnt(edict, Prop_Send, "m_hOwnerEntity") == client)
 			{
 				SetEntityRenderMode(edict, (unhide ? RENDER_NORMAL : RENDER_TRANSCOLOR));

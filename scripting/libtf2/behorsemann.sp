@@ -63,11 +63,11 @@ public Plugin myinfo =
     url = "http://forums.alliedmods.net/showthread.php?t=166819"
 }
 
-Handle hCvarThirdPerson = INVALID_HANDLE;
-Handle hCvarHealth = INVALID_HANDLE;
-Handle hCvarSounds = INVALID_HANDLE;
-Handle hCvarBoo = INVALID_HANDLE;
-Handle fwdOnScare = INVALID_HANDLE;
+Handle hCvarThirdPerson = null;
+Handle hCvarHealth = null;
+Handle hCvarSounds = null;
+Handle hCvarBoo = null;
+Handle fwdOnScare = null;
 
 bool   g_bNativeOverride = false;
 bool   g_IsModel[MAXPLAYERS+1];
@@ -243,7 +243,7 @@ public Action RemoveModel(int client)
 }
 
 /*
-stock SwitchView (target, bool:observer, bool:viewmodel, bool:self)
+stock SwitchView (target, bool observer, bool viewmodel, bool self)
 {
     SetEntPropEnt(target, Prop_Send, "m_hObserverTarget", observer ? target:-1);
     SetEntProp(target, Prop_Send, "m_iObserverMode", observer ? 1:0);
@@ -472,7 +472,7 @@ stock void GiveAxe(int client)
     TF2_RemoveWeaponSlot(client, TFWeaponSlot_Melee);
 
     Handle hWeapon = TF2Items_CreateItem(OVERRIDE_ALL|FORCE_GENERATION);
-    if (hWeapon != INVALID_HANDLE)
+    if (hWeapon != null)
     {
         TF2Items_SetClassname(hWeapon, "tf_weapon_sword");
         TF2Items_SetItemIndex(hWeapon, 266);
@@ -806,7 +806,7 @@ void TE_ParticleToAll(char[] Name, float origin[3]=NULL_VECTOR, float start[3]=N
 stock void ScreenShake(int target, float intensity=30.0, float duration=10.0, float frequency=3.0)
 {
     Handle bf; 
-    if ((bf = StartMessageOne("Shake", target)) != INVALID_HANDLE)
+    if ((bf = StartMessageOne("Shake", target)) != null)
     {
         BfWriteByte(bf, 0);
         BfWriteFloat(bf, intensity);

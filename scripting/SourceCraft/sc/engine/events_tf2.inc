@@ -9,7 +9,7 @@
 
 new m_ObjectBuilt[MAXENTITIES+1];
 
-bool:HookTFEvents()
+bool HookTFEvents()
 {
     if (!HookEventEx("teamplay_round_start",RoundStart,EventHookMode_PostNoCopy))
     {
@@ -553,7 +553,7 @@ bool:HookTFEvents()
     return true;
 }
 
-public PlayerChargeDeployed(Handle:event,const String:name[],bool:dontBroadcast)
+public PlayerChargeDeployed(Handle event,const char[] name,bool dontBroadcast)
 {
     new userid = GetEventInt(event,"userid");
     if (userid > 0)
@@ -575,7 +575,7 @@ public PlayerChargeDeployed(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public PlayerBuiltObject(Handle:event,const String:name[],bool:dontBroadcast)
+public PlayerBuiltObject(Handle event,const char[] name,bool dontBroadcast)
 {
     if (g_RoundState >= RoundActive && g_RoundState < RoundOver)
     {
@@ -611,7 +611,7 @@ public PlayerBuiltObject(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public EventObjectDestroyed(Handle:event,const String:name[],bool:dontBroadcast)
+public EventObjectDestroyed(Handle event,const char[] name,bool dontBroadcast)
 {
     new obj = GetEventInt(event,"index");
     if (obj > 0)
@@ -656,7 +656,7 @@ public EventObjectDestroyed(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public EventObjectRemoved(Handle:event,const String:name[],bool:dontBroadcast)
+public EventObjectRemoved(Handle event,const char[] name,bool dontBroadcast)
 {
     new obj = GetEventInt(event,"index");
     if (obj > 0)
@@ -680,14 +680,14 @@ public EventObjectRemoved(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public EventObjectUpgraded(Handle:event,const String:name[],bool:dontBroadcast)
+public EventObjectUpgraded(Handle event,const char[] name,bool dontBroadcast)
 {
     if (g_RoundState >= RoundActive && g_RoundState < RoundOver)
     {
         new userid = GetEventInt(event,"userid");
         new index  = GetClientOfUserId(userid);
         new TFObjectType:type = TFObjectType:GetEventInt(event,"object");
-        new bool:isBuilder = GetEventBool(event,"isbuilder");
+        bool isBuilder = GetEventBool(event,"isbuilder");
 
         #if defined _TRACE
             new obj = GetEventInt(event,"index");
@@ -703,7 +703,7 @@ public EventObjectUpgraded(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public EventFlagEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public EventFlagEvent(Handle event,const char[] name,bool dontBroadcast)
 {
     new player = GetEventInt(event,"player");
 
@@ -735,13 +735,13 @@ public EventFlagEvent(Handle:event,const String:name[],bool:dontBroadcast)
     #endif
 }
 
-public EventPointCapture(Handle:event,const String:name[],bool:dontBroadcast)
+public EventPointCapture(Handle event,const char[] name,bool dontBroadcast)
 {
-    decl String:cappers[MAXPLAYERS+1];
+    char cappers[MAXPLAYERS+1];
     GetEventString(event,"cappers", cappers, MAXPLAYERS);
     if (strlen(cappers)>0)
     {
-        new bool:startcap = StrEqual(name, "teamplay_point_startcapture");
+        bool startcap = StrEqual(name, "teamplay_point_startcapture");
         new len = strlen(cappers);
         for(new i=0;i<len;i++)
         {
@@ -760,7 +760,7 @@ public EventPointCapture(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public EventCaptureBlocked(Handle:event,const String:name[],bool:dontBroadcast)
+public EventCaptureBlocked(Handle event,const char[] name,bool dontBroadcast)
 {
     new blocker=GetEventInt(event,"blocker");
 
@@ -781,7 +781,7 @@ public EventCaptureBlocked(Handle:event,const String:name[],bool:dontBroadcast)
     #endif
 }
 
-public EventEscortScore(Handle:event,const String:name[],bool:dontBroadcast)
+public EventEscortScore(Handle event,const char[] name,bool dontBroadcast)
 {
     new player = GetEventInt(event,"player");
 
@@ -804,7 +804,7 @@ public EventEscortScore(Handle:event,const String:name[],bool:dontBroadcast)
     #endif
 }
 
-public EventBomberKilled(Handle:event,const String:name[],bool:dontBroadcast)
+public EventBomberKilled(Handle event,const char[] name,bool dontBroadcast)
 {
     new player = GetEventInt(event,"player");
 
@@ -825,7 +825,7 @@ public EventBomberKilled(Handle:event,const String:name[],bool:dontBroadcast)
     #endif
 }
 
-public EventRoundSetupFinished(Handle:event,const String:name[],bool:dontBroadcast)
+public EventRoundSetupFinished(Handle event,const char[] name,bool dontBroadcast)
 {
     g_RoundState = RoundSetupFinished;
 
@@ -834,7 +834,7 @@ public EventRoundSetupFinished(Handle:event,const String:name[],bool:dontBroadca
     #endif
 }
 
-public EventScorePanel(Handle:event,const String:name[],bool:dontBroadcast)
+public EventScorePanel(Handle event,const char[] name,bool dontBroadcast)
 {
     new team  = GetEventInt(event,"winning_team");
     new score = (team == 2) ? GetEventInt(event,"blue_score")
@@ -985,7 +985,7 @@ public EventScorePanel(Handle:event,const String:name[],bool:dontBroadcast)
     TraceReturn();
 }
 
-public EventDoomsday(Handle:event,const String:name[],bool:dontBroadcast)
+public EventDoomsday(Handle event,const char[] name,bool dontBroadcast)
 {
     new team  = GetEventInt(event,"team");
 
@@ -1012,7 +1012,7 @@ public EventDoomsday(Handle:event,const String:name[],bool:dontBroadcast)
     TraceReturn();
 }
 
-public EventMissionComplete(Handle:event,const String:name[],bool:dontBroadcast)
+public EventMissionComplete(Handle event,const char[] name,bool dontBroadcast)
 {
     static const team = 3; // Players are only on the red team, bots are on blue
 
@@ -1076,7 +1076,7 @@ GiveTeamMvpAwards(team)
     }
 }
 
-public SortScoreDesc(x[], y[], array[][], Handle:data)
+public SortScoreDesc(x[], y[], array[][], Handle data)
 {
     if (x[1] > y[1])
         return -1;
@@ -1086,9 +1086,9 @@ public SortScoreDesc(x[], y[], array[][], Handle:data)
         return 0;
 }
 
-public EventBroadcast(Handle:event,const String:name[],bool:dontBroadcast)
+public EventBroadcast(Handle event,const char[] name,bool dontBroadcast)
 {
-    decl String:sound[64];
+    char sound[64];
     GetEventString(event, "sound", sound, sizeof(sound));
 
     TraceInto("Events_TF2", "EventBroadcast", "sound=%s", sound);
@@ -1099,7 +1099,7 @@ public EventBroadcast(Handle:event,const String:name[],bool:dontBroadcast)
     TraceReturn();
 }
 
-public Action:LogScanner(const String:message[])
+public Action LogScanner(const char[] message)
 {
     if (StrContains(message, "changed map", false) >= 0 ||
         StrContains(message, "changing map", false) >= 0)
@@ -1110,7 +1110,7 @@ public Action:LogScanner(const String:message[])
     return Plugin_Continue;
 }
 
-public Action:OnLogAction(Handle:source, Identity:ident, client, target, const String:message[])
+public Action OnLogAction(Handle source, Identity ident, client, target, const char[] message)
 {
     if (StrContains(message, "changed map", false) >= 0 ||
         StrContains(message, "changing map", false) >= 0)
@@ -1122,7 +1122,7 @@ public Action:OnLogAction(Handle:source, Identity:ident, client, target, const S
     return Plugin_Continue;
 }
 
-public EntityOutput_HealthKit(const String:output[], caller, activator, Float:delay)
+public EntityOutput_HealthKit(const char[] output, caller, activator, float delay)
 {
     if (IsValidClient(activator) && IsPlayerAlive(activator))
     {
@@ -1138,15 +1138,15 @@ public EntityOutput_HealthKit(const String:output[], caller, activator, Float:de
     }
 }
 
-public EntityOutput_OnAnimationBegun(const String:output[], caller, activator, Float:delay)
+public EntityOutput_OnAnimationBegun(const char[] output, caller, activator, float delay)
 {
 	if (IsValidEntity(caller))
 	{
-		new String:modelname[128];
+		char modelname[128];
 		GetEntPropString(caller, Prop_Data, "m_ModelName", modelname, 128);
 		if (StrEqual(modelname, "models/props_gameplay/resupply_locker.mdl"))
 		{
-			decl Float:pos[3], Float:orig[3];
+			float pos[3], orig[3];
 			GetEntPropVector(caller, Prop_Send, "m_vecOrigin", pos);
 
 			for (new index=1;index<=MaxClients;index++)
@@ -1182,7 +1182,7 @@ public TF2_OnWaitingForPlayersEnd()
     g_RoundState = RoundActive;
 }
 
-public Action:EntityHurtEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public Action EntityHurtEvent(Handle event,const char[] name,bool dontBroadcast)
 {
     new Action:result = Plugin_Continue;
     new attacker_index = GetClientOfUserId(GetEventInt(event,"attacker_player"));
@@ -1201,7 +1201,7 @@ public Action:EntityHurtEvent(Handle:event,const String:name[],bool:dontBroadcas
     return result;
 }
 
-public EntityDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public EntityDeathEvent(Handle event,const char[] name,bool dontBroadcast)
 {
     new attacker_index = GetEventInt(event,"player_entindex");
     new attacker_race  = (attacker_index > 0) ? GetRace(attacker_index) : -1;
@@ -1271,7 +1271,7 @@ public EntityDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
         LogError("Unable to determine victim of death event %s", name);
 }
 
-public EntityStunnedEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public EntityStunnedEvent(Handle event,const char[] name,bool dontBroadcast)
 {
     new attacker_index = GetEventInt(event,"player_entindex");
     new attacker_race  = (attacker_index > 0) ? GetRace(attacker_index) : -1;

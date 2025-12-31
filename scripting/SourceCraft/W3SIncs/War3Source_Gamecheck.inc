@@ -30,7 +30,7 @@ stock ValveGameEnum:War3_GetGame()
 stock DetermineGameMode() 
 {
     //DETERMINE GAME TYPE: CS TF ETC
-    new String:gameDir[64];
+    char gameDir[64];
     GetGameFolderName(gameDir, sizeof(gameDir));
 
     if (StrContains(gameDir, "cstrike", false) == 0) 
@@ -66,37 +66,37 @@ stock DetermineGameMode()
     }
 }
 
-stock bool:GameCS() 
+stock bool GameCS() 
 {
     return War3_GetGame() == Game_CS;
 }
-stock bool:GameTF() 
+stock bool GameTF() 
 {
     return War3_GetGame() == Game_TF;
 }
 
-stock bool:GameL4D1() 
+stock bool GameL4D1() 
 {
     return (War3_GetGame() == Game_L4D);
 }
 
-stock bool:GameL4D2() 
+stock bool GameL4D2() 
 {
     return (War3_GetGame() == Game_L4D2);
 }
 
-stock bool:GameL4DAny() 
+stock bool GameL4DAny() 
 {
     return (War3_GetGame() == Game_L4D || War3_GetGame() == Game_L4D2);
 }
 
-stock bool:GameCSGO() 
+stock bool GameCSGO() 
 {
     return War3_GetGame() == Game_CSGO;
 }
-stock bool:GameCSANY() 
+stock bool GameCSANY() 
 {
-    new ValveGameEnum:war3Game = War3_GetGame();
+    int ValveGameEnum:war3Game = War3_GetGame();
     
     return (war3Game == Game_CS || war3Game == Game_CSGO); 
 }

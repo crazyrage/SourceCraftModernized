@@ -4,43 +4,43 @@
 #include "W3SIncs/War3Source_Interface"  
 //#include "W3SIncs/War3Source_Effects"
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "War3Source - Race - Rarity",
     author = "War3Source Team",
     description = "The Rarity race for War3Source."
 };
 
-new thisRaceID;
+	int thisRaceID;
 
 new SKILL_SMITTEN,SKILL_HEARTACHE,SKILL_SLEEP,ULTIMATE;
 ///based on succubus HON
 
 
-new Float:smittenCooldown=15.0;
-new Float:smittenDuration=10.0;
-new Float:smittenMultiplier[]={1.0,0.9,0.83,0.76,0.7};
-new bSmittened[MAXPLAYERSCUSTOM];
-new Float:SmittendMultiplier[MAXPLAYERSCUSTOM];
+new float smittenCooldown=15.0;
+new float smittenDuration=10.0;
+new float smittenMultiplier[]={1.0,0.9,0.83,0.76,0.7};
+	int bSmittened[MAXPLAYERSCUSTOM];
+new float SmittendMultiplier[MAXPLAYERSCUSTOM];
 
 
-new Float:sleepCooldown=15.0;
-new Float:sleepDuration[]={0.0,3.0,3.5,4.0,4.5};
-new Float:sleepDistance=400.0;
+new float sleepCooldown=15.0;
+new float sleepDuration[]={0.0,3.0,3.5,4.0,4.5};
+new float sleepDistance=400.0;
 
-new Handle:SleepHandle[MAXPLAYERSCUSTOM]; //the trie
-new Handle:SleepTimer[MAXPLAYERSCUSTOM]; //the timer that ends the sleep
+new Handle SleepHandle[MAXPLAYERSCUSTOM]; //the trie
+new Handle SleepTimer[MAXPLAYERSCUSTOM]; //the timer that ends the sleep
 
-new Float:heartacheChance[]={0.0,0.06,0.9,0.12,0.15};
+new float heartacheChance[]={0.0,0.06,0.9,0.12,0.15};
 
 
-new Float:ultDuration[]={0.0,1.5,1.75,2.0,2.25};
-new Float:ultDistance=500.0;
+new float ultDuration[]={0.0,1.5,1.75,2.0,2.25};
+new float ultDistance=500.0;
 
-new holdingvictim[MAXPLAYERSCUSTOM]; //the victim being held
-new Handle:holdingTimer[MAXPLAYERSCUSTOM];
+	int holdingvictim[MAXPLAYERSCUSTOM]; //the victim being held
+new Handle holdingTimer[MAXPLAYERSCUSTOM];
 
-public OnWar3LoadRaceOrItemOrdered(num)
+public void OnWar3LoadRaceOrItemOrdered(num)
 {
     if(num==220)
     {
@@ -98,22 +98,22 @@ public OnWar3LoadRaceOrItemOrdered(num)
     }
 }
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("w3s.race.rarity.phrases");
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
 
 }
-public OnWar3EventSpawn(client){
+public void OnWar3EventSpawn(client){
     bSmittened[client]=false;
 }
 
 
 
-public OnW3TakeDmgBulletPre(victim,attacker,Float:damage)
+public OnW3TakeDmgBulletPre(victim,attacker,float damage)
 {
     if(ValidPlayer(victim)&&ValidPlayer(attacker)&&attacker!=victim )
     {
@@ -126,12 +126,12 @@ public OnW3TakeDmgBulletPre(victim,attacker,Float:damage)
         }
         if(SleepHandle[victim]){
             KillTimer(SleepTimer[victim]);
-            SleepTimer[victim]=INVALID_HANDLE;
+            SleepTimer[victim]=null;
             SleepHandle[attacker]=SleepHandle[victim];
-            SleepHandle[victim]=INVALID_HANDLE;
+            SleepHandle[victim]=null;
             
             UnSleep(victim);
-            new Float:duration;
+            new float duration;
             GetTrieValue(SleepHandle[attacker],"originalduration",duration);
             SleepTimer[attacker]=CreateTimer(duration,EndSleep,attacker);
             Sleep(attacker);
@@ -142,7 +142,7 @@ public OnW3TakeDmgBulletPre(victim,attacker,Float:damage)
     ///need to do sleep transfer, beware of sleep trie which you  need to close
 }
 
-public Action:UnSmitten(Handle:timer,any:client)
+public Action UnSmitten(Handle timer,any:client)
 {
     bSmittened[client]=false;
 }
@@ -152,10 +152,10 @@ public Action:UnSmitten(Handle:timer,any:client)
 
 
 
-public OnWar3EventPostHurt(victim, attacker, Float:damage, const String:weapon[32], bool:isWarcraft)
+public void OnWar3EventPostHurt(victim, attacker, float damage, const char[] weapon3, bool isWarcraft)
 {
     if(!isWarcraft && War3_GetRace(attacker)==thisRaceID ){
-        new lvl = War3_GetSkillLevel(attacker,thisRaceID,SKILL_HEARTACHE);
+        int lvl = War3_GetSkillLevel(attacker,thisRaceID,SKILL_HEARTACHE);
         if(lvl > 0  )
         {
             if(W3Chance(heartacheChance[lvl]*W3ChanceModifier(attacker))    && !IsSkillImmune(victim)  ){
@@ -193,28 +193,28 @@ public OnWar3EventPostHurt(victim, attacker, Float:damage, const String:weapon[3
 
 
 
-public bool:AbilityFilter(client)
+public bool AbilityFilter(client)
 {
     return (!IsSkillImmune(client));
 }
 
 
-public OnAbilityCommand(client,ability,bool:pressed)
+public OnAbilityCommand(client,ability,bool pressed)
 {
     if(War3_GetRace(client)==thisRaceID && ability==0 && pressed && IsPlayerAlive(client))
     {
-        new lvl = War3_GetSkillLevel(client,thisRaceID,SKILL_SLEEP);
+        int lvl = War3_GetSkillLevel(client,thisRaceID,SKILL_SLEEP);
         if(lvl > 0)
         {
             if(!Silenced(client)&&War3_SkillNotInCooldown(client,thisRaceID,SKILL_SLEEP,true))
             {    
             
                 
-                //War3_GetTargetInViewCone(client,Float:max_distance=0.0,bool:include_friendlys=false,Float:cone_angle=23.0,Function:FilterFunction=INVALID_FUNCTION);
-                new target = War3_GetTargetInViewCone(client,sleepDistance,_,_,AbilityFilter);
+                //War3_GetTargetInViewCone(client,float max_distance=0.0,bool include_friendlys=false,float cone_angle=23.0,Function:FilterFunction=INVALID_FUNCTION);
+                int target = War3_GetTargetInViewCone(client,sleepDistance,_,_,AbilityFilter);
                 if(target>0)
                 {    
-                    new Float:duration=sleepDuration[lvl];
+                    new float duration=sleepDuration[lvl];
                     SleepHandle[target]=CreateTrie();
                     SleepTimer[target]=CreateTimer(duration,EndSleep,target);
                     //SetTrieValue(sleepTrie,"timer",timer);
@@ -243,11 +243,11 @@ Sleep(client){
     }
 }
 
-public Action:EndSleep(Handle:t,any:client){
+public Action EndSleep(Handle t,any:client){
 
-    SleepTimer[client]=INVALID_HANDLE;
+    SleepTimer[client]=null;
     CloseHandle(SleepHandle[client]);
-    SleepHandle[client]=INVALID_HANDLE;
+    SleepHandle[client]=null;
     
     UnSleep(client);
 }
@@ -269,7 +269,7 @@ UnSleep(client){
 
 
 
-public OnUltimateCommand(client,race,bool:pressed)
+public OnUltimateCommand(client,race,bool pressed)
 {
     
     if(race==thisRaceID && pressed && ValidPlayer(client,true) )
@@ -279,15 +279,15 @@ public OnUltimateCommand(client,race,bool:pressed)
         {
             if(!Silenced(client)&&War3_SkillNotInCooldown(client,thisRaceID,ULTIMATE,true))
             {
-                //War3_GetTargetInViewCone(client,Float:max_distance=0.0,bool:include_friendlys=false,Float:cone_angle=23.0,Function:FilterFunction=INVALID_FUNCTION);
-                new target = War3_GetTargetInViewCone(client,ultDistance,_,_,UltimateFilter);
+                //War3_GetTargetInViewCone(client,float max_distance=0.0,bool include_friendlys=false,float cone_angle=23.0,Function:FilterFunction=INVALID_FUNCTION);
+                int target = War3_GetTargetInViewCone(client,ultDistance,_,_,UltimateFilter);
                 if(target>0)
                 {        
                     //in case of double hold, release the old one
-                    if(holdingTimer[client]!=INVALID_HANDLE){
+                    if(holdingTimer[client]!=null){
                         TriggerTimer(holdingTimer[client]);
                     }
-                    new Float:duration = ultDuration[level];
+                    new float duration = ultDuration[level];
                     ///hold it right there
                     holdingvictim[client]=target;
                     holdingTimer[client]=CreateTimer(duration,EndHold,client);
@@ -295,7 +295,7 @@ public OnUltimateCommand(client,race,bool:pressed)
                     War3_SetBuff(target,bStunned,thisRaceID,true);
                     
 #if defined SOURCECRAFT
-					new Float:cooldown= GetUpgradeCooldown(thisRaceID,ULTIMATE);
+					new float cooldown= GetUpgradeCooldown(thisRaceID,ULTIMATE);
 					War3_CooldownMGR(client,cooldown,thisRaceID,ULTIMATE);
 #else
                     War3_CooldownMGR(client,20.0,thisRaceID,ULTIMATE);
@@ -310,34 +310,34 @@ public OnUltimateCommand(client,race,bool:pressed)
 }
 
 //return true to allow targeting
-public bool:UltimateFilter(client)
+public bool UltimateFilter(client)
 {
     return (!IsUltImmune(client));
 }
-public Action:EndHold(Handle:t,any:client){
+public Action EndHold(Handle t,any:client){
     new victim=holdingvictim[client];
     War3_SetBuff(victim,bStunned,thisRaceID,false);
     War3_SetBuff(client,bStunned,thisRaceID,false);
     holdingvictim[client]=0;
-    holdingTimer[client]=INVALID_HANDLE;
+    holdingTimer[client]=null;
 }
-public OnWar3EventDeath(client, attacker, deathrace){
+public void OnWar3EventDeath(client, attacker, deathrace){
     CleanUP(client);
 }
-public OnClientDisconnect(client){
+public void OnClientDisconnect(client){
     CleanUP(client);
 }
 CleanUP(client){
     if(holdingvictim[client]){
         TriggerTimer(holdingTimer[client]);
-        holdingTimer[client]=INVALID_HANDLE;
+        holdingTimer[client]=null;
     }
     if(SleepTimer[client]){
         UnSleep(client);
         KillTimer(SleepTimer[client]);
-        SleepTimer[client]=INVALID_HANDLE;
+        SleepTimer[client]=null;
         CloseHandle(SleepHandle[client]);
-        SleepHandle[client]=INVALID_HANDLE;
+        SleepHandle[client]=null;
         
     }
 }

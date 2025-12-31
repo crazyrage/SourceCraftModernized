@@ -12,20 +12,20 @@
 
 #define AUTHINFO_ID 0
 
-stock Handle:AuthTimer(Float:delay,index,Timer:func, flags=0)
+stock Handle AuthTimer(float delay,int index,Timer func, int flags=0)
 {
-    new Handle:pack;
+    Handle pack;
     AuthTimerEx(delay, index, func, pack, flags);
     return pack;
 }
 
-stock Handle:AuthTimerEx(Float:delay,index,Timer:func, &Handle:pack, flags=0)
+stock Handle AuthTimerEx(float delay,int index,Timer func, Handle &pack, int flags=0)
 {
-    decl String:auth[64];
+    char auth[64];
     GetClientAuthId(index, AuthId_Steam2, auth, sizeof(auth));
 
-    new Handle:timer = CreateDataTimer(delay,func,pack, flags);
-    if (timer != INVALID_HANDLE && pack != INVALID_HANDLE)
+    Handle timer = CreateDataTimer(delay,func,pack, flags);
+    if (timer != null && pack != null)
     {
         WritePackCell(pack, index);
         WritePackString(pack, auth);
@@ -33,12 +33,12 @@ stock Handle:AuthTimerEx(Float:delay,index,Timer:func, &Handle:pack, flags=0)
     return timer;
 }
 
-stock ClientOfAuthString(const String:auth[])
+stock ClientOfAuthString(const char[] auth)
 {
-    new index = 0;
-    new max=GetMaxClients();
-    decl String:authStr[64];
-    for (new x=1;x<=max;x++)
+    int index = 0;
+    int max=GetMaxClients();
+    char authStr[64];
+    for (int x=1;x<=max;x++)
     {
         if (IsClientInGame(x))
         {
@@ -53,13 +53,13 @@ stock ClientOfAuthString(const String:auth[])
     return index;
 }
 
-stock ClientOfAuthTimer(Handle:pack)
+stock ClientOfAuthTimer(Handle pack)
 {
-    new index = 0;
-    new old_index = 0;
-    if (pack != INVALID_HANDLE)
+    int index = 0;
+    int old_index = 0;
+    if (pack != null)
     {
-        decl String:auth[64];
+        char auth[64];
 
         ResetPack(pack);
         index = ReadPackCell(pack);
@@ -68,7 +68,7 @@ stock ClientOfAuthTimer(Handle:pack)
 
         if (IsClientInGame(index))
         {
-            decl String:authStr[64];
+            char authStr[64];
             GetClientAuthId(index, AuthId_Steam2, authStr, sizeof(authStr));
             if (!StrEqual(auth,authStr))
                 index = 0;

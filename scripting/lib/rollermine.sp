@@ -814,7 +814,7 @@ stock bool Entity_Cansee(int iEnt, int iClient)
 	
 	bool bSee = true;
 	Handle hTrace = TR_TraceRayFilterEx(flStart, flEnd, MASK_SOLID, RayType_EndPoint, TraceFilterSelf, iEnt);
-	if(hTrace != INVALID_HANDLE)
+	if(hTrace != null)
 	{
 		if(TR_DidHit(hTrace))
 			bSee = false;

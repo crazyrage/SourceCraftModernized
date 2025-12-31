@@ -24,10 +24,10 @@
 //stock SetClip(weapon, amount)
 #define SetClip(%1,%2)           SetEntProp(%1, Prop_Send, "m_iClip1", %2, 1)
 
-stock GetActiveWeapon(client, bool:validate=true)
+stock GetActiveWeapon(client, bool validate=true)
 {
-    decl String:classname[64];
-    new weapon = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+    char classname[64];
+    int weapon = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
     return (!validate ||
             (weapon > 0 && IsValidEntity(weapon) && IsValidEdict(weapon) &&
              GetEdictClassname(weapon, classname, sizeof(classname)) &&
@@ -35,18 +35,18 @@ stock GetActiveWeapon(client, bool:validate=true)
            ? weapon : INVALID_ENT_REFERENCE;
 }
 
-stock GetCurrentWeaponClass(client, String:name[], maxlength)
+stock GetCurrentWeaponClass(client, char[] name, maxlength)
 {
-    new index = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+    int index = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
     if (index > 0 && IsValidEntity(index))
         GetEntityNetClass(index, name, maxlength);
     else
         name[0] = '\0';
 }
 
-stock GetCurrentWeaponEdictClass(client, String:name[], maxlength)
+stock GetCurrentWeaponEdictClass(client, char[] name, maxlength)
 {
-    new index = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+    int index = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
     if (index > 0 && IsValidEntity(index))
         GetEdictClassname(index, name, maxlength);
     else
@@ -61,9 +61,9 @@ stock GetCurrentWeaponEdictClass(client, String:name[], maxlength)
  * @param melee 	Set melee attacks also?
  * @return			none
  */
-stock SetNextAttack(client, Float:duration=0.0)
+stock SetNextAttack(client, float duration=0.0)
 {
-    new Float:nextAttack = GetGameTime()+duration;
+    float nextAttack = GetGameTime()+duration;
     new offset=FindSendPropInfo("CBasePlayer", "m_hMyWeapons");
     for(new i=0;i<MAX_SLOTS;i++)
     {

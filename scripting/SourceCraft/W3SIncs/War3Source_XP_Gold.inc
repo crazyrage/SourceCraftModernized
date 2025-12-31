@@ -19,8 +19,8 @@ native W3GetReqXP(level); //get required xp for leveling to the level, use (leve
 #else
 stock W3GetKillXP(client,leveldifference=0)
 {
-    new xp=GetKillXP(client)+leveldifference;
-    new max=GetReqLevelXP(GetLevel(client)+1);
+    int xp=GetKillXP(client)+leveldifference;
+    int max=GetReqLevelXP(GetLevel(client)+1);
     return (xp < max) ? xp : max;
 }
 
@@ -41,7 +41,7 @@ native War3_ShowXP(client);
 //nothing happens if you give 0 xp 0 gold
 //automatically prints gained or lost xp/gold
 #if !defined SOURCECRAFT // Not Implemented!
-native W3GiveXPGold(client,W3XPAwardedBy:awardreason=XPAwardByGeneric,xpamount=0,goldamount=0,String:awardstringreason[]);
+native W3GiveXPGold(client,W3XPAwardedBy:awardreason=XPAwardByGeneric,xpamount=0,goldamount=0,char[] awardstringreason);
 #endif
 
 //=======================================================================

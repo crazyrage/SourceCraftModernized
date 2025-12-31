@@ -10,7 +10,7 @@
 #define PLUGIN_URL  "http://www.mattsfiles.com"
 
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
 	name = PLUGIN_NAME,
 	author = PLUGIN_AUTHOR,
@@ -19,22 +19,22 @@ public Plugin:myinfo =
 	url = PLUGIN_URL
 }
 
-new Handle:g_hcvEnabled = INVALID_HANDLE;
-new Handle:g_hcvAllowMedic = INVALID_HANDLE;
-new Handle:g_hcvAllowCommand = INVALID_HANDLE;
-new Handle:g_hcvRequireDispenser = INVALID_HANDLE;
-new Handle:g_hcvRequireBetweenWaves = INVALID_HANDLE;
+Handle g_hcvEnabled = null;
+Handle g_hcvAllowMedic = null;
+Handle g_hcvAllowCommand = null;
+Handle g_hcvRequireDispenser = null;
+Handle g_hcvRequireBetweenWaves = null;
 
-new bool:g_bEnabled = false;
-new bool:g_bAllowMedic = false;
-new bool:g_bAllowCommand = false;
-new bool:g_bRequireDispenser = false;
-new bool:g_bRequireBetweenWaves = false;
+bool g_bEnabled = false;
+bool g_bAllowMedic = false;
+bool g_bAllowCommand = false;
+bool g_bRequireDispenser = false;
+bool g_bRequireBetweenWaves = false;
 
-new g_iObjectiveResource = -1;
+int g_iObjectiveResource = -1;
 
-new bool:g_bUpgrading[MAXPLAYERS+1];
-new Float:g_faUpgradingAngle[MAXPLAYERS+1][3];
+bool g_bUpgrading[MAXPLAYERS+1];
+float g_faUpgradingAngle[MAXPLAYERS+1][3];
 
 public OnPluginStart()
 {
@@ -76,21 +76,21 @@ public OnConfigsExecuted()
 	g_bRequireBetweenWaves = GetConVarBool(g_hcvRequireBetweenWaves);
 }
 
-public OnConVarChanged(Handle:cvar, const String:oldValue[], const String:newValue[])
+public OnConVarChanged(Handle cvar, const char[] oldValue, const char[] newValue)
 {
 	if(cvar == g_hcvEnabled)
-		g_bEnabled = bool:StringToInt(newValue);
+		g_bEnabled = bool StringToInt(newValue);
 	else if(cvar == g_hcvAllowMedic)
-		g_bAllowMedic = bool:StringToInt(newValue);
+		g_bAllowMedic = bool StringToInt(newValue);
 	else if(cvar == g_hcvAllowCommand)
-		g_bAllowCommand = bool:StringToInt(newValue);
+		g_bAllowCommand = bool StringToInt(newValue);
 	else if(cvar == g_hcvRequireDispenser)
-		g_bRequireDispenser = bool:StringToInt(newValue);
+		g_bRequireDispenser = bool StringToInt(newValue);
 	else if(cvar == g_hcvRequireBetweenWaves)
-		g_bRequireBetweenWaves = bool:StringToInt(newValue);
+		g_bRequireBetweenWaves = bool StringToInt(newValue);
 }
 
-public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:fVelocity[3], Float:fAngles[3], &weapon)
+public Action OnPlayerRunCmd(client, &buttons, &impulse, float fVelocity[3], float fAngles[3], &weapon)
 {
 	if(g_bUpgrading[client] && (buttons & (IN_FORWARD|IN_BACK|IN_MOVELEFT|IN_MOVERIGHT) || (g_faUpgradingAngle[client][0] != fAngles[0] || g_faUpgradingAngle[client][1] != fAngles[1])))
 	{
@@ -100,7 +100,7 @@ public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:fVelocity[3], Flo
 	return Plugin_Continue;
 }
 
-public Action:cmdUpgrade(client, args)
+public Action cmdUpgrade(client, args)
 {
 	if(!g_bEnabled)
 	{
@@ -130,12 +130,12 @@ public Action:cmdUpgrade(client, args)
 	return Plugin_Handled;
 }
 
-public Action:OnVoiceMenu(client, const String:szCommand[], iArgc)
+public Action OnVoiceMenu(client, const char[] szCommand, iArgc)
 {
 	if(!g_bEnabled || !g_bAllowMedic) return Plugin_Continue;
 	if(iArgc < 2 || !IsPlayerAlive(client)) return Plugin_Continue;
 	
-	decl String:sArg[255];
+	char sArg[255];
 	GetCmdArgString(sArg, sizeof(sArg));
 	StripQuotes(sArg);
 	TrimString(sArg);
@@ -148,17 +148,17 @@ public Action:OnVoiceMenu(client, const String:szCommand[], iArgc)
 	return Plugin_Continue;
 }
 
-stock bool:IsBetweenWaves()
+stock bool IsBetweenWaves()
 {
 	if(g_iObjectiveResource < 0)
 	{
 		g_iObjectiveResource = FindEntityByClassname(-1, "tf_objective_resource");
 	}
 	
-	return bool:GetEntProp(g_iObjectiveResource, Prop_Send, "m_bMannVsMachineBetweenWaves");
+	return bool GetEntProp(g_iObjectiveResource, Prop_Send, "m_bMannVsMachineBetweenWaves");
 }
 
-stock SetUpgrading(client, bool:upgrading)
+stock SetUpgrading(client, bool upgrading)
 {
 	if(upgrading)
 	{
@@ -173,16 +173,16 @@ stock SetUpgrading(client, bool:upgrading)
 	}
 }
 
-stock bool:NearDispenser(client)
+stock bool NearDispenser(client)
 {
 	new TFTeam:tClientTeam = TFTeam:GetClientTeam(client);
-	decl Float:fClientPos[3]; GetClientAbsOrigin(client, fClientPos);
-	new entity = -1;
+	decl float fClientPos[3]; GetClientAbsOrigin(client, fClientPos);
+	int entity = -1;
 	while ((entity = FindEntityByClassname(entity, "obj_dispenser")) != -1)
 	{
 		
 		if(tClientTeam != TFTeam:GetEntProp(entity, Prop_Send, "m_iTeamNum")) continue;
-		decl Float:fObjPos[3]; GetEntPropVector(entity, Prop_Data, "m_vecOrigin", fObjPos);
+		decl float fObjPos[3]; GetEntPropVector(entity, Prop_Data, "m_vecOrigin", fObjPos);
 		if(GetVectorDistance(fClientPos, fObjPos) <= 100.0)
 			return true;
 	}

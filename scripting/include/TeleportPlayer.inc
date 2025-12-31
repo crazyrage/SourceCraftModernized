@@ -29,7 +29,7 @@
  * @noreturn
  * @error				Invalid entity or client not in game, or lack of mod support.
  */
-stock bool:TeleportPlayer(client, const Float:origin[3], const Float:angles[3], const Float:velocity[3])
+stock bool TeleportPlayer(client, const float origin[3], const float angles[3], const float velocity[3])
 {
     if (GetGameType() == tf2)
     {
@@ -57,7 +57,7 @@ stock bool:TeleportPlayer(client, const Float:origin[3], const Float:angles[3], 
     }
 }
 
-stock CrashTeleportPlayer(client, const Float:origin[3], const Float:angles[3], const Float:velocity[3])
+stock CrashTeleportPlayer(client, const float origin[3], const float angles[3], const float velocity[3])
 {
     if (GetGameType() == tf2 && TF2_IsPlayerSlowed(client) &&
         TF2_GetPlayerClass(client) == TFClass_Heavy)
@@ -65,7 +65,7 @@ stock CrashTeleportPlayer(client, const Float:origin[3], const Float:angles[3], 
         // Stun the heavy briefly to stop the minigun from spinning
         TF2_StunPlayer(client, 0.2, 0.0, TF_STUNFLAG_NOSOUNDOREFFECT|TF_STUNFLAG_THIRDPERSON);
 
-        new Handle:pack;
+        Handle pack;
         CreateDataTimer(0.1, TeleportHandler, pack, TIMER_FLAG_NO_MAPCHANGE);
         WritePackCell(pack,GetClientUserId(client));
         WritePackFloat(pack, origin[0]);
@@ -82,23 +82,23 @@ stock CrashTeleportPlayer(client, const Float:origin[3], const Float:angles[3], 
         TeleportEntity(client, origin, angles, velocity);
 }
 
-public Action:TeleportHandler(Handle:timer, Handle:pack)
+public Action TeleportHandler(Handle timer, Handle pack)
 {
     ResetPack(pack);
-    new client = GetClientOfUserId(ReadPackCell(pack));
+    int client = GetClientOfUserId(ReadPackCell(pack));
     if (client > 0)
     {
-        new Float:origin[3];
+        float origin[3];
         origin[0] = ReadPackFloat(pack);
         origin[1] = ReadPackFloat(pack);
         origin[2] = ReadPackFloat(pack);
 
-        new Float:angles[3];
+        float angles[3];
         angles[0] = ReadPackFloat(pack);
         angles[1] = ReadPackFloat(pack);
         angles[2] = ReadPackFloat(pack);
 
-        new Float:velocity[3];
+        float velocity[3];
         velocity[0] = ReadPackFloat(pack);
         velocity[1] = ReadPackFloat(pack);
         velocity[2] = ReadPackFloat(pack);

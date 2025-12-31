@@ -26,7 +26,7 @@ bool MC_SkipList[MAXPLAYERS + 1];
 Handle MC_Trie;
 int MC_TeamColors[][] = {{0xCCCCCC, 0x4D7942, 0xFF4040}}; // Multi-dimensional array for games that don't support SayText2. First index is the game index (as defined by the GAME_ defines), second index is team. 0 = spectator, 1 = team1, 2 = team2
 
-static Handle sm_show_activity = INVALID_HANDLE;
+static Handle sm_show_activity = null;
 
 /**
  * Prints a message to a specific client in the chat area.
@@ -204,7 +204,7 @@ stock void MC_SkipNextClient(int client) {
  * @return			No return
  */
 stock void MC_CheckTrie() {
-	if(MC_Trie == INVALID_HANDLE) {
+	if(MC_Trie == null) {
 		MC_Trie = MC_InitColorTrie();
 	}
 }
@@ -409,7 +409,7 @@ stock void MC_ReplyToCommandEx(int client, int author, const char[] message, any
  */
 stock int MC_ShowActivity(int client, const char[] format, any ...)
 {
-	if (sm_show_activity == INVALID_HANDLE)
+	if (sm_show_activity == null)
 		sm_show_activity = FindConVar("sm_show_activity");
 
 	char tag[] = "[SM] ";
@@ -524,7 +524,7 @@ stock int MC_ShowActivity(int client, const char[] format, any ...)
  */
 stock int MC_ShowActivityEx(int client, const char[] tag, const char[] format, any ...)
 {
-	if (sm_show_activity == INVALID_HANDLE)
+	if (sm_show_activity == null)
 		sm_show_activity = FindConVar("sm_show_activity");
 
 	char szBuffer[MC_MAX_MESSAGE_LENGTH];
@@ -639,7 +639,7 @@ stock int MC_ShowActivityEx(int client, const char[] tag, const char[] format, a
  */
 stock int MC_ShowActivity2(int client, const char[] tag, const char[] format, any ...)
 {
-	if (sm_show_activity == INVALID_HANDLE)
+	if (sm_show_activity == null)
 		sm_show_activity = FindConVar("sm_show_activity");
 
 	char szBuffer[MC_MAX_MESSAGE_LENGTH];

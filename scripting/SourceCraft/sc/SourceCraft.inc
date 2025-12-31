@@ -48,7 +48,7 @@ native Mode:GetMode();
  * Returns true if the Game supports Money
  * @return The return value will be true if the game itself has a currency
  */
-native bool:GameHasMoney();
+native bool GameHasMoney();
 
 /**
  * Gets the state of the round.
@@ -60,7 +60,7 @@ native RoundStates:GetRoundState();
  * Retrieves the SourceCraftLoaded flag.
  * @return The return value will be true if SourceCraft has completed loading.
  */
-native bool:IsSourceCraftLoaded();
+native bool IsSourceCraftLoaded();
 
 /**
  * Registers a race with the SourceCraft plugin
@@ -88,11 +88,11 @@ native bool:IsSourceCraftLoaded();
  * @param image:            The image of the race, to be placed into the database for the webapp. (defaults to translation)
  * @return                  The return value will be the race index or -1 if there was a problem.
  */         
-native CreateRace(const String:short[], required_level=0, tech_level=0, max_level=16,
-                  Float:initial_energy=30.0, Float:energy_limit=100.0, Float:energy_rate=1.0, Faction:faction=Generic,
-                  UnitType:type=GenericUnit, const String:parent[]="", Translation:translation=Translation_Auto,
-                  const String:translation_file[]="", const String:name[]="", const String:switch_message[]="",
-                  const String:pending_message[]="", const String:desc[]="", const String:image[]="");
+native CreateRace(const char short[], required_level=0, tech_level=0, max_level=16,
+                  float initial_energy=30.0, float energy_limit=100.0, float energy_rate=1.0, Faction:faction=Generic,
+                  UnitType:type=GenericUnit, const char parent[]="", Translation:translation=Translation_Auto,
+                  const char translation_file[]="", const char name[]="", const char switch_message[]="",
+                  const char pending_message[]="", const char desc[]="", const char image[]="");
 
 /**
  * Can be called after a race has been fully created/defined to save
@@ -104,7 +104,7 @@ native CreateRace(const String:short[], required_level=0, tech_level=0, max_leve
  * @param desc:     The description of the race.
  * @param image:    The image of the race.
  */
-native RaceComplete(race, const String:desc[]="", const String:image[]="");
+native RaceComplete(race, const char desc[]="", const char image[]="");
 
 /**
  * Changes the Attributes for an existing race
@@ -130,20 +130,20 @@ native RaceComplete(race, const String:desc[]="", const String:image[]="");
  * @param short:            The short name of the race. (max 16, defaults to truncated & lowercased name) 
  * @noreturn
  */
-native SetRaceAttributes(race, required_level=-1, tech_level=-1, max_level=-1, Float:initial_energy=-1.0,
-                         Float:energy_limit=-1.0, Float:energy_rate=-1.0, Faction:faction=Unassigned,
-                         UnitType:type=UnassignedUnit, const String:parent[]="",
+native SetRaceAttributes(race, required_level=-1, tech_level=-1, max_level=-1, float initial_energy=-1.0,
+                         float energy_limit=-1.0, float energy_rate=-1.0, Faction:faction=Unassigned,
+                         UnitType:type=UnassignedUnit, const char parent[]="",
                          Translation:translation=Translation_Default,
-                         const String:translation_file[]="", const String:name[]="",
-                         const String:switch_message[]="", const String:pending_message[]="",
-                         const String:short[]="");
+                         const char translation_file[]="", const char name[]="",
+                         const char switch_message[]="", const char pending_message[]="",
+                         const char short[]="");
 
 /**
  * Gets the Energy accumulation Rate for a race.
  * @param race:     The race ID returned from CreateRace()
  * @return          The return value will be the amount of energy or -1 if it failed.
  */
-native Float:GetRaceEnergyRate(race);
+native float GetRaceEnergyRate(race);
 
 /**
  * Sets the Energy accumulation Rate for a race.
@@ -151,14 +151,14 @@ native Float:GetRaceEnergyRate(race);
  * @param newrate:  The amount you want to set
  * @noreturn
  */
-native Float:SetRaceEnergyRate(race,newrate);
+native float SetRaceEnergyRate(race,newrate);
 
 /**
  * Gets the Energy Limit for a race.
  * @param race:     The race ID returned from CreateRace()
  * @return          The return value will be the amount of energy or -1 if it failed.
  */
-native Float:GetRaceEnergyLimit(race);
+native float GetRaceEnergyLimit(race);
 
 /**
  * Sets the Energy Limit for a race.
@@ -166,14 +166,14 @@ native Float:GetRaceEnergyLimit(race);
  * @param newlimit: The amount you want to set
  * @noreturn
  */
-native SetRaceEnergyLimit(race,Float:newlimit);
+native SetRaceEnergyLimit(race,float newlimit);
 
 /**
  * Gets the Initial Energy for a race.
  * @param race:     The race ID returned from CreateRace()
  * @return          The return value will be the amount of energy or -1 if it failed.
  */
-native Float:GetRaceInitialEnergy(race);
+native float GetRaceInitialEnergy(race);
 
 /**
  * Sets the Initial Energy for a race.
@@ -181,7 +181,7 @@ native Float:GetRaceInitialEnergy(race);
  * @param newamount: The amount you want to set
  * @noreturn
  */
-native SetRaceInitialEnergy(race,Float:newamount);
+native SetRaceInitialEnergy(race,float newamount);
 
 /**
  * Gets the Energy Flags for a race.
@@ -206,7 +206,7 @@ native SetRaceEnergyFlags(race,EnergyFlags:newflags);
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetRaceName(race, String:name[], maxlength, lang=LANG_SERVER);
+native GetRaceName(race, char name[], maxlength, lang=LANG_SERVER);
 
 /**
  * Retrieves the description of the race.
@@ -216,7 +216,7 @@ native GetRaceName(race, String:name[], maxlength, lang=LANG_SERVER);
  * @param lang:         Client to translate the description for, if any.
  * @noreturn
  */
-native GetRaceDescription(race, String:description[], maxlength, lang=LANG_SERVER);
+native GetRaceDescription(race, char description[], maxlength, lang=LANG_SERVER);
 
 /**
  * Retrieves the short name of the race
@@ -225,7 +225,7 @@ native GetRaceDescription(race, String:description[], maxlength, lang=LANG_SERVE
  * @param maxlength: The size of the short buffer.
  * @noreturn
  */
-native GetRaceShortName(race, String:short[], maxlength);
+native GetRaceShortName(race, char short[], maxlength);
 
 /**
  * Retrieves the name of the race's parent
@@ -234,7 +234,7 @@ native GetRaceShortName(race, String:short[], maxlength);
  * @param maxlength: The size of the name buffer.
  * @noreturn
  */
-native GetRaceParentName(race, String:name[], maxlength);
+native GetRaceParentName(race, char name[], maxlength);
 
 /**
  * Retrieves the race ID of the race's parent
@@ -249,14 +249,14 @@ native GetRaceParentId(race);
  * @param validate: Set to true to return only valid faction indices (converts Unassigned to Generic)
  * @return          The return value will be the Faction of the race
  */
-native Faction:GetRaceFaction(race,bool:validate=true);
+native Faction:GetRaceFaction(race,bool validate=true);
 
 /**
  * Gets the plugin Handle for a race.
  * @param race:     The race ID returned from CreateRace()
  * @return          The return value will be the Handle of the plugin that created the race.
  */
-native Handle:GetRacePlugin(race);
+native Handle GetRacePlugin(race);
 
 /**
  * Retrieves the number of races
@@ -272,7 +272,7 @@ native GetRaceCount();
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetUnitTypeName(UnitType:type, String:name[], maxlength, lang=LANG_SERVER);
+native GetUnitTypeName(UnitType:type, char name[], maxlength, lang=LANG_SERVER);
 
 /**
  * Retrieves the name of the faction
@@ -282,7 +282,7 @@ native GetUnitTypeName(UnitType:type, String:name[], maxlength, lang=LANG_SERVER
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetFactionName(Faction:faction, String:name[], maxlength, lang=LANG_SERVER);
+native GetFactionName(Faction:faction, char name[], maxlength, lang=LANG_SERVER);
 
 /**
  * Retrieves the description of the faction
@@ -292,7 +292,7 @@ native GetFactionName(Faction:faction, String:name[], maxlength, lang=LANG_SERVE
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetFactionDescription(Faction:faction, String:desc[], maxlength, lang=LANG_SERVER);
+native GetFactionDescription(Faction:faction, char desc[], maxlength, lang=LANG_SERVER);
 
 /**
  * Retrieves the "Not Enough Crystals" sound for the faction
@@ -302,7 +302,7 @@ native GetFactionDescription(Faction:faction, String:desc[], maxlength, lang=LAN
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetFactionCrystalSound(Faction:faction, String:sound[], maxlength, lang=LANG_SERVER);
+native GetFactionCrystalSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER);
 
 /**
  * Emits the "Not Enough Crystals" sound to the client
@@ -320,7 +320,7 @@ native EmitCrystalSoundToClient(client, Faction:faction=Unassigned);
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetFactionVespeneSound(Faction:faction, String:sound[], maxlength, lang=LANG_SERVER);
+native GetFactionVespeneSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER);
 
 /**
  * Emits the "Not Enough Vespene" sound to the client
@@ -338,7 +338,7 @@ native EmitVespeneSoundToClient(client, Faction:faction=Unassigned);
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetFactionEnergySound(Faction:faction, String:sound[], maxlength, lang=LANG_SERVER);
+native GetFactionEnergySound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER);
 
 /**
  * Emits the "Not Enough Energy" sound to the client
@@ -356,7 +356,7 @@ native EmitEnergySoundToClient(client, Faction:faction=Unassigned);
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetFactionXPSound(Faction:faction, String:sound[], maxlength, lang=LANG_SERVER);
+native GetFactionXPSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER);
 
 /**
  * Emits the "Not Enough XP" sound to the client
@@ -375,7 +375,7 @@ native EmitXPSoundToClient(client, Faction:faction=Unassigned);
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetFactionLevelSound(Faction:faction, String:sound[], maxlength, lang=LANG_SERVER);
+native GetFactionLevelSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER);
 
 /**
  * Emits the "Leveled Up" sound to the client
@@ -390,7 +390,7 @@ native EmitLevelSoundToClient(client, Faction:faction=Unassigned);
  * @param name:     The short name of the race. (max 64)
  * @return          The return value will be the race index or -1 if there was a problem.
  */         
-native FindRace(const String:name[]);
+native FindRace(const char name[]);
 
 /**
  * Retrieves the number of upgrades a race has
@@ -431,13 +431,13 @@ native GetUpgradeCount(race);
  *                            (unless the race's translation format is Translation_W3S, which uses the W3S format)
  * @return                    The return value will be the upgrade index or -1 if there was a problem.
  */
-native AddUpgrade(race, const String:short[], upgrade_category=0, required_level=-1, max_level=4, Float:energy=0.0,
-                  Float:recurring_energy=0.0, Float:recurring_interval=0.0, bool:accumulated=false, crystals=0,
-                  vespene=0, cost_crystals=-1, cost_vespene=-1, Float:cooldown=0.0, CooldownType:cooldown_type=Cooldown_None,
-                  bool:disabled=false, const String:name[]="", const String:desc[]="", const String:invoke[]="",
-                  const String:bind[]="", const String:image[]="", const String:p1[]="", const String:p2[]="",
-                  const String:p3[]="", const String:p4[]="", const String:p5[]="", const String:p6[]="",
-				  const String:p7[]="");
+native AddUpgrade(race, const char short[], upgrade_category=0, required_level=-1, max_level=4, float energy=0.0,
+                  float recurring_energy=0.0, float recurring_interval=0.0, bool accumulated=false, crystals=0,
+                  vespene=0, cost_crystals=-1, cost_vespene=-1, float cooldown=0.0, CooldownType:cooldown_type=Cooldown_None,
+                  bool disabled=false, const char name[]="", const char desc[]="", const char invoke[]="",
+                  const char bind[]="", const char image[]="", const char p1[]="", const char p2[]="",
+                  const char p3[]="", const char p4[]="", const char p5[]="", const char p6[]="",
+				  const char p7[]="");
 
 #define AddUltimate AddUpgrade
 #define AddAbility  AddUpgrade
@@ -452,7 +452,7 @@ native AddUpgrade(race, const String:short[], upgrade_category=0, required_level
  * @param override:         Set true to override the config file.
  * @noreturn
  */
-native SetUpgradeCost(race, upgrade, cost_crystals=-1, cost_vespene=-1, bool:override=false);
+native SetUpgradeCost(race, upgrade, cost_crystals=-1, cost_vespene=-1, bool override=false);
 
 /**
  * Sets an upgrade's cooldown parameters
@@ -463,9 +463,9 @@ native SetUpgradeCost(race, upgrade, cost_crystals=-1, cost_vespene=-1, bool:ove
  * @param override:         Set true to override the config file.
  * @noreturn
  */         
-native SetUpgradeCooldown(race, upgrade, Float:cooldown=0.0,
+native SetUpgradeCooldown(race, upgrade, float cooldown=0.0,
                           CooldownType:cooldown_type=Cooldown_None,
-                          bool:override=false);
+                          bool override=false);
 
 /**
  * Gets an upgrade's cooldown parameters
@@ -474,7 +474,7 @@ native SetUpgradeCooldown(race, upgrade, Float:cooldown=0.0,
  * @param cooldown_type:    Returns what type of cooldown to use
  * @return                  The return value will be the cooldown duration
  */         
-native Float:GetUpgradeCooldown(race, upgrade, &CooldownType:cooldown_type=Cooldown_None);
+native float GetUpgradeCooldown(race, upgrade, &CooldownType:cooldown_type=Cooldown_None);
 
 /**
  * Retrieves the name of an upgrade
@@ -485,7 +485,7 @@ native Float:GetUpgradeCooldown(race, upgrade, &CooldownType:cooldown_type=Coold
  * @param lang:      Client to translate the description for, if any.
  * @noreturn
  */
-native GetUpgradeName(race, upgrade, String:name[], maxlength, lang=LANG_SERVER);
+native GetUpgradeName(race, upgrade, char name[], maxlength, lang=LANG_SERVER);
 
 /**
  * Retrieves the short name of an upgrade
@@ -496,7 +496,7 @@ native GetUpgradeName(race, upgrade, String:name[], maxlength, lang=LANG_SERVER)
  * @param lang:      Client to translate the description for, if any.
  * @noreturn
  */
-native GetUpgradeShortName(race, upgrade, String:short[], maxlength);
+native GetUpgradeShortName(race, upgrade, char short[], maxlength);
 
 /**
  * Retrieves the description of an upgrade
@@ -508,7 +508,7 @@ native GetUpgradeShortName(race, upgrade, String:short[], maxlength);
  * @return              The return value will be category gleaned from the description
  *                      (if any -- only set for Translation_W3S races)
  */
-native GetUpgradeDescription(race, upgrade, String:description[], maxlength, lang=LANG_SERVER);
+native GetUpgradeDescription(race, upgrade, char description[], maxlength, lang=LANG_SERVER);
 
 /**
  * Change the description of an upgrade
@@ -517,7 +517,7 @@ native GetUpgradeDescription(race, upgrade, String:description[], maxlength, lan
  * @param description:  New description for the Upgrade.
  * @noreturn
  */
-native SetUpgradeDescription(race, upgrade, const String:description[]);
+native SetUpgradeDescription(race, upgrade, const char description[]);
 
 /**
  * Retrieves the amount of energy used by an upgrade
@@ -525,7 +525,7 @@ native SetUpgradeDescription(race, upgrade, const String:description[]);
  * @param upgrade:  The upgrade ID returned from AddUpgrade()
  * @return          The return value will be the amount of energy or -1 if it failed.
  */
-native Float:GetUpgradeEnergy(race, upgrade);
+native float GetUpgradeEnergy(race, upgrade);
 
 /**
  * Sets the amount of energy used by an upgrade
@@ -535,7 +535,7 @@ native Float:GetUpgradeEnergy(race, upgrade);
  * @param override: Set true to override the config file.
  * @noreturn
  */
-native SetUpgradeEnergy(race, upgrade, Float:energy, bool:override=false);
+native SetUpgradeEnergy(race, upgrade, float energy, bool override=false);
 
 /**
  * Retrieves the amount of recurring energy used by an upgrade
@@ -543,7 +543,7 @@ native SetUpgradeEnergy(race, upgrade, Float:energy, bool:override=false);
  * @param upgrade:  The upgrade ID returned from AddUpgrade()
  * @return          The return value will be the amount of recurring energy or -1 if it failed.
  */
-native Float:GetUpgradeRecurringEnergy(race, upgrade);
+native float GetUpgradeRecurringEnergy(race, upgrade);
 
 /**
  * Sets the amount of recurring energy used by an upgrade
@@ -553,7 +553,7 @@ native Float:GetUpgradeRecurringEnergy(race, upgrade);
  * @param override: Set true to override the config file.
  * @noreturn
  */
-native Float:SetUpgradeRecurringEnergy(race, upgrade, Float:amount, bool:override=false);
+native float SetUpgradeRecurringEnergy(race, upgrade, float amount, bool override=false);
 
 /**
  * Retrieves the amount of vespene used by an upgrade
@@ -571,7 +571,7 @@ native GetUpgradeVespene(race, upgrade);
  * @param override: Set true to override the config file.
  * @noreturn
  */
-native SetUpgradeVespene(race, upgrade, amount, bool:override=false);
+native SetUpgradeVespene(race, upgrade, amount, bool override=false);
 
 /**
  * Retrieves the amount of crystals used by an upgrade
@@ -589,7 +589,7 @@ native GetUpgradeCrystals(race, upgrade);
  * @param override: Set true to override the config file.
  * @noreturn
  */
-native SetUpgradeCrystals(race, upgrade, amount, bool:override=false);
+native SetUpgradeCrystals(race, upgrade, amount, bool override=false);
 
 /**
  * Retrieves the required level of an upgrade
@@ -607,7 +607,7 @@ native GetUpgradeRequiredLevel(race, upgrade);
  * @param override: Set true to override the config file.
  * @noreturn
  */
-native SetUpgradeRequiredLevel(race, upgrade, level, bool:override=false);
+native SetUpgradeRequiredLevel(race, upgrade, level, bool override=false);
 
 /**
  * Retrieves the max level of an upgrade
@@ -625,7 +625,7 @@ native GetUpgradeMaxLevel(race,upgrade);
  * @param override: Set true to override the config file.
  * @noreturn
  */
-native SetUpgradeMaxLevel(race,upgrade, level, bool:override=false);
+native SetUpgradeMaxLevel(race,upgrade, level, bool override=false);
 
 /**
  * Retrieves the category of an upgrade
@@ -680,9 +680,9 @@ native SetUpgradeDisabled(race,upgrade,flag=true);
  * @param image:            The image of the item, to be placed into the database for the webapp. (defaults to translation)
  * @return                  The return value will be the item index or -1 if there was a problem.
  */         
-native CreateShopItem(const String:short[], crystals=0, vespene=0, money=0, bool:use_pcrystals=false, xp=0, max=1,
-                      required_level=0, store=0, Translation:translation=Translation_Auto, const String:translation_file[]="",
-                      const String:category[]="", const String:name[]="",const String:desc[]="", const String:image[]="");
+native CreateShopItem(const char short[], crystals=0, vespene=0, money=0, bool use_pcrystals=false, xp=0, max=1,
+                      required_level=0, store=0, Translation:translation=Translation_Auto, const char translation_file[]="",
+                      const char category[]="", const char name[]="",const char desc[]="", const char image[]="");
 
 /**
  * Retrieves the short name of the shop item
@@ -691,7 +691,7 @@ native CreateShopItem(const String:short[], crystals=0, vespene=0, money=0, bool
  * @param maxlength:    The size of the name buffer.
  * @noreturn
  */
-native GetItemShortName(item, String:name[], maxlength);
+native GetItemShortName(item, char name[], maxlength);
 
 /**
  * Changes a ShopItem's short name.
@@ -699,7 +699,7 @@ native GetItemShortName(item, String:name[], maxlength);
  * @param short:        The new short name of the item. (max 16) 
  * @noreturn
  */
-native SetItemShortName(const String:short[]);
+native SetItemShortName(const char short[]);
 
 /**
  * Retrieves the name of the shop item
@@ -709,7 +709,7 @@ native SetItemShortName(const String:short[]);
  * @param lang:         Client to translate the name for, if any.
  * @noreturn
  */
-native GetItemName(item, String:name[], maxlength, lang=LANG_SERVER);
+native GetItemName(item, char name[], maxlength, lang=LANG_SERVER);
 
 /**
  * Retrieves the category of the shop item
@@ -719,7 +719,7 @@ native GetItemName(item, String:name[], maxlength, lang=LANG_SERVER);
  * @param lang:         Client to translate the category for, if any.
  * @noreturn
  */
-native GetItemCategory(item, String:category[], maxlength, lang=LANG_SERVER);
+native GetItemCategory(item, char category[], maxlength, lang=LANG_SERVER);
 
 /**
  * Retrieves the description of the shop item
@@ -729,14 +729,14 @@ native GetItemCategory(item, String:category[], maxlength, lang=LANG_SERVER);
  * @param lang:         Client to translate the description for, if any.
  * @noreturn
  */
-native GetItemDescription(item, String:description[], maxlength, lang=LANG_SERVER);
+native GetItemDescription(item, char description[], maxlength, lang=LANG_SERVER);
 
 /**
  * Gets the plugin Handle for a shop item.
  * @param item:     The item ID returned from CreateItem()
  * @return          The return value will be the Handle of the plugin that created the shop item.
  */
-native Handle:GetItemPlugin(item);
+native Handle GetItemPlugin(item);
 
 /**
  * Retrieves the number of ShopItems
@@ -749,7 +749,7 @@ native GetShopItemCount();
  * @param name:     The name of the item. (max 64)
  * @return          The return value will be the item index or -1 if there was a problem.
  */         
-native FindShopItem(const String:name[]);
+native FindShopItem(const char name[]);
 
 /**
  * Registers a help command with the SourceCraft plugin for help
@@ -757,7 +757,7 @@ native FindShopItem(const String:name[]);
  * @param desc:     The description of the command. (max 256) 
  * @return          The return value will be the help index or -1 if there was a problem.
  */
-native CreateHelpCommand(const String:name[],const String:desc[]);
+native CreateHelpCommand(const char name[],const char desc[]);
 
 /**
  * Give health to (heal) a player
@@ -790,12 +790,12 @@ native HealPlayer(client, amount, health=-1, max=-1);
  * @param prevent_stack:    Set to true to prevent other sourcecraft damage mods from stacking (defaults to true).
  * @return                  The return value will be the victims remaining health
  */
-native HurtPlayer(victim, damage, attacker=0, const String:weapon_name[]="",
-                  const String:weapon_desc[]="", xp=0, bool:explode=false,
+native HurtPlayer(victim, damage, attacker=0, const char weapon_name[]="",
+                  const char weapon_desc[]="", xp=0, bool explode=false,
                   type=DMG_GENERIC, DamageFrom:category=DamageFrom_None,
-                  Float:limit=0.90, bool:ignore_armor=false, bool:ignore_immunity=false,
-                  bool:in_hurt_event=false, bool:no_suicide=false, bool:no_forward=false,
-                  bool:no_translate=false, bool:prevent_stack=true);
+                  float limit=0.90, bool ignore_armor=false, bool ignore_immunity=false,
+                  bool in_hurt_event=false, bool no_suicide=false, bool no_forward=false,
+                  bool no_translate=false, bool prevent_stack=true);
 
 /**
  * Kill a player.
@@ -811,11 +811,11 @@ native HurtPlayer(victim, damage, attacker=0, const String:weapon_name[]="",
  * @param no_translate:  Set to true to supress translating the weapon_name to get the weapon_desc
  * @noreturn
  */
-native KillPlayer(victim, attacker=0, const String:weapon_name[]="",
-                  const String:weapon_desc[]="", xp=0,
-                  bool:explode=false, type=DMG_GENERIC,
-                  bool:silent=false, bool:no_suicide=false,
-                  bool:no_translate=false);
+native KillPlayer(victim, attacker=0, const char weapon_name[]="",
+                  const char weapon_desc[]="", xp=0,
+                  bool explode=false, type=DMG_GENERIC,
+                  bool silent=false, bool no_suicide=false,
+                  bool no_translate=false);
 
 /**
  * Take health from (damage) an entity
@@ -826,23 +826,23 @@ native KillPlayer(victim, attacker=0, const String:weapon_name[]="",
  * @param weapon:   The name of the weapon used to deal the damage to the entity.
  * @noreturn
  */
-native DamageEntity(victim,damage,attacker=0,dmg_type=DMG_GENERIC,const String:weapon[]="");
+native DamageEntity(victim,damage,attacker=0,dmg_type=DMG_GENERIC,const char weapon[]="");
 
 /**
  * Retrieves the Suppress Damage Forwarding Flag set in HurtPlayer()
- * only valid in OnTakePlayerDamage() and OnPlayerHurt() Handlers.
+ * only valid in OnTakePlayerDamage() and OnPlayerHurt() Handle rs.
  *
  * @return The return value will be the Suppress Damage Forwarding flag.
  */
-native bool:GetDamageFromPlayerHurt();
+native bool GetDamageFromPlayerHurt();
 
 /**
  * Retrieves the Suppress Damage Forwarding Flag set in HurtPlayer()
- * only valid in OnTakePlayerDamage() and OnPlayerHurt() Handlers.
+ * only valid in OnTakePlayerDamage() and OnPlayerHurt() Handle rs.
  *
  * @return The return value will be the Suppress Damage Forwarding flag.
  */
-native bool:GetSuppressDamageForward();
+native bool GetSuppressDamageForward();
 
 /**
  * Retrieves the damage done by the event, calculates it if required.
@@ -850,7 +850,7 @@ native bool:GetSuppressDamageForward();
  * @param client:   The index of the player that was damaged (0=get userid from event)
  * @return          The return value will be the amount of damage
  */
-native GetDamage(Handle:event, client=0);
+native GetDamage(Handle event, client=0);
 
 /**
  * Displays damage inflicted upon a player
@@ -862,9 +862,9 @@ native GetDamage(Handle:event, client=0);
  * @param no_translate: Set to true to supress translating the weapon_name to get the weapon_desc
  * @noreturn
  */
-native DisplayDamage(client, victim, hp=0, const String:weapon[],
-                     const String:description[]="",
-                     bool:no_translate=false);
+native DisplayDamage(client, victim, hp=0, const char weapon[],
+                     const char description[]="",
+                     bool no_translate=false);
 
 /**
  * Displays when a player is killed
@@ -876,9 +876,9 @@ native DisplayDamage(client, victim, hp=0, const String:weapon[],
  * @param no_translate: Set to true to supress translating the weapon_name to get the weapon_desc
  * @noreturn
  */
-native DisplayKill(client, victim, xp=0, const String:weapon[],
-                   const String:description[]="",
-                   bool:no_translate=false);
+native DisplayKill(client, victim, xp=0, const char weapon[],
+                   const char description[]="",
+                   bool no_translate=false);
 
 /**
  * Displays a message to a player
@@ -888,7 +888,7 @@ native DisplayKill(client, victim, xp=0, const String:weapon[],
  * @param ...:          Format arguments (if any)
  * @noreturn
  */
-native DisplayMessage(client, Display:flags, const String:fmt[], any:...);
+native DisplayMessage(client, Display:flags, const char fmt[], any:...);
 
 /**
  * Displays a hint message to a player
@@ -900,8 +900,8 @@ native DisplayMessage(client, Display:flags, const String:fmt[], any:...);
  * @param ...:          Format arguments (if any)
  * @noreturn
  */
-native DisplayHint(client, HintSlot:slot=HintSlot_Generic, bool:exclusive=false,
-                   Float:duration=5.0, const String:fmt[]="", any:...);
+native DisplayHint(client, HintSlot:slot=HintSlot_Generic, bool exclusive=false,
+                   float duration=5.0, const char fmt[]="", any:...);
 
 /**
  * Displays a Hud Message to a player
@@ -910,7 +910,7 @@ native DisplayHint(client, HintSlot:slot=HintSlot_Generic, bool:exclusive=false,
  * @param ...:          Format arguments (if any)
  * @noreturn
  */
-native HudMessage(client, const String:fmt[], any:...);
+native HudMessage(client, const char fmt[], any:...);
 
 /**
  * Clears a client's Hud.
@@ -920,7 +920,7 @@ native HudMessage(client, const String:fmt[], any:...);
 *                       the HUD is cleared unconditionally.
  * @noreturn
  */
-native ClearHud(client, const String:contains[]="", any:...);
+native ClearHud(client, const char contains[]="", any:...);
 
 /**
  * Retrieves the players HUD Message
@@ -929,7 +929,7 @@ native ClearHud(client, const String:contains[]="", any:...);
  * @param maxlength:    The size of the message buffer.
  * @noreturn
  */
-native GetHudMessage(client, String:message[], maxlength);
+native GetHudMessage(client, char message[], maxlength);
 
 /**
  * Shows the client's XP, level and race in chat
@@ -971,7 +971,7 @@ native ShowEnergy(client, Display:displayFlags=Display_Energy);
  * @param lang:         Client to translate the name for, if any.
  * @noreturn
  */
-native bool:GetEntityName(entIndex, String:entName[], nameMax, lang=LANG_SERVER);
+native bool GetEntityName(entIndex, char entName[], nameMax, lang=LANG_SERVER);
 
 /**
  * Returns how much armor the client has
@@ -1008,8 +1008,8 @@ native ArmorFlags:GetArmorFlags(client);
  * @param maxShields    The max amount of shields when fully regenerated (-1 = same as amount for shields or 0 for armor)
  * @return			    none
  */
-native SetArmor(client, amount, const Float:percent[2]={1.0,1.0},
-                const String:name[]="", ArmorFlags:flags=Armor_Default,
+native SetArmor(client, amount, const float percent[2]={1.0,1.0},
+                const char name[]="", ArmorFlags:flags=Armor_Default,
                 maxShields=-1);
 
 /**
@@ -1028,7 +1028,7 @@ native SetArmorAmount(client, amount);
  * @param percent       Array that holds a range of percent damage that the armor absorbs.
  * @return			    none
  */
-native SetArmorPercent(client, const Float:percent[2]);
+native SetArmorPercent(client, const float percent[2]);
 
 /**
  * Gets what % damage the client's armor absorbs
@@ -1037,7 +1037,7 @@ native SetArmorPercent(client, const Float:percent[2]);
  * @param percent       Array to receive the range of percent damage that the armor absorbs.
  * @return			    none
  */
-native GetArmorPercent(client, Float:percent[2]);
+native GetArmorPercent(client, float percent[2]);
 
 /**
  * Sets the name of the given client's armor
@@ -1045,7 +1045,7 @@ native GetArmorPercent(client, Float:percent[2]);
  * @param name:         What to call the armor in the HUD and messages. (max 64)
  * @noreturn
  */
-native SetArmorName(client, const String:name[]);
+native SetArmorName(client, const char name[]);
 
 /**
  * Retrieves the name of the given client's armor
@@ -1054,7 +1054,7 @@ native SetArmorName(client, const String:name[]);
  * @param maxlength:    The size of the name buffer.
  * @noreturn
  */
-native GetArmorName(client, String:name[], maxlength);
+native GetArmorName(client, char name[], maxlength);
 
 /**
  * Increments how much armor the client has
@@ -1083,7 +1083,7 @@ native DecrementArmor(client, amount);
  * @param limitToMaxHP  Limit the shields to the client's Max HP.
  * @return			    none
  */
-native RegenerateShields(client, amount, power=-1, bool:limitToMaxHP=true);
+native RegenerateShields(client, amount, power=-1, bool limitToMaxHP=true);
 
 /**
  * Gets the state of all display settings for a client.
@@ -1098,7 +1098,7 @@ native Display:GetDisplayBits(client);
  * @param setting:  The display setting or settings you want to check. 
  * @return          The return value will be true if they are set or false if they aren't.
  */
-native bool:GetDisplaySetting(client,Display:setting);
+native bool GetDisplaySetting(client,Display:setting);
 
 /**
  * Gets the state of all settings for a client.
@@ -1113,7 +1113,7 @@ native Settings:GetSettingsBits(client);
  * @param setting:  The setting or settings you want to check. 
  * @return          The return value will be true if they are set or false if they aren't.
  */
-native bool:GetSetting(client,Settings:setting);
+native bool GetSetting(client,Settings:setting);
 
 /**
  * Returns if the client is changing class
@@ -1121,7 +1121,7 @@ native bool:GetSetting(client,Settings:setting);
  * @param client 	Client
  * @return			true if the client is in the process of changing class
  */
-native bool:IsChangingClass(client);
+native bool IsChangingClass(client);
 
 /**
  * Returns if the client is in a spawn area
@@ -1129,7 +1129,7 @@ native bool:IsChangingClass(client);
  * @param client 	Client
  * @return			true if the client is in a spawn area
  */
-native bool:IsInSpawn(client);
+native bool IsInSpawn(client);
 
 /**
  * Gets the current race for the player.
@@ -1147,7 +1147,7 @@ native GetRace(client);
  * @param saveEnergy:   Save the client's remaining energy into accumulated energy (for summons).
  * @noreturn
  */
-native ChangeRace(client, race, bool:force=false, bool:check=true, bool:saveEnergy=false);
+native ChangeRace(client, race, bool force=false, bool check=true, bool saveEnergy=false);
 
 /**
  * Gets the current level for the provided race.
@@ -1165,7 +1165,7 @@ native GetLevel(client,race=-1);
  * @param update:   If true, updates the overall and tech levels also.
  * @noreturn
  */
-native SetLevel(client,race,newlevel,bool:update=true);
+native SetLevel(client,race,newlevel,bool update=true);
 
 /**
  * Resets the current level for the provided race, also adjusts Upgrade, Overall and Tech levels as required.
@@ -1240,7 +1240,7 @@ native GetReqLevelXP(level);
  * @param check:    Set true to check the race. If the client's race != race, return 0.
  * @return          The return value will be the upgrade level or 0 if it failed.
  */
-native GetUpgradeLevel(client,race,upgrade,bool:check=false);
+native GetUpgradeLevel(client,race,upgrade,bool check=false);
 
 /**
  * Sets the current level for the upgrade for the provided race.
@@ -1259,7 +1259,7 @@ native SetUpgradeLevel(client,race,upgrade,newlevel);
  * @param show:     If true, Show the upgrade menu
  * @noreturn
  */
-native ResetUpgradeLevels(client, race=-1, bool:show=true);
+native ResetUpgradeLevels(client, race=-1, bool show=true);
 
 /**
  * Gets the amount of Accumulated Energy a player has.
@@ -1267,7 +1267,7 @@ native ResetUpgradeLevels(client, race=-1, bool:show=true);
  * @param race:     The race ID returned from CreateRace or -1 for current race
  * @return          The return value will be the amount of energy or -1 if it failed.
  */
-native Float:GetAccumulatedEnergy(client,race=-1);
+native float GetAccumulatedEnergy(client,race=-1);
 
 /**
  * Sets the amount of Accumulated Energy a player has.
@@ -1276,7 +1276,7 @@ native Float:GetAccumulatedEnergy(client,race=-1);
  * @param neweneergy: The amount you want to set
  * @noreturn
  */
-native SetAccumulatedEnergy(client,race,Float:newenergy);
+native SetAccumulatedEnergy(client,race,float newenergy);
 
 /**
  * Gets the amount of Energy a player has.
@@ -1284,7 +1284,7 @@ native SetAccumulatedEnergy(client,race,Float:newenergy);
  * @param scale:    Scale the returned amount by the energy_factor
  * @return          The return value will be the amount of energy or -1 if it failed.
  */
-native Float:GetEnergy(client, bool:scale=false);
+native float GetEnergy(client, bool scale=false);
 
 /**
  * Sets the amount of Energy a player has.
@@ -1293,7 +1293,7 @@ native Float:GetEnergy(client, bool:scale=false);
  * @param scale:    Scale the amount by the energy_factor
  * @noreturn
  */
-native SetEnergy(client,Float:amount, bool:scale=false);
+native SetEnergy(client,float amount, bool scale=false);
 
 /**
  * Increments the amount of Energy a player has.
@@ -1302,7 +1302,7 @@ native SetEnergy(client,Float:amount, bool:scale=false);
  * @param scale:    Scale the amount by the energy_factor
  * @noreturn
  */
-native IncrementEnergy(client, Float:amount, bool:scale=true);
+native IncrementEnergy(client, float amount, bool scale=true);
 
 /**
  * Decrements the amount of Energy a player has.
@@ -1312,14 +1312,14 @@ native IncrementEnergy(client, Float:amount, bool:scale=true);
  * @param scale:    Scale the amount by the energy_factor
  * @return          The return value will be false if there is insufficent energy.
  */
-native bool:DecrementEnergy(client, Float:amount, bool:scale=false, bool:check=true);
+native bool DecrementEnergy(client, float amount, bool scale=false, bool check=true);
 
 /**
  * Gets the Energy accumulation Rate for a player.
  * @param client:   The index of the player.
  * @return          The return value will be the amount of energy or -1 if it failed.
  */
-native Float:GetEnergyRate(client);
+native float GetEnergyRate(client);
 
 /**
  * Sets the Energy accumulation Rate for a player.
@@ -1327,14 +1327,14 @@ native Float:GetEnergyRate(client);
  * @param newrate:  The amount you want to set
  * @noreturn
  */
-native SetEnergyRate(client,Float:newrate);
+native SetEnergyRate(client,float newrate);
 
 /**
  * Gets the Energy Limit for a player.
  * @param client:   The index of the player.
  * @return          The return value will be the amount of energy or -1 if it failed.
  */
-native Float:GetEnergyLimit(client);
+native float GetEnergyLimit(client);
 
 /**
  * Sets the Energy Limit for a player.
@@ -1342,14 +1342,14 @@ native Float:GetEnergyLimit(client);
  * @param newlimit: The amount you want to set
  * @noreturn
  */
-native SetEnergyLimit(client,Float:newlimit);
+native SetEnergyLimit(client,float newlimit);
 
 /**
  * Gets the Initial Energy for a player.
  * @param client:   The index of the player.
  * @return          The return value will be the amount of energy or -1 if it failed.
  */
-native Float:GetInitialEnergy(client);
+native float GetInitialEnergy(client);
 
 /**
  * Sets the Initial Energy for a player.
@@ -1357,7 +1357,7 @@ native Float:GetInitialEnergy(client);
  * @param amount:   The amount you want to set
  * @noreturn
  */
-native SetInitialEnergy(client,Float:amount);
+native SetInitialEnergy(client,float amount);
 
 /**
  * Gets the maximum amount of Crystals a player can have.
@@ -1380,7 +1380,7 @@ native GetCrystals(client);
  * @param overflow: Set true to allow overflow to +crystals
  * @noreturn
  */
-native SetCrystals(client,amount,bool:check=true,bool:overflow=true);
+native SetCrystals(client,amount,bool check=true,bool overflow=true);
 
 /**
  * Increments the amount of Crystals a player has.
@@ -1390,7 +1390,7 @@ native SetCrystals(client,amount,bool:check=true,bool:overflow=true);
  * @param overflow: Set true to allow overflow to +crystals
  * @noreturn
  */
-native IncrementCrystals(client,amount,bool:check=true,bool:overflow=true);
+native IncrementCrystals(client,amount,bool check=true,bool overflow=true);
 
 /**
  * Decrements the amount of Crystals a player has.
@@ -1399,7 +1399,7 @@ native IncrementCrystals(client,amount,bool:check=true,bool:overflow=true);
  * @param check:    Set true to check for sufficent crystals before decrementing
  * @return          The return value will be false if there is insufficent crystals.
  */
-native bool:DecrementCrystals(client,amount, bool:check=true);
+native bool DecrementCrystals(client,amount, bool check=true);
 
 /**
  * Gets the amount of +crystals a player has.
@@ -1431,7 +1431,7 @@ native IncrementPCrystals(client,amount);
  * @param check:    Set true to check for sufficent +crystals before decrementing
  * @return          The return value will be false if there is insufficent +crystals.
  */
-native bool:DecrementPCrystals(client,amount, bool:check=true);
+native bool DecrementPCrystals(client,amount, bool check=true);
 
 /**
  * Gets the amount of (CS or TF2 MvM) Money a player has.
@@ -1468,7 +1468,7 @@ native GetVespene(client);
  * @param check:    Set true to check limit before changing.
  * @return          The return value will be the amount of vespene set or -1 if it failed.
  */
-native SetVespene(client,amount,bool:check=true);
+native SetVespene(client,amount,bool check=true);
 
 /**
  * Increments the amount of Vespene (gas) a player has.
@@ -1477,7 +1477,7 @@ native SetVespene(client,amount,bool:check=true);
  * @param check:    Set true to check limit before changing.
  * @return          The return value will be the amount of vespene set or -1 if it failed.
  */
-native IncrementVespene(client,amount,bool:check=true);
+native IncrementVespene(client,amount,bool check=true);
 
 /**
  * Decrements the amount of Vespene (gas) a player has.
@@ -1486,7 +1486,7 @@ native IncrementVespene(client,amount,bool:check=true);
  * @param check:    Set true to check for sufficent vespene before decrementing
  * @return          The return value will be false if there is insufficent vespene.
  */
-native bool:DecrementVespene(client,amount, bool:check=true);
+native bool DecrementVespene(client,amount, bool check=true);
 
 /**
  * Gets the player's current overall level. (Total level of all races)
@@ -1542,7 +1542,7 @@ native SetImmunityBits(client, immunities);
  * @param immunity: The immunity or immunities you want to check. 
  * @return          The return value will be true if they are immune or false if they aren't.
  */
-native bool:GetImmunity(client,Immunity:imm);
+native bool GetImmunity(client,Immunity:imm);
 
 /**
  * Gives the player a specific immunity.
@@ -1553,8 +1553,8 @@ native bool:GetImmunity(client,Immunity:imm);
  * @param pluginid:  Handle of the plugin to set immunity for (defaults to calling plugin)
  * @noreturn
  */
-native SetImmunity(client, Immunity:immunity, bool:imm_state=true,
-                   id=0, Handle:pluginid=INVALID_HANDLE);
+native SetImmunity(client, Immunity:immunity, bool imm_state=true,
+                   id=0, Handle pluginid=null);
 
 /**
  * Gets the state of all restrictions for a player.
@@ -1577,7 +1577,7 @@ native SetRestrictionBits(client, restrict);
  * @param immunity: The restriction or restrictions you want to check. 
  * @return          The return value will be true if they are restricted or false if they aren't.
  */
-native bool:GetRestriction(client,Restriction:restrict);
+native bool GetRestriction(client,Restriction:restrict);
 
 /**
  * Gives the player a specific restriction.
@@ -1588,8 +1588,8 @@ native bool:GetRestriction(client,Restriction:restrict);
  * @param pluginid:  Handle of the plugin to set restriction for (defaults to calling plugin)
  * @noreturn
  */
-native SetRestriction(client,Restriction:restrict,bool:restrict_state=true,
-                      id=0, Handle:pluginid=INVALID_HANDLE);
+native SetRestriction(client,Restriction:restrict,bool restrict_state=true,
+                      id=0, Handle pluginid=null);
 
 /**
  * Gets the state of all attributes for a player.
@@ -1612,7 +1612,7 @@ native SetAttributeBits(client, attributes);
  * @param attrib:   The attribute or attributes you want to check. 
  * @return          The return value will be true if the attribute is set or false if it isn't.
  */
-native bool:GetAttribute(client,Attribute:attrib);
+native bool GetAttribute(client,Attribute:attrib);
 
 /**
  * Gives the player a specific attribute.
@@ -1621,7 +1621,7 @@ native bool:GetAttribute(client,Attribute:attrib);
  * @param imm_state: The state to set the attribute to.
  * @noreturn
  */
-native SetAttribute(client,Attribute:attrib,bool:attrib_state=true);
+native SetAttribute(client,Attribute:attrib,bool attrib_state=true);
 
 /**
  * Sets the speed for the player that is handled within the SourceCraft system,
@@ -1635,8 +1635,8 @@ native SetAttribute(client,Attribute:attrib,bool:attrib_state=true);
  * @param pluginid: Handle of the plugin to set speed for (defaults to calling plugin)
  * @noreturn
  */
-native SetSpeed(client, Float:speed=-1.0, bool:apply=false,
-                id=0, Handle:pluginid=INVALID_HANDLE);
+native SetSpeed(client, float speed=-1.0, bool apply=false,
+                id=0, Handle pluginid=null);
 
 /**
  * Sets the gravity for the player that is handled within the SourceCraft system,
@@ -1650,8 +1650,8 @@ native SetSpeed(client, Float:speed=-1.0, bool:apply=false,
  * @param pluginid: Handle of the plugin to set gravity for (defaults to calling plugin)
  * @noreturn
  */
-native SetGravity(client, Float:gravity=-1.0, bool:apply=false,
-                  id=0, Handle:pluginid=INVALID_HANDLE);
+native SetGravity(client, float gravity=-1.0, bool apply=false,
+                  id=0, Handle pluginid=null);
 
 /**
  * Sets the visibility for the player that is handled within the SourceCraft system,
@@ -1679,12 +1679,12 @@ native SetGravity(client, Float:gravity=-1.0, bool:apply=false,
  * @noreturn
  */
 native SetVisibility(client, VisibilityType:type=NormalVisibility,
-                     visibility=-1, Float:factor1=-1.0, Float:factor2=-1.0,
+                     visibility=-1, float factor1=-1.0, float factor2=-1.0,
                      RenderMode:mode=RenderMode:-1, RenderFx:fx=RenderFx:-1,
-                     r=-1, g=-1, b=-1, weaponAlpha=-1,bool:colorWeapons=false,
+                     r=-1, g=-1, b=-1, weaponAlpha=-1,bool colorWeapons=false,
                      VisibilityPriority:priority=VisibilityPriorityNotSpecified,
-                     Float:timestamp=0.0, bool:apply=false,
-                     id=0, Handle:pluginid=INVALID_HANDLE);
+                     float timestamp=0.0, bool apply=false,
+                     id=0, Handle pluginid=null);
 
 /**
  * Overrides the speed for SourceCraft, useful for punishing them or whatever.
@@ -1697,8 +1697,8 @@ native SetVisibility(client, VisibilityType:type=NormalVisibility,
  * @param pluginid: Handle of the plugin to set speed for (defaults to calling plugin)
  * @noreturn
  */
-native SetOverrideSpeed(client, Float:speed=-1.0, bool:apply=false,
-                        id=0, Handle:pluginid=INVALID_HANDLE);
+native SetOverrideSpeed(client, float speed=-1.0, bool apply=false,
+                        id=0, Handle pluginid=null);
 
 /**
  * Overrides the gravity for SourceCraft, useful for punishing them or whatever.
@@ -1711,8 +1711,8 @@ native SetOverrideSpeed(client, Float:speed=-1.0, bool:apply=false,
  * @param pluginid: Handle of the plugin to set gravity for (defaults to calling plugin)
  * @noreturn
  */
-native SetOverrideGravity(client,Float:gravity=-1.0,bool:apply=false,
-                          id=0, Handle:pluginid=INVALID_HANDLE);
+native SetOverrideGravity(client,float gravity=-1.0,bool apply=false,
+                          id=0, Handle pluginid=null);
 
 /**
  * Overrides the (in)visibility for SourceCraft , useful for punishing them or whatever.
@@ -1725,8 +1725,8 @@ native SetOverrideGravity(client,Float:gravity=-1.0,bool:apply=false,
  * @param pluginid:     Handle of the plugin to set visibility for (defaults to calling plugin)
  * @noreturn
  */
-native SetOverrideVisiblity(client, visibility=-1, bool:apply=false,
-                            id=0, Handle:pluginid=INVALID_HANDLE);
+native SetOverrideVisiblity(client, visibility=-1, bool apply=false,
+                            id=0, Handle pluginid=null);
 
 /**
  * Sets the MoveType for the player that is handled within the SourceCraft system,
@@ -1738,8 +1738,8 @@ native SetOverrideVisiblity(client, visibility=-1, bool:apply=false,
  * @param pluginid: Handle of the plugin to set MoveType for (defaults to calling plugin)
  * @noreturn
  */
-native SetMoveType(client, MoveType:mt=MOVETYPE_DEFAULT, bool:apply=false,
-                   id=0, Handle:pluginid=INVALID_HANDLE);
+native SetMoveType(client, MoveType:mt=MOVETYPE_DEFAULT, bool apply=false,
+                   id=0, Handle pluginid=null);
 
 /**
  * Applies the Speed, Gravity and Visibility settings for the specified player
@@ -1759,15 +1759,15 @@ native ApplyPlayerSettings(client);
  * @param pluginid: Handle of the plugin to set health regen for (defaults to calling plugin)
  * @noreturn
  */
-native SetHealthRegen(client, Float:rate=0.0, RegenFlags:flags=Regen_Default,
-                      id=0, Handle:pluginid=INVALID_HANDLE);
+native SetHealthRegen(client, float rate=0.0, RegenFlags:flags=Regen_Default,
+                      id=0, Handle pluginid=null);
 
 /**
  * Gets the sum of the health regeneration (or decay) rate set by all plugins
  * @param client:   The index of the player.
  * @noreturn
  */
-native Float:GetHealthRegenSum(client);
+native float GetHealthRegenSum(client);
 
 /**
  * Sets the Shield Regeneration (or Decay) Rate.
@@ -1778,15 +1778,15 @@ native Float:GetHealthRegenSum(client);
  * @param pluginid: Handle of the plugin to set shield regen for (defaults to calling plugin)
  * @noreturn
  */
-native SetShieldRegen(client, Float:rate=0.0, RegenFlags:flags=Regen_Default,
-                      id=0, Handle:pluginid=INVALID_HANDLE);
+native SetShieldRegen(client, float rate=0.0, RegenFlags:flags=Regen_Default,
+                      id=0, Handle pluginid=null);
 
 /**
  * Gets the sum of the shield regeneration (or decay) rate set by all plugins
  * @param client:   The index of the player.
  * @noreturn
  */
-native Float:GetShieldRegenSum(client);
+native float GetShieldRegenSum(client);
 
 /**
  * Sets the physical armor percent used by war3source races
@@ -1796,15 +1796,15 @@ native Float:GetShieldRegenSum(client);
  * @param pluginid: Handle of the plugin to set armor for (defaults to calling plugin)
  * @noreturn
  */
-native SetPhysicalArmorPercent(client, Float:armor=0.0, id=0,
-                               Handle:pluginid=INVALID_HANDLE);
+native SetPhysicalArmorPercent(client, float armor=0.0, id=0,
+                               Handle pluginid=null);
 
 /**
  * Gets the sum of the physical armor percent set by all (war3source) plugins
  * @param client:   The index of the player.
  * @noreturn
  */
-native Float:GetPhysicalArmorSum(client);
+native float GetPhysicalArmorSum(client);
 
 /**
  * Sets the magical armor percent used by war3source races
@@ -1814,15 +1814,15 @@ native Float:GetPhysicalArmorSum(client);
  * @param pluginid: Handle of the plugin to set armor for (defaults to calling plugin)
  * @noreturn
  */
-native SetMagicalArmorPercent(client, Float:armor=0.0, id=0,
-                               Handle:pluginid=INVALID_HANDLE);
+native SetMagicalArmorPercent(client, float armor=0.0, id=0,
+                               Handle pluginid=null);
 
 /**
  * Gets the sum of the magical armor percent set by all (war3source) plugins
  * @param client:   The index of the player.
  * @noreturn
  */
-native Float:GetMagicalArmorSum(client);
+native float GetMagicalArmorSum(client);
 
 /**
  * Restores (removes ill effects from) a player (removes all overrides)
@@ -1830,7 +1830,7 @@ native Float:GetMagicalArmorSum(client);
  * @param apply:    Set to true to apply the setting immedately.
  * @return          The return value will be true if the restore succeeded.
  */
-native bool:RestorePlayer(client,bool:apply=false);
+native bool RestorePlayer(client,bool apply=false);
 
 /**
  * Respawns a player
@@ -1850,12 +1850,12 @@ native RespawnPlayer(client);
  * @param expireSound:  The sound to play when the cooldown expires
  * @return              The return value will be true if the restore succeeded.
  */
-native CreateCooldown(client, race, upgrade, Float:duration=-1.0, const String:name[]="",
+native CreateCooldown(client, race, upgrade, float duration=-1.0, const char name[]="",
                       CooldownType:type=Cooldown_AutoReset     |
                                         Cooldown_ResetOnChange |
                                         Cooldown_CreateNotify  |
                                         Cooldown_ExpireNotify,
-                      const String:expireSound[]="");
+                      const char expireSound[]="");
 
 /**
  * Returns the time of the cooldown expiration.
@@ -1864,7 +1864,7 @@ native CreateCooldown(client, race, upgrade, Float:duration=-1.0, const String:n
  * @param upgrade:  The upgrade for the cooldown
  * @return          The return value will be the time of the cooldown expiration, or 0.0 if there isn't any.
  */
-native Float:GetCooldownExpireTime(client, race, upgrade);
+native float GetCooldownExpireTime(client, race, upgrade);
 
 #define GetCooldownRemaining(%1) (GetCooldownExpireTime(%1)-GetGameTime())
 
@@ -1885,7 +1885,7 @@ native CooldownType:GetCooldownType(client, race, upgrade);
  * @param notify:   Set to true to display a message to the client
  * @noreturn
  */
-native ResetCooldown(client, race, upgrade, bool:notify=true);
+native ResetCooldown(client, race, upgrade, bool notify=true);
 
 /**
  * Check if a cooldown has expired yet.
@@ -1895,31 +1895,31 @@ native ResetCooldown(client, race, upgrade, bool:notify=true);
  * @param notify:   Set to true to display a message to the client if the cooldown hasn't expired yet.
  * @return          The return value will be true if the cooldown has expired (or there is no cooldown)
  */
-native bool:HasCooldownExpired(client, race, upgrade, bool:notify=true);
+native bool HasCooldownExpired(client, race, upgrade, bool notify=true);
 
 /**
  * Check if an upgrade can be invoked.
  * @param client:   The index of the player.
  * @param race:     The race and
  * @param upgrade:  The upgrade for the cooldown
- * @param charge:   Set to true to reduce the client's resources the appropriate amounts.
+ * @param char ge:   Set to true to reduce the client's resources the appropriate amounts.
  * @param notify:   Set to true to display a message to the client if there are insufficient resources.
  * @return          The return value will be true if there is sufficient resources
  *                  and the upgrade can be invoked.
  */
-native bool:CanInvokeUpgrade(client, race, upgrade, bool:charge=true, bool:notify=true);
+native bool CanInvokeUpgrade(client, race, upgrade, bool char ge=true, bool notify=true);
 
 /**
  * Check if an recurring upgrade can be processed (checks recurring_energy).
  * @param client:   The index of the player.
  * @param race:     The race and
  * @param upgrade:  The upgrade for the cooldown
- * @param charge:   Set to true to reduce the client's resources the appropriate amounts.
+ * @param char ge:   Set to true to reduce the client's resources the appropriate amounts.
  * @param notify:   Set to true to display a message to the client if there are insufficient resources.
  * @return          The return value will be true if there is sufficient resources
  *                  and the upgrade can be invoked.
  */
-native bool:CanProcessUpgrade(client, race, upgrade, bool:chargeCosts=true, bool:notify=false);
+native bool CanProcessUpgrade(client, race, upgrade, bool char geCosts=true, bool notify=false);
 
 /**
  * Charge for an upgrade that was invoked (subtract energy, vespene and/or crystals).
@@ -1937,7 +1937,7 @@ native ChargeForUpgrade(client, race, upgrade);
  * @param data:     The data handle associated with the attribute.
  * @return          The return value will be true if the client has the attribute ot false if not.
  */
-native HasAttribute(client, const String:attrName[], &Handle:data);
+native HasAttribute(client, const char attrName[], &Handle data);
 
 /**
  * Assigns an attribute (and associated data handle) to a client
@@ -1946,7 +1946,7 @@ native HasAttribute(client, const String:attrName[], &Handle:data);
  * @param data:     The data handle to associate with the attribute.
  * @return			True on success, false on failure.
  */         
-native bool:AssignAttribute(client, const String:attrName[], Handle:data);
+native bool AssignAttribute(client, const char attrName[], Handle data);
 
 /**
  * Removes an attribute from a client (and closes associated data handle)
@@ -1954,7 +1954,7 @@ native bool:AssignAttribute(client, const String:attrName[], Handle:data);
  * @param attrName: The name of the attribute. (max 64)
  * @return			True on success, false on failure.
  */
-native RemoveAttribute(client, const String:attrName[]);
+native RemoveAttribute(client, const char attrName[]);
 
 /**
  * Removes all attributes from a client (and closes associated data handles)
@@ -1968,7 +1968,7 @@ native RemoveAllAttributes(client);
  * @param attrName: The name of the attribute. (max 64)
  * @return          The return value will be the attribute index or -1 if there was a problem.
  */         
-native CreateAttribute(const String:attrName[]);
+native CreateAttribute(const char attrName[]);
 
 /**
  * Returns if a client has been assigned an attribute (by Id)
@@ -1977,7 +1977,7 @@ native CreateAttribute(const String:attrName[]);
  * @param data:     The data handle associated with the attribute.
  * @return          The return value will be true if the client has the attribute ot false if not.
  */
-native HasAttributeId(client, attrId, &Handle:data);
+native HasAttributeId(client, attrId, &Handle data);
 
 /**
  * Assigns an attribute (and associated data handle) to a client (by Id)
@@ -1985,7 +1985,7 @@ native HasAttributeId(client, attrId, &Handle:data);
  * @param attrId:   The Id of the attribute returned by CreateAttribute()
  * @return			True on success, false on failure.
  */
-native bool:AssignAttributeId(client, attr, Handle:data);
+native bool AssignAttributeId(client, attr, Handle data);
 
 /**
  * Removes an attribute (and associated data handle) from a client (by Id)
@@ -2004,11 +2004,11 @@ native RemoveAttributeId(client, attr);
  * @param section   Optional section for the config value
  * @noreturn
  */
-native GetConfigNum(const String:key[], defvalue=0, fileId=MAIN,
-                    node=NONE, const String:section[]="");
+native GetConfigNum(const char key[], defvalue=0, fileId=MAIN,
+                    node=NONE, const char section[]="");
 
 /**
- * Retrieves a floating point value from a config file
+ * Retrieves a float ing point value from a config file
  * @param key		Name of the key
  * @param defvalue	Optional default value to use if the key is not found.
  * @param fileId:   Optional fileId for the config value (race ID, SHOPITEM or MAIN)
@@ -2016,8 +2016,8 @@ native GetConfigNum(const String:key[], defvalue=0, fileId=MAIN,
  * @param section   Optional section for the config value
  * @noreturn
  */
-native Float:GetConfigFloat(const String:key[], Float:defvalue=0.0, fileId=MAIN,
-                            node=NONE, const String:section[]="");
+native float GetConfigFloat(const char key[], float defvalue=0.0, fileId=MAIN,
+                            node=NONE, const char section[]="");
 
 /**
  * Retrieves a string value from a config file
@@ -2030,9 +2030,9 @@ native Float:GetConfigFloat(const String:key[], Float:defvalue=0.0, fileId=MAIN,
  * @param section   Optional section for the config value
  * @noreturn
  */
-native GetConfigString(const String:key[], String:value[], maxlength,
-                       const String:defvalue[]="", fileId=MAIN,
-                       node=NONE, const String:section[]="");
+native GetConfigString(const char key[], char value[], maxlength,
+                       const char defvalue[]="", fileId=MAIN,
+                       node=NONE, const char section[]="");
 
 /**
  * Retrieves an array of integer values from a config file
@@ -2045,11 +2045,11 @@ native GetConfigString(const String:key[], String:value[], maxlength,
  * @param section   Optional section for the config value
  * @return          The return value will be the number of elements set.
  */
-native GetConfigArray(const String:key[], any:value[], size, const any:defvalue[],
-                      fileId=MAIN, node=NONE, const String:section[]="");
+native GetConfigArray(const char key[], any:value[], size, const any:defvalue[],
+                      fileId=MAIN, node=NONE, const char section[]="");
 
 /**
- * Retrieves an array of floating point values from a config file
+ * Retrieves an array of float ing point values from a config file
  * @param key		Name of the key
  * @param value	    Array to store values in.
  * @param size      Size of the value array.
@@ -2059,9 +2059,9 @@ native GetConfigArray(const String:key[], any:value[], size, const any:defvalue[
  * @param section   Optional section for the config value
  * @return          The return value will be the number of elements set.
  */
-native GetConfigFloatArray(const String:key[], Float:value[], size,
-                           const Float:defvalue[], fileId=MAIN,
-                           node=NONE, const String:section[]="");
+native GetConfigFloatArray(const char key[], float value[], size,
+                           const float defvalue[], fileId=MAIN,
+                           node=NONE, const char section[]="");
 
 /**
  * Loads a translation file for the Sourcecraft plugin.
@@ -2070,7 +2070,7 @@ native GetConfigFloatArray(const String:key[], Float:value[], size,
  * @param path		Translation file.
  * @noreturn
  */
-native LoadSourceCraftTranslations(const String:file[]);
+native LoadSourceCraftTranslations(const char file[]);
 
 /**
  * Loads a translation file for the Sourcecraft plugin and the calling plugin.
@@ -2079,7 +2079,7 @@ native LoadSourceCraftTranslations(const String:file[]);
  * @param path		Translation file.
  * @noreturn
  */
-stock AdditionalTranslations(const String:file[])
+stock AdditionalTranslations(const char file[])
 {
     LoadTranslations(file);
     LoadSourceCraftTranslations(file);
@@ -2164,7 +2164,7 @@ forward OnItemPurchase(client,item);
  *                       Plugin_Continue to continue with call to OnItemPurchase()
  *                       (even if the cost was altered),
  */
-forward Action:OnItemPurchaseEx(client,item,&bool:use_pcrystals,&cost,&cost_vespene,&cost_xp);
+forward Action:OnItemPurchaseEx(client,item,&bool use_pcrystals,&cost,&cost_vespene,&cost_xp);
 
 /**
  * Gets called when a player no longer has an item.
@@ -2182,7 +2182,7 @@ forward OnItemLost(client,item);
  * @param arg:      Value of the argument (0 for no args)
  * @noreturn
  */
-forward OnUltimateCommand(client,race,bool:pressed,arg);
+forward OnUltimateCommand(client,race,bool pressed,arg);
 
 /**
  * Gets called when XP is given to a player
@@ -2191,7 +2191,7 @@ forward OnUltimateCommand(client,race,bool:pressed,arg);
  * @param taken:  The amount is to be taken instead of given.
  * @return        Plugin_Stop will block XP.
  */
-forward Action:OnXPGiven(client,&amount,bool:taken);
+forward Action:OnXPGiven(client,&amount,bool taken);
 
 /**
  * Gets called when crystals are given to a player
@@ -2200,7 +2200,7 @@ forward Action:OnXPGiven(client,&amount,bool:taken);
  * @param taken:  The amount is to be taken instead of given.
  * @return        Plugin_Stop will block Crystals.
  */
-forward Action:OnCrystalsGiven(client,&amount,bool:taken);
+forward Action:OnCrystalsGiven(client,&amount,bool taken);
 
 /**
  * Gets called when vespene is given to a player
@@ -2209,7 +2209,7 @@ forward Action:OnCrystalsGiven(client,&amount,bool:taken);
  * @param taken:  The amount is to be taken instead of given.
  * @return        Plugin_Stop will block Vespene.
  */
-forward Action:OnVespeneGiven(client,&amount,bool:taken);
+forward Action:OnVespeneGiven(client,&amount,bool taken);
 
 /**
  * Gets called when a player has been Restored
@@ -2227,7 +2227,7 @@ forward Action:OnPlayerRestored(client);
  * @param damagetype: Type of damage.
  * @return            Plugin_Changed will change the damage and Plugin_Handled will block it.
  */      
-forward Action:OnPlayerTakeDamage(victim,&attacker,&inflictor,&Float:damage,&damagetype);  
+forward Action:OnPlayerTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype);  
 
 /**
  * Gets called for player_hurt
@@ -2243,9 +2243,9 @@ forward Action:OnPlayerTakeDamage(victim,&attacker,&inflictor,&Float:damage,&dam
  *                        Plugin_Changed to update health, etc. or
  *                        Plugin_Continue if the event was not handled
  */
-forward Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race,
+forward Action:OnPlayerHurtEvent(Handle event, victim_index, victim_race,
                                  attacker_index, attacker_race, damage,
-                                 absorbed, bool:from_sc);
+                                 absorbed, bool from_sc);
 
 /**
  * Gets called for player_hurt for the assister if OnPlayerHurtEvent() returned Plugin_Continue or Plugin_Changed
@@ -2260,7 +2260,7 @@ forward Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race,
  *                        Plugin_Changed to update health, etc. or
  *                        Plugin_Continue if the event was not handled
  */
-forward Action:OnPlayerAssistEvent(Handle:event, victim_index, victim_race,
+forward Action:OnPlayerAssistEvent(Handle event, victim_index, victim_race,
                                    assister_index, assister_race, damage,
                                    absorbed);
 
@@ -2282,11 +2282,11 @@ forward Action:OnPlayerAssistEvent(Handle:event, victim_index, victim_race,
  * @param melee:          Set to true when a melee weapon (knife, etc) was used.
  * @noreturn
  */
-forward OnPlayerDeathEvent(Handle:event, victim_index, victim_race,
+forward OnPlayerDeathEvent(Handle event, victim_index, victim_race,
                            attacker_index, attacker_race, assister_index,
-                           assister_race, damage, const String:weapon[],
-                           bool:is_equipment, customkill, bool:headshot,
-                           bool:backstab, bool:melee);
+                           assister_race, damage, const char weapon[],
+                           bool is_equipment, customkill, bool headshot,
+                           bool backstab, bool melee);
 
 /**
  * Called when an object, tf2 building, takes damage, requires SDK Hooks.
@@ -2298,7 +2298,7 @@ forward OnPlayerDeathEvent(Handle:event, victim_index, victim_race,
  * @param damagetype: Type of damage.
  * @return            Plugin_Changed will change the damage and Plugin_Handled will block it.
  */      
-forward Action:OnObjectTakeDamage(victim,builder,&attacker,&inflictor,&Float:damage,&damagetype);  
+forward Action:OnObjectTakeDamage(victim,builder,&attacker,&inflictor,&float damage,&damagetype);  
 
 /**
  * Called when an entity, that is not a player, takes damage, requires SDK Hooks.
@@ -2309,7 +2309,7 @@ forward Action:OnObjectTakeDamage(victim,builder,&attacker,&inflictor,&Float:dam
  * @param damagetype: Type of damage.
  * @return            Plugin_Changed will change the damage and Plugin_Handled will block it.
  */      
-forward Action:OnEntityTakeDamage(victim,&attacker,&inflictor,&Float:damage,&damagetype);  
+forward Action:OnEntityTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype);  
 
 /**
  * Gets called when an entity, that is not a player, is hurt
@@ -2324,7 +2324,7 @@ forward Action:OnEntityTakeDamage(victim,&attacker,&inflictor,&Float:damage,&dam
  *                        (OnPlayerHurtEvent() will be called if
  *                         Plugin_Continue is returned)
  */
-forward Action:OnEntityHurtEvent(Handle:event, victim_index, attacker_index,
+forward Action:OnEntityHurtEvent(Handle event, victim_index, attacker_index,
                                  attacker_race, damage);
 
 /**
@@ -2341,7 +2341,7 @@ forward Action:OnEntityHurtEvent(Handle:event, victim_index, attacker_index,
  *                        (OnPlayerAssitEvent() will be called if
  *                         Plugin_Continue is returned)
  */
-forward Action:OnEntityAssistEvent(Handle:event, victim_index, assister_index,
+forward Action:OnEntityAssistEvent(Handle event, victim_index, assister_index,
                                    assister_race, damage);
 
 /**
@@ -2354,7 +2354,7 @@ forward Action:OnEntityAssistEvent(Handle:event, victim_index, assister_index,
  * @param assister_race:  The race of the assister.
  * @noreturn
  */
-forward OnEntityStunnedEvent(Handle:event, victim_index,
+forward OnEntityStunnedEvent(Handle event, victim_index,
                              attacker_index, attacker_race,
                              assister_index, assister_race);
 
@@ -2368,7 +2368,7 @@ forward OnEntityStunnedEvent(Handle:event, victim_index,
  * @param assister_race:  The race of the assister.
  * @noreturn
  */
-forward OnEntityDeathEvent(Handle:event, victim_index,
+forward OnEntityDeathEvent(Handle event, victim_index,
                            attacker_index, attacker_race,
                            assister_index, assister_race);
 
@@ -2379,7 +2379,7 @@ forward OnEntityDeathEvent(Handle:event, victim_index,
  * @param race:           The race of the client.
  * @noreturn
  */
-forward OnPlayerSpawnEvent(Handle:event, client, race);
+forward OnPlayerSpawnEvent(Handle event, client, race);
 
 /**
  * Gets called for player_builtobject, but only when it is 1st built and not when it is moved.
@@ -2389,7 +2389,7 @@ forward OnPlayerSpawnEvent(Handle:event, client, race);
  * @param type:           The type of the object.
  * @noreturn
  */
-forward OnPlayerBuiltObject(Handle:event, client, obj, TFObjectType:type);
+forward OnPlayerBuiltObject(Handle event, client, obj, TFObjectType:type);
 
 /**
  * Gets called when a health cabinet is used (opened)
@@ -2418,7 +2418,7 @@ forward OnHealthUsed(client,entity);
  * @return               Plugin_Stop (or Plugin_Handled) will block cooldown when
  *                       expiredByTime is false or notification when expiredByTime is true
  */
-forward OnCooldownExpired(client,race,upgrade,bool:expiredByTime);
+forward OnCooldownExpired(client,race,upgrade,bool expiredByTime);
 
 /**
  * Do not edit below this line!

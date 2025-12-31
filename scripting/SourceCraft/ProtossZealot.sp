@@ -1,4 +1,4 @@
- /**
+/**
  * vim: set ai et ts=4 sw=4 :
  * File: ProtossZealot.sp
  * Description: The Protoss Zealot race for SourceCraft.
@@ -34,39 +34,39 @@
 #include "effect/HaloSprite"
 #include "effect/SendEffects"
 
-new const String:spawnWav[]         = "sc/pzerdy00.wav";
-new const String:deathWav[]         = "sc/pzedth00.mp3";
+static const char[] spawnWav[]         = "sc/pzerdy00.wav";
+static const char[] deathWav[]         = "sc/pzedth00.mp3";
 
-new const String:g_PsiBladesSound[] = "sc/uzefir00.wav";
+static const char[] g_PsiBladesSound[] = "sc/uzefir00.wav";
 
-new const String:g_ChargeSound[]    = "sc/pzerag00.wav";
+static const char[] g_ChargeSound[]    = "sc/pzerag00.wav";
 
-new const String:g_ChargeAttackSound[][] = { "sc/pzeatt00.wav" ,
+static const char[] g_ChargeAttackSound[][] = { "sc/pzeatt00.wav" ,
                                              "sc/pzeatt01.wav" ,
                                              "sc/pzehit00.wav" };
 
-new raceID, immunityID, legID, shieldsID, chargeID;
-new meleeID, dragoonID, immortalID, stalkerID;
+int raceID, immunityID, legID, shieldsID, chargeID;
+int meleeID, dragoonID, immortalID, stalkerID;
 
-new Float:g_ChargePercent[]         = { 0.10, 0.25, 0.50, 0.75, 1.00 };
+float g_ChargePercent[]         = { 0.10, 0.25, 0.50, 0.75, 1.00 };
 #include "sc/Charge"
 
-new Float:g_PsiBladesPercent[]      = { 0.0, 0.15, 0.30, 0.40, 0.50 };
+float g_PsiBladesPercent[]      = { 0.0, 0.15, 0.30, 0.40, 0.50 };
 
-new Float:g_SpeedLevels[]           = { -1.0, 1.05, 1.10, 1.15, 1.20 };
+float g_SpeedLevels[]           = { -1.0, 1.05, 1.10, 1.15, 1.20 };
 
-new Float:g_InitialShields[]        = { 0.0, 0.10, 0.20, 0.30, 0.40 };
-new Float:g_ShieldsPercent[][2]     = { {0.00, 0.00},
+float g_InitialShields[]        = { 0.0, 0.10, 0.20, 0.30, 0.40 };
+float g_ShieldsPercent[][2]     = { {0.00, 0.00},
                                         {0.00, 0.05},
                                         {0.02, 0.10},
                                         {0.05, 0.15},
                                         {0.08, 0.20} };
 
-new g_dragoonRace = -1;
-new g_stalkerRace = -1;
-new g_immortalRace = -1;
+int g_dragoonRace = -1;
+int g_stalkerRace = -1;
+int g_immortalRace = -1;
 
-public Plugin:myinfo = 
+public Plugin myinfo =
 {
     name = "SourceCraft Race - Protoss Zealot",
     author = "-=|JFH|=-Naris",
@@ -75,7 +75,7 @@ public Plugin:myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.common.phrases.txt");
     LoadTranslations("sc.charge.phrases.txt");
@@ -119,9 +119,9 @@ public OnSourceCraftReady()
     GetConfigFloatArray("shields_amount", g_InitialShields, sizeof(g_InitialShields),
                         g_InitialShields, raceID, shieldsID);
 
-    for (new level=0; level < sizeof(g_ShieldsPercent); level++)
+    for (int level=0; level < sizeof(g_ShieldsPercent); level++)
     {
-        decl String:key[32];
+        char key[32];
         Format(key, sizeof(key), "shields_percent_level_%d", level);
         GetConfigFloatArray(key, g_ShieldsPercent[level], sizeof(g_ShieldsPercent[]),
                             g_ShieldsPercent[level], raceID, shieldsID);
@@ -137,7 +137,7 @@ public OnSourceCraftReady()
                         g_ChargePercent, raceID, chargeID);
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupSmokeSprite();
     SetupHaloSprite();
@@ -154,7 +154,7 @@ public OnMapStart()
     SetupSound(g_PsiBladesSound);
 
     SetupSound(g_ChargeSound);
-    for (new i = 0; i < sizeof(g_ChargeAttackSound); i++)
+    for (int i = 0; i < sizeof(g_ChargeAttackSound); i++)
         SetupSound(g_ChargeAttackSound[i]);
 }
 
@@ -163,12 +163,12 @@ public OnPlayerAuthed(client)
     m_ChargeActive[client] = false;
 }
 
-public OnClientDisconnect(client)
+public void OnClientDisconnect(client)
 {
     m_ChargeActive[client] = false;
 }
 
-public Action:OnRaceDeselected(client,oldrace,newrace)
+public Action OnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
@@ -176,7 +176,7 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
         SetSpeed(client,-1.0, true);
 
         // Turn off Immunities
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, false);
 
         return Plugin_Handled;
@@ -218,7 +218,7 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
     }
 }
 
-public Action:OnRaceSelected(client,oldrace,newrace)
+public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
@@ -229,13 +229,13 @@ public Action:OnRaceSelected(client,oldrace,newrace)
             PrepareAndEmitSoundToAll(spawnWav, client);
 
             // Turn on Immunities
-            new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+            int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
             DoImmunity(client, immunity_level, true);
 
-            new leg_level = GetUpgradeLevel(client,raceID,legID);
+            int leg_level = GetUpgradeLevel(client,raceID,legID);
             SetSpeedBoost(client, leg_level, true, g_SpeedLevels);
 
-            new shields_level = GetUpgradeLevel(client,raceID,shieldsID);
+            int shields_level = GetUpgradeLevel(client,raceID,shieldsID);
             SetupShields(client, shields_level, g_InitialShields, g_ShieldsPercent);
         }
         return Plugin_Handled;
@@ -262,7 +262,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
 public OnItemPurchase(client,item)
 {
-    new race=GetRace(client);
+    int race=GetRace(client);
     if (race == raceID && IsValidClientAlive(client))
     {
         if (g_bootsItem < 0)
@@ -270,14 +270,14 @@ public OnItemPurchase(client,item)
 
         if (item == g_bootsItem)
         {
-            new leg_level = GetUpgradeLevel(client,race,legID);
+            int leg_level = GetUpgradeLevel(client,race,legID);
             if (leg_level > 0)
                 SetSpeedBoost(client, leg_level, true, g_SpeedLevels);
         }
     }
 }
 
-public OnUltimateCommand(client,race,bool:pressed,arg)
+public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (pressed && race==raceID && IsValidClientAlive(client))
     {
@@ -285,22 +285,22 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
         {
             case 4:
             {
-                new stalker_level = GetUpgradeLevel(client,race,stalkerID);
+                int stalker_level = GetUpgradeLevel(client,race,stalkerID);
                 if (stalker_level > 0)
                     SummonStalker(client);
                 else
                 {
-                    new immortal_level = GetUpgradeLevel(client,race,immortalID);
+                    int immortal_level = GetUpgradeLevel(client,race,immortalID);
                     if (immortal_level > 0)
                         SummonImmortal(client);
                     else
                     {
-                        new dragoon_level = GetUpgradeLevel(client,race,dragoonID);
+                        int dragoon_level = GetUpgradeLevel(client,race,dragoonID);
                         if (dragoon_level > 0)
                             SummonDragoon(client);
                         else
                         {
-                            new charge_level = GetUpgradeLevel(client,race,chargeID);
+                            int charge_level = GetUpgradeLevel(client,race,chargeID);
                             if (charge_level)
                                 Charge(client, race, chargeID, charge_level, 0, 10, 75.0, 50.0);
                         }
@@ -309,22 +309,22 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             }
             case 3:
             {
-                new immortal_level = GetUpgradeLevel(client,race,immortalID);
+                int immortal_level = GetUpgradeLevel(client,race,immortalID);
                 if (immortal_level > 0)
                     SummonImmortal(client);
                 else
                 {
-                    new dragoon_level = GetUpgradeLevel(client,race,dragoonID);
+                    int dragoon_level = GetUpgradeLevel(client,race,dragoonID);
                     if (dragoon_level > 0)
                         SummonDragoon(client);
                     else
                     {
-                        new charge_level=GetUpgradeLevel(client,race,chargeID);
+                        int charge_level=GetUpgradeLevel(client,race,chargeID);
                         if (charge_level)
                             Charge(client, race, chargeID, charge_level, 0, 10, 75.0, 50.0);
                         else
                         {
-                            new stalker_level = GetUpgradeLevel(client,race,stalkerID);
+                            int stalker_level = GetUpgradeLevel(client,race,stalkerID);
                             if (stalker_level > 0)
                                 SummonStalker(client);
                         }
@@ -333,22 +333,22 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             }
             case 2:
             {
-                new dragoon_level = GetUpgradeLevel(client,race,dragoonID);
+                int dragoon_level = GetUpgradeLevel(client,race,dragoonID);
                 if (dragoon_level > 0)
                     SummonDragoon(client);
                 else
                 {
-                    new charge_level=GetUpgradeLevel(client,race,chargeID);
+                    int charge_level=GetUpgradeLevel(client,race,chargeID);
                     if (charge_level)
                         Charge(client, race, chargeID, charge_level, 0, 10, 75.0, 50.0);
                     else
                     {
-                        new immortal_level = GetUpgradeLevel(client,race,immortalID);
+                        int immortal_level = GetUpgradeLevel(client,race,immortalID);
                         if (immortal_level > 0)
                             SummonImmortal(client);
                         else
                         {
-                            new stalker_level = GetUpgradeLevel(client,race,stalkerID);
+                            int stalker_level = GetUpgradeLevel(client,race,stalkerID);
                             if (stalker_level > 0)
                                 SummonStalker(client);
                         }
@@ -357,22 +357,22 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             }
             default:
             {
-                new charge_level=GetUpgradeLevel(client,race,chargeID);
+                int charge_level=GetUpgradeLevel(client,race,chargeID);
                 if (charge_level)
                     Charge(client, race, chargeID, charge_level, 0, 10, 75.0, 50.0);
                 else
                 {
-                    new dragoon_level = GetUpgradeLevel(client,race,dragoonID);
+                    int dragoon_level = GetUpgradeLevel(client,race,dragoonID);
                     if (dragoon_level > 0)
                         SummonDragoon(client);
                     else
                     {
-                        new immortal_level = GetUpgradeLevel(client,race,immortalID);
+                        int immortal_level = GetUpgradeLevel(client,race,immortalID);
                         if (immortal_level > 0)
                             SummonImmortal(client);
                         else
                         {
-                            new stalker_level = GetUpgradeLevel(client,race,stalkerID);
+                            int stalker_level = GetUpgradeLevel(client,race,stalkerID);
                             if (stalker_level > 0)
                                 SummonStalker(client);
                         }
@@ -383,7 +383,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
     }
 }
 
-public OnPlayerSpawnEvent(Handle:event, client, race)
+public OnPlayerSpawnEvent(Handle event, client, race)
 {
     if (race == raceID)
     {
@@ -391,25 +391,25 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
 
         PrepareAndEmitSoundToAll(spawnWav, client);
 
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
-        new leg_level = GetUpgradeLevel(client,raceID,legID);
+        int leg_level = GetUpgradeLevel(client,raceID,legID);
         SetSpeedBoost(client, leg_level, true, g_SpeedLevels);
 
-        new shields_level = GetUpgradeLevel(client,raceID,shieldsID);
+        int shields_level = GetUpgradeLevel(client,raceID,shieldsID);
         SetupShields(client, shields_level, g_InitialShields, g_ShieldsPercent);
     }
 }
 
-public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacker_index,
-                                attacker_race, damage, absorbed, bool:from_sc)
+public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
+                                attacker_race, damage, absorbed, bool from_sc)
 {
     if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index &&
         attacker_race == raceID)
     {
-        new blades_level=GetUpgradeLevel(attacker_index,raceID,meleeID);
+        int blades_level=GetUpgradeLevel(attacker_index,raceID,meleeID);
         if (blades_level > 0)
         {
             if (MeleeAttack(raceID, meleeID, blades_level, event, damage+absorbed,
@@ -423,10 +423,10 @@ public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacke
     return Plugin_Continue;
 }
 
-public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_index,
+public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_index,
                           attacker_race, assister_index, assister_race, damage,
-                          const String:weapon[], bool:is_equipment, customkill,
-                          bool:headshot, bool:backstab, bool:melee)
+                          const char[] weapon, bool is_equipment, customkill,
+                          bool headshot, bool backstab, bool melee)
 {
     if (victim_race == raceID)
     {
@@ -468,7 +468,7 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
     }
 }
 
-DoImmunity(client, level, bool:value)
+void DoImmunity(client, level, bool value)
 {
     SetImmunity(client,Immunity_HealthTaking, (value && level >= 1));
     SetImmunity(client,Immunity_Theft, (value && level >= 2));
@@ -477,7 +477,7 @@ DoImmunity(client, level, bool:value)
 
     if (value && IsValidClientAlive(client))
     {
-        new Float:start[3];
+        float start[3];
         GetClientAbsOrigin(client, start);
 
         static const color[4] = { 0, 255, 50, 128 };
@@ -487,14 +487,14 @@ DoImmunity(client, level, bool:value)
     }
 }
 
-SummonDragoon(client)
+void SummonDragoon(client)
 {
     if (g_dragoonRace < 0)
         g_dragoonRace = FindRace("dragoon");
 
     if (g_dragoonRace < 0)
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceID, dragoonID, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "IsNotAvailable", upgradeName);
         LogError("***The Protoss Dragoon race is not Available!");
@@ -508,7 +508,7 @@ SummonDragoon(client)
     }
     else if (CanInvokeUpgrade(client, raceID, dragoonID))
     {
-        new Float:clientLoc[3];
+        float clientLoc[3];
         GetClientAbsOrigin(client, clientLoc);
         clientLoc[2] += 40.0; // Adjust position to the middle
 
@@ -524,14 +524,14 @@ SummonDragoon(client)
     }
 }
 
-SummonImmortal(client)
+void SummonImmortal(client)
 {
     if (g_immortalRace < 0)
         g_immortalRace = FindRace("immortal");
 
     if (g_immortalRace < 0)
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceID, immortalID, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "IsNotAvailable", upgradeName);
         LogError("***The Protoss Immortal race is not Available!");
@@ -545,7 +545,7 @@ SummonImmortal(client)
     }
     else if (CanInvokeUpgrade(client, raceID, immortalID))
     {
-        new Float:clientLoc[3];
+        float clientLoc[3];
         GetClientAbsOrigin(client, clientLoc);
         clientLoc[2] += 40.0; // Adjust position to the middle
 
@@ -561,14 +561,14 @@ SummonImmortal(client)
     }
 }
 
-SummonStalker(client)
+void SummonStalker(client)
 {
     if (g_stalkerRace < 0)
         g_stalkerRace = FindRace("stalker");
 
     if (g_stalkerRace < 0)
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceID, stalkerID, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "IsNotAvailable", upgradeName);
         LogError("***The Protoss Stalker race is not Available!");
@@ -582,7 +582,7 @@ SummonStalker(client)
     }
     else if (CanInvokeUpgrade(client, raceID, stalkerID))
     {
-        new Float:clientLoc[3];
+        float clientLoc[3];
         GetClientAbsOrigin(client, clientLoc);
         clientLoc[2] += 40.0; // Adjust position to the middle
 

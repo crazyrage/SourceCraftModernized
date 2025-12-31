@@ -26,7 +26,7 @@
  * @param vec			Destination vector to store the origin vector.
  * @noreturn
  */
-stock GetEntityAbsOrigin(entity, Float:vec[3])
+stock GetEntityAbsOrigin(entity, float vec[3])
 {
     if (IsClient(entity))
         GetClientAbsOrigin(entity, vec);
@@ -45,7 +45,7 @@ stock GetEntityAbsOrigin(entity, Float:vec[3])
 * @param inGameOnly         If false connecting players are also counted.
 * @return                   Client count in the server.
 */
-stock CountClients(team=COUNT_ALL, bool:countFakeClients=true, bool:inGameOnly=true)
+stock CountClients(team=COUNT_ALL, bool countFakeClients=true, bool inGameOnly=true)
 {
     if (countFakeClients && team == COUNT_ALL)
         return GetClientCount(inGameOnly);
@@ -87,7 +87,7 @@ stock CountClients(team=COUNT_ALL, bool:countFakeClients=true, bool:inGameOnly=t
 * @param inGameOnly         If false connecting players are also counted.
 * @return                   Client count in the server.
 */
-stock bool:CheckClientCount(num, team=COUNT_ALL, bool:countFakeClients=true)
+stock bool CheckClientCount(num, team=COUNT_ALL, bool countFakeClients=true)
 {
     if (countFakeClients && team == COUNT_ALL)
         return (GetClientCount() >= num);

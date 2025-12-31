@@ -15,8 +15,8 @@
 
 #include "sc/client"
 
-stock const String:cureWav[] = "sc/ptehal01.wav";
-stock const String:hallucinateWav[] = "sc/ptehal00.wav";
+stock const char cureWav[] = "sc/ptehal01.wav";
+stock const char hallucinateWav[] = "sc/ptehal00.wav";
 
 stock SetupHallucinate()
 {
@@ -24,7 +24,7 @@ stock SetupHallucinate()
     SetupSound(hallucinateWav);
 }
 
-stock bool:Hallucinate(victim_index, index, level, Float:amount,
+stock bool Hallucinate(victim_index, index, level, float amount,
                        const hallucinateChance[])
 {
     if (IsValidClient(victim_index) &&
@@ -36,7 +36,7 @@ stock bool:Hallucinate(victim_index, index, level, Float:amount,
     {
         if (GetRandomInt(1,100) <= hallucinateChance[level])
         {
-            new Float:energy = GetEnergy(index);
+            float energy = GetEnergy(index);
             if (energy >= amount)
             {
                 if (GetSetting(victim_index,Remove_Queasiness) ||
@@ -75,7 +75,7 @@ stock bool:Hallucinate(victim_index, index, level, Float:amount,
     return false;
 }
 
-public Action:CurePlayer(Handle:timer,any:userid)
+public Action CurePlayer(Handle timer,any:userid)
 {
     new client = GetClientOfUserId(userid);
     if (client > 0)
@@ -86,7 +86,7 @@ public Action:CurePlayer(Handle:timer,any:userid)
     return Plugin_Stop;
 }
 
-public Action:UnblindPlayer(Handle:timer,any:userid)
+public Action UnblindPlayer(Handle timer,any:userid)
 {
     new client = GetClientOfUserId(userid);
     if (IsValidClient(client))

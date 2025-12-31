@@ -10,12 +10,12 @@
  *
  * @param client: client index
  */
-native bool:War3_bots_distribute_sp(client);
+native bool War3_bots_distribute_sp(client);
 
 /**
  * Make a fake client pick a random race he has access to and pick a random level
  *
  * @param client: client index
  */
-native bool:War3_bots_pickrace(client);
+native bool War3_bots_pickrace(client);
 #endif

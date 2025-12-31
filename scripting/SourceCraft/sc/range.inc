@@ -10,42 +10,42 @@
 #endif
 #define _range_included
 
-stock Float:DistanceBetween(const Float:startvec[3],const Float:endvec[3])
+stock float DistanceBetween(const float startvec[3],const float endvec[3])
 {
-    new Float:distance = GetVectorDistance(startvec,endvec);
+    float distance = GetVectorDistance(startvec,endvec);
     if (distance < 0)
         distance *= -1;
 
     return distance;                                  
 }
 
-stock bool:IsPointInRange(const Float:start[3], const Float:end[3],Float:maxdistance)
+stock bool IsPointInRange(const float start[3], const float end[3],float maxdistance)
 {
     return (DistanceBetween(start,end)<maxdistance);
 }
 
-stock bool:IsInRange(client,index,Float:maxdistance)
+stock bool IsInRange(client,index,float maxdistance)
 {
-    new Float:start[3];
-    new Float:end[3];
+    float start[3];
+    float end[3];
     GetClientAbsOrigin(client,start);
     GetClientAbsOrigin(index,end);
     return (DistanceBetween(start,end)<maxdistance);
 }
 
-stock PowerOfRange(Float:location[3],Float:radius,Float:check_location[3],maxhp,
-                   Float:factor=0.20,bool:limit=true)
+stock PowerOfRange(float location[3],float radius,float check_location[3],maxhp,
+                   float factor=0.20,bool limit=true)
 {
     if (radius <= 0.0)
         return maxhp;
     else
     {
-        new Float:distance=DistanceBetween(location,check_location);
+        float distance=DistanceBetween(location,check_location);
         if (limit && distance > radius)
             return 0;
         else
         {
-            new Float:healthtakeaway=1-FloatDiv(distance,radius)+factor;
+            float healthtakeaway=1-FloatDiv(distance,radius)+factor;
             return (healthtakeaway > 0.0) ? RoundFloat(float(maxhp)*healthtakeaway) : 0;
         }
     }

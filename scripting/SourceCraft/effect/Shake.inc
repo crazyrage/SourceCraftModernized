@@ -14,10 +14,10 @@
 #include <lib/Hallucinate>
 #include "effect/message"
 
-stock Shake(const clients[],numClients,on_off=0,Float:amplitude=30.0,Float:duration=1.0,Float:frequency=30.0)
+stock Shake(const clients[],numClients,on_off=0,float amplitude=30.0,float duration=1.0,float frequency=30.0)
 {
-    new Handle:hBf=StartMessage("Shake", clients, numClients);
-    if(hBf!=INVALID_HANDLE)
+    Handle hBf=StartMessage("Shake", clients, numClients);
+    if(hBf!=null)
     {
         BfWriteByte(hBf, on_off);
         BfWriteFloat(hBf,amplitude);
@@ -27,10 +27,10 @@ stock Shake(const clients[],numClients,on_off=0,Float:amplitude=30.0,Float:durat
     }
 }
 
-stock ShakeOne(client,on_off=0,Float:amplitude=30.0,Float:duration=1.0,Float:frequency=30.0)
+stock ShakeOne(client,on_off=0,float amplitude=30.0,float duration=1.0,float frequency=30.0)
 {
-    new Handle:hBf=StartMessageOne("Shake", client);
-    if(hBf!=INVALID_HANDLE)
+    Handle hBf=StartMessageOne("Shake", client);
+    if(hBf!=null)
     {
         BfWriteByte(hBf, on_off);
         BfWriteFloat(hBf,amplitude);
@@ -40,11 +40,11 @@ stock ShakeOne(client,on_off=0,Float:amplitude=30.0,Float:duration=1.0,Float:fre
     }
 }
 
-stock ShakeAll(on_off,Float:amplitude=30.0,Float:duration=1.0,Float:frequency=30.0)
+stock ShakeAll(on_off,float amplitude=30.0,float duration=1.0,float frequency=30.0)
 {
-    new Handle:hBf=(on_off) ? StartMessageAll("Shake")
-                            : StartMessageAllLiving("Shake");
-    if(hBf!=INVALID_HANDLE)
+    Handle hBf=(on_off) ? StartMessageAll("Shake")
+                        : StartMessageAllLiving("Shake");
+    if(hBf!=null)
     {
         BfWriteByte(hBf, on_off);
         BfWriteFloat(hBf,amplitude);
@@ -54,14 +54,14 @@ stock ShakeAll(on_off,Float:amplitude=30.0,Float:duration=1.0,Float:frequency=30
     }
 }
 
-stock ShakeOneAllowed(client,on_off=0,Float:amplitude=30.0,Float:duration=1.0,Float:frequency=30.0)
+stock ShakeOneAllowed(client,on_off=0,float amplitude=30.0,float duration=1.0,float frequency=30.0)
 {
     if (!IsFakeClient(client) &&
         !GetSetting(client,Remove_Queasiness) &&
         !GetImmunity(client,Immunity_Drugs))
     {
-        new Handle:hBf=StartMessageOne("Shake", client);
-        if(hBf!=INVALID_HANDLE)
+        Handle hBf=StartMessageOne("Shake", client);
+        if(hBf!=null)
         {
             BfWriteByte(hBf, on_off);
             BfWriteFloat(hBf,amplitude);
@@ -72,11 +72,11 @@ stock ShakeOneAllowed(client,on_off=0,Float:amplitude=30.0,Float:duration=1.0,Fl
     }
 }
 
-stock ShakeAllAllowed(on_off,Float:amplitude=30.0,Float:duration=1.0,Float:frequency=30.0)
+stock ShakeAllAllowed(on_off,float amplitude=30.0,float duration=1.0,float frequency=30.0)
 {
-    new Handle:hBf=(on_off) ? StartMessageAll("Shake")
-                            : StartMessageAllAllowed("Shake");
-    if(hBf!=INVALID_HANDLE)
+    Handle hBf=(on_off) ? StartMessageAll("Shake")
+                        : StartMessageAllAllowed("Shake");
+    if(hBf!=null)
     {
         BfWriteByte(hBf, on_off);
         BfWriteFloat(hBf,amplitude);
@@ -94,7 +94,7 @@ stock ShakeAllAllowed(on_off,Float:amplitude=30.0,Float:duration=1.0,Float:frequ
  * @param noise: Optional noise value.
  * @noreturn
  */
-stock ShakeScreen(client,Float:duration=1.0,Float:magnitude=40.0,Float:noise=30.0)
+stock ShakeScreen(client,float duration=1.0,float magnitude=40.0,float noise=30.0)
 {
     if (!IsFakeClient(client))
     {
@@ -113,9 +113,9 @@ stock ShakeScreen(client,Float:duration=1.0,Float:magnitude=40.0,Float:noise=30.
     }
 }
 
-public Action:RemoveBlind(Handle:timer,any:userid)
+public Action RemoveBlind(Handle timer,any userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (client > 0 && IsValidClient(client))
     {
         PerformBlind(client, 0);

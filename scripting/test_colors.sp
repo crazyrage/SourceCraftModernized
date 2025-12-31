@@ -18,7 +18,7 @@
 
 *****************************************************************/
 
-public Plugin:myinfo = {
+public Plugin myinfo = {
 	name = "smlib - color tests",
 	author = "Berni",
 	description = "",
@@ -50,7 +50,7 @@ public Plugin:myinfo = {
 
 *****************************************************************/
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
     MarkNativeAsOptional("GetUserMessageType");
     return APLRes_Success;
@@ -72,9 +72,9 @@ public OnPluginStart()
 
 ****************************************************************/
 
-public Action:Command_TestColors(client, args)
+public Action Command_TestColors(int client, int args)
 {
-	decl String:arguments[255];
+	char arguments[255];
 
 	GetCmdArgString(arguments, sizeof(arguments));
 	Client_PrintToChat(client, true, "%s", arguments);

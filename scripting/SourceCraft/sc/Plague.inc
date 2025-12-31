@@ -16,30 +16,30 @@
 #include "sc/PlagueInfect"
 
 stock static m_raceId, m_upgradeId;
-stock static String:m_PlagueShort[64];
-stock static Handle:m_PlagueTimers[MAXPLAYERS+1];
+stock static char m_PlagueShort[64];
+stock static Handle m_PlagueTimers[MAXPLAYERS+1];
 
-stock SetupPlague(const String:plagueSound[])
+stock SetupPlague(const char plagueSound[])
 {
     //SetupDeniedSound();
     SetupSound(plagueSound);
 }
 
 stock Plague(client, raceId, upgradeId, level, PlagueType:type=NormalPlague,
-             bool:targeted=false, Float:plagueRange[], const String:plagueSound[],
-             const String:plagueShort[])
+             bool targeted=false, float plagueRange[], const char plagueSound[],
+             const char plagueShort[])
 {
     if (IsEntLimitReached(.client=client,
                           .message="Unable to spawn anymore plague clouds"))
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "NoEntitiesAvailable");
     }
     else if (GetRestriction(client,Restriction_NoUltimates) ||
              GetRestriction(client,Restriction_Stunned))
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
         PrepareAndEmitSoundToClient(client,deniedWav);
@@ -73,19 +73,19 @@ stock Plague(client, raceId, upgradeId, level, PlagueType:type=NormalPlague,
 
         if (CanInvokeUpgrade(client, raceId, upgradeId))
         {
-            new Float:targetLoc[3];
+            float targetLoc[3];
             if (targeted)
                 TraceAimPosition(client, targetLoc, true);
             else
                 GetClientAbsOrigin(client, targetLoc);
 
-            new String:originData[64];
+            char originData[64];
             Format(originData, sizeof(originData), "%f %f %f",
                    targetLoc[0], targetLoc[1], targetLoc[2]);
 
             // Create the Plague Cloud
-            new String:size[5];
-            new String:name[128];
+            char size[5];
+            char name[128];
             Format(size, sizeof(size), "%1.0f", plagueRange[level]);
             Format(name, sizeof(name), "Plague%i", client);
             new cloud = CreateEntityByName("env_smokestack");
@@ -109,26 +109,26 @@ stock Plague(client, raceId, upgradeId, level, PlagueType:type=NormalPlague,
 
                 PrepareAndEmitSoundToAll(plagueSound, client, .origin=targetLoc);
 
-                decl String:upgradeName[64];
+                char upgradeName[64];
                 GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName));
                 DisplayMessage(client,Display_Ultimate,"%t", "Invoked", upgradeName);
                 CreateCooldown(client, raceId, upgradeId);
 
-                new Float:length = 5.0 * float(level);
-                new Handle:entitypack = CreateDataPack();
+                float length = 5.0 * float(level);
+                Handle entitypack = CreateDataPack();
                 WritePackCell(entitypack, EntIndexToEntRef(cloud));
                 WritePackCell(entitypack, client);
                 CreateTimer(length, RemovePlague, entitypack);
 
-                if (m_PlagueTimers[client] == INVALID_HANDLE)
+                if (m_PlagueTimers[client] == null)
                 {
-                    new Handle:pack;
+                    Handle pack;
                     m_raceId = raceId;
                     m_upgradeId = upgradeId;
                     strcopy(m_PlagueShort, sizeof(m_PlagueShort), plagueShort);
                     m_PlagueTimers[client] = CreateDataTimer(0.2, PlagueTimer, pack,
                                                              TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
-                    if (pack != INVALID_HANDLE)
+                    if (pack != null)
                     {
                         WritePackCell(pack, client);
                         WritePackCell(pack, _:type);
@@ -146,9 +146,9 @@ stock Plague(client, raceId, upgradeId, level, PlagueType:type=NormalPlague,
     }
 }
 
-public Action:PlagueTimer(Handle:timer, Handle:pack)
+public Action PlagueTimer(Handle timer, Handle pack)
 {
-    if (pack != INVALID_HANDLE)
+    if (pack != null)
     {
         ResetPack(pack);
         new client=ReadPackCell(pack);
@@ -160,15 +160,15 @@ public Action:PlagueTimer(Handle:timer, Handle:pack)
                 if (level > 0)
                 {
                     new PlagueType:type = PlagueType:ReadPackCell(pack);
-                    new Float:range     = ReadPackFloat(pack);
-                    new Float:endTime   = ReadPackFloat(pack);
+                    float range     = ReadPackFloat(pack);
+                    float endTime   = ReadPackFloat(pack);
 
-                    new Float:targetLoc[3];
+                    float targetLoc[3];
                     targetLoc[0] = ReadPackFloat(pack);
                     targetLoc[1] = ReadPackFloat(pack);
                     targetLoc[2] = ReadPackFloat(pack);
 
-                    new Float:indexLoc[3];
+                    float indexLoc[3];
                     new team = GetClientTeam(client);
                     for (new index=1;index<=MaxClients;index++)
                     {
@@ -195,12 +195,12 @@ public Action:PlagueTimer(Handle:timer, Handle:pack)
                 }
             }
         }
-        m_PlagueTimers[client] = INVALID_HANDLE;
+        m_PlagueTimers[client] = null;
     }
     return Plugin_Stop;
 }
 
-public Action:RemovePlague(Handle:timer, Handle:entitypack)
+public Action RemovePlague(Handle timer, Handle entitypack)
 {
     ResetPack(entitypack);
     new cloud = EntRefToEntIndex(ReadPackCell(entitypack));
@@ -215,7 +215,7 @@ public Action:RemovePlague(Handle:timer, Handle:entitypack)
     }
 }
 
-public Action:KillPlague(Handle:timer, Handle:entitypack)
+public Action KillPlague(Handle timer, Handle entitypack)
 {
     ResetPack(entitypack);
 
@@ -228,9 +228,9 @@ public Action:KillPlague(Handle:timer, Handle:entitypack)
 
 stock ResetPlague(client)
 {
-    if (m_PlagueTimers[client] != INVALID_HANDLE)
+    if (m_PlagueTimers[client] != null)
     {
         KillTimer(m_PlagueTimers[client], true);
-        m_PlagueTimers[client] = INVALID_HANDLE;	
+        m_PlagueTimers[client] = null;	
     }
 }

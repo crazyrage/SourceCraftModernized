@@ -16,7 +16,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of the Uber Charger plugin.
  * @return		    	none
  */
-native ControlUberCharger(bool:plugin_only=true);
+native ControlUberCharger(bool plugin_only=true);
 
 /**
  * Give an uber charger to the player
@@ -26,7 +26,7 @@ native ControlUberCharger(bool:plugin_only=true);
  * @param amount    Set to amount of uber per heartbeat, 0.0 = default amount from convar.
  * @return			none
  */
-native SetUberCharger(client,bool:arm=true,Float:amount=0.0);
+native SetUberCharger(client,bool arm=true,Float amount=0.0);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

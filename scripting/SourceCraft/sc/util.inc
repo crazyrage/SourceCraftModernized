@@ -18,11 +18,11 @@
 enum Mod { undetected, tf2, cstrike, dod, hl2mp, insurgency, other };
 stock Mod:GameType = undetected;
 
-stock Mod:GetGameType()
+stock Mod GetGameType()
 {
     if (GameType == undetected)
     {
-        new String:modname[30];
+        char modname[30];
         GetGameFolderName(modname, sizeof(modname));
         if (StrEqual(modname,"cstrike",false))
             GameType=cstrike;
@@ -40,11 +40,11 @@ stock Mod:GetGameType()
     return GameType;
 }
 
-stock bool:SetupSound(const String:wav[], bool:preload=false, bool:download=false)
+stock bool SetupSound(const char[] wav, bool preload=false, bool download=false)
 {
     if (download)
     {
-        decl String:file[PLATFORM_MAX_PATH+1];
+        char file[PLATFORM_MAX_PATH+1];
         Format(file, PLATFORM_MAX_PATH, "sound/%s", wav);
 
         if(FileExists(file))
@@ -53,7 +53,7 @@ stock bool:SetupSound(const String:wav[], bool:preload=false, bool:download=fals
     return PrecacheSound(wav,preload);
 }
 
-stock SetupModel(const String:model[], bool:preload=false, bool:download=false)
+stock SetupModel(const char[] model, bool preload=false, bool download=false)
 {
     if (download && FileExists(model))
         AddFileToDownloadsTable(model);

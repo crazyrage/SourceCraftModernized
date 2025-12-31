@@ -38,13 +38,13 @@
 
 #include "gametype"
 
-new Handle:g_DrugTimers[MAXPLAYERS+1];
-new Float:g_DrugAngles[20] = {0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 20.0, 15.0, 10.0, 5.0, 0.0, -5.0, -10.0, -15.0, -20.0, -25.0, -20.0, -15.0, -10.0, -5.0};
+Handle g_DrugTimers[MAXPLAYERS+1];
+float g_DrugAngles[20] = {0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 20.0, 15.0, 10.0, 5.0, 0.0, -5.0, -10.0, -15.0, -20.0, -25.0, -20.0, -15.0, -10.0, -5.0};
 
 // UserMessageId for Fade.
-new UserMsg:g_FadeUserMsgId;
+UserMsg g_FadeUserMsgId;
 
-public Plugin:myinfo = 
+public Plugin myinfo =
 {
     name = "drug",
     author = "SourceMod Team / -=|JFH|=- Naris",
@@ -53,7 +53,7 @@ public Plugin:myinfo =
     url = "http://sourcemod.net/"
 };
 
-public bool:AskPluginLoad(Handle:myself,bool:late,String:error[],err_max)
+public bool AskPluginLoad(Handle myself,bool late,char[] error,err_max)
 {
     CreateNative("PerformDrug",Native_PerformDrug);
     CreateNative("PerformBlind",Native_PerformBlind);
@@ -93,14 +93,14 @@ public OnClientDisconnect(client)
     PerformDrug(client, 0);
 }
 
-public Action:Event_PlayerDeath(Handle:event,const String:name[],bool:dontBroadcast)
+public Action Event_PlayerDeath(Handle event,const char[] name,bool dontBroadcast)
 {
-    new client=GetClientOfUserId(GetEventInt(event,"userid"));
+    int client=GetClientOfUserId(GetEventInt(event,"userid"));
     PerformDrug(client, 0);
     return Plugin_Handled;
 }
 
-public Action:Event_RoundEnd(Handle:event,const String:name[],bool:dontBroadcast)
+public Action Event_RoundEnd(Handle event,const char[] name,bool dontBroadcast)
 {
     KillAllDrugs();
     return Plugin_Handled;
@@ -115,19 +115,19 @@ KillDrug(client)
 {
     KillDrugTimer(client);
 
-    new Float:pos[3];
+    float pos[3];
     GetClientAbsOrigin(client, pos);
-    new Float:angs[3];
+    float angs[3];
     GetClientEyeAngles(client, angs);
 
     angs[2] = 0.0;
 
     TeleportEntity(client, pos, angs, NULL_VECTOR);	
 
-    new clients[2];
+    int clients[2];
     clients[0] = client;	
 
-    new Handle:message = StartMessageEx(g_FadeUserMsgId, clients, 1);
+    Handle message = StartMessageEx(g_FadeUserMsgId, clients, 1);
     BfWriteShort(message, 1536);
     BfWriteShort(message, 1536);
     BfWriteShort(message, (0x0001 | 0x0010));
@@ -141,15 +141,15 @@ KillDrug(client)
 KillDrugTimer(client)
 {
     KillTimer(g_DrugTimers[client]);
-    g_DrugTimers[client] = INVALID_HANDLE;	
+    g_DrugTimers[client] = null;	
 }
 
 KillAllDrugs()
 {
-    new maxclients = GetMaxClients();
-    for (new i = 1; i <= maxclients; i++)
+    int maxclients = GetMaxClients();
+    for (int i = 1; i <= maxclients; i++)
     {
-        if (g_DrugTimers[i] != INVALID_HANDLE)
+        if (g_DrugTimers[i] != null)
         {
             if(IsClientInGame(i))
                 KillDrug(i);
@@ -165,7 +165,7 @@ bool:PerformDrug(target, toggle)
     {
         case (2):
         {
-            if (g_DrugTimers[target] == INVALID_HANDLE)
+            if (g_DrugTimers[target] == null)
             {
                 CreateDrug(target);
                 return true;
@@ -176,7 +176,7 @@ bool:PerformDrug(target, toggle)
 
         case (1):
         {
-            if (g_DrugTimers[target] == INVALID_HANDLE)
+            if (g_DrugTimers[target] == null)
             {
                 CreateDrug(target);
                 return true;
@@ -185,7 +185,7 @@ bool:PerformDrug(target, toggle)
 
         case (0):
         {
-            if (g_DrugTimers[target] != INVALID_HANDLE)
+            if (g_DrugTimers[target] != null)
                 KillDrug(target);
         }
     }
@@ -194,10 +194,10 @@ bool:PerformDrug(target, toggle)
 
 PerformBlind(target, amount)
 {
-	new targets[2];
+	int targets[2];
 	targets[0] = target;
 	
-	new Handle:message = StartMessageEx(g_FadeUserMsgId, targets, 1);
+	Handle message = StartMessageEx(g_FadeUserMsgId, targets, 1);
 	BfWriteShort(message, 1536);
 	BfWriteShort(message, 1536);
 	
@@ -214,7 +214,7 @@ PerformBlind(target, amount)
 	EndMessage();
 }
 
-public Action:Timer_Drug(Handle:timer, any:client)
+public Action Timer_Drug(Handle timer, any client)
 {
     if (!IsClientInGame(client))
     {
@@ -228,20 +228,20 @@ public Action:Timer_Drug(Handle:timer, any:client)
         return Plugin_Handled;
     }
 
-    new Float:pos[3];
+    float pos[3];
     GetClientAbsOrigin(client, pos);
 
-    new Float:angs[3];
+    float angs[3];
     GetClientEyeAngles(client, angs);
 
     angs[2] = g_DrugAngles[GetRandomInt(0,100) % 20];
 
     TeleportEntity(client, pos, angs, NULL_VECTOR);
 
-    new clients[2];
+    int clients[2];
     clients[0] = client;	
 
-    new Handle:message = StartMessageEx(g_FadeUserMsgId, clients, 1);
+    Handle message = StartMessageEx(g_FadeUserMsgId, clients, 1);
     BfWriteShort(message, 255);
     BfWriteShort(message, 255);
     BfWriteShort(message, (0x0002));
@@ -255,12 +255,12 @@ public Action:Timer_Drug(Handle:timer, any:client)
     return Plugin_Handled;
 }
 
-public Native_PerformDrug(Handle:plugin,numParams)
+public Native_PerformDrug(Handle plugin,numParams)
 {
     return PerformDrug(GetNativeCell(1),GetNativeCell(2));
 }
 
-public Native_PerformBlind(Handle:plugin,numParams)
+public Native_PerformBlind(Handle plugin,numParams)
 {
     PerformBlind(GetNativeCell(1),GetNativeCell(2));
 }

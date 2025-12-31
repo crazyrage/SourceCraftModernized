@@ -37,49 +37,49 @@
 #define MAXENTITIES 2048
 #define MASK_GRABBERSOLID   (MASK_PLAYERSOLID|MASK_NPCSOLID|MASK_SHOT)
 
-new const String:scarabModel[]       = "models/items/grenadeAmmo.mdl";
-new const String:dodScarabModel[]    = "models/weapons/w_tnt.mdl";
-new const String:tf2ScarabModels[][] = { "models/props_halloween/pumpkin_explode.mdl",
+static const char[] scarabModel[]       = "models/items/grenadeAmmo.mdl";
+static const char[] dodScarabModel[]    = "models/weapons/w_tnt.mdl";
+static const char[] tf2ScarabModels[][] = { "models/props_halloween/pumpkin_explode.mdl",
                                          "models/props_halloween/pumpkin_01.mdl" };
 
-new const String:spawnWav[]          = "sc/ptrrdy00.wav";
-new const String:deathWav[]          = "sc/ptrdth00.wav";
-new const String:explodeWav[]        = "sc/PSaHit00.wav";
+static const char[] spawnWav[]          = "sc/ptrrdy00.wav";
+static const char[] deathWav[]          = "sc/ptrdth00.wav";
+static const char[] explodeWav[]        = "sc/PSaHit00.wav";
 
-new const String:g_ScarabFireWav[][] = { "sc/ptrfir00.mp3", "sc/ptrfir01.mp3" };
-new const String:g_ScarabReadyWav[]  = "sc/ptryes01.wav";
-new const String:g_ActivateSiegeWav[] = "sc/ptrwht00.wav";
-new const String:g_DeactivateSiegeWav[] = "sc/ptrpss00.wav";
+static const char[] g_ScarabFireWav[][] = { "sc/ptrfir00.mp3", "sc/ptrfir01.mp3" };
+static const char[] g_ScarabReadyWav[]  = "sc/ptryes01.wav";
+static const char[] g_ActivateSiegeWav[] = "sc/ptrwht00.wav";
+static const char[] g_DeactivateSiegeWav[] = "sc/ptrpss00.wav";
 
 new raceID, immunityID, speedID, shieldsID;
 new scarabAttackID, capacityID, velocityID;
 new scarabID, argusScarabID, siegeID, detonateID;
 
-new Float:g_SpeedLevels[]            = { 0.80, 0.90, 0.95, 1.00, 1.05 };
+float g_SpeedLevels[]            = { 0.80, 0.90, 0.95, 1.00, 1.05 };
 
-new g_ScrabAttackChance[]            = { 0, 20, 40, 60, 90 };
-new Float:g_ScrabAttackPercent[]     = { 0.0, 0.15, 0.30, 0.40, 0.60 };
+	int g_ScrabAttackChance[]            = { 0, 20, 40, 60, 90 };
+float g_ScrabAttackPercent[]     = { 0.0, 0.15, 0.30, 0.40, 0.60 };
 
-new Float:g_InitialShields[]         = { 0.05, 0.10, 0.25, 0.50, 0.75 };
-new Float:g_ShieldsPercent[][2]      = { {0.05, 0.10},
+float g_InitialShields[]         = { 0.05, 0.10, 0.25, 0.50, 0.75 };
+float g_ShieldsPercent[][2]      = { {0.05, 0.10},
                                          {0.10, 0.20},
                                          {0.15, 0.30},
                                          {0.20, 0.40},
                                          {0.25, 0.50} };
 
-new Float:cfgStopSpeed               = 10.0;
-new Float:cfgThrowTime               = 2.0;
+new float cfgStopSpeed               = 10.0;
+new float cfgThrowTime               = 2.0;
 new cfgScarabLimit                   = 50;
 
-new Float:m_ScarabAttackTime[MAXPLAYERS+1];
-new bool:m_SiegeActive[MAXPLAYERS+1];
-new m_ScarabCount[MAXPLAYERS+1];
+float m_ScarabAttackTime[MAXPLAYERS+1];
+bool m_SiegeActive[MAXPLAYERS+1];
+	int m_ScarabCount[MAXPLAYERS+1];
 
-new Float:gThrow[MAXPLAYERS+1];         // throw charge state 
-new Handle:g_ScarabTimers[MAXPLAYERS+1];
-new Handle:gTrackTimers[MAXENTITIES+1]; // entity track timers
+float gThrow[MAXPLAYERS+1];         // throw charge state 
+new Handle g_ScarabTimers[MAXPLAYERS+1];
+new Handle gTrackTimers[MAXENTITIES+1]; // entity track timers
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "SourceCraft Race - Protoss Reaver",
     author = "-=|JFH|=-Naris",
@@ -88,7 +88,7 @@ public Plugin:myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.common.phrases.txt");
     LoadTranslations("sc.reaver.phrases.txt");
@@ -170,9 +170,9 @@ public OnSourceCraftReady()
     GetConfigFloatArray("shields_amount", g_InitialShields, sizeof(g_InitialShields),
                         g_InitialShields, raceID, shieldsID);
 
-    for (new level=0; level < sizeof(g_ShieldsPercent); level++)
+    for(int level=0; level < sizeof(g_ShieldsPercent); level++)
     {
-        decl String:key[32];
+        char key[32];
         Format(key, sizeof(key), "shields_percent_level_%d", level);
         GetConfigFloatArray(key, g_ShieldsPercent[level], sizeof(g_ShieldsPercent[]),
                             g_ShieldsPercent[level], raceID, shieldsID);
@@ -193,7 +193,7 @@ public OnSourceCraftReady()
 
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupHaloSprite();
     SetupExplosion();
@@ -210,12 +210,12 @@ public OnMapStart()
     SetupSound(g_ActivateSiegeWav);
     SetupSound(g_DeactivateSiegeWav);
 
-    for (new i = 0; i < sizeof(g_ScarabFireWav); i++)
+    for(int i = 0; i < sizeof(g_ScarabFireWav); i++)
         SetupSound(g_ScarabFireWav[i]);
 
     if (GetGameType() == tf2)
     {
-        for (new i = 0; i < sizeof(tf2ScarabModels); i++)
+        for(int i = 0; i < sizeof(tf2ScarabModels); i++)
             PrecacheModel(tf2ScarabModels[i], true);
     }
     else if (GameType == dod)
@@ -231,26 +231,26 @@ public OnPlayerAuthed(client)
     m_SiegeActive[client] = false;
 }
 
-public OnClientDisconnect(client)
+public void OnClientDisconnect(client)
 {
     Detonate(client);
 
-    new Handle:timer=g_ScarabTimers[client];
-    if (timer != INVALID_HANDLE)
+    new Handle timer=g_ScarabTimers[client];
+    if (timer != null)
     {
-        g_ScarabTimers[client] = INVALID_HANDLE;
+        g_ScarabTimers[client] = null;
         KillTimer(timer);
     }
 }
 
-public Action:OnRaceDeselected(client,oldrace,newrace)
+public Action OnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
-        new Handle:timer=g_ScarabTimers[client];
-        if (timer != INVALID_HANDLE)
+        new Handle timer=g_ScarabTimers[client];
+        if (timer != null)
         {
-            g_ScarabTimers[client] = INVALID_HANDLE;
+            g_ScarabTimers[client] = null;
             KillTimer(timer);
         }
 
@@ -258,7 +258,7 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
         SetSpeed(client,-1.0, true);
 
         if (m_SiegeActive[client])
-            DeactivateSiege(INVALID_HANDLE, GetClientUserId(client));
+            DeactivateSiege(null, GetClientUserId(client));
 
         Detonate(client);
 
@@ -269,7 +269,7 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
     return Plugin_Continue;
 }
 
-public Action:OnRaceSelected(client,oldrace,newrace)
+public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
@@ -285,24 +285,24 @@ public Action:OnRaceSelected(client,oldrace,newrace)
             new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
             DoImmunity(client, immunity_level, true);
 
-            new speed_level = GetUpgradeLevel(client,raceID,speedID);
+            int speed_level = GetUpgradeLevel(client,raceID,speedID);
             SetSpeedBoost(client, speed_level, true, g_SpeedLevels);
 
-            new scarab_level = GetUpgradeLevel(client,raceID,scarabID);
-            new argus_level = GetUpgradeLevel(client,raceID,argusScarabID);
+            int scarab_level = GetUpgradeLevel(client,raceID,scarabID);
+            int argus_level = GetUpgradeLevel(client,raceID,argusScarabID);
             if (scarab_level > 0 || argus_level > 0)
             {
                 m_ScarabCount[client] = (scarab_level > argus_level) ? scarab_level : argus_level;
                 HudMessage(client, "Scarabs: %d", m_ScarabCount[client]);
 
-                if (g_ScarabTimers[client] == INVALID_HANDLE)
+                if (g_ScarabTimers[client] == null)
                 {
                     g_ScarabTimers[client] = CreateTimer(5.0, BuildScarab, GetClientUserId(client),
                                                          TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
                 }
             }
 
-            new shields_level = GetUpgradeLevel(client,raceID,shieldsID);
+            int shields_level = GetUpgradeLevel(client,raceID,shieldsID);
             SetupShields(client, shields_level, g_InitialShields, g_ShieldsPercent);
         }
         return Plugin_Handled;
@@ -321,8 +321,8 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
             SetSpeedBoost(client, new_level, true, g_SpeedLevels);
         else if (upgrade==scarabID)
         {
-            new argus_level = GetUpgradeLevel(client,raceID,argusScarabID);
-            new scarab_count = (new_level > argus_level) ? new_level : argus_level;
+            int argus_level = GetUpgradeLevel(client,raceID,argusScarabID);
+            int scarab_count = (new_level > argus_level) ? new_level : argus_level;
             if (m_ScarabCount[client] < scarab_count)
             {
                 m_ScarabCount[client] = scarab_count;
@@ -332,7 +332,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
                     HudMessage(client, "%t", "ScarabHud", m_ScarabCount[client]);
             }
 
-            if (g_ScarabTimers[client] == INVALID_HANDLE)
+            if (g_ScarabTimers[client] == null)
             {
                 g_ScarabTimers[client] = CreateTimer(5.0, BuildScarab, GetClientUserId(client),
                                                      TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
@@ -340,8 +340,8 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
         }
         else if (upgrade==argusScarabID)
         {
-            new scarab_level = GetUpgradeLevel(client,raceID,scarabID);
-            new scarab_count = (scarab_level > new_level) ? scarab_level : new_level;
+            int scarab_level = GetUpgradeLevel(client,raceID,scarabID);
+            int scarab_count = (scarab_level > new_level) ? scarab_level : new_level;
             if (m_ScarabCount[client] < scarab_count)
             {
                 m_ScarabCount[client] = scarab_count;
@@ -351,7 +351,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
                     HudMessage(client, "%t", "ScarabHud", m_ScarabCount[client]);
             }
 
-            if (g_ScarabTimers[client] == INVALID_HANDLE)
+            if (g_ScarabTimers[client] == null)
             {
                 g_ScarabTimers[client] = CreateTimer(5.0, BuildScarab, GetClientUserId(client),
                                                      TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
@@ -375,13 +375,13 @@ public OnItemPurchase(client,item)
 
         if (item == g_bootsItem)
         {
-            new speed_level = GetUpgradeLevel(client,race,speedID);
+            int speed_level = GetUpgradeLevel(client,race,speedID);
             SetSpeedBoost(client, speed_level, true, g_SpeedLevels);
         }
     }
 }
 
-public OnUltimateCommand(client,race,bool:pressed,arg)
+public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (race==raceID && IsValidClientAlive(client))
     {
@@ -459,7 +459,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
     }
 }
 
-public OnPlayerSpawnEvent(Handle:event, client, race)
+public OnPlayerSpawnEvent(Handle event, client, race)
 {
     if (race == raceID)
     {
@@ -472,20 +472,20 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
         new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
-        new speed_level = GetUpgradeLevel(client,raceID,speedID);
+        int speed_level = GetUpgradeLevel(client,raceID,speedID);
         SetSpeedBoost(client, speed_level, true, g_SpeedLevels);
 
-        new shields_level = GetUpgradeLevel(client,raceID,shieldsID);
+        int shields_level = GetUpgradeLevel(client,raceID,shieldsID);
         SetupShields(client, shields_level, g_InitialShields, g_ShieldsPercent);
 
-        new scarab_level = GetUpgradeLevel(client,raceID,scarabID);
-        new argus_level = GetUpgradeLevel(client,raceID,argusScarabID);
+        int scarab_level = GetUpgradeLevel(client,raceID,scarabID);
+        int argus_level = GetUpgradeLevel(client,raceID,argusScarabID);
         if (scarab_level > 0 || argus_level > 0)
         {
             m_ScarabCount[client] = (scarab_level > argus_level) ? scarab_level : argus_level;
             HudMessage(client, "Scarabs: %d", m_ScarabCount[client]);
 
-            if (g_ScarabTimers[client] == INVALID_HANDLE)
+            if (g_ScarabTimers[client] == null)
             {
                 g_ScarabTimers[client] = CreateTimer(5.0, BuildScarab, GetClientUserId(client),
                                                      TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
@@ -494,8 +494,8 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
     }
 }
 
-public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacker_index,
-                                attacker_race, damage, absorbed, bool:from_sc)
+public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
+                                attacker_race, damage, absorbed, bool from_sc)
 {
     if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index &&
@@ -512,7 +512,7 @@ public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacke
     return Plugin_Continue;
 }
 
-public Action:OnPlayerAssistEvent(Handle:event, victim_index, victim_race,
+public Action OnPlayerAssistEvent(Handle event, victim_index, victim_race,
                                   assister_index, assister_race, damage,
                                   absorbed)
 {
@@ -525,20 +525,20 @@ public Action:OnPlayerAssistEvent(Handle:event, victim_index, victim_race,
     return Plugin_Continue;
 }
 
-public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_index,
+public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_index,
                           attacker_race, assister_index, assister_race, damage,
-                          const String:weapon[], bool:is_equipment, customkill,
-                          bool:headshot, bool:backstab, bool:melee)
+                          const char[] weapon, bool is_equipment, customkill,
+                          bool headshot, bool backstab, bool melee)
 {
     if (victim_race == raceID)
     {
         if (m_SiegeActive[victim_index])
-            DeactivateSiege(INVALID_HANDLE, GetClientUserId(victim_index));
+            DeactivateSiege(null, GetClientUserId(victim_index));
 
-        new Handle:timer=g_ScarabTimers[victim_index];
-        if (timer != INVALID_HANDLE)
+        new Handle timer=g_ScarabTimers[victim_index];
+        if (timer != null)
         {
-            g_ScarabTimers[victim_index] = INVALID_HANDLE;
+            g_ScarabTimers[victim_index] = null;
             KillTimer(timer);
         }
 
@@ -547,9 +547,9 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
     }
 }
 
-public RoundEndEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public RoundEndEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    for (new index=1;index<=MaxClients;index++)
+    for(int index=1;index<=MaxClients;index++)
     {
         if (GetRace(index) == raceID)
         {
@@ -561,9 +561,9 @@ public RoundEndEvent(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-bool:ScarabAttack(damage, victim_index, index)
+bool ScarabAttack(damage, victim_index, index)
 {
-    new rs_level = GetUpgradeLevel(index, raceID, scarabAttackID);
+    int rs_level = GetUpgradeLevel(index, raceID, scarabAttackID);
     if (rs_level > 0)
     {
         if (!GetRestriction(index, Restriction_NoUpgrades) &&
@@ -573,20 +573,20 @@ bool:ScarabAttack(damage, victim_index, index)
             !GetImmunity(victim_index,Immunity_Upgrades) &&
             !IsInvulnerable(victim_index))
         {
-            new Float:lastTime = m_ScarabAttackTime[index];
-            new Float:interval = GetGameTime() - lastTime;
+            new float lastTime = m_ScarabAttackTime[index];
+            new float interval = GetGameTime() - lastTime;
             if (lastTime == 0.0 || interval > 0.25)
             {
                 if (GetRandomInt(1,100) <= g_ScrabAttackChance[rs_level])
                 {
-                    new health_take = RoundToFloor(float(damage)*g_ScrabAttackPercent[rs_level]);
+                    int health_take = RoundToFloor(float(damage)*g_ScrabAttackPercent[rs_level]);
                     if (health_take > 0)
                     {
                         if (CanInvokeUpgrade(index, raceID, scarabAttackID, .notify=false))
                         {
                             if (interval == 0.0 || interval >= 2.0)
                             {
-                                new Float:Origin[3];
+                                float Origin[3];
                                 GetEntityAbsOrigin(victim_index, Origin);
                                 Origin[2] += 5;
 
@@ -611,7 +611,7 @@ bool:ScarabAttack(damage, victim_index, index)
     return false;
 }
 
-DoImmunity(client, level, bool:value)
+void DoImmunity(client, level, bool value)
 {
     SetImmunity(client,Immunity_MotionTaking, (value && level >= 1));
     SetImmunity(client,Immunity_ShopItems, (value && level >= 2));
@@ -620,7 +620,7 @@ DoImmunity(client, level, bool:value)
 
     if (value && IsValidClientAlive(client))
     {
-        new Float:start[3];
+        float start[3];
         GetClientAbsOrigin(client, start);
 
         static const color[4] = { 0, 255, 50, 128 };
@@ -630,14 +630,14 @@ DoImmunity(client, level, bool:value)
     }
 }
 
-public Action:BuildScarab(Handle:timer, any:userid)
+public Action BuildScarab(Handle timer, any:userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client) && GetRace(client) == raceID &&
         !GetRestriction(client,Restriction_NoUltimates) &&
         !GetRestriction(client,Restriction_Stunned))
     {
-        new capactity_level = GetUpgradeLevel(client,raceID,capacityID);
+        int capactity_level = GetUpgradeLevel(client,raceID,capacityID);
         if (m_ScarabCount[client] < (capactity_level*2)+5)
         {
             PrepareAndEmitSoundToAll(g_ScarabReadyWav,client);
@@ -653,7 +653,7 @@ public Action:BuildScarab(Handle:timer, any:userid)
     return Plugin_Continue;
 }
 
-LaunchScarab(client, level, model, pressed)
+void LaunchScarab(client, level, model, pressed)
 {
     if (GetRestriction(client,Restriction_NoUltimates) ||
         GetRestriction(client,Restriction_Stunned))
@@ -676,7 +676,7 @@ LaunchScarab(client, level, model, pressed)
     }
     else if (IsMole(client))
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceID, scarabID, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
         PrepareAndEmitSoundToClient(client,errorWav);
@@ -696,23 +696,23 @@ LaunchScarab(client, level, model, pressed)
     else if (CanInvokeUpgrade(client, raceID, scarabID))
     {
         // throw scarab
-        new bool:siege = m_SiegeActive[client];
-        new Float:throwspeed = float(GetUpgradeLevel(client,raceID,velocityID)+1)*1000.0;
+        new bool siege = m_SiegeActive[client];
+        new float throwspeed = float(GetUpgradeLevel(client,raceID,velocityID)+1)*1000.0;
         if (siege)
             throwspeed *= 5.0;
 
-        new Float:time = GetEngineTime() - gThrow[client];
+        new float time = GetEngineTime() - gThrow[client];
         if (time < cfgThrowTime)
             throwspeed *= time / cfgThrowTime;
 
         gThrow[client] = 0.0;
 
         // get position and angles
-        new Float:startpt[3];
+        float startpt[3];
         GetClientEyePosition(client, startpt);
-        new Float:angle[3];
-        new Float:speed[3];
-        new Float:playerspeed[3];
+        float angle[3];
+        float speed[3];
+        float playerspeed[3];
         GetClientEyeAngles(client, angle);
         GetAngleVectors(angle, speed, NULL_VECTOR, NULL_VECTOR);
         ScaleVector(speed, throwspeed);
@@ -727,10 +727,10 @@ LaunchScarab(client, level, model, pressed)
         else
             HudMessage(client, "%t", "ScarabHud", m_ScarabCount[client]);
 
-        new num = GetRandomInt(0,sizeof(g_ScarabFireWav)-1);
+        int num = GetRandomInt(0,sizeof(g_ScarabFireWav)-1);
         PrepareAndEmitSoundToAll(g_ScarabFireWav[num], client);
 
-        new ent = CreateEntityByName("prop_physics_override");
+        int ent = CreateEntityByName("prop_physics_override");
         if (ent > 0 && IsValidEntity(ent))
         {
             SetEntProp(ent, Prop_Send, "m_iTeamNum", GetClientTeam(client));
@@ -751,13 +751,13 @@ LaunchScarab(client, level, model, pressed)
             startpt[2] += 50.0;
             TeleportEntity(ent, startpt, angle, speed);
 
-            new ref = EntIndexToEntRef(ent);
+            int ref = EntIndexToEntRef(ent);
 
-            new Handle:pack;
+            new Handle pack;
             gTrackTimers[ent] = CreateDataTimer(0.2,TrackObject,pack,TIMER_REPEAT);
-            if (gTrackTimers[ent] != INVALID_HANDLE)
+            if (gTrackTimers[ent] != null)
             {
-                new Float:vecPos[3];
+                float vecPos[3];
                 GetEntPropVector(ent, Prop_Send, "m_vecOrigin", vecPos);
                 WritePackCell(pack, ref); // EntIndexToEntRef(ent));
                 WritePackFloat(pack, vecPos[0]);
@@ -776,7 +776,7 @@ LaunchScarab(client, level, model, pressed)
     }
 }
 
-public Action:UpdateBar(Handle:timer,any:client)
+public Action UpdateBar(Handle timer,any:client)
 {
     if (gThrow[client] > 0.0 && IsValidClientAlive(client))
     {
@@ -789,14 +789,14 @@ public Action:UpdateBar(Handle:timer,any:client)
 }
 
 // show a progres bar via hint text
-ShowBar(client, Float:curTime, Float:totTime)
+void ShowBar(client, float curTime, float totTime)
 {
-    new String:gauge[30] = "[=====================]";
-    new Float:percent = curTime/totTime;
-    new bool:partial = (percent < 1.0);
+    char gauge[30] = "[=====================]";
+    new float percent = curTime/totTime;
+    new bool partial = (percent < 1.0);
     if (partial)
     {
-        new pos = RoundFloat(percent * 20.0) + 1;
+        int pos = RoundFloat(percent * 20.0) + 1;
         if (pos < 21)
         {
             gauge[pos] = ']';
@@ -807,47 +807,47 @@ ShowBar(client, Float:curTime, Float:totTime)
     return partial;
 }
 
-public Action:TrackObject(Handle:timer, Handle:pack)
+public Action TrackObject(Handle timer, Handle pack)
 {
     ResetPack(pack);
-    new ref = ReadPackCell(pack);
-    new ent = EntRefToEntIndex(ref);
+    int ref = ReadPackCell(pack);
+    int ent = EntRefToEntIndex(ref);
 
     // check if the object is still the same type we picked up
     if (ent > 0 && IsValidEntity(ent) && IsValidEdict(ent))
     {
-        decl Float:lastPos[3];
+        decl float lastPos[3];
         lastPos[0] = ReadPackFloat(pack);
         lastPos[1] = ReadPackFloat(pack);
         lastPos[2] = ReadPackFloat(pack);
 
-        new Float:lastSpeed = ReadPackFloat(pack);
-        new stopCount = ReadPackCell(pack);
-        new Float:fuseTime = ReadPackFloat(pack);
-        new client = ReadPackCell(pack);
+        new float lastSpeed = ReadPackFloat(pack);
+        int stopCount = ReadPackCell(pack);
+        new float fuseTime = ReadPackFloat(pack);
+        int client = ReadPackCell(pack);
 
-        decl Float:vecPos[3];
+        decl float vecPos[3];
         GetEntPropVector(ent, Prop_Send, "m_vecOrigin", vecPos);
 
-        decl Float:vecVel[3];
+        decl float vecVel[3];
         SubtractVectors(lastPos, vecPos, vecVel);
 
-        new Float:vecGround[3];
+        float vecGround[3];
         vecGround[0] = vecPos[0];
         vecGround[1] = vecPos[1];
         vecGround[2] = vecPos[2];
 
-        new Float:stopSpeed = cfgStopSpeed;
-        new Float:speed = vecVel[0] + vecVel[1] + vecVel[2];
+        new float stopSpeed = cfgStopSpeed;
+        new float speed = vecVel[0] + vecVel[1] + vecVel[2];
         if (speed < 0)
             speed *= -1.0;
 
-        new bool:bStop = (speed < stopSpeed);
-        new Float:height = 0.0;
-        decl Float:vecBelow[3];
-        decl Float:vecCheckBelow[3];
+        new bool bStop = (speed < stopSpeed);
+        new float height = 0.0;
+        decl float vecBelow[3];
+        decl float vecCheckBelow[3];
 
-        new bool:bGround = ((GetEntityFlags(ent) & FL_ONGROUND) != 0);
+        new bool bGround = ((GetEntityFlags(ent) & FL_ONGROUND) != 0);
         //if (!bGround) // F_ONGROUND flag lies!!!
         {
             //Check below the object for the ground
@@ -856,9 +856,9 @@ public Action:TrackObject(Handle:timer, Handle:pack)
             vecCheckBelow[2] = vecPos[2] - 1000.0;
             TR_TraceRayFilter(vecPos, vecCheckBelow, MASK_GRABBERSOLID,
                               RayType_EndPoint, TraceRayDontHitSelf, ent);
-            if (TR_DidHit(INVALID_HANDLE))
+            if (TR_DidHit(null))
             {
-                TR_GetEndPosition(vecBelow, INVALID_HANDLE);
+                TR_GetEndPosition(vecBelow, null);
                 vecGround[2] = vecBelow[2];
                 height = (vecPos[2] - vecBelow[2]);
                 if (bGround && height > 0.0)
@@ -892,8 +892,8 @@ public Action:TrackObject(Handle:timer, Handle:pack)
                     {
                         // it's stuck, try to knock it loose.
                         stopSpeed *= 5.0;
-                        new Float:negSpeed = stopSpeed * -1.0;
-                        decl Float:vecKnock[3];
+                        new float negSpeed = stopSpeed * -1.0;
+                        decl float vecKnock[3];
                         vecKnock[0]= GetRandomFloat(negSpeed, stopSpeed);
                         vecKnock[1]= GetRandomFloat(negSpeed, stopSpeed);
                         vecKnock[2]= GetRandomFloat(negSpeed, stopSpeed);
@@ -909,7 +909,7 @@ public Action:TrackObject(Handle:timer, Handle:pack)
 
         if (bStop || bGround || height <= 0.0)
         {
-            new Float:vecAngles[3];
+            float vecAngles[3];
             GetEntPropVector(ent, Prop_Send, "m_angRotation", vecAngles);
             if (vecAngles[0] != 0.0 || vecAngles[2] != 0.0)
             {
@@ -928,9 +928,9 @@ public Action:TrackObject(Handle:timer, Handle:pack)
                 vecCheckBelow[0] += 30.0;
                 TR_TraceRayFilter(vecPos, vecCheckBelow, MASK_GRABBERSOLID,
                                   RayType_EndPoint, TraceRayDontHitSelf, ent);
-                if (TR_DidHit(INVALID_HANDLE))
+                if (TR_DidHit(null))
                 {
-                    TR_GetEndPosition(vecBelow, INVALID_HANDLE);
+                    TR_GetEndPosition(vecBelow, null);
                     if (vecGround[2] < vecBelow[2])
                         vecGround[2] = vecBelow[2];
                 }
@@ -940,9 +940,9 @@ public Action:TrackObject(Handle:timer, Handle:pack)
                 vecCheckBelow[1] += 30.0;
                 TR_TraceRayFilter(vecPos, vecCheckBelow, MASK_GRABBERSOLID,
                                   RayType_EndPoint, TraceRayDontHitSelf, ent);
-                if (TR_DidHit(INVALID_HANDLE))
+                if (TR_DidHit(null))
                 {
-                    TR_GetEndPosition(vecBelow, INVALID_HANDLE);
+                    TR_GetEndPosition(vecBelow, null);
                     if (vecGround[2] < vecBelow[2])
                         vecGround[2] = vecBelow[2];
                 }
@@ -952,9 +952,9 @@ public Action:TrackObject(Handle:timer, Handle:pack)
                 vecCheckBelow[0] -= 30.0;
                 TR_TraceRayFilter(vecPos, vecCheckBelow, MASK_GRABBERSOLID,
                                   RayType_EndPoint, TraceRayDontHitSelf, ent);
-                if (TR_DidHit(INVALID_HANDLE))
+                if (TR_DidHit(null))
                 {
-                    TR_GetEndPosition(vecBelow, INVALID_HANDLE);
+                    TR_GetEndPosition(vecBelow, null);
                     if (vecGround[2] < vecBelow[2])
                         vecGround[2] = vecBelow[2];
                 }
@@ -964,9 +964,9 @@ public Action:TrackObject(Handle:timer, Handle:pack)
                 vecCheckBelow[0] -= 30.0;
                 TR_TraceRayFilter(vecPos, vecCheckBelow, MASK_GRABBERSOLID,
                                   RayType_EndPoint, TraceRayDontHitSelf, ent);
-                if (TR_DidHit(INVALID_HANDLE))
+                if (TR_DidHit(null))
                 {
-                    TR_GetEndPosition(vecBelow, INVALID_HANDLE);
+                    TR_GetEndPosition(vecBelow, null);
                     if (vecGround[2] < vecBelow[2])
                         vecGround[2] = vecBelow[2];
                 }
@@ -976,9 +976,9 @@ public Action:TrackObject(Handle:timer, Handle:pack)
                 vecCheckBelow[1] -= 30.0;
                 TR_TraceRayFilter(vecPos, vecCheckBelow, MASK_GRABBERSOLID,
                                   RayType_EndPoint, TraceRayDontHitSelf, ent);
-                if (TR_DidHit(INVALID_HANDLE))
+                if (TR_DidHit(null))
                 {
-                    TR_GetEndPosition(vecBelow, INVALID_HANDLE);
+                    TR_GetEndPosition(vecBelow, null);
                     if (vecGround[2] < vecBelow[2])
                         vecGround[2] = vecBelow[2];
                 }
@@ -988,9 +988,9 @@ public Action:TrackObject(Handle:timer, Handle:pack)
                 vecCheckBelow[1] -= 30.0;
                 TR_TraceRayFilter(vecPos, vecCheckBelow, MASK_GRABBERSOLID,
                                   RayType_EndPoint, TraceRayDontHitSelf, ent);
-                if (TR_DidHit(INVALID_HANDLE))
+                if (TR_DidHit(null))
                 {
-                    TR_GetEndPosition(vecBelow, INVALID_HANDLE);
+                    TR_GetEndPosition(vecBelow, null);
                     if (vecGround[2] < vecBelow[2])
                         vecGround[2] = vecBelow[2];
                 }
@@ -1000,9 +1000,9 @@ public Action:TrackObject(Handle:timer, Handle:pack)
                 vecCheckBelow[0] += 30.0;
                 TR_TraceRayFilter(vecPos, vecCheckBelow, MASK_GRABBERSOLID,
                                   RayType_EndPoint, TraceRayDontHitSelf, ent);
-                if (TR_DidHit(INVALID_HANDLE))
+                if (TR_DidHit(null))
                 {
-                    TR_GetEndPosition(vecBelow, INVALID_HANDLE);
+                    TR_GetEndPosition(vecBelow, null);
                     if (vecGround[2] < vecBelow[2])
                         vecGround[2] = vecBelow[2];
                 }
@@ -1012,14 +1012,14 @@ public Action:TrackObject(Handle:timer, Handle:pack)
                 vecCheckBelow[0] += 30.0;
                 TR_TraceRayFilter(vecPos, vecCheckBelow, MASK_GRABBERSOLID,
                                   RayType_EndPoint, TraceRayDontHitSelf, ent);
-                if (TR_DidHit(INVALID_HANDLE))
+                if (TR_DidHit(null))
                 {
-                    TR_GetEndPosition(vecBelow, INVALID_HANDLE);
+                    TR_GetEndPosition(vecBelow, null);
                     if (vecGround[2] < vecBelow[2])
                         vecGround[2] = vecBelow[2];
                 }
 
-                new Float:delta = vecPos[2] - vecGround[2];
+                new float delta = vecPos[2] - vecGround[2];
                 if (delta > 5.0)
                 {
                     // Move building down to ground (or whatever it hit).
@@ -1031,7 +1031,7 @@ public Action:TrackObject(Handle:timer, Handle:pack)
             if (GetGameType() == tf2)
             {
                 /* Create pumpkin bomb in it's place */
-                new Float:vecAngles[3];
+                float vecAngles[3];
                 GetEntPropVector(ent, Prop_Send, "m_angRotation", vecAngles);
                 AcceptEntityInput(ent, "kill");
 
@@ -1066,24 +1066,24 @@ public Action:TrackObject(Handle:timer, Handle:pack)
             return Plugin_Continue;
         }
 
-        gTrackTimers[ent] = INVALID_HANDLE;
+        gTrackTimers[ent] = null;
     }
 
     return Plugin_Stop;
 }
 
-public Action:DetonateTimer(Handle:timer,any:ref)
+public Action DetonateTimer(Handle timer,any:ref)
 {
-    new ent = EntRefToEntIndex(ref);
+    int ent = EntRefToEntIndex(ref);
     if (ent > 0)
     {
         DamageEntity(ent,100, GetEntPropEnt(ent, Prop_Send, "m_hOwnerEntity"));
     }
 }
 
-Detonate(client)
+void Detonate(client)
 {
-    new ent = -1;
+    int ent = -1;
     while ((ent = FindEntityByClassname(ent, "tf_pumpkin_bomb")) != -1)
     {
         if (GetEntPropEnt(ent, Prop_Send, "m_hOwnerEntity")==client)
@@ -1091,21 +1091,21 @@ Detonate(client)
     }
 }
 
-Siege(client, level)
+void Siege(client, level)
 {
     if (level > 0)
     {
         if (GetRestriction(client,Restriction_NoUltimates) ||
             GetRestriction(client,Restriction_Stunned))
         {
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, siegeID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
         }
         else if (IsMole(client))
         {
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, siegeID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
             PrepareAndEmitSoundToClient(client,errorWav);
@@ -1123,9 +1123,9 @@ Siege(client, level)
     }
 }
 
-public Action:DeactivateSiege(Handle:timer,any:userid)
+public Action DeactivateSiege(Handle timer,any:userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (client > 0)
     {
         PrepareAndEmitSoundToAll(g_DeactivateSiegeWav,client);

@@ -19,11 +19,11 @@
  * @return				A handle to a bf_write bit packing structure, or
  *						INVALID_HANDLE on failure.
  */
-stock Handle:StartMessageAllLiving(String:msgname[], flags=0)
+stock Handle StartMessageAllLiving(char[] msgname, flags=0)
 {
-    new total = 0;
-    new clients[MaxClients];
-    for (new i=1; i<=MaxClients; i++)
+    int total = 0;
+    int clients[MaxClients];
+    for (int i=1; i<=MaxClients; i++)
     {
         if (IsClientInGame(i) && IsPlayerAlive(i) && !IsFakeClient(i))
         {
@@ -34,7 +34,7 @@ stock Handle:StartMessageAllLiving(String:msgname[], flags=0)
     if (total > 0)
         return StartMessage(msgname, clients, total, flags);
     else
-        return INVALID_HANDLE;
+        return null;
 }
 
 /**
@@ -47,11 +47,11 @@ stock Handle:StartMessageAllLiving(String:msgname[], flags=0)
  * @return				A handle to a bf_write bit packing structure, or
  *						INVALID_HANDLE on failure.
  */
-stock Handle:StartMessageAllAllowed(String:msgname[], flags=0)
+stock Handle StartMessageAllAllowed(char[] msgname, flags=0)
 {
-    new total = 0;
-    new clients[MaxClients];
-    for (new i=1; i<=MaxClients; i++)
+    int total = 0;
+    int clients[MaxClients];
+    for (int i=1; i<=MaxClients; i++)
     {
         if (IsClientConnected(i) && IsClientInGame(i) &&
             IsValidClientAlive(i) && !IsFakeClient(i) &&
@@ -65,5 +65,5 @@ stock Handle:StartMessageAllAllowed(String:msgname[], flags=0)
     if (total > 0)
         return StartMessage(msgname, clients, total, flags);
     else
-        return INVALID_HANDLE;
+        return null;
 }

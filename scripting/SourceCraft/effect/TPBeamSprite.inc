@@ -16,4 +16,4 @@
 #define TPBeamSprite()      PrepareModel(g_tpBeamModel, g_tpBeamSprite)
 
 stock g_tpBeamSprite;
-stock const String:g_tpBeamModel[] = "materials/sprites/tp_beam001.vmt";
+static const char g_tpBeamModel[] = "materials/sprites/tp_beam001.vmt";

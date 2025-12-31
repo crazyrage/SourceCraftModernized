@@ -12,11 +12,11 @@
 #define	CLIENTHEIGHT	90.0
 
 //SM_Blink:
-public Action:Command_Blink(Client, Arguments)
+public Action Command_Blink(Client, Arguments)
 {
 
 	//Player:
-	new Player;
+	int Player;
 
 	//Default:
 	if(Arguments < 1) Player = Client;
@@ -26,15 +26,15 @@ public Action:Command_Blink(Client, Arguments)
 	{
 
 		//Retrieve Arguments:
-		decl MaxClients;
-		decl String:ArgumentName[32], String:PlayerName[32];
+		int MaxClients;
+		char ArgumentName[32], char PlayerName[32];
 
 		//Initialize:
 		MaxClients = GetMaxClients();
 		GetCmdArg(1, ArgumentName, sizeof(ArgumentName));
 
 		//Find:
-		for(new X = 1; X <= MaxClients; X++)
+		for(int X= 1; X <= MaxClients; X++)
 		{
 
 			//Invalid:
@@ -50,8 +50,8 @@ public Action:Command_Blink(Client, Arguments)
 	}
 
 	//Declare:
-	decl Handle:TraceRay;
-	decl Float:StartOrigin[3], Float:Angles[3];
+	decl Handle TraceRay;
+	decl float StartOrigin[3], float Angles[3];
 
 	//Initialize:
 	GetClientEyeAngles(Client, Angles);
@@ -65,8 +65,8 @@ public Action:Command_Blink(Client, Arguments)
 	{
 
 		//Declare:
-		decl Float:Distance;
-		decl Float:PositionBuffer[3], Float:EndOrigin[3], Float:CeilingBuffer[3];
+		decl float Distance;
+		decl float PositionBuffer[3], float EndOrigin[3], float CeilingBuffer[3];
 
 		//Retrieve:
 		TR_GetEndPosition(EndOrigin, TraceRay);
@@ -99,7 +99,7 @@ public Action:Command_Blink(Client, Arguments)
 }
 
 //Information:
-public Plugin:myinfo =
+public Plugin myinfo =
 {
 
 	//Initialize:

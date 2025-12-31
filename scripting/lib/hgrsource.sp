@@ -98,7 +98,7 @@ enum HGRSourceAccess
     Take = 1, /** Takes access from user */
 };
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "HGR:Source",
     author = "SumGuy14 (Aka Soccerdude)",
@@ -108,74 +108,74 @@ public Plugin:myinfo =
 };
 
 // General handles
-new Handle:cvarAnnounce;
+HandlecvarAnnounce;
 // Sound handles
-new Handle:cvarGrabHitSound;
-new Handle:cvarSeekingSound;
-new Handle:cvarErrorSound;
-new Handle:cvarPullSound;
-new Handle:cvarDeniedSound;
-new Handle:cvarFireSound;
-new Handle:cvarHitSound;
+HandlecvarGrabHitSound;
+HandlecvarSeekingSound;
+HandlecvarErrorSound;
+HandlecvarPullSound;
+HandlecvarDeniedSound;
+HandlecvarFireSound;
+HandlecvarHitSound;
 // Hook handles
-new Handle:cvarHookEnable;
-new Handle:cvarHookAdminOnly;
-new Handle:cvarHookNoFlag;
-new Handle:cvarHookSpeed;
-new Handle:cvarHookBeamColor;
-new Handle:cvarHookRed;
-new Handle:cvarHookGreen;
-new Handle:cvarHookBlue;
+HandlecvarHookEnable;
+HandlecvarHookAdminOnly;
+HandlecvarHookNoFlag;
+HandlecvarHookSpeed;
+HandlecvarHookBeamColor;
+HandlecvarHookRed;
+HandlecvarHookGreen;
+HandlecvarHookBlue;
 // Grab handles
-new Handle:cvarGrabEnable;
-new Handle:cvarGrabAdminOnly;
-new Handle:cvarGrabSpeed;
-new Handle:cvarGrabBeamColor;
-new Handle:cvarGrabRed;
-new Handle:cvarGrabGreen;
-new Handle:cvarGrabBlue;
-new Handle:cvarGrabTeam;
-new Handle:cvarGrabSpys;
-new Handle:cvarGrabDecloak;
+HandlecvarGrabEnable;
+HandlecvarGrabAdminOnly;
+HandlecvarGrabSpeed;
+HandlecvarGrabBeamColor;
+HandlecvarGrabRed;
+HandlecvarGrabGreen;
+HandlecvarGrabBlue;
+HandlecvarGrabTeam;
+HandlecvarGrabSpys;
+HandlecvarGrabDecloak;
 // Rope handles
-new Handle:cvarRopeEnable;
-new Handle:cvarRopeAdminOnly;
-new Handle:cvarRopeNoFlag;
-new Handle:cvarRopeSpeed;
-new Handle:cvarRopeBeamColor;
-new Handle:cvarRopeRed;
-new Handle:cvarRopeGreen;
-new Handle:cvarRopeBlue;
+HandlecvarRopeEnable;
+HandlecvarRopeAdminOnly;
+HandlecvarRopeNoFlag;
+HandlecvarRopeSpeed;
+HandlecvarRopeBeamColor;
+HandlecvarRopeRed;
+HandlecvarRopeGreen;
+HandlecvarRopeBlue;
 // Forward handles
-new Handle:fwdOnGrab;
-new Handle:fwdOnDrag;
-new Handle:fwdOnDrop;
-new Handle:fwdOnHook;
-new Handle:fwdOnRope;
+HandlefwdOnGrab;
+HandlefwdOnDrag;
+HandlefwdOnDrop;
+HandlefwdOnHook;
+HandlefwdOnRope;
 
 // Hook array
-new Float:gHookEndloc[MAXPLAYERS+1][3];
+floatgHookEndloc[MAXPLAYERS+1][3];
 
 // Grab arrays
 new gTargetUserId[MAXPLAYERS+1];
-new Float:gGrabDist[MAXPLAYERS+1];
-new bool:gGrabbed[MAXPLAYERS+1];
+floatgGrabDist[MAXPLAYERS+1];
+boolgGrabbed[MAXPLAYERS+1];
 new gGrabCounter[MAXPLAYERS+1];
-//new Float:gMaxSpeed[MAXPLAYERS+1];
-new Float:gGravity[MAXPLAYERS+1];
+//floatgMaxSpeed[MAXPLAYERS+1];
+floatgGravity[MAXPLAYERS+1];
 
 // Rope arrays
-new Float:gRopeEndloc[MAXPLAYERS+1][3];
-new Float:gRopeDist[MAXPLAYERS+1];
+floatgRopeEndloc[MAXPLAYERS+1][3];
+floatgRopeDist[MAXPLAYERS+1];
 
 // Client status arrays
-new bool:gStatus[MAXPLAYERS+1][NUM_ACTIONS];
+boolgStatus[MAXPLAYERS+1][NUM_ACTIONS];
 
 // Clients that have access to hook, grab or rope
-new bool:gAllowedClients[MAXPLAYERS+1][NUM_ACTIONS];
-new Float:gAllowedRange[MAXPLAYERS+1][NUM_ACTIONS];
-new Float:gCooldown[MAXPLAYERS+1][NUM_ACTIONS];
-new Float:gLastUsed[MAXPLAYERS+1][NUM_ACTIONS];
+boolgAllowedClients[MAXPLAYERS+1][NUM_ACTIONS];
+floatgAllowedRange[MAXPLAYERS+1][NUM_ACTIONS];
+floatgCooldown[MAXPLAYERS+1][NUM_ACTIONS];
+floatgLastUsed[MAXPLAYERS+1][NUM_ACTIONS];
 new gAllowedDuration[MAXPLAYERS+1][NUM_ACTIONS];
 new gFlags[MAXPLAYERS+1][NUM_ACTIONS];
 new gRemainingDuration[MAXPLAYERS+1];
@@ -184,22 +184,22 @@ new gRemainingDuration[MAXPLAYERS+1];
 new precache_laser = 0;
 
 // Native interface settings
-new bool:g_bIsTF2 = false;
-new bool:g_bNativeOverride = false;
+boolg_bIsTF2 = false;
+boolg_bNativeOverride = false;
 new g_iNativeHooks;
 new g_iNativeGrabs;
 new g_iNativeRopes;
 
 // Sounds
-new String:fireWav[PLATFORM_MAX_PATH]       = "weapons/crossbow/fire1.wav";
-new String:hitWav[PLATFORM_MAX_PATH]        = "weapons/crossbow/hit1.wav";
-new String:errorWav[PLATFORM_MAX_PATH]      = ERROR_SOUND;
-new String:pullerWav[PLATFORM_MAX_PATH]     = PULLER_SOUND;
-new String:deniedWav[PLATFORM_MAX_PATH]     = DENIED_SOUND;
-new String:grabberHitWav[PLATFORM_MAX_PATH] = GRABHIT_SOUND;
-new String:seekingWav[PLATFORM_MAX_PATH]    = SEEKING_SOUND;
+charfireWav[PLATFORM_MAX_PATH]       = "weapons/crossbow/fire1.wav";
+charhitWav[PLATFORM_MAX_PATH]        = "weapons/crossbow/hit1.wav";
+charerrorWav[PLATFORM_MAX_PATH]      = ERROR_SOUND;
+charpullerWav[PLATFORM_MAX_PATH]     = PULLER_SOUND;
+chardeniedWav[PLATFORM_MAX_PATH]     = DENIED_SOUND;
+chargrabberHitWav[PLATFORM_MAX_PATH] = GRABHIT_SOUND;
+charseekingWav[PLATFORM_MAX_PATH]    = SEEKING_SOUND;
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLResAskPluginLoad2(Handle myself, bool late, char[] error, err_max)
 {
     // Register Natives
     CreateNative("ControlHookGrabRope",Native_ControlHookGrabRope);
@@ -308,7 +308,7 @@ public OnPluginStart()
     cvarRopeBlue=CreateConVar("hgrsource_rope_blue","0","The blue component of the beam (Only if you are using a custom color)");
 
     // Disable noflag if the game isn't TF2.
-    decl String:modname[30];
+    charmodname[30];
     GetGameFolderName(modname, sizeof(modname));
 
     g_bIsTF2 = StrEqual(modname,"tf",false);
@@ -402,7 +402,7 @@ public OnClientDisconnect(client)
  *Events*
  *********/
 
-public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public PlayerSpawnEvent(Handle event,const char[]name[],bool dontBroadcast)
 {
     new index=GetClientOfUserId(GetEventInt(event,"userid")); // Get clients index
     // Tell plugin they aren't using any of its features
@@ -423,7 +423,7 @@ public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
  *Natives*
  **********/
 
-public Native_ControlHookGrabRope(Handle:plugin,numParams)
+public Native_ControlHookGrabRope(Handle plugin,numParams)
 {
     if (numParams >= 1)
         g_bNativeOverride = GetNativeCell(1);
@@ -431,7 +431,7 @@ public Native_ControlHookGrabRope(Handle:plugin,numParams)
         g_bNativeOverride = true;
 }
 
-public Native_Hook(Handle:plugin,numParams)
+public Native_Hook(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -441,7 +441,7 @@ public Native_Hook(Handle:plugin,numParams)
     }
 }
 
-public Native_UnHook(Handle:plugin,numParams)
+public Native_UnHook(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -451,7 +451,7 @@ public Native_UnHook(Handle:plugin,numParams)
     }
 }
 
-public Native_HookToggle(Handle:plugin,numParams)
+public Native_HookToggle(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -466,7 +466,7 @@ public Native_HookToggle(Handle:plugin,numParams)
     }
 }
 
-public Native_Grab(Handle:plugin,numParams)
+public Native_Grab(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -476,7 +476,7 @@ public Native_Grab(Handle:plugin,numParams)
     }
 }
 
-public Native_Drop(Handle:plugin,numParams)
+public Native_Drop(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -486,7 +486,7 @@ public Native_Drop(Handle:plugin,numParams)
     }
 }
 
-public Native_GrabToggle(Handle:plugin,numParams)
+public Native_GrabToggle(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -501,7 +501,7 @@ public Native_GrabToggle(Handle:plugin,numParams)
     }
 }
 
-public Native_Rope(Handle:plugin,numParams)
+public Native_Rope(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -511,7 +511,7 @@ public Native_Rope(Handle:plugin,numParams)
     }
 }
 
-public Native_Detach(Handle:plugin,numParams)
+public Native_Detach(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -521,7 +521,7 @@ public Native_Detach(Handle:plugin,numParams)
     }
 }
 
-public Native_RopeToggle(Handle:plugin,numParams)
+public Native_RopeToggle(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -536,21 +536,21 @@ public Native_RopeToggle(Handle:plugin,numParams)
     }
 }
 
-public Native_GiveHook(Handle:plugin,numParams)
+public Native_GiveHook(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
         new client = GetNativeCell(1);
         new duration = (numParams >= 2) ? GetNativeCell(2) : 0;
-        new Float:range = (numParams >= 3) ? (Float:GetNativeCell(3)) : 0.0;
-        new Float:cooldown = (numParams >= 4) ? (Float:GetNativeCell(4)) : 0.0;
+        floatrange = (numParams >= 3) ? (Float:GetNativeCell(3)) : 0.0;
+        floatcooldown = (numParams >= 4) ? (Float:GetNativeCell(4)) : 0.0;
         new flags = (numParams >= 5) ? GetNativeCell(5) : 0;
         if (!ClientAccess(client,Give,Hook,duration,range,cooldown,flags))
             g_iNativeHooks++;
     }
 }
 
-public Native_TakeHook(Handle:plugin,numParams)
+public Native_TakeHook(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -567,21 +567,21 @@ public Native_TakeHook(Handle:plugin,numParams)
     }
 }
 
-public Native_GiveGrab(Handle:plugin,numParams)
+public Native_GiveGrab(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
         new client = GetNativeCell(1);
         new duration = (numParams >= 2) ? GetNativeCell(2) : 0;
-        new Float:range = (numParams >= 3) ? (Float:GetNativeCell(3)) : 0.0;
-        new Float:cooldown = (numParams >= 4) ? (Float:GetNativeCell(4)) : 0.0;
+        floatrange = (numParams >= 3) ? (Float:GetNativeCell(3)) : 0.0;
+        floatcooldown = (numParams >= 4) ? (Float:GetNativeCell(4)) : 0.0;
         new flags = (numParams >= 5) ? GetNativeCell(5) : 0;
         if (!ClientAccess(client,Give,Grab,duration,range,cooldown,flags))
             g_iNativeGrabs++;
     }
 }
 
-public Native_TakeGrab(Handle:plugin,numParams)
+public Native_TakeGrab(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -598,21 +598,21 @@ public Native_TakeGrab(Handle:plugin,numParams)
     }
 }
 
-public Native_GiveRope(Handle:plugin,numParams)
+public Native_GiveRope(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
         new client = GetNativeCell(1);
         new duration = (numParams >= 2) ? GetNativeCell(2) : 0;
-        new Float:range= (numParams >= 3) ? (Float:GetNativeCell(3)) : 0.0;
-        new Float:cooldown = (numParams >= 4) ? (Float:GetNativeCell(4)) : 0.0;
+        floatrange= (numParams >= 3) ? (Float:GetNativeCell(3)) : 0.0;
+        floatcooldown = (numParams >= 4) ? (Float:GetNativeCell(4)) : 0.0;
         new flags = (numParams >= 5) ? GetNativeCell(5) : 0;
         if (!ClientAccess(client,Give,Rope,duration,range,cooldown,flags))
             g_iNativeRopes++;
     }
 }
 
-public Native_TakeRope(Handle:plugin,numParams)
+public Native_TakeRope(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -629,7 +629,7 @@ public Native_TakeRope(Handle:plugin,numParams)
     }
 }
 
-public Native_HGRState(Handle:plugin,numParams)
+public Native_HGRState(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -640,7 +640,7 @@ public Native_HGRState(Handle:plugin,numParams)
     return false;
 }
 
-public Native_IsGrabbed(Handle:plugin,numParams)
+public Native_IsGrabbed(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -650,7 +650,7 @@ public Native_IsGrabbed(Handle:plugin,numParams)
     return false;
 }
 
-public Native_GrabTarget(Handle:plugin,numParams)
+public Native_GrabTarget(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -664,21 +664,21 @@ public Native_GrabTarget(Handle:plugin,numParams)
  *Cmds*
  *******/
 
-public Action:HookCmd(client,argc)
+public ActionHookCmd(client,argc)
 {
     if (IsClientInGame(client) && IsPlayerAlive(client))
         Action_Hook(client);
     return Plugin_Handled;
 }
 
-public Action:UnHookCmd(client,argc)
+public ActionUnHookCmd(client,argc)
 {
     if (IsClientInGame(client) && IsPlayerAlive(client))
         Action_UnHook(client);
     return Plugin_Handled;
 }
 
-public Action:HookToggle(client,argc)
+public ActionHookToggle(client,argc)
 {
     if (IsClientInGame(client) && IsPlayerAlive(client))
     {
@@ -690,21 +690,21 @@ public Action:HookToggle(client,argc)
     return Plugin_Handled;
 }
 
-public Action:GrabCmd(client,argc)
+public ActionGrabCmd(client,argc)
 {
     if (IsClientInGame(client) && IsPlayerAlive(client))
         Action_Grab(client);
     return Plugin_Handled;
 }
 
-public Action:DropCmd(client,argc)
+public ActionDropCmd(client,argc)
 {
     if (IsClientInGame(client) && IsPlayerAlive(client))
         Action_Drop(client);
     return Plugin_Handled;
 }
 
-public Action:GrabToggle(client,argc)
+public ActionGrabToggle(client,argc)
 {
     if (IsClientInGame(client) && IsPlayerAlive(client))
     {
@@ -716,21 +716,21 @@ public Action:GrabToggle(client,argc)
     return Plugin_Handled;
 }
 
-public Action:RopeCmd(client,argc)
+public ActionRopeCmd(client,argc)
 {
     if (IsClientInGame(client) && IsPlayerAlive(client))
         Action_Rope(client);
     return Plugin_Handled;
 }
 
-public Action:DetachCmd(client,argc)
+public ActionDetachCmd(client,argc)
 {
     if (IsClientInGame(client) && IsPlayerAlive(client))
         Action_Detach(client);
     return Plugin_Handled;
 }
 
-public Action:RopeToggle(client,argc)
+public ActionRopeToggle(client,argc)
 {
     if (IsClientInGame(client) && IsPlayerAlive(client))
     {
@@ -746,13 +746,13 @@ public Action:RopeToggle(client,argc)
  *Admin*
  ********/
 
-public Action:GiveHook(client,argc)
+public ActionGiveHook(client,argc)
 {
     if(argc>=1)
     {
         if(!g_bNativeOverride && IsFeatureEnabled(Hook) && IsFeatureAdminOnly(Hook))
         {
-            decl String:target[64];
+            chartarget[64];
             GetCmdArg(1,target,sizeof(target));
             new count=Access(target,Give,Hook);
             if(!count)
@@ -765,13 +765,13 @@ public Action:GiveHook(client,argc)
     return Plugin_Handled;
 }
 
-public Action:TakeHook(client,argc)
+public ActionTakeHook(client,argc)
 {
     if(argc>=1)
     {
         if(!g_bNativeOverride && IsFeatureEnabled(Hook) && IsFeatureAdminOnly(Hook))
         {
-            decl String:target[64];
+            chartarget[64];
             GetCmdArg(1,target,sizeof(target));
             new count=Access(target,Take,Hook);
             if(!count)
@@ -784,13 +784,13 @@ public Action:TakeHook(client,argc)
     return Plugin_Handled;
 }
 
-public Action:GiveGrab(client,argc)
+public ActionGiveGrab(client,argc)
 {
     if(argc>=1)
     {
         if(!g_bNativeOverride && IsFeatureEnabled(Grab) && IsFeatureAdminOnly(Grab))
         {
-            decl String:target[64];
+            chartarget[64];
             GetCmdArg(1,target,sizeof(target));
             new count=Access(target,Give,Grab);
             if(!count)
@@ -803,13 +803,13 @@ public Action:GiveGrab(client,argc)
     return Plugin_Handled;
 }
 
-public Action:TakeGrab(client,argc)
+public ActionTakeGrab(client,argc)
 {
     if(argc>=1)
     {
         if(!g_bNativeOverride && IsFeatureEnabled(Grab) && IsFeatureAdminOnly(Grab))
         {
-            decl String:target[64];
+            chartarget[64];
             GetCmdArg(1,target,sizeof(target));
             new count=Access(target,Take,Grab);
             if(!count)
@@ -822,13 +822,13 @@ public Action:TakeGrab(client,argc)
     return Plugin_Handled;
 }
 
-public Action:GiveRope(client,argc)
+public ActionGiveRope(client,argc)
 {
     if(argc>=1)
     {
         if(!g_bNativeOverride && IsFeatureEnabled(Rope) && IsFeatureAdminOnly(Rope))
         {
-            decl String:target[64];
+            chartarget[64];
             GetCmdArg(1,target,sizeof(target));
             new count=Access(target,Give,Rope);
             if(!count)
@@ -841,13 +841,13 @@ public Action:GiveRope(client,argc)
     return Plugin_Handled;
 }
 
-public Action:TakeRope(client,argc)
+public ActionTakeRope(client,argc)
 {
     if(argc>=1)
     {
         if(!g_bNativeOverride && IsFeatureEnabled(Rope) && IsFeatureAdminOnly(Rope))
         {
-            decl String:target[64];
+            chartarget[64];
             GetCmdArg(1,target,sizeof(target));
             new count=Access(target,Take,Rope);
             if(!count)
@@ -864,7 +864,7 @@ public Action:TakeRope(client,argc)
  *Access*
  *********/
 
-Access(const String:target[],HGRSourceAccess:access,HGRSourceAction:action)
+Access(const char[]target[],HGRSourceAccess:access,HGRSourceAction:action)
 {
     new clients[MAXPLAYERS];
     new count=FindMatchingPlayers(target,clients);
@@ -877,7 +877,7 @@ Access(const String:target[],HGRSourceAccess:access,HGRSourceAction:action)
 
 bool:ClientAccess(client,HGRSourceAccess:access,HGRSourceAction:action,duration,Float:range,Float:cooldown,flags)
 {
-    new bool:prevState = false;
+    boolprevState = false;
     if(access==Give)
     {
         if(action==Hook)
@@ -1064,25 +1064,25 @@ Action_Hook(client)
                     }
                     else
                     {
-                        new Float:cooldown = gCooldown[client][ACTION_HOOK];
-                        new Float:lastUsed = gLastUsed[client][ACTION_HOOK];
+                        floatcooldown = gCooldown[client][ACTION_HOOK];
+                        floatlastUsed = gLastUsed[client][ACTION_HOOK];
                         if (cooldown <= 0.0 || lastUsed <= 0.0 ||
                             ((GetGameTime() - lastUsed) >= cooldown))
                         {
                             if (fireWav[0])
                                 PrepareAndEmitSoundToAll(fireWav, client); // Emit fire sound
 
-                            new Float:clientloc[3],Float:clientang[3];
+                            floatclientloc[3],Float:clientang[3];
                             GetClientEyePosition(client,clientloc); // Get the position of the player's eyes
                             GetClientEyeAngles(client,clientang); // Get the angle the player is looking
 
                             // Create a ray that tells where the player is looking
-                            new Handle:hTrace = TR_TraceRayFilterEx(clientloc,clientang,MASK_SOLID,RayType_Infinite,TraceRayTryToHit);
+                            HandlehTrace = TR_TraceRayFilterEx(clientloc,clientang,MASK_SOLID,RayType_Infinite,TraceRayTryToHit);
                             TR_GetEndPosition(gHookEndloc[client], hTrace); // Get the end xyz coordinate of where a player is looking
                             CloseHandle(hTrace);
 
-                            new Float:limit=gAllowedRange[client][ACTION_GRAB];
-                            new Float:distance=GetVectorDistance(clientloc,gHookEndloc[client]);
+                            floatlimit=gAllowedRange[client][ACTION_GRAB];
+                            floatdistance=GetVectorDistance(clientloc,gHookEndloc[client]);
                             if (limit == 0.0 || distance <= limit)
                             {
                                 if (gRemainingDuration[client] <= 0)
@@ -1153,7 +1153,7 @@ Action_Hook(client)
 
 Hook_Push(client)
 {
-    new Float:clientloc[3],Float:velocity[3];
+    floatclientloc[3],Float:velocity[3];
     GetClientAbsOrigin(client,clientloc); // Get the xyz coordinate of the player
     clientloc[2]+=30.0;
 
@@ -1166,17 +1166,17 @@ Hook_Push(client)
     // Push the client
     TeleportEntity(client,NULL_VECTOR,NULL_VECTOR,velocity);
 
-    new Float:distance=GetVectorDistance(clientloc,gHookEndloc[client]);
+    floatdistance=GetVectorDistance(clientloc,gHookEndloc[client]);
     if (distance<30.0)
     {
         SetEntityMoveType(client,MOVETYPE_NONE); // Freeze client
 
-        new Float:gravity = gGravity[client]; // Set gravity back to saved value (or normal)
+        floatgravity = gGravity[client]; // Set gravity back to saved value (or normal)
         SetEntPropFloat(client,Prop_Data,"m_flGravity",(gravity != 0.0) ? gravity : 1.0);
     }
 }
 
-public Action:Hooking(Handle:timer,any:userid)
+public ActionHooking(Handle timer,any:userid)
 {
     new index = GetClientOfUserId(userid);
     if (index > 0)
@@ -1226,7 +1226,7 @@ Action_UnHook(client)
 
     if (IsClientInGame(client))
     {
-        new Float:gravity = gGravity[client]; // Set gravity back to saved value (or normal)
+        floatgravity = gGravity[client]; // Set gravity back to saved value (or normal)
         SetEntPropFloat(client,Prop_Data,"m_flGravity",(gravity != 0.0) ? gravity : 1.0);
         SetEntityMoveType(client,MOVETYPE_WALK); // Unfreeze client
     }
@@ -1253,8 +1253,8 @@ Action_Grab(client)
             {
                 if (HasAccess(client,Grab))
                 {
-                    new Float:cooldown = gCooldown[client][ACTION_GRAB];
-                    new Float:lastUsed = gLastUsed[client][ACTION_GRAB];
+                    floatcooldown = gCooldown[client][ACTION_GRAB];
+                    floatlastUsed = gLastUsed[client][ACTION_GRAB];
                     if (cooldown <= 0.0 || lastUsed <= 0.0 ||
                         ((GetGameTime() - lastUsed) >= cooldown))
                     {
@@ -1322,7 +1322,7 @@ Action_Grab(client)
     TraceReturn();
 }
 
-public Action:GrabSearch(Handle:timer,any:userid)
+public ActionGrabSearch(Handle timer,any:userid)
 {
     new index = GetClientOfUserId(userid);
 
@@ -1339,19 +1339,19 @@ public Action:GrabSearch(Handle:timer,any:userid)
             PrintCenterText(index,"Searching for a target...");
             Trace("%d:%N is searching for a target", index, index);
 
-            decl Float:clientloc[3],Float:clientang[3];
+            floatclientloc[3],Float:clientang[3];
             GetClientEyePosition(index,clientloc); // Get seekers eye coordinate
             GetClientEyeAngles(index,clientang); // Get angle of where the player is looking
 
             // Create a ray that tells where the player is looking
-            new Handle:hTrace = TR_TraceRayFilterEx(clientloc,clientang,MASK_ALL,RayType_Infinite,TraceRayGrabEnt);
+            HandlehTrace = TR_TraceRayFilterEx(clientloc,clientang,MASK_ALL,RayType_Infinite,TraceRayGrabEnt);
             new target = TR_GetEntityIndex(hTrace); // Set the seekers targetindex to the person he picked up
 
             if (target > 0 && target <= MaxClients && IsClientInGame(target))
             {
                 // Found something
-                decl String:name[32];
-                new bool:bValid = (GetEntityNetClass(target,name,sizeof(name)) &&
+                charname[32];
+                boolbValid = (GetEntityNetClass(target,name,sizeof(name)) &&
                                    StrContains(name, "Player") >= 0);
                 if (bValid)
                 {
@@ -1372,7 +1372,7 @@ public Action:GrabSearch(Handle:timer,any:userid)
                             bValid = false;
                             #if defined _TRACE
                                 new pcond, pcond2;
-                                decl String:condFlags[64];
+                                charcondFlags[64];
                                 TF2_GetPlayerConditionString(client, condFlags, sizeof(condFlags), pcond, pcond2);
                                 Trace("%d:%N was incapacitated; pcond=[%s]-(0x%08x:%08x), stun=0x%08x", \
                                       index, index, condFlags, pcond, pcond2, \
@@ -1387,7 +1387,7 @@ public Action:GrabSearch(Handle:timer,any:userid)
                             bValid = false;
                             #if defined _TRACE
                                 new pcond, pcond2;
-                                decl String:condFlags[64];
+                                charcondFlags[64];
                                 TF2_GetPlayerConditionString(target, condFlags, sizeof(condFlags), pcond, pcond2);
                                 Trace("%d:%N found invalid target %d:%N with pcond=[%s]-(0x%08x:%08x), stun=0x%08x", \
                                       index, index, target, target, condFlags, pcond, pcond2, \
@@ -1426,7 +1426,7 @@ public Action:GrabSearch(Handle:timer,any:userid)
 
                             #if defined _TRACE
                                 new pcond, pcond2;
-                                decl String:condFlags[64];
+                                charcondFlags[64];
                                 TF2_GetPlayerConditionString(target, condFlags, sizeof(condFlags), pcond, pcond2);
                                 Trace("%d:%N found target %d:%N with pcond=[%s]-(0x%08x:%08x), stun=0x%08x", \
                                       index, index, target, target, condFlags, pcond, pcond2, \
@@ -1455,7 +1455,7 @@ public Action:GrabSearch(Handle:timer,any:userid)
 
                 if (bValid)
                 {
-                    decl Float:targetloc[3];
+                    floattargetloc[3];
                     GetClientAbsOrigin(target,targetloc); // Find the target's xyz coordinate
 
                     // Found a player that can be grabbed.
@@ -1464,8 +1464,8 @@ public Action:GrabSearch(Handle:timer,any:userid)
 
                     gGrabCounter[index]=0;
 
-                    new Float:distance=GetVectorDistance(clientloc,targetloc);
-                    new Float:limit=gAllowedRange[index][ACTION_GRAB];
+                    floatdistance=GetVectorDistance(clientloc,targetloc);
+                    floatlimit=gAllowedRange[index][ACTION_GRAB];
                     if (limit <= 0.0 || limit >= distance)
                     {
                         new Action:res = Plugin_Continue;
@@ -1571,7 +1571,7 @@ public Action:GrabSearch(Handle:timer,any:userid)
     return Plugin_Stop;
 }
 
-public Action:Grabbing(Handle:timer,any:userid)
+public ActionGrabbing(Handle timer,any:userid)
 {
     new index = GetClientOfUserId(userid);
 
@@ -1611,7 +1611,7 @@ public Action:Grabbing(Handle:timer,any:userid)
                     {
                         #if defined _TRACE
                             new pcond, pcond2;
-                            decl String:condFlags[64];
+                            charcondFlags[64];
                             TF2_GetPlayerConditionString(client, condFlags, sizeof(condFlags), pcond, pcond2);
                             Trace("%d:%N dropped %d:%N due to incapacitation; pcond=[%s]-(0x%08x:%08x), stun=0x%08x", \
                                   index, index, target, target, condFlags, pcond, pcond2, \
@@ -1629,7 +1629,7 @@ public Action:Grabbing(Handle:timer,any:userid)
                     {
                         #if defined _TRACE
                             new pcond, pcond2;
-                            decl String:condFlags[64];
+                            charcondFlags[64];
                             TF2_GetPlayerConditionString(target, condFlags, sizeof(condFlags), pcond, pcond2);
                             TraceReturn("%d:%N dropped invalid target %d:%N with pcond=[%s]-(0x%08x:%08x), stun=0x%08x", \
                                         index, index, target, target, condFlags, pcond, pcond2, \
@@ -1643,7 +1643,7 @@ public Action:Grabbing(Handle:timer,any:userid)
                     {
                         #if defined _TRACE
                             new pcond, pcond2;
-                            decl String:condFlags[64];
+                            charcondFlags[64];
                             TF2_GetPlayerConditionString(target, condFlags, sizeof(condFlags), pcond, pcond2);
                             TraceReturn("%d:%N dropped cloaked target %d:%N with pcond=[%s]-(0x%08x:%08x)", \
                                         index, index, target, target, condFlags, pcond, pcond2);
@@ -1658,7 +1658,7 @@ public Action:Grabbing(Handle:timer,any:userid)
                         {
                             #if defined _TRACE
                                 new pcond, pcond2;
-                                decl String:condFlags[64];
+                                charcondFlags[64];
                                 TF2_GetPlayerConditionString(target, condFlags, sizeof(condFlags), pcond, pcond2);
                                 TraceReturn("%d:%N dropped disguised target %d:%N with pcond=[%s]-(0x%08x:%08x)", \
                                             index, index, target, target, condFlags, pcond, pcond2);
@@ -1697,7 +1697,7 @@ public Action:Grabbing(Handle:timer,any:userid)
                 }
 
                 // Find where to push the target
-                new Float:clientloc[3],Float:clientang[3],Float:targetloc[3],Float:endvec[3],Float:distance[3];
+                floatclientloc[3],Float:clientang[3],Float:targetloc[3],Float:endvec[3],Float:distance[3];
                 GetClientAbsOrigin(index,clientloc);
                 GetClientEyeAngles(index,clientang);
                 GetClientAbsOrigin(target,targetloc);
@@ -1706,7 +1706,7 @@ public Action:Grabbing(Handle:timer,any:userid)
                 if (gFlags[index][ACTION_GRAB] != 0)
                 {
                     // Adjust the distance if the target is closer, or drag the victim in.
-                    new Float:targetDistance=GetVectorDistance(clientloc,targetloc);
+                    floattargetDistance=GetVectorDistance(clientloc,targetloc);
                     if (gGrabDist[index] > targetDistance)
                         gGrabDist[index] = targetDistance;
                     else if (gGrabDist[index] > 1)
@@ -1721,7 +1721,7 @@ public Action:Grabbing(Handle:timer,any:userid)
                 }
 
                 // Find where the player is aiming
-                new Handle:hTrace = TR_TraceRayFilterEx(clientloc,clientang,MASK_ALL,RayType_Infinite,TraceRayTryToHit);
+                HandlehTrace = TR_TraceRayFilterEx(clientloc,clientang,MASK_ALL,RayType_Infinite,TraceRayTryToHit);
                 TR_GetEndPosition(endvec, hTrace); // Get the end position of the trace ray
                 CloseHandle(hTrace);
 
@@ -1729,11 +1729,11 @@ public Action:Grabbing(Handle:timer,any:userid)
                 distance[1]=endvec[1]-clientloc[1];
                 distance[2]=endvec[2]-clientloc[2];
 
-                new Float:que=gGrabDist[index]/(SquareRoot(distance[0]*distance[0]+
+                floatque=gGrabDist[index]/(SquareRoot(distance[0]*distance[0]+
                                                            distance[1]*distance[1]+
                                                            distance[2]*distance[2]));
 
-                decl Float:velocity[3];
+                floatvelocity[3];
                 velocity[0]=(((distance[0]*que)+clientloc[0])-targetloc[0])*(GetConVarFloat(cvarGrabSpeed)/1.666667);
                 velocity[1]=(((distance[1]*que)+clientloc[1])-targetloc[1])*(GetConVarFloat(cvarGrabSpeed)/1.666667);
                 velocity[2]=(((distance[2]*que)+clientloc[2])-targetloc[2])*(GetConVarFloat(cvarGrabSpeed)/1.666667);
@@ -1810,7 +1810,7 @@ Action_Drop(client)
 
         if (IsClientInGame(target))
         {
-            new Float:gravity = gGravity[target]; // Set gravity back to saved value (or normal)
+            floatgravity = gGravity[target]; // Set gravity back to saved value (or normal)
             SetEntPropFloat(target,Prop_Data,"m_flGravity",(gravity != 0.0) ? gravity : 1.0);
 
             if (gFlags[client][ACTION_GRAB] != 0) // Grabber is a Puller
@@ -1861,25 +1861,25 @@ Action_Rope(client)
                     }
                     else
                     {
-                        new Float:cooldown = gCooldown[client][ACTION_ROPE];
-                        new Float:lastUsed = gLastUsed[client][ACTION_ROPE];
+                        floatcooldown = gCooldown[client][ACTION_ROPE];
+                        floatlastUsed = gLastUsed[client][ACTION_ROPE];
                         if (cooldown <= 0.0 || lastUsed <= 0.0 ||
                             ((GetGameTime() - lastUsed) >= cooldown))
                         {
                             if (fireWav[0])
                                 PrepareAndEmitSoundToAll(fireWav, client); // Emit fire sound
 
-                            new Float:clientloc[3],Float:clientang[3];
+                            floatclientloc[3],Float:clientang[3];
                             GetClientEyePosition(client,clientloc); // Get the position of the player's eyes
                             GetClientEyeAngles(client,clientang); // Get the angle the player is looking
 
                             // Create a ray that tells where the player is looking
-                            new Handle:hTrace = TR_TraceRayFilterEx(clientloc,clientang,MASK_ALL,RayType_Infinite,TraceRayTryToHit);
+                            HandlehTrace = TR_TraceRayFilterEx(clientloc,clientang,MASK_ALL,RayType_Infinite,TraceRayTryToHit);
                             TR_GetEndPosition(gRopeEndloc[client], hTrace); // Get the end xyz coordinate of where a player is looking
                             CloseHandle(hTrace);
 
-                            new Float:limit=gAllowedRange[client][ACTION_ROPE];
-                            new Float:dist=GetVectorDistance(clientloc,gRopeEndloc[client]);
+                            floatlimit=gAllowedRange[client][ACTION_ROPE];
+                            floatdist=GetVectorDistance(clientloc,gRopeEndloc[client]);
                             if (limit <= 0.0 || limit >= dist)
                             {
                                 if (gRemainingDuration[client] == 0)
@@ -1943,7 +1943,7 @@ Action_Rope(client)
     }
 }
 
-public Action:Roping(Handle:timer,any:userid)
+public ActionRoping(Handle timer,any:userid)
 {
     new index = GetClientOfUserId(userid);
     if (index > 0)
@@ -1972,13 +1972,13 @@ public Action:Roping(Handle:timer,any:userid)
                 return Plugin_Stop;
             }
 
-            new Float:clientloc[3],Float:velocity[3],Float:velocity2[3];
+            floatclientloc[3],Float:velocity[3],Float:velocity2[3];
             GetClientAbsOrigin(index,clientloc);
             GetVelocity(index,velocity);
             velocity2[0]=(gRopeEndloc[index][0]-clientloc[0])*3.0;
             velocity2[1]=(gRopeEndloc[index][1]-clientloc[1])*3.0;
 
-            new Float:y_coord,Float:x_coord;
+            floaty_coord,Float:x_coord;
             y_coord=velocity2[0]*velocity2[0]+velocity2[1]*velocity2[1];
             x_coord=(GetConVarFloat(cvarRopeSpeed)*20.0)/SquareRoot(y_coord);
 
@@ -2016,14 +2016,14 @@ Action_Detach(client)
  *Trace Filters*
  ****************/
 
-public bool:TraceRayTryToHit(entity,mask)
+public boolTraceRayTryToHit(entity,mask)
 {
     if(entity>0&&entity<=MaxClients) // Check if the beam hit a player and tell it to keep tracing if it did
         return false;
     return true;
 }
 
-public bool:TraceRayGrabEnt(entity,mask)
+public boolTraceRayGrabEnt(entity,mask)
 {
     if(entity>0) // Check if the beam hit an entity other than the grabber, and stop if it does
     {
@@ -2039,7 +2039,7 @@ public bool:TraceRayGrabEnt(entity,mask)
  *Helpers*
  **********/
 
-EmitSoundFromOrigin(const String:sound[],const Float:orig[3])
+EmitSoundFromOrigin(const char[]sound[],const Float:orig[3])
 {
     EmitSoundToAll(sound,SOUND_FROM_WORLD,SNDCHAN_AUTO,SNDLEVEL_NORMAL,
                    SND_NOFLAGS,SNDVOL_NORMAL,SNDPITCH_NORMAL,-1,orig,
@@ -2073,7 +2073,7 @@ Float:CreateVectorFromPoints(const Float:vec1[3],const Float:vec2[3],Float:outpu
 
 stock AddInFrontOf(Float:orig[3],Float:angle[3],Float:distance,Float:output[3])
 {
-    new Float:viewvector[3];
+    floatviewvector[3];
     ViewVector(angle,viewvector);
     output[0]=viewvector[0]*distance+orig[0];
     output[1]=viewvector[1]*distance+orig[1];
@@ -2104,7 +2104,7 @@ BeamEffect(Float:startvec[3],Float:endvec[3],Float:life,Float:width,
  *Partial Name Parser*
  **********************/
 
-FindMatchingPlayers(const String:matchstr[],clients[])
+FindMatchingPlayers(const char[]matchstr[],clients[])
 {
     new count=0;
     if(StrEqual(matchstr,"@all",false))
@@ -2162,7 +2162,7 @@ FindMatchingPlayers(const String:matchstr[],clients[])
         {
             if(IsClientInGame(x))
             {
-                decl String:name[64];
+                charname[64];
                 GetClientName(x,name,sizeof(name));
                 if(StrContains(name,matchstr,false)!=-1)
                 {
@@ -2177,11 +2177,11 @@ FindMatchingPlayers(const String:matchstr[],clients[])
 
 stock bool:IsPlayerStuck(client)
 {
-    decl Float:vecMin[3], Float:vecMax[3], Float:vecOrigin[3];
+    floatvecMin[3], Float:vecMax[3], Float:vecOrigin[3];
     GetClientMins(client, vecMin);
     GetClientMaxs(client, vecMax);
     GetClientAbsOrigin(client, vecOrigin);
-    new Handle:hTrace = TR_TraceHullFilterEx(vecOrigin, vecOrigin, vecMin, vecMax,
+    HandlehTrace = TR_TraceHullFilterEx(vecOrigin, vecOrigin, vecMin, vecMax,
                                              MASK_PLAYERSOLID, TraceRayHitCollidable,
                                              client);
     new entity = TR_GetEntityIndex(hTrace);
@@ -2189,7 +2189,7 @@ stock bool:IsPlayerStuck(client)
     return (entity > 0);
 }
 
-public bool:TraceRayHitCollidable(entity, mask)
+public boolTraceRayHitCollidable(entity, mask)
 {
     if (entity > MaxClients)
     {

@@ -33,19 +33,19 @@
 #include "effect/SendEffects"
 #include "effect/FlashScreen"
 
-#define ResetExclaimTimer(%1) m_ExclaimTimers[%1] = INVALID_HANDLE
+#define ResetExclaimTimer(%1) m_ExclaimTimers[%1] = null
 
 new raceID, burrowID, degenerationID, meleeID, attackID;
 
-new Float:g_BroodlingAttackRange[]      = { 1000.0, 800.0, 800.0, 800.0, 800.0 };
-new Float:g_AdrenalGlandsPercent[]      = { 0.0, 0.15, 0.35, 0.55, 0.65 };
+float g_BroodlingAttackRange[]      = { 1000.0, 800.0, 800.0, 800.0, 800.0 };
+float g_AdrenalGlandsPercent[]      = { 0.0, 0.15, 0.35, 0.55, 0.65 };
 
-new const String:g_AdrenalGlandsSound[] = "sc/zbratt00.wav";
+new const char[] g_AdrenalGlandsSound[] = "sc/zbratt00.wav";
 
-new const String:spawnWav[]             = "sc/zbrrdy00.wav";
-new const String:deathWav[]             = "sc/zbrdth00.wav";
+new const char[] spawnWav[]             = "sc/zbrrdy00.wav";
+new const char[] deathWav[]             = "sc/zbrdth00.wav";
 
-new const String:broodlingWav[][]       = { "sc/zbrwht00.wav" ,
+new const char[] broodlingWav[][]       = { "sc/zbrwht00.wav" ,
                                             "sc/zbrwht01.wav" ,
                                             "sc/zbrwht02.wav" ,
                                             "sc/zbrwht03.wav" ,
@@ -54,11 +54,11 @@ new const String:broodlingWav[][]       = { "sc/zbrwht00.wav" ,
                                             "sc/zbrpss02.wav" ,
                                             "sc/zbrpss03.wav" };
 
-new m_LastRace[MAXPLAYERS+1];
-new m_Countdown[MAXPLAYERS+1];
-new Handle:m_ExclaimTimers[MAXPLAYERS+1];
+	int m_LastRace[MAXPLAYERS+1];
+	int m_Countdown[MAXPLAYERS+1];
+Handle m_ExclaimTimers[MAXPLAYERS+1];
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "SourceCraft Race - Broodling",
     author = "-=|JFH|=-Naris",
@@ -67,7 +67,7 @@ public Plugin:myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.broodling.phrases.txt");
 
@@ -96,7 +96,7 @@ public OnSourceCraftReady()
                         g_AdrenalGlandsPercent, raceID, meleeID);
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupRespawn();
     SetupLightning();
@@ -110,26 +110,26 @@ public OnMapStart()
     SetupSound(deathWav);
     SetupSound(g_AdrenalGlandsSound);
     
-    for (new i = 0; i < sizeof(broodlingWav); i++)
+    for (int i = 0; i < sizeof(broodlingWav); i++)
         SetupSound(broodlingWav[i]);
 }
 
-public OnMapEnd()
+public void OnMapEnd()
 {
-    for (new i = 1; i <= MaxClients; i++)
+    for (int i = 1; i <= MaxClients; i++)
     {
         ResetClientTimer(i);
         ResetExclaimTimer(i);
     }
 }
 
-public OnClientDisconnect(client)
+public void OnClientDisconnect(client)
 {
     KillClientTimer(client);
     KillExclaimTimer(client);
 }
 
-public Action:OnRaceDeselected(client,oldrace,newrace)
+public Action OnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
@@ -157,7 +157,7 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
         return Plugin_Continue;
 }   
 
-public Action:OnRaceSelected(client,oldrace,newrace)
+public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
@@ -192,18 +192,18 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
     }
 }
 
-public OnUltimateCommand(client,race,bool:pressed,arg)
+public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (pressed && race==raceID && IsValidClientAlive(client))
     {
-        new burrow_level = GetUpgradeLevel(client,race,burrowID);
+        int burrow_level = GetUpgradeLevel(client,race,burrowID);
         if (burrow_level > 0)
             Burrow(client, burrow_level);
     }
 }
 
 // Events
-public OnPlayerSpawnEvent(Handle:event, client, race)
+public OnPlayerSpawnEvent(Handle event, client, race)
 {
     if (race == raceID)
     {
@@ -218,14 +218,14 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
     }
 }
 
-public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacker_index,
-                                attacker_race, damage, absorbed, bool:from_sc)
+public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
+                                attacker_race, damage, absorbed, bool from_sc)
 {
     if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index &&
         attacker_race == raceID)
     {
-        new adrenal_glands_level = GetUpgradeLevel(attacker_index,raceID,meleeID);
+        int adrenal_glands_level = GetUpgradeLevel(attacker_index,raceID,meleeID);
         if (adrenal_glands_level > 0)
         {
             if (MeleeAttack(raceID, meleeID, adrenal_glands_level, event, damage+absorbed,
@@ -240,10 +240,10 @@ public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacke
     return Plugin_Continue;
 }
 
-public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_index,
+public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_index,
                           attacker_race, assister_index, assister_race, damage,
-                          const String:weapon[], bool:is_equipment, customkill,
-                          bool:headshot, bool:backstab, bool:melee)
+                          const char[] weapon[], bool is_equipment, customkill,
+                          bool headshot, bool backstab, bool melee)
 {
     KillClientTimer(victim_index);
     KillExclaimTimer(victim_index);
@@ -269,7 +269,7 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
             ClearHud(victim_index, "%t", "BroodlingHud");
 
             // Default race to human for new players.
-            new race = m_LastRace[victim_index];
+            int race = m_LastRace[victim_index];
             if (race <= 0)
                 race = FindRace("human");
 
@@ -279,12 +279,12 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
     }
 }
 
-public Action:Degeneration(Handle:timer, any:userid)
+public Action Degeneration(Handle timer, any:userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client) && GetRace(client) == raceID)
     {
-        new Float:clientLoc[3];
+        float clientLoc[3];
         GetClientAbsOrigin(client, clientLoc);
         clientLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
@@ -298,19 +298,19 @@ public Action:Degeneration(Handle:timer, any:userid)
         new attack_level=GetUpgradeLevel(client,raceID,attackID);
         if (attack_level > 0)
         {
-            new Float:indexLoc[3];
-            new Float:range=g_BroodlingAttackRange[attack_level];
+            float indexLoc[3];
+            float range=g_BroodlingAttackRange[attack_level];
 
             new lightning  = Lightning();
-            new haloSprite = HaloSprite();
+            int haloSprite = HaloSprite();
             static const attackColor[4] = {255, 10, 55, 255};
 
             new count=0;
             new alt_count=0;
-            new list[MaxClients+1];
-            new alt_list[MaxClients+1];
+            int list[MaxClients+1];
+            int alt_list[MaxClients+1];
             new team=GetClientTeam(client);
-            for (new index=1;index<=MaxClients;index++)
+            for (int index=1;index<=MaxClients;index++)
             {
                 if (index != client && IsClientInGame(index) &&
                     IsPlayerAlive(index) && GetClientTeam(index) == team)
@@ -380,16 +380,16 @@ public Action:Degeneration(Handle:timer, any:userid)
     return Plugin_Stop;
 }
 
-public Action:Exclaimation(Handle:timer, any:client)
+public Action Exclaimation(Handle timer, any:client)
 {
     if (IsValidClientAlive(client))
     {
         if (GetRace(client) == raceID)
         {
-            new Float:clientLoc[3];
+            float clientLoc[3];
             GetClientAbsOrigin(client, clientLoc);
 
-            new num = GetRandomInt(0,sizeof(broodlingWav)-1);
+            int num = GetRandomInt(0,sizeof(broodlingWav)-1);
             PrepareAndEmitAmbientSound(broodlingWav[num], clientLoc, client);
 
             if (--m_Countdown[client] > 0)
@@ -398,23 +398,23 @@ public Action:Exclaimation(Handle:timer, any:client)
                 KillPlayer(client, client, "sc_expire");
         }
     }
-    m_ExclaimTimers[client] = INVALID_HANDLE;	
+    m_ExclaimTimers[client] = null;	
     return Plugin_Stop;
 }
 
-stock CreateExclaimTimer(client, Float:interval, Timer:func,
+stock CreateExclaimTimer(client, float interval, Timer:func,
                          flags=TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE)
 {
-    if (m_ExclaimTimers[client] == INVALID_HANDLE)
+    if (m_ExclaimTimers[client] == null)
         m_ExclaimTimers[client] = CreateTimer(interval,func,client,flags);
 }
 
 stock KillExclaimTimer(client)
 {
-    new Handle:timer=m_ExclaimTimers[client];
-    if (timer != INVALID_HANDLE)
+    Handle timer=m_ExclaimTimers[client];
+    if (timer != null)
     {
-        m_ExclaimTimers[client] = INVALID_HANDLE;	
+        m_ExclaimTimers[client] = null;	
         KillTimer(timer);
     }
 }

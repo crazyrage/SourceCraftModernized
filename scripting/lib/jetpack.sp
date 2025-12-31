@@ -127,38 +127,38 @@
 #define ROCKETMAN               5
 
 // ConVars
-new Handle:sm_jetpack               = INVALID_HANDLE;
-new Handle:sm_jetpack_start_sound   = INVALID_HANDLE;
-new Handle:sm_jetpack_stop_sound    = INVALID_HANDLE;
-new Handle:sm_jetpack_loop_sound    = INVALID_HANDLE;
-new Handle:sm_jetpack_crit_sound    = INVALID_HANDLE;
-new Handle:sm_jetpack_empty_sound   = INVALID_HANDLE;
-new Handle:sm_jetpack_refuel_sound  = INVALID_HANDLE;
-new Handle:sm_jetpack_speed         = INVALID_HANDLE;
-new Handle:sm_jetpack_volume        = INVALID_HANDLE;
-new Handle:sm_jetpack_fuel          = INVALID_HANDLE;
-new Handle:sm_jetpack_team          = INVALID_HANDLE;
-new Handle:sm_jetpack_onspawn       = INVALID_HANDLE;
-new Handle:sm_jetpack_announce      = INVALID_HANDLE;
-new Handle:sm_jetpack_adminonly     = INVALID_HANDLE;
-new Handle:sm_jetpack_refueling_time= INVALID_HANDLE;
-new Handle:sm_jetpack_max_refuels   = INVALID_HANDLE;
-new Handle:sm_jetpack_noflag        = INVALID_HANDLE;
-new Handle:sm_jetpack_gravity       = INVALID_HANDLE;
-new Handle:sm_jetpack_burn          = INVALID_HANDLE;
-new Handle:sm_jetpack_burn_range    = INVALID_HANDLE;
-new Handle:sm_jetpack_burn_damage   = INVALID_HANDLE;
-new Handle:sm_jetpack_explode       = INVALID_HANDLE;
-new Handle:sm_jetpack_explode_fuel  = INVALID_HANDLE;
-new Handle:sm_jetpack_explode_range = INVALID_HANDLE;
-new Handle:sm_jetpack_explode_damage= INVALID_HANDLE;
-new Handle:sm_jetpack_allow[CLS_MAX]= { INVALID_HANDLE, ...};
-new Handle:sm_jetpack_rate[CLS_MAX] = { INVALID_HANDLE, ...};
-new Handle:tf_weapon_criticals      = INVALID_HANDLE;
-new Handle:mp_friendlyfire          = INVALID_HANDLE;
+Handlesm_jetpack               = null;
+Handlesm_jetpack_start_sound   = null;
+Handlesm_jetpack_stop_sound    = null;
+Handlesm_jetpack_loop_sound    = null;
+Handlesm_jetpack_crit_sound    = null;
+Handlesm_jetpack_empty_sound   = null;
+Handlesm_jetpack_refuel_sound  = null;
+Handlesm_jetpack_speed         = null;
+Handlesm_jetpack_volume        = null;
+Handlesm_jetpack_fuel          = null;
+Handlesm_jetpack_team          = null;
+Handlesm_jetpack_onspawn       = null;
+Handlesm_jetpack_announce      = null;
+Handlesm_jetpack_adminonly     = null;
+Handlesm_jetpack_refueling_time= null;
+Handlesm_jetpack_max_refuels   = null;
+Handlesm_jetpack_noflag        = null;
+Handlesm_jetpack_gravity       = null;
+Handlesm_jetpack_burn          = null;
+Handlesm_jetpack_burn_range    = null;
+Handlesm_jetpack_burn_damage   = null;
+Handlesm_jetpack_explode       = null;
+Handlesm_jetpack_explode_fuel  = null;
+Handlesm_jetpack_explode_range = null;
+Handlesm_jetpack_explode_damage= null;
+Handlesm_jetpack_allow[CLS_MAX]= { null, ...};
+Handlesm_jetpack_rate[CLS_MAX] = { null, ...};
+Handletf_weapon_criticals      = null;
+Handlemp_friendlyfire          = null;
 
-new Handle:hCookie                  = INVALID_HANDLE;
-new Handle:hAdminMenu               = INVALID_HANDLE;
+HandlehCookie                  = null;
+HandlehAdminMenu               = null;
 new TopMenuObject:oGiveJetpack      = INVALID_TOPMENUOBJECT;
 new TopMenuObject:oTakeJetpack      = INVALID_TOPMENUOBJECT;
 
@@ -166,19 +166,19 @@ new g_JetpackLight[MAXPLAYERS + 1]  = { INVALID_ENT_REFERENCE, ... };
 new g_JetpackParticle[MAXPLAYERS + 1][3];
 
 // Soundfiles
-new String:g_StartSound[PLATFORM_MAX_PATH];
-new String:g_StopSound[PLATFORM_MAX_PATH];
-new String:g_LoopSound[PLATFORM_MAX_PATH];
-new String:g_CritSound[PLATFORM_MAX_PATH];
-new String:g_EmptySound[PLATFORM_MAX_PATH];
-new String:g_RefuelSound[PLATFORM_MAX_PATH];
+charg_StartSound[PLATFORM_MAX_PATH];
+charg_StopSound[PLATFORM_MAX_PATH];
+charg_LoopSound[PLATFORM_MAX_PATH];
+charg_CritSound[PLATFORM_MAX_PATH];
+charg_EmptySound[PLATFORM_MAX_PATH];
+charg_RefuelSound[PLATFORM_MAX_PATH];
 
 // Is Jetpack Enabled
-new bool:g_bHasJetpack[MAXPLAYERS + 1];
-new bool:g_bUseJetpack[MAXPLAYERS + 1];
-new bool:g_bFromNative[MAXPLAYERS + 1];
-new bool:g_bJetpackOn[MAXPLAYERS + 1];
-new bool:g_bCrits[MAXPLAYERS + 1];
+boolg_bHasJetpack[MAXPLAYERS + 1];
+boolg_bUseJetpack[MAXPLAYERS + 1];
+boolg_bFromNative[MAXPLAYERS + 1];
+boolg_bJetpackOn[MAXPLAYERS + 1];
+boolg_bCrits[MAXPLAYERS + 1];
 
 // Fuel for the Jetpacks
 new g_iFuel[MAXPLAYERS + 1];
@@ -186,35 +186,35 @@ new g_iRate[MAXPLAYERS + 1];
 new g_iMaxRefuels[MAXPLAYERS + 1];
 new g_iRefuelCount[MAXPLAYERS + 1];
 new g_iRefuelAmount[MAXPLAYERS + 1];
-new Float:g_JumpPushedTime[MAXPLAYERS+1];
-new Float:g_fRefuelingTime[MAXPLAYERS + 1];
+floatg_JumpPushedTime[MAXPLAYERS+1];
+floatg_fRefuelingTime[MAXPLAYERS + 1];
 
 // Jetpack burn
-new bool:g_bBurn[MAXPLAYERS + 1];
-new Float:g_BurnRange[MAXPLAYERS+1];
+boolg_bBurn[MAXPLAYERS + 1];
+floatg_BurnRange[MAXPLAYERS+1];
 new g_BurnDamage[MAXPLAYERS + 1];
 
 // Jetpack explosions
-new bool:g_bExplode[MAXPLAYERS + 1];
-new Float:g_ExplodeRange[MAXPLAYERS+1];
+boolg_bExplode[MAXPLAYERS + 1];
+floatg_ExplodeRange[MAXPLAYERS+1];
 new g_iExplodeDamage[MAXPLAYERS + 1];
 new g_iExplodeFuel[MAXPLAYERS + 1];
 
 // Timer For GameFrame
-new Float:g_fTimer  = 0.0;
-new Float:g_fCheck  = 0.0;
+floatg_fTimer  = 0.0;
+floatg_fCheck  = 0.0;
 
 // Native interface settings
 new g_iNativeRate[MAXPLAYERS + 1];
-new bool:g_bNativeOverride = false;
+boolg_bNativeOverride = false;
 new g_iNativeJetpacks      = 0;
 new g_FilteredEntity       = -1;
 new g_ExplosionIndex;
 
 // Forward handles
-new Handle:fwdOnJetpack;
-new Handle:fwdOnJetpackBurn;
-new Handle:fwdOnJetpackExplode;
+HandlefwdOnJetpack;
+HandlefwdOnJetpackBurn;
+HandlefwdOnJetpackExplode;
 
 #if defined _ztf2grab_included
     stock bool:m_GravgunAvailable = false;
@@ -224,7 +224,7 @@ new Handle:fwdOnJetpackExplode;
     stock bool:m_SourceCraftAvailable = false;
 #endif
 
-public Plugin:myinfo =
+public Plugin myinfo =
 {
     name = "Jetpack",
     author = "Knagg0,Naris",
@@ -235,7 +235,7 @@ public Plugin:myinfo =
 
 /*****************************************************************/
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLResAskPluginLoad2(Handle myself, bool late, char[] error, err_max)
 {
     // Register Natives
     CreateNative("ControlJetpack",Native_ControlJetpack);
@@ -377,8 +377,8 @@ public OnPluginStart()
     CreateConVar("sm_jetpack_version", PLUGIN_VERSION, "", FCVAR_NONE | FCVAR_REPLICATED | FCVAR_NOTIFY);
 
     /* Account for late loading */
-    new Handle:topmenu;
-    if (LibraryExists("adminmenu") && ((topmenu = GetAdminTopMenu()) != INVALID_HANDLE))
+    Handletopmenu;
+    if (LibraryExists("adminmenu") && ((topmenu = GetAdminTopMenu()) != null))
     {
         OnAdminMenuReady(topmenu);
     }
@@ -393,7 +393,7 @@ public OnPluginStart()
 }
 
 #if defined _ztf2grab_included || defined SOURCECRAFT
-public OnLibraryAdded(const String:name[])
+public OnLibraryAdded(const char[]name[])
 {
 #if defined _ztf2grab_included
     if (StrEqual(name, "ztf2grab"))
@@ -413,10 +413,10 @@ public OnLibraryAdded(const String:name[])
 }
 #endif
 
-public OnLibraryRemoved(const String:name[])
+public OnLibraryRemoved(const char[]name[])
 {
     if (StrEqual(name, "adminmenu"))
-        hAdminMenu = INVALID_HANDLE;
+        hAdminMenu = null;
 
 #if defined _ztf2grab_included
     else if (StrEqual(name, "ztf2grab"))
@@ -460,7 +460,7 @@ public OnConfigsExecuted()
     GetConVarString(sm_jetpack_loop_sound, g_LoopSound, sizeof(g_LoopSound));
     SetupSound(g_LoopSound, true, AUTO_DOWNLOAD, true, true);
 
-    if (sm_jetpack_crit_sound == INVALID_HANDLE)
+    if (sm_jetpack_crit_sound == null)
         g_CritSound[0] = '\0';
     else
     {
@@ -469,7 +469,7 @@ public OnConfigsExecuted()
     }
 }
 
-public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public PlayerSpawnEvent(Handle event,const char[]name[],bool dontBroadcast)
 {
     new index=GetClientOfUserId(GetEventInt(event,"userid")); // Get clients index
 
@@ -488,7 +488,7 @@ public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
                 case tf2: class = _:TF2_GetPlayerClass(index);
                 case dod: class = _:DOD_GetPlayerClass(index); 
             }
-            new Handle:rate_cvar = sm_jetpack_rate[class];
+            Handlerate_cvar = sm_jetpack_rate[class];
             g_iRate[index] = rate_cvar ? GetConVarInt(rate_cvar) : 1;
         }
         else
@@ -523,14 +523,14 @@ public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
         }
 
         // Check for allowed classes.
-        new Handle:allow_cvar = sm_jetpack_allow[class];
-        if (allow_cvar != INVALID_HANDLE && !GetConVarBool(allow_cvar))
+        Handleallow_cvar = sm_jetpack_allow[class];
+        if (allow_cvar != null && !GetConVarBool(allow_cvar))
         {
             g_bHasJetpack[index] = false;
             return;
         }
 
-        new Handle:rate_cvar = sm_jetpack_rate[class];
+        Handlerate_cvar = sm_jetpack_rate[class];
         g_iRate[index] = rate_cvar ? GetConVarInt(rate_cvar) : 1;
         g_iFuel[index] = g_iRefuelAmount[index] = GetConVarInt(sm_jetpack_fuel);
         g_fRefuelingTime[index] = GetConVarFloat(sm_jetpack_refueling_time);
@@ -557,7 +557,7 @@ public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
         g_bHasJetpack[index] = false;
 }
 
-public Action:PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public ActionPlayerDeathEvent(Handle event,const char[]name[],bool dontBroadcast)
 {
     new userid = GetEventInt(event,"userid");
     new index = GetClientOfUserId(userid); // Get clients index
@@ -567,12 +567,12 @@ public Action:PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadca
     return Plugin_Continue;
 }   
 
-public Action:HookRagdoll(Handle:hTimer, any:userid)
+public ActionHookRagdoll(Handle:hTimer, any:userid)
 {
     new index=GetClientOfUserId(userid); // Get clients index
     if (index > 0 && g_bExplode[index] && g_iFuel[index] > g_iExplodeFuel[index])
     {
-        new bool:burning = false;
+        boolburning = false;
         new iRagdoll = GetEntPropEnt(index, Prop_Send, "m_hRagdoll");
         if (iRagdoll > 0 && IsValidEdict(iRagdoll))
         {
@@ -582,7 +582,7 @@ public Action:HookRagdoll(Handle:hTimer, any:userid)
             {
                 burning = bool:GetEntData(iRagdoll, offset);
 
-                decl String:sDissolveName[32];
+                charsDissolveName[32];
                 Format(sDissolveName, sizeof(sDissolveName), "dis_%d", index);
                 DispatchKeyValue(iRagdoll, "targetname", sDissolveName);
 
@@ -597,13 +597,13 @@ public Action:HookRagdoll(Handle:hTimer, any:userid)
             }
         }
 
-        new Handle:hTimerData;
+        HandlehTimerData;
         CreateDataTimer(burning ? 0.1 : 2.0, Explode, hTimerData);
 
         WritePackCell(hTimerData, userid);
         WritePackCell(hTimerData, g_iFuel[index]);
 
-        decl Float:fOrigin[3];
+        floatfOrigin[3];
         GetEntPropVector(index, Prop_Send, "m_vecOrigin", fOrigin);
         WritePackFloat(hTimerData, fOrigin[0]);
         WritePackFloat(hTimerData, fOrigin[1]);
@@ -611,16 +611,16 @@ public Action:HookRagdoll(Handle:hTimer, any:userid)
     }
 }
 
-public Action:Explode(Handle:hTimer, Handle:hData)
+public ActionExplode(Handle:hTimer, Handle:hData)
 {
-    new bool:bFF = GetConVarBool(mp_friendlyfire);
+    boolbFF = GetConVarBool(mp_friendlyfire);
 
     ResetPack(hData);
     new userid = ReadPackCell(hData);
 
     new fuel = ReadPackCell(hData);
 
-    decl Float:fOrigin[3];
+    floatfOrigin[3];
     fOrigin[0] = ReadPackFloat(hData);
     fOrigin[1] = ReadPackFloat(hData);
     fOrigin[2] = ReadPackFloat(hData);
@@ -644,15 +644,15 @@ public Action:Explode(Handle:hTimer, Handle:hData)
             {
                 if (bFF || GetClientTeam(victim) != team )
                 {
-                    decl Float:victimPos[3];
+                    floatvictimPos[3];
                     GetClientAbsOrigin(victim, victimPos);
 
-                    new Float:fuelRatio = float(fuel) / 100.0;
+                    floatfuelRatio = float(fuel) / 100.0;
                     if (fuelRatio > 1.0)
                         fuelRatio = 1.0;
 
-                    new Float:distance;
-                    new Float:range = g_ExplodeRange[index] * fuelRatio;
+                    floatdistance;
+                    floatrange = g_ExplodeRange[index] * fuelRatio;
                     if (CanTarget(index, fOrigin, victim, victimPos, range, distance))
                     {
                         #if defined SOURCECRAFT
@@ -687,16 +687,16 @@ public Action:Explode(Handle:hTimer, Handle:hData)
 
 public OnGameFrame()
 {
-    new Float:gameTime = GetGameTime();
+    floatgameTime = GetGameTime();
     if ((g_iNativeJetpacks > 0 || GetConVarBool(sm_jetpack)) && g_fTimer < gameTime - 0.075)
     {
         g_fTimer = gameTime;
 
-        new bool:checkCond = (GameType == tf2 && g_fCheck < gameTime - 0.5);
+        boolcheckCond = (GameType == tf2 && g_fCheck < gameTime - 0.5);
         if (checkCond)
             g_fCheck = gameTime;
 
-        for (new client = 1; client <= MaxClients; client++)
+        for (int client = 1; client <= MaxClients; client++)
         {
             if (g_bJetpackOn[client])
             {
@@ -755,7 +755,7 @@ public OnGameFrame()
                             SetMoveCollideType(client, MOVETYPE_WALK, MOVECOLLIDE_DEFAULT);
                         else
                         {
-                            EmitJetpackSound(INVALID_HANDLE, client);
+                            EmitJetpackSound(null, client);
 
                             new MoveType:movetype = GetConVarInt(sm_jetpack_gravity) ? MOVETYPE_FLYGRAVITY : MOVETYPE_FLY;
                             SetMoveCollideType(client, movetype, MOVECOLLIDE_FLY_BOUNCE);
@@ -780,8 +780,8 @@ public OnGameFrame()
                             g_iFuel[client] = 0;
 
                         /* Display the Fuel Gauge */
-                        new String:gauge[30] = "[====+=====|=====+====]";
-                        new Float:percent = float(g_iFuel[client]) / float(g_iRefuelAmount[client]);
+                        chargauge[30] = "[====+=====|=====+====]";
+                        floatpercent = float(g_iFuel[client]) / float(g_iRefuelAmount[client]);
                         new pos = RoundFloat(percent * 20.0)+1;
                         if (pos < 21)
                         {
@@ -831,7 +831,7 @@ public OnGameFrame()
     }
 }
 
-public Action:RefuelJetpack(Handle:timer,any:client)
+public ActionRefuelJetpack(Handle timer,any:client)
 {
     if (client && g_bHasJetpack[client] && IsClientInGame(client) && IsPlayerAlive(client))
     {
@@ -870,7 +870,7 @@ public OnClientPutInServer(client)
 
     if (!IsFakeClient(client) && AreClientCookiesCached(client))
     {
-        decl String:buffer[5];
+        charbuffer[5];
         GetClientCookie(client, hCookie, buffer, sizeof(buffer));
         g_bUseJetpack[client] = buffer[0] ? (bool:StringToInt(buffer)) : true;
     }
@@ -889,7 +889,7 @@ public OnClientDisconnect(client)
     }
 }
 
-public Action:JetpackPressed(client, args)
+public ActionJetpackPressed(client, args)
 {
     if (g_iNativeJetpacks > 0 || GetConVarBool(sm_jetpack))
         StartJetpack(client);
@@ -897,7 +897,7 @@ public Action:JetpackPressed(client, args)
     return Plugin_Continue;
 }
 
-public Action:JetpackReleased(client, args)
+public ActionJetpackReleased(client, args)
 {
     StopJetpack(client);
     return Plugin_Continue;
@@ -931,7 +931,7 @@ StartJetpack(client)
 
             if (g_StartSound[0])
             {
-                decl Float:vecPos[3];
+                floatvecPos[3];
                 GetClientAbsOrigin(client, vecPos);
                 EmitSoundToAll(g_StartSound, client, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS,
                                GetConVarFloat(sm_jetpack_volume), SNDPITCH_NORMAL, -1,
@@ -941,7 +941,7 @@ StartJetpack(client)
                     CreateTimer(0.02, EmitJetpackSound, client);
             }
             else if (g_LoopSound[0])
-                EmitJetpackSound(INVALID_HANDLE, client);
+                EmitJetpackSound(null, client);
 
             if (GameType == tf2 && !IsEntLimitReached(.client=client,.message="unable to create flame particles"))
             {
@@ -1026,7 +1026,7 @@ StopJetpack(client)
 
             if (g_StopSound[0])
             {
-                decl Float:vecPos[3];
+                floatvecPos[3];
                 GetClientAbsOrigin(client, vecPos);
                 EmitSoundToAll(g_StopSound, client, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS,
                                GetConVarFloat(sm_jetpack_volume), SNDPITCH_NORMAL, -1,
@@ -1036,13 +1036,13 @@ StopJetpack(client)
     }
 }
 
-public Action:EmitJetpackSound(Handle:timer, any:client)
+public ActionEmitJetpackSound(Handle timer, any:client)
 {
     if (g_bJetpackOn[client])
     {
         if (g_bCrits[client] && g_CritSound[0])
         {
-            decl Float:vecPos[3];
+            floatvecPos[3];
             GetClientAbsOrigin(client, vecPos);
             EmitSoundToAll(g_CritSound, client, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS,
                            GetConVarFloat(sm_jetpack_volume), SNDPITCH_NORMAL, -1,
@@ -1050,7 +1050,7 @@ public Action:EmitJetpackSound(Handle:timer, any:client)
         }
         else if (g_LoopSound[0])
         {
-            decl Float:vecPos[3];
+            floatvecPos[3];
             GetClientAbsOrigin(client, vecPos);
             EmitSoundToAll(g_LoopSound, client, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS,
                            GetConVarFloat(sm_jetpack_volume), SNDPITCH_NORMAL, -1,
@@ -1082,7 +1082,7 @@ SetMoveCollideType(client, MoveType:movetype, movecollide)
 
 AddVelocity(client, Float:speed)
 {
-    decl Float:vecVelocity[3];
+    floatvecVelocity[3];
     GetEntPropVector(client, Prop_Data, "m_vecVelocity", vecVelocity);
 
     vecVelocity[2] += speed;
@@ -1091,7 +1091,7 @@ AddVelocity(client, Float:speed)
     //(fixes stuck issue from pyro/medic updates)
     if (GetEntityFlags(client) & FL_ONGROUND)
     {
-        decl Float:vecOrigin[3];
+        floatvecOrigin[3];
         GetClientAbsOrigin(client, vecOrigin);
         vecOrigin[2] += 1.0; //gets player off the ground if they're not in the air
         TeleportEntity(client, vecOrigin, NULL_VECTOR, vecVelocity);
@@ -1105,7 +1105,7 @@ AddFireEffect(client)
 {
     if (GameType != tf2 && GameType != l4d && GameType != l4d2)
     {
-        decl Float:vecPos[3],Float:vecDir[3];
+        floatvecPos[3],Float:vecDir[3];
         GetClientAbsOrigin(client, vecPos);
         GetClientEyePosition(client,vecDir);
 
@@ -1130,35 +1130,35 @@ AddFireEffect(client)
 
 BurnEnemies(client)
 {
-    decl Float:clientPos[3];
+    floatclientPos[3];
     GetEntPropVector(client, Prop_Data, "m_vecAbsOrigin", clientPos);
 
-    decl Float:clientAng[3];
+    floatclientAng[3];
     GetEntPropVector(client, Prop_Send, "m_angRotation", clientAng);
 
-    new bool:ff = GetConVarBool(mp_friendlyfire);
+    boolff = GetConVarBool(mp_friendlyfire);
     for (new victim = 1; victim <= MaxClients; victim++)
     {
         if (victim!=client && IsClientInGame(victim) && IsPlayerAlive(victim) &&
             (ff || GetClientTeam(victim) != GetClientTeam(client)))
         {
-            decl Float:victimPos[3];
+            floatvictimPos[3];
             GetEntPropVector(victim, Prop_Data, "m_vecAbsOrigin", victimPos);
 
-            decl Float:victimAng[3];
+            floatvictimAng[3];
             SubtractVectors(clientPos, victimPos, victimAng);
             GetVectorAngles(victimAng, victimAng);  
 
-            new Float:diffYaw = FloatAbs((victimAng[1] - 180.0) - clientAng[1]);
+            floatdiffYaw = FloatAbs((victimAng[1] - 180.0) - clientAng[1]);
             if (diffYaw >= 135.0 && diffYaw < 225.0)
             {
                 new fuel = g_iFuel[client];
-                new Float:fuelRatio = float(fuel) / 100.0;
+                floatfuelRatio = float(fuel) / 100.0;
                 if (fuelRatio > 1.0)
                     fuelRatio = 1.0;
 
-                new Float:distance;
-                new Float:range = g_BurnRange[client] * fuelRatio;
+                floatdistance;
+                floatrange = g_BurnRange[client] * fuelRatio;
                 if (CanTarget(client, clientPos, victim, victimPos, range, distance))
                 {
                     #if defined SOURCECRAFT
@@ -1203,7 +1203,7 @@ stock bool:CanTarget(origin, const Float:pos[3], target, const Float:targetPos[3
         return false;
 
     g_FilteredEntity = origin;
-    new Handle:hTrace = TR_TraceRayFilterEx(pos, targetPos, MASK_PLAYERSOLID, RayType_EndPoint, TraceFilter);
+    HandlehTrace = TR_TraceRayFilterEx(pos, targetPos, MASK_PLAYERSOLID, RayType_EndPoint, TraceFilter);
     if (!TR_DidHit(hTrace))
     {
         CloseHandle(hTrace);
@@ -1224,13 +1224,13 @@ stock bool:CanTarget(origin, const Float:pos[3], target, const Float:targetPos[3
         }
         else
         {
-            decl Float:hitPos[3];
+            floathitPos[3];
             TR_GetEndPosition(hitPos, hTrace);
             CloseHandle(hTrace);
 
             if (GetVectorDistance(hitPos, targetPos) <= 50.0)
             {
-                decl String:edictName[64];
+                charedictName[64];
                 GetEdictClassname( hitEnt, edictName, sizeof( edictName ) );
 
                 if ((throughPlayer && StrEqual(edictName, "player")) ||
@@ -1240,7 +1240,7 @@ stock bool:CanTarget(origin, const Float:pos[3], target, const Float:targetPos[3
                                       StrEqual(edictName, "obj_teleporter_exit") ||
                                       StrEqual(edictName, "obj_attachment_sapper"))))
                 {
-                    decl Float:entPos[3];
+                    floatentPos[3];
                     GetEntPropVector(hitEnt, Prop_Data, "m_vecAbsOrigin", entPos);
 
                     if (GetVectorDistance(entPos, targetPos) > 50.0)
@@ -1261,7 +1261,7 @@ stock bool:CanTarget(origin, const Float:pos[3], target, const Float:targetPos[3
     return false;
 }
 
-public bool:TraceFilter(ent, contentMask)
+public boolTraceFilter(ent, contentMask)
 {
     return (ent == g_FilteredEntity) ? false : true;
 }
@@ -1317,7 +1317,7 @@ EmptyEffect(client)
     }
     else
     {
-        decl Float:vecPos[3],Float:vecDir[3];
+        floatvecPos[3],Float:vecDir[3];
         GetClientAbsOrigin(client, vecPos);
         GetClientEyePosition(client,vecDir);
 
@@ -1355,30 +1355,30 @@ CreateLightEntity(client)
         DispatchKeyValue(entity, "style", "5");
         DispatchSpawn(entity);
 
-        decl Float:fAngle[3];
+        floatfAngle[3];
         GetClientEyeAngles(client, fAngle);
 
-        decl Float:fAngle2[3];
+        floatfAngle2[3];
         fAngle2[0] = 0.0;
         fAngle2[1] = fAngle[1];
         fAngle2[2] = 0.0;
 
-        decl Float:fForward[3];
+        floatfForward[3];
         GetAngleVectors(fAngle2, fForward, NULL_VECTOR, NULL_VECTOR);
         ScaleVector(fForward, -50.0);
         fForward[2] = 0.0;
 
-        decl Float:fPos[3];
+        floatfPos[3];
         GetClientEyePosition(client, fPos);
 
-        decl Float:fOrigin[3];
+        floatfOrigin[3];
         AddVectors(fPos, fForward, fOrigin);
 
         fAngle[0] += 90.0;
         fOrigin[2] -= 120.0;
         TeleportEntity(entity, fOrigin, fAngle, NULL_VECTOR);
 
-        decl String:strName[32];
+        charstrName[32];
         Format(strName, sizeof(strName), "target%i", client);
         DispatchKeyValue(client, "targetname", strName);
 
@@ -1405,21 +1405,21 @@ DeleteLightEntity(&entityRef)
     }
 }
 
-public Native_StartJetpack(Handle:plugin,numParams)
+public Native_StartJetpack(Handle plugin,numParams)
 {
     new client = GetNativeCell(1);
     if (client > 0 && client <= MAXPLAYERS+1)
         StartJetpack(client);
 }
 
-public Native_StopJetpack(Handle:plugin,numParams)
+public Native_StopJetpack(Handle plugin,numParams)
 {
     new client = GetNativeCell(1);
     if (client > 0 && client <= MAXPLAYERS+1)
         StopJetpack(client);
 }
 
-public Native_GiveJetpack(Handle:plugin,numParams)
+public Native_GiveJetpack(Handle plugin,numParams)
 {
     new client = GetNativeCell(1);
     if (client > 0 && client <= MAXPLAYERS+1)
@@ -1451,7 +1451,7 @@ public Native_GiveJetpack(Handle:plugin,numParams)
                 case tf2: class = _:TF2_GetPlayerClass(client);
                 case dod: class = _:DOD_GetPlayerClass(client); 
             }
-            new Handle:rate_cvar = sm_jetpack_rate[class];
+            Handlerate_cvar = sm_jetpack_rate[class];
             g_iRate[client] = rate_cvar ? GetConVarInt(rate_cvar) : 1;
         }
         else
@@ -1462,7 +1462,7 @@ public Native_GiveJetpack(Handle:plugin,numParams)
     return -1;
 }
 
-public Native_TakeJetpack(Handle:plugin,numParams)
+public Native_TakeJetpack(Handle plugin,numParams)
 {
     new client = GetNativeCell(1);
     if (client > 0 && client <= MAXPLAYERS+1)
@@ -1477,7 +1477,7 @@ public Native_TakeJetpack(Handle:plugin,numParams)
     }
 }
 
-public Native_GiveJetpackFuel(Handle:plugin,numParams)
+public Native_GiveJetpackFuel(Handle plugin,numParams)
 {
     new client = GetNativeCell(1);
     if (client > 0 && client <= MAXPLAYERS+1)
@@ -1499,7 +1499,7 @@ public Native_GiveJetpackFuel(Handle:plugin,numParams)
     return -1;
 }
 
-public Native_TakeJetpackFuel(Handle:plugin,numParams)
+public Native_TakeJetpackFuel(Handle plugin,numParams)
 {
     new client = GetNativeCell(1);
     if (client > 0 && client <= MAXPLAYERS+1)
@@ -1529,7 +1529,7 @@ public Native_TakeJetpackFuel(Handle:plugin,numParams)
     return -1;
 }
 
-public Native_SetJetpackFuel(Handle:plugin,numParams)
+public Native_SetJetpackFuel(Handle plugin,numParams)
 {
     new client = GetNativeCell(1);
     if (client > 0 && client <= MAXPLAYERS+1)
@@ -1544,7 +1544,7 @@ public Native_SetJetpackFuel(Handle:plugin,numParams)
     }
 }
 
-public Native_SetJetpackRate(Handle:plugin,numParams)
+public Native_SetJetpackRate(Handle plugin,numParams)
 {
     new client = GetNativeCell(1);
     if (client > 0 && client <= MAXPLAYERS+1)
@@ -1558,7 +1558,7 @@ public Native_SetJetpackRate(Handle:plugin,numParams)
                 case tf2: class = _:TF2_GetPlayerClass(client);
                 case dod: class = _:DOD_GetPlayerClass(client); 
             }
-            new Handle:rate_cvar = sm_jetpack_rate[class];
+            Handlerate_cvar = sm_jetpack_rate[class];
             g_iRate[client] = rate_cvar ? GetConVarInt(rate_cvar) : 1;
         }
         else
@@ -1566,7 +1566,7 @@ public Native_SetJetpackRate(Handle:plugin,numParams)
     }
 }
 
-public Native_SetJetpackRefuelingTime(Handle:plugin,numParams)
+public Native_SetJetpackRefuelingTime(Handle plugin,numParams)
 {
     new client = GetNativeCell(1);
     if (client > 0 && client <= MAXPLAYERS+1)
@@ -1575,41 +1575,41 @@ public Native_SetJetpackRefuelingTime(Handle:plugin,numParams)
         SetConVarFloat(sm_jetpack_refueling_time, Float:GetNativeCell(2));
 }
 
-public Native_GetJetpackFuel(Handle:plugin,numParams)
+public Native_GetJetpackFuel(Handle plugin,numParams)
 {
     return g_iFuel[GetNativeCell(1)];
 }
 
-public Native_GetJetpackRate(Handle:plugin,numParams)
+public Native_GetJetpackRate(Handle plugin,numParams)
 {
     return g_iRate[GetNativeCell(1)];
 }
 
-public Native_GetJetpackRefuelingTime(Handle:plugin,numParams)
+public Native_GetJetpackRefuelingTime(Handle plugin,numParams)
 {
     return _:(g_fRefuelingTime[GetNativeCell(1)]);
 }
 
-public Native_HasJetpack(Handle:plugin,numParams)
+public Native_HasJetpack(Handle plugin,numParams)
 {
     return g_bHasJetpack[GetNativeCell(1)];
 }
 
-public Native_IsJetpackOn(Handle:plugin,numParams)
+public Native_IsJetpackOn(Handle plugin,numParams)
 {
     return g_bJetpackOn[GetNativeCell(1)];
 }
 
-public Native_ControlJetpack(Handle:plugin,numParams)
+public Native_ControlJetpack(Handle plugin,numParams)
 {
     g_bNativeOverride = GetNativeCell(1);
 }
 
-public Action:Command_GiveJetpack(client,argc)
+public ActionCommand_GiveJetpack(client,argc)
 {
     if (argc>=1)
     {
-        decl String:target[64];
+        chartarget[64];
         GetCmdArg(1,target,64);
         new count = SetJetpack(client,target,true);
         if (!count)
@@ -1623,11 +1623,11 @@ public Action:Command_GiveJetpack(client,argc)
     return Plugin_Handled;
 }
 
-public Action:Command_TakeJetpack(client,argc)
+public ActionCommand_TakeJetpack(client,argc)
 {
     if (argc>=1)
     {
-        decl String:target[64];
+        chartarget[64];
         GetCmdArg(1,target,64);
 
         new count=SetJetpack(client,target,false);
@@ -1642,7 +1642,7 @@ public Action:Command_TakeJetpack(client,argc)
     return Plugin_Handled;
 }
 
-public SetJetpack(client,const String:target[],bool:enable)
+public SetJetpack(client,const char[]target[],bool:enable)
 {
     decl bool:isml, String:name[64], clients[MAXPLAYERS+1];
     new count=ProcessTargetString(target,client,clients,MAXPLAYERS+1,COMMAND_FILTER_NO_BOTS,
@@ -1682,7 +1682,7 @@ public PerformJetpack(client, target, bool:enable)
                 case dod: class = _:DOD_GetPlayerClass(client); 
             }
 
-            new Handle:rate_cvar = sm_jetpack_rate[class];
+            Handlerate_cvar = sm_jetpack_rate[class];
             g_iRate[target] = rate_cvar ? GetConVarInt(rate_cvar) : 1;
             g_iFuel[target] = g_iRefuelAmount[target] = GetConVarInt(sm_jetpack_fuel);
             g_fRefuelingTime[target] = GetConVarFloat(sm_jetpack_refueling_time);
@@ -1752,7 +1752,7 @@ public AdminMenu(Handle:topmenu, TopMenuAction:action, TopMenuObject:object_id, 
 
 JetpackMenu(client, TopMenuObject:object_id)
 {
-    new Handle:menu = CreateMenu(MenuHandler_Jetpack);
+    Handlemenu = CreateMenu(MenuHandler_Jetpack);
 
     SetMenuTitle(menu, (object_id == oGiveJetpack)
                        ? "Give a Jetpack to"
@@ -1767,7 +1767,7 @@ JetpackMenu(client, TopMenuObject:object_id)
 
 public MenuHandler_Jetpack(Handle:menu, MenuAction:action, param1, param2)
 {
-    decl String:title[32];
+    chartitle[32];
     GetMenuTitle(menu,title,sizeof(title));
 
     if (action == MenuAction_End)
@@ -1776,14 +1776,14 @@ public MenuHandler_Jetpack(Handle:menu, MenuAction:action, param1, param2)
     }
     else if (action == MenuAction_Cancel)
     {
-        if (param2 == MenuCancel_ExitBack && hAdminMenu != INVALID_HANDLE)
+        if (param2 == MenuCancel_ExitBack && hAdminMenu != null)
         {
             DisplayTopMenu(hAdminMenu, param1, TopMenuPosition_LastCategory);
         }
     }
     else if (action == MenuAction_Select)
     {
-        decl String:info[32];
+        charinfo[32];
         new userid, target;
 
         GetMenuItem(menu, param2, info, sizeof(info));
@@ -1799,7 +1799,7 @@ public MenuHandler_Jetpack(Handle:menu, MenuAction:action, param1, param2)
         }
         else
         {
-            new String:name[32];
+            charname[32];
             GetClientName(target, name, sizeof(name));
 
             if (StrContains(title, "Give") != -1)
@@ -1833,7 +1833,7 @@ public PrefsMenu(client, CookieMenuAction:action, any:info, String:buffer[], max
 {
     if (action == CookieMenuAction_SelectOption)
     {
-        new Handle:menu = CreateMenu(MenuHandler_Prefs);
+        Handlemenu = CreateMenu(MenuHandler_Prefs);
         SetMenuTitle(menu, "Jetpack Preferences");
         AddMenuItem(menu, "1", "+JUMP activates Jetpack");
         AddMenuItem(menu, "0", "+JUMP does NOT activate Jetpack");
@@ -1846,7 +1846,7 @@ public MenuHandler_Prefs(Handle:menu, MenuAction:action, client, selection)
 {
     if (action == MenuAction_Select)    
     {
-        decl String:SelectionInfo[5];
+        charSelectionInfo[5];
         GetMenuItem(menu, selection, SelectionInfo, sizeof(SelectionInfo));
         SetClientCookie(client, hCookie, SelectionInfo);
         g_bUseJetpack[client] = bool:StringToInt(SelectionInfo);

@@ -73,57 +73,57 @@ enum SolidType_t
 new g_BeamSprite;
 new g_HaloSprite;
 
-new bool:DontAsk[MAXPLAYERS+1]       = { false, ... };
-new bool:NearAmplifier[MAXPLAYERS+1] = { false, ... };
+bool DontAsk[MAXPLAYERS+1]       = { false, ... };
+bool NearAmplifier[MAXPLAYERS+1] = { false, ... };
 new EngiAssists[MAXPLAYERS+1]        = { 0, ... };
 new Revenges[MAXPLAYERS+1]           = { 0, ... };              //for Engineers with Frontier Justice
 new GetPar[MAXPLAYERS+1]             = { INVALID_ENT_REFERENCE, ... };
 
-new Handle:cvarUpgradeStationEnabled = INVALID_HANDLE;
+Handle cvarUpgradeStationEnabled = null;
 
-new Handle:cvarAmplifierUpgradable = INVALID_HANDLE;
-new Handle:cvarAmplifierEnabled = INVALID_HANDLE;
-new Handle:cvarAmplifierPercent = INVALID_HANDLE;
-new Handle:cvarAmplifierRange[4] = { INVALID_HANDLE, ... };
-new Handle:cvarAmplifierMetal = INVALID_HANDLE;
-new Handle:cvarRegeneration = INVALID_HANDLE;
-new Handle:cvarSpawnMenu = INVALID_HANDLE;
-new Handle:cvarCondition = INVALID_HANDLE;
-new Handle:cvarMetalMax = INVALID_HANDLE;
-new Handle:cvarParticle = INVALID_HANDLE;
-new Handle:cvarWallBlock = INVALID_HANDLE;
-new Handle:cvarMiniCritToSG = INVALID_HANDLE;
-new Handle:cvarAnnounce = INVALID_HANDLE;
+Handle cvarAmplifierUpgradable = null;
+Handle cvarAmplifierEnabled = null;
+Handle cvarAmplifierPercent = null;
+Handle cvarAmplifierRange[4] = { null, ... };
+Handle cvarAmplifierMetal = null;
+Handle cvarRegeneration = null;
+Handle cvarSpawnMenu = null;
+Handle cvarCondition = null;
+Handle cvarMetalMax = null;
+Handle cvarParticle = null;
+Handle cvarWallBlock = null;
+Handle cvarMiniCritToSG = null;
+Handle cvarAnnounce = null;
 
-new Handle:cvarRepairNodeEnabled = INVALID_HANDLE;
-new Handle:cvarRepairNodePercent = INVALID_HANDLE;
-new Handle:cvarRepairNodeRockets = INVALID_HANDLE;
-new Handle:cvarRepairNodeRange[4] = { INVALID_HANDLE, ... };
-new Handle:cvarRepairNodeRegen[4] = { INVALID_HANDLE, ... };
-new Handle:cvarRepairNodeShells[4] = { INVALID_HANDLE, ... };
-new Handle:cvarRepairNodeMetal = INVALID_HANDLE;
-new Handle:cvarTeam = INVALID_HANDLE;
-new Handle:cvarMini = INVALID_HANDLE;
+Handle cvarRepairNodeEnabled = null;
+Handle cvarRepairNodePercent = null;
+Handle cvarRepairNodeRockets = null;
+Handle cvarRepairNodeRange[4] = { null, ... };
+Handle cvarRepairNodeRegen[4] = { null, ... };
+Handle cvarRepairNodeShells[4] = { null, ... };
+Handle cvarRepairNodeMetal = null;
+Handle cvarTeam = null;
+Handle cvarMini = null;
 
-new Handle:fwdOnAmplify = INVALID_HANDLE;
+Handle fwdOnAmplify = null;
 
-new bool:SpawnMenu = false;
-new bool:AmplifierEnabled = true;
-new bool:AmplifierUpgradable = true;
-new bool:UpgradeStationEnabled = true;
-new bool:RepairNodeEnabled = true;
+bool SpawnMenu = false;
+bool AmplifierEnabled = true;
+bool AmplifierUpgradable = true;
+bool UpgradeStationEnabled = true;
+bool RepairNodeEnabled = true;
 new DefaultRockets = 2;
 new DefaultRegen[4] = { 0, 15, 20, 30 };
 new DefaultShells[4] = { 0, 0, 5, 10 };
 new TFCond:DefaultCondition = TFCond_Kritzkrieged;
-new Float:DefaultAmplifierRange[4] = { 0.0, 100.0, 200.0, 300.0 };
-new Float:DefaultRepairNodeRange[4] = { 0.0, 300.0, 400.0, 500.0 };
-new bool:RepairNodeMetal = true;
-new bool:DefaultTeam = false;
-new bool:DefaultMini = false;
-new bool:ShowParticle = true;
-new bool:MiniCritToSG = true;
-new bool:WallBlock = false;
+float DefaultAmplifierRange[4] = { 0.0, 100.0, 200.0, 300.0 };
+float DefaultRepairNodeRange[4] = { 0.0, 300.0, 400.0, 500.0 };
+bool RepairNodeMetal = true;
+bool DefaultTeam = false;
+bool DefaultMini = false;
+bool ShowParticle = true;
+bool MiniCritToSG = true;
+bool WallBlock = false;
 new RepairNodePercent = 100;
 new AmplifierPercent = 100;
 new AmplifierMetal = 5;
@@ -131,20 +131,20 @@ new AmplifierMetal = 5;
 new MetalRegeneration = 10;
 new MetalMax = 400;
 
-new bool:NativeControl = false;
-new bool:NativeAmplifier[MAXPLAYERS+1];
-new bool:NativeRepairNode[MAXPLAYERS+1];
-new bool:NativeUpgradeStation[MAXPLAYERS+1];
+bool NativeControl = false;
+bool NativeAmplifier[MAXPLAYERS+1];
+bool NativeRepairNode[MAXPLAYERS+1];
+bool NativeUpgradeStation[MAXPLAYERS+1];
 new TFCond:NativeCondition[MAXPLAYERS+1];
-new Float:NativeAmplifierRange[MAXPLAYERS+1][4];
-new Float:NativeRepairNodeRange[MAXPLAYERS+1][4];
+float NativeAmplifierRange[MAXPLAYERS+1][4];
+float NativeRepairNodeRange[MAXPLAYERS+1][4];
 new NativeRepairNodePercent[MAXPLAYERS+1];
 new NativeAmplifierPercent[MAXPLAYERS+1];
 new NativeRegen[MAXPLAYERS+1][4];
 new NativeShells[MAXPLAYERS+1][4];
 new NativeRockets[MAXPLAYERS+1];
 
-public Plugin:myinfo = {
+public Plugin myinfo = {
     name = "amp_node",
     author = "-=|JFH|=-Naris, Eggman, Geel9, Murphy7 and Benjamuffin ",
     description = "Allows players to build The Amplifier and The Repair Node",
@@ -152,13 +152,13 @@ public Plugin:myinfo = {
 };
 
 new TFExtObjectType:BuildingType[MAXENTITIES] = { TFExtObject_Unknown, ... };
-new Float:BuildingRange[MAXENTITIES][4];
-new bool:BuildingOn[MAXENTITIES]=false;
+float BuildingRange[MAXENTITIES][4];
+bool BuildingOn[MAXENTITIES]=false;
 new BuildingPercent[MAXENTITIES];
 new BuildingProp[MAXENTITIES]                 = { INVALID_ENT_REFERENCE, ... };
 new BuildingRef[MAXENTITIES]                  = { INVALID_ENT_REFERENCE, ... };
 
-new bool:ConditionApplied[MAXENTITIES][MAXPLAYERS+1];
+bool ConditionApplied[MAXENTITIES][MAXPLAYERS+1];
 new TFCond:AmplifierCondition[MAXENTITIES];
 
 new RepairNodeTarget[MAXENTITIES]             = { INVALID_ENT_REFERENCE, ... };
@@ -166,14 +166,14 @@ new RepairNodeRockets[MAXENTITIES];
 new RepairNodeRegen[MAXENTITIES][4];
 new RepairNodeShells[MAXENTITIES][4];
 new RepairNodeParticle[MAXENTITIES][2];
-new bool:RepairNodeTeam[MAXENTITIES];
-new bool:RepairNodeMini[MAXENTITIES];
+bool RepairNodeTeam[MAXENTITIES];
+bool RepairNodeMini[MAXENTITIES];
 
-new Float:BuildingBuildDelay[]  = { 0.0, 10.4, 11.4, 11.4 };
-new Float:BuildingUpdateDelay[] = { 0.0,  2.4,  5.4,  6.4 };
-new Float:BuildingDropDelay[]   = { 0.0,  1.4,  7.4,  9.4 };
+float BuildingBuildDelay[]  = { 0.0, 10.4, 11.4, 11.4 };
+float BuildingUpdateDelay[] = { 0.0,  2.4,  5.4,  6.4 };
+float BuildingDropDelay[]   = { 0.0,  1.4,  7.4,  9.4 };
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char error[], err_max)
 {
     // Register Natives
     CreateNative("ControlAmpNode",Native_ControlAmpNode);
@@ -194,9 +194,9 @@ public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
 public OnPluginStart()
 {
     // Initialize RepairNodeParticle[][] array
-    for (new i= 0; i < sizeof(RepairNodeParticle); i++)
+    for (int i = 0; i < sizeof(RepairNodeParticle); i++)
     {
-        for (new j = 0; j < sizeof(RepairNodeParticle[]); j++)
+        for (int j = 0; j < sizeof(RepairNodeParticle[]); j++)
             RepairNodeParticle[i][j] = INVALID_ENT_REFERENCE;
     }
 
@@ -307,26 +307,26 @@ public OnPluginStart()
     AutoExecConfig(true, "plugin.amp_node");
 }
 
-public CvarChange(Handle:convar, const String:oldValue[], const String:newValue[])
+public CvarChange(Handle convar, const char[] oldValue, const char[] newValue)
 {
     if (convar == cvarRepairNodeEnabled)
-        RepairNodeEnabled = bool:StringToInt(newValue);
+        RepairNodeEnabled = bool StringToInt(newValue);
     else if (convar == cvarRepairNodePercent)
         RepairNodePercent = StringToInt(newValue);
     else if (convar == cvarUpgradeStationEnabled)
-        UpgradeStationEnabled = bool:StringToInt(newValue);
+        UpgradeStationEnabled = bool StringToInt(newValue);
     else if (convar == cvarAmplifierEnabled)
-        AmplifierEnabled = bool:StringToInt(newValue);
+        AmplifierEnabled = bool StringToInt(newValue);
     else if (convar == cvarAmplifierPercent)
         AmplifierPercent = StringToInt(newValue);
     else if (convar == cvarAmplifierMetal)
         AmplifierMetal = StringToInt(newValue);
     else if (convar == cvarRepairNodeMetal)
-        RepairNodeMetal = bool:StringToInt(newValue);
+        RepairNodeMetal = bool StringToInt(newValue);
     else if (convar == cvarTeam)
-        DefaultTeam = bool:StringToInt(newValue);
+        DefaultTeam = bool StringToInt(newValue);
     else if (convar == cvarMini)
-        DefaultMini = bool:StringToInt(newValue);
+        DefaultMini = bool StringToInt(newValue);
     else if (convar == cvarMetalMax)
         MetalMax = StringToInt(newValue);
     else if (convar == cvarRegeneration)
@@ -334,15 +334,15 @@ public CvarChange(Handle:convar, const String:oldValue[], const String:newValue[
     else if (convar == cvarCondition)
         DefaultCondition = TFCond:StringToInt(newValue);
     else if (convar == cvarAmplifierUpgradable)
-        AmplifierUpgradable = bool:StringToInt(newValue);
+        AmplifierUpgradable = bool StringToInt(newValue);
     else if (convar == cvarMiniCritToSG)
-        MiniCritToSG = bool:StringToInt(newValue);
+        MiniCritToSG = bool StringToInt(newValue);
     else if (convar == cvarParticle)
-        ShowParticle = bool:StringToInt(newValue);
+        ShowParticle = bool StringToInt(newValue);
     else if (convar == cvarWallBlock)
-        WallBlock = bool:StringToInt(newValue);
+        WallBlock = bool StringToInt(newValue);
     else if (convar == cvarSpawnMenu)
-        SpawnMenu = bool:StringToInt(newValue);
+        SpawnMenu = bool StringToInt(newValue);
     else if (convar == cvarAmplifierRange[1])
         DefaultAmplifierRange[1] = StringToFloat(newValue);
     else if (convar == cvarAmplifierRange[2])
@@ -422,16 +422,16 @@ public OnConfigsExecuted()
 
 public OnMapStart()
 {
-    static String:extensions[][] = {".mdl", ".dx80.vtx", ".dx90.vtx", ".sw.vtx", ".vvd", ".phy"};
-    static String:extensionsb[][] = {".vtf", ".vmt"};
-    new String:strLine[256];
+    static char extensions[][] = {".mdl", ".dx80.vtx", ".dx90.vtx", ".sw.vtx", ".vvd", ".phy"};
+    static char extensionsb[][] = {".vtf", ".vmt"};
+    char strLine[256];
 
     // Download the Amplifier & Gib Models
-    for (new i=0; i < sizeof(extensions); i++)
+    for (int i =0; i < sizeof(extensions); i++)
     {
         Format(strLine,sizeof(strLine),"%s%s",AmplifierModel,extensions[i]);
         AddFileToDownloadsTable(strLine);
-        for (new j=1; j <=8; j++)
+        for (int j =1; j <=8; j++)
         {
             Format(strLine,sizeof(strLine),"%s%i%s",AMPgib,j,extensions[i]);
             AddFileToDownloadsTable(strLine);
@@ -439,7 +439,7 @@ public OnMapStart()
     }
 
     // Download the Amplifier Materials
-    for (new i=0; i < sizeof(extensionsb); i++)
+    for (int i =0; i < sizeof(extensionsb); i++)
     {
         Format(strLine,sizeof(strLine),"%s%s",AmplifierTex,extensionsb[i]);
         AddFileToDownloadsTable(strLine);
@@ -477,14 +477,14 @@ public OnMapStart()
     SetupModel(strLine, .precache=true);
 
     // Precache the Amplifier Gib Models
-    for (new i=1; i <=8; i++)
+    for (int i =1; i <=8; i++)
     {
         Format(strLine,sizeof(strLine),"%s%d.mdl",AMPgib, i);
         SetupModel(strLine, .precache=true);
     }
 
     // Precache the Repair Node Models (for each level)
-    for (new i=1; i <=3; i++)
+    for (int i =1; i <=3; i++)
     {
         Format(strLine,sizeof(strLine),"%s%d.mdl",RepairNodeModel, i);
         SetupModel(strLine, .precache=true);
@@ -495,9 +495,9 @@ public OnMapStart()
     SetupModel(HaloModel, g_HaloSprite);
 }
 
-public OnClientAuthorized(client, const String:auth[])
+public OnClientAuthorized(client, const char[] auth)
 {
-    static const Float:UseDefaultRange[4] = { -1.0, -1.0, -1.0, -1.0 };
+    static const float UseDefaultRange[4] = { -1.0, -1.0, -1.0, -1.0 };
     static const UseDefaultValues[4]      = { -1,   -1,   -1,   -1 };
 
     BuildingType[client]=TFExtObject_Unknown;
@@ -515,7 +515,7 @@ public OnClientAuthorized(client, const String:auth[])
     RepairNodeMini[client] = bool:-1;
 }
 
-public Action:Timer_Announce(Handle:hTimer)
+public Action Timer_Announce(Handle hTimer)
 {
     if (NativeControl || GetConVarBool(cvarAnnounce))
         return Plugin_Stop;
@@ -537,7 +537,7 @@ public Action:Timer_Announce(Handle:hTimer)
 }
 
 //Show Panel to Engineer on spawn.
-public Action:Event_player_spawn(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Event_player_spawn(Handle event, const char[] name, bool dontBroadcast)
 {
     if (!NativeControl && SpawnMenu)
     {
@@ -548,16 +548,16 @@ public Action:Event_player_spawn(Handle:event, const String:name[], bool:dontBro
     return Plugin_Continue;
 }
 
-public AmpHelpPanelH(Handle:menu, MenuAction:action, param1, param2)
+public AmpHelpPanelH(Handle menu, MenuAction:action, param1, param2)
 {
     if(action == MenuAction_Select)
         return;   
 }
   
-public Action:HelpPanel(client, Args)
+public Action HelpPanel(client, Args)
 {
-    new String:s[256];
-    new Handle:panel = CreatePanel();
+    char s[256];
+    Handle panel = CreatePanel();
 
     Format(s,sizeof(s),"%t","Help1");
     SetPanelTitle(panel, s);
@@ -583,7 +583,7 @@ public Action:HelpPanel(client, Args)
 }
 
 //Show Panel to Enginner on command
-public Action:CallPanel(client, Args)
+public Action CallPanel(client, Args)
 {
     if (!NativeControl)
         AmpPanel(client);
@@ -597,9 +597,9 @@ public AmpPanel(client)
     if (NativeControl || TF2_GetPlayerClass(client) != TFClass_Engineer)
         return;
 
-    new bool:ampEnabled;
-    new bool:rnEnabled;
-    new bool:usEnabled;
+    bool ampEnabled;
+    bool rnEnabled;
+    bool usEnabled;
     if (NativeControl)
     {
         usEnabled = NativeUpgradeStation[client];
@@ -613,8 +613,8 @@ public AmpPanel(client)
         ampEnabled = AmplifierEnabled;
     }
 
-    new String:str[256];
-    new Handle:panel = CreatePanel();
+    char str[256];
+    Handle panel = CreatePanel();
     SetGlobalTransTarget(client);
 
     Format(str,sizeof(str),"%t","Select2ndBuilding");
@@ -649,7 +649,7 @@ public AmpPanel(client)
 }
 
 //Panel's Handle Procedure
-public AmpPanelH(Handle:menu, MenuAction:action, param1, param2)
+public AmpPanelH(Handle menu, MenuAction:action, param1, param2)
 {
     if (action == MenuAction_Select)
     {
@@ -746,10 +746,10 @@ public AmpPanelH(Handle:menu, MenuAction:action, param1, param2)
 //--Spawn (Remove) crit effects on players. 
 //--Disable Amplifiers when they dying
 //--WAVES
-public Action:BuildingTimer(Handle:hTimer)
+public Action BuildingTimer(Handle hTimer)
 {
-    new Float:Pos[3];
-    new Float:BuildingPos[3];
+    float Pos[3];
+    float BuildingPos[3];
     new TFTeam:clientTeam;
     new TFTeam:team;
     new i,client;
@@ -784,7 +784,7 @@ public Action:BuildingTimer(Handle:hTimer)
                         if (percent >= 0 && percent < 100 && (ConditionApplied[ent][client] || GetRandomInt(1,100) > percent))
                             continue;
 
-                        new bool:enableParticle;
+                        bool enableParticle;
                         new TFCond:Condition = AmplifierCondition[ent];
                         switch (Condition)
                         {
@@ -858,7 +858,7 @@ public Action:BuildingTimer(Handle:hTimer)
                                 }
                             }
 
-                            new String:weapon[64];
+                            char weapon[64];
                             GetClientWeapon(client, weapon, sizeof(weapon));
 
                             //Set condition to player
@@ -1011,7 +1011,7 @@ public Action:BuildingTimer(Handle:hTimer)
                     {
                         ConditionApplied[ent][client]=false;
                         TF2_RemoveCondition(client, AmplifierCondition[ent]);
-                        new String:weapon[64];
+                        char weapon[64];
                         GetClientWeapon(client, weapon, sizeof(weapon));
 
                         if (MiniCritToSG && AmplifierCondition[ent] != TFCond_Buffed &&
@@ -1173,7 +1173,7 @@ public Action:BuildingTimer(Handle:hTimer)
                 else if (BuildingType[i] == TFExtObject_RepairNode)
                 {
                     // Remove any healing beams
-                    for (new obj=MaxClients+1; obj<maxEntities; obj++)
+                    for (int obj =MaxClients+1; obj<maxEntities; obj++)
                     {
                         if (EntRefToEntIndex(RepairNodeTarget[obj]) == i)
                             RemoveRepairParticles(obj);
@@ -1187,7 +1187,7 @@ public Action:BuildingTimer(Handle:hTimer)
     return Plugin_Continue;
 }
 
-CheckObject(client, ent, obj, Float:Pos[3], level, &metal, bool:isSentry)
+CheckObject(client, ent, obj, float Pos[3], level, &metal, bool isSentry)
 {
     if (obj != ent)
     {
@@ -1230,7 +1230,7 @@ CheckObject(client, ent, obj, Float:Pos[3], level, &metal, bool:isSentry)
             }
         }
 
-        new Float:BuildingPos[3];
+        float BuildingPos[3];
         GetEntPropVector(obj, Prop_Send, "m_vecOrigin", BuildingPos);
 
         if (GetVectorDistance(Pos,BuildingPos) <= BuildingRange[ent][level] &&
@@ -1253,7 +1253,7 @@ CheckObject(client, ent, obj, Float:Pos[3], level, &metal, bool:isSentry)
                     prop = CreateEntityByName("prop_dynamic");
                     if (prop > 0 && IsValidEdict(prop))
                     {
-                        new String:pName[128]; // Dispenser Prop
+                        char pName[128]; // Dispenser Prop
                         Format(pName, sizeof(pName), "target%i", prop);
                         DispatchKeyValue(prop, "targetname", pName);
                         DispatchKeyValue(prop, "model", "models/buildables/dispenser.mdl");
@@ -1262,13 +1262,13 @@ CheckObject(client, ent, obj, Float:Pos[3], level, &metal, bool:isSentry)
                         //DispatchKeyValue(prop, "rendermode", "10");
                         SetEntityRenderMode(prop, RENDER_NONE);
 
-                        new Float:angles[3];
+                        float angles[3];
                         GetEntPropVector(ent, Prop_Send, "m_angRotation", angles);
                         GetEntPropVector(ent, Prop_Send, "m_vecOrigin", Pos);
                         TeleportEntity(prop, Pos, angles, NULL_VECTOR);
                         //DispatchKeyValueVector(prop, "origin", Pos);
 
-                        new String:rName[128]; // Repair Node
+                        char rName[128]; // Repair Node
                         Format(rName, sizeof(rName), "target%i", ent);
                         DispatchKeyValue(ent, "targetname", rName);
                         DispatchKeyValue(prop, "parentname", rName);
@@ -1376,7 +1376,7 @@ CheckObject(client, ent, obj, Float:Pos[3], level, &metal, bool:isSentry)
     }
 }
 
-public Void:SetHealthOfEnt(any:ent, any:health)
+public Void:SetHealthOfEnt(any ent, any health)
 {
     new entvalue = GetEntProp(ent, Prop_Send, "m_iHealth");
     if (entvalue < 200)
@@ -1397,7 +1397,7 @@ public Void:SetHealthOfEnt(any:ent, any:health)
     }
 }
 
-stock AttachRepairParticle(obj, String:particleType[], ent, const Float:Pos[3], prop,
+stock AttachRepairParticle(obj, char particleType[], ent, const float Pos[3], prop,
                            &particle, &particle2)
 {
     //This is used to attach a particle that has two control points
@@ -1410,7 +1410,7 @@ stock AttachRepairParticle(obj, String:particleType[], ent, const Float:Pos[3], 
     if (particle > 0 && IsValidEdict(particle))
     {
         //Name the particle (this particle is attached to the source player)
-        new String:particleName[128];
+        char particleName[128];
         Format(particleName, sizeof(particleName), "TF2particle%i", particle);
         DispatchKeyValue(particle, "targetname", particleName);
 
@@ -1419,13 +1419,13 @@ stock AttachRepairParticle(obj, String:particleType[], ent, const Float:Pos[3], 
         DispatchSpawn(particle);
 
         //Name the destination, usually another player
-        new String:cpName[128];
+        char cpName[128];
         Format(cpName, sizeof(cpName), "target%i", ent);
         DispatchKeyValue(ent, "targetname", cpName);
 
         //--------------------------------------
 
-        new String:dName[128];
+        char dName[128];
         Format(dName, sizeof(dName), "target%i", prop);
 
         //Parent the source particle to the source player
@@ -1444,13 +1444,13 @@ stock AttachRepairParticle(obj, String:particleType[], ent, const Float:Pos[3], 
         if (particle2 > 0 && IsValidEdict(particle2))
         {
             //Give the destination particle a unique name
-            new String:cp2Name[128];
+            char cp2Name[128];
             Format(cp2Name, sizeof(cp2Name), "TF2particle%i", particle2);
             DispatchKeyValue(particle2, "targetname", cp2Name);
             DispatchKeyValueVector(particle2, "origin", Pos);
 
             //Name the originating source, usually the player
-            new String:tName[128];
+            char tName[128];
             Format(tName, sizeof(tName), "target%i", obj);
             DispatchKeyValue(obj, "targetname", tName);
 
@@ -1477,29 +1477,29 @@ stock AttachRepairParticle(obj, String:particleType[], ent, const Float:Pos[3], 
 RemoveRepairParticles(obj)
 {
     RepairNodeTarget[obj] = INVALID_ENT_REFERENCE;
-    for (new i=0; i < sizeof(RepairNodeParticle[]); i++)
+    for (int i =0; i < sizeof(RepairNodeParticle[]); i++)
     {
         DeleteParticle(RepairNodeParticle[obj][i]);
     }
 }
 
 //Add scores for engi for assist by Amplifier
-public Action:event_player_death(Handle:event, const String:name[], bool:dontBroadcast)
+public Action event_player_death(Handle event, const char[] name, bool dontBroadcast)
 {
-    //new Float:Pos[3];
-    //new Float:BuildingPos[3];
+    //float Pos[3];
+    //float BuildingPos[3];
     new Victim = GetClientOfUserId(GetEventInt(event,"userid"));
     new Attacker = GetClientOfUserId(GetEventInt(event, "attacker"));
     if (NearAmplifier[Attacker] || NearAmplifier[Victim])
     {
         new maxEntities = GetMaxEntities();
-        for (new i=MaxClients+1; i<maxEntities; i++)
+        for (int i =MaxClients+1; i<maxEntities; i++)
         {
             new ent = EntRefToEntIndex(BuildingRef[i]);
             if (ent > 0 && BuildingOn[ent] && Attacker != i &&
                 !GetEntProp(ent, Prop_Send, "m_bHasSapper"))
             {
-                new bool:assist;
+                bool assist;
                 switch (AmplifierCondition[ent])
                 {
                     case TFCond_Slowed, TFCond_Zoomed, TFCond_TeleportedGlow, TFCond_Taunting,
@@ -1521,7 +1521,7 @@ public Action:event_player_death(Handle:event, const String:name[], bool:dontBro
                         EngiAssists[builder]++;
                         if (EngiAssists[builder]>=4)
                         {
-                            new Handle:aevent = CreateEvent("player_escort_score", true) ;
+                            Handle aevent = CreateEvent("player_escort_score", true) ;
                             SetEventInt(aevent, "player", builder);
                             SetEventInt(aevent, "points", 1);
                             FireEvent(aevent);
@@ -1542,7 +1542,7 @@ public OnEntityDestroyed(ent)
     TraceInto("amp_node", "OnEntityDestroyed", "ent=0x%08x", ent);
     if (IsValidEdict(ent))
     {
-        decl String:classname[64];
+        char classname[64];
         if (GetEntityClassname(ent, classname, sizeof(classname))
             && strncmp(classname, "obj_", 4) == 0)
         {
@@ -1555,14 +1555,14 @@ public OnEntityDestroyed(ent)
     TraceReturn();
 }
 
-public Action:Event_Remove(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Event_Remove(Handle event, const char[] name, bool dontBroadcast)
 {
     new ent = GetEventInt(event, "index");
     TraceInto("amp_node", "Event_Remove", "ent=0x%08x", ent);
     if (ent > 0)
     {
         #if defined _TRACE
-            decl String:classname[64];
+            char classname[64];
             GetEntityClassname(ent, classname, sizeof(classname));
             Trace("Event_Remove: ent=0x%08x, class=%s, type=%d", ent, classname, \
                   (ent >= 0 && ent < sizeof(BuildingType)) ? BuildingType[ent] : TFExtObjectType:-2);
@@ -1593,7 +1593,7 @@ DisableBuilding(ent)
     if (BuildingType[ent] == TFExtObject_Amplifier)
     {
         // Remove any lingering amplifier conditions
-        for (new client=1; client<=MaxClients; client++)
+        for (int client =1; client<=MaxClients; client++)
         {
             if (ConditionApplied[ent][client])
             {
@@ -1607,7 +1607,7 @@ DisableBuilding(ent)
     {
         // Remove any healing beams
         new maxEntities = GetMaxEntities();
-        for (new obj=MaxClients+1; obj<maxEntities; obj++)
+        for (int obj =MaxClients+1; obj<maxEntities; obj++)
         {
             if (EntRefToEntIndex(RepairNodeTarget[obj]) == ent)
                 RemoveRepairParticles(obj);
@@ -1629,7 +1629,7 @@ DisableBuilding(ent)
 }
 
 //Detect upgrading of buildings
-public Action:Event_Upgrade(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Event_Upgrade(Handle event, const char[] name, bool dontBroadcast)
 {
     new ent = GetEventInt(event, "index");
     TraceInto("amp_node", "Event_Upgrade", "ent=0x%08x, type=%d", ent, \
@@ -1657,7 +1657,7 @@ public Action:Event_Upgrade(Handle:event, const String:name[], bool:dontBroadcas
     return Plugin_Continue;
 }
 
-public Action:Event_Carry(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Event_Carry(Handle event, const char[] name, bool dontBroadcast)
 {
     new ent = GetEventInt(event, "index");
     TraceInto("amp_node", "Event_Carry", "ent=0x%08x, type=%d", ent, \
@@ -1679,7 +1679,7 @@ public Action:Event_Carry(Handle:event, const String:name[], bool:dontBroadcast)
                 SetEntityModel(ent,DispenserModel);
             else
             {
-                decl String:modelname[128];
+                char modelname[128];
                 Format(modelname,sizeof(modelname),"%s%d%s",DispenserLvlModel,level,".mdl");
                 SetEntityModel(ent,modelname);
             }
@@ -1691,7 +1691,7 @@ public Action:Event_Carry(Handle:event, const String:name[], bool:dontBroadcast)
     return Plugin_Continue;
 }
 
-public Action:Event_Drop(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Event_Drop(Handle event, const char[] name, bool dontBroadcast)
 {
     new ent = GetEventInt(event, "index");
     TraceInto("amp_node", "Event_Drop", "ent=0x%08x, type=%d", ent, \
@@ -1714,7 +1714,7 @@ public Action:Event_Drop(Handle:event, const String:name[], bool:dontBroadcast)
 }
 
 // Spa sappin' mah Amplifier!!!!11
-public Action:Event_Sapped(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Event_Sapped(Handle event, const char[] name, bool dontBroadcast)
 {
     new ent = GetEventInt(event, "object");
     TraceInto("amp_node", "Event_Sapped", "ent=0x%08x, type=%d", ent, \
@@ -1734,7 +1734,7 @@ public Action:Event_Sapped(Handle:event, const String:name[], bool:dontBroadcast
                 SetEntityModel(ent,DispenserModel);
             else
             {
-                decl String:modelname[128];
+                char modelname[128];
                 Format(modelname,sizeof(modelname),"%s%d%s",DispenserLvlModel,level,".mdl");
                 SetEntityModel(ent,modelname);
             }
@@ -1748,7 +1748,7 @@ public Action:Event_Sapped(Handle:event, const String:name[], bool:dontBroadcast
     return Plugin_Continue;
 }
 
-public Action:CheckSapper(Handle:hTimer,any:ref)
+public Action CheckSapper(Handle hTimer,any ref)
 {
     new ent = EntRefToEntIndex(ref);
     TraceInto("amp_node", "CheckSapper", "ent=0x%08x, type=%d", ent, \
@@ -1770,7 +1770,7 @@ public Action:CheckSapper(Handle:hTimer,any:ref)
 }
 
 //Detect building of, err, buildings
-public Action:Event_Build(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Event_Build(Handle event, const char[] name, bool dontBroadcast)
 {
     new ent = GetEventInt(event, "index");
     TraceInto("amp_node", "Event_Build", "ent=0x%08x, type=%d", ent, \
@@ -1833,7 +1833,7 @@ CheckDisp(ent, client)
     }
     else if (client > 0 && BuildingType[client] != TFExtObject_Dispenser)
     {
-        new String:classname[64];
+        char classname[64];
         GetEdictClassname(ent, classname, sizeof(classname));
         if (StrEqual(classname, "obj_dispenser"))
         {
@@ -1841,9 +1841,9 @@ CheckDisp(ent, client)
 
             BuildingOn[ent] = false;
 
-            new bool:ampEnabled;
-            new bool:rnEnabled;
-            new bool:usEnabled;
+            bool ampEnabled;
+            bool rnEnabled;
+            bool usEnabled;
             if (NativeControl)
             {
                 usEnabled = NativeUpgradeStation[client];
@@ -1897,8 +1897,8 @@ CheckDisp(ent, client)
             {
                 // Display a menu for the engineer to pick what to build
                 new ref = EntIndexToEntRef(ent);
-                new String:str[256], String:info[64];
-                new Handle:menu = CreateMenu(BuildMenu);
+                char str[256], char info[64];
+                Handle menu = CreateMenu(BuildMenu);
                 SetMenuTitle(menu, "%t","Build");
 
                 Format(info,sizeof(info),"%d,1", ref);
@@ -1927,7 +1927,7 @@ CheckDisp(ent, client)
     TraceReturn();
 }
 
-ConvertToAmplifier(ent, percent, const Float:range[4], TFCond:condition)
+ConvertToAmplifier(ent, percent, const float range[4], TFCond:condition)
 {
     new ref = BuildingRef[ent] = EntIndexToEntRef(ent);
     TraceInto("amp_node", "ConvertToAmplifier", "ref=0x%08x, ent=0x%08x", ref, ent);
@@ -1941,7 +1941,7 @@ ConvertToAmplifier(ent, percent, const Float:range[4], TFCond:condition)
     else
         BuildingRange[ent] = range;
 
-    decl String:modelname[128];
+    char modelname[128];
     Format(modelname,sizeof(modelname),"%s%s",AmplifierModel,".mdl");
 
     SetEntityModel(ent,modelname);
@@ -1964,14 +1964,14 @@ ConvertToAmplifier(ent, percent, const Float:range[4], TFCond:condition)
     TraceReturn();
 }
 
-ConvertToRepairNode(ent, percent, const Float:range[4], const regen[4],
+ConvertToRepairNode(ent, percent, const float range[4], const regen[4],
                     const shells[4], rockets, team, mini)
 {
     new ref = BuildingRef[ent] = EntIndexToEntRef(ent);
     TraceInto("amp_node", "ConvertToRepairNode", "ref=0x%08x, ent=0x%08x", ref, ent);
 
-    RepairNodeTeam[ent]  = (team < 0) ? DefaultTeam : bool:team;
-    RepairNodeMini[ent]  = (mini < 0) ? DefaultMini : bool:mini;
+    RepairNodeTeam[ent]  = (team < 0) ? DefaultTeam : bool team;
+    RepairNodeMini[ent]  = (mini < 0) ? DefaultMini : bool mini;
     BuildingPercent[ent] = (percent < 0) ? RepairNodePercent : percent;
     BuildingType[ent] = TFExtObject_RepairNode;
 
@@ -1997,10 +1997,10 @@ ConvertToRepairNode(ent, percent, const Float:range[4], const regen[4],
 
     SetEntProp(ent, Prop_Send, "m_bDisabled", 1);
     
-    new String:modelname[128];
+    char modelname[128];
     if (GetEntPropFloat(ent, Prop_Send, "m_flPercentageConstructed") >= 1.0)
     {
-        //decl String:modelname[128];
+        //char modelname[128];
         new level = GetEntProp(ent, Prop_Send, "m_iUpgradeLevel");
         Format(modelname,sizeof(modelname),"%s%d%s",RepairNodeModel,level,".mdl");
 
@@ -2024,7 +2024,7 @@ ConvertToRepairNode(ent, percent, const Float:range[4], const regen[4],
     TraceReturn();
 }
 
-ConvertToUpgradeStation(ent) // Float:delay, Timer:stageFunc, flags=0)
+ConvertToUpgradeStation(ent) // float delay, Timer:stageFunc, flags=0)
 {
     new ref = BuildingRef[ent] = EntIndexToEntRef(ent);
     TraceInto("amp_node", "ConvertToUpgradeStation", "ref=0x%08x, ent=0x%08x", ref, ent);
@@ -2036,10 +2036,10 @@ ConvertToUpgradeStation(ent) // Float:delay, Timer:stageFunc, flags=0)
         DispatchSpawn(func);
         ActivateEntity(func);
 
-        decl Float:objpos[3];
+        decl float objpos[3];
         GetEntPropVector(ent, Prop_Send, "m_vecOrigin", objpos);
 
-        //decl Float:objang[3];
+        //decl float objang[3];
         //GetEntPropVector(ent, Prop_Send, "m_vecAngles", objang);
         //objang[1] += 90.0;
 
@@ -2081,13 +2081,13 @@ ConvertToUpgradeStation(ent) // Float:delay, Timer:stageFunc, flags=0)
     TraceReturn();
 }
 
-public BuildMenu(Handle:menu,MenuAction:action,client,selection)
+public BuildMenu(Handle menu,MenuAction:action,client,selection)
 {
     TraceInto("amp_node", "BuildMenu", "menu=0x%08x, action=%d, client=%d, selection=%d", menu, action,client,selection);
     if (action == MenuAction_Select)
     {
-        decl String:SelectionInfo[64];
-        decl String:SelectionPart[2][32];
+        char SelectionInfo[64];
+        char SelectionPart[2][32];
         GetMenuItem(menu,selection,SelectionInfo,sizeof(SelectionInfo));
         ExplodeString(SelectionInfo,",",SelectionPart,sizeof(SelectionPart), sizeof(SelectionPart[]));
 
@@ -2167,7 +2167,7 @@ public BuildMenu(Handle:menu,MenuAction:action,client,selection)
 
 
 // Wait over stage, Transition to the complete stage
-public Action:DelayedActivate(Handle:hTimer,any:ref)
+public Action DelayedActivate(Handle hTimer,any ref)
 {
     new ent = EntRefToEntIndex(ref);
     TraceInto("amp_node", "", "ref=0x%08x, ent=0x%08x", ref, ent);
@@ -2182,7 +2182,7 @@ public Action:DelayedActivate(Handle:hTimer,any:ref)
 }
 
 // Complete stage, change the model and show a particle fountain
-public Action:Activate(Handle:hTimer, any:ref)
+public Action Activate(Handle hTimer, any ref)
 {
     new ent = EntRefToEntIndex(ref);
     TraceInto("amp_node", "Activate", "hTimer=0x%08x, ref=0x%08x, ent=0x%08x", hTimer, ref, ent);
@@ -2221,7 +2221,7 @@ public ResetModel(ent)
     // Ensure the Amplifier or Repair Node hasn't been enabled
     SetEntProp(ent, Prop_Send, "m_bDisabled", 1);
 
-    decl String:modelname[128];
+    char modelname[128];
     if (BuildingType[ent] == TFExtObject_Amplifier)
     {
         Format(modelname,sizeof(modelname),"%s%s",AmplifierModel,".mdl");
@@ -2255,7 +2255,7 @@ public ResetModel(ent)
 }
 
 //Wait for kill teleport effect
-public Action:RemoveEntityTimer(Handle:hTimer,any:ref)
+public Action RemoveEntityTimer(Handle hTimer,any ref)
 {
     new ent = EntRefToEntIndex(ref);
     if (ent > 0 && IsValidEntity(ent))
@@ -2265,13 +2265,13 @@ public Action:RemoveEntityTimer(Handle:hTimer,any:ref)
 }
 
 //Create Crit Particle
-AttachParticle(ent, String:particleType[],&particle)
+AttachParticle(ent, char particleType[],&particle)
 {
     particle = CreateEntityByName("info_particle_system");
     if (particle > 0 && IsValidEdict(particle))
     {
-        new String:tName[128];
-        new Float:pos[3];
+        char tName[128];
+        float pos[3];
         GetEntPropVector(ent, Prop_Send, "m_vecOrigin", pos);
         TeleportEntity(particle, pos, NULL_VECTOR, NULL_VECTOR);
 
@@ -2291,11 +2291,11 @@ AttachParticle(ent, String:particleType[],&particle)
     }
 }
 
-stock CleanString(String:strBuffer[])
+stock CleanString(char strBuffer[])
 {
     // Cleanup any illegal characters
     new Length = strlen(strBuffer);
-    for (new i=0; i<Length; i++)
+    for (int i =0; i<Length; i++)
     {
         switch(strBuffer[i])
         {
@@ -2313,19 +2313,19 @@ stock CleanString(String:strBuffer[])
  * Description: Native Interface
  */
 
-public Native_ControlAmpNode(Handle:plugin,numParams)
+public Native_ControlAmpNode(Handle plugin,numParams)
 {
     NativeControl = GetNativeCell(1);
 }
 
-public Native_SetAmplifier(Handle:plugin,numParams)
+public Native_SetAmplifier(Handle plugin,numParams)
 {
     new client = GetNativeCell(1);
 
     new TFCond:condition = TFCond:GetNativeCell(2);
     NativeCondition[client] = (condition < TFCond_Slowed) ? DefaultCondition : condition;
 
-    new Float:range[4];
+    float range[4];
     GetNativeArray(3, range, sizeof(range));
     if (range[0] < 0.0)
         NativeAmplifierRange[client] = DefaultAmplifierRange;
@@ -2335,17 +2335,17 @@ public Native_SetAmplifier(Handle:plugin,numParams)
     new percent = GetNativeCell(4);
     NativeAmplifierPercent[client] = (percent < 0) ? AmplifierPercent : percent;
 
-    NativeAmplifier[client] = bool:GetNativeCell(5);
+    NativeAmplifier[client] = bool GetNativeCell(5);
 
     if (GetNativeCell(6))
         BuildingType[client] = TFExtObject_Amplifier;
 }
 
-public Native_SetRepairNode(Handle:plugin,numParams)
+public Native_SetRepairNode(Handle plugin,numParams)
 {
     new client = GetNativeCell(1);
 
-    new Float:range[4];
+    float range[4];
     GetNativeArray(2, range, sizeof(range));
     if (range[0] < 0.0)
         NativeRepairNodeRange[client] = DefaultRepairNodeRange;
@@ -2369,37 +2369,37 @@ public Native_SetRepairNode(Handle:plugin,numParams)
     NativeRockets[client] = (rockets < 0) ? DefaultRockets : rockets;
 
     new team = GetNativeCell(6);
-    RepairNodeTeam[client] = (team < 0) ? DefaultTeam : bool:team;
+    RepairNodeTeam[client] = (team < 0) ? DefaultTeam : bool team;
 
     new mini = GetNativeCell(7);
-    RepairNodeMini[client] = (mini < 0) ? DefaultMini : bool:mini;
+    RepairNodeMini[client] = (mini < 0) ? DefaultMini : bool mini;
 
     new percent = GetNativeCell(8);
     NativeRepairNodePercent[client] = (percent < 0) ? RepairNodePercent : percent;
 
-    NativeRepairNode[client] = bool:GetNativeCell(9);
+    NativeRepairNode[client] = bool GetNativeCell(9);
 
     if (GetNativeCell(10))
         BuildingType[client] = TFExtObject_RepairNode;
 }
 
-public Native_SetUpgradeStation(Handle:plugin,numParams)
+public Native_SetUpgradeStation(Handle plugin,numParams)
 {
     new client = GetNativeCell(1);
 
-    NativeUpgradeStation[client] = bool:GetNativeCell(2);
+    NativeUpgradeStation[client] = bool GetNativeCell(2);
 
     if (GetNativeCell(3))
         BuildingType[client] = TFExtObject_UpgradeStation;
 }
 
-public Native_CountConvertedBuildings(Handle:plugin,numParams)
+public Native_CountConvertedBuildings(Handle plugin,numParams)
 {
     new count = 0;
     new client = GetNativeCell(1);
     new TFExtObjectType:type = GetNativeCell(2);
     new maxEntities = GetMaxEntities();
-    for (new i=MaxClients+1; i<maxEntities; i++)
+    for (int i =MaxClients+1; i<maxEntities; i++)
     {
         if (BuildingType[i] == type)
         {
@@ -2414,7 +2414,7 @@ public Native_CountConvertedBuildings(Handle:plugin,numParams)
     return count;
 }
 
-public Native_ConvertToAmplifier(Handle:plugin,numParams)
+public Native_ConvertToAmplifier(Handle plugin,numParams)
 {
     new ent = GetNativeCell(1);
     if (ent > 0 && IsValidEntity(ent))
@@ -2422,7 +2422,7 @@ public Native_ConvertToAmplifier(Handle:plugin,numParams)
         new client = GetNativeCell(2);
         new TFCond:condition = TFCond:GetNativeCell(3);
 
-        new Float:range[4];
+        float range[4];
         GetNativeArray(4, range, sizeof(range));
 
         new percent = GetNativeCell(5);
@@ -2454,14 +2454,14 @@ public Native_ConvertToAmplifier(Handle:plugin,numParams)
     }
 }
 
-public Native_ConvertToRepairNode(Handle:plugin,numParams)
+public Native_ConvertToRepairNode(Handle plugin,numParams)
 {
     new ent = GetNativeCell(1);
     if (ent > 0 && IsValidEntity(ent))
     {
         new client = GetNativeCell(2);
 
-        new Float:range[4];
+        float range[4];
         GetNativeArray(3, range, sizeof(range));
 
         new regen[4];
@@ -2506,10 +2506,10 @@ public Native_ConvertToRepairNode(Handle:plugin,numParams)
                 BuildingPercent[ent] = percent;
 
             if (team >= 0)
-                RepairNodeTeam[ent] = bool:team;
+                RepairNodeTeam[ent] = bool team;
 
             if (mini >= 0)
-                RepairNodeMini[ent] = bool:mini;
+                RepairNodeMini[ent] = bool mini;
 
             if (range[0] >= 0.0)
                 BuildingRange[ent] = range;
@@ -2526,7 +2526,7 @@ public Native_ConvertToRepairNode(Handle:plugin,numParams)
     }
 }
 
-public Native_ConvertToUpgradeStation(Handle:plugin,numParams)
+public Native_ConvertToUpgradeStation(Handle plugin,numParams)
 {
     new ent = GetNativeCell(1);
     if (ent > 0 && IsValidEntity(ent))
@@ -2541,7 +2541,7 @@ public Native_ConvertToUpgradeStation(Handle:plugin,numParams)
 /**
  *  If ztf2grab (gravgun) is loaded and someone tries to pickup certain Amplifiers, don't allow it.
  */
-public Action:OnPickupObject(client, builder, ent)
+public Action OnPickupObject(client, builder, ent)
 {
     if (BuildingRef[ent] != INVALID_ENT_REFERENCE && EntRefToEntIndex(BuildingRef[ent]) == ent)
     {

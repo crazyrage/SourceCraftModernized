@@ -30,22 +30,22 @@ stock m_savedArmor[MAXPLAYERS+1];
  * @param upgrade       Set true if armor is being upgraded
  * @return			    Amount of armor given.
  */
-stock SetupArmor(client, level, const Float:initialArmor[], const Float:armorPercent[][2],
-                 const String:armorName[]="", ArmorFlags:flags=Armor_Default, maxShields=-1,
-                 bool:upgrade=false)
+stock SetupArmor(int client, int level, const float[] initialArmor, const float armorPercent[][2],
+                 const char[] armorName="", ArmorFlags flags=Armor_Default, int maxShields=-1,
+                 bool upgrade=false)
 {
-    new amount = 0;
+    int amount = 0;
     ResetMaxHealth(client);
     if (initialArmor[level] > 0.0)
     {
-        new maxhp = TF2_GetPlayerMaxHealth(client);
+        int maxhp = TF2_GetPlayerMaxHealth(client);
         amount = RoundFloat(float(maxhp)*initialArmor[level]);
     }
 
     if (upgrade)
     {
-        new armor = GetArmor(client);
-        new oldArmor = m_savedArmor[client];
+        int armor = GetArmor(client);
+        int oldArmor = m_savedArmor[client];
         if (level > 0 && armor >= initialArmor[level-1])
             m_savedArmor[client] = amount;
         else if (amount > oldArmor && oldArmor >  0)

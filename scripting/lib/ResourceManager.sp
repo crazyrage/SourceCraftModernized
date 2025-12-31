@@ -19,33 +19,33 @@
 enum State { Unknown=0, Defined, Download, Force, Precached };
 
 // ConVars
-new Handle:cvarDownloadThreshold = INVALID_HANDLE;
-new Handle:cvarDecalThreshold    = INVALID_HANDLE;
-new Handle:cvarModelThreshold    = INVALID_HANDLE;
-new Handle:cvarSoundThreshold    = INVALID_HANDLE;
-new Handle:cvarSoundLimit        = INVALID_HANDLE;
+Handle cvarDownloadThreshold = null;
+Handle cvarDecalThreshold    = null;
+Handle cvarModelThreshold    = null;
+Handle cvarSoundThreshold    = null;
+Handle cvarSoundLimit        = null;
 
 // Resource Tries
-new Handle:g_decalTrie           = INVALID_HANDLE;
-new Handle:g_modelTrie           = INVALID_HANDLE;
-new Handle:g_soundTrie           = INVALID_HANDLE;
+Handle g_decalTrie           = null;
+Handle g_modelTrie           = null;
+Handle g_soundTrie           = null;
 
 // Variables
-new g_iDecalCount                = 0;
-new g_iModelCount                = 0;
-new g_iSoundCount                = 0;
-new g_iDownloadCount             = 0;
-new g_iRequiredCount             = 0;
-new g_iPrevDownloadIndex         = 0;
+int g_iDecalCount                = 0;
+int g_iModelCount                = 0;
+int g_iSoundCount                = 0;
+int g_iDownloadCount             = 0;
+int g_iRequiredCount             = 0;
+int g_iPrevDownloadIndex         = 0;
 
-new g_iDownloadThreshold         = -1;
-new g_iDecalThreshold            = -1;
-new g_iModelThreshold            = -1;
-new g_iSoundThreshold            = -1;
-new g_iSoundLimit                = -1;
+int g_iDownloadThreshold         = -1;
+int g_iDecalThreshold            = -1;
+int g_iModelThreshold            = -1;
+int g_iSoundThreshold            = -1;
+int g_iSoundLimit                = -1;
 
 
-public Plugin:myinfo = {
+public Plugin myinfo = {
     name = "Resource Manager",
     author = "-=|JFH|=-Naris",
     description = "Manage resources",
@@ -53,7 +53,7 @@ public Plugin:myinfo = {
     url = "http://www.jigglysfunhouse.net"
 };
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
     // Register Natives
     CreateNative("AddDirToDownloadTable",   Native_AddDirToDownloadTable);
@@ -110,7 +110,7 @@ public OnConfigsExecuted()
               g_iSoundCount, g_soundTrie ? GetTrieSize(g_soundTrie) : 0, g_iSoundLimit);
 }
 
-public CvarUpdated(Handle:hHandle, String:strOldVal[], String:strNewVal[])
+public void CvarUpdated(Handle hHandle, const char[] strOldVal, const char[] strNewVal)
 {
     if (hHandle == cvarDownloadThreshold)
         g_iDownloadThreshold = StringToInt(strNewVal);
@@ -124,19 +124,19 @@ public CvarUpdated(Handle:hHandle, String:strOldVal[], String:strNewVal[])
         g_iSoundLimit = StringToInt(strNewVal);
 }
 
-public OnMapEnd()
+public void OnMapEnd()
 {
-    new numDecals = g_decalTrie ? GetTrieSize(g_decalTrie) : 0;
+    int numDecals = g_decalTrie ? GetTrieSize(g_decalTrie) : 0;
     LogToGame("%d/%d Decals loaded by Map End time", g_iDecalCount, numDecals);
     if (numDecals > 0)
         LogMessage("%d/%d Decals loaded by Map End time", g_iDecalCount, numDecals);
 
-    new numModels = g_modelTrie ? GetTrieSize(g_modelTrie) : 0;
+    int numModels = g_modelTrie ? GetTrieSize(g_modelTrie) : 0;
     LogToGame("%d/%d Models loaded by Map End time", g_iModelCount, numModels);
     if (numModels > 0)
         LogMessage("%d/%d Models loaded by Map End time", g_iModelCount, numModels);
 
-    new numSounds = g_soundTrie ? GetTrieSize(g_soundTrie) : 0;
+    int numSounds = g_soundTrie ? GetTrieSize(g_soundTrie) : 0;
     LogToGame("%d/%d/%d Sounds loaded by Map End time", g_iSoundCount, numSounds, g_iSoundLimit);
     LogToGame("%d+%d Sounds downloaded by Map End time", g_iDownloadCount, g_iRequiredCount);
     if (numSounds > 0)
@@ -156,17 +156,17 @@ public OnMapEnd()
 
     ResetGameMode();
 
-    if (g_decalTrie == INVALID_HANDLE)
+    if (g_decalTrie == null)
         g_decalTrie = CreateTrie();
     else
         ClearTrie(g_decalTrie);
 
-    if (g_modelTrie == INVALID_HANDLE)
+    if (g_modelTrie == null)
         g_modelTrie = CreateTrie();
     else
         ClearTrie(g_modelTrie);
 
-    if (g_soundTrie == INVALID_HANDLE)
+    if (g_soundTrie == null)
         g_soundTrie = CreateTrie();
     else
         ClearTrie(g_soundTrie);
@@ -183,20 +183,20 @@ public OnMapEnd()
  * @param preload       If preload is true the file will be precached before level startup.
  * @return              Returns true if successfully precached.
  *
- * native bool:SetupSound(const String:sound[], download=DOWNLOAD, bool:force=false,
+ * native bool:SetupSound(const char[]sound[], download=DOWNLOAD, bool force=false,
  *                        bool:precache=false, bool:preload=false);
  */
-public Native_SetupSound(Handle:plugin,numParams)
+public int Native_SetupSound(Handle plugin, int numParams)
 {
-    new bool:wasPrecached = false;
-    decl String:sound[PLATFORM_MAX_PATH+1];
+    bool wasPrecached = false;
+    char sound[PLATFORM_MAX_PATH+1];
     GetNativeString(1, sound, sizeof(sound));
 
-    if (g_soundTrie == INVALID_HANDLE)
+    if (g_soundTrie == null)
         g_soundTrie = CreateTrie();
 
-    new State:value = Unknown;
-    new bool:update = !GetTrieValue(g_soundTrie, sound, value);
+    State value = Unknown;
+    bool update = !GetTrieValue(g_soundTrie, sound, value);
     if (update || value < Defined)
     {
         g_iSoundCount++;
@@ -204,10 +204,10 @@ public Native_SetupSound(Handle:plugin,numParams)
         update = true;
     }
 
-    new download = GetNativeCell(3);
+    int download = GetNativeCell(3);
     if (download && value < Download && g_iDownloadThreshold != 0)
     {
-        decl String:file[PLATFORM_MAX_PATH+1];
+        char file[PLATFORM_MAX_PATH+1];
         Format(file, PLATFORM_MAX_PATH, "sound/%s", sound);
 
         if (FileExists(file))
@@ -270,7 +270,7 @@ public Native_SetupSound(Handle:plugin,numParams)
         }
     }
 
-    new bool:force = GetNativeCell(2);
+    bool force = GetNativeCell(2);
     if (value < Precached && (g_iSoundThreshold < 0 ||
                               g_iSoundCount <= g_iSoundThreshold ||
                               GetNativeCell(4))) // precache)
@@ -306,17 +306,17 @@ public Native_SetupSound(Handle:plugin,numParams)
  * @param preload       If preload is true the file will be precached immdiately (if required).
  * @return              Returns false if the sound limit has been reached.
  *
- * native PrepareSound(const String:sound[], bool:force=false, bool:preload=false);
+ * native PrepareSound(const char[]sound[], bool force=false, bool:preload=false);
  */
-public Native_PrepareSound(Handle:plugin,numParams)
+public int Native_PrepareSound(Handle plugin, int numParams)
 {
-    decl String:sound[PLATFORM_MAX_PATH+1];
+    char sound[PLATFORM_MAX_PATH+1];
     GetNativeString(1, sound, sizeof(sound));
 
-    if (g_soundTrie == INVALID_HANDLE)
+    if (g_soundTrie == null)
         g_soundTrie = CreateTrie();
 
-    new State:value = Unknown;
+    State value = Unknown;
     if (!GetTrieValue(g_soundTrie, sound, value) || value < Precached)
     {
         if (value >= Force || g_iSoundLimit < 0 || GetNativeCell(2) || // force
@@ -347,19 +347,19 @@ public Native_PrepareSound(Handle:plugin,numParams)
  * @param preload       If preload is true the file will be precached before level startup.
  * @return              Returns a model index (if precached).
  * 
- * native SetupModel(const String:model[], &index=0, bool:download=true,
+ * native SetupModel(const char[]model[], &index=0, bool:download=true,
  *                   bool:precache=false, bool:preload=false);
  */
-public Native_SetupModel(Handle:plugin,numParams)
+public int Native_SetupModel(Handle plugin, int numParams)
 {
-    decl String:model[PLATFORM_MAX_PATH+1];
+    char model[PLATFORM_MAX_PATH+1];
     GetNativeString(1, model, sizeof(model));
 
-    if (g_modelTrie == INVALID_HANDLE)
+    if (g_modelTrie == null)
         g_modelTrie = CreateTrie();
 
-    new index       = -1;
-    new bool:update = !GetTrieValue(g_modelTrie, model, index);
+    int index       = -1;
+    bool update = !GetTrieValue(g_modelTrie, model, index);
     if (update || index < 0)
     {
         g_iModelCount++;
@@ -370,10 +370,10 @@ public Native_SetupModel(Handle:plugin,numParams)
     {
         AddFileToDownloadsTable(model);
 
-        new Handle:files = Handle:GetNativeCell(6);
-        if (files != INVALID_HANDLE)
+        Handle files = view_as<Handle>(GetNativeCell(6));
+        if (files != null)
         {
-            decl String:file[PLATFORM_MAX_PATH+1];
+            char file[PLATFORM_MAX_PATH+1];
             while (PopStackString(files, file, sizeof(file)))
                 AddFileToDownloadsTable(file);
         }
@@ -407,17 +407,17 @@ public Native_SetupModel(Handle:plugin,numParams)
  * @param preload       If preload is true the file will be precached before level startup (if required).
  * @return              Returns a model index.
  * 
- * native PrepareModel(const String:model[], &index=0, bool:preload=true);
+ * native PrepareModel(const char[]model[], &index=0, bool:preload=true);
  */
-public Native_PrepareModel(Handle:plugin,numParams)
+public int Native_PrepareModel(Handle plugin, int numParams)
 {
-    decl String:model[PLATFORM_MAX_PATH+1];
+    char model[PLATFORM_MAX_PATH+1];
     GetNativeString(1, model, sizeof(model));
 
-    if (g_modelTrie == INVALID_HANDLE)
+    if (g_modelTrie == null)
         g_modelTrie = CreateTrie();
 
-    new index = GetNativeCellRef(2);
+    int index = GetNativeCellRef(2);
     if (index <= 0)
         GetTrieValue(g_modelTrie, model, index);
 
@@ -441,19 +441,19 @@ public Native_PrepareModel(Handle:plugin,numParams)
  * @param preload       If preload is true the file will be precached before level startup.
  * @return              Returns a decal index (if precached).
  *
- * native SetupDecal(const String:decal[], &index=0, bool:download=true,
+ * native SetupDecal(const char[]decal[], &index=0, bool:download=true,
  *                   bool:precache=false, bool:preload=false);
  */
-public Native_SetupDecal(Handle:plugin,numParams)
+public int Native_SetupDecal(Handle plugin, int numParams)
 {
-    decl String:decal[PLATFORM_MAX_PATH+1];
+    char decal[PLATFORM_MAX_PATH+1];
     GetNativeString(1, decal, sizeof(decal));
 
-    if (g_decalTrie == INVALID_HANDLE)
+    if (g_decalTrie == null)
         g_decalTrie = CreateTrie();
 
-    new index       = -1;
-    new bool:update = !GetTrieValue(g_decalTrie, decal, index);
+    int index       = -1;
+    bool update = !GetTrieValue(g_decalTrie, decal, index);
     if (update || index < 0)
     {
         g_iModelCount++;
@@ -487,17 +487,17 @@ public Native_SetupDecal(Handle:plugin,numParams)
  * @param preload       If preload is true the file will be precached before level startup (if required).
  * @return              Returns a decal index.
  *
- * native PrepareDecal(const String:model[], &index=0, bool:preload=false);
+ * native PrepareDecal(const char[]model[], &index=0, bool:preload=false);
  */
-public Native_PrepareDecal(Handle:plugin,numParams)
+public int Native_PrepareDecal(Handle plugin, int numParams)
 {
-    decl String:decal[PLATFORM_MAX_PATH+1];
+    char decal[PLATFORM_MAX_PATH+1];
     GetNativeString(1, decal, sizeof(decal));
 
-    if (g_decalTrie == INVALID_HANDLE)
+    if (g_decalTrie == null)
         g_decalTrie = CreateTrie();
 
-    new index = GetNativeCellRef(2);
+    int index = GetNativeCellRef(2);
     if (index <= 0)
         GetTrieValue(g_decalTrie, decal, index);
 
@@ -518,21 +518,22 @@ public Native_PrepareDecal(Handle:plugin,numParams)
  * @param recursive     If true, descends child directories to recursively add all files therein.
  * @noreturn
  *
- * native AddDirToDownloadTable(const String:directory[], bool:recursive=false);
+ * native AddDirToDownloadTable(const char[]directory[], bool:recursive=false);
  */
-public Native_AddDirToDownloadTable(Handle:plugin,numParams)
+public int Native_AddDirToDownloadTable(Handle plugin, int numParams)
 {
-    decl String:directory[PLATFORM_MAX_PATH+1];
+    char directory[PLATFORM_MAX_PATH+1];
     GetNativeString(1, directory, sizeof(directory));
-    AddDirToDownloadTable(directory, bool:GetNativeCell(2));
+    AddDirToDownloadTable(directory, view_as<bool>(GetNativeCell(2)));
 }
 
-AddDirToDownloadTable(const String:directory[], bool:recursive=false)
+void AddDirToDownloadTable(const char[] directory, bool recursive=false)
 {
-    decl String:path[PLATFORM_MAX_PATH+1];
-    decl String:fileName[PLATFORM_MAX_PATH+1];
+    char path[PLATFORM_MAX_PATH+1];
+    char fileName[PLATFORM_MAX_PATH+1];
 
-    new Handle:Dir = OpenDirectory(directory), FileType:type;
+    Handle Dir = OpenDirectory(directory);
+    FileType type;
     while(ReadDirEntry(Dir, fileName, sizeof(fileName), type))     
     {
         if (type == FileType_Directory && recursive)         

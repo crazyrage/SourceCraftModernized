@@ -12,19 +12,19 @@
  *
  * @return				True or false
  **/
-native bool:TF2BTG_IsPlayerGhost( iClient );
+native bool TF2BTG_IsPlayerGhost( iClient );
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /**
  * Return Plugin_Handled or Plugin_Stop to prevent
  **/
-forward Action:TF2BTG_CanPlayAsGhost( iClient );
+forward Action TF2BTG_CanPlayAsGhost( iClient );
 
 /**
  * Return Plugin_Handled or Plugin_Stop to prevent
  **/
-forward Action:TF2BTG_CanBeScared( iGhost, iClient );
+forward Action TF2BTG_CanBeScared( iGhost, iClient );
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 

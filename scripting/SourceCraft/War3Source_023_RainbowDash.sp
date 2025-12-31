@@ -4,7 +4,7 @@
 #include "W3SIncs/War3Source_Interface"  
 //#include "W3SIncs/War3Source_Effects"
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "War3Source - Race - Rainbow Dash",
     author = "War3Source Team",
@@ -12,20 +12,20 @@ public Plugin:myinfo =
 };
 
 new HaloSprite, XBeamSprite;
-new thisRaceID;
+	int thisRaceID;
 
-new Float:fEvadeChance[5]={0.0,0.05,0.10,0.15,0.20};
-new Float:fSwiftASPDBuff[5]={1.0,1.04,1.08,1.12,1.15};
-new Float:abilityspeed[5]={1.0,1.15,1.23,1.32,1.40};
-new Float:rainboomradius[5]={0.0,200.0,266.0,333.0,400.0};
+new float fEvadeChance[5]={0.0,0.05,0.10,0.15,0.20};
+new float fSwiftASPDBuff[5]={1.0,1.04,1.08,1.12,1.15};
+new float abilityspeed[5]={1.0,1.15,1.23,1.32,1.40};
+new float rainboomradius[5]={0.0,200.0,266.0,333.0,400.0};
 
-new Float:LastDamageTime[MAXPLAYERSCUSTOM];
-new Handle:speedendtimer[MAXPLAYERSCUSTOM];
-new bool:inSpeed[MAXPLAYERSCUSTOM];
+new float LastDamageTime[MAXPLAYERSCUSTOM];
+new Handle speedendtimer[MAXPLAYERSCUSTOM];
+new bool inSpeed[MAXPLAYERSCUSTOM];
 
 new SKILL_EVADE, SKILL_SWIFT, SKILL_SPEED, ULTIMATE;
 
-public OnWar3LoadRaceOrItemOrdered(num)
+public void OnWar3LoadRaceOrItemOrdered(num)
 {    
     if(num==230)
     {
@@ -78,23 +78,23 @@ public OnWar3LoadRaceOrItemOrdered(num)
 }
 
 #if defined SOURCECRAFT
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("w3s.race.rainbowdash.phrases");
 }
 #endif
 
-public OnMapStart()
+public void OnMapStart()
 {
     HaloSprite = War3_PrecacheHaloSprite();
     XBeamSprite = War3_PrecacheBeamSprite();
 }
 
-public OnAbilityCommand(client,ability,bool:pressed)
+public OnAbilityCommand(client,ability,bool pressed)
 {
     if(ValidPlayer(client, true) && pressed)
     {
-        new skill_level = War3_GetSkillLevel(client, thisRaceID, SKILL_SPEED);
+        int skill_level = War3_GetSkillLevel(client, thisRaceID, SKILL_SPEED);
         if(skill_level > 0)
         {
             if(SkillAvailable(client, thisRaceID, SKILL_SPEED))
@@ -112,7 +112,7 @@ public OnAbilityCommand(client,ability,bool:pressed)
                 }
                 speedendtimer[client] = CreateTimer(6.0, EndSpeed, EntIndexToEntRef(client));
 #if defined SOURCECRAFT
-                new Float:cooldown= GetUpgradeCooldown(thisRaceID,SKILL_SPEED);
+                new float cooldown= GetUpgradeCooldown(thisRaceID,SKILL_SPEED);
                 War3_CooldownMGR(client,cooldown,thisRaceID,SKILL_SPEED);
 #else
                 War3_CooldownMGR(client, 20.0, thisRaceID, SKILL_SPEED, _, _);
@@ -122,8 +122,8 @@ public OnAbilityCommand(client,ability,bool:pressed)
     }
 }
 
-public Action:EndSpeed(Handle:t, any:clientRef){
-    new client = EntRefToEntIndex(clientRef);
+public Action EndSpeed(Handle t, any:clientRef){
+    int client = EntRefToEntIndex(clientRef);
     
     if(GAMETF)
     {
@@ -133,31 +133,31 @@ public Action:EndSpeed(Handle:t, any:clientRef){
     War3_SetBuff(client, fMaxSpeed, thisRaceID, 1.0);
     War3_SetBuff(client, fSlow, thisRaceID, 1.0);
     
-    speedendtimer[client] = INVALID_HANDLE;
+    speedendtimer[client] = null;
     inSpeed[client] = false;
 }
 
-public OnWar3EventDeath(client, attacker, deathrace)
+public void OnWar3EventDeath(client, attacker, deathrace)
 {
-    if(speedendtimer[client] != INVALID_HANDLE)
+    if(speedendtimer[client] != null)
     {
         TriggerTimer(speedendtimer[client]);
     }
 }
 
-public OnWar3EventPostHurt(victim, attacker, Float:damage, const String:weapon[32], bool:isWarcraft)
+public void OnWar3EventPostHurt(victim, attacker, float damage, const char[] weapon3, bool isWarcraft)
 {
     if(victim > 0 && victim < sizeof(LastDamageTime))
     {
         LastDamageTime[victim] = GetEngineTime();
-        if(speedendtimer[victim] != INVALID_HANDLE)
+        if(speedendtimer[victim] != null)
         {
             TriggerTimer(speedendtimer[victim]);
         }
         else if(War3_GetRace(victim)==thisRaceID)
         {
 #if defined SOURCECRAFT
-            new Float:cooldown= GetUpgradeCooldown(thisRaceID,SKILL_SPEED) / 2.0;
+            new float cooldown= GetUpgradeCooldown(thisRaceID,SKILL_SPEED) / 2.0;
             War3_CooldownMGR(victim,cooldown,thisRaceID,SKILL_SPEED);
 #else
             War3_CooldownMGR(victim, 10.0, thisRaceID, SKILL_SPEED, _, _);
@@ -167,11 +167,11 @@ public OnWar3EventPostHurt(victim, attacker, Float:damage, const String:weapon[3
 }
 
 
-public OnUltimateCommand(client, race, bool:pressed)
+public OnUltimateCommand(client, race, bool pressed)
 {
     if(race == thisRaceID && pressed && ValidPlayer(client, true))
     {
-        new skill = War3_GetSkillLevel(client, race, ULTIMATE);
+        int skill = War3_GetSkillLevel(client, race, ULTIMATE);
         if(skill > 0)
         {
             if(SkillAvailable(client, thisRaceID, ULTIMATE))
@@ -182,16 +182,16 @@ public OnUltimateCommand(client, race, bool:pressed)
                 }
                 else{
 #if defined SOURCECRAFT
-                    new Float:cooldown= GetUpgradeCooldown(thisRaceID,ULTIMATE);
+                    new float cooldown= GetUpgradeCooldown(thisRaceID,ULTIMATE);
                     War3_CooldownMGR(client,cooldown,thisRaceID,ULTIMATE);
 #else
                     War3_CooldownMGR(client, 20.0, thisRaceID, ULTIMATE, _, _);
 #endif
                     
-                    decl Float:start_pos[3];
+                    decl float start_pos[3];
                     GetClientAbsOrigin(client,start_pos);
                     
-                    //TE_SetupBeamRingPoint(const Float:center[3], Float:Start_Radius, Float:End_Radius, ModelIndex, HaloIndex, StartFrame, FrameRate, Float:Life, Float:Width, Float:Amplitude, const Color[4], Speed, Flags)
+                    //TE_SetupBeamRingPoint(const float center[3], float Start_Radius, float End_Radius, ModelIndex, HaloIndex, StartFrame, FrameRate, float Life, float Width, float Amplitude, const Color[4], Speed, Flags)
                     TE_SetupBeamRingPoint(start_pos,                 20.0,            rainboomradius[skill]*2,             XBeamSprite, HaloSprite,     0,         1,                 0.5,     30.0,         0.0,             {255,0,0,255}, 10,     0);
                     TE_SendToAll(0.0);
                     TE_SetupBeamRingPoint(start_pos,                 20.0,            rainboomradius[skill]*2,             XBeamSprite, HaloSprite,     0,         1,                 0.5,     30.0,         0.0,             {255, 127, 0,255}, 10,     0);
@@ -207,8 +207,8 @@ public OnUltimateCommand(client, race, bool:pressed)
                     TE_SetupBeamRingPoint(start_pos,                 20.0,            rainboomradius[skill]*2,             XBeamSprite, HaloSprite,     0,         1,                 0.5,     30.0,         0.0,             {143, 0, 255,255}, 10,     0);
                     TE_SendToAll(0.17);
                 
-                    decl Float:TargetPos[3];
-                    for (new i = 1; i <= MaxClients; i++) 
+                    decl float TargetPos[3];
+                    for (int i = 1; i <= MaxClients; i++) 
                     {
                         if(ValidPlayer(i,true) && GetClientTeam(i) == GetClientTeam(client) && GetClientTeam(client) == GetApparentTeam(i)) 
                         {

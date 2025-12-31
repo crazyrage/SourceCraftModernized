@@ -16,7 +16,7 @@
  * @param client 	Client to query
  * @return			true if the player is a mole.
  */
-native bool:IsMole(client);
+native bool IsMole(int client);
 
 /**
  * Sets the client's "is a mole" flag.
@@ -25,7 +25,7 @@ native bool:IsMole(client);
  * @param value 	Value to set the IsMole flag.
  * @noreturn
  */
-native SetMole(client, bool:value=true);
+native SetMole(int client, bool value=true);
 
 /**
  * Transform a player into a mole by teleporting him to the enemies spawn.
@@ -33,7 +33,7 @@ native SetMole(client, bool:value=true);
  * @param client 	Client to query
  * @return			true if the player is a mole.
  */
-native InvokeMole(client);
+native InvokeMole(int client);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

@@ -25,7 +25,7 @@
 
 enum MedicState { NotMedic=0, IsMedic, NotMedicPending, IsMedicPending }
 
-new const String:g_classlist[][] = { "",
+new const char[]g_classlist[][] = { "",
     "Rifleman",
     "Assault",
     "Support",
@@ -33,11 +33,11 @@ new const String:g_classlist[][] = { "",
     "MG",
     "Rocket" };
 
-new const String:g_model[][] = { "", "",
+new const char[]g_model[][] = { "", "",
     "models/player/american_medic.mdl",
     "models/player/german_medic.mdl" };
 
-new const String:g_model_files[][]  = {
+new const char[]g_model_files[][]  = {
     "models/player/american_medic.dx80.vtx",
     "models/player/american_medic.dx90.vtx",
     "models/player/american_medic.mdl",
@@ -56,37 +56,37 @@ new const String:g_model_files[][]  = {
     "materials/models/player/german/axs_mc_body.vtf" };
 
 
-new Handle:g_Cvar_MedicEnable;
-new Handle:g_Cvar_MedicWeapon;
-new Handle:g_Cvar_MedicNades;
-new Handle:g_Cvar_MedicNadeAmmo;
-new Handle:g_Cvar_MedicAmmo;
-new Handle:g_Cvar_MedicSpeed;
-new Handle:g_Cvar_MedicWeight;
-new Handle:g_Cvar_MedicHealth;
-new Handle:g_Cvar_MedicMaxHeal;
-new Handle:g_Cvar_MedicMax;
-new Handle:g_Cvar_MedicPacks;
-new Handle:g_Cvar_MedicMessages;
-new Handle:g_Cvar_MedicRestrict;
-new Handle:g_Cvar_MedicPickup;
-new Handle:g_Cvar_MedicKeepWeapon;
-new Handle:g_Cvar_MedicMinPlayers;
-new Handle:g_Cvar_MedicMaxHealth;
-new Handle:g_Cvar_MedicSelf;
+Handleg_Cvar_MedicEnable;
+Handleg_Cvar_MedicWeapon;
+Handleg_Cvar_MedicNades;
+Handleg_Cvar_MedicNadeAmmo;
+Handleg_Cvar_MedicAmmo;
+Handleg_Cvar_MedicSpeed;
+Handleg_Cvar_MedicWeight;
+Handleg_Cvar_MedicHealth;
+Handleg_Cvar_MedicMaxHeal;
+Handleg_Cvar_MedicMax;
+Handleg_Cvar_MedicPacks;
+Handleg_Cvar_MedicMessages;
+Handleg_Cvar_MedicRestrict;
+Handleg_Cvar_MedicPickup;
+Handleg_Cvar_MedicKeepWeapon;
+Handleg_Cvar_MedicMinPlayers;
+Handleg_Cvar_MedicMaxHealth;
+Handleg_Cvar_MedicSelf;
 
-new Handle:g_OnMedicHealedHandle = INVALID_HANDLE;
-new Handle:g_PistolPluginHandle = INVALID_HANDLE;
+Handleg_OnMedicHealedHandle = null;
+Handleg_PistolPluginHandle = null;
 
-new Handle:g_WeaponTimer[MAXPLAYERS+1];
+Handleg_WeaponTimer[MAXPLAYERS+1];
 
 new g_medic_master[4][17];
 
 new MedicState:g_IsMedic[MAXPLAYERS+1];
-new bool:g_MedicKeepWeapon[MAXPLAYERS+1];
-new bool:g_MedicPickup[MAXPLAYERS+1];
-new Float:g_MedicWeight[MAXPLAYERS+1];
-new Float:g_MedicSpeed[MAXPLAYERS+1];
+boolg_MedicKeepWeapon[MAXPLAYERS+1];
+boolg_MedicPickup[MAXPLAYERS+1];
+floatg_MedicWeight[MAXPLAYERS+1];
+floatg_MedicSpeed[MAXPLAYERS+1];
 new g_MedicPacksLeft[MAXPLAYERS+1];
 new g_NumMedicPacks[MAXPLAYERS+1];
 new g_MedicNadeAmmo[MAXPLAYERS+1];
@@ -96,21 +96,21 @@ new g_MedicWeapon[MAXPLAYERS+1];
 new g_MedicNades[MAXPLAYERS+1];
 new g_MedicAmmo[MAXPLAYERS+1];
 
-new bool:swap[MAXPLAYERS+1];
-new bool:yell[MAXPLAYERS+1];
+boolswap[MAXPLAYERS+1];
+boolyell[MAXPLAYERS+1];
 
 new g_MaxMedics;
 new g_MinPlayers;
 new g_SelfHealth;
 new g_MedicRestrict;
 new g_MaxMedicHealth;
-new bool:g_MedicEnabled;
-new bool:g_MedicMessages;
-new bool:g_NativeOverride = false;
+boolg_MedicEnabled;
+boolg_MedicMessages;
+boolg_NativeOverride = false;
 
 new ammo_offset;
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "Medic Class for DoDS",
     author = "<eVa>Dog",
@@ -119,7 +119,7 @@ public Plugin:myinfo =
     url = "http://www.theville.org"
 }
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLResAskPluginLoad2(Handle myself, bool late, char[] error, err_max)
 {
     // Register Natives
     CreateNative("ControlMedic",Native_ControlMedic);
@@ -182,7 +182,7 @@ public OnConfigsExecuted()
 public OnMapStart()
 {
     // Added custom models to download table
-    for (new i = 0; i < sizeof(g_model_files); i++)
+    for (int i = 0; i < sizeof(g_model_files); i++)
         AddFileToDownloadsTable(g_model_files[i]);
     
     AddFileToDownloadsTable("sound/bandage/bandage.mp3")
@@ -194,13 +194,13 @@ public OnMapStart()
     PrecacheSound("common/weapon_denyselect.wav", true)
     PrecacheSound("common/weapon_select.wav", true)
     
-    for (new i = 1; i < sizeof(g_medic_master[]); i++)
+    for (int i = 1; i < sizeof(g_medic_master[]); i++)
     {
         g_medic_master[2][i] = 0
         g_medic_master[3][i] = 0
     }
     
-    for (new i = 0; i < sizeof(g_IsMedic); i++)
+    for (int i = 0; i < sizeof(g_IsMedic); i++)
     {
         g_IsMedic[i] = NotMedic
         swap[i]=false; 
@@ -212,7 +212,7 @@ public OnMapStart()
     ammo_offset = FindSendPropOffs("CDODPlayer", "m_iAmmo")
 }
 
-public bool:OnClientConnect(client, String:rejectmsg[], maxlen)
+public boolOnClientConnect(client, String:rejectmsg[], maxlen)
 {
     g_MedicPickup[client] = GetConVarBool(g_Cvar_MedicPickup);
     g_MedicKeepWeapon[client] = GetConVarBool(g_Cvar_MedicKeepWeapon);
@@ -238,7 +238,7 @@ public OnClientDisconnect(client)
     {
         if (g_MaxMedics > 0)
         {
-            for (new i = 1; i < sizeof(g_medic_master[]); i++)
+            for (int i = 1; i < sizeof(g_medic_master[]); i++)
             {
                 for (new team = 2; team <= 3; team++)
                 {
@@ -253,7 +253,7 @@ public OnClientDisconnect(client)
     }
 }
 
-public PlayerSpawnEvent(Handle:event, const String:name[], bool:dontBroadcast)
+public PlayerSpawnEvent(Handle event, const char[]name[], bool dontBroadcast)
 {
     if (g_NativeOverride || g_MedicEnabled)
     {
@@ -277,7 +277,7 @@ public PlayerSpawnEvent(Handle:event, const String:name[], bool:dontBroadcast)
             if (g_MaxMedics > 0)
             {
                 new otherTeam = (team == 2) ? 3 : 2;
-                for (new i = 1; i <= g_MaxMedics; i++)
+                for (int i = 1; i <= g_MaxMedics; i++)
                 {
                     if (g_medic_master[team][i] == client)
                         g_medic_master[team][i] = 0;
@@ -310,7 +310,7 @@ public PlayerSpawnEvent(Handle:event, const String:name[], bool:dontBroadcast)
                 if (!g_MedicPickup[client] && !g_WeaponTimer[client])
                     g_WeaponTimer[client] = CreateTimer(0.1, WeaponsCheck, client, TIMER_REPEAT);
 
-                if (g_PistolPluginHandle == INVALID_HANDLE)
+                if (g_PistolPluginHandle == null)
                     CreateTimer(0.1, GiveClientWeapon, client);
                 else
                     CreateTimer(0.2, GiveClientWeapon, client);
@@ -325,7 +325,7 @@ public PlayerSpawnEvent(Handle:event, const String:name[], bool:dontBroadcast)
 }
 
 //added by psychocoder, if a swap plugin swap medic 
-public PlayerChangeTeamEvent(Handle:event, const String:name[], bool:dontBroadcast)
+public PlayerChangeTeamEvent(Handle event, const char[]name[], bool dontBroadcast)
 {
     if (g_NativeOverride || g_MedicEnabled)
     {
@@ -342,7 +342,7 @@ public PlayerChangeTeamEvent(Handle:event, const String:name[], bool:dontBroadca
 
                 if (g_MaxMedics > 0)
                 {
-                    for (new i = 1; i < sizeof(g_medic_master[]); i++)
+                    for (int i = 1; i < sizeof(g_medic_master[]); i++)
                     { 
                         if (g_medic_master[oldteam][i] == client) 
                         {
@@ -357,7 +357,7 @@ public PlayerChangeTeamEvent(Handle:event, const String:name[], bool:dontBroadca
 }
 //end add 
 
-public PlayerChangeClassEvent(Handle:event, const String:name[], bool:dontBroadcast)
+public PlayerChangeClassEvent(Handle event, const char[]name[], bool dontBroadcast)
 {
     new client = GetClientOfUserId(GetEventInt(event, "userid"))
     if (g_NativeOverride)
@@ -387,7 +387,7 @@ public PlayerChangeClassEvent(Handle:event, const String:name[], bool:dontBroadc
 
     if (g_MaxMedics > 0)
     {
-        for (new i = 1; i < sizeof(g_medic_master[]); i++)
+        for (int i = 1; i < sizeof(g_medic_master[]); i++)
         {
             for (new team = 2; team <= 3; team++)
             {
@@ -401,12 +401,12 @@ public PlayerChangeClassEvent(Handle:event, const String:name[], bool:dontBroadc
     }
 }
 
-public Action:WeaponsCheck(Handle:timer, any:client)
+public ActionWeaponsCheck(Handle timer, any:client)
 {
     if (!g_IsMedic[client]      || g_MedicPickup[client] ||
         !IsClientInGame(client) || !IsPlayerAlive(client))
     {
-        g_WeaponTimer[client] = INVALID_HANDLE;
+        g_WeaponTimer[client] = null;
         return Plugin_Stop;
     }
     
@@ -426,7 +426,7 @@ public Action:WeaponsCheck(Handle:timer, any:client)
     return Plugin_Continue;
 }
 
-public Action:beMedic(client, args)
+public ActionbeMedic(client, args)
 {
     if (g_MedicEnabled || g_NativeOverride)
     {
@@ -461,7 +461,7 @@ public Action:beMedic(client, args)
                     if (g_MaxMedics > 0)
                     {
                         new slot_available = 0;
-                        for (new i = 1; i <= g_MaxMedics; i++)
+                        for (int i = 1; i <= g_MaxMedics; i++)
                         {
                             new occupant = g_medic_master[team][i];
                             if (occupant == client)
@@ -503,7 +503,7 @@ public Action:beMedic(client, args)
     return Plugin_Handled;
 }
 
-public Action:Yell(client, args)
+public ActionYell(client, args)
 {
     if (g_NativeOverride || g_MedicEnabled)
     {
@@ -543,7 +543,7 @@ public Action:Yell(client, args)
     return Plugin_Handled
 }
 
-public Action:Call(client, args)
+public ActionCall(client, args)
 {
     if (g_NativeOverride || g_MedicEnabled)
     {
@@ -582,19 +582,19 @@ public Action:Call(client, args)
     return Plugin_Handled
 }
 
-public Action:ResetYell(Handle:timer, any:client)
+public ActionResetYell(Handle timer, any:client)
 {
     yell[client] = false;
 }
 
-public Action:Heal(client, args)
+public ActionHeal(client, args)
 {
     if (g_NativeOverride || g_MedicEnabled)
     {
         if (g_IsMedic[client] >= IsMedic && g_IsMedic[client] <= NotMedicPending)
         {
-            new Float:medicVector[3];
-            new Float:patientVector[3];
+            floatmedicVector[3];
+            floatpatientVector[3];
 
             if (IsPlayerAlive(client))
             {
@@ -613,7 +613,7 @@ public Action:Heal(client, args)
                                 GetClientAbsOrigin(client, medicVector);
                                 GetClientAbsOrigin(patient, patientVector);
 
-                                new Float:distance = GetVectorDistance(medicVector, patientVector);
+                                floatdistance = GetVectorDistance(medicVector, patientVector);
 
                                 if (distance > 100)
                                 {
@@ -625,9 +625,9 @@ public Action:Heal(client, args)
                                 else
                                 {
                                     //Perform healing
-                                    new String:patientName[128];
+                                    charpatientName[128];
                                     GetClientName(patient, patientName, sizeof(patientName));
-                                    new String:medicName[128];
+                                    charmedicName[128];
                                     GetClientName(client, medicName, sizeof(medicName));
 
                                     new patienthealth = GetClientHealth(patient);
@@ -697,7 +697,7 @@ public Action:Heal(client, args)
     return Plugin_Handled;
 }
 
-public Action:GiveClientWeapon(Handle:timer, any:client)
+public ActionGiveClientWeapon(Handle timer, any:client)
 {
     if (IsClientInGame(client))
     {
@@ -772,28 +772,28 @@ public Action:GiveClientWeapon(Handle:timer, any:client)
 }
 
  // Added by Lebson506th
-public Action:Who(client, args)
+public ActionWho(client, args)
 {
     if (g_NativeOverride || g_MedicEnabled)
     {
         new ctr = 0;
         if (client == 0) // Console
         {
-            for (new i = 1; i < sizeof(g_medic_master[]); i++)
+            for (int i = 1; i < sizeof(g_medic_master[]); i++)
             {
                 if (g_medic_master[3][i] != 0)
                 {
-                    new String:playerName[128];
+                    charplayerName[128];
                     GetClientName(g_medic_master[3][i], playerName, sizeof(playerName));
                     PrintToServer("Axis Medic #%i: %s", i, playerName);
                     ctr++;
                 }
             }
-            for (new i = 1; i < sizeof(g_medic_master[]); i++)
+            for (int i = 1; i < sizeof(g_medic_master[]); i++)
             {
                 if (g_medic_master[2][i] != 0)
                 {
-                    new String:playerName[128];
+                    charplayerName[128];
                     GetClientName(g_medic_master[2][i], playerName, sizeof(playerName));
                     PrintToServer("Allies Medic #%i: %s", i, playerName);
                     ctr++;
@@ -805,11 +805,11 @@ public Action:Who(client, args)
         else
         {
             new team = GetClientTeam(client);
-            for (new i = 1; i < sizeof(g_medic_master[]); i++)
+            for (int i = 1; i < sizeof(g_medic_master[]); i++)
             {
                 if (g_medic_master[team][i] != 0)
                 {
-                    new String:playerName[128];
+                    charplayerName[128];
                     GetClientName(g_medic_master[team][i], playerName, sizeof(playerName));
 
                     if (IsClientInGame(client))
@@ -828,7 +828,7 @@ public Action:Who(client, args)
     return Plugin_Handled
 } 
 
-public Native_ControlMedic(Handle:plugin,numParams)
+public Native_ControlMedic(Handle plugin,numParams)
 {
     g_NativeOverride = GetNativeCell(1);
     g_MaxMedicHealth = GetNativeCell(2);
@@ -853,7 +853,7 @@ public Native_ControlMedic(Handle:plugin,numParams)
         g_SelfHealth = GetConVarInt(g_Cvar_MedicSelf);
 }
 
-public Native_UnassignMedic(Handle:plugin,numParams)
+public Native_UnassignMedic(Handle plugin,numParams)
 {
     new client = GetNativeCell(1);
     if (IsPlayerAlive(client))
@@ -868,7 +868,7 @@ public Native_UnassignMedic(Handle:plugin,numParams)
 
         if (g_MaxMedics > 0)
         {
-            for (new i = 1; i < sizeof(g_medic_master[]); i++)
+            for (int i = 1; i < sizeof(g_medic_master[]); i++)
             {
                 for (new team = 2; team <= 3; team++)
                 {
@@ -883,7 +883,7 @@ public Native_UnassignMedic(Handle:plugin,numParams)
     }
 }
 
-public Native_AssignMedic(Handle:plugin,numParams)
+public Native_AssignMedic(Handle plugin,numParams)
 {
     new client = GetNativeCell(1);
     if (client > 0)
@@ -959,7 +959,7 @@ public AssignMedic(client)
         {
             new slot_available = 0;
             new team = GetClientTeam(client);
-            for (new i = 1; i < sizeof(g_medic_master[]); i++)
+            for (int i = 1; i < sizeof(g_medic_master[]); i++)
             {
                 new occupant = g_medic_master[team][i];
                 if (occupant == client)
@@ -983,19 +983,19 @@ public AssignMedic(client)
     }
 }
 
-public Native_GetMedicSpeed(Handle:plugin,numParams)
+public Native_GetMedicSpeed(Handle plugin,numParams)
 {
-    new Float:speed = g_MedicSpeed[GetNativeCell(1)]
+    floatspeed = g_MedicSpeed[GetNativeCell(1)]
     return (speed < 0.0) ? (_:GetConVarFloat(g_Cvar_MedicSpeed)) : (_:speed);
 }
 
-public Native_GetMedicWeight(Handle:plugin,numParams)
+public Native_GetMedicWeight(Handle plugin,numParams)
 {
-    new Float:weight = g_MedicWeight[GetNativeCell(1)]
+    floatweight = g_MedicWeight[GetNativeCell(1)]
     return (weight < 0.0) ? (_:GetConVarFloat(g_Cvar_MedicWeight)) : (_:weight);
 }
 
-public Native_MedicHeal(Handle:plugin,numParams)
+public Native_MedicHeal(Handle plugin,numParams)
 {
     Heal(GetNativeCell(1), 0);
 }

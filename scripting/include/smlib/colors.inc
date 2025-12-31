@@ -25,7 +25,7 @@ enum ChatColorInfo
 {
 	ChatColorInfo_Code,
 	ChatColorInfo_Alternative,
-	bool:ChatColorInfo_Supported,
+	bool ChatColorInfo_Supported,
 	ChatColorSubjectType:ChatColorInfo_SubjectType
 };
 
@@ -45,7 +45,7 @@ enum ChatColor
 	ChatColor_Black
 }
 
-static String:chatColorTags[][] = {
+static char[] chatColorTags[] = {
 	"N",	// Normal
 	"O",	// Orange
 	"R",	// Red
@@ -60,7 +60,7 @@ static String:chatColorTags[][] = {
 	"BLA"	// BLAck
 };
 
-static String:chatColorNames[][] = {
+static char[] chatColorNames[] = {
 	"normal",		// Normal
 	"orange",		// Orange
 	"red",			// Red
@@ -92,9 +92,9 @@ static chatColorInfo[][ChatColorInfo] =
 	{ '\x06', 9	/* Green */	, true,			ChatColorSubjectType_none	}	// BLAck
 };
 
-static bool:checkTeamPlay			= false;
-static Handle:mp_teamplay			= INVALID_HANDLE;
-static bool:isSayText2_supported	= true;
+static bool checkTeamPlay			= false;
+static Handle mp_teamplay			= null;
+static bool isSayText2_supported	= true;
 static chatSubject					= CHATCOLOR_NOSUBJECT;
 
 /**
@@ -141,15 +141,13 @@ stock Color_ChatClearSubject()
  * @param size				Output Buffer size
  * @return					Returns a value for the subject
  */
-stock Color_ParseChatText(const String:str[], String:buffer[], size)
+stock Color_ParseChatText(const char[] str, char[] buffer, size)
 {
-	new
-		bool:inBracket = false,
+	bool inBracket = false,
 		x = 0, x_buf = 0, x_tag = 0,
 		subject = CHATCOLOR_NOSUBJECT;
 
-	decl
-		String:sTag[10]         = "",     // This should be able to hold "\x08RRGGBBAA"\0
+	char sTag[10]         = "",     // This should be able to hold "\x08RRGGBBAA"\0
 		String:colorCode[10]    = "",     // This should be able to hold "\x08RRGGBBAA"\0
 		String:currentColor[10] = "\x01"; // Initialize with normal color
 
@@ -245,7 +243,7 @@ stock Color_ParseChatText(const String:str[], String:buffer[], size)
  * @param result            The result as character sequence (string). This will be \0 if the tag is unkown.
  * @noreturn
  */
-stock Color_TagToCode(const String:tag[], &subject=-1, String:result[10])
+stock Color_TagToCode(const char[] tag, &subject=-1, String:result[10])
 {
 	// Check if the tag starts with a '#'.
 	// We will handle it has RGB(A)-color code then.
@@ -311,7 +309,7 @@ stock Color_TagToCode(const String:tag[], &subject=-1, String:result[10])
  * @param size				Max Size of the Output string
  * @noreturn
  */
-stock Color_StripFromChatText(const String:input[], String:output[], size)
+stock Color_StripFromChatText(const char[] input, char[] output, size)
 {
 	new x = 0;
 	for (new i=0; input[i] != '\0'; i++) {
@@ -349,7 +347,7 @@ static stock Color_ChatInitialize()
 
 	initialized = true;
 
-	decl String:gameFolderName[32];
+	char gameFolderName[32];
 	GetGameFolderName(gameFolderName, sizeof(gameFolderName));
 
 	chatColorInfo[ChatColor_Black][ChatColorInfo_Supported]		    = false;
@@ -398,15 +396,15 @@ static stock Color_ChatInitialize()
 		isSayText2_supported = false;
 	}
 
-	decl String:path_gamedata[PLATFORM_MAX_PATH];
+	char path_gamedata[PLATFORM_MAX_PATH];
 	BuildPath(Path_SM, path_gamedata, sizeof(path_gamedata), "gamedata/%s.txt", SMLIB_COLORS_GAMEDATAFILE);
 
 	if (FileExists(path_gamedata)) {
-		new Handle:gamedata = INVALID_HANDLE;
+		Handle gamedata = null;
 
-		if ((gamedata = LoadGameConfigFile(SMLIB_COLORS_GAMEDATAFILE)) != INVALID_HANDLE) {
+		if ((gamedata = LoadGameConfigFile(SMLIB_COLORS_GAMEDATAFILE)) != null) {
 
-			decl String:keyName[32], String:buffer[6];
+			char keyName[32], String:buffer[6];
 
 			for (new i=0; i < sizeof(chatColorNames); i++) {
 

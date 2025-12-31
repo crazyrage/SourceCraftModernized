@@ -88,9 +88,9 @@ stock const TF2_SentryHealth[]     = { 100, 150, 180, 216, 8191 };
 stock const TF2_MaxUpgradeMetal    = 200;
 stock const TF2_MaxDispenserMetal  = 400;
 
-stock TFExtObjectType:TF2_GetExtObjectType(entity, bool:specific=false)
+stock TFExtObjectType TF2_GetExtObjectType(entity, bool specific=false)
 {
-    decl String:class[5];
+    char class[5];
     if (GetEdictClassname(entity, class, sizeof(class)) &&
         strncmp(class, "obj_", 4) == 0)
     {

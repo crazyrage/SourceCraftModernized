@@ -12,13 +12,13 @@
 
 #include <tf2_objects>
 
-stock BuildSentry(hBuilder, const Float:fOrigin[3], const Float:fAngle[3], iLevel=1,
-                  bool:bDisabled=false, bool:bMini=false, bool:bShielded=false,
+stock BuildSentry(hBuilder, const Float fOrigin[3], const Float fAngle[3], iLevel=1,
+                  bool bDisabled=false, bool bMini=false, bool bShielded=false,
                   iHealth=-1, iMaxHealth=-1, iShells=-1, iRockets=-1,
-                  Float:flPercentage=1.0)
+                  Float flPercentage=1.0)
 {
-    static const Float:fBuildMaxs[3] = { 24.0, 24.0, 66.0 };
-    //static const Float:fMdlWidth[3] = { 1.0, 0.5, 0.0 };
+    static const Float fBuildMaxs[3] = { 24.0, 24.0, 66.0 };
+    //static const Float fMdlWidth[3] = { 1.0, 0.5, 0.0 };
 
     new iTeam = GetClientTeam(hBuilder);
 
@@ -72,7 +72,7 @@ stock BuildSentry(hBuilder, const Float:fOrigin[3], const Float:fAngle[3], iLeve
 
         TeleportEntity(iSentry, fOrigin, fAngle, NULL_VECTOR);
 
-        decl String:sModel[64];
+        char sModel[64];
         if (bMini)
             strcopy(sModel, sizeof(sModel),"models/buildables/sentry1.mdl");
         else
@@ -136,8 +136,8 @@ stock BuildSentry(hBuilder, const Float:fOrigin[3], const Float:fAngle[3], iLeve
         SetVariantInt(hBuilder);
         AcceptEntityInput(iSentry, "SetBuilder", -1, -1, 0);
 
-        new Handle:event = CreateEvent("player_builtobject");
-        if (event != INVALID_HANDLE)
+        Handle event = CreateEvent("player_builtobject");
+        if (event != null)
         {
             SetEventInt(event, "userid", GetClientUserId(hBuilder));
             SetEventInt(event, "object", _:TFObject_Sentry);
@@ -149,11 +149,11 @@ stock BuildSentry(hBuilder, const Float:fOrigin[3], const Float:fAngle[3], iLeve
     return iSentry;
 }
 
-stock BuildDispenser(hBuilder, const Float:fOrigin[3], const Float:fAngle[3], iLevel=1,
-                     bool:iDisabled=false, iHealth=-1, iMaxHealth=-1, iMetal=-1,
-                     Float:flPercentage=1.0, TFExtObject:type=TFExtObject:TFExtObject_Dispenser)
+stock BuildDispenser(hBuilder, const Float fOrigin[3], const Float fAngle[3], iLevel=1,
+                     bool iDisabled=false, iHealth=-1, iMaxHealth=-1, iMetal=-1,
+                     Float flPercentage=1.0, TFExtObject:type=TFExtObject:TFExtObject_Dispenser)
 {
-    static const Float:fBuildMaxs[3] = { 24.0, 24.0, 66.0 };
+    static const Float fBuildMaxs[3] = { 24.0, 24.0, 66.0 };
 
     new iTeam = GetClientTeam(hBuilder);
 
@@ -178,7 +178,7 @@ stock BuildDispenser(hBuilder, const Float:fOrigin[3], const Float:fAngle[3], iL
 
         TeleportEntity(iDispenser, fOrigin, fAngle, NULL_VECTOR);
 
-        decl String:sModel[64];
+        char sModel[64];
         switch (type)
         {
             case TFObject_Amplifier:
@@ -242,8 +242,8 @@ stock BuildDispenser(hBuilder, const Float:fOrigin[3], const Float:fAngle[3], iL
         if (!iDisabled)
             AcceptEntityInput(iDispenser, "TurnOn");
 
-        new Handle:event = CreateEvent("player_builtobject");
-        if (event != INVALID_HANDLE)
+        Handle event = CreateEvent("player_builtobject");
+        if (event != null)
         {
             SetEventInt(event, "userid", GetClientUserId(hBuilder));
             SetEventInt(event, "object", _:TFObject_Dispenser);
@@ -255,12 +255,12 @@ stock BuildDispenser(hBuilder, const Float:fOrigin[3], const Float:fAngle[3], iL
     return iDispenser;
 }
 
-stock BuildTeleporterEntry(hBuilder, const Float:fOrigin[3], const Float:fAngle[3],
-                           iLevel=1, bool:iDisabled=false, iHealth=-1, iMaxHealth=-1,
-                           Float:flPercentage=1.0)
+stock BuildTeleporterEntry(hBuilder, const Float fOrigin[3], const Float fAngle[3],
+                           iLevel=1, bool iDisabled=false, iHealth=-1, iMaxHealth=-1,
+                           Float flPercentage=1.0)
 {
-    static const Float:fBuildMaxs[3] = { 28.0, 28.0, 66.0 };
-    //static const Float:fMdlWidth[3] = { 1.0, 0.5, 0.0 };
+    static const Float fBuildMaxs[3] = { 28.0, 28.0, 66.0 };
+    //static const Float fMdlWidth[3] = { 1.0, 0.5, 0.0 };
 
     new iTeam = GetClientTeam(hBuilder);
 
@@ -323,8 +323,8 @@ stock BuildTeleporterEntry(hBuilder, const Float:fOrigin[3], const Float:fAngle[
         if (!iDisabled)
             AcceptEntityInput(iTeleporter, "TurnOn");
 
-        new Handle:event = CreateEvent("player_builtobject");
-        if (event != INVALID_HANDLE)
+        Handle event = CreateEvent("player_builtobject");
+        if (event != null)
         {
             SetEventInt(event, "userid", GetClientUserId(hBuilder));
             SetEventInt(event, "object", _:TFObject_TeleporterEntry);
@@ -336,11 +336,11 @@ stock BuildTeleporterEntry(hBuilder, const Float:fOrigin[3], const Float:fAngle[
     return iTeleporter;
 }
 
-stock BuildTeleporterExit(hBuilder, const Float:fOrigin[3], const Float:fAngle[3],
-                          iLevel=1, bool:iDisabled=false, iHealth=-1, iMaxHealth=-1,
-                          Float:flPercentage=1.0)
+stock BuildTeleporterExit(hBuilder, const Float fOrigin[3], const Float fAngle[3],
+                          iLevel=1, bool iDisabled=false, iHealth=-1, iMaxHealth=-1,
+                          Float flPercentage=1.0)
 {
-    static const Float:fBuildMaxs[3] = { 28.0, 28.0, 66.0 };
+    static const Float fBuildMaxs[3] = { 28.0, 28.0, 66.0 };
 
     new iTeam = GetClientTeam(hBuilder);
 
@@ -403,8 +403,8 @@ stock BuildTeleporterExit(hBuilder, const Float:fOrigin[3], const Float:fAngle[3
         if (!iDisabled)
             AcceptEntityInput(iTeleporter, "TurnOn");
 
-        new Handle:event = CreateEvent("player_builtobject");
-        if (event != INVALID_HANDLE)
+        Handle event = CreateEvent("player_builtobject");
+        if (event != null)
         {
             SetEventInt(event, "userid", GetClientUserId(hBuilder));
             SetEventInt(event, "object", _:TFObject_TeleporterExit);

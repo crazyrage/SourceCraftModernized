@@ -17,7 +17,7 @@
  * @param maxlength		Maximum length of the string buffer (0 to calculate using strlen().
  * @noreturn
  */
-stock StringToLower(String:text[], maxlength=0)
+stock StringToLower(char[] text, maxlength=0)
 {
     if (maxlength == 0)
         maxlength = strlen(text);

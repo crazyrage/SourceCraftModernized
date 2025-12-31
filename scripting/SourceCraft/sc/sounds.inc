@@ -12,10 +12,10 @@
 
 #include <lib/ResourceManager>
 
-stock const String:errorWav[]    = "sc/perror.mp3";
-stock const String:deniedWav[]   = "sc/buzz.wav";
-stock const String:buttonWav[]   = "buttons/button14.wav";
-stock const String:rechargeWav[] = "sc/transmission.wav";
+stock const char errorWav[]    = "sc/perror.mp3";
+stock const char deniedWav[]   = "sc/buzz.wav";
+stock const char buttonWav[]   = "buttons/button14.wav";
+stock const char rechargeWav[] = "sc/transmission.wav";
 
 #define SetupErrorSound()    SetupSound(errorWav, true, DOWNLOAD, true, true)
 #define SetupDeniedSound()   SetupSound(deniedWav, true, DOWNLOAD, true, true)

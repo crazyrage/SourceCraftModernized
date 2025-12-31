@@ -47,22 +47,22 @@
 #include "effect/BeamSprite"
 #include "effect/SendEffects"
 
-new const String:bunkerWav[]    = "sc/tmedheal.wav";
+static const charbunkerWav[]    = "sc/tmedheal.wav";
 
-new const String:g_ArmorName[]  = "Armor";
-new Float:g_InitialArmor[]      = { 0.0, 0.10, 0.20, 0.30, 0.40 };
-new Float:g_ArmorPercent[][2]   = { {0.00, 0.00},
+static const charg_ArmorName[]  = "Armor";
+floatg_InitialArmor[]      = { 0.0, 0.10, 0.20, 0.30, 0.40 };
+floatg_ArmorPercent[][2]   = { {0.00, 0.00},
                                     {0.00, 0.05},
                                     {0.00, 0.10},
                                     {0.05, 0.15},
                                     {0.10, 0.20} };
 
-new Float:g_BunkerPercent[]     = { 0.00, 0.10, 0.20, 0.30, 0.40 };
-new Float:g_TeleporterRate[]    = { 0.0, 8.0, 6.0, 3.0, 1.0 };
-new Float:g_SupplyBunkerRange[] = { 0.0, 150.0, 250.0, 350.0, 450.0 };
-new g_AmmopackMetal[]           = { 0, 0, 50, 100, 200 };
+floatg_BunkerPercent[]     = { 0.00, 0.10, 0.20, 0.30, 0.40 };
+floatg_TeleporterRate[]    = { 0.0, 8.0, 6.0, 3.0, 1.0 };
+floatg_SupplyBunkerRange[] = { 0.0, 150.0, 250.0, 350.0, 450.0 };
+	int g_AmmopackMetal[]           = { 0, 0, 50, 100, 200 };
 
-new Float:g_AmpRange[][]        =
+floatg_AmpRange[][]        =
 {
     { 0.0,   0.0,   0.0,   0.0 },
     { 0.0, 100.0, 150.0, 200.0 },
@@ -71,7 +71,7 @@ new Float:g_AmpRange[][]        =
     { 0.0, 250.0, 300.0, 350.0 }
 };
 
-new Float:g_NodeRange[][]       =
+floatg_NodeRange[][]       =
 {
     { 0.0,   0.0,   0.0,   0.0 },
     { 0.0, 100.0, 150.0, 200.0 },
@@ -80,7 +80,7 @@ new Float:g_NodeRange[][]       =
     { 0.0, 250.0, 350.0, 500.0 }
 };
 
-new g_NodeRegen[][]             =
+	int g_NodeRegen[][]             =
 {
     { 0,  0,  0,  0 },
     { 0, 10, 15, 20 },
@@ -89,7 +89,7 @@ new g_NodeRegen[][]             =
     { 0, 25, 30, 40 }
 };
 
-new g_NodeShells[][]            =
+	int g_NodeShells[][]            =
 {
     { 0,  0,  0,  0 },
     { 0,  0,  0,  0 },
@@ -98,21 +98,21 @@ new g_NodeShells[][]            =
     { 0, 10, 15, 20 }
 };
 
-new g_NodeRockets[]             = { 0,  0,  0,  2, 4 };
+	int g_NodeRockets[]             = { 0,  0,  0,  2, 4 };
 
 new raceID, armorID, supplyID, supplyBunkerID, ammopackID, teleporterID, immunityID;
 new amplifierID, repairNodeID, tripmineID, nadeID, gravgunID, battlecruiserID, bunkerID;
 
-new g_battlecruiserRace = -1;
+	int g_battlecruiserRace = -1;
 
-new cfgAllowGravgun;
-new bool:cfgAllowRepair;
-new Float:cfgGravgunDuration;
-new Float:cfgGravgunThrowSpeed;
+	int cfgAllowGravgun;
+boolcfgAllowRepair;
+floatcfgGravgunDuration;
+floatcfgGravgunThrowSpeed;
 
-new Float:m_GravTime[MAXPLAYERS+1];
+floatm_GravTime[MAXPLAYERS+1];
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "SourceCraft Race - Terran SCV",
     author = "-=|JFH|=-Naris",
@@ -121,7 +121,7 @@ public Plugin:myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.ammopack.phrases.txt");
     LoadTranslations("sc.tripmine.phrases.txt");
@@ -197,7 +197,7 @@ public OnSourceCraftReady()
     }
     else
     {
-        cfgAllowRepair = bool:GetConfigNum("allow_repair", true, .section="gravgun");
+        cfgAllowRepair = bool GetConfigNum("allow_repair", true, .section="gravgun");
         if (cfgAllowRepair)
         {
             gravgunID = AddUpgrade(raceID, "gravgun", 1, 10, .energy=5.0, .recurring_energy=5.0,
@@ -263,9 +263,9 @@ public OnSourceCraftReady()
     GetConfigFloatArray("armor_amount", g_InitialArmor, sizeof(g_InitialArmor),
                         g_InitialArmor, raceID, armorID);
 
-    for (new level=0; level < sizeof(g_ArmorPercent); level++)
+    for (intlevel=0; level < sizeof(g_ArmorPercent); level++)
     {
-        decl String:key[32];
+        charkey[32];
         Format(key, sizeof(key), "armor_percent_level_%d", level);
         GetConfigFloatArray(key, g_ArmorPercent[level], sizeof(g_ArmorPercent[]),
                             g_ArmorPercent[level], raceID, armorID);
@@ -288,33 +288,33 @@ public OnSourceCraftReady()
         cfgGravgunDuration=GetConfigFloat("duration", 15.0, raceID, gravgunID);
         cfgGravgunThrowSpeed=GetConfigFloat("throw_speed", 500.0, raceID, gravgunID);
 
-        for (new level=0; level < sizeof(g_AmpRange); level++)
+        for (intlevel=0; level < sizeof(g_AmpRange); level++)
         {
-            decl String:key[32];
+            charkey[32];
             Format(key, sizeof(key), "range_level_%d", level);
             GetConfigFloatArray(key, g_AmpRange[level], sizeof(g_AmpRange[]),
                                 g_AmpRange[level], raceID, amplifierID);
         }
 
-        for (new level=0; level < sizeof(g_NodeRange); level++)
+        for (intlevel=0; level < sizeof(g_NodeRange); level++)
         {
-            decl String:key[32];
+            charkey[32];
             Format(key, sizeof(key), "range_level_%d", level);
             GetConfigFloatArray(key, g_NodeRange[level], sizeof(g_NodeRange[]),
                                 g_NodeRange[level], raceID, repairNodeID);
         }
 
-        for (new level=0; level < sizeof(g_NodeRegen); level++)
+        for (intlevel=0; level < sizeof(g_NodeRegen); level++)
         {
-            decl String:key[32];
+            charkey[32];
             Format(key, sizeof(key), "regen_level_%d", level);
             GetConfigArray(key, g_NodeRegen[level], sizeof(g_NodeRegen[]),
                            g_NodeRegen[level], raceID, repairNodeID);
         }
 
-        for (new level=0; level < sizeof(g_NodeShells); level++)
+        for (intlevel=0; level < sizeof(g_NodeShells); level++)
         {
-            decl String:key[32];
+            charkey[32];
             Format(key, sizeof(key), "shells_level_%d", level);
             GetConfigArray(key, g_NodeShells[level], sizeof(g_NodeShells[]),
                            g_NodeShells[level], raceID, repairNodeID);
@@ -325,7 +325,7 @@ public OnSourceCraftReady()
     }
 }
 
-public OnLibraryAdded(const String:name[])
+public OnLibraryAdded(const char[]name[])
 {
     if (StrEqual(name, "amp_node"))
         IsAmpNodeAvailable(true);
@@ -345,7 +345,7 @@ public OnLibraryAdded(const String:name[])
         IsInfiniteAmmoAvailable(true);
 }
 
-public OnLibraryRemoved(const String:name[])
+public OnLibraryRemoved(const char[]name[])
 {
     if (StrEqual(name, "ammopacks"))
         m_AmmopacksAvailable = false;
@@ -365,7 +365,7 @@ public OnLibraryRemoved(const String:name[])
         m_InfiniteAmmoAvailable = false;
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupLightning();
     SetupBeamSprite();
@@ -382,17 +382,17 @@ public OnMapStart()
     SetupSound(bunkerWav);
 }
 
-public OnMapEnd()
+public void OnMapEnd()
 {
     ResetAllClientTimers();
 }
 
-public OnClientDisconnect(client)
+public void OnClientDisconnect(client)
 {
     KillClientTimer(client);
 }
 
-public Action:OnRaceDeselected(client,oldrace,newrace)
+public ActionOnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
@@ -424,7 +424,7 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
             TakeNades(client);
 
         // Turn off Immunities
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        intimmunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, false);
 
         return Plugin_Handled;
@@ -446,23 +446,23 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
     }
 }
 
-public Action:OnRaceSelected(client,oldrace,newrace)
+public ActionOnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
         // Turn on Immunities
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        intimmunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
         if (m_TripminesAvailable)
         {
-            new tripmine_level=GetUpgradeLevel(client,raceID,tripmineID);
+            inttripmine_level=GetUpgradeLevel(client,raceID,tripmineID);
             GiveTripmines(client, tripmine_level, tripmine_level, tripmine_level);
         }
 
         if (m_NadesAvailable)
         {
-            new nade_level=GetUpgradeLevel(client,raceID,nadeID);
+            intnade_level=GetUpgradeLevel(client,raceID,nadeID);
             GiveNades(client, nade_level, nade_level, nade_level,
                       nade_level, false, DefaultNade,
                       _:DamageFrom_Ultimates);
@@ -470,10 +470,10 @@ public Action:OnRaceSelected(client,oldrace,newrace)
 
         if (m_AmpNodeAvailable)
         {
-            new amplifier_level = GetUpgradeLevel(client,raceID,amplifierID);
+            intamplifier_level = GetUpgradeLevel(client,raceID,amplifierID);
             SetAmplifier(client, .range=g_AmpRange[amplifier_level], .enable=(amplifier_level > 0));
 
-            new repair_node_level = GetUpgradeLevel(client,raceID,repairNodeID);
+            intrepair_node_level = GetUpgradeLevel(client,raceID,repairNodeID);
             SetRepairNode(client, .range=g_NodeRange[repair_node_level],
                           .regen=g_NodeRegen[repair_node_level],
                           .shells=g_NodeShells[repair_node_level],
@@ -484,23 +484,23 @@ public Action:OnRaceSelected(client,oldrace,newrace)
             //SetUpgradeStation(client, .enable=(amplifier_level > 0) || (repair_node_level > 0));
         }
 
-        new ammopack_level = GetUpgradeLevel(client,raceID,ammopackID);
+        intammopack_level = GetUpgradeLevel(client,raceID,ammopackID);
         SetupAmmopack(client, ammopack_level);
 
-        new armor_level = GetUpgradeLevel(client,raceID,armorID);
+        intarmor_level = GetUpgradeLevel(client,raceID,armorID);
         SetupArmor(client, armor_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        new teleporter_level = GetUpgradeLevel(client,raceID,teleporterID);
+        intteleporter_level = GetUpgradeLevel(client,raceID,teleporterID);
         SetupTeleporter(client, teleporter_level);
 
-        new gravgun_level=GetUpgradeLevel(client,raceID,gravgunID);
+        intgravgun_level=GetUpgradeLevel(client,raceID,gravgunID);
         SetupGravgun(client, gravgun_level);
 
         if (IsValidClientAlive(client))
         {
-            new supply_level=GetUpgradeLevel(client,raceID,supplyID);
-            new bunker_level=GetUpgradeLevel(client,raceID,supplyBunkerID);
+            intsupply_level=GetUpgradeLevel(client,raceID,supplyID);
+            intbunker_level=GetUpgradeLevel(client,raceID,supplyBunkerID);
             if (supply_level > 2 || bunker_level > 0)
             {
                 CreateClientTimer(client, 5.0, SupplyDepot,
@@ -574,7 +574,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
         }
         else if (upgrade==supplyID)
         {
-            new bunker_level=GetUpgradeLevel(client,raceID,supplyBunkerID);
+            intbunker_level=GetUpgradeLevel(client,raceID,supplyBunkerID);
             if (new_level > 0 || bunker_level > 0)
             {
                 if (IsValidClientAlive(client))
@@ -588,7 +588,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
         }
         else if (upgrade==supplyBunkerID)
         {
-            new supply_level=GetUpgradeLevel(client,raceID,supplyID);
+            intsupply_level=GetUpgradeLevel(client,raceID,supplyID);
             if (new_level > 0 || supply_level > 0)
             {
                 if (IsValidClientAlive(client))
@@ -603,7 +603,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
     }
 }
 
-public OnUltimateCommand(client,race,bool:pressed,arg)
+public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (race == raceID && IsValidClientAlive(client))
     {
@@ -611,7 +611,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
         {
             case 6:
             {
-				new nade_level = GetUpgradeLevel(client,race,nadeID);
+	int nade_level = GetUpgradeLevel(client,race,nadeID);
 				if (nade_level > 0)
 				{
 					if (m_NadesAvailable)
@@ -628,7 +628,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
 					}
 					else if (pressed)
 					{
-						decl String:upgradeName[64];
+						charupgradeName[64];
 						GetUpgradeName(raceID, nadeID, upgradeName, sizeof(upgradeName), client);
 						PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
 					}
@@ -640,7 +640,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                 {
                     if (m_AmmopacksAvailable)
                     {
-                        new ammopack_level = GetUpgradeLevel(client,race,ammopackID);
+                        intammopack_level = GetUpgradeLevel(client,race,ammopackID);
                         if (ammopack_level > 0)
                             DropPack(client, ammopack_level);
                     }
@@ -650,12 +650,12 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             {
                 if (!pressed)
                 {
-                    new battlecruiser_level = GetUpgradeLevel(client,race,battlecruiserID);
+                    intbattlecruiser_level = GetUpgradeLevel(client,race,battlecruiserID);
                     if (battlecruiser_level > 0)
                         BuildBattlecruiser(client);
                     else if (m_AmmopacksAvailable)
                     {
-                        new ammopack_level = GetUpgradeLevel(client,race,ammopackID);
+                        intammopack_level = GetUpgradeLevel(client,race,ammopackID);
                         if (ammopack_level > 0)
                             DropPack(client, ammopack_level);
                     }
@@ -663,7 +663,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             }
             case 3:
             {
-                new nade_level = GetUpgradeLevel(client,race,nadeID);
+                intnade_level = GetUpgradeLevel(client,race,nadeID);
                 if (nade_level > 0)
                 {
                     if (m_NadesAvailable)
@@ -680,19 +680,19 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                     }
                     else if (pressed)
                     {
-                        decl String:upgradeName[64];
+                        charupgradeName[64];
                         GetUpgradeName(raceID, nadeID, upgradeName, sizeof(upgradeName), client);
                         PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
                     }
                 }
                 else if (!pressed)
                 {
-                    new battlecruiser_level=GetUpgradeLevel(client,race,battlecruiserID);
+                    intbattlecruiser_level=GetUpgradeLevel(client,race,battlecruiserID);
                     if (battlecruiser_level > 0)
                         BuildBattlecruiser(client);
                     else if (m_AmmopacksAvailable)
                     {
-                        new ammopack_level = GetUpgradeLevel(client,race,ammopackID);
+                        intammopack_level = GetUpgradeLevel(client,race,ammopackID);
                         if (ammopack_level > 0)
                             DropPack(client, ammopack_level);
                     }
@@ -700,12 +700,12 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             }
             case 2:
             {
-                new bunker_level = GetUpgradeLevel(client,race,bunkerID);
+                intbunker_level = GetUpgradeLevel(client,race,bunkerID);
                 if (bunker_level > 0)
                 {
                     if (!pressed)
                     {
-                        new armor = RoundToNearest(float(GetPlayerMaxHealth(client))
+                        intarmor = RoundToNearest(float(GetPlayerMaxHealth(client))
                                                    * g_BunkerPercent[bunker_level]);
 
                         EnterBunker(client, armor, raceID, bunkerID);
@@ -713,7 +713,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                 }
                 else
                 {
-                    new tripmine_level=GetUpgradeLevel(client,race,tripmineID);
+                    inttripmine_level=GetUpgradeLevel(client,race,tripmineID);
                     if (tripmine_level > 0)
                     {
                         if (!pressed)
@@ -722,7 +722,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                             {
                                 if (IsMole(client))
                                 {
-                                    decl String:upgradeName[64];
+                                    charupgradeName[64];
                                     GetUpgradeName(raceID, tripmineID, upgradeName, sizeof(upgradeName), client);
                                     DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
                                     PrepareAndEmitSoundToClient(client,deniedWav);
@@ -739,7 +739,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                             }
                             else
                             {
-                                decl String:upgradeName[64];
+                                charupgradeName[64];
                                 GetUpgradeName(raceID, tripmineID, upgradeName, sizeof(upgradeName), client);
                                 PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
                             }
@@ -747,7 +747,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                     }
                     else
                     {
-                        new nade_level = GetUpgradeLevel(client,race,nadeID);
+                        intnade_level = GetUpgradeLevel(client,race,nadeID);
                         if (nade_level > 0)
                         {
                             if (m_NadesAvailable)
@@ -764,14 +764,14 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                             }
                             else if (pressed)
                             {
-                                decl String:upgradeName[64];
+                                charupgradeName[64];
                                 GetUpgradeName(raceID, nadeID, upgradeName, sizeof(upgradeName), client);
                                 PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
                             }
                         }
                         else if (m_AmmopacksAvailable)
                         {
-                            new ammopack_level = GetUpgradeLevel(client,race,ammopackID);
+                            intammopack_level = GetUpgradeLevel(client,race,ammopackID);
                             if (ammopack_level > 0)
                                 DropPack(client, ammopack_level);
                         }
@@ -780,7 +780,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             }
             default:
             {
-                new gravgun_level = GetUpgradeLevel(client,race,gravgunID);
+                intgravgun_level = GetUpgradeLevel(client,race,gravgunID);
                 if (gravgun_level > 0 && cfgAllowGravgun > 0)
                 {
                     if (m_GravgunAvailable)
@@ -788,7 +788,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                         if (cfgAllowGravgun < 2 && GetGameType() == tf2 &&
                             TF2_GetPlayerClass(client) != TFClass_Engineer)
                         {
-                            decl String:upgradeName[64];
+                            charupgradeName[64];
                             GetUpgradeName(raceID, gravgunID, upgradeName, sizeof(upgradeName), client);
                             DisplayMessage(client, Display_Ultimate, "%t", "EngineersOnly", upgradeName);
                             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -800,7 +800,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                                 if (GetRestriction(client, Restriction_NoUltimates) ||
                                     GetRestriction(client, Restriction_Stunned))
                                 {
-                                    decl String:upgradeName[64];
+                                    charupgradeName[64];
                                     GetUpgradeName(raceID, gravgunID, upgradeName, sizeof(upgradeName), client);
                                     DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
                                     PrepareAndEmitSoundToClient(client,deniedWav);
@@ -814,14 +814,14 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                     }
                     else if (pressed)
                     {
-                        decl String:upgradeName[64];
+                        charupgradeName[64];
                         GetUpgradeName(raceID, gravgunID, upgradeName, sizeof(upgradeName), client);
                         PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
                     }
                 }
                 else
                 {
-                    new tripmine_level = GetUpgradeLevel(client,race,tripmineID);
+                    inttripmine_level = GetUpgradeLevel(client,race,tripmineID);
                     if (tripmine_level > 0)
                     {
                         if (!pressed)
@@ -830,7 +830,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                             {
                                 if (IsMole(client))
                                 {
-                                    decl String:upgradeName[64];
+                                    charupgradeName[64];
                                     GetUpgradeName(raceID, tripmineID, upgradeName, sizeof(upgradeName), client);
                                     DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
                                     PrepareAndEmitSoundToClient(client,deniedWav);
@@ -847,7 +847,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                             }
                             else
                             {
-                                decl String:upgradeName[64];
+                                charupgradeName[64];
                                 GetUpgradeName(raceID, tripmineID, upgradeName, sizeof(upgradeName), client);
                                 PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
                             }
@@ -855,7 +855,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                     }
                     else
                     {
-                        new nade_level = GetUpgradeLevel(client,race,nadeID);
+                        intnade_level = GetUpgradeLevel(client,race,nadeID);
                         if (nade_level > 0)
                         {
                             if (m_NadesAvailable)
@@ -872,14 +872,14 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                             }
                             else if (pressed)
                             {
-                                decl String:upgradeName[64];
+                                charupgradeName[64];
                                 GetUpgradeName(raceID, nadeID, upgradeName, sizeof(upgradeName), client);
                                 PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
                             }
                         }
                         else if (m_AmmopacksAvailable)
                         {
-                            new ammopack_level = GetUpgradeLevel(client,race,ammopackID);
+                            intammopack_level = GetUpgradeLevel(client,race,ammopackID);
                             if (ammopack_level > 0)
                                 DropPack(client, ammopack_level);
                         }
@@ -891,29 +891,29 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
 }
 
 // Events
-public OnPlayerSpawnEvent(Handle:event, client, race)
+public OnPlayerSpawnEvent(Handle event, client, race)
 {
     if (race == raceID)
     {
         SetOverrideSpeed(client, -1.0);
 
-        new immunity_level = GetUpgradeLevel(client,raceID,immunityID);
+        intimmunity_level = GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
-        new armor_level = GetUpgradeLevel(client,raceID,armorID);
+        intarmor_level = GetUpgradeLevel(client,raceID,armorID);
         SetupArmor(client, armor_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        new gravgun_level=GetUpgradeLevel(client,raceID,gravgunID);
+        intgravgun_level=GetUpgradeLevel(client,raceID,gravgunID);
         SetupGravgun(client, gravgun_level);
 
         if (m_AmpNodeAvailable)
         {
-            new amplifier_level = GetUpgradeLevel(client,raceID,amplifierID);
+            intamplifier_level = GetUpgradeLevel(client,raceID,amplifierID);
             SetAmplifier(client, .range=g_AmpRange[amplifier_level],
                          .enable=(amplifier_level > 0));
 
-            new repair_node_level = GetUpgradeLevel(client,raceID,repairNodeID);
+            intrepair_node_level = GetUpgradeLevel(client,raceID,repairNodeID);
             SetRepairNode(client, .range=g_NodeRange[repair_node_level],
                           .regen=g_NodeRegen[repair_node_level],
                           .shells=g_NodeShells[repair_node_level],
@@ -924,8 +924,8 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
             //SetUpgradeStation(client, .enable=(amplifier_level > 0) || (repair_node_level > 0));
         }
 
-        new supply_level = GetUpgradeLevel(client,raceID,supplyID);
-        new bunker_level = GetUpgradeLevel(client,raceID,supplyBunkerID);
+        intsupply_level = GetUpgradeLevel(client,raceID,supplyID);
+        intbunker_level = GetUpgradeLevel(client,raceID,supplyBunkerID);
         if (supply_level > 0 || bunker_level > 0)
         {
             CreateClientTimer(client, 5.0, SupplyDepot,
@@ -934,10 +934,10 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
     }
 }
 
-public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_index,
+public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_index,
                           attacker_race, assister_index, assister_race, damage,
-                          const String:weapon[], bool:is_equipment, customkill,
-                          bool:headshot, bool:backstab, bool:melee)
+                          const char[]weapon[], bool is_equipment, customkill,
+                          bool headshot, bool backstab, bool melee)
 {
     SetOverrideSpeed(victim_index, -1.0);
     KillClientTimer(victim_index);
@@ -954,7 +954,7 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
     }
 }
 
-DoImmunity(client, level, bool:value)
+void DoImmunity(client, level, bool value)
 {
     SetImmunity(client,Immunity_Theft, (value && level >= 1));
     SetImmunity(client,Immunity_Ultimates, (value && level >= 2));
@@ -963,7 +963,7 @@ DoImmunity(client, level, bool:value)
 
     if (value && IsValidClientAlive(client))
     {
-        new Float:start[3];
+        floatstart[3];
         GetClientAbsOrigin(client, start);
 
         static const color[4] = { 0, 255, 50, 128 };
@@ -973,7 +973,7 @@ DoImmunity(client, level, bool:value)
     }
 }
 
-SetupAmmopack(client, level)
+void SetupAmmopack(client, level)
 {
     if (m_AmmopacksAvailable && GameType == tf2)
     {
@@ -991,13 +991,13 @@ SetupAmmopack(client, level)
     }
 }
 
-SetupTeleporter(client, level)
+void SetupTeleporter(client, level)
 {
     if (m_TeleporterAvailable)
         SetTeleporter(client, g_TeleporterRate[level]);
 }
 
-SetupGravgun(client, level)
+void SetupGravgun(client, level)
 {
     if (m_GravgunAvailable)
     {
@@ -1005,9 +1005,9 @@ SetupGravgun(client, level)
                           (cfgAllowGravgun >= 1 &&
                            (GameType != tf2 || TF2_GetPlayerClass(client) == TFClass_Engineer))))
         {
-            new Float:speed = cfgGravgunThrowSpeed * float(level);
-            new Float:duration = cfgGravgunDuration * float(level);
-            new permissions=HAS_GRABBER|CAN_STEAL;
+            floatspeed = cfgGravgunThrowSpeed * float(level);
+            floatduration = cfgGravgunDuration * float(level);
+            intpermissions=HAS_GRABBER|CAN_STEAL;
 
             if (GameType == tf2)
             {
@@ -1032,7 +1032,7 @@ SetupGravgun(client, level)
     }
 }
 
-public Action:OnPickupObject(client, builder, ent)
+public ActionOnPickupObject(client, builder, ent)
 {
     if (GetRace(client) == raceID)
     {
@@ -1050,7 +1050,7 @@ public Action:OnPickupObject(client, builder, ent)
         if (GetRestriction(client, Restriction_NoUltimates) ||
             GetRestriction(client, Restriction_Stunned))
         {
-            decl String:upgradeName[64];
+            charupgradeName[64];
             GetUpgradeName(raceID, gravgunID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -1065,25 +1065,25 @@ public Action:OnPickupObject(client, builder, ent)
     return Plugin_Continue;
 }
 
-public Action:OnCarryObject(client,ent,Float:time)
+public ActionOnCarryObject(client,ent,float time)
 {
     if (GetRace(client) == raceID)
     {
-        new Float:now = GetEngineTime();
-        new Float:amount = GetUpgradeRecurringEnergy(raceID,gravgunID);
+        floatnow = GetEngineTime();
+        floatamount = GetUpgradeRecurringEnergy(raceID,gravgunID);
         if (now-m_GravTime[client] > amount)
         {
             if (GetRestriction(client, Restriction_NoUltimates) ||
                 GetRestriction(client, Restriction_Stunned))
             {
-                decl String:upgradeName[64];
+                charupgradeName[64];
                 GetUpgradeName(raceID, gravgunID, upgradeName, sizeof(upgradeName), client);
                 DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
                 PrepareAndEmitSoundToClient(client,deniedWav);
             }
             else if (CanProcessUpgrade(client, raceID, gravgunID))
             {
-                decl String:upgradeName[64];
+                charupgradeName[64];
                 GetUpgradeName(raceID, gravgunID, upgradeName, sizeof(upgradeName), client);
                 DisplayMessage(client, Display_Energy, "%t", "ConsumedEnergy", upgradeName, amount);
                 m_GravTime[client] = now;
@@ -1091,7 +1091,7 @@ public Action:OnCarryObject(client,ent,Float:time)
             }
             else
             {
-                decl String:upgradeName[64];
+                charupgradeName[64];
                 GetUpgradeName(raceID, gravgunID, upgradeName, sizeof(upgradeName), client);
                 DisplayMessage(client, Display_Energy, "%t", "OutOfEnergy", upgradeName);
                 EmitEnergySoundToClient(client,Terran);
@@ -1111,43 +1111,43 @@ public OnDropObject(client, ent)
     }
 }
 
-public Action:OnThrowObject(client, ent)
+public ActionOnThrowObject(client, ent)
 {
     OnDropObject(client, ent);
     return Plugin_Continue;
 }
 
-public Action:SupplyDepot(Handle:timer, any:userid)
+public ActionSupplyDepot(Handle timer, any:userid)
 {
-    new client = GetClientOfUserId(userid);
+    intclient = GetClientOfUserId(userid);
     if (IsValidClientAlive(client) && GetRace(client) == raceID &&
         !GetRestriction(client, Restriction_NoUpgrades) ||
         !GetRestriction(client, Restriction_Stunned))
     {
-        new supply_level=GetUpgradeLevel(client,raceID,supplyID);
+        intsupply_level=GetUpgradeLevel(client,raceID,supplyID);
         if (supply_level > 0)
             SupplyAmmo(client, supply_level, "Supply Depot", SupplyDefault);
 
         if (GetGameType() == tf2 && TF2_GetPlayerClass(client) == TFClass_Engineer)
         {
-            new bunker_level=GetUpgradeLevel(client,raceID,supplyBunkerID);
+            intbunker_level=GetUpgradeLevel(client,raceID,supplyBunkerID);
             if (bunker_level > 0)
             {
-                new bunker_amount = bunker_level + 1;
-                new bunker_health = bunker_amount * 5;
-                new bunker_ammo = bunker_amount * 2;
-                new Float:bunker_energy = float(bunker_amount) / 2.0;
-                new Float:bunker_range=g_SupplyBunkerRange[bunker_level];
+                intbunker_amount = bunker_level + 1;
+                intbunker_health = bunker_amount * 5;
+                intbunker_ammo = bunker_amount * 2;
+                floatbunker_energy = float(bunker_amount) / 2.0;
+                floatbunker_range=g_SupplyBunkerRange[bunker_level];
 
-                new beamSprite = BeamSprite();
-                new haloSprite = HaloSprite();
+                intbeamSprite = BeamSprite();
+                inthaloSprite = HaloSprite();
 
                 static const ammoColor[4]    = {255, 225, 0, 255};
                 static const healingColor[4] = {0, 255, 0, 255};
 
-                new team = GetClientTeam(client);
-                new maxentities = GetMaxEntities();
-                for (new ent = MaxClients + 1; ent <= maxentities; ent++)
+                intteam = GetClientTeam(client);
+                intmaxentities = GetMaxEntities();
+                for (intent = MaxClients + 1; ent <= maxentities; ent++)
                 {
                     if (IsValidEntity(ent) && IsValidEdict(ent))
                     {
@@ -1157,16 +1157,16 @@ public Action:SupplyDepot(Handle:timer, any:userid)
                                 GetEntPropFloat(ent, Prop_Send, "m_flPercentageConstructed") >= 1.0)
                             {
                                 // Heal/Supply teammates
-                                new Float:indexLoc[3];
-                                new Float:pos[3];
+                                floatindexLoc[3];
+                                floatpos[3];
                                 GetEntPropVector(ent, Prop_Send, "m_vecOrigin", pos);
                                 pos[2] += 25.0; // Adjust trace position to the middle/top of the object instead of the bottom.
 
-                                new count=0;
-                                new alt_count=0;
-                                new list[MaxClients+1];
-                                new alt_list[MaxClients+1];
-                                for (new index=1;index<=MaxClients;index++)
+                                intcount=0;
+                                intalt_count=0;
+                                intlist[MaxClients+1];
+                                intalt_list[MaxClients+1];
+                                for (intindex=1;index<=MaxClients;index++)
                                 {
                                     if (IsClientInGame(index) && IsPlayerAlive(index))
                                     {
@@ -1243,14 +1243,14 @@ public Action:SupplyDepot(Handle:timer, any:userid)
     return Plugin_Continue;
 }
 
-BuildBattlecruiser(client)
+void BuildBattlecruiser(client)
 {
     if (g_battlecruiserRace < 0)
         g_battlecruiserRace = FindRace("battlecruiser");
 
     if (g_battlecruiserRace < 0)
     {
-        decl String:upgradeName[64];
+        charupgradeName[64];
         GetUpgradeName(raceID, battlecruiserID, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "IsNotAvailable", upgradeName);
         LogError("***The Terran Battlecruiser race is not Available!");
@@ -1265,7 +1265,7 @@ BuildBattlecruiser(client)
     }
     else if (HasCooldownExpired(client, raceID, battlecruiserID))
     {
-        new Float:clientLoc[3];
+        floatclientLoc[3];
         GetClientAbsOrigin(client, clientLoc);
         clientLoc[2] += 40.0; // Adjust position to the middle
 
@@ -1280,11 +1280,11 @@ BuildBattlecruiser(client)
     }
 }
 
-public Action:OnAmplify(builder,client,TFCond:condition)
+public ActionOnAmplify(builder,client,TFCond:condition)
 {
     if (condition == TFCond_Buffed && builder > 0 && GetRace(builder) == raceID)
     {
-        new Float:energy = GetEnergy(client);
+        floatenergy = GetEnergy(client);
         if (energy < 4.0)
             return Plugin_Stop;
         else
@@ -1294,7 +1294,7 @@ public Action:OnAmplify(builder,client,TFCond:condition)
     return Plugin_Continue;
 }
 
-DropPack(client,level)
+void DropPack(client,level)
 {
     if (TF2_GetPlayerClass(client) == TFClass_Engineer)
         DropAmmopack(client, -1);

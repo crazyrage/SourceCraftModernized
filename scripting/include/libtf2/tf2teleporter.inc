@@ -16,7 +16,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of the Teleporter plugin.
  * @return		    	none
  */
-native ControlTeleporter(bool:plugin_only=true);
+native ControlTeleporter(bool plugin_only=true);
 
 /**
  * Enable Teleporter Recharger for a player.
@@ -25,7 +25,7 @@ native ControlTeleporter(bool:plugin_only=true);
  * @param recharge  Recharge time for teleporters built by client.
  * @return			none
  */
-native SetTeleporter(client,Float:recharge);
+native SetTeleporter(client,Float recharge);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

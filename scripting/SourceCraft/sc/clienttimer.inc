@@ -12,14 +12,14 @@
 
 #include "sc/client"
 
-#define ResetClientTimer(%1) g_ClientTimers[%1] = INVALID_HANDLE
+#define ResetClientTimer(%1) g_ClientTimers[%1] = null
 
-stock Handle:g_ClientTimers[MAXPLAYERS+1];
+stock Handle g_ClientTimers[MAXPLAYERS+1];
 
-stock CreateClientTimer(client, Float:interval, Timer:func,
+stock CreateClientTimer(client, float interval, Timer:func,
                         flags=TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE)
 {
-    if (IsClient(client) && g_ClientTimers[client] == INVALID_HANDLE)
+    if (IsClient(client) && g_ClientTimers[client] == null)
         g_ClientTimers[client] = CreateTimer(interval,func,GetClientUserId(client),flags);
 }
 
@@ -27,8 +27,8 @@ stock KillClientTimer(client)
 {
     if (IsClient(client))
     {
-        new Handle:timer=g_ClientTimers[client];
-        if (timer != INVALID_HANDLE)
+        Handle timer=g_ClientTimers[client];
+        if (timer != null)
         {
             ResetClientTimer(client);	
             KillTimer(timer);

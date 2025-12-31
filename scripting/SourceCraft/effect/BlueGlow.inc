@@ -16,4 +16,4 @@
 #define BlueGlow()      PrepareModel(g_blueModel, g_blueGlow)
 
 stock g_blueGlow;
-stock const String:g_blueModel[] = "materials/sprites/blueglow1.vmt";
+static const char g_blueModel[] = "materials/sprites/blueglow1.vmt";

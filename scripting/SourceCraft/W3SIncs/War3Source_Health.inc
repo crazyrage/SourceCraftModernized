@@ -65,14 +65,14 @@
  * @param noWarning: Prevent warning print when using DealDamage from a event where it's error prone
  * @return bool: did damage go through, false if player was immune to that damage type or damage was zero or something else failed
  */
-native bool:War3_DealDamage(victim,damage,attacker=0,damage_type=DMG_GENERIC|DMG_PREVENT_PHYSICS_FORCE,String:weaponNameStr[], War3DamageOrigin:W3DMGORIGIN=W3DMGORIGIN_UNDEFINED , War3DamageType:W3DMGTYPE=W3DMGTYPE_MAGIC , bool:respectVictimImmunity=true , bool:countAsFirstDamageRetriggered=false, bool:noWarning=false);
+native bool War3_DealDamage(victim,damage,attacker=0,damage_type=DMG_GENERIC|DMG_PREVENT_PHYSICS_FORCE,char[] weaponNameStr, War3DamageOrigin:W3DMGORIGIN=W3DMGORIGIN_UNDEFINED , War3DamageType:W3DMGTYPE=W3DMGTYPE_MAGIC , bool respectVictimImmunity=true , bool countAsFirstDamageRetriggered=false, bool noWarning=false);
 
 /*
  * forces the damage to be multiplied by @num
  * shall only be done inside SDKHOOKS damage forward (when damage hasnt been dealt yet) 
  * @noreturn
  */
-native War3_DamageModPercent(Float:num);
+native War3_DamageModPercent(float num);
 
 
 //get the actual damage dealt from War3_DealDamage, because real damage is different after taking account to magic/physical armor
@@ -95,8 +95,8 @@ native W3ForceDamageIsBullet();
 //get the depth of the damage stack, usually 1 or more
 native W3GetDamageStack();
 
-stock War3_DealDamageDelayed(victim,attacker,damage,String:classname[32],Float:delay=0.0,bool:showDamage=false,showDamage_skill=0) {
-    new Handle:pack;
+stock War3_DealDamageDelayed(victim,attacker,damage,String:classname[32],float delay=0.0,bool showDamage=false,showDamage_skill=0) {
+    Handle pack;
     CreateDataTimer(delay, _war3source_Timer_DealDamage, pack);
     WritePackCell(pack, victim);
     WritePackCell(pack, attacker);
@@ -107,19 +107,19 @@ stock War3_DealDamageDelayed(victim,attacker,damage,String:classname[32],Float:d
 }
 
 // In csgo killing 2 players in the same frame causes a crash so we use this dirty workaround
-public Action:_war3source_Timer_DealDamage(Handle:timer, Handle:pack)
+public Action _war3source_Timer_DealDamage(Handle timer, Handle pack)
 {
     ResetPack(pack); //resolve the package...
-    new victim = ReadPackCell(pack);
+    int victim = ReadPackCell(pack);
     if(!ValidPlayer(victim,true)) {
         // immedialety exit!
         return Plugin_Stop;
     }
-    new attacker = ReadPackCell(pack);
-    new damage = ReadPackCell(pack);
-    new bool:showDamage = bool:ReadPackCell(pack);
-    new showDamage_skill = ReadPackCell(pack);
-    decl String:classname[32];
+    int attacker = ReadPackCell(pack);
+    int damage = ReadPackCell(pack);
+    bool showDamage = bool ReadPackCell(pack);
+    int showDamage_skill = ReadPackCell(pack);
+    char classname[32];
     ReadPackString(pack,classname,sizeof(classname));
     
     // Glider: TODO: Figure out if the notification include or the 
@@ -131,7 +131,7 @@ public Action:_war3source_Timer_DealDamage(Handle:timer, Handle:pack)
     return Plugin_Stop;
 }
 
-stock bool:W3IsDamageFromMelee(const String:weapon[])
+stock bool W3IsDamageFromMelee(const char weapon[])
 {
     switch (War3_GetGame())
     {
@@ -270,13 +270,13 @@ stock bool:W3IsDamageFromMelee(const String:weapon[])
  * heals with the limit of (warcraft ) max hp
  * @noreturn
  */
-stock bool:War3_HealToMaxHP(client, health)
+stock bool War3_HealToMaxHP(client, health)
 {
-    new maxhp = War3_GetMaxHP(client);
-    new currenthp = GetClientHealth(client);
+    int maxhp = War3_GetMaxHP(client);
+    int currenthp = GetClientHealth(client);
     if(currenthp < maxhp)
     {
-        new newhp = GetClientHealth(client) + health;
+        int newhp = GetClientHealth(client) + health;
         if (newhp > maxhp)
         {
             newhp = maxhp;
@@ -291,9 +291,9 @@ stock bool:War3_HealToMaxHP(client, health)
  * heals with the limit of your specified HP
  * @noreturn
  */
-stock bool:War3HealToHP(client, addhp, maximumHP) {
-    new currenthp = GetClientHealth(client);
-    new newhp = currenthp + addhp;
+stock bool War3HealToHP(client, addhp, maximumHP) {
+    int currenthp = GetClientHealth(client);
+    int newhp = currenthp + addhp;
     if (newhp > maximumHP) 
     {
         newhp = maximumHP;
@@ -313,13 +313,13 @@ stock bool:War3HealToHP(client, addhp, maximumHP) {
  * no extra hp in other games 
  * @noreturn
  */
-stock bool:War3_HealToBuffHP(client, health)
+stock bool War3_HealToBuffHP(client, health)
 {
-    new maxhp = (War3_GetGame() == Game_TF) ? RoundFloat(float(War3_GetMaxHP(client)) * 1.5) : War3_GetMaxHP(client);
-    new currenthp = GetClientHealth(client);
+    int maxhp = (War3_GetGame() == Game_TF) ? RoundFloat(float(War3_GetMaxHP(client)) * 1.5) : War3_GetMaxHP(client);
+    int currenthp = GetClientHealth(client);
     if(currenthp < maxhp)
     {
-        new newhp = GetClientHealth(client) + health;
+        int newhp = GetClientHealth(client) + health;
         if (newhp > maxhp)
         {
             newhp = maxhp;
@@ -336,9 +336,9 @@ stock bool:War3_HealToBuffHP(client, health)
  * direcly decreases the player's hp by X amount (Not via damage)
  * this health removal is "non lethal"
  */
-stock bool:War3_DecreaseHP(client, amount)
+stock bool War3_DecreaseHP(client, amount)
 {
-    new iHealth = GetClientHealth(client)-amount;
+    int iHealth = GetClientHealth(client)-amount;
     if(iHealth < 1)
     {
         iHealth = 1;
@@ -348,9 +348,9 @@ stock bool:War3_DecreaseHP(client, amount)
 }
 
 // The actual internal setHealth function. Returns if the health has changed
-stock bool:nsEntity_SetHealth(entity, health) 
+stock bool nsEntity_SetHealth(entity, health) 
 {
-    new currenthp = GetEntProp(entity, Prop_Data, "m_iHealth");
+    int currenthp = GetEntProp(entity, Prop_Data, "m_iHealth");
     
     if (currenthp == health)
     {
@@ -379,7 +379,7 @@ stock War3_TFHealingEvent(client, amount_healed)
         return;
     }
     
-    new Handle:event = CreateEvent("player_healonhit");
+    Handle event = CreateEvent("player_healonhit");
     SetEventInt(event, "entindex", client);
     SetEventInt(event, "amount", amount_healed);
     FireEvent(event);

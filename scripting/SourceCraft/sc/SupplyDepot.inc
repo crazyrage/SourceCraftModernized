@@ -25,9 +25,9 @@
 
 enum SupplyTypes ( <<= 1) { SupplyDefault = 1, SupplyPrimary, SupplySecondary, SupplyMetal, SupplyGrenade, SupplySmoke };
 
-stock SupplyAmmo(client, amount, const String:source[],
+stock SupplyAmmo(client, amount, const char source[],
                  SupplyTypes:types=SupplyDefault,
-                 heavyFactor=10, bool:full=false)
+                 heavyFactor=10, bool full=false)
 {
     new ammoSupplied = 0;
     if (amount > 0)
@@ -515,7 +515,7 @@ stock SupplyAmmo(client, amount, const String:source[],
 
     if (ammoSupplied > 0)
     {
-        decl String:type[64];
+        char type[64];
         type[0] = '\0';
 
         if (GameType == tf2)

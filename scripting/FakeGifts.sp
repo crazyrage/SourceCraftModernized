@@ -8,11 +8,11 @@
 #define INVIS					{255,255,255,0}
 #define NORMAL					{255,255,255,255}
 
-new g_FilteredEntity = -1;
-new Float:g_ClientPosition[MAXPLAYERS+1][3];
-new bool:g_IsGift[MAXPLAYERS+1] = { false, ...};
+int g_FilteredEntity = -1;
+float g_ClientPosition[MAXPLAYERS+1][3];
+bool g_IsGift[MAXPLAYERS+1] = { false, ...};
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "[TF2] Fake Halloween Gifts",
     author = "DarthNinja",
@@ -38,9 +38,9 @@ public OnMapStart()
 		PrecacheModel(GIFT);
 }
 
-public EventInventoryApplication(Handle:event, const String:name[], bool:dontBroadcast)
+public EventInventoryApplication(Handle event, const char[] name, bool dontBroadcast)
 {
-	new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	if (IsValidEntity(client) && g_IsGift[client])
 	{
 		SetVariantString("");
@@ -52,7 +52,7 @@ public EventInventoryApplication(Handle:event, const String:name[], bool:dontBro
 	}
 }
 
-public Action:FakeGift(client, args)
+public Action FakeGift(client, args)
 {
 	if (client < 0)
 	{
@@ -67,7 +67,7 @@ public Action:FakeGift(client, args)
 	return Plugin_Handled;
 }
 
-public Action:MakeMeAGift(client, args)
+public Action MakeMeAGift(client, args)
 {
 	if (client < 0)
 	{
@@ -100,9 +100,9 @@ public Action:MakeMeAGift(client, args)
 	return Plugin_Handled;
 }
 
-stock TF_SpawnAmmopack(client, String:name[], bool:cmd)
+stock TF_SpawnAmmopack(client, char name[], bool cmd)
 {
-    new Float:PlayerPosition[3];
+    float PlayerPosition[3];
     if (cmd)
         GetClientAbsOrigin(client, PlayerPosition);
     else
@@ -114,7 +114,7 @@ stock TF_SpawnAmmopack(client, String:name[], bool:cmd)
         g_FilteredEntity = client;
         if (cmd)
         {
-            new Float:PlayerPosEx[3], Float:PlayerAngle[3], Float:PlayerPosAway[3];
+            float PlayerPosEx[3], float PlayerAngle[3], float PlayerPosAway[3];
             GetClientEyeAngles(client, PlayerAngle);
             PlayerPosEx[0] = Cosine((PlayerAngle[1]/180)*FLOAT_PI);
             PlayerPosEx[1] = Sine((PlayerAngle[1]/180)*FLOAT_PI);
@@ -122,27 +122,27 @@ stock TF_SpawnAmmopack(client, String:name[], bool:cmd)
             ScaleVector(PlayerPosEx, 75.0);
             AddVectors(PlayerPosition, PlayerPosEx, PlayerPosAway);
 
-            new Handle:TraceEx = TR_TraceRayFilterEx(PlayerPosition, PlayerPosAway, MASK_SOLID, RayType_EndPoint, AmmopackTraceFilter);
+            Handle TraceEx = TR_TraceRayFilterEx(PlayerPosition, PlayerPosAway, MASK_SOLID, RayType_EndPoint, AmmopackTraceFilter);
             TR_GetEndPosition(PlayerPosition, TraceEx);
             CloseHandle(TraceEx);
         }
 
-        new Float:Direction[3];
+        float Direction[3];
         Direction[0] = PlayerPosition[0];
         Direction[1] = PlayerPosition[1];
         Direction[2] = PlayerPosition[2]-1024;
-        new Handle:Trace = TR_TraceRayFilterEx(PlayerPosition, Direction, MASK_SOLID, RayType_EndPoint, AmmopackTraceFilter);
+        Handle Trace = TR_TraceRayFilterEx(PlayerPosition, Direction, MASK_SOLID, RayType_EndPoint, AmmopackTraceFilter);
 
-        new Float:AmmoPos[3];
+        float AmmoPos[3];
         TR_GetEndPosition(AmmoPos, Trace);
         CloseHandle(Trace);
         AmmoPos[2] += 4;
 
-        new Ammopack = CreateEntityByName(name);
+        int Ammopack = CreateEntityByName(name);
         DispatchKeyValue(Ammopack, "OnPlayerTouch", "!self,Kill,,0,-1");
         if (DispatchSpawn(Ammopack))
         {
-            new team = 0;
+            int team = 0;
             SetEntProp(Ammopack, Prop_Send, "m_iTeamNum", team, 4);
             SetEntityModel(Ammopack, GIFT)
             TeleportEntity(Ammopack, AmmoPos, NULL_VECTOR, NULL_VECTOR);
@@ -150,12 +150,12 @@ stock TF_SpawnAmmopack(client, String:name[], bool:cmd)
     }
 }
 
-public bool:AmmopackTraceFilter(ent, contentMask)
+public bool AmmopackTraceFilter(ent, contentMask)
 {
     return (ent != g_FilteredEntity);
 }
 
-stock bool:IsEntLimitReached()
+stock bool IsEntLimitReached()
 {
     if (GetEntityCount() >= (GetMaxEntities()-16))
     {
@@ -173,12 +173,12 @@ Credit to pheadxdll for invisibility code.
 public Colorize(client, color[4])
 {	
 	//Colorize the weapons
-	new m_hMyWeapons = FindSendPropOffs("CBasePlayer", "m_hMyWeapons");	
-	new String:classname[256];
-	new type;
+	int m_hMyWeapons = FindSendPropOffs("CBasePlayer", "m_hMyWeapons");	
+	char classname[256];
+	int type;
 	new TFClassType:class = TF2_GetPlayerClass(client);
 	
-	for(new i = 0, weapon; i < 47; i += 4)
+	for(int i= 0, weapon; i < 47; i += 4)
 	{
 		weapon = GetEntDataEnt2(client, m_hMyWeapons + i);
 		
@@ -208,9 +208,9 @@ public Colorize(client, color[4])
 	return;
 }
 
-SetWearablesRGBA_Impl( client,  const String:entClass[], const String:serverClass[], color[4])
+SetWearablesRGBA_Impl( client,  const char[] entClass, const char[] serverClass, color[4])
 {
-	new ent = -1;
+	int ent = -1;
 	while( (ent = FindEntityByClassname(ent, entClass)) != -1 )
 	{
 		if ( IsValidEntity(ent) )
@@ -228,7 +228,7 @@ InvisibleHideFixes(client, TFClassType:class, type)
 {
 	if(class == TFClass_DemoMan)
 	{
-		new decapitations = GetEntProp(client, Prop_Send, "m_iDecapitations");
+		int decapitations = GetEntProp(client, Prop_Send, "m_iDecapitations");
 		if(decapitations >= 1)
 		{
 			if(!type)
@@ -245,19 +245,19 @@ InvisibleHideFixes(client, TFClassType:class, type)
 	}
 	else if(class == TFClass_Spy)
 	{
-		new disguiseWeapon = GetEntPropEnt(client, Prop_Send, "m_hDisguiseWeapon");
+		int disguiseWeapon = GetEntPropEnt(client, Prop_Send, "m_hDisguiseWeapon");
 		if(IsValidEntity(disguiseWeapon))
 		{
 			if(!type)
 			{
 				SetEntityRenderMode(disguiseWeapon , RENDER_TRANSCOLOR);
-				new color[4] = INVIS;
+				int color[4] = INVIS;
 				SetEntityRenderColor(disguiseWeapon , color[0], color[1], color[2], color[3]);
 			}
 			else
 			{
 				SetEntityRenderMode(disguiseWeapon , RENDER_TRANSCOLOR);
-				new color[4] = NORMAL;
+				int color[4] = NORMAL;
 				SetEntityRenderColor(disguiseWeapon , color[0], color[1], color[2], color[3]);
 			}
 		}
@@ -267,7 +267,7 @@ InvisibleHideFixes(client, TFClassType:class, type)
 
 //This won't be required in the future as Sourcemod 1.4 already has this stuff
 stock TF2_AddCond(client, cond) {
-	new Handle:cvar = FindConVar("sv_cheats"), bool:enabled = GetConVarBool(cvar), flags = GetConVarFlags(cvar);
+	Handle cvar = FindConVar("sv_cheats"), bool enabled = GetConVarBool(cvar), flags = GetConVarFlags(cvar);
 	if(!enabled) {
 		SetConVarFlags(cvar, flags^FCVAR_NOTIFY^FCVAR_REPLICATED);
 		SetConVarBool(cvar, true);
@@ -281,7 +281,7 @@ stock TF2_AddCond(client, cond) {
 }
 
 stock TF2_RemoveCond(client, cond) {
-	new Handle:cvar = FindConVar("sv_cheats"), bool:enabled = GetConVarBool(cvar), flags = GetConVarFlags(cvar);
+	Handle cvar = FindConVar("sv_cheats"), bool enabled = GetConVarBool(cvar), flags = GetConVarFlags(cvar);
 	if(!enabled) {
 		SetConVarFlags(cvar, flags^FCVAR_NOTIFY^FCVAR_REPLICATED);
 		SetConVarBool(cvar, true);

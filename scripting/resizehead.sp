@@ -9,17 +9,17 @@
 
 /* Global Handles */
 
-new Handle:Version;
-new Handle:cvarEnabled;
-new Handle:cvarLogs;
+Handle Version;
+Handle cvarEnabled;
+Handle cvarLogs;
 
 /* Global Variables */
 
-new bool:Enabled;
-new bool:Logs;
-new Float:g_HeadScale[MAXPLAYERS + 1] = 1.0;
+bool Enabled;
+bool Logs;
+float g_HeadScale[MAXPLAYERS + 1] = 1.0;
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
 	name = "[TF2] Resize Heads",
 	author = "Tak + ReFlexPoison",
@@ -28,9 +28,9 @@ public Plugin:myinfo =
 	url = "http://www.sourcemod.net"
 }
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char error[], err_max)
 {
-	new String:Game[32];
+	char Game[32];
 	GetGameFolderName(Game, sizeof(Game));
 	if(!StrEqual(Game, "tf"))
 	{
@@ -54,7 +54,7 @@ public OnPluginStart()
 	
 	LoadTranslations("common.phrases");
 	
-	for(new i = 0; i <= MaxClients; i++)
+	for(int i= 0; i <= MaxClients; i++)
 	{
 		if(!IsValidClient(i)) continue;
 		{
@@ -64,7 +64,7 @@ public OnPluginStart()
 	}
 }
 
-public CVarChange(Handle:convar, const String:oldValue[], const String:newValue[])
+public CVarChange(Handle convar, const char[] oldValue, const char[] newValue)
 {
 	if(convar == Version) SetConVarString(Version, PLUGIN_VERSION);
 	if(convar == cvarEnabled)
@@ -95,7 +95,7 @@ public OnGameFrame()
 {
 	if(!Enabled) return;
 
-	for(new i = 0; i <= MaxClients; i++)
+	for(int i= 0; i <= MaxClients; i++)
 	{
 		if(!IsValidClient(i) || g_HeadScale[i] == 1.0) continue;
 		{
@@ -104,7 +104,7 @@ public OnGameFrame()
 	}
 }
 
-public Action:ResizeHead(client, args)
+public Action ResizeHead(client, args)
 {
 	if(!Enabled) return Plugin_Continue;
 
@@ -119,12 +119,12 @@ public Action:ResizeHead(client, args)
 		return Plugin_Handled;
 	}
 
-	decl String:arg1[65], String:arg2[65], Float:scale;
+	char arg1[65], char arg2[65], float scale;
 	GetCmdArg(1, arg1, sizeof(arg1));
 	GetCmdArg(2, arg2, sizeof(arg2));
 	scale = StringToFloat(arg2);
-	decl String:target_name[MAX_TARGET_LENGTH];
-	decl target_list[MAXPLAYERS], target_count, bool:tn_is_ml;
+	char target_name[MAX_TARGET_LENGTH];
+	decl target_list[MAXPLAYERS], target_count, bool tn_is_ml;
 	if((target_count = ProcessTargetString(
 			arg1,
 			client,
@@ -142,7 +142,7 @@ public Action:ResizeHead(client, args)
 	if(scale <= 0.0) scale = 0.1;
 	if(scale > 3.0) scale = 3.0;
 	
-	for(new i = 0; i < target_count; i++)
+	for(int i= 0; i < target_count; i++)
 	{
 		if(!IsValidClient(target_list[i]))
 		{
@@ -157,14 +157,14 @@ public Action:ResizeHead(client, args)
 	return Plugin_Handled;
 }
 
-stock bool:IsValidClient(i, bool:replay = true)
+stock bool IsValidClient(i, bool replay = true)
 {
 	if(i <= 0 || i > MaxClients || !IsClientInGame(i) || GetEntProp(i, Prop_Send, "m_bIsCoaching")) return false;
 	if(replay && (IsClientSourceTV(i) || IsClientReplay(i))) return false;
 	return true;
 }
 
-stock Resize(client, Float:scale)
+stock Resize(client, float scale)
 {
 	g_HeadScale[client] = scale;
 	if(scale == 1.0) PrintToChat(client, "[SM] Your head size has been reset.");

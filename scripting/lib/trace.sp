@@ -7,35 +7,35 @@
 
 #pragma semicolon 1
 
-new Handle:gTraceVar = INVALID_HANDLE;
-new Handle:gTraceDepthVar = INVALID_HANDLE;
-new Handle:gTraceIndentVar = INVALID_HANDLE;
-new Handle:gTraceVerbosityVar = INVALID_HANDLE;
-new Handle:gTraceCallLevelVar = INVALID_HANDLE;
-new Handle:gTraceClassExVar = INVALID_HANDLE;
-new Handle:gTraceClassVar = INVALID_HANDLE;
-new Handle:gTraceCatExVar = INVALID_HANDLE;
-new Handle:gTraceCatVar = INVALID_HANDLE;
-new Handle:gCallStack = INVALID_HANDLE;
+HandlegTraceVar = null;
+HandlegTraceDepthVar = null;
+HandlegTraceIndentVar = null;
+HandlegTraceVerbosityVar = null;
+HandlegTraceCallLevelVar = null;
+HandlegTraceClassExVar = null;
+HandlegTraceClassVar = null;
+HandlegTraceCatExVar = null;
+HandlegTraceCatVar = null;
+HandlegCallStack = null;
 
-new String:gCategory[256] = "";
+chargCategory[256] = "";
 
-new String:gTraceCat[1024] = "";
-new String:gExcludeCat[1024] = "";
+chargTraceCat[1024] = "";
+chargExcludeCat[1024] = "";
 
-new String:gTraceClass[1024] = "";
-new String:gExcludeClass[1024] = "";
+chargTraceClass[1024] = "";
+chargExcludeClass[1024] = "";
 
 new gMaxDepth = 25;
 new gVerbosity = 10;
 new gCallLevel = 9;
-new bool:gEnable = false;
-new bool:gIndent = true;
-new bool:gConfigLoaded = false;
+boolgEnable = false;
+boolgIndent = true;
+boolgConfigLoaded = false;
 
 new gCurrentDepth = 0;
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLResAskPluginLoad2(Handle myself, bool late, char[] error, err_max)
 {
     CreateNative("TraceInto",Native_TraceInto);
     CreateNative("TraceReturn",Native_TraceReturn);
@@ -55,7 +55,7 @@ public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
 
 public OnPluginStart()
 {
-    decl String:buf[16];
+    charbuf[16];
     IntToString(gEnable, buf, sizeof(buf));
     gTraceVar           = CreateConVar("sm_trace", buf, "Enable Tracing");
 
@@ -91,13 +91,13 @@ public OnPluginStart()
     }
 }
 
-public bool:LoadConfigFile()
+public boolLoadConfigFile()
 {
-    new bool:loaded = false;
-    decl String:path[PLATFORM_MAX_PATH];
+    boolloaded = false;
+    charpath[PLATFORM_MAX_PATH];
     BuildPath(Path_SM,path,sizeof(path),"configs/trace.cfg");
 
-    new Handle:traceConfigHandle = CreateKeyValues("trace");
+    HandletraceConfigHandle = CreateKeyValues("trace");
     if (FileToKeyValues(traceConfigHandle,path))
     {
         // Load values
@@ -156,7 +156,7 @@ public OnConfigsExecuted()
     /**/
 } 
 
-public CvarChange(Handle:convar, const String:oldValue[], const String:newValue[])
+public CvarChange(Handle:convar, const char[]oldValue[], const char[]newValue[])
 {
     if (convar == gTraceVar)
         gEnable = bool:StringToInt(newValue);
@@ -217,7 +217,7 @@ CheckCategory()
     {
         new idx, pos=0;
         new ok = (gTraceCat[0] == '\0') ? 0 : -1;
-        decl String:aCategory[64];
+        charaCategory[64];
         while ((idx = SplitString(gCategory[pos], ",", aCategory, sizeof(aCategory))) != -1)
         {
             pos += idx;
@@ -241,7 +241,7 @@ CheckCategory()
     }
 }
 
-CheckClass(const String:class[])
+CheckClass(const char[]class[])
 {
     if (gExcludeClass[0] != '\0' && StrContains(gExcludeClass, class, false) < 0)
     {
@@ -261,7 +261,7 @@ CheckClass(const String:class[])
     }
 }
 
-ExtractName(const String:prefix[], String:name[], maxlength)
+ExtractName(const char[]prefix[], String:name[], maxlength)
 {
     if (SplitString(prefix, "{", name, maxlength) < 0)
     {
@@ -270,7 +270,7 @@ ExtractName(const String:prefix[], String:name[], maxlength)
     }
 }
 
-CheckPrefix(const String:prefix[])
+CheckPrefix(const char[]prefix[])
 {
     if (gTraceClass[0] == '\0' && gExcludeClass[0] == '\0')
     {
@@ -279,10 +279,10 @@ CheckPrefix(const String:prefix[])
     }
     else
     {
-        decl String:name[64];
+        charname[64];
         ExtractName(prefix, name, sizeof(name));
 
-        decl String:class[64];
+        charclass[64];
         if (SplitString(name, "::", class, sizeof(class)) >= 0)
         {
             //LogMessage("CheckPrefix=checkClass=%d",CheckClass(class));
@@ -303,15 +303,15 @@ CheckPrefix(const String:prefix[])
  * @param fmt: The format string for the message
  * @param ...: Format arguments (if any)
  * @noreturn
- * native TraceInto(const String:class[], const String:method[], const String:fmt[], any:...);
+ * native TraceInto(const char[]class[], const char[]method[], const char[]fmt[], any:...);
  */
-public Native_TraceInto(Handle:plugin,numParams)
+public Native_TraceInto(Handle plugin,numParams)
 {
     if (gEnable)
     {
         gCurrentDepth++;
 
-        decl String:indent[32];
+        charindent[32];
         if (gIndent)
         {
             new i = 0;
@@ -325,17 +325,17 @@ public Native_TraceInto(Handle:plugin,numParams)
         else
             Format(indent, sizeof(indent),"[%d] ", gCurrentDepth);
 
-        decl String:class[64],String:method[64];
+        charclass[64],String:method[64];
         GetNativeString(1,class,sizeof(class));
         GetNativeString(2,method,sizeof(method));
 
-        decl String:prefix[256];
+        charprefix[256];
         if (gCategory[0] == '\0')
             Format(prefix, sizeof(prefix), "%s::%s %s", class, method, indent);
         else
             Format(prefix, sizeof(prefix), "%s::%s{%s} %s", class, method, gCategory, indent);
 
-        if (gCallStack == INVALID_HANDLE)
+        if (gCallStack == null)
             gCallStack = CreateArray(255);
 
         new size = GetArraySize(gCallStack);
@@ -349,7 +349,7 @@ public Native_TraceInto(Handle:plugin,numParams)
         {
             if (gCallLevel <= gVerbosity)
             {
-                decl String:buffer[1024], written;
+                charbuffer[1024], written;
                 if (numParams >= 3)
                 {
                     FormatNativeString(0, /* Use an output buffer */
@@ -384,14 +384,14 @@ public Native_TraceInto(Handle:plugin,numParams)
  * @param fmt: The format string for the message
  * @param ...: Format arguments (if any)
  * @noreturn
- * native TraceReturn(const String:fmt[], any:...);
+ * native TraceReturn(const char[]fmt[], any:...);
  */
-public Native_TraceReturn(Handle:plugin,numParams)
+public Native_TraceReturn(Handle plugin,numParams)
 {
     if (gEnable)
     {
-        decl String:prefix[255];
-        if (gCallStack == INVALID_HANDLE)
+        charprefix[255];
+        if (gCallStack == null)
             prefix[0] = '\0';
         else
         {
@@ -410,7 +410,7 @@ public Native_TraceReturn(Handle:plugin,numParams)
         {
             if (gCallLevel <= gVerbosity)
             {
-                decl String:buffer[1024], written;
+                charbuffer[1024], written;
                 if (numParams >= 1)
                 {
                   FormatNativeString(0, /* Use an output buffer */
@@ -451,16 +451,16 @@ public Native_TraceReturn(Handle:plugin,numParams)
  * @param fmt: The format string for the message
  * @param ...: Format arguments (if any)
  * @noreturn
- * native Trace(const String:fmt[], any:...);
+ * native Trace(const char[]fmt[], any:...);
  */
-public Native_TraceMessage(Handle:plugin,numParams)
+public Native_TraceMessage(Handle plugin,numParams)
 {
     if (gEnable)
     {
         if (GetNativeCell(1) <= gVerbosity)
         {
-            decl String:prefix[255];
-            if (gCallStack == INVALID_HANDLE)
+            charprefix[255];
+            if (gCallStack == null)
                 prefix[0] = '\0';
             else
             {   
@@ -474,7 +474,7 @@ public Native_TraceMessage(Handle:plugin,numParams)
             new checkOK = CheckCategory();
             if (checkOK > 0 || (checkOK == 0 && CheckPrefix(prefix) >= 0))
             {
-                decl String:buffer[1024], written;
+                charbuffer[1024], written;
                 if (numParams >= 1)
                 {
                     FormatNativeString(0, /* Use an output buffer */
@@ -502,15 +502,15 @@ public Native_TraceMessage(Handle:plugin,numParams)
  * @param fmt: The format string for the message
  * @param ...: Format arguments (if any)
  * @noreturn
- * native TraceDump(const String:fmt[], any:...);
+ * native TraceDump(const char[]fmt[], any:...);
  */
-public Native_TraceDump(Handle:plugin,numParams)
+public Native_TraceDump(Handle plugin,numParams)
 {
     if (gEnable)
     {
         new last;
-        decl String:prefix[255];
-        if (gCallStack == INVALID_HANDLE)
+        charprefix[255];
+        if (gCallStack == null)
         {
             last = 0;
             prefix[0] = '\0';
@@ -530,7 +530,7 @@ public Native_TraceDump(Handle:plugin,numParams)
         new checkOK = CheckCategory();
         if (checkOK > 0 || (checkOK == 0 && CheckPrefix(prefix) >= 0))
         {
-            decl String:buffer[1024], written;
+            charbuffer[1024], written;
             if (numParams >= 1)
             {
                 FormatNativeString(0, /* Use an output buffer */
@@ -549,7 +549,7 @@ public Native_TraceDump(Handle:plugin,numParams)
                 PrintToServer("*%s%s", prefix, buffer);
             }
 
-            decl String:name[64];
+            charname[64];
             while (last > 0)
             {
                 ExtractName(prefix, name, sizeof(name));
@@ -569,7 +569,7 @@ public Native_TraceDump(Handle:plugin,numParams)
  * @param category: String to place into the category.
  * @noreturn
  */
-public Native_SetCategory(Handle:plugin,numParams)
+public Native_SetCategory(Handle plugin,numParams)
 {
     GetNativeString(1,gCategory,sizeof(gCategory));
 }
@@ -578,7 +578,7 @@ public Native_SetCategory(Handle:plugin,numParams)
  * Resets the current category to nothing
  * @noreturn
  */
-public Native_ResetCategory(Handle:plugin,numParams)
+public Native_ResetCategory(Handle plugin,numParams)
 {
     gCategory[0] = '\0';
 }
@@ -589,7 +589,7 @@ public Native_ResetCategory(Handle:plugin,numParams)
  * @param maxlength: The size of the category buffer.
  * @noreturn
  */
-public Native_GetCategory(Handle:plugin,numParams)
+public Native_GetCategory(Handle plugin,numParams)
 {
     SetNativeString(1, gCategory, GetNativeCell(2));
 }
@@ -600,20 +600,20 @@ public Native_GetCategory(Handle:plugin,numParams)
  * @param maxlength: The size of the name buffer.
  * @noreturn
  */
-public Native_GetTraceMethod(Handle:plugin,numParams)
+public Native_GetTraceMethod(Handle plugin,numParams)
 {
     if (gEnable)
     {
-        if (gCallStack == INVALID_HANDLE)
+        if (gCallStack == null)
             return;
 
         new last = GetArraySize(gCallStack)-1;
         if (last >= 0)
         {
-            decl String:prefix[255];
+            charprefix[255];
             GetArrayString(gCallStack, last, prefix, sizeof(prefix));
 
-            decl String:name[64];
+            charname[64];
             ExtractName(prefix, name, sizeof(name));
 
             new maxlength = GetNativeCell(2);

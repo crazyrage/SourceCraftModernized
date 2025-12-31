@@ -14,7 +14,7 @@
 #include <sdktools>
 #include <entlimit>
 
-stock DissolveRagdoll(client, Float:delay=0.0)
+stock DissolveRagdoll(client, float delay=0.0)
 {
     if (delay > 0.0)
     {
@@ -22,11 +22,11 @@ stock DissolveRagdoll(client, Float:delay=0.0)
     }
     else
     {
-        Dissolve(INVALID_HANDLE, client);
+        Dissolve(null, client);
     }
 }
 
-public Action:Dissolve(Handle:timer, any:userid)
+public Action Dissolve(Handle timer, any:userid)
 {
     new client = GetClientOfUserId(userid);
     if (client > 0 && IsValidEntity(client))
@@ -44,7 +44,7 @@ public Action:Dissolve(Handle:timer, any:userid)
             return;
         }
 
-        new String:dname[32];
+        char dname[32];
         Format(dname, sizeof(dname), "dis_%d", client);
 
         new ent = CreateEntityByName("env_entity_dissolver");

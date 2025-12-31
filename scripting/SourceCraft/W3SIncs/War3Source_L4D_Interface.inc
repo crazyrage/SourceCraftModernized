@@ -52,7 +52,7 @@ enum L4D2GlowType
  * Bug: If you kick the infected then this function will still return true
  * for the client until he gets properly freed from a infected attack.
  */
-native bool:War3_L4D_IsHelpless(client);  
+native bool War3_L4D_IsHelpless(client);  
 
 // TODO: Remove identifier? Clients can only have one progressbar at a time
 //		 anyway... 
@@ -68,7 +68,7 @@ native bool:War3_L4D_IsHelpless(client);
  * returns a identifier to clearly identify client - progressbar. 
  * -1 if there was an error
  */
-native War3_L4D_ActivateProgressBar(client, Float:time);
+native War3_L4D_ActivateProgressBar(client, float time);
 /**
  * Cancels the current Progressbar on the given client
  */
@@ -77,7 +77,7 @@ native War3_L4D_CancelProgressBar(client);
 /**
  * Check if the client is currently in progress bar mode
  */
-native bool:War3_L4D_HasProgressBar(client);
+native bool War3_L4D_HasProgressBar(client);
 
 /**
  * Forwards for the progress bar. 
@@ -87,20 +87,20 @@ forward HasAbortedProgress(client, progress_id);
 
 //  * type == 0: Fire
 //  * type != 0: Explosion
-native War3_L4D_Explode(attacker, Float:pos[3], type);
+native War3_L4D_Explode(attacker, float pos[3], type);
 #endif
 
-stock bool:War3_IsL4DEngine() {
+stock bool War3_IsL4DEngine() {
 	return (War3_GetGame() == Game_L4D || War3_GetGame() == Game_L4D2);
 }
 
-stock bool:War3_IsPlayerIncapped(client)
+stock bool War3_IsPlayerIncapped(client)
 {
 	if (GetEntProp(client, Prop_Send, "m_isIncapacitated", 1)) return true;
 	return false;
 }
 
-stock bool:War3_IsL4DZombieEntity(iEntity) {
+stock bool War3_IsL4DZombieEntity(iEntity) {
 	if (War3_IsL4DEngine()) {
 		return (War3_IsCommonInfected(iEntity) || War3_IsWitch(iEntity));
 	}
@@ -109,11 +109,11 @@ stock bool:War3_IsL4DZombieEntity(iEntity) {
 }
 
 // Finds all zombies, common and uncommon
-stock bool:War3_IsCommonInfected(iEntity)
+stock bool War3_IsCommonInfected(iEntity)
 {
 	if(iEntity > 0 && IsValidEntity(iEntity) && IsValidEdict(iEntity))
 	{
-		decl String:strClassName[64];
+		char strClassName[64];
 		GetEdictClassname(iEntity, strClassName, sizeof(strClassName));
 		
 		return StrEqual(strClassName, "infected");
@@ -122,11 +122,11 @@ stock bool:War3_IsCommonInfected(iEntity)
 }  
 
 // Check if a infected is a uncommon one
-stock bool:War3_IsUncommonInfected(iEntity)
+stock bool War3_IsUncommonInfected(iEntity)
 {
 	if(iEntity > 0 && IsValidEntity(iEntity) && IsValidEdict(iEntity))
 	{
-		decl String:ModelName[128];
+		char ModelName[128];
 		GetEntPropString(iEntity, Prop_Data, "m_ModelName", ModelName, sizeof(ModelName));
 		
 		return (StrEqual(ModelName, "models/infected/common_male_riot.mdl") ||
@@ -140,11 +140,11 @@ stock bool:War3_IsUncommonInfected(iEntity)
 	return false;
 }
 
-stock bool:War3_IsWitch(iEntity)
+stock bool War3_IsWitch(iEntity)
 {
 	if(iEntity > 0 && IsValidEntity(iEntity) && IsValidEdict(iEntity))
 	{
-		decl String:strClassName[64];
+		char strClassName[64];
 		GetEdictClassname(iEntity, strClassName, sizeof(strClassName));
 		return StrEqual(strClassName, "witch");
 	}
@@ -152,7 +152,7 @@ stock bool:War3_IsWitch(iEntity)
 }
 
 // To check if an infected in versus hasn't spawned yet
-stock bool:IsPlayerGhost(client)
+stock bool IsPlayerGhost(client)
 {
 	if (GetEntProp(client, Prop_Send, "m_isGhost", 1) == 1)
 	{
@@ -162,19 +162,19 @@ stock bool:IsPlayerGhost(client)
 	return false;
 }
 
-stock Float:GetSurvivorTempHealth(client)
+stock float GetSurvivorTempHealth(client)
 {
-	new Float:temphp = GetEntPropFloat(client, Prop_Send, "m_healthBuffer") - ((GetGameTime() - GetEntPropFloat(client, Prop_Send, "m_healthBufferTime")) * GetConVarFloat(FindConVar("pain_pills_decay_rate")));
+	float temphp = GetEntPropFloat(client, Prop_Send, "m_healthBuffer") - ((GetGameTime() - GetEntPropFloat(client, Prop_Send, "m_healthBufferTime")) * GetConVarFloat(FindConVar("pain_pills_decay_rate")));
 	return temphp > 0.0 ? temphp : 0.0;
 }
 
-stock SetSurvivorTempHealth(client, Float:hp)
+stock SetSurvivorTempHealth(client, float hp)
 {
 	SetEntPropFloat(client, Prop_Send, "m_healthBufferTime", GetGameTime());
 	SetEntPropFloat(client, Prop_Send, "m_healthBuffer", hp);
 }
 
-stock GetMaxMagSize(const String:weapon[])
+stock GetMaxMagSize(const char weapon[])
 {
 	if (War3_IsL4DEngine())
 	{
@@ -229,12 +229,12 @@ stock GetMaxMagSize(const String:weapon[])
 
 stock GetCurrentBackupAmmo(client)
 {
-	decl String:weapon[64];
-	new iWeapon = GetPlayerWeaponSlot(client, 0);
+	char weapon[64];
+	int iWeapon = GetPlayerWeaponSlot(client, 0);
 	GetEdictClassname(iWeapon, weapon, sizeof(weapon));
 	
-	new iAmmoOffset = FindDataMapOffs(client, "m_iAmmo");
-	new backup_ammo = 0;
+	int iAmmoOffset = FindDataMapOffs(client, "m_iAmmo");
+	int backup_ammo = 0;
 
 	if (StrEqual(weapon, "weapon_rifle", false) || StrEqual(weapon, "weapon_rifle_ak47", false) || StrEqual(weapon, "weapon_rifle_desert", false) || StrEqual(weapon, "weapon_rifle_sg552", false))
 	{
@@ -268,7 +268,7 @@ stock GetCurrentBackupAmmo(client)
 	return backup_ammo;
 }
 
-stock GetMaxBackupAmmo(const String:weapon[])
+stock GetMaxBackupAmmo(const char weapon[])
 {
 	if (War3_IsL4DEngine())
 	{
@@ -311,11 +311,11 @@ stock GetMaxBackupAmmo(const String:weapon[])
 
 stock SetBackupAmmo(client, ammo)
 {
-	decl String:weapon[64];
-	new iWeapon = GetPlayerWeaponSlot(client, 0);
+	char weapon[64];
+	int iWeapon = GetPlayerWeaponSlot(client, 0);
 	GetEdictClassname(iWeapon, weapon, sizeof(weapon));
 	
-	new iAmmoOffset = FindDataMapOffs(client, "m_iAmmo");
+	int iAmmoOffset = FindDataMapOffs(client, "m_iAmmo");
 
 	if (StrEqual(weapon, "weapon_rifle", false) || StrEqual(weapon, "weapon_rifle_ak47", false) || StrEqual(weapon, "weapon_rifle_desert", false) || StrEqual(weapon, "weapon_rifle_sg552", false))
 	{
@@ -380,9 +380,9 @@ stock GetEntityHP(entity)
  * 1. Give player the weapons he should use on Spawn.
  * 2. SDKHook(client, SDKHook_WeaponCanUse, OnWeaponCanUse);
  * 
- * public Action:OnWeaponCanUse(client, weapon)
+ * public Action OnWeaponCanUse(client, weapon)
 {
-	decl String:entityName[64];
+	char entityName[64];
 	GetEdictClassname(weapon, entityName, sizeof(entityName));
 	
 	if (IsWeapon(entityName))
@@ -394,7 +394,7 @@ stock GetEntityHP(entity)
  */
 
 
-stock bool:IsWeapon(const String:weaponName[])
+stock bool IsWeapon(const char weaponName[])
 {
 	return (StrEqual(weaponName, "weapon_rifle", false) || 
 			StrEqual(weaponName, "weapon_rifle_ak47", false) || 
@@ -419,7 +419,7 @@ stock bool:IsWeapon(const String:weaponName[])
 		
 }
 
-stock CreateProgressBar(client, Float:fTimeDur)
+stock CreateProgressBar(client, float fTimeDur)
 {
 	SetEntPropFloat(client, Prop_Send, "m_flProgressBarDuration", fTimeDur);
 	SetEntPropFloat(client, Prop_Send, "m_flProgressBarStartTime", GetGameTime());
@@ -472,7 +472,7 @@ stock L4D2_SetWeaponUpgrades(weapon, upgrades)
  */
 stock L4D2_GetInfectedAttacker(client)
 {
-	new attacker;
+	int attacker;
 
 	/* Charger */
 	attacker = GetEntPropEnt(client, Prop_Send, "m_pummelAttacker");
@@ -508,7 +508,7 @@ stock L4D2_GetInfectedAttacker(client)
  */
 stock L4D2_GetSurvivorVictim(client)
 {
-	new victim;
+	int victim;
 
 	/* Charger */
 	victim = GetEntPropEnt(client, Prop_Send, "m_pummelVictim");
@@ -600,9 +600,9 @@ stock L4D2_GetPlayerUseActionOwner(client)
  * @return				True if using a mounted weapon, false otherwise.
  * @error				Invalid client index.
  */
-stock bool:L4D_IsPlayerUsingMountedWeapon(client)
+stock bool L4D_IsPlayerUsingMountedWeapon(client)
 {
-	return bool:GetEntProp(client, Prop_Send, "m_usingMountedWeapon");
+	return bool GetEntProp(client, Prop_Send, "m_usingMountedWeapon");
 }
 
 /**
@@ -639,7 +639,7 @@ stock L4D_SetPlayerReviveCount(client, zzcount)
  * @return				Intensity.
  * @error				Invalid client index.
  */
-stock Float:L4D_GetPlayerIntensity(client)
+stock float L4D_GetPlayerIntensity(client)
 {
 	/* This format is used to keep consistency with the Director which also
 	 * uses 0.0 for calm and 1.0 for stressed */
@@ -654,11 +654,11 @@ stock Float:L4D_GetPlayerIntensity(client)
  *
  * @return				Average intensity level for survivors.
  */
-stock Float:L4D_GetAvgSurvivorIntensity()
+stock float L4D_GetAvgSurvivorIntensity()
 {
-	new intensityTotal = 0;
-	new intensityMaxTotal = 0;
-	for (new i = 1; i <= MaxClients; i++)
+	int intensityTotal = 0;
+	int intensityMaxTotal = 0;
+	for (int i = 1; i <= MaxClients; i++)
 	{
 		if (!IsClientInGame(i) ||
 			L4DTeam:GetClientTeam(i) != L4DTeam_Survivor ||
@@ -687,7 +687,7 @@ stock Float:L4D_GetAvgSurvivorIntensity()
  * @noreturn
  * @error				Invalid client index.
  */
-stock L4D_SetPlayerIntensity(client, Float:intensity)
+stock L4D_SetPlayerIntensity(client, float intensity)
 {
 	SetEntProp(client, Prop_Send, "m_clientIntensity", RoundToNearest(intensity * 100.0);
 }
@@ -702,9 +702,9 @@ stock L4D_SetPlayerIntensity(client, Float:intensity)
  * @return				True if player is calm, false otherwise.
  * @error				Invalid client index.
  */
-stock bool:L4D_IsPlayerCalm(client)
+stock bool L4D_IsPlayerCalm(client)
 {
-	return bool:GetEntProp(client, Prop_Send, "m_isCalm");
+	return bool GetEntProp(client, Prop_Send, "m_isCalm");
 }
 
 /**
@@ -718,7 +718,7 @@ stock bool:L4D_IsPlayerCalm(client)
  * @noreturn
  * @error				Invalid client index.
  */
-stock L4D_SetPlayerCalmState(client, bool:isCalm)
+stock L4D_SetPlayerCalmState(client, bool isCalm)
 {
 	SetEntProp(client, Prop_Send, "m_isCalm", _:isCalm);
 }
@@ -730,9 +730,9 @@ stock L4D_SetPlayerCalmState(client, bool:isCalm)
  * @return				True if on third strike, false otherwise.
  * @error				Invalid client index.
  */
-stock bool:L4D_IsPlayerOnThirdStrike(client)
+stock bool L4D_IsPlayerOnThirdStrike(client)
 {
-	return bool:GetEntProp(client, Prop_Send, "m_bIsOnThirdStrike");
+	return bool GetEntProp(client, Prop_Send, "m_bIsOnThirdStrike");
 }
 
 /**
@@ -743,7 +743,7 @@ stock bool:L4D_IsPlayerOnThirdStrike(client)
  * @noreturn
  * @error				Invalid client index.
  */
-stock L4D_SetPlayerThirdStrikeState(client, bool:onThirdStrike)
+stock L4D_SetPlayerThirdStrikeState(client, bool onThirdStrike)
 {
 	SetEntProp(client, Prop_Send, "m_bIsOnThirdStrike", _:onThirdStrike);
 }
@@ -760,9 +760,9 @@ stock L4D_SetPlayerThirdStrikeState(client, bool:onThirdStrike)
  * @return				True if player is going to die, false otherwise.
  * @error				Invalid client index.
  */
-stock bool:L4D_IsPlayerGoingToDie(client)
+stock bool L4D_IsPlayerGoingToDie(client)
 {
-	return bool:GetEntProp(client, Prop_Send, "m_isGoingToDie");
+	return bool GetEntProp(client, Prop_Send, "m_isGoingToDie");
 }
 
 /**
@@ -773,7 +773,7 @@ stock bool:L4D_IsPlayerGoingToDie(client)
  * @noreturn
  * @error				Invalid client index.
  */
-stock L4D_SetPlayerIsGoingToDie(client, bool:isGoingToDie)
+stock L4D_SetPlayerIsGoingToDie(client, bool isGoingToDie)
 {
 	SetEntProp(client, Prop_Send, "m_isGoingToDie", _:isGoingToDie);
 }
@@ -786,7 +786,7 @@ stock L4D_SetPlayerIsGoingToDie(client, bool:isGoingToDie)
  * @noreturn
  * @error				Invalid entity index or entity does not support glow.
  */
-stock L4D2_SetEntGlow_Flashing(entity, bool:flashing)
+stock L4D2_SetEntGlow_Flashing(entity, bool flashing)
 {
 	SetEntProp(entity, Prop_Send, "m_bFlashing", _:flashing);
 }
@@ -843,12 +843,12 @@ stock L4D2_SetEntGlow_Range(entity, range)
  * @return				True if glow was set, false if entity does not support
  *						glow.
  */
-stock bool:L4D2_SetEntGlow(entity, L4D2GlowType:type, range, minRange, colorOverride[3], bool:flashing)
+stock bool L4D2_SetEntGlow(entity, L4D2GlowType:type, range, minRange, colorOverride[3], bool flashing)
 {
-	decl String:netclass[128];
+	char netclass[128];
 	GetEntityNetClass(entity, netclass, 128);
 
-	new offset = FindSendPropInfo(netclass, "m_iGlowType");
+	int offset = FindSendPropInfo(netclass, "m_iGlowType");
 	if (offset < 1)
 	{
 		return false;	
@@ -890,16 +890,16 @@ stock L4D_GetResourceEntity()
  *
  * @return				True if finale is active, false otherwise.
  */
-stock bool:L4D_IsFinaleActive()
+stock bool L4D_IsFinaleActive()
 {
-	new entity = L4D_GetResourceEntity();
+	int entity = L4D_GetResourceEntity();
 
 	if (entity == -1)
 	{
 		return false;
 	}
 
-	return bool:GetEntProp(entity, Prop_Send, "m_isFinale", 1);
+	return bool GetEntProp(entity, Prop_Send, "m_isFinale", 1);
 }
 
 /**
@@ -934,7 +934,7 @@ stock L4D_SetPlayerShovePenalty(client, shovePenalty)
  * @noreturn
  * @error				Invalid client index.
  */
-stock L4D_SetPlayerIncapacitatedState(client, bool:isIncapacitated)
+stock L4D_SetPlayerIncapacitatedState(client, bool isIncapacitated)
 {
 	SetEntProp(client, Prop_Send, "m_isIncapacitated", isIncapacitated, 1);
 }

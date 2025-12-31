@@ -18,9 +18,9 @@
  * @return The return value will be the item index or -1 if there was a problem.
  */
 #if !defined SOURCECRAFT
-native War3_CreateShopItem(String:name[], String:shortname[], String:desc[], cost, bool:lost_upon_death=true);
+native War3_CreateShopItem(char[] name, char[] shortname, char[] desc, cost, bool lost_upon_death=true);
 #else
-stock War3_CreateShopItem(const String:name[], const String:shortname[], const String:desc[], cost, bool:lost_upon_death=true)
+stock War3_CreateShopItem(const char name[], const char shortname[], const char desc[], cost, bool lost_upon_death=true)
 {
     CreateShopItem(shortname, cost, .name=name, .desc=desc);
 }
@@ -28,9 +28,9 @@ stock War3_CreateShopItem(const String:name[], const String:shortname[], const S
 
 //translated
 #if !defined SOURCECRAFT
-native War3_CreateShopItemT(String:shortname[], cost, bool:lost_upon_death=true);
+native War3_CreateShopItemT(char[] shortname, cost, bool lost_upon_death=true);
 #else
-stock War3_CreateShopItemT(const String:shortname[], cost, bool:lost_upon_death=true)
+stock War3_CreateShopItemT(const char shortname[], cost, bool lost_upon_death=true)
 {
     CreateShopItem(shortname, cost);
 }
@@ -45,11 +45,11 @@ native War3_GetItemProperty(itemid,W3ItemProp:ITEM_PROPERTY);
 //remember itemid that is valid is more than 0
 //returns -1 if not found
 #if !defined SOURCECRAFT
-native War3_GetItemIdByShortname(String:itemshortname[]);
+native War3_GetItemIdByShortname(char[] itemshortname);
 
-native W3GetItemName(itemid,String:ret[],maxlen);
-native W3GetItemShortname(itemid,String:ret[],maxlen);
-native W3GetItemDescription(itemid,String:ret[],maxlen);
+native W3GetItemName(itemid,char[] ret,maxlen);
+native W3GetItemShortname(itemid,char[] ret,maxlen);
+native W3GetItemDescription(itemid,char[] ret,maxlen);
 #else
 #define War3_GetItemIdByShortname FindShopItem
 
@@ -61,11 +61,11 @@ native W3GetItemDescription(itemid,String:ret[],maxlen);
 #if !defined SOURCECRAFT // Not Implemented!
 native W3GetItemCost(itemid);
 native W3GetItemOrder(itemid);
-native W3ItemHasFlag(itemid,String:flagsearch[]);
+native W3ItemHasFlag(itemid,char[] flagsearch);
 #endif
 
 #if !defined SOURCECRAFT
-native W3GetItemCategory(itemid,String:retcatagorystr[],maxlen);
+native W3GetItemCategory(itemid,char[] retcatagorystr,maxlen);
 native W3GetItemsLoaded(); //how many items are loaded?
 #else
 #define W3GetItemCategory GetItemCategory
@@ -73,8 +73,8 @@ native W3GetItemsLoaded(); //how many items are loaded?
 #endif
 
 #if !defined SOURCECRAFT // Not Implemented!
-native bool:W3IsItemDisabledGlobal(itemid);
-native bool:W3IsItemDisabledForRace(race,itemid);
+native bool W3IsItemDisabledGlobal(itemid);
+native bool W3IsItemDisabledForRace(race,itemid);
 #endif
 
 #if !defined SOURCECRAFT // Not Implemented!
@@ -97,7 +97,7 @@ native W3GetMaxGold();
  */
 #if !defined SOURCECRAFT
 native War3_GetOwnsItem(client, item);
-native War3_SetOwnsItem(client,item,bool:ownsitem);
+native War3_SetOwnsItem(client,item,bool ownsitem);
 #else
 #define War3_GetOwnsItem GetOwnsItem
 #define War3_SetOwnsItem SetOwnsItem

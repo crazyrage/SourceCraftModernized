@@ -13,7 +13,7 @@
 #include <sdktools>
 
 stock tf2_CloakMeterOffset;
-stock bool:tf2_CloakMeterSet = false;
+stock bool tf2_CloakMeterSet = false;
 
 stock TF2_GetCloakMeterOffset()
 {
@@ -25,7 +25,7 @@ stock TF2_GetCloakMeterOffset()
     return tf2_CloakMeterOffset;
 }
 
-stock Float:TF2_GetCloakMeter(client)
+stock Float TF2_GetCloakMeter(client)
 {
     if (IsClientConnected(client))
     {
@@ -35,7 +35,7 @@ stock Float:TF2_GetCloakMeter(client)
     return -1.0;
 }
 
-stock TF2_SetCloakMeter(client,Float:cloakMeter)
+stock TF2_SetCloakMeter(client,Float cloakMeter)
 {
     if (IsClientConnected(client))
     {

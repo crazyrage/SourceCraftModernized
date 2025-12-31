@@ -17,7 +17,7 @@
 
 #include "sc/plugins"
 
-new Float:g_AmpRange[][][] =
+float g_AmpRange[][][] =
 {
     {   // Slow, Undisguise, Decloak, Really Slow
         { 0.0,    0.0,   0.0,   0.0 },
@@ -51,7 +51,7 @@ new Float:g_AmpRange[][][] =
 
 stock static m_warpInRaceId, m_warpInUpgradeId;
 
-WarpInAmplifier(client, amp_level, raceId, upgradeId, bool:allowKrit)
+WarpInAmplifier(client, amp_level, raceId, upgradeId, bool allowKrit)
 {
     if (m_BuildAvailable)
     {
@@ -59,7 +59,7 @@ WarpInAmplifier(client, amp_level, raceId, upgradeId, bool:allowKrit)
         {
             PrepareAndEmitSoundToClient(client,deniedWav);
 
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
         }
@@ -70,12 +70,12 @@ WarpInAmplifier(client, amp_level, raceId, upgradeId, bool:allowKrit)
             DisplayMessage(client, Display_Ultimate,
                            "%t", "PreventedFromWarpingInAmplifier");
         }
-        else if (CanInvokeUpgrade(client, raceId, upgradeId, .charge=false))
+        else if (CanInvokeUpgrade(client, raceId, upgradeId, .char ge=false))
         {
             if (TF2_IsPlayerDisguised(client))
                 TF2_RemovePlayerDisguise(client);
 
-            new Handle:menu=CreateMenu(Amplifier_Selected);
+            Handle menu=CreateMenu(Amplifier_Selected);
             SetMenuTitle(menu,"[SC] %T", "ChooseAmplifier", client);
 
             new count = CountConvertedBuildings(client, TFExtObject_Amplifier);
@@ -108,9 +108,9 @@ WarpInAmplifier(client, amp_level, raceId, upgradeId, bool:allowKrit)
     }
 }
 
-public Amplifier_Selected(Handle:menu,MenuAction:action,client,selection)
+public Amplifier_Selected(Handle menu,MenuAction:action,client,selection)
 {
-    static const String:typeName[][] = { "SlowAmplifier", "JarAmplifier", "FireAmplifier", "TauntAmplifier", "UndisguiseAmplifier",
+    static const char typeName[][] = { "SlowAmplifier", "JarAmplifier", "FireAmplifier", "TauntAmplifier", "UndisguiseAmplifier",
                                          "DecloakAmplifier", "BuffAmplifier", "KritAmplifier", "UberAmplifier", "MilkAmplifier",
                                          "DefenseAmplifier", "BleedAmplifier", "StunAmplifier", "SlowAmplifier", "RegenAmplifier",
                                          "DeathAmplifier" };
@@ -139,7 +139,7 @@ public Amplifier_Selected(Handle:menu,MenuAction:action,client,selection)
         
         if (GetRace(client) == m_warpInRaceId)
         {
-            decl String:SelectionInfo[12];
+            char SelectionInfo[12];
             GetMenuItem(menu,selection,SelectionInfo,sizeof(SelectionInfo));
 
             new item = StringToInt(SelectionInfo);
@@ -158,7 +158,7 @@ public Amplifier_Selected(Handle:menu,MenuAction:action,client,selection)
                 {
                     PrepareAndEmitSoundToClient(client,deniedWav);
 
-                    decl String:upgradeName[64];
+                    char upgradeName[64];
                     GetUpgradeName(m_warpInRaceId, m_warpInUpgradeId, upgradeName, sizeof(upgradeName), client);
                     DisplayMessage(client, Display_Ultimate,
                                    "%t", "YouHaveDied", upgradeName);
@@ -167,7 +167,7 @@ public Amplifier_Selected(Handle:menu,MenuAction:action,client,selection)
                 {
                     PrepareAndEmitSoundToClient(client,deniedWav);
 
-                    decl String:upgradeName[64];
+                    char upgradeName[64];
                     GetUpgradeName(m_warpInRaceId, m_warpInUpgradeId, upgradeName, sizeof(upgradeName), client);
                     DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
                 }
@@ -242,7 +242,7 @@ public Amplifier_Selected(Handle:menu,MenuAction:action,client,selection)
 
                     PrepareAndEmitSoundToAll(recallDstWav,client);
 
-                    decl String:ampName[64];
+                    char ampName[64];
                     Format(ampName, sizeof(ampName), "%T", typeName[item], client);
                     DisplayMessage(client,Display_Ultimate, "%t", "WarpedIn", ampName);
                     CreateCooldown(client, m_warpInRaceId, m_warpInUpgradeId);

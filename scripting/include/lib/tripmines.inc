@@ -16,7 +16,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of the Tripmines plugin.
  * @return		    	none
  */
-native ControlTripmines(bool:plugin_only=true);
+native ControlTripmines(bool plugin_only=true);
 
 /**
  * Give a player one or more tripmines to plant
@@ -62,7 +62,7 @@ native SubTripmines(client,number=1);
  * @param allowed   Set to  true to return number allowed, otherwise
  * @return			returns number of remaining tripmines.
  */
-native HasTripmines(client,bool:allowed=false);
+native HasTripmines(client,bool allowed=false);
 
 /**
  * Sets (Plants) a tripmine.
@@ -70,7 +70,7 @@ native HasTripmines(client,bool:allowed=false);
  * @param index 	Client index
  * @return			true if a Tripmine was successfully set.
  */
-native bool:SetTripmine(client);
+native bool SetTripmine(client);
 
 /**
  * Counts how many tripmines the player has active.
@@ -85,14 +85,14 @@ native CountTripmines(client);
  * @param client 	Client index of the player setting the tripmine
  * @return		  	Plugin_Stop will prevent the tripmine from being set.
  */
-forward Action:OnSetTripmine(client);
+forward Action OnSetTripmine(client);
 
 /**
  * Gets called when when a tripmine explodes
  * @param client 	Client index of the player that set the tripmine
  * @return		  	none
  */
-forward Action:OnTripmineExplode(client);
+forward Action OnTripmineExplode(client);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

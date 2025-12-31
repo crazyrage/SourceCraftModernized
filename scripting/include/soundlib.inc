@@ -25,9 +25,9 @@ public Extension:__ext_geoip =
  *
  * @param file                File to open
  * @param relativeToSound    if true, it is relative to the sound directory, otherwise you have to build the path yourself
- * @return                    A Handle to the sound file, INVALID_HANDLE on open error.
+ * @return                    A Handle to the sound file, null on open error.
  */
-native Handle:OpenSoundFile(const String:file[], bool:relativeToSound=true);
+native Handle OpenSoundFile(const char[] file, bool relativeToSound=true);
 
 /**
  * Gets the length of the sound file in seconds
@@ -35,7 +35,7 @@ native Handle:OpenSoundFile(const String:file[], bool:relativeToSound=true);
  * @param hndl            Handle to the sound file.
  * @return                The song length in seconds
  */
-native GetSoundLength(Handle:hndl);
+native GetSoundLength(Handle hndl);
 
 /**
  * Gets the length of the sound file in seconds as float.
@@ -44,7 +44,7 @@ native GetSoundLength(Handle:hndl);
  * @param hndl            Handle to the sound file.
  * @return                The song length in seconds as float
  */
-native Float:GetSoundLengthFloat(Handle:hndl);
+native float GetSoundLengthFloat(Handle hndl);
 
 /**
  * Get the Bit rate of sound (kbps)
@@ -52,7 +52,7 @@ native Float:GetSoundLengthFloat(Handle:hndl);
  * @param hndl            Handle to the sound file
  * @return                sound bitrate (cell)
  */
-native GetSoundBitRate(Handle:hndl);
+native GetSoundBitRate(Handle hndl);
 
 /**
  * Get the Sampling rate of sound (hz)
@@ -60,7 +60,7 @@ native GetSoundBitRate(Handle:hndl);
  * @param hndl            Handle to the sound file
  * @return                sampling rate (cell)
  */
-native GetSoundSamplingRate(Handle:hndl);
+native GetSoundSamplingRate(Handle hndl);
 
 /**
  * Get the Artist of the sound
@@ -70,7 +70,7 @@ native GetSoundSamplingRate(Handle:hndl);
  * @param maxlength        Maximum length of the buffer.
  * @return                Length of string written to buffer.
  */
-native GetSoundArtist(Handle:hndl, String:buffer[], maxlength);
+native GetSoundArtist(Handle hndl, char[] buffer, maxlength);
 
 /**
  * Get the Track title of  sound
@@ -80,7 +80,7 @@ native GetSoundArtist(Handle:hndl, String:buffer[], maxlength);
  * @param maxlength        Maximum length of the buffer.
  * @return                Length of string written to buffer.
  */
-native GetSoundTitle(Handle:hndl, String:buffer[], maxlength);
+native GetSoundTitle(Handle hndl, char[] buffer, maxlength);
 
 /**
  * Get the Track number of the sound
@@ -88,7 +88,7 @@ native GetSoundTitle(Handle:hndl, String:buffer[], maxlength);
  * @param hndl            Handle to the sound file
  * @return                sound number (cell)
  */
-native GetSoundNum(Handle:hndl);
+native GetSoundNum(Handle hndl);
 
 /**
  * Get the Album of the sound
@@ -98,7 +98,7 @@ native GetSoundNum(Handle:hndl);
  * @param maxlength        Maximum length of the buffer.
  * @return                Length of string written to buffer.
  */
-native GetSoundAlbum(Handle:hndl, String:buffer[], maxlength);
+native GetSoundAlbum(Handle hndl, char[] buffer, maxlength);
 
 /**
  * Get the Year of  sound
@@ -106,7 +106,7 @@ native GetSoundAlbum(Handle:hndl, String:buffer[], maxlength);
  * @param hndl            Handle to the sound file
  * @return                sound year (cell)
  */
-native GetSoundYear(Handle:hndl);
+native GetSoundYear(Handle hndl);
 
 /**
  * Get the Comment of the sound
@@ -116,7 +116,7 @@ native GetSoundYear(Handle:hndl);
  * @param maxlength        Maximum length of the buffer.
  * @return                Length of string written to buffer.
  */
-native GetSoundComment(Handle:hndl, String:buffer[], maxlength);
+native GetSoundComment(Handle hndl, char[] buffer, maxlength);
 
 /**
  * Get the Genre of the sound
@@ -126,4 +126,4 @@ native GetSoundComment(Handle:hndl, String:buffer[], maxlength);
  * @param maxlength        Maximum length of the buffer.
  * @return                Length of string written to buffer.
  */
-native GetSoundGenre(Handle:hndl, String:buffer[], maxlength);
+native GetSoundGenre(Handle hndl, char[] buffer, maxlength);

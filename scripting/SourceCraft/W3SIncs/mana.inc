@@ -51,7 +51,7 @@
  * @noreturn
  * @error			Error will be thrown if client index is invalid, client is not ingame or invalid ManaType
  */
-native W3SetMana(client,ManaType:type,any:value,any:...);
+native W3SetMana(client,ManaType:type,any:value,any ...);
 
  /**
  * Retrieves the wanted value from the mana system
@@ -66,7 +66,7 @@ native W3SetMana(client,ManaType:type,any:value,any:...);
  * @return			Target value or noreturn on szPrefix and aColor(see retbuf param)
  * @error			Error will be thrown if client index is invalid, client is not ingame or invalid ManaType/optional params
  */
-native any:W3GetMana(client,ManaType:type,any:...);
+native any:W3GetMana(client,ManaType:type,any ...);
 
  /**
  * Prints the current mana value regardless of MANA_ACTIVE

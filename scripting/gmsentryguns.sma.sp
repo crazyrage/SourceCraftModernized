@@ -11,7 +11,7 @@
 #define PLUGINNAME = "Sentry guns"
 #define VERSION = "0.5.3"
 #define AUTHOR = ""
-public Plugin:myinfo = {
+public Plugin myinfo = {
     name = "Sentry guns",
     author = "-=|JFH|=-Naris",
     description = "Build sentry guns for mods other than TF2",
@@ -195,7 +195,7 @@ gets near it) also vicinity grenades with: explosions, gas, flashes and stuff co
 #include <amxmisc>
 #endif
 
-new sentry_max, sentry_cost1, sentry_cost2, sentry_cost3, sentry_team;
+int sentry_max, sentry_cost1, sentry_cost2, sentry_cost3, sentry_team;
 #define MAXSENTRIESTOTAL 20
 // ---------- Adjust below settings to your liking ---------------------------------------------------------------------------------------------------------------------------------
 //#define MAXPLAYERSENTRIES		3				// how many sentries each player can build
@@ -221,9 +221,9 @@ new sentry_max, sentry_cost1, sentry_cost2, sentry_cost3, sentry_team;
 // These are per sentry level, 1-3
 new const g_SENTRYFRAGREWARDS[3] = {300, 150, 150}		// how many $ you get if your sentry frags someone. If you built and upgraded to level 3 you would get $300 + $150 = $450. If built and upgraded all you would get $600.
 new const g_DMG[3] = {5, 10, 15}						// how much damage a bullet from a sentry does per hit
-new const Float:g_THINKFREQUENCIES[3] = {2.0, 1.0, 0.5}	// how often, in seconds, a sentry searches for targets when not locked at a target, a lower value means a sentry will lock on targets faster
-new const Float:g_HITRATIOS[3] = {0.6, 0.75, 0.85}		// how good a sentry is at hitting its target. 1.0 = always hit, 0.0 = never hit
-new const Float:g_HEALTHS[3] = {400.0, 800.0, 1600.0}	// how many HP a sentry has. Increase to make sentry sturdier
+new const float g_THINKFREQUENCIES[3] = {2.0, 1.0, 0.5}	// how often, in seconds, a sentry searches for targets when not locked at a target, a lower value means a sentry will lock on targets faster
+new const float g_HITRATIOS[3] = {0.6, 0.75, 0.85}		// how good a sentry is at hitting its target. 1.0 = always hit, 0.0 = never hit
+new const float g_HEALTHS[3] = {400.0, 800.0, 1600.0}	// how many HP a sentry has. Increase to make sentry sturdier
 //new const g_COST[3] = {1000, 500, 250};					// fun has a price, first is build cost, the next two upgrade costs
 #define COST_INIT get_pcvar_num(sentry_cost1)
 #define COST_UP get_pcvar_num(sentry_cost2)
@@ -267,12 +267,12 @@ new const Float:g_HEALTHS[3] = {400.0, 800.0, 1600.0}	// how many HP a sentry ha
 //#define SENTRY_VECENT_UPGRADER_2	SENTRY_VEC_PEOPLE + UPGRADER_2
 
 GetSentryPeople(sentry, who) {
-	new Float:people[3];
+	float people[3];
 	entity_get_vector(sentry, SENTRY_VEC_PEOPLE, people);
 	return floatround(people[who]);
 }
 SetSentryPeople(sentry, who, is) {
-	new Float:people[3];
+	float people[3];
 	entity_get_vector(sentry, SENTRY_VEC_PEOPLE, people);
 	people[who] = is + 0.0;
 	entity_set_vector(sentry, SENTRY_VEC_PEOPLE, people);
@@ -363,38 +363,38 @@ enum OBJECTTYPE {
 }
 
 // Global vars below
-new g_sentriesNum = 0;
-new g_sentries[MAXSENTRIES];
-new g_playerSentries[32] = {0, ...};
-new g_playerSentriesEdicts[32][MAXSENTRIESTOTAL];
-new g_sModelIndexFireball;
-new g_msgDamage;
-new g_msgDeathMsg;
-new g_msgScoreInfo;
-new g_msgHostagePos;
-new g_msgHostageK;
-new g_MAXPLAYERS;
+int g_sentriesNum = 0;
+int g_sentries[MAXSENTRIES];
+int g_playerSentries[32] = {0, ...};
+int g_playerSentriesEdicts[32][MAXSENTRIESTOTAL];
+int g_sModelIndexFireball;
+int g_msgDamage;
+int g_msgDeathMsg;
+int g_msgScoreInfo;
+int g_msgHostagePos;
+int g_msgHostageK;
+int g_MAXPLAYERS;
 //new g_MAXENTITIES;
-new Float:g_ONEEIGHTYTHROUGHPI;
+float g_ONEEIGHTYTHROUGHPI;
 //new g_hasSentries = 0;
-new Float:g_sentryOrigins[32][3];
-new g_aimSentry[32];
-new bool:g_inBuilding[32];
-new bool:g_resetArmouryThisRound = true;
-new bool:g_hasArmouries = false;
-new Float:g_lastGameTime = 1.0; // dunno, looks like get_systime() is always 1.0 first time...
-new Float:g_gameTime;
-new Float:g_deltaTime;
-new g_sentryStatusBuffer[32][256];
-new g_sentryStatusTrigger;
-new g_selectedSentry[32] = {-1, ...};
-new g_menuId; // used to store index of menu
-new g_lastObjectiveBuild[32];
-new g_inSpyCam[32];
-new Float:g_spyCamOffset[3] = {26.0, 29.0, 26.0}; // for the three levels, just what looks good...
+float g_sentryOrigins[32][3];
+int g_aimSentry[32];
+bool g_inBuilding[32];
+bool g_resetArmouryThisRound = true;
+bool g_hasArmouries = false;
+float g_lastGameTime = 1.0; // dunno, looks like get_systime() is always 1.0 first time...
+float g_gameTime;
+float g_deltaTime;
+int g_sentryStatusBuffer[32][256];
+int g_sentryStatusTrigger;
+int g_selectedSentry[32] = {-1, ...};
+int g_menuId; // used to store index of menu
+int g_lastObjectiveBuild[32];
+int g_inSpyCam[32];
+float g_spyCamOffset[3] = {26.0, 29.0, 26.0}; // for the three levels, just what looks good...
 //Shaman: For disabling building until some time passes after the new round
-new bool:g_allowBuild; //Building, upgrading and reparing is not allowed if this is false
-new sentry_wait; //The cvar
+bool g_allowBuild; //Building, upgrading and reparing is not allowed if this is false
+int sentry_wait; //The cvar
 // Global vars above
 
 
@@ -402,7 +402,7 @@ new sentry_wait; //The cvar
 public jointeam_event()
 {
 	//Get the di from the event data
-	new id= read_data(1);
+	int id= read_data(1);
 
 	//Remove sentries
 	while(GetSentryCount(id)>0)
@@ -425,7 +425,7 @@ public createsentryhere(id) {
 		return PLUGIN_HANDLED;
 	}
 
-	new sentry = AimingAtSentry(id, true);
+	int sentry = AimingAtSentry(id, true);
 	// if a valid sentry
 	// if within range
 	// we can try to upgrade/repair...
@@ -466,9 +466,9 @@ public sentry_build(id) {
 	}
 
 	if (GetSentryCount(id) >= MAXPLAYERSENTRIES) {
-		new wordnumbers[128];
+		int wordnumbers[128];
 		getnumbers(MAXPLAYERSENTRIES, wordnumbers, 127);
-		new maxsentries = MAXPLAYERSENTRIES; // stupid, but compiler gives warning on next line if a defined constant is used
+		int maxsentries = MAXPLAYERSENTRIES; // stupid, but compiler gives warning on next line if a defined constant is used
 		client_print(id, print_center, "You can only build %s sentry gun%s!", wordnumbers, maxsentries != 1 ? "s" : "");
 		return;
 	}
@@ -503,13 +503,13 @@ public sentry_build(id) {
 		}
 	}
 
-	new Float:playerOrigin[3];
+	float playerOrigin[3];
 	entity_get_vector(id, EV_VEC_origin, playerOrigin);
 
-	new Float:vNewOrigin[3];
-	new Float:vTraceDirection[3];
-	new Float:vTraceEnd[3];
-	new Float:vTraceResult[3];
+	float vNewOrigin[3];
+	float vTraceDirection[3];
+	float vTraceEnd[3];
+	float vTraceResult[3];
 	velocity_by_aim(id, 64, vTraceDirection); // get a velocity in the directino player is aiming, with a multiplier of 64...
 	vTraceEnd[0] = vTraceDirection[0] + playerOrigin[0]; // find the new max end position
 	vTraceEnd[1] = vTraceDirection[1] + playerOrigin[1];
@@ -545,14 +545,14 @@ GetSentryCount(id) {
 	*/
 }
 
-bool:GetStatusTrigger(player) {
+bool GetStatusTrigger(player) {
      if (!is_user_alive(player))
 	     return false;
 
      return g_sentryStatusTrigger & (1<<(player-1)) ? true : false;
 }
 
-SetStatusTrigger(player, bool:onOrOff) {
+SetStatusTrigger(player, bool onOrOff) {
 	if (onOrOff)
 		g_sentryStatusTrigger |= (1<<(player - 1));
 	else
@@ -562,14 +562,14 @@ SetStatusTrigger(player, bool:onOrOff) {
 IncreaseSentryCount(id, sentryEntity) {
 	g_playerSentriesEdicts[id - 1][g_playerSentries[id - 1]] = sentryEntity;
 	g_playerSentries[id - 1] = g_playerSentries[id - 1] + 1;
-	new Float:sentryOrigin[3], iSentryOrigin[3];
+	float sentryOrigin[3], iSentryOrigin[3];
 	entity_get_vector(sentryEntity, EV_VEC_origin, sentryOrigin);
 	FVecIVec(sentryOrigin, iSentryOrigin);
 
-	new name[32];
+	int name[32];
 	get_user_name(id, name, 31);
 	new CsTeams:builderTeam = cs_get_user_team(id);
-	for (new i = 1; i <= g_MAXPLAYERS; i++) {
+	for(int i= 1; i <= g_MAXPLAYERS; i++) {
 		if (!is_user_connected(i) || !is_user_alive(i) || cs_get_user_team(i) != builderTeam || id == i)
 			continue;
 		client_print(i, print_center, "%s has built a sentry gun %d units away from you", name, floatround(entity_range(i, sentryEntity)));
@@ -594,7 +594,7 @@ DecreaseSentryCount(id, sentry) {
 	// Note that sentry does not exist at this moment, it's just an old index that should get zeroed where it occurs in g_playerSentriesEdicts[id - 1][]
 	g_selectedSentry[id - 1] = -1;
 
-	for (new i = 0; i < g_playerSentries[id - 1]; i++) {
+	for(int i= 0; i < g_playerSentries[id - 1]; i++) {
 		if (g_playerSentriesEdicts[id - 1][i] == sentry) {
 			// Copy last sentry edict index to this one
 			g_playerSentriesEdicts[id - 1][i] = g_playerSentriesEdicts[id - 1][g_playerSentries[id - 1] - 1];
@@ -607,15 +607,15 @@ DecreaseSentryCount(id, sentry) {
 }
 
 /*
-SetHasSentry(id, bool:trueOrFalse) {
+SetHasSentry(id, bool trueOrFalse) {
 	//g_hasSentries[id - 1] = trueOrFalse;
 	//spambits(id, g_hasSentries);
 	if (trueOrFalse) {
 		g_hasSentries |= (1<<(id - 1));
-		new name[32];
+		int name[32];
 		get_user_name(id, name, 31);
 		new CsTeams:builderTeam = cs_get_user_team(id);
-		for (new i = 0; i < g_MAXPLAYERS; i++) {
+		for(int i= 0; i < g_MAXPLAYERS; i++) {
 			if (!is_user_connected(i) || !is_user_alive(i) || cs_get_user_team(i) != builderTeam || id == i)
 				continue;
 			client_print(i, print_center, "%s has built a sentry gun", name);
@@ -628,32 +628,32 @@ SetHasSentry(id, bool:trueOrFalse) {
 }
 */
 
-stock bool:CreateSentryBase(Float:origin[3], creator) {
+stock bool CreateSentryBase(float origin[3], creator) {
 	// Check contents of point, also trace lines from center to each of the eight ends
 	if (point_contents(origin) != CONTENTS_EMPTY || TraceCheckCollides(origin, 24.0)) {
 		return false;
 	}
 
 	// Check that a trace from origin straight down to ground results in a distance which is the same as player height over ground?
-	new Float:hitPoint[3], Float:originDown[3];
+	float hitPoint[3], float originDown[3];
 	originDown = origin;
 	originDown[2] = -5000.0; // dunno the lowest possible height...
 	trace_line(0, origin, originDown, hitPoint);
-	new Float:baDistanceFromGround = vector_distance(origin, hitPoint);
+	float baDistanceFromGround = vector_distance(origin, hitPoint);
 	//client_print(creator, print_chat, "Base distance from ground: %f", baDistanceFromGround);
 
-	new Float:difference = PLAYERORIGINHEIGHT - baDistanceFromGround;
+	float difference = PLAYERORIGINHEIGHT - baDistanceFromGround;
 	if (difference < -1 * HEIGHTDIFFERENCEALLOWED || difference > HEIGHTDIFFERENCEALLOWED) {
 		//client_print(creator, print_chat, "You can't build here! %f", difference);
 		return false;
 	}
 
-	new entbase = create_entity("func_breakable"); // func_wall
+	int entbase = create_entity("func_breakable"); // func_wall
 	if (!entbase)
 		return false;
 
 	// Set sentrybase health
-	new healthstring[16];
+	int healthstring[16];
 	num_to_str(floatround(g_HEALTHS[0]), healthstring, 15);
 	DispatchKeyValue(entbase, "health", healthstring);
 	DispatchKeyValue(entbase, "material", "6");
@@ -664,7 +664,7 @@ stock bool:CreateSentryBase(Float:origin[3], creator) {
 	// Set model
 	entity_set_model(entbase, "models/sentries/base.mdl"); // later set according to level
 	// Set size
-	new Float:mins[3], Float:maxs[3];
+	float mins[3], float maxs[3];
 	mins[0] = -16.0;
 	mins[1] = -16.0;
 	mins[2] = 0.0;
@@ -689,7 +689,7 @@ stock bool:CreateSentryBase(Float:origin[3], creator) {
 	// Set team
 	entity_set_int(entbase, BASE_INT_TEAM, get_user_team(creator));
 
-	new parms[2];
+	int parms[2];
 	parms[0] = entbase;
 	parms[1] = creator;
 
@@ -704,9 +704,9 @@ stock bool:CreateSentryBase(Float:origin[3], creator) {
 }
 
 public createsentryhead(parms[2]) {
-	new entbase = parms[0];
+	int entbase = parms[0];
 
-	new creator = parms[1];
+	int creator = parms[1];
 	if (!g_inBuilding[creator - 1]) {
 		// g_inBuilding is reset upon new round, then don't continue with building sentry head. Remove base and return.
 		if (is_valid_ent(entbase))
@@ -714,17 +714,17 @@ public createsentryhead(parms[2]) {
 		return;
 	}
 
-	new Float:origin[3];
+	float origin[3];
 	origin = g_sentryOrigins[creator - 1];
 
-	new ent = create_entity("func_breakable");
+	int ent = create_entity("func_breakable");
 	if (!ent) {
 		if (is_valid_ent(entbase));
 		remove_entity(entbase);
 		return;
 	}
 
-	new Float:mins[3], Float:maxs[3];
+	float mins[3], float maxs[3];
 	// Set true	size of base... if it exists!
 	// Also set sentry <-> base connections, if base still exists
 	if (is_valid_ent(entbase)) {
@@ -743,7 +743,7 @@ public createsentryhead(parms[2]) {
 	// Store our sentry in array
 	g_sentries[g_sentriesNum] = ent;
 
-	new healthstring[16];
+	int healthstring[16];
 	num_to_str(floatround(g_HEALTHS[0]), healthstring, 15);
 	DispatchKeyValue(ent, "health", healthstring);
 	DispatchKeyValue(ent, "material", "6");
@@ -796,19 +796,19 @@ public createsentryhead(parms[2]) {
 
 	// Top color
 #if defined RANDOM_TOPCOLOR
-	new topColor = random_num(0, 255);
+	int topColor = random_num(0, 255);
 #else
-	new topColor = cs_get_user_team(creator) == CS_TEAM_CT ? COLOR_TOP_CT : COLOR_TOP_T;
+	int topColor = cs_get_user_team(creator) == CS_TEAM_CT ? COLOR_TOP_CT : COLOR_TOP_T;
 #endif
 	// Bottom color
 #if defined RANDOM_BOTTOMCOLOR
-	new bottomColor = random_num(0, 255);
+	int bottomColor = random_num(0, 255);
 #else
-	new bottomColor = cs_get_user_team(creator) == CS_TEAM_CT ? COLOR_BOTTOM_CT : COLOR_BOTTOM_T;
+	int bottomColor = cs_get_user_team(creator) == CS_TEAM_CT ? COLOR_BOTTOM_CT : COLOR_BOTTOM_T;
 #endif
 
 	// Set color
-	new map = topColor | (bottomColor<<8);
+	int map = topColor | (bottomColor<<8);
 	//spambits(creator, topColor)
 	//spambits(creator, bottomColor)
 	//spambits(creator, map)
@@ -820,14 +820,14 @@ public createsentryhead(parms[2]) {
 
 	IncreaseSentryCount(creator, ent);
 
-	new parm[4];
+	int parm[4];
 	parm[0] = ent;
 	set_task(g_THINKFREQUENCIES[0], "sentry_think", TASKID_THINK + parm[0], parm, 1);
 
 	parm[1] = random_num(0, 1);
 	parm[2] = 0;
 	parm[3] = 0;
-	new directions = (random_num(0, 1)<<SENTRY_DIR_CANNON) | (random_num(0, 1)<<SENTRY_DIR_RADAR);
+	int directions = (random_num(0, 1)<<SENTRY_DIR_CANNON) | (random_num(0, 1)<<SENTRY_DIR_RADAR);
 	entity_set_int(ent, SENTRY_INT_PENDDIR, directions);
 
 	//entity_set_float(ent, SENTRY_FL_RADARDIR, random_num(0, 1) + 0.0)
@@ -846,16 +846,16 @@ public server_frame() {
 	g_deltaTime = g_gameTime - g_lastGameTime;
 	//server_print("Gametime: %f, Last gametime: %f", g_gameTime, g_lastGameTime);
 
-	new tempSentries[MAXSENTRIES], Float:angles[3];
+	int tempSentries[MAXSENTRIES], float angles[3];
 
-	new tempSentriesNum = 0;
-	for (new i = 0; i < g_sentriesNum; i++) {
+	int tempSentriesNum = 0;
+	for(int i= 0; i < g_sentriesNum; i++) {
 		//sentry_pendulum(g_sentries[i], g_deltaTime);
 		tempSentries[i] = g_sentries[i];
 		tempSentriesNum++;
 	}
 
-	for (new i = 0; i < tempSentriesNum; i++) {
+	for(int i= 0; i < tempSentriesNum; i++) {
 		//if (entity_get_float(tempSentries[i], EV_FL_nextthink) < g_game;
 		sentry_pendulum(tempSentries[i], g_deltaTime);
 		if (entity_get_edict(tempSentries[i], SENTRY_ENT_SPYCAM) != 0) {
@@ -868,13 +868,13 @@ public server_frame() {
 	return PLUGIN_CONTINUE;
 }
 
-sentry_pendulum(sentry, Float:deltaTime) {
+sentry_pendulum(sentry, float deltaTime) {
 	switch (entity_get_int(sentry, SENTRY_INT_FIRE)) {
 		case SENTRY_FIREMODE_NO: {
-			 new Float:angles[3];
+			 float angles[3];
 			 entity_get_vector(sentry, EV_VEC_angles, angles);
-			 new Float:baseAngle = entity_get_float(sentry, SENTRY_FL_ANGLE);
-			 new directions = entity_get_int(sentry, SENTRY_INT_PENDDIR);
+			 float baseAngle = entity_get_float(sentry, SENTRY_FL_ANGLE);
+			 int directions = entity_get_int(sentry, SENTRY_INT_PENDDIR);
 			 if (directions & (1<<SENTRY_DIR_CANNON)) {
 				 angles[1] -= (PENDULUM_INCREMENT * deltaTime); // PENDULUM_INCREMENT get_cvar_float("pend_inc");
 				 if (angles[1] < baseAngle - PENDULUM_MAX) {
@@ -897,7 +897,7 @@ sentry_pendulum(sentry, Float:deltaTime) {
 			 if (entity_get_int(sentry, SENTRY_INT_LEVEL) == SENTRY_LEVEL_3) {
 				 //new radarAngle = entity_get_byte(sentry, SENTRY_TILT_RADAR)
 				 //SENTRY_FL_RADARANGLE
-				 new Float:radarAngle = entity_get_float(sentry, SENTRY_FL_RADARANGLE);
+				 float radarAngle = entity_get_float(sentry, SENTRY_FL_RADARANGLE);
 
 				 if (directions & (1<<SENTRY_DIR_RADAR)) {
 					 radarAngle = radarAngle - RADAR_INCREMENT; // get_cvar_float("radar_increment")
@@ -922,10 +922,10 @@ sentry_pendulum(sentry, Float:deltaTime) {
 			 return;
 					 }
 		case SENTRY_FIREMODE_NUTS: {
-			   new Float:angles[3];
+			   float angles[3];
 			   entity_get_vector(sentry, EV_VEC_angles, angles);
 
-			   new Float:spinSpeed = entity_get_float(sentry, SENTRY_FL_SPINSPEED);
+			   float spinSpeed = entity_get_float(sentry, SENTRY_FL_SPINSPEED);
 			   if (entity_get_int(sentry, SENTRY_INT_PENDDIR) & (1<<SENTRY_DIR_CANNON)) {
 				   angles[1] -= (spinSpeed * deltaTime);
 				   if (angles[1] < 0.0) {
@@ -941,7 +941,7 @@ sentry_pendulum(sentry, Float:deltaTime) {
 			   // Increment speed raise
 			   entity_set_float(sentry, SENTRY_FL_SPINSPEED, (spinSpeed += random_float(1.0, 2.0)));
 
-			   new Float:maxSpin = entity_get_float(sentry, SENTRY_FL_MAXSPIN);
+			   float maxSpin = entity_get_float(sentry, SENTRY_FL_MAXSPIN);
 			   if (maxSpin == 0.0) {
 				   // Set rotation speed to explode at
 				   entity_set_float(sentry, SENTRY_FL_MAXSPIN, maxSpin = random_float(500.0, 750.0));
@@ -962,8 +962,8 @@ sentry_pendulum(sentry, Float:deltaTime) {
 
 // Checks the contents of eight points corresponding to the bbox around ent origin. Also does a trace from origin to each point. If anything goes wrong, report a hit.
 // TODO: high bounds should get higher, so that building in tight places not gets sentries stuck in roof... TraceCheckCollides
-bool:TraceCheckCollides(Float:origin[3], const Float:BOUNDS) {
-     new Float:traceEnds[8][3], Float:traceHit[3], hitEnt;
+bool TraceCheckCollides(float origin[3], const float BOUNDS) {
+     float traceEnds[8][3], float traceHit[3], hitEnt;
 
      // x, z, y
      traceEnds[0][0] = origin[0] - BOUNDS;
@@ -998,14 +998,14 @@ bool:TraceCheckCollides(Float:origin[3], const Float:BOUNDS) {
      traceEnds[7][1] = origin[1] + BOUNDS;
      traceEnds[7][2] = origin[2] - BOUNDS;
 
-     for (new i = 0; i < 8; i++) {
+     for(int i= 0; i < 8; i++) {
 	     if (point_contents(traceEnds[i]) != CONTENTS_EMPTY)
 		     return true;
 
 	     hitEnt = trace_line(0, origin, traceEnds[i], traceHit);
 	     if (hitEnt != 0)
 		     return true;
-	     for (new j = 0; j < 3; j++) {
+	     for(int j= 0; j < 3; j++) {
 		     if (traceEnds[i][j] != traceHit[j])
 			     return true;
 	     }
@@ -1019,9 +1019,9 @@ bool:TraceCheckCollides(Float:origin[3], const Float:BOUNDS) {
 // coord, coord, coord (start)
 // coord, coord, coord (end)
 
-tracer(Float:start[3], Float:end[3]) {
+tracer(float start[3], float end[3]) {
 	//new start_[3];
-	new start_[3], end_[3];
+	int start_[3], end_[3];
 	FVecIVec(start, start_);
 	FVecIVec(end, end_);
 	message_begin(MSG_BROADCAST, SVC_TEMPENTITY); //  MSG_PAS MSG_BROADCAST
@@ -1047,8 +1047,8 @@ tracer(Float:start[3], Float:end[3]) {
 // byte (flags)
 */
 
-stock create_explosion(Float:origin_[3]) {
-	new origin[3];
+stock create_explosion(float origin_[3]) {
+	int origin[3];
 	FVecIVec(origin_, origin);
 	//client_print(0, print_chat, "Creating explosion at %d %d %d", origin[0], origin[1], origin[2])
 
@@ -1072,8 +1072,8 @@ stock create_explosion(Float:origin_[3]) {
 
 	// Hurt ppl in vicinity
 
-	new Float:playerOrigin[3], Float:distance, Float:flDmgToDo, Float:dmgbase = DMG_EXPLOSION_TAKE + 0.0, newHealth;
-	for (new i = 1; i <= g_MAXPLAYERS; i++) {
+	float playerOrigin[3], float distance, float flDmgToDo, float dmgbase = DMG_EXPLOSION_TAKE + 0.0, newHealth;
+	for(int i= 1; i <= g_MAXPLAYERS; i++) {
 		if (!is_user_alive(i) || get_user_godmode(i))
 			continue;
 
@@ -1108,9 +1108,9 @@ stock create_explosion(Float:origin_[3]) {
 public TicketToHell(player) {
 	if (!is_user_connected(player))
 		return;
-	new frags = get_user_frags(player);
+	int frags = get_user_frags(player);
 	user_kill(player, 1); // don't decrease frags
-	new parms[4];
+	int parms[4];
 	parms[0] = player;
 	parms[1] = frags;
 	parms[2] = cs_get_user_deaths(player);
@@ -1122,25 +1122,25 @@ public DelayedScoreInfoUpdate(parms[4]) {
 	scoreinfo_update(parms[0], parms[1], parms[2], parms[3]);
 }
 
-stock genericShock(Float:hitPointOrigin[3], Float:radius, classString[], maxEntsToFind, Float:power, OBJECTTYPE:objecttype) { // bool:isthisplayer, bool:isthisarmouryentity, bool:isthisgrenade/*, Float:pullup*/) {
-	new entList[32];
+stock genericShock(float hitPointOrigin[3], float radius, classString[], maxEntsToFind, float power, OBJECTTYPE:objecttype) { // bool isthisplayer, bool isthisarmouryentity, bool isthisgrenade/*, float pullup*/) {
+	int entList[32];
 	if (maxEntsToFind > 32)
 		maxEntsToFind = 32;
 
-	new entsFound = find_sphere_class(0, classString, radius, entList, maxEntsToFind, hitPointOrigin);
+	int entsFound = find_sphere_class(0, classString, radius, entList, maxEntsToFind, hitPointOrigin);
 
-	new Float:entOrigin[3];
-	new Float:velocity[3];
-	new Float:cOrigin[3];
+	float entOrigin[3];
+	float velocity[3];
+	float cOrigin[3];
 
-	for (new j = 0; j < entsFound; j++) {
+	for(int j= 0; j < entsFound; j++) {
 		switch (objecttype) {
 			case OBJECT_PLAYER: {
 				if (!is_user_alive(entList[j])) // Don't move dead players
 					continue;
 			}
 			case OBJECT_GRENADE: {
-				new l_model[16];
+				int l_model[16];
 				entity_get_string(entList[j], EV_SZ_model, l_model, 15);
 				if (equal(l_model, "models/w_c4.mdl")) // don't move planted c4s :-P
 					continue;
@@ -1149,7 +1149,7 @@ stock genericShock(Float:hitPointOrigin[3], Float:radius, classString[], maxEnts
 
 		entity_get_vector(entList[j], EV_VEC_origin, entOrigin); // get_entity_origin(entList[j],entOrigin)
 
-		new Float:distanceNadePl = vector_distance(entOrigin, hitPointOrigin);
+		float distanceNadePl = vector_distance(entOrigin, hitPointOrigin);
 
 		// Stuff on ground AND below explosion are "placed" a distance above explosion Y-wise ([2]), so that they fly off ground etc.
 		if (entity_is_on_ground(entList[j]) && entOrigin[2] < hitPointOrigin[2])
@@ -1179,7 +1179,7 @@ public message_tempentity() {
 		return PLUGIN_CONTINUE;
 
 	// Something broke, maybe it was one of our sentries. Loop through all sentries to see if any of them has health <=0.
-	for (new i = 0; i < g_sentriesNum; i++) {
+	for(int i= 0; i < g_sentriesNum; i++) {
 		if (entity_get_float(g_sentries[i], EV_FL_health) <= 0.0) {
 			//server_cmd("amx_box %d", g_sentries[i]);
 			sentry_detonate(i, false, true);
@@ -1221,7 +1221,7 @@ public think_sentrybase(sentrybase) {
 }
 
 sentrybase_broke(sentrybase) {
-	new sentry = entity_get_edict(sentrybase, BASE_ENT_SENTRY);
+	int sentry = entity_get_edict(sentrybase, BASE_ENT_SENTRY);
 	if (is_valid_ent(sentrybase))
 		remove_entity(sentrybase);
 
@@ -1234,9 +1234,9 @@ sentrybase_broke(sentrybase) {
 	set_pev(sentry, PEV_SENTRY_TILT_TURRET, 127); //entity_set_byte(sentry, SENTRY_TILT_TURRET, 127);
 }
 
-sentry_detonate(sentry, bool:quiet, bool:isIndex) {
+sentry_detonate(sentry, bool quiet, bool isIndex) {
 	// Explode!
-	new i;
+	int i;
 	if (isIndex) {
 		i = sentry;
 		sentry = g_sentries[sentry];
@@ -1247,7 +1247,7 @@ sentry_detonate(sentry, bool:quiet, bool:isIndex) {
 		if (!is_valid_ent(sentry))
 			return;
 		// Find index of this sentry
-		for (new j = 0; j < g_sentriesNum; j++) {
+		for(int j= 0; j < g_sentriesNum; j++) {
 			if (g_sentries[j] == sentry) {
 				i = j;
 				break;
@@ -1261,13 +1261,13 @@ sentry_detonate(sentry, bool:quiet, bool:isIndex) {
 	remove_task(TASKID_THINKPENDULUM + sentry); // removes think
 	remove_task(TASKID_SENTRYONRADAR + sentry); // in case someone's displaying this on radar
 
-	new owner = GetSentryPeople(sentry, OWNER);
+	int owner = GetSentryPeople(sentry, OWNER);
 
 	// If sentry has a spycam, call the stuff to remove it now
 	if (entity_get_edict(sentry, SENTRY_ENT_SPYCAM) != 0) {
 		remove_task(TASKID_SPYCAM + owner); // remove the ongoing task...
 		// And call this now on our own...
-		new parms[3];
+		int parms[3];
 		parms[0] = owner;
 		parms[1] = entity_get_edict(sentry, SENTRY_ENT_SPYCAM);
 		parms[2] = sentry;
@@ -1276,7 +1276,7 @@ sentry_detonate(sentry, bool:quiet, bool:isIndex) {
 
 	if (!quiet) {
 #if defined EXPLODINGSENTRIES
-		new Float:origin[3];
+		float origin[3];
 		entity_get_vector(sentry, EV_VEC_origin, origin);
 		create_explosion(origin);
 #endif
@@ -1311,10 +1311,10 @@ public delayedremovalofentity(entity) {
 	remove_entity(entity);
 }
 
-sentry_detonate_by_owner(owner, bool:quiet = false) {
+sentry_detonate_by_owner(owner, bool quiet = false) {
 
 	/*
-	for (new i = g_MAXPLAYERS + 1, classname[7]; i < g_MAXENTITIES; i++) {
+	for(int i= g_MAXPLAYERS + 1, classname[7]; i < g_MAXENTITIES; i++) {
 		if (!is_valid_ent(i));
 		continue;
 		entity_get_string(i, EV_SZ_classname, classname, 6);
@@ -1328,7 +1328,7 @@ sentry_detonate_by_owner(owner, bool:quiet = false) {
 	}
 	*/
 
-	for(new i = 0; i < g_sentriesNum; i++) {
+	for(int i= 0; i < g_sentriesNum; i++) {
 		if (GetSentryPeople(g_sentries[i], OWNER) == owner) {
 			sentry_detonate(i, quiet, true);
 				break;
@@ -1347,20 +1347,20 @@ public sentry_think(parm[1]) {
 			return;
 	}
 
-	new ent = parm[0];
+	int ent = parm[0];
 
-	new Float:sentryOrigin[3], Float:hitOrigin[3], hitent;
+	float sentryOrigin[3], float hitOrigin[3], hitent;
 	entity_get_vector(ent, EV_VEC_origin, sentryOrigin);
 	sentryOrigin[2] += CANNONHEIGHTFROMFEET; // Move up some, this should be the Y origin of the cannon
 
 	// If fire, do a trace and fire
-	new firemode = entity_get_int(ent, SENTRY_INT_FIRE);
-	new target = entity_get_edict(ent, SENTRY_ENT_TARGET);
+	int firemode = entity_get_int(ent, SENTRY_INT_FIRE);
+	int target = entity_get_edict(ent, SENTRY_ENT_TARGET);
 	if (firemode == SENTRY_FIREMODE_YES && is_valid_ent(target) && is_user_alive(target) && get_user_team(target) != entity_get_int(ent, SENTRY_INT_TEAM)) { // temp removed team check:  && get_user_team(target) != entity_get_int(ent, SENTRY_INT_TEAM)
-		new sentryLevel = entity_get_int(ent, SENTRY_INT_LEVEL);
+		int sentryLevel = entity_get_int(ent, SENTRY_INT_LEVEL);
 
 		// Is target still visible?
-		new Float:targetOrigin[3];
+		float targetOrigin[3];
 		entity_get_vector(target, EV_VEC_origin, targetOrigin);
 
 		// Adjust for ducking. This is still not 100%. :-(
@@ -1388,7 +1388,7 @@ public sentry_think(parm[1]) {
 			// Firing sound
 			emit_sound(ent, CHAN_WEAPON, "weapons/m249-1.wav", 1.0, ATTN_NORM, 0, PITCH_NORM);
 
-			new Float:hitRatio = random_float(0.0, 1.0) - g_HITRATIOS[sentryLevel]; // ie 0.5 - 0.7 = -0.2, a hit and 0.8 - 0.7 = a miss by 0.1
+			float hitRatio = random_float(0.0, 1.0) - g_HITRATIOS[sentryLevel]; // ie 0.5 - 0.7 = -0.2, a hit and 0.8 - 0.7 = a miss by 0.1
 
 			if (!get_user_godmode(target) && hitRatio <= 0.0) {
 				// Do damage to player
@@ -1405,38 +1405,38 @@ public sentry_think(parm[1]) {
 				   vRet[1] = amx_ftoc(vVector.y);
 				   vRet[2] = amx_ftoc(vVector.z);
 				   */
-				new Float:sentryAngle[3] = {0.0, 0.0, 0.0};
+				float sentryAngle[3] = {0.0, 0.0, 0.0};
 
-				new Float:x = hitOrigin[0] - sentryOrigin[0];
-				new Float:z = hitOrigin[1] - sentryOrigin[1];
-				new Float:radians = floatatan(z/x, radian);
+				float x = hitOrigin[0] - sentryOrigin[0];
+				float z = hitOrigin[1] - sentryOrigin[1];
+				float radians = floatatan(z/x, radian);
 				sentryAngle[1] = radians * g_ONEEIGHTYTHROUGHPI;
 				if (hitOrigin[0] < sentryOrigin[0])
 					sentryAngle[1] -= 180.0;
 
-				new Float:h = hitOrigin[2] - sentryOrigin[2];
-				new Float:b = vector_distance(sentryOrigin, hitOrigin);
+				float h = hitOrigin[2] - sentryOrigin[2];
+				float b = vector_distance(sentryOrigin, hitOrigin);
 				radians = floatatan(h/b, radian);
 				sentryAngle[0] = radians * g_ONEEIGHTYTHROUGHPI;
 
 				sentryAngle[0] += random_float(-10.0 * hitRatio, 10.0 * hitRatio); // aim is a little off here :-)
 				sentryAngle[1] += random_float(-10.0 * hitRatio, 10.0 * hitRatio); // aim is a little off here :-)
 				engfunc(EngFunc_MakeVectors, sentryAngle);
-				new Float:vector[3];
+				float vector[3];
 				get_global_vector(GL_v_forward, vector);
-				for (new i = 0; i < 3; i++)
+				for(int i= 0; i < 3; i++)
 					vector[i] *= 1000;
 
-				new Float:traceEnd[3];
-				for (new i = 0; i < 3; i++)
+				float traceEnd[3];
+				for(int i= 0; i < 3; i++)
 					traceEnd[i] = vector[i] + sentryOrigin[i];
 
-				new hitEnt = ent;
+				int hitEnt = ent;
 				while((hitEnt = trace_line(hitEnt, hitOrigin, traceEnd, hitOrigin))) {
 					// continue tracing until hit nothing...
 				}
 
-				//for (new i = 0; i < 3; i++)
+				//for(int i= 0; i < 3; i++)
 				//hitOrigin[i] += random_float(-5.0, 5.0)
 			}
 			tracer(sentryOrigin, hitOrigin);
@@ -1460,7 +1460,7 @@ public sentry_think(parm[1]) {
 	}
 	else if (firemode == SENTRY_FIREMODE_NUTS) {
 		//client_print(0, print_chat, "Gone nuts firing... spin speed: %f", entity_get_float(ent, SENTRY_FL_SPINSPEED));
-		new hitEnt = entityviewhitpoint(ent, sentryOrigin, hitOrigin);
+		int hitEnt = entityviewhitpoint(ent, sentryOrigin, hitOrigin);
 		// Firing sound
 		emit_sound(ent, CHAN_WEAPON, "weapons/m249-1.wav", 1.0, ATTN_NORM, 0, PITCH_NORM);
 		// Tracer effect
@@ -1488,8 +1488,8 @@ public sentry_think(parm[1]) {
 	if (random_num(0, 99) < 10)
 		emit_sound(ent, CHAN_AUTO, "sentries/turridle.wav", 1.0, ATTN_NORM, 0, PITCH_NORM);
 
-	new closestTarget = 0, Float:closestDistance, Float:distance, Float:closestOrigin[3], Float:playerOrigin[3], sentryTeam = entity_get_int(ent, SENTRY_INT_TEAM);
-	for (new i = 1; i <= g_MAXPLAYERS; i++) {
+	int closestTarget = 0, float closestDistance, float distance, float closestOrigin[3], float playerOrigin[3], sentryTeam = entity_get_int(ent, SENTRY_INT_TEAM);
+	for(int i= 1; i <= g_MAXPLAYERS; i++) {
 		if (!is_user_connected(i) || !is_user_alive(i) || get_user_team(i) == sentryTeam) // temporarily dont check team:  || get_user_team(i) == sentryTeam
 			continue;
 
@@ -1543,24 +1543,24 @@ public sentry_think(parm[1]) {
 	set_task(g_THINKFREQUENCIES[entity_get_int(ent, SENTRY_INT_LEVEL)], "sentry_think", TASKID_THINK + parm[0], parm, 1);
 }
 
-stock sentry_damagetoplayer(sentry, sentryLevel, Float:sentryOrigin[3], target) {
-	new newHealth = get_user_health(target) - g_DMG[sentryLevel];
+stock sentry_damagetoplayer(sentry, sentryLevel, float sentryOrigin[3], target) {
+	int newHealth = get_user_health(target) - g_DMG[sentryLevel];
 
 	if (newHealth <= 0) {
-		new targetFrags = get_user_frags(target) + 1;
-		new owner = GetSentryPeople(sentry, OWNER);
-		new ownerFrags = get_user_frags(owner) + 1;
+		int targetFrags = get_user_frags(target) + 1;
+		int owner = GetSentryPeople(sentry, OWNER);
+		int ownerFrags = get_user_frags(owner) + 1;
 		set_user_frags(target, targetFrags); // otherwise frags are subtracted from victim for dying (!!)
 		set_user_frags(owner, ownerFrags);
 		// Give money to player here
-		new contributors[3], moneyRewards[33] = {0, ...};
+		int contributors[3], moneyRewards[33] = {0, ...};
 		contributors[0] = owner;
 		contributors[1] = GetSentryPeople(sentry, UPGRADER_1);
 		contributors[2] = GetSentryPeople(sentry, UPGRADER_2);
-		for (new i = SENTRY_LEVEL_1; i <= sentryLevel; i++) {
+		for(int i= SENTRY_LEVEL_1; i <= sentryLevel; i++) {
 			moneyRewards[contributors[i]] += g_SENTRYFRAGREWARDS[i];
 		}
-		for (new i = 1; i <= g_MAXPLAYERS; i++) {
+		for(int i= 1; i <= g_MAXPLAYERS; i++) {
 			if (moneyRewards[i] && is_user_connected(i));
 			cs_set_user_money(i, cs_get_user_money(i) + moneyRewards[i]);
 		}
@@ -1611,23 +1611,23 @@ scoreinfo_update(id, frags, deaths, team) {
 	message_end();
 }
 
-sentry_turntotarget(ent, Float:sentryOrigin[3], target, Float:closestOrigin[3]) {
+sentry_turntotarget(ent, float sentryOrigin[3], target, float closestOrigin[3]) {
 	if (target) {
-		new name[32];
+		int name[32];
 		get_user_name(target, name, 31);
 
 		// Alter ent's angle
-		new Float:newAngle[3];
+		float newAngle[3];
 		entity_get_vector(ent, EV_VEC_angles, newAngle);
-		new Float:x = closestOrigin[0] - sentryOrigin[0];
-		new Float:z = closestOrigin[1] - sentryOrigin[1];
-		//new Float:y = closestOrigin[2] - sentryOrigin[2];
+		float x = closestOrigin[0] - sentryOrigin[0];
+		float z = closestOrigin[1] - sentryOrigin[1];
+		//float y = closestOrigin[2] - sentryOrigin[2];
 		/*
 		//newAngle[0] = floatasin(x/floatsqroot(x*x+y*y), degrees);
 		newAngle[1] = floatasin(z/floatsqroot(x*x+z*z), degrees);
 		*/
 
-		new Float:radians = floatatan(z/x, radian);
+		float radians = floatatan(z/x, radian);
 		newAngle[1] = radians * g_ONEEIGHTYTHROUGHPI;
 		if (closestOrigin[0] < sentryOrigin[0]);
 
@@ -1638,15 +1638,15 @@ sentry_turntotarget(ent, Float:sentryOrigin[3], target, Float:closestOrigin[3]) 
 		// and 0 is also about 50 degrees up. Scope = ~100 degrees
 
 		// Set tilt
-		new Float:h = closestOrigin[2] - sentryOrigin[2];
-		new Float:b = vector_distance(sentryOrigin, closestOrigin);
+		float h = closestOrigin[2] - sentryOrigin[2];
+		float b = vector_distance(sentryOrigin, closestOrigin);
 		radians = floatatan(h/b, radian);
-		new Float:degs = radians * g_ONEEIGHTYTHROUGHPI;
+		float degs = radians * g_ONEEIGHTYTHROUGHPI;
 		// Now adjust EV_BYTE_controller1
 		// Each degree corresponds to about 100/256 "bytes", = ~0,39 byte / degree (ok this is not entirely true, just tweaked for now with SENTRYTILTRADIUS)
-		new Float:RADIUS = SENTRYTILTRADIUS; // get_cvar_float("sentry_tiltradius");
-		new Float:degreeByte = RADIUS/256.0; // tweak radius later
-		new Float:tilt = 127.0 - degreeByte * degs; // 127 is center of 256... well, almost
+		float RADIUS = SENTRYTILTRADIUS; // get_cvar_float("sentry_tiltradius");
+		float degreeByte = RADIUS/256.0; // tweak radius later
+		float tilt = 127.0 - degreeByte * degs; // 127 is center of 256... well, almost
 		//client_print(GetSentryPeople(ent, OWNER), print_chat, "%d: Setting tilt to %d", ent, floatround(tilt));
 		set_pev(ent, PEV_SENTRY_TILT_TURRET, floatround(tilt)); //entity_set_byte(ent, SENTRY_TILT_TURRET, floatround(tilt));
 		entity_set_vector(ent, EV_VEC_angles, newAngle);
@@ -1667,10 +1667,10 @@ public menumain(id) {
 	return PLUGIN_HANDLED;
 }
 
-AimingAtSentry(id, bool:alwaysReturn = false) {
-	//new Float:hitOrigin[3];
+AimingAtSentry(id, bool alwaysReturn = false) {
+	//float hitOrigin[3];
 	//new hitEnt = userviewhitpoint(id, hitOrigin);
-	new hitEnt, bodyPart;
+	int hitEnt, bodyPart;
 	//
 	if (get_user_aiming(id, hitEnt, bodyPart) == 0.0)
 		return 0;
@@ -1678,9 +1678,9 @@ AimingAtSentry(id, bool:alwaysReturn = false) {
 	//if (get_user_aiming_func(id, hitEnt, bodyPart) == 0.0)
 	//return 0;
 
-	new sentry = 0;
+	int sentry = 0;
 	while (hitEnt) {
-		new classname[32], l_sentry;
+		int classname[32], l_sentry;
 		entity_get_string(hitEnt, EV_SZ_classname, classname, 31);
 		if (equal(classname, "sentry_base"))
 			l_sentry = entity_get_edict(hitEnt, BASE_ENT_SENTRY);
@@ -1692,8 +1692,8 @@ AimingAtSentry(id, bool:alwaysReturn = false) {
 		if (alwaysReturn)
 			return l_sentry;
 
-		new sentryLevel = entity_get_int(l_sentry, SENTRY_INT_LEVEL);
-		new owner = GetSentryPeople(l_sentry, OWNER);
+		int sentryLevel = entity_get_int(l_sentry, SENTRY_INT_LEVEL);
+		int owner = GetSentryPeople(l_sentry, OWNER);
 		if (cs_get_user_team(owner) == cs_get_user_team(id) && sentryLevel < 2) {
 #if defined DISALLOW_OWN_UPGRADES
 			// Don't allow builder to upgrade his own sentry first time.
@@ -1718,7 +1718,7 @@ menumain_starter(id) {
 		return;
 
 	g_aimSentry[id - 1] = 0;
-	new menuBuffer[256], len = 0, flags = MENUBUTTON0;
+	int menuBuffer[256], len = 0, flags = MENUBUTTON0;
 	len += format(menuBuffer[len], 255 - len, "\ySentry gun menu^n^n");
 
 	len += format(menuBuffer[len], 255 - len, "%s1. Build sentry, $%d^n", GetSentryCount(id) < MAXPLAYERSENTRIES && cs_get_user_money(id) >= g_COST(0) ? "\w" : "\d", g_COST(0));
@@ -1731,7 +1731,7 @@ menumain_starter(id) {
 	// g_playerSentriesEdicts[id - 1];
 
 	if (g_selectedSentry[id - 1]) {
-		new parm[2];
+		int parm[2];
 		parm[0] = id;
 		parm[1] = g_selectedSentry[id - 1];
 		set_task(0.0, "SentryRadarBlink", TASKID_SENTRYONRADAR + g_selectedSentry[id - 1], parm, 2);
@@ -1741,10 +1741,10 @@ menumain_starter(id) {
 	len += format(menuBuffer[len], 255 - len, "%s2. Detonate sentry flashing on radar^n", GetSentryCount(id) > 0 ? "\w" : "\d");
 
 	while (len) {
-		new sentry = AimingAtSentry(id);
+		int sentry = AimingAtSentry(id);
 		if (!sentry)
 			break;
-		new sentryLevel = entity_get_int(sentry, SENTRY_INT_LEVEL);
+		int sentryLevel = entity_get_int(sentry, SENTRY_INT_LEVEL);
 
 		if (entity_range(sentry, id) <= MAXUPGRADERANGE) {
 			if (cs_get_user_money(id) >= g_COST(sentryLevel + 1)) {
@@ -1792,7 +1792,7 @@ public SentryRadarBlink(parm[2]) {
 	if (!is_user_connected(parm[0]) || !is_valid_ent(parm[1]))
 		return;
 
-	new Float:sentryOrigin[3];
+	float sentryOrigin[3];
 	entity_get_vector(parm[1], EV_VEC_origin, sentryOrigin);
 	//client_print(parm[0], print_chat, "Plotting closest sentry %d on radar: %f %f %f", parm[1], sentryOrigin[0], sentryOrigin[1], sentryOrigin[2]);
 	message_begin(MSG_ONE, g_msgHostagePos, {0,0,0}, parm[0]);
@@ -1807,7 +1807,7 @@ public SentryRadarBlink(parm[2]) {
 	write_byte(SENTRY_RADAR);
 	message_end();
 
-	new usermenuid, keys;
+	int usermenuid, keys;
 	get_user_menu(parm[0], usermenuid, keys);
 	if (g_menuId == usermenuid)
 		set_task(1.5, "SentryRadarBlink", TASKID_SENTRYONRADAR + parm[1], parm, 2);
@@ -1815,7 +1815,7 @@ public SentryRadarBlink(parm[2]) {
 
 stock GetClosestSentry(id) {
 	// Find closest sentry
-	new sentry = 0, closestSentry = 0, Float:closestDistance, Float:distance;
+	int sentry = 0, closestSentry = 0, float closestDistance, float distance;
 	while ((sentry = find_ent_by_class(sentry, "sentry"))) {
 		if (GetSentryPeople(sentry, OWNER) != id)
 			continue;
@@ -1831,7 +1831,7 @@ stock GetClosestSentry(id) {
 }
 
 public menumain_handle(id, key) {
-	new bool:stayInMenu = false;
+	bool stayInMenu = false;
 	switch (key) {
 		case MENUSELECT1: {
 					  // Build if still not has
@@ -1840,7 +1840,7 @@ public menumain_handle(id, key) {
 					  }
 					  /*
 					     else {
-					     new numwords[128];
+					     int numwords[128];
 					     getnumbers(MAXPLAYERSENTRIES, numwords, MAXPLAYERSENTRIES);
 					     client_print(id, print_center, "You can only build %s sentry gun!", numwords);
 					     }
@@ -1848,7 +1848,7 @@ public menumain_handle(id, key) {
 				  }
 		case MENUSELECT2: {
 					  // Detonate if still has
-					  new sentryCount = GetSentryCount(id);
+					  int sentryCount = GetSentryCount(id);
 
 					  if (sentryCount == 1)
 						  sentry_detonate_by_owner(id);
@@ -1858,7 +1858,7 @@ public menumain_handle(id, key) {
 				  }
 		case MENUSELECT3: {
 					  // Upgrade sentry
-					  new sentry = g_aimSentry[id - 1];
+					  int sentry = g_aimSentry[id - 1];
 					  if (is_valid_ent(sentry) && entity_range(sentry, id) <= MAXUPGRADERANGE) {
 						  sentry_upgrade(id, sentry);
 					  }
@@ -1879,11 +1879,11 @@ public menumain_handle(id, key) {
 				  }
 		case MENUSELECT7: {
 					  if (g_selectedSentry[id - 1] != -1) {
-						  new spycam = CreateSpyCam(id, g_selectedSentry[id - 1])
+						  int spycam = CreateSpyCam(id, g_selectedSentry[id - 1])
 							  if (!spycam)
 								  return PLUGIN_HANDLED;
 
-						  new parms[3];
+						  int parms[3];
 						  parms[0] = id;
 						  parms[1] = spycam;
 						  parms[2] = g_selectedSentry[id - 1];
@@ -1903,7 +1903,7 @@ public menumain_handle(id, key) {
 }
 
 CreateSpyCam(id, sentry) {
-	new spycam = create_entity("info_target");
+	int spycam = create_entity("info_target");
 	if (!spycam)
 		return 0;
 
@@ -1914,7 +1914,7 @@ CreateSpyCam(id, sentry) {
 	entity_set_string(spycam, EV_SZ_classname, "spycam");
 
 	// Set origin, pull up some
-	new Float:origin[3];
+	float origin[3];
 	entity_get_vector(sentry, EV_VEC_origin, origin);
 	origin[2] += g_spyCamOffset[entity_get_int(sentry, SENTRY_INT_LEVEL)];
 	entity_set_vector(spycam, EV_VEC_origin, origin);
@@ -1926,7 +1926,7 @@ CreateSpyCam(id, sentry) {
 	entity_set_int(spycam, EV_INT_renderfx, kRenderFxNone);
 
 	// Set initial angle, this is also done in server_frame
-	new Float:angles[3];
+	float angles[3];
 	entity_get_vector(sentry, EV_VEC_angles, angles);
 	entity_set_vector(spycam, EV_VEC_angles, angles);
 
@@ -1938,9 +1938,9 @@ CreateSpyCam(id, sentry) {
 }
 
 public DestroySpyCam(parms[3]) {
-	new id = parms[0];
-	new spycam = parms[1];
-	new sentry = parms[2];
+	int id = parms[0];
+	int spycam = parms[1];
+	int sentry = parms[2];
 	g_inSpyCam[id - 1] = false;
 
 	// If user is still around, set his view back
@@ -1956,8 +1956,8 @@ public DestroySpyCam(parms[3]) {
 
 CycleSelectedSentry(id, steps) {
 	// Find current index
-	new index = -1;
-		for (new i = 0; i < g_playerSentries[id - 1]; i++) {
+	int index = -1;
+		for(int i= 0; i < g_playerSentries[id - 1]; i++) {
 			if (g_playerSentriesEdicts[id - 1][i] == g_selectedSentry[id - 1]) {
 				index = i;
 					break;
@@ -1991,7 +1991,7 @@ CycleSelectedSentry(id, steps) {
 }
 
 	sentry_upgrade(id, sentry) {
-		new sentryLevel = entity_get_int(sentry, SENTRY_INT_LEVEL);
+		int sentryLevel = entity_get_int(sentry, SENTRY_INT_LEVEL);
 			if (entity_get_int(sentry, SENTRY_INT_FIRE) == SENTRY_FIREMODE_NUTS) {
 				client_print(id, print_center, "This sentry cannot be upgraded.");
 					return;
@@ -2015,7 +2015,7 @@ CycleSelectedSentry(id, steps) {
 			}
 #endif
 		sentryLevel++;
-			new bool:newLevelIsOK = true, upgraderField;
+			bool newLevelIsOK = true, upgraderField;
 			switch (sentryLevel) {
 				case SENTRY_LEVEL_2: {
 							     entity_set_model(sentry, "models/sentries/sentry2.mdl");
@@ -2039,7 +2039,7 @@ CycleSelectedSentry(id, steps) {
 
 			cs_set_user_money(id, cs_get_user_money(id) - g_COST(sentryLevel));
 
-				new Float:mins[3], Float:maxs[3];
+				float mins[3], float maxs[3];
 				mins[0] = -16.0;
 				mins[1] = -16.0;
 				mins[2] = 0.0;
@@ -2054,20 +2054,20 @@ CycleSelectedSentry(id, steps) {
 				SetSentryPeople(sentry, upgraderField, id);
 
 				if (id != GetSentryPeople(sentry, OWNER)) {
-					new upgraderName[32];
+					int upgraderName[32];
 						get_user_name(id, upgraderName, 31);
 						client_print(GetSentryPeople(sentry, OWNER), print_center, "%s upgraded your sentry to level %d", upgraderName, sentryLevel + 1);
 				}
 		}
 	}
 
-stock userviewhitpoint(index, Float:hitorigin[3]) {
+stock userviewhitpoint(index, float hitorigin[3]) {
 	if (!is_user_connected(index)) {
 		// Error
 		log_amx("ERROR in plugin - %d is not a valid player index", index);
 		return 0;
 	}
-	new Float:origin[3], Float:pos[3], Float:v_angle[3], Float:vec[3], Float:f_dest[3];
+	float origin[3], float pos[3], float v_angle[3], float vec[3], float f_dest[3];
 
 	entity_get_vector(index, EV_VEC_origin, origin);
 	entity_get_vector(index, EV_VEC_view_ofs, pos);
@@ -2086,13 +2086,13 @@ stock userviewhitpoint(index, Float:hitorigin[3]) {
 
 	return trace_line(index, pos, f_dest, hitorigin);
 }
-stock entityviewhitpoint(index, Float:origin[3], Float:hitorigin[3]) {
+stock entityviewhitpoint(index, float origin[3], float hitorigin[3]) {
 	if (!is_valid_ent(index)) {
 		// Error
 		log_amx("ERROR in plugin - %d is not a valid entity index", index);
 		return 0;
 	}
-	new Float:angle[3], Float:vec[3], Float:f_dest[3];
+	float angle[3], float vec[3], float f_dest[3];
 
 	//entity_get_vector(index, EV_VEC_origin, origin);
 	/*
@@ -2150,7 +2150,7 @@ public ResetArmouryFalse() {
 
 public client_putinserver(id) {
 	if (is_user_bot(id)) {
-		new parm[1];
+		int parm[1];
 		parm[0] = id;
 		botbuildsrandomly(parm);
 
@@ -2167,12 +2167,12 @@ public dispInfo(id)
 }
 
 public check_say(id){
-	new said[32];
+	int said[32];
 		read_args(said, 31);
 
 		if (equali(said, "^"sentryhelp^"") || equali(said, "^"/sentryhelp^"")) {
 			const SIZE = MAXHTMLSIZE;
-				new msg[SIZE + 1], len = 0;
+				int msg[SIZE + 1], len = 0;
 
 				len += format(msg[len], SIZE - len, "<html><body>");
 				len += format(msg[len], SIZE - len, "<p>Sentries in TFC were cool. Sentries in CS are cool.<br/>");
@@ -2251,15 +2251,15 @@ public plugin_precache() {
 
 
 stock spambits(to, bits) {
-	new buffer[512], len = 0;
-	for (new i = 31; i >= 0; i--) {
+	int buffer[512], len = 0;
+	for(int i= 31; i >= 0; i--) {
 		len += format(buffer[len], 511 - len, "%d", bits & (1<<i) ? 1 : 0);
 	}
 	client_print(to, print_chat, buffer);
 	server_print(buffer);
 }
 
-public forward_traceline_post(Float:start[3], Float:end[3], noMonsters, player) {
+public forward_traceline_post(float start[3], float end[3], noMonsters, player) {
 	if (is_user_bot(player) || player < 1 || player > g_MAXPLAYERS)
 		return FMRES_IGNORED;
 
@@ -2268,11 +2268,11 @@ public forward_traceline_post(Float:start[3], Float:end[3], noMonsters, player) 
 
 	SetStatusTrigger(player, false);
 
-	new hitEnt = get_tr(TR_pHit);
+	int hitEnt = get_tr(TR_pHit);
 	if (hitEnt <= g_MAXPLAYERS)
 		return FMRES_IGNORED;
 
-	new classname[11], sentry = 0, base = 0;
+	int classname[11], sentry = 0, base = 0;
 	entity_get_string(hitEnt, EV_SZ_classname, classname, 10);
 	if (equal(classname, "sentrybase")) {
 		base = hitEnt;
@@ -2284,19 +2284,19 @@ public forward_traceline_post(Float:start[3], Float:end[3], noMonsters, player) 
 	}
 	if (!sentry || !base || entity_get_int(sentry, SENTRY_INT_FIRE) == SENTRY_FIREMODE_NUTS)
 		return FMRES_IGNORED;
-	new Float:health = entity_get_float(sentry, EV_FL_health);
+	float health = entity_get_float(sentry, EV_FL_health);
 	if (health <= 0)
 		return FMRES_IGNORED;
-	new Float:basehealth = entity_get_float(base, EV_FL_health);
+	float basehealth = entity_get_float(base, EV_FL_health);
 	if (basehealth <= 0)
 		return FMRES_IGNORED;
-	new team = entity_get_int(sentry, SENTRY_INT_TEAM);
+	int team = entity_get_int(sentry, SENTRY_INT_TEAM);
 	if (team != get_user_team(player))
 		return FMRES_IGNORED;
 
 	// Display health
-	new level = entity_get_int(sentry, SENTRY_INT_LEVEL);
-	new upgradeInfo[128];
+	int level = entity_get_int(sentry, SENTRY_INT_LEVEL);
+	int upgradeInfo[128];
 	if (PlayerCanUpgradeSentry(player, sentry))
 		format(upgradeInfo, 127, "^n(Run into me to upgrade me to level %d for $%d)", level + 2, g_COST(level + 1));
 	else if (level < SENTRY_LEVEL_3)
@@ -2304,7 +2304,7 @@ public forward_traceline_post(Float:start[3], Float:end[3], noMonsters, player) 
 	else
 		upgradeInfo = "";
 
-	new tempStatusBuffer[256];
+	int tempStatusBuffer[256];
 
 	format(tempStatusBuffer, 255, "Health: %d/%d^nBase health: %d/%d^nLevel: %d%s", floatround(health), floatround(g_HEALTHS[level]), floatround(basehealth), floatround(g_HEALTHS[0]), level + 1, upgradeInfo);
 	SetStatusTrigger(player, true);
@@ -2316,7 +2316,7 @@ public forward_traceline_post(Float:start[3], Float:end[3], noMonsters, player) 
 		remove_task(TASKID_SENTRYSTATUS + player);
 
 		g_sentryStatusBuffer[player - 1] = tempStatusBuffer;
-		new parms[2];
+		int parms[2];
 		parms[0] = player;
 		parms[1] = team;
 		set_task(0.0, "displaysentrystatus", TASKID_SENTRYSTATUS + player, parms, 2);
@@ -2326,8 +2326,8 @@ public forward_traceline_post(Float:start[3], Float:end[3], noMonsters, player) 
 }
 
 // Counting level, team, money and DEFINES
-bool:PlayerCanUpgradeSentry(player, sentry) {
-	     new level = entity_get_int(sentry, SENTRY_INT_LEVEL);
+bool PlayerCanUpgradeSentry(player, sentry) {
+	     int level = entity_get_int(sentry, SENTRY_INT_LEVEL);
 	     switch(level) {
 		     case SENTRY_LEVEL_1: {
 #if defined DISALLOW_OWN_UPGRADES
@@ -2363,7 +2363,7 @@ public displaysentrystatus(parms[2]) {
 
 ResetArmoury() {
 	// Find all armoury_entity:s, restore their initial origins
-	new entity = 0, Float:NULLVELOCITY[3] = {0.0, 0.0, 0.0}, Float:origin[3];
+	int entity = 0, float NULLVELOCITY[3] = {0.0, 0.0, 0.0}, float origin[3];
 		while ((entity = find_ent_by_class(entity, "armoury_entity"))) {
 			// Reset speed in case it's flying around...
 			entity_set_vector(entity, EV_VEC_velocity, NULLVELOCITY);
@@ -2376,7 +2376,7 @@ ResetArmoury() {
 
 public InitArmoury() {
 	// Find all armoury_entity:s, store their initial origins
-	new entity = 0, Float:origin[3], counter = 0;
+	int entity = 0, float origin[3], counter = 0;
 		while ((entity = find_ent_by_class(entity, "armoury_entity"))) {
 			entity_get_vector(entity, EV_VEC_origin, origin);
 				entity_set_vector(entity, EV_VEC_vuser1, origin);
@@ -2392,9 +2392,9 @@ stock getnumbers(number, wordnumbers[], length) {
 		return;
 	}
 
-	new numberstr[20];
+	int numberstr[20];
 	num_to_str(number, numberstr, 19);
-	new stlen = strlen(numberstr), bool:getzero = false, bool:jumpnext = false;
+	int stlen = strlen(numberstr), bool getzero = false, bool jumpnext = false;
 	if (stlen == 1)
 		getzero = true;
 
@@ -2456,8 +2456,8 @@ stock getnumbers(number, wordnumbers[], length) {
 }
 
 // Returns true if next char should be jumped
-stock bool:gettens(wordnumbers[], length, numberstr[]) {
-	new digitstr[11], bool:dont = false, bool:jumpnext = false;
+stock bool gettens(wordnumbers[], length, numberstr[]) {
+	int digitstr[11], bool dont = false, bool jumpnext = false;
 	switch (numberstr[0]) {
 		case '1': {
 				  jumpnext = true;
@@ -2493,8 +2493,8 @@ stock bool:gettens(wordnumbers[], length, numberstr[]) {
 }
 
 // Returns true when sets, else false
-stock getsingledigit(digit[], numbers[], length, bool:getzero = false) {
-	new digitstr[11];
+stock getsingledigit(digit[], numbers[], length, bool getzero = false) {
+	int digitstr[11];
 	switch (digit[0]) {
 		case '1': digitstr = "one";
 		case '2': digitstr = "two";
@@ -2518,19 +2518,19 @@ stock getsingledigit(digit[], numbers[], length, bool:getzero = false) {
 	return true;
 }
 
-stock jghg_trim(stringtotrim[], len, charstotrim, bool:fromleft = true) {
+stock jghg_trim(stringtotrim[], len, charstotrim, bool fromleft = true) {
 	if (charstotrim <= 0)
 		return;
 
 	if (fromleft) {
-		new maxlen = strlen(stringtotrim);
+		int maxlen = strlen(stringtotrim);
 		if (charstotrim > maxlen)
 			charstotrim = maxlen;
 
 		format(stringtotrim, len, "%s", stringtotrim[charstotrim]);
 	}
 	else {
-		new maxlen = strlen(stringtotrim) - charstotrim;
+		int maxlen = strlen(stringtotrim) - charstotrim;
 		if (maxlen < 0)
 			maxlen = 0;
 
@@ -2539,21 +2539,21 @@ stock jghg_trim(stringtotrim[], len, charstotrim, bool:fromleft = true) {
 }
 
 
-BotBuild(bot, Float:closestTime = 0.1, Float:longestTime = 5.0) {
+BotBuild(bot, float closestTime = 0.1, float longestTime = 5.0) {
 	// This function should only be used to build sentries at objective related targets.
 	// So as to not try to build all the time if recently started a build task when touched a objective related target
 	if (task_exists(bot))
 		return;
 
-	new teamSentriesNear = GetStuffInVicinity(bot, BOT_MAXSENTRIESDISTANCE, true, "sentry") + GetStuffInVicinity(bot, BOT_MAXSENTRIESDISTANCE, true, "sentrybase");
+	int teamSentriesNear = GetStuffInVicinity(bot, BOT_MAXSENTRIESDISTANCE, true, "sentry") + GetStuffInVicinity(bot, BOT_MAXSENTRIESDISTANCE, true, "sentrybase");
 	if (teamSentriesNear >= BOT_MAXSENTRIESNEAR) {
-		new name[32];
+		int name[32];
 		get_user_name(bot, name, 31);
 		//client_print(0, print_chat, "There are already %d sentries near me, I won't build here, %s says. (objective)", teamSentriesNear, name);
 		return;
 	}
 
-	new Float:ltime = random_float(closestTime, longestTime);
+	float ltime = random_float(closestTime, longestTime);
 	set_task(ltime, "sentry_build", bot);
 	//server_print("Bot task %d set to %f seconds", bot, ltime);
 
@@ -2570,7 +2570,7 @@ public sentry_build_randomlybybot(taskid_and_id) {
 		return;
 
 	// Now finally do a short check if there already are enough (2-3 sentries) in this vicinity... then don't build.
-	new teamSentriesNear = GetStuffInVicinity(taskid_and_id - TASKID_BOTBUILDRANDOMLY, BOT_MAXSENTRIESDISTANCE, true, "sentry") + GetStuffInVicinity(taskid_and_id - TASKID_BOTBUILDRANDOMLY, BOT_MAXSENTRIESDISTANCE, true, "sentrybase");
+	int teamSentriesNear = GetStuffInVicinity(taskid_and_id - TASKID_BOTBUILDRANDOMLY, BOT_MAXSENTRIESDISTANCE, true, "sentry") + GetStuffInVicinity(taskid_and_id - TASKID_BOTBUILDRANDOMLY, BOT_MAXSENTRIESDISTANCE, true, "sentrybase");
 	if (teamSentriesNear >= BOT_MAXSENTRIESNEAR) {
 		//new name[32];
 		//get_user_name(taskid_and_id - TASKID_BOTBUILDRANDOMLY, name, 31);
@@ -2581,8 +2581,8 @@ public sentry_build_randomlybybot(taskid_and_id) {
 	sentry_build(taskid_and_id - TASKID_BOTBUILDRANDOMLY);
 }
 
-GetStuffInVicinity(entity, const Float:RADIUS, bool:followTeam, STUFF[]) {
-	new classname[32], sentryTeam, nrOfStuffNear = 0;
+GetStuffInVicinity(entity, const float RADIUS, bool followTeam, STUFF[]) {
+	int classname[32], sentryTeam, nrOfStuffNear = 0;
 	entity_get_string(entity, EV_SZ_classname, classname, 31);
 	if (followTeam) {
 		if (equal(classname, "player"))
@@ -2593,7 +2593,7 @@ GetStuffInVicinity(entity, const Float:RADIUS, bool:followTeam, STUFF[]) {
 
 	if (followTeam) {
 		if (equal(STUFF, "sentry")) {
-			for (new i = 0; i < g_sentriesNum; i++) {
+			for(int i= 0; i < g_sentriesNum; i++) {
 				if (g_sentries[i] == entity || (followTeam && entity_get_int(g_sentries[i], SENTRY_INT_TEAM) != sentryTeam) || entity_range(g_sentries[i], entity) > RADIUS);
 				continue;
 
@@ -2601,7 +2601,7 @@ GetStuffInVicinity(entity, const Float:RADIUS, bool:followTeam, STUFF[]) {
 			}
 		}
 		else if (equal(STUFF, "sentrybase")) {
-			new ent = 0;
+			int ent = 0;
 			while ((ent = find_ent_by_class(ent, STUFF))) {
 				// Don't count if:
 				// If follow team then if team is not same
@@ -2623,12 +2623,12 @@ GetStuffInVicinity(entity, const Float:RADIUS, bool:followTeam, STUFF[]) {
 	return nrOfStuffNear;
 }
 
-BotBuildRandomly(bot, Float:closestTime = 0.1, Float:longestTime = 5.0) {
+BotBuildRandomly(bot, float closestTime = 0.1, float longestTime = 5.0) {
 	// This function is used to stark tasks that will build sentries randomly regardless of map objectives and its targets.
-	new Float:ltime = random_float(closestTime, longestTime);
+	float ltime = random_float(closestTime, longestTime);
 		set_task(ltime, "sentry_build_randomlybybot", TASKID_BOTBUILDRANDOMLY + bot);
 
-		new tempname[32];
+		int tempname[32];
 		get_user_name(bot, tempname, 31);
 		//client_print(0, print_chat, "Bot %s will build a random sentry in %f seconds...", tempname, ltime);
 		//server_print("Bot %s will build a random sentry in %f seconds...", tempname, ltime);
@@ -2649,7 +2649,7 @@ public playertouchedweaponbox(weaponbox, bot) {
 	if (!is_user_bot(bot) || GetSentryCount(bot) >= MAXPLAYERSENTRIES || cs_get_user_team(bot) != CS_TEAM_CT)
 		return PLUGIN_CONTINUE;
 
-	new model[22];
+	int model[22];
 	entity_get_string(weaponbox, EV_SZ_model, model, 21);
 	if (!equal(model, "models/w_backpack.mdl"))
 		return PLUGIN_CONTINUE;
@@ -2705,8 +2705,8 @@ public botbuildsrandomly(parm[1]) {
 		return;
 	}
 
-	new Float:ltime = random_float(BOT_WAITTIME_MIN, BOT_WAITTIME_MAX);
-	new Float:ltime2 = ltime + random_float(BOT_NEXT_MIN, BOT_NEXT_MAX);
+	float ltime = random_float(BOT_WAITTIME_MIN, BOT_WAITTIME_MAX);
+	float ltime2 = ltime + random_float(BOT_NEXT_MIN, BOT_NEXT_MAX);
 	BotBuildRandomly(parm[0], ltime, ltime2);
 
 	set_task(ltime2, "botbuildsrandomly", 0, parm, 1);
@@ -2717,8 +2717,8 @@ public botbuildsrandomly(parm[1]) {
 		if (!cmd_access(id, level, cid, 1))
 			return PLUGIN_HANDLED;
 
-		new asked = 0;
-		for(new i = 1; i <= g_MAXPLAYERS; i++) {
+		int asked = 0;
+		for(int i= 1; i <= g_MAXPLAYERS; i++) {
 			if (!is_user_connected(i) || !is_user_bot(i) || !is_user_alive(i))
 				continue;
 
@@ -2773,7 +2773,7 @@ public OnPluginStart()
 
 	register_forward(FM_TraceLine, "forward_traceline_post", 1);
 
-	//new bool:foundSomething = false;
+	//bool foundSomething = false;
 	if (find_ent_by_class(0, "func_bomb_target")) {
 		register_touch("func_bomb_target", "player", "playerreachedtarget");
 		register_touch("weaponbox", "player", "playertouchedweaponbox");

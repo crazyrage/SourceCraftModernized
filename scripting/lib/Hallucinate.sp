@@ -49,8 +49,8 @@
 #define DRUG_CRAZY      3
 
 new g_DrugType[MAXPLAYERS+1];
-new Float:g_flMagnitude[MAXPLAYERS+1];
-new Handle:g_DrugTimers[MAXPLAYERS+1];
+floatg_flMagnitude[MAXPLAYERS+1];
+Handleg_DrugTimers[MAXPLAYERS+1];
 new const Float:g_DrugAngles[20] = {0.0, 5.0, 10.0, 15.0, 20.0, 25.0,
                                     20.0, 15.0, 10.0, 5.0, 0.0, -5.0,
                                     -10.0, -15.0, -20.0, -25.0, -20.0,
@@ -62,7 +62,7 @@ new UserMsg:g_FadeUserMsgId;
 // Offset for m_vecPunchAngle
 new g_offsPunchAngle;
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "SourceCraft Upgrade - Hallucinate",
     author = "-=|JFH|=- Naris with code from the SourceMod Team",
@@ -71,7 +71,7 @@ public Plugin:myinfo =
     url = "http://sourcemod.net/"
 };
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLResAskPluginLoad2(Handle myself, bool late, char[] error, err_max)
 {
     CreateNative("PerformDrug",Native_PerformDrug);
     CreateNative("PerformBlind",Native_PerformBlind);
@@ -150,7 +150,7 @@ public OnClientDisconnect(client)
     PerformDrug(client, 0, 0, 0.0);
 }
 
-public Action:Event_PlayerDeath(Handle:event,const String:name[],bool:dontBroadcast)
+public ActionEvent_PlayerDeath(Handle event,const char[]name[],bool dontBroadcast)
 {
     if (GameType == tf2)
     {
@@ -171,7 +171,7 @@ public Action:Event_PlayerDeath(Handle:event,const String:name[],bool:dontBroadc
     return Plugin_Handled;
 }
 
-public Action:Event_RoundEnd(Handle:event,const String:name[],bool:dontBroadcast)
+public ActionEvent_RoundEnd(Handle event,const char[]name[],bool dontBroadcast)
 {
     KillAllDrugs();
     return Plugin_Handled;
@@ -188,9 +188,9 @@ KillDrug(client)
 {
     KillDrugTimer(client);
 
-    new Float:pos[3];
+    floatpos[3];
     GetClientAbsOrigin(client, pos);
-    new Float:angs[3];
+    floatangs[3];
     GetClientEyeAngles(client, angs);
 
     angs[2] = 0.0;
@@ -200,7 +200,7 @@ KillDrug(client)
     new clients[2];
     clients[0] = client;	
 
-    new Handle:message = StartMessageEx(g_FadeUserMsgId, clients, 1);
+    Handlemessage = StartMessageEx(g_FadeUserMsgId, clients, 1);
     BfWriteShort(message, 1536);
     BfWriteShort(message, 1536);
     BfWriteShort(message, (0x0001 | 0x0010));
@@ -215,16 +215,16 @@ KillDrug(client)
 
 KillDrugTimer(client)
 {
-    if (g_DrugTimers[client] != INVALID_HANDLE)
+    if (g_DrugTimers[client] != null)
     {
         KillTimer(g_DrugTimers[client]);
-        g_DrugTimers[client] = INVALID_HANDLE;	
+        g_DrugTimers[client] = null;	
     }
 }
 
 KillAllDrugs()
 {
-    for (new i = 1; i <= MaxClients; i++)
+    for (int i = 1; i <= MaxClients; i++)
     {
         if(IsClientInGame(i))
             KillDrug(i);
@@ -239,7 +239,7 @@ bool:PerformDrug(target, toggle, type, Float:magnitude)
     {
         case (2):
         {
-            if (g_DrugTimers[target] == INVALID_HANDLE)
+            if (g_DrugTimers[target] == null)
             {
                 CreateDrug(target, type, magnitude);
                 return true;
@@ -250,7 +250,7 @@ bool:PerformDrug(target, toggle, type, Float:magnitude)
 
         case (1):
         {
-            if (g_DrugTimers[target] == INVALID_HANDLE)
+            if (g_DrugTimers[target] == null)
             {
                 CreateDrug(target, type, magnitude);
                 return true;
@@ -264,7 +264,7 @@ bool:PerformDrug(target, toggle, type, Float:magnitude)
 
         case (0):
         {
-            if (g_DrugTimers[target] != INVALID_HANDLE)
+            if (g_DrugTimers[target] != null)
                 KillDrug(target);
         }
     }
@@ -276,7 +276,7 @@ PerformBlind(target, amount)
 	new targets[2];
 	targets[0] = target;
 	
-	new Handle:message = StartMessageEx(g_FadeUserMsgId, targets, 1);
+	Handlemessage = StartMessageEx(g_FadeUserMsgId, targets, 1);
 	BfWriteShort(message, 1536);
 	BfWriteShort(message, 1536);
 	
@@ -293,7 +293,7 @@ PerformBlind(target, amount)
 	EndMessage();
 }
 
-public Action:Timer_Drug(Handle:timer, any:client)
+public ActionTimer_Drug(Handle timer, any:client)
 {
     if (!IsClientInGame(client))
     {
@@ -314,10 +314,10 @@ public Action:Timer_Drug(Handle:timer, any:client)
     {
         case DRUG_SOURCEMOD:
         {
-            new Float:pos[3];
+            floatpos[3];
             GetClientAbsOrigin(client, pos);
 
-            new Float:angs[3];
+            floatangs[3];
             GetClientEyeAngles(client, angs);
 
             angs[2] = g_DrugAngles[GetRandomInt(0,100) % 20];
@@ -327,7 +327,7 @@ public Action:Timer_Drug(Handle:timer, any:client)
             new clients[2];
             clients[0] = client;	
 
-            new Handle:message = StartMessageEx(g_FadeUserMsgId, clients, 1);
+            Handlemessage = StartMessageEx(g_FadeUserMsgId, clients, 1);
             BfWriteShort(message, 255);
             BfWriteShort(message, 255);
             BfWriteShort(message, (0x0002));
@@ -339,7 +339,7 @@ public Action:Timer_Drug(Handle:timer, any:client)
         }
         case DRUG_DIZZY:
         {
-            new Float:vecPunch[3];
+            floatvecPunch[3];
             vecPunch[0] = GetRandomFloat(g_flMagnitude[client] * -1, g_flMagnitude[client]);
             vecPunch[1] = GetRandomFloat(g_flMagnitude[client] * -1, g_flMagnitude[client]);
             vecPunch[2] = GetRandomFloat(g_flMagnitude[client] * -1, g_flMagnitude[client]);
@@ -354,34 +354,34 @@ public Action:Timer_Drug(Handle:timer, any:client)
     return Plugin_Handled;
 }
 
-public Native_PerformDrug(Handle:plugin,numParams)
+public Native_PerformDrug(Handle plugin,numParams)
 {
     return PerformDrug(GetNativeCell(1),GetNativeCell(2),
                        GetNativeCell(3),Float:GetNativeCell(4));
 }
 
-public Native_PerformBlind(Handle:plugin,numParams)
+public Native_PerformBlind(Handle plugin,numParams)
 {
     PerformBlind(GetNativeCell(1),GetNativeCell(2));
 }
 
-public Action:CMD_Blind(client,args)
+public ActionCMD_Blind(client,args)
 {
-    decl String:match[MAX_TARGET_LENGTH];
+    charmatch[MAX_TARGET_LENGTH];
     GetCmdArg(1,match,sizeof(match));
 
     new amt = 0;
     if (args >= 2)
     {
-        decl String:buf[32];
+        charbuf[32];
         GetCmdArg(2,buf,sizeof(buf));
 
         amt=StringToInt(buf);
     }
 
-    new bool:tn_is_ml;
+    booltn_is_ml;
     new target_list[MAXPLAYERS];
-    new String:target_name[MAX_TARGET_LENGTH];
+    chartarget_name[MAX_TARGET_LENGTH];
     new count = ProcessTargetString(match, client, target_list, sizeof(target_list),
                                     COMMAND_FILTER_NO_BOTS, target_name,
                                     sizeof(target_name), tn_is_ml);
@@ -405,17 +405,17 @@ public Action:CMD_Blind(client,args)
     return Plugin_Handled;
 }
 
-public Action:CMD_Drug(client,args)
+public ActionCMD_Drug(client,args)
 {
-    decl String:match[MAX_TARGET_LENGTH];
+    charmatch[MAX_TARGET_LENGTH];
     GetCmdArg(1,match,sizeof(match));
 
     new toggle = 2;
     new type = DRUG_RANDOM;
-    new Float:magnitude = 0.0;
+    floatmagnitude = 0.0;
     if (args >= 2)
     {
-        decl String:buf[32];
+        charbuf[32];
         GetCmdArg(2,buf,sizeof(buf));
         toggle=StringToInt(buf);
 
@@ -432,9 +432,9 @@ public Action:CMD_Drug(client,args)
         }
     }
 
-    new bool:tn_is_ml;
+    booltn_is_ml;
     new target_list[MAXPLAYERS];
-    new String:target_name[MAX_TARGET_LENGTH];
+    chartarget_name[MAX_TARGET_LENGTH];
     new count = ProcessTargetString(match, client, target_list, sizeof(target_list),
                                     COMMAND_FILTER_NO_BOTS, target_name,
                                     sizeof(target_name), tn_is_ml);
