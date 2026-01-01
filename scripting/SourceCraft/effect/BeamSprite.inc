@@ -16,4 +16,4 @@
 #define BeamSprite()      PrepareModel(g_beamModel, g_beamSprite)
 
 stock g_beamSprite;
-stock const String:g_beamModel[] = "materials/sprites/laser.vmt";
+static const char g_beamModel[] = "materials/sprites/laser.vmt";

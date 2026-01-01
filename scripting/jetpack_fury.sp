@@ -32,32 +32,32 @@
 #define EFFECT_BURNER_WARP "pyro_blast_warp"
 #define EFFECT_BURNER_WARP2 "pyro_blast_warp2"
 
-new Handle:g_Enable = INVALID_HANDLE;
-new Handle:g_BurnEnemy = INVALID_HANDLE;
-new Handle:g_BurnEnemy2 = INVALID_HANDLE;
-new Handle:g_JetPackUp = INVALID_HANDLE;
-new Handle:g_JetPackUpward = INVALID_HANDLE;
-new Handle:g_JetPackFall = INVALID_HANDLE;
-new Handle:g_JetPackFrwd = INVALID_HANDLE;
-new Handle:cookie_jet;
+Handle g_Enable = null;
+Handle g_BurnEnemy = null;
+Handle g_BurnEnemy2 = null;
+Handle g_JetPackUp = null;
+Handle g_JetPackUpward = null;
+Handle g_JetPackFall = null;
+Handle g_JetPackFrwd = null;
+Handle cookie_jet;
 
-new g_Particle1[MAXPLAYERS+1] = -1;
-new g_Particle2[MAXPLAYERS+1] = -1;
-new g_Explosion;
-new g_LightEntity[MAXPLAYERS+1] = -1;
-new jetpack_pref[MAXPLAYERS+1] = -1;
+int g_Particle1[MAXPLAYERS+1] = -1;
+int g_Particle2[MAXPLAYERS+1] = -1;
+int g_Explosion;
+int g_LightEntity[MAXPLAYERS+1] = -1;
+int jetpack_pref[MAXPLAYERS+1] = -1;
 
-new bool:g_FirstJump[MAXPLAYERS+1] = false;
-new bool:g_ReleaseButton[MAXPLAYERS+1] = false;
-new bool:g_Flying[MAXPLAYERS+1] = false;
-new bool:g_State[MAXPLAYERS+1] = false;
-new bool:g_Crits[MAXPLAYERS+1] = false;
-new bool:g_bKilling[MAXPLAYERS+1] = false;
+bool g_FirstJump[MAXPLAYERS+1] = false;
+bool g_ReleaseButton[MAXPLAYERS+1] = false;
+bool g_Flying[MAXPLAYERS+1] = false;
+bool g_State[MAXPLAYERS+1] = false;
+bool g_Crits[MAXPLAYERS+1] = false;
+bool g_bKilling[MAXPLAYERS+1] = false;
 
-new Float:g_LastKeyCheckTime[MAXPLAYERS+1] = 0.0;
-new g_FilteredEntity = -1;
-new iMaxClients;
-public Plugin:myinfo = 
+float g_LastKeyCheckTime[MAXPLAYERS+1] = 0.0;
+int g_FilteredEntity = -1;
+int iMaxClients;
+public Plugin myinfo = 
 {
     name = "The Fury",
     author = "RavensBro",
@@ -78,7 +78,7 @@ public OnPluginStart()
     g_JetPackFall = CreateConVar("thefury_fall_mag", "0.32", "Fall velocity magnification", 0, true, 0.0, true, 2.0);
     g_JetPackFrwd = CreateConVar("thefury_frwd_mag", "1.32", "Forward velocity magnification", 0, true, 0.0, true, 2.0);
 
-    for (new iClient = 1; iClient <= MAXPLAYERS; iClient++)
+    for(int iClient= 1; iClient <= MAXPLAYERS; iClient++)
     {
         DeleteBurnerParticle(iClient);
         g_LastKeyCheckTime[iClient] = 0.0;
@@ -96,12 +96,12 @@ public OnPluginStart()
     SetCookieMenuItem(jetpack_menu, 0, "JetPack Prefs");
 }
 
-public Action:OnPlayerSay(client, args)
+public Action OnPlayerSay(client, args)
 {
-    decl String:text[192];
+    char text[192];
     GetCmdArgString(text, sizeof(text));
-    new startidx;
-    new len = strlen(text);
+    int startidx;
+    int len = strlen(text);
 
     if (text[len-1] == '"')
     {
@@ -114,7 +114,7 @@ public Action:OnPlayerSay(client, args)
     }
 }
 
-public jetpack_menu(client, CookieMenuAction:action, any:info, String:buffer[], maxlen)
+public jetpack_menu(client, CookieMenuAction action, any:info, char buffer[], maxlen)
 {
     if (action == CookieMenuAction_SelectOption)
     {
@@ -124,7 +124,7 @@ public jetpack_menu(client, CookieMenuAction:action, any:info, String:buffer[], 
 
 showmenu(client)
 {
-    new Handle:menu = CreateMenu(MenuHandlerJetPack);
+    Handle menu = CreateMenu(MenuHandlerJetPack);
 
     SetMenuTitle(menu,"jetpack menu");
 
@@ -140,7 +140,7 @@ showmenu(client)
 
 loadcookies(client)
 {
-    decl String:buffer[5];
+    char buffer[5];
 
     GetClientCookie(client, cookie_jet, buffer, 5);
     if(!StrEqual(buffer, ""))
@@ -149,7 +149,7 @@ loadcookies(client)
     }
 }
 
-public MenuHandlerJetPack(Handle:menu, MenuAction:action, param1, param2)
+public MenuHandlerJetPack(Handle menu, MenuAction action, param1, param2)
 {
     if(action == MenuAction_Select)	
     {
@@ -161,7 +161,7 @@ public MenuHandlerJetPack(Handle:menu, MenuAction:action, param1, param2)
         {
             jetpack_pref[param1] = false;
         }
-        decl String:buffer[5];
+        char buffer[5];
         IntToString(jetpack_pref[param1], buffer, 5);
         SetClientCookie(param1,cookie_jet, buffer);
     } 
@@ -177,7 +177,7 @@ public OnMapStart()
     if(GuessSDKVersion()==SOURCE_SDK_EPISODE2VALVE)
         SetConVarString(FindConVar("thefury"), PLUGIN_VERSION, true, true);
 
-    for (new iClient = 1; iClient <= MAXPLAYERS; iClient++)
+    for(int iClient= 1; iClient <= MAXPLAYERS; iClient++)
     {
         DeleteBurnerParticle(iClient);
         g_LastKeyCheckTime[iClient] = 0.0;
@@ -207,7 +207,7 @@ public OnMapStart()
 
     iMaxClients=GetMaxClients();
 
-    for(new i = 1; i <=iMaxClients; i++) 
+    for(int i= 1; i <=iMaxClients; i++) 
     {
         if(IsClientInGame(i) && IsFakeClient(i))
         {
@@ -242,7 +242,7 @@ public OnClientPutInServer(client)
 
 public OnGameFrame()
 {
-    for (new iClient = 1; iClient <= MaxClients; iClient++)
+    for(int iClient= 1; iClient <= MaxClients; iClient++)
     {	
         if(IsValidClient(iClient) && IsPlayerAlive(iClient))
         {	
@@ -265,7 +265,7 @@ public OnGameFrame()
                                         {
                                             CalculateCrit(iClient);
 
-                                            new Float:fVelocity[3];
+                                            float fVelocity[3];
                                             GetEntPropVector(iClient, Prop_Data, "m_vecAbsVelocity", fVelocity);
 
                                             if(fVelocity[2] >= -300.0 && !g_Flying[iClient])
@@ -278,7 +278,7 @@ public OnGameFrame()
                                             EmitSoundToAll(SOUND_BURNER_START, iClient, _, _, SND_CHANGEPITCH, 0.3, 150);
                                             CreateTimer(0.02, Timer_StartBurnerLoopSound, iClient);
 
-                                            new Float:ang[3], Float:pos[3];
+                                            float ang[3], float pos[3];
                                             ang[0] = -25.0;
                                             ang[1] = 90.0;
                                             ang[2] = 0.0;
@@ -356,7 +356,7 @@ public OnGameFrame()
 
                                             if(!IsLightEntity(g_LightEntity[iClient]))
                                             {
-                                                new iEntity = CreateLightEntity(iClient);
+                                                int iEntity = CreateLightEntity(iClient);
                                                 if(IsLightEntity(iEntity))
                                                     g_LightEntity[iClient] = iEntity;
                                             }
@@ -365,8 +365,8 @@ public OnGameFrame()
                                         {
                                             //if(!(GetEntityFlags(iClient) & FL_INWATER)) // already checked above
                                             {
-                                                new Float:fOrigin[3];
-                                                new Float:fVelocity[3];
+                                                float fOrigin[3];
+                                                float fVelocity[3];
                                                 GetEntPropVector(iClient, Prop_Data, "m_vecAbsVelocity", fVelocity);
 
                                                 GetClientEyeAngles(iClient, fOrigin);
@@ -385,14 +385,14 @@ public OnGameFrame()
                                                 }
                                                 else
                                                 {
-                                                    decl Float:clientPos[3];
+                                                    decl float clientPos[3];
                                                     GetClientAbsOrigin(iClient, clientPos);
 
-                                                    static const Float:targetPos[3] = { 0.0, 0.0, -4096.0};
-                                                    new Handle:TraceEx = TR_TraceRayFilterEx( clientPos, targetPos, MASK_PLAYERSOLID, RayType_EndPoint, TraceEntityFilterPlayer );
+                                                    static const float targetPos[3] = { 0.0, 0.0, -4096.0};
+                                                    Handle TraceEx = TR_TraceRayFilterEx( clientPos, targetPos, MASK_PLAYERSOLID, RayType_EndPoint, TraceEntityFilterPlayer );
                                                     if(TR_DidHit(TraceEx))
                                                     {
-                                                        decl Float:hitPos[3];
+                                                        decl float hitPos[3];
                                                         TR_GetEndPosition( hitPos, TraceEx );
                                                         if( GetVectorDistanceMeter(clientPos, hitPos) <= 1.125 )
                                                             fVelocity[2] = 133.33;
@@ -406,7 +406,7 @@ public OnGameFrame()
                                                 }
 
                                                 /* This seems to have no purpose ?
-                                                decl Float:fOriginLength[2];
+                                                decl float fOriginLength[2];
                                                 if(Cosine(fOrigin[1])<0)
                                                     fOriginLength[0] = Cosine(fOrigin[1]) * (-1.0);
                                                 else
@@ -418,7 +418,7 @@ public OnGameFrame()
                                                     fOriginLength[1] = Sine(fOrigin[1]);
                                                 */
 
-                                                decl Float:fVelVector[3];
+                                                decl float fVelVector[3];
                                                 fVelVector[2] = 0.0;
                                                 if(fVelocity[0]<230.0 && fVelocity[0]>-230.0)
                                                 {
@@ -453,14 +453,14 @@ public OnGameFrame()
 
                                                 if(GetConVarBool(g_BurnEnemy))
                                                 {
-                                                    new Float:clientPos[3];
-                                                    new Float:clientAng[3];
-                                                    new Float:targetPos[3];
-                                                    new Float:targetAng[3];
+                                                    float clientPos[3];
+                                                    float clientAng[3];
+                                                    float targetPos[3];
+                                                    float targetAng[3];
                                                     GetEntPropVector(iClient, Prop_Data, "m_vecAbsOrigin", clientPos);
                                                     GetEntPropVector(iClient, Prop_Data, "m_angRotation", clientAng);
 
-                                                    for (new iVictim = 1; iVictim <= MaxClients; iVictim++)
+                                                    for(int iVictim= 1; iVictim <= MaxClients; iVictim++)
                                                     {
                                                         if(iClient!=iVictim && IsValidClient(iVictim) && IsPlayerAlive(iVictim) && (GetClientTeam(iClient)!=GetClientTeam(iVictim) || GetConVarInt(FindConVar("mp_friendlyfire"))==1))
                                                         {
@@ -468,7 +468,7 @@ public OnGameFrame()
                                                             SubtractVectors(clientPos, targetPos, targetAng);
                                                             GetVectorAngles(targetAng, targetAng);	
 
-                                                            new Float:diffYaw = FloatAbs((targetAng[1] - 180.0) - clientAng[1]);
+                                                            float diffYaw = FloatAbs((targetAng[1] - 180.0) - clientAng[1]);
                                                             if( (diffYaw >= 135.0) && (diffYaw < 225.0) )
                                                             {
                                                                 if(CanSeeTarget(iClient, clientPos, iVictim, targetPos, 10.0, true, false))
@@ -545,18 +545,18 @@ public OnClientDisconnect(iClient)
         ResetPlayerData(iClient);
 }
 
-public Action:Event_PlayerSpawn(Handle:hEvent, const String:sName[], bool:bDontBroadcast)
+public Action Event_PlayerSpawn(Handle hEvent, const char[] sName, bool bDontBroadcast)
 {
-    new iClient = GetClientOfUserId(GetEventInt(hEvent, "userid"));
+    int iClient = GetClientOfUserId(GetEventInt(hEvent, "userid"));
     if(IsValidClient(iClient))
         ResetPlayerData(iClient);
     return Plugin_Continue;
 }
 
-public Action:Event_PlayerDeath(Handle:hEvent, const String:sName[], bool:bDontBroadcast)
+public Action Event_PlayerDeath(Handle hEvent, const char[] sName, bool bDontBroadcast)
 {	
     {
-        new iClient = GetClientOfUserId(GetEventInt(hEvent, "userid"));
+        int iClient = GetClientOfUserId(GetEventInt(hEvent, "userid"));
         //new iAttacker = GetClientOfUserId(GetEventInt(hEvent, "attacker"));
         if(!IsValidClient(iClient))// || !IsValidClient(iAttacker))
         {
@@ -577,7 +577,7 @@ public Action:Event_PlayerDeath(Handle:hEvent, const String:sName[], bool:bDontB
 }	
 
 // timers
-public Action:Timer_StartBurnerLoopSound(Handle:hTimer, any:iClient)
+public Action Timer_StartBurnerLoopSound(Handle hTimer, any:iClient)
 {
     if(g_State[iClient])
     {
@@ -605,7 +605,7 @@ public Action:Timer_StartBurnerLoopSound(Handle:hTimer, any:iClient)
 }
 
 
-public Action:Timer_InstantKill(Handle:hTimer, any:iClient)
+public Action Timer_InstantKill(Handle hTimer, any:iClient)
 {
     if(IsValidClient(iClient) && IsPlayerAlive(iClient) && IsValidEntity(iClient))
     {
@@ -617,19 +617,19 @@ public Action:Timer_InstantKill(Handle:hTimer, any:iClient)
 }
 
 
-public Action:Timer_HookRagdoll(Handle:hTimer, any:iClient)
+public Action Timer_HookRagdoll(Handle hTimer, any:iClient)
 {
-    decl String:sDissolveName[32];
+    char sDissolveName[32];
     Format(sDissolveName, sizeof(sDissolveName), "dis_%d", iClient);
 
-    new iRagdoll = GetEntPropEnt(iClient, Prop_Send, "m_hRagdoll");
+    int iRagdoll = GetEntPropEnt(iClient, Prop_Send, "m_hRagdoll");
     if(IsValidEdict(iRagdoll))
     {
         //SetEntityRenderColor(iRagdoll, 255, 255, 255, 255);
         DispatchKeyValue(iRagdoll, "targetname", sDissolveName);
     }
 
-    new iDissolver = CreateEntityByName("env_entity_dissolver");
+    int iDissolver = CreateEntityByName("env_entity_dissolver");
     if(IsValidEdict(iDissolver))
     {
         DispatchKeyValue(iDissolver, "dissolvetype", "0");
@@ -640,9 +640,9 @@ public Action:Timer_HookRagdoll(Handle:hTimer, any:iClient)
 
     if(GetConVarBool(g_BurnEnemy2))
     {
-        decl Float:fOrigin[3];
+        decl float fOrigin[3];
         GetEntPropVector(iClient, Prop_Send, "m_vecOrigin", fOrigin);
-        decl Handle:hTimerData;
+        decl Handle hTimerData;
         if(GetEntProp(iRagdoll, Prop_Send, "m_bBurning")==0)
             CreateDataTimer(2.0, Timer_Explode, hTimerData);
         else
@@ -654,12 +654,12 @@ public Action:Timer_HookRagdoll(Handle:hTimer, any:iClient)
     }
 }
 
-public Action:Timer_Explode(Handle:hTimer, Handle:hData)
+public Action Timer_Explode(Handle hTimer, Handle hData)
 {
     ResetPack(hData);
-    new bool:bFF = GetConVarBool(FindConVar("mp_friendlyfire"));
-    new iClient = ReadPackCell(hData);
-    decl Float:fOrigin[3];
+    bool bFF = GetConVarBool(FindConVar("mp_friendlyfire"));
+    int iClient = ReadPackCell(hData);
+    decl float fOrigin[3];
     fOrigin[0] = ReadPackFloat(hData);
     fOrigin[1] = ReadPackFloat(hData);
     fOrigin[2] = ReadPackFloat(hData);
@@ -671,7 +671,7 @@ public Action:Timer_Explode(Handle:hTimer, Handle:hData)
     TE_SendToAll();
     if(GetClientTeam(iClient)>1)
     {
-        for(new iVictim = 1; iVictim <= MaxClients; iVictim++)
+        for(int iVictim= 1; iVictim <= MaxClients; iVictim++)
         {
             if( iVictim<=0 || iVictim>MaxClients || !IsClientConnected(iVictim) ||
                 !IsClientInGame(iVictim) || !IsPlayerAlive(iVictim) ||
@@ -683,16 +683,16 @@ public Action:Timer_Explode(Handle:hTimer, Handle:hData)
                 continue;
             else
             {
-                decl Float:PlayerVec[3];
+                decl float PlayerVec[3];
                 GetClientAbsOrigin(iVictim, PlayerVec);
-                new Float:distance = GetVectorDistanceMeter(fOrigin, PlayerVec, true);
+                float distance = GetVectorDistanceMeter(fOrigin, PlayerVec, true);
                 if(distance > 1000.0)
                     continue;
                 else if(!CanSeeTarget(iClient, fOrigin, iVictim, PlayerVec, 1000.0, true, false))
                     continue;
                 else
                 {
-                    new damage = RoundFloat(1000.0 - distance) / 5;
+                    int damage = RoundFloat(1000.0 - distance) / 5;
                     CreateFlameAttack(iVictim, iClient, damage, _, _, true);
                 }
             }
@@ -702,7 +702,7 @@ public Action:Timer_Explode(Handle:hTimer, Handle:hData)
 
 // additional functions
 
-stock bool:CreateFlameAttack(any:iVictim, any:iAttacker=0, iDamage=5, bool:bCrits=false, bool:bMiniCrits=false, bool:bNoSlay=false)
+stock bool CreateFlameAttack(any:iVictim, any:iAttacker=0, iDamage=5, bool bCrits=false, bool bMiniCrits=false, bool bNoSlay=false)
 {
     if(IsValidClient(iVictim) && (IsValidClient(iAttacker) || iAttacker==0))
     {	
@@ -714,8 +714,8 @@ stock bool:CreateFlameAttack(any:iVictim, any:iAttacker=0, iDamage=5, bool:bCrit
                 iDamage *= GetRandomFloat(1.1,2.1);
             if((GetClientHealth(iVictim)-iDamage)>1)
             {
-                new Handle:hTmpEvent = CreateEvent("player_hurt");
-                if (hTmpEvent != INVALID_HANDLE && IsValidEntity(iVictim))
+                Handle hTmpEvent = CreateEvent("player_hurt");
+                if (hTmpEvent != null && IsValidEntity(iVictim))
                 {
                     SetEventInt(hTmpEvent, "userid", GetClientUserId(iVictim));
                     SetEventInt(hTmpEvent, "health", (GetClientHealth(iVictim)-iDamage));
@@ -770,7 +770,7 @@ public ResetPlayerData(any:iClient)
     g_State[iClient] = false;
 }
 
-public bool:DeleteBurnerParticle(any:iClient)
+public bool DeleteBurnerParticle(any:iClient)
 {
     if (g_Particle1[iClient] != -1)
     {
@@ -803,7 +803,7 @@ stock SaveKeyTime(any:iClient)
         g_LastKeyCheckTime[iClient] = GetGameTime();
 }
 
-stock bool:CheckElapsedTime(any:iClient, Float:time)
+stock bool CheckElapsedTime(any:iClient, float time)
 {
     if(IsValidClient(iClient))
     {
@@ -814,7 +814,7 @@ stock bool:CheckElapsedTime(any:iClient, Float:time)
     return false;
 }
 
-stock bool:IsValidClient(any:iClient, bool:idOnly=false)
+stock bool IsValidClient(any:iClient, bool idOnly=false)
 {
     if (iClient <= 0)
         return false;
@@ -826,14 +826,14 @@ stock bool:IsValidClient(any:iClient, bool:idOnly=false)
         return true;
 }
 
-stock bool:PrePlayParticle(String:particlename[])
+stock bool PrePlayParticle(char particlename[])
 {
     if(IsValidEntity(0))
     {
-        new particle = CreateEntityByName("info_particle_system");
+        int particle = CreateEntityByName("info_particle_system");
         if (IsValidEdict(particle))
         {
-            new String:tName[32];
+            char tName[32];
             GetEntPropString(0, Prop_Data, "m_iName", tName, sizeof(tName));
             DispatchKeyValue(particle, "targetname", "tf2particle");
             DispatchKeyValue(particle, "parentname", tName);
@@ -851,12 +851,12 @@ stock bool:PrePlayParticle(String:particlename[])
     return false;
 }
 
-stock bool:AttachParticleBone(ent, String:particleType[], String:attachBone[], Float:time, Float:addPos[3]=NULL_VECTOR, Float:addAngle[3]=NULL_VECTOR)
+stock bool AttachParticleBone(ent, char particleType[], char attachBone[], float time, float addPos[3]=NULL_VECTOR, float addAngle[3]=NULL_VECTOR)
 {
-    new particle = CreateEntityByName("info_particle_system");
+    int particle = CreateEntityByName("info_particle_system");
     if (IsValidEdict(particle))
     {
-        new String:tName[32];
+        char tName[32];
         GetEntPropString(ent, Prop_Data, "m_iName", tName, sizeof(tName));
         DispatchKeyValue(particle, "targetname", "tf2particle");
         DispatchKeyValue(particle, "parentname", tName);
@@ -875,12 +875,12 @@ stock bool:AttachParticleBone(ent, String:particleType[], String:attachBone[], F
     return false;
 }
 
-stock any:AttachLoopParticleBone(ent, String:particleType[], String:attachBone[], Float:addPos[3]=NULL_VECTOR, Float:addAngle[3]=NULL_VECTOR)
+stock any:AttachLoopParticleBone(ent, char particleType[], char attachBone[], float addPos[3]=NULL_VECTOR, float addAngle[3]=NULL_VECTOR)
 {
-    new particle = CreateEntityByName("info_particle_system");
+    int particle = CreateEntityByName("info_particle_system");
     if (IsValidEdict(particle))
     {
-        new String:tName[32];
+        char tName[32];
         GetEntPropString(ent, Prop_Data, "m_iName", tName, sizeof(tName));
         DispatchKeyValue(particle, "targetname", "tf2particle");
         DispatchKeyValue(particle, "parentname", tName);
@@ -898,13 +898,13 @@ stock any:AttachLoopParticleBone(ent, String:particleType[], String:attachBone[]
     return particle;
 }
 
-stock DeleteParticle(&particle, Float:delay = 0.0)
+stock DeleteParticle(&particle, float delay = 0.0)
 {
     if(particle!= -1)
     {
         if(IsValidEdict(particle))
         {
-            new String:classname[32];
+            char classname[32];
             GetEdictClassname( particle, classname, sizeof( classname ) );
             if( StrEqual( classname, "info_particle_system", false ) )
             {
@@ -917,13 +917,13 @@ stock DeleteParticle(&particle, Float:delay = 0.0)
     }
 }
 
-public Action:RemoveParticle( Handle:timer, any:particle )
+public Action RemoveParticle( Handle timer, any:particle )
 {
     if(particle!= -1)
     {
         if(IsValidEntity(particle))
         {
-            new String:classname[32];
+            char classname[32];
             GetEdictClassname(particle, classname, sizeof(classname));
             if (StrEqual(classname, "info_particle_system", false))
             {
@@ -935,26 +935,26 @@ public Action:RemoveParticle( Handle:timer, any:particle )
     }
 }
 
-stock bool:CanSeeTarget( any:origin, Float:pos[3], any:target, Float:targetPos[3], Float:range, bool:throughPlayer=true, bool:throughBuild=true )
+stock bool CanSeeTarget( any:origin, float pos[3], any:target, float targetPos[3], float range, bool throughPlayer=true, bool throughBuild=true )
 {
-    new Float:distance = GetVectorDistanceMeter( pos, targetPos );
+    float distance = GetVectorDistanceMeter( pos, targetPos );
     if( distance >= range )
         return false;
 
-    new Float:backpos[3];
+    float backpos[3];
     backpos = pos;
 
     g_FilteredEntity = origin;
-    new Handle:TraceEx = TR_TraceRayFilterEx( pos, targetPos, MASK_PLAYERSOLID, RayType_EndPoint, TraceFilter );
-    new hitEnt = TR_GetEntityIndex( TraceEx );
+    Handle TraceEx = TR_TraceRayFilterEx( pos, targetPos, MASK_PLAYERSOLID, RayType_EndPoint, TraceFilter );
+    int hitEnt = TR_GetEntityIndex( TraceEx );
 
-    new Float:hitPos[3];
+    float hitPos[3];
     TR_GetEndPosition( hitPos, TraceEx );
     if( GetVectorDistanceMeter( hitPos, targetPos ) <= 1.0 )
     {
         if( throughPlayer )
         {
-            new String:edictName[64];
+            char edictName[64];
             GetEdictClassname( hitEnt, edictName, sizeof( edictName ) ); 
             if( StrEqual( edictName, "player" ) )  
             {
@@ -974,7 +974,7 @@ stock bool:CanSeeTarget( any:origin, Float:pos[3], any:target, Float:targetPos[3
         }
         if( throughBuild )
         {
-            new String:edictName[64];
+            char edictName[64];
             GetEdictClassname( hitEnt, edictName, sizeof( edictName ) ); 
             if( StrEqual(edictName, "obj_dispenser")
                     || StrEqual(edictName, "obj_sentrygun") 
@@ -1009,12 +1009,12 @@ stock bool:CanSeeTarget( any:origin, Float:pos[3], any:target, Float:targetPos[3
     return false;
 }
 
-public bool:TraceFilter(ent, contentMask)
+public bool TraceFilter(ent, contentMask)
 {
     return (ent == g_FilteredEntity) ? false : true;
 }
 
-public bool:TraceEntityFilterPlayer(entity, contentsMask)
+public bool TraceEntityFilterPlayer(entity, contentsMask)
 {
     return entity > GetMaxClients() || !entity;
 }
@@ -1026,7 +1026,7 @@ stock CreateLightEntity(iClient)
     if (!IsPlayerAlive(iClient))
         return -1;
 
-    new iEntity = CreateEntityByName("light_dynamic");
+    int iEntity = CreateEntityByName("light_dynamic");
     if (IsValidEntity(iEntity))
     {
         DispatchKeyValue(iEntity, "inner_cone", "0");
@@ -1039,11 +1039,11 @@ stock CreateLightEntity(iClient)
         DispatchKeyValue(iEntity, "style", "5");
         DispatchSpawn(iEntity);
 
-        decl Float:fPos[3];
-        decl Float:fAngle[3];
-        decl Float:fAngle2[3];
-        decl Float:fForward[3];
-        decl Float:fOrigin[3];
+        decl float fPos[3];
+        decl float fAngle[3];
+        decl float fAngle2[3];
+        decl float fForward[3];
+        decl float fOrigin[3];
         GetClientEyePosition(iClient, fPos);
         GetClientEyeAngles(iClient, fAngle);
         GetClientEyeAngles(iClient, fAngle2);
@@ -1059,7 +1059,7 @@ stock CreateLightEntity(iClient)
         fOrigin[2] -= 120.0;
         TeleportEntity(iEntity, fOrigin, fAngle, NULL_VECTOR);
 
-        decl String:strName[32];
+        char strName[32];
         Format(strName, sizeof(strName), "target%i", iClient);
         DispatchKeyValue(iClient, "targetname", strName);
 
@@ -1073,23 +1073,23 @@ stock CreateLightEntity(iClient)
     return iEntity;
 }
 
-stock Float:GetVectorDistanceMeter(const Float:vec1[3], const Float:vec2[3], bool:squared=false)
+stock float GetVectorDistanceMeter(const float vec1[3], const float vec2[3], bool squared=false)
 {
     return ( GetVectorDistance( vec1, vec2, squared ) / 50.00 );
 }
 
-EmitSoundFromOrigin(const String:sound[],const Float:orig[3])
+EmitSoundFromOrigin(const char[] sound,const float orig[3])
 {
     EmitSoundToAll(sound,SOUND_FROM_WORLD,SNDCHAN_AUTO,SNDLEVEL_NORMAL,SND_NOFLAGS,SNDVOL_NORMAL,SNDPITCH_NORMAL,-1,orig,NULL_VECTOR,true,0.0);
 }
 
-stock bool:IsLightEntity(iEntity)
+stock bool IsLightEntity(iEntity)
 {
     if (iEntity > 0)
     {
         if (IsValidEdict(iEntity))
         {
-            decl String:strClassname[32];
+            char strClassname[32];
             GetEdictClassname(iEntity, strClassname, sizeof(strClassname));
             if(StrEqual(strClassname, "light_dynamic", false))
                 return true;

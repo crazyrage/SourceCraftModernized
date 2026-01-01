@@ -11,9 +11,9 @@
 #define _player_tracking_included
 
 // Global definition
-new Handle:g_OnUpgradeLevelChangedHandle = INVALID_HANDLE;
-new Handle:g_OnRaceDeselectedHandle = INVALID_HANDLE;
-new Handle:g_OnRaceSelectedHandle = INVALID_HANDLE;
+Handle g_OnUpgradeLevelChangedHandle = null;
+Handle g_OnRaceDeselectedHandle = null;
+Handle g_OnRaceSelectedHandle = null;
 
 GetOwnsItem(client,item)
 {
@@ -24,8 +24,8 @@ GetOwnsItem(client,item)
     new count = GetShopItemCount();
     if (count >= 1 && item < count)
     {
-        new Handle:shopitems=GetShopitems(client);
-        if (shopitems != INVALID_HANDLE &&
+        Handle shopitems=GetShopitems(client);
+        if (shopitems != null &&
             item < GetArraySize(shopitems))
         {
             owns = GetArrayCell(shopitems,item);
@@ -34,7 +34,7 @@ GetOwnsItem(client,item)
         {
             Trace("Unable to determine if client=%d:%N owns item=%d; shopitems=0x%08x, size=%d", \
                   client, ValidClientIndex(client), item, shopitems, \
-                  (shopitems != INVALID_HANDLE) ? GetArraySize(shopitems) : 0);
+                  (shopitems != null) ? GetArraySize(shopitems) : 0);
         }
     }
 
@@ -49,20 +49,20 @@ SetOwnsItem(client,item,owns)
 
     if (GetShopItemCount() >= 1)
     {
-        new Handle:shopitems=GetShopitems(client);
-        if (shopitems != INVALID_HANDLE &&
+        Handle shopitems=GetShopitems(client);
+        if (shopitems != null &&
             item < GetArraySize(shopitems))
         {
             SetArrayCell(shopitems,item,owns);
         }
         else
         {
-            decl String:itemName[NAME_STRING_LENGTH];
-            new Handle:itemHandle = GetItemIndexHandle(item);
+            char itemName[NAME_STRING_LENGTH];
+            Handle itemHandle = GetItemIndexHandle(item);
             GetItemName(itemHandle, itemName, sizeof(itemName));
             LogError("Unable to set that client=%d:%N owns %d of item=%d:%s; shopitems=0x%08x, size=%d",
                      client, ValidClientIndex(client), owns, item, itemName, shopitems,
-                     (shopitems != INVALID_HANDLE) ? GetArraySize(shopitems) : 0);
+                     (shopitems != null) ? GetArraySize(shopitems) : 0);
         }
     }
 
@@ -77,8 +77,8 @@ GetXP(client,race)
     new xp = 0;
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        Handle raceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
             xp = GetRaceInfoXP(raceInfo);
     }
 
@@ -96,8 +96,8 @@ SetXP(client,race,xp)
 
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        Handle raceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
             Trace("Set %d:%N's race %d XP=%d", \
                   client, ValidClientIndex(client), \
@@ -118,8 +118,8 @@ ResetXP(client,race,xp)
 
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        Handle raceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
             Trace("Reset %d:%N's race %d XP=%d", \
                   client, ValidClientIndex(client), \
@@ -128,8 +128,8 @@ ResetXP(client,race,xp)
             SetRaceInfoXP(raceInfo,xp);
             SetDatabaseSaved(client, false);
 
-            new Handle:raceHandle=GetRaceHandle(race);
-            if (raceHandle != INVALID_HANDLE)
+            Handle raceHandle=GetRaceHandle(race);
+            if (raceHandle != null)
             {
                 if (GetRaceInfoLevel(raceInfo) < GetRaceMaxLevel(raceHandle))
                     DoLevelCheck(client);
@@ -148,8 +148,8 @@ GetLevel(client,race)
     new level = 0;
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfoHandle(client, race); // Debug
-        if (raceInfo != INVALID_HANDLE)
+        Handle raceInfo = GetRaceInfoHandle(client, race); // Debug
+        if (raceInfo != null)
             level = GetRaceInfoLevel(raceInfo);
     }
 
@@ -160,7 +160,7 @@ GetLevel(client,race)
     return level;
 }
 
-SetLevel(client,race,level,bool:update=false)
+SetLevel(client,race,level,bool update=false)
 {
     TraceInto("PlayerTracking", "SetLevel", "client=%d:%N, race=%d, level=%d", \
               client, ValidClientIndex(client), race, level);
@@ -168,8 +168,8 @@ SetLevel(client,race,level,bool:update=false)
     new delta = 0;
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        Handle raceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
             new oldLevel = GetRaceInfoLevel(raceInfo);
 
@@ -188,10 +188,10 @@ SetLevel(client,race,level,bool:update=false)
                     new oLevel = GetOverallLevel(client);
                     SetOverallLevel(client,oLevel+delta);
 
-                    new Handle:raceHandle=GetRaceHandle(race);
-                    if (raceHandle != INVALID_HANDLE)
+                    Handle raceHandle=GetRaceHandle(race);
+                    if (raceHandle != null)
                     {
-                        new Faction:techId = GetRaceFaction(raceHandle);
+                        Faction techId = GetRaceFaction(raceHandle);
                         if (techId > Generic)
                         {
                             IncrementTechLevel(client,techId,delta);
@@ -224,16 +224,16 @@ ResetLevel(client,race,new_level)
     TraceReturn();
 }
 
-Float:GetAccumulatedEnergy(client,race)
+float GetAccumulatedEnergy(client,race)
 {
     TraceInto("PlayerTracking", "GetAccumulatedEnergy", "client=%d:%N, race=%d", \
               client, ValidClientIndex(client), race);
 
-    new Float:accumulated_energy=0.0;
+    float accumulated_energy=0.0;
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        Handle raceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
             accumulated_energy = GetRaceInfoAccumulatedEnergy(raceInfo);
     }
 
@@ -241,32 +241,32 @@ Float:GetAccumulatedEnergy(client,race)
     return accumulated_energy;
 }
 
-SetAccumulatedEnergy(client,race,Float:energy)
+SetAccumulatedEnergy(client,race,float energy)
 {
     TraceInto("PlayerTracking", "SetAccumulatedEnergy", "client=%d:%N, race=%d, energy=%d", \
               client, ValidClientIndex(client), race, energy);
 
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        Handle raceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
             SetRaceInfoAccumulatedEnergy(raceInfo,energy);
     }
 
     TraceReturn();
 }
 
-IncrementAccumulatedEnergy(client,race,Float:amount)
+IncrementAccumulatedEnergy(client,race,float amount)
 {
     TraceInto("PlayerTracking", "IncrementAccumulatedEnergy", "client=%d:%N, race=%d, amount=%d", \
               client, ValidClientIndex(client), race, amount);
 
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        Handle raceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
-            new Float:energy = GetRaceInfoAccumulatedEnergy(raceInfo);
+            float energy = GetRaceInfoAccumulatedEnergy(raceInfo);
             SetRaceInfoAccumulatedEnergy(raceInfo,energy+amount);
         }
     }
@@ -283,8 +283,8 @@ GetActiveUltimate(client,race,category)
     if (category >= 1 && category <= MAX_ULTIMATE_CATEGORY &&
         race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        HandleraceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
             new pos; // = RACEINFO_ACTIVE_ULTIMATE_1+category-1;
             switch (category)
@@ -310,8 +310,8 @@ stock SetActiveUltimate(client,race,category,upgrade)
     if (category >= 1 && category <= MAX_ULTIMATE_CATEGORY &&
         race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        HandleraceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
             new pos; // = RACEINFO_ACTIVE_ULTIMATE_1+category-1;
             switch (category)
@@ -336,8 +336,8 @@ DataStatus:GetRaceLoaded(client,race)
     new DataStatus:loaded = DataNotLoaded;
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        HandleraceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
             loaded = GetRaceInfoLoaded(raceInfo);
     }
 
@@ -352,8 +352,8 @@ stock SetRaceLoaded(client,race,DataStatus:loaded)
 
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        HandleraceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
             SetRaceInfoLoaded(raceInfo,loaded);
     }
 
@@ -368,8 +368,8 @@ stock GetSavedXP(client,race)
     new xp = 0;
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        HandleraceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
             xp = GetRaceInfoSavedXP(raceInfo);
     }
 
@@ -387,8 +387,8 @@ stock SetSavedXP(client,race,xp)
 
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        HandleraceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
             Trace("Set %d:%N's race %d SavedXP=%d", \
                   client, ValidClientIndex(client), \
@@ -409,8 +409,8 @@ GetUpgradeLevel(client,race,upgrade)
     new level = 0;
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        HandleraceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
             new upgradePos = GetRaceInfoUpgradePos(upgrade);
             new upgradeSize = GetArraySize(raceInfo);
@@ -418,11 +418,11 @@ GetUpgradeLevel(client,race,upgrade)
                 level = GetArrayCell(raceInfo,upgradePos); // +UPGRADEINFO_LEVEL
             else
             {
-                new Handle:raceHandle=GetRaceHandle(race);
-                if (raceHandle != INVALID_HANDLE)
+                HandleraceHandle=GetRaceHandle(race);
+                if (raceHandle != null)
                 {
                     new upgradeCount = (upgradeSize-RACEINFO_SIZE)/UPGRADEINFO_SIZE;
-                    decl String:rname[64]; GetRaceName(raceHandle,rname,sizeof(rname));
+                    charrname[64]; GetRaceName(raceHandle,rname,sizeof(rname));
                     LogError("GetUpgradeLevel of Invalid upgrade %d (pos %d) of %d(%d) for race %d(%s)",
                              upgrade, upgradePos, upgradeSize, upgradeCount, race, rname);
 
@@ -445,8 +445,8 @@ SetUpgradeLevel(client,race,upgrade,level)
 
     if (race >= 0 && GetRaceCount() > 1 && IsClientInGame(client))
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        HandleraceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
             new old = 0;
             new upgradePos = GetRaceInfoUpgradePos(upgrade);
@@ -489,16 +489,16 @@ SetUpgradeLevel(client,race,upgrade,level)
     TraceReturn();
 }
 
-bool:IncrementUpgradeLevel(client,race,upgrade,category,max)
+bool IncrementUpgradeLevel(client,race,upgrade,category,max)
 {
     TraceInto("PlayerTracking", "IncrementUpgradeLevel", "client=%d:%N, race=%d, upgrade=%d, category=%d", \
               client, ValidClientIndex(client), race, upgrade, category);
 
-    new bool:success=false;
+    boolsuccess=false;
     if (race >= 0 && GetRaceCount() > 1 && IsClientInGame(client))
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        HandleraceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
             new upgradePos = GetRaceInfoUpgradePos(upgrade);
             new old = GetArrayCell(raceInfo,upgradePos); // +UPGRADEINFO_LEVEL
@@ -544,17 +544,17 @@ LoadUpgradeLevel(client,race,upgrade,level)
 
     if (g_bSaveUpgrades && race >= 0 && GetRaceCount() > 1 && IsClientInGame(client))
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        HandleraceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
             new upgradePos = GetRaceInfoUpgradePos(upgrade);
             if (upgradePos >= GetArraySize(raceInfo))
             {
-                new Handle:raceHandle=GetRaceHandle(race);
-                if (raceHandle != INVALID_HANDLE)
+                HandleraceHandle=GetRaceHandle(race);
+                if (raceHandle != null)
                 {
                     new ident = GetRaceIdent(raceHandle);
-                    decl String:name[NAME_STRING_LENGTH]; GetRaceName(raceHandle,name,sizeof(name));
+                    charname[NAME_STRING_LENGTH]; GetRaceName(raceHandle,name,sizeof(name));
                     LogError("Unable to Set %d:%N's %d-%d:%s Upgrade %d Level=%d, upgradePos=%d of %d == FUBAR!",
                              client, ValidClientIndex(client), race, ident, name,
                              upgrade, level, upgradePos, GetArraySize(raceInfo));
@@ -591,11 +591,11 @@ GetUpgradeLevelCount(client,race)
     new ret = 0;
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        HandleraceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
-            new Handle:raceHandle = GetRaceHandle(race);
-            if (raceHandle != INVALID_HANDLE)
+            HandleraceHandle = GetRaceHandle(race);
+            if (raceHandle != null)
             {
                 new upgradeCount = GetUpgradeCount(raceHandle);
                 new last = GetRaceInfoUpgradePos(upgradeCount);
@@ -617,8 +617,8 @@ stock GetSavedUpgradeLevel(client,race,upgrade)
     new ret=0;
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        HandleraceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
             new upgradePos = GetRaceInfoUpgradePos(upgrade);
             ret = GetArrayCell(raceInfo,upgradePos+UPGRADEINFO_SAVED_LEVEL);
@@ -636,8 +636,8 @@ stock SetSavedUpgradeLevel(client,race,upgrade,level)
 
     if (race >= 0 && GetRaceCount() > 1)
     {
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        HandleraceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
             new upgradePos = GetRaceInfoUpgradePos(upgrade);
             SetArrayCell(raceInfo,upgradePos+UPGRADEINFO_SAVED_LEVEL,level);
@@ -656,8 +656,8 @@ DataStatus:GetTechLoaded(client,Faction:techId)
     new DataStatus:loaded = DataNotLoaded;
     if (techId >= Generic)
     {
-        new Handle:techInfo=GetTechInfo(client, techId);
-        if (techInfo != INVALID_HANDLE)
+        HandletechInfo=GetTechInfo(client, techId);
+        if (techInfo != null)
             loaded = GetTechInfoLoaded(techInfo);
     }
 
@@ -672,8 +672,8 @@ stock SetTechLoaded(client,Faction:techId,loaded)
 
     if (techId >= Generic)
     {
-        new Handle:techInfo=GetTechInfo(client, techId);
-        if (techInfo != INVALID_HANDLE)
+        HandletechInfo=GetTechInfo(client, techId);
+        if (techInfo != null)
             SetTechInfoLoaded(techInfo,loaded);
     }
 
@@ -688,8 +688,8 @@ stock GetTechCount(client,Faction:techId)
     new count = 0;
     if (techId >= Generic)
     {
-        new Handle:techInfo=GetTechInfo(client, techId);
-        if (techInfo != INVALID_HANDLE)
+        HandletechInfo=GetTechInfo(client, techId);
+        if (techInfo != null)
             count = GetTechInfoCount(techInfo);
     }
 
@@ -707,8 +707,8 @@ stock SetTechCount(client,Faction:techId, count)
 
     if (techId >= Generic)
     {
-        new Handle:techInfo=GetTechInfo(client, techId);
-        if (techInfo != INVALID_HANDLE)
+        HandletechInfo=GetTechInfo(client, techId);
+        if (techInfo != null)
             SetTechInfoCount(techInfo, count);
     }
 
@@ -722,8 +722,8 @@ IncrementTechCount(client,Faction:techId, amount)
 
     if (techId >= Generic)
     {
-        new Handle:techInfo=GetTechInfo(client, techId);
-        if (techInfo != INVALID_HANDLE)
+        HandletechInfo=GetTechInfo(client, techId);
+        if (techInfo != null)
         {
             new count = GetTechInfoCount(techInfo);
             SetTechInfoCount(techInfo, count+amount);
@@ -741,8 +741,8 @@ GetTechLevel(client,Faction:techId)
     new level = 0;
     if (techId >= Generic)
     {
-        new Handle:techInfo=GetTechInfo(client, techId);
-        if (techInfo != INVALID_HANDLE)
+        HandletechInfo=GetTechInfo(client, techId);
+        if (techInfo != null)
             level = GetTechInfoLevel(techInfo);
     }
 
@@ -760,8 +760,8 @@ stock SetTechLevel(client,Faction:techId, level)
 
     if (techId >= Generic)
     {
-        new Handle:techInfo=GetTechInfo(client, techId);
-        if (techInfo != INVALID_HANDLE)
+        HandletechInfo=GetTechInfo(client, techId);
+        if (techInfo != null)
             SetTechInfoLevel(techInfo, level);
     }
 
@@ -775,8 +775,8 @@ IncrementTechLevel(client,Faction:techId, amount)
 
     if (techId >= Generic)
     {
-        new Handle:techInfo=GetTechInfo(client, techId);
-        if (techInfo != INVALID_HANDLE)
+        HandletechInfo=GetTechInfo(client, techId);
+        if (techInfo != null)
         {
             new level = GetTechInfoLevel(techInfo);
             SetTechInfoLevel(techInfo, level+amount);
@@ -786,7 +786,7 @@ IncrementTechLevel(client,Faction:techId, amount)
     TraceReturn();
 }
 
-bool:SetRace(client, race, bool:saveEnergy=false)
+bool SetRace(client, race, bool saveEnergy=false)
 {
     TraceInto("PlayerTracking", "SetRace", "client=%d:%N, race=%d, saveEnergy=%d", \
               client, ValidClientIndex(client), race, saveEnergy);
@@ -798,7 +798,7 @@ bool:SetRace(client, race, bool:saveEnergy=false)
               client,ValidClientIndex(client), \
               race);
 
-        new bool:saveEnabled = (g_bSaveXP && GetRaceCount() > 1 &&
+        boolsaveEnabled = (g_bSaveXP && GetRaceCount() > 1 &&
                                 GetPlayerStatus(client) != PlayerDisabled);
 
         if (oldrace > 0 && saveEnabled && !GetDatabaseSaved(client) &&
@@ -851,7 +851,7 @@ bool:SetRace(client, race, bool:saveEnergy=false)
             Call_PushCell(oldrace);
             Call_PushCell(race);
 
-            new Action:result = Plugin_Continue;
+            Actionresult = Plugin_Continue;
             Call_Finish(result);
             if (result >= Plugin_Stop)
             {
@@ -871,7 +871,7 @@ bool:SetRace(client, race, bool:saveEnergy=false)
         Call_PushCell(oldrace);
         Call_PushCell(race);
 
-        new Action:result = Plugin_Continue;
+        Actionresult = Plugin_Continue;
         Call_Finish(result);
         if (result >= Plugin_Stop)
         {
@@ -883,26 +883,26 @@ bool:SetRace(client, race, bool:saveEnergy=false)
         }
 
         // Reset accumulated energy when changing races
-        new Handle:raceInfo = GetRaceInfo(client, race);
-        if (raceInfo != INVALID_HANDLE)
+        HandleraceInfo = GetRaceInfo(client, race);
+        if (raceInfo != null)
         {
-            new Float:energy = (saveEnergy) ? GetEnergy(client) : 0.0;
+            floatenergy = (saveEnergy) ? GetEnergy(client) : 0.0;
             SetRaceInfoAccumulatedEnergy(raceInfo, energy);
         }
 
         // Set the energy to the initial amount of the new race.
-        new Float:initial = GetInitialEnergy(client);
+        floatinitial = GetInitialEnergy(client);
 
         Trace("%d:%N's initial energy is %1.0f", \
               client, ValidClientIndex(client), initial);
 
-        new Handle:raceHandle=GetRaceHandle(race);
-        if (raceHandle != INVALID_HANDLE && initial < 0.0)
+        HandleraceHandle=GetRaceHandle(race);
+        if (raceHandle != null && initial < 0.0)
         {
             initial = GetRaceInitialEnergy(raceHandle);
 
             #if defined _TRACE
-                decl String:rname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
+                charrname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
                 Trace("Race %d(0x%08x)'s initial energy is %1.0f", race, raceHandle, initial);
             #endif
         }
@@ -916,7 +916,7 @@ bool:SetRace(client, race, bool:saveEnergy=false)
               client, ValidClientIndex(client), initial);
 
         // Setup racial immunities (vulnerabilities)
-        new UnitType:type = (raceHandle != INVALID_HANDLE) ? GetRaceType(raceHandle) : GenericUnit;
+        new UnitType:type = (raceHandle != null) ? GetRaceType(raceHandle) : GenericUnit;
         SetAttribute(client,Attribute_IsBiological, type == Biological || type == BioMechanical || type == Cybernetic || type == GenericUnit);
         SetAttribute(client,Attribute_IsMechanical, type == Mechanical || type == BioMechanical || type == Cybernetic);
         SetAttribute(client,Attribute_IsRobotic, type == Robotic || type == Cybernetic);
@@ -951,30 +951,30 @@ bool:SetRace(client, race, bool:saveEnergy=false)
     return false;
 }
 
-Handle:GetPropInfo(Handle:propData, Handle:plugin, id)
+Handle GetPropInfo(Handle propData, Handle plugin, int id)
 {
     new size=GetArraySize(propData);
     for (new x=0;x<size;x++)
     {
-        new Handle:propInfo=GetArrayCell(propData,x);
+        HandlepropInfo=GetArrayCell(propData,x);
         if (GetPropInfoPlugin(propInfo) == plugin &&
             GetPropInfoId(propInfo) == id)
         {
             return propInfo;
         }
     }
-    return INVALID_HANDLE;
+    return null;
 }
 
-Handle:CreateProperties(client, Handle:plugin, id, Float:forceSpeed=-1.0, Float:forceGravity=-1.0,
-                        forceVisibility=-1, Float:speed=-1.0, Float:gravity=-1.0, visibility=-1,
-                        VisibilityType:type=VisibilityType:-1, Float:factor1=-1.0, Float:factor2=-1.0,
-                        RenderMode:mode=RenderMode:-1, RenderFx:fx=RenderFx:-1, r=-1, g=-1, b=-1,
-                        weaponAlpha=-1,bool:colorWeapons=false, VisibilityPriority:priority=VisibilityPriorityNotSpecified,
-                        Float:timestamp=0.0, Immunity:immunities=Immunity_None, Restriction:restrictions=Restriction_None,
-                        MoveType:mt=MOVETYPE_DEFAULT, Float:physicalArmorPercent=0.0, Float:magicalArmorPercent=0.0,
-                        RegenFlags:regenHealthFlags=Regen_Default, Float:regenHealth=0.0,
-                        RegenFlags:regenShieldFlags=Regen_Default, Float:regenShield=0.0)
+Handle CreateProperties(client, Handle plugin, int id, float forceSpeed=-1.0, float forceGravity=-1.0,
+                        int forceVisibility=-1, float speed=-1.0, float gravity=-1.0, int visibility=-1,
+                        VisibilityType type=VisibilityType:-1, float factor1=-1.0, float factor2=-1.0,
+                        RenderMode mode=RenderMode:-1, RenderFx fx=RenderFx:-1, int r=-1, int g=-1, int b=-1,
+                        int weaponAlpha=-1,bool colorWeapons=false, VisibilityPriority priority=VisibilityPriorityNotSpecified,
+                        float timestamp=0.0, Immunity immunities=Immunity_None, Restriction restrictions=Restriction_None,
+                        MoveType mt=MOVETYPE_DEFAULT, float physicalArmorPercent=0.0, float magicalArmorPercent=0.0,
+                        RegenFlags regenHealthFlags=Regen_Default, float regenHealth=0.0,
+                        RegenFlags regenShieldFlags=Regen_Default, float regenShield=0.0)
 {
     #if defined _TRACE
         SetTraceCategory("Array");
@@ -984,7 +984,7 @@ Handle:CreateProperties(client, Handle:plugin, id, Float:forceSpeed=-1.0, Float:
         #pragma unused client
     #endif
 
-    new Handle:pHandle=CreateArray();
+    HandlepHandle=CreateArray();
     PushArrayCell(pHandle, plugin);                 // plugin handle
     PushArrayCell(pHandle, id);                     // identifier
     PushArrayCell(pHandle, forceSpeed);             // force speed?
@@ -1023,7 +1023,7 @@ Handle:CreateProperties(client, Handle:plugin, id, Float:forceSpeed=-1.0, Float:
     return pHandle;
 }
 
-ResetPlayer(client, bool:clear)
+ResetPlayer(client, bool clear)
 {
     TraceInto("PlayerTracking", "ResetPlayer", "client=%d:%N", \
               client, ValidClientIndex(client));
@@ -1083,8 +1083,8 @@ ResetPlayer(client, bool:clear)
         ClearPlayer(client);
 
     // Player's properties
-    new Handle:propData=GetPropData(client);
-    if (propData == INVALID_HANDLE)
+    HandlepropData=GetPropData(client);
+    if (propData == null)
     {
         propData = SetPropData(client, CreateArray()); // Player's properties
         // No need to initialize properties elements.
@@ -1097,8 +1097,8 @@ ResetPlayer(client, bool:clear)
         new numprops=GetArraySize(propData);
         for (new x=0;x<numprops;x++)
         {
-            new Handle:propInfo=GetArrayCell(propData,x);
-            if (propInfo != INVALID_HANDLE)
+            HandlepropInfo=GetArrayCell(propData,x);
+            if (propInfo != null)
             {
                 //SetPropInfoPlugin(propInfo,plugin);                   // plugin handle
                 //SetPropInfoId(propInfo,id);                           // identifier
@@ -1137,8 +1137,8 @@ ResetPlayer(client, bool:clear)
     // Player's shop items
     new shopItemCount;
     new shopVectorCount=GetShopItemCount();
-    new Handle:shopitems=GetShopitems(client);
-    if (shopitems == INVALID_HANDLE)
+    Handleshopitems=GetShopitems(client);
+    if (shopitems == null)
     {
         shopItemCount = shopVectorCount;
         shopitems = SetShopitems(client, CreateArray(1, shopItemCount));
@@ -1182,8 +1182,8 @@ ResetPlayer(client, bool:clear)
     // Player's race data
     new raceDataCount;
     new raceCount = GetRaceCount();
-    new Handle:raceData=GetRaceData(client);
-    if (raceData == INVALID_HANDLE)
+    HandleraceData=GetRaceData(client);
+    if (raceData == null)
     {
         raceData = SetRaceData(client, CreateArray()); // Player's race data
 
@@ -1192,7 +1192,7 @@ ResetPlayer(client, bool:clear)
 
         for (new race=0;race<raceCount;race++)
         {
-            new Handle:raceInfo=CreateArray(); // Player's races
+            HandleraceInfo=CreateArray(); // Player's races
             PushArrayCell(raceInfo,0); // Race's XP
             PushArrayCell(raceInfo,0); // Race's Level
             PushArrayCell(raceInfo,0.0); // Race's Accumulated Energy
@@ -1207,8 +1207,8 @@ ResetPlayer(client, bool:clear)
             TraceCat("Array", "CreateArray playerRaceInfo[%d,%d]=0x%08x", \
                      client, race, raceInfo);
 
-            new Handle:raceHandle=GetRaceHandle(race);
-            new upgradeCount = (raceHandle != INVALID_HANDLE)
+            HandleraceHandle=GetRaceHandle(race);
+            new upgradeCount = (raceHandle != null)
                                ? GetUpgradeCount(raceHandle) : 0;
             for(new upgrade=0;upgrade<upgradeCount;upgrade++)
             {
@@ -1219,7 +1219,7 @@ ResetPlayer(client, bool:clear)
             // Perform a sanity check of the race info.
             if (GetArraySize(raceInfo) != GetRaceInfoUpgradePos(upgradeCount))
             {
-                decl String:rname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
+                charrname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
                 LogError("ERROR: Player %d:%N's race %s(%d) data got fubared! %d != %d",
                          client, ValidClientIndex(client), rname, race,
                          GetArraySize(raceInfo), GetRaceInfoUpgradePos(upgradeCount));
@@ -1239,8 +1239,8 @@ ResetPlayer(client, bool:clear)
         raceDataCount=GetArraySize(raceData);
         for (new race=0;race<raceDataCount;race++)
         {
-            new Handle:raceInfo=GetArrayCell(raceData,race); // Player's races
-            if (raceInfo != INVALID_HANDLE)
+            HandleraceInfo=GetArrayCell(raceData,race); // Player's races
+            if (raceInfo != null)
             {
                 SetRaceInfoXP(raceInfo, 0); // Race's XP
                 SetRaceInfoLevel(raceInfo, 0); // Race's Level
@@ -1252,8 +1252,8 @@ ResetPlayer(client, bool:clear)
                 SetRaceInfoLoaded(raceInfo, DataNotLoaded); // Race Not Loaded
                 SetRaceInfoSavedXP(raceInfo, 0); // Race's Saved XP
 
-                new Handle:raceHandle=GetRaceHandle(race);
-                new upgradeCount = (raceHandle != INVALID_HANDLE) ? GetUpgradeCount(raceHandle) : 0;
+                HandleraceHandle=GetRaceHandle(race);
+                new upgradeCount = (raceHandle != null) ? GetUpgradeCount(raceHandle) : 0;
                 for (new upgrade=0;upgrade<upgradeCount;upgrade++)
                 {
                     new upgradePos = GetRaceInfoUpgradePos(upgrade);
@@ -1264,7 +1264,7 @@ ResetPlayer(client, bool:clear)
                 // Perform a sanity check of the race info.
                 if (GetArraySize(raceInfo)!=GetRaceInfoUpgradePos(upgradeCount))
                 {
-                    decl String:rname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
+                    charrname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
                     LogError("ERROR: Player %d:%N's race %d:%s data got fubared! %d != %d",
                              client, ValidClientIndex(client), race, rname,
                              GetArraySize(raceInfo), GetRaceInfoUpgradePos(upgradeCount));
@@ -1297,8 +1297,8 @@ ResetPlayer(client, bool:clear)
     // Player's tech data
 
     new techDataCount;
-    new Handle:techData=GetTechData(client);
-    if (techData == INVALID_HANDLE)
+    HandletechData=GetTechData(client);
+    if (techData == null)
     {
         techData = SetTechData(client, CreateArray()); // Player's tech data
 
@@ -1307,7 +1307,7 @@ ResetPlayer(client, bool:clear)
 
         for (new Faction:techId=Generic;techId<Faction;techId++)
         {
-            new Handle:techInfo=CreateArray(); // Player's tech info
+            HandletechInfo=CreateArray(); // Player's tech info
             PushArrayCell(techInfo,0); // Tech Count
             PushArrayCell(techInfo,0); // Tech Level
             PushArrayCell(techInfo,DataNotLoaded); // Tech Not Loaded
@@ -1319,7 +1319,7 @@ ResetPlayer(client, bool:clear)
             // Perform a sanity check of the tech info.
             if (GetArraySize(techInfo) != TECHINFO_SIZE)
             {
-                decl String:tech[NAME_STRING_LENGTH];
+                chartech[NAME_STRING_LENGTH];
                 GetFactionName(techId, tech, sizeof(tech));
                 LogError("ERROR: Player %d:%N's tech %d:%s data got fubared! %d != %d",
                          client, ValidClientIndex(client), techId, tech,
@@ -1340,8 +1340,8 @@ ResetPlayer(client, bool:clear)
         techDataCount=GetArraySize(techData);
         for (new Faction:techId=Generic;techId<Faction:techDataCount;techId++)
         {
-            new Handle:techInfo=GetArrayCell(techData,_:techId); // Player's tech data
-            if (techInfo != INVALID_HANDLE)
+            HandletechInfo=GetArrayCell(techData,_:techId); // Player's tech data
+            if (techInfo != null)
             {
                 SetTechInfoCount(techInfo,0); // Tech Count
                 SetTechInfoLevel(techInfo,0); // Tech Level
@@ -1350,7 +1350,7 @@ ResetPlayer(client, bool:clear)
                 // Perform a sanity check of the tech info.
                 if (GetArraySize(techInfo)!=TECHINFO_SIZE)
                 {
-                    decl String:tech[NAME_STRING_LENGTH];
+                    chartech[NAME_STRING_LENGTH];
                     GetFactionName(techId, tech, sizeof(tech));
                     LogError("ERROR: Player %d:%N's tech %d:%s data got fubared! %d != %d",
                              client, ValidClientIndex(client), techId, tech,
@@ -1395,18 +1395,18 @@ ClearPlayer(client)
     TraceInto("PlayerTracking", "ClearPlayer", "client=%d:%N", \
               client, ValidClientIndex(client));
 
-    new Handle:propData=Handle:GetPropData(client); // Player's properties
-    if (propData != INVALID_HANDLE)
+    HandlepropData=Handle:GetPropData(client); // Player's properties
+    if (propData != null)
     {
         new numprops=GetArraySize(propData);
         for (new x=0;x<numprops;x++)
         {
-            new Handle:propInfo=GetArrayCell(propData,x);
-            if (propInfo != INVALID_HANDLE)
+            HandlepropInfo=GetArrayCell(propData,x);
+            if (propInfo != null)
             {
                 #if defined _TRACE
                     new id = GetPropInfoId(propInfo);
-                    new Handle:plugin = GetPropInfoPlugin(propInfo);
+                    Handleplugin = GetPropInfoPlugin(propInfo);
                     TraceCat("Array", "CloseArray playerInfo[%d,0x%08x,%d,%d]=0x%08x", \
                              client, plugin, id, x, propInfo);
                 #endif
@@ -1417,31 +1417,31 @@ ClearPlayer(client)
         }
         ClearArray(propData);
         CloseHandle(propData);
-        SetPropData(client, INVALID_HANDLE);
+        SetPropData(client, null);
 
         TraceCat("Array", "CloseArray playerArray[%d,INFO_PROPERTIES]=0x%08x", \
                  client, propData);
     }
 
-    new Handle:shopitems=Handle:GetShopitems(client); // Player's shop items
-    if (shopitems != INVALID_HANDLE)
+    Handleshopitems=Handle:GetShopitems(client); // Player's shop items
+    if (shopitems != null)
     {
         ClearArray(shopitems);
         CloseHandle(shopitems);
-        SetShopitems(client, INVALID_HANDLE);
+        SetShopitems(client, null);
 
         TraceCat("Array", "CloseArray playerArray[%d,INFO_SHOPITEMS]=0x%08x", \
                  client, shopitems);
     }
 
-    new Handle:raceData = GetRaceData(client); // Player's race data
-    if (raceData != INVALID_HANDLE)
+    HandleraceData = GetRaceData(client); // Player's race data
+    if (raceData != null)
     {
         new raceDataCount=GetArraySize(raceData);
         for(new race=0;race<raceDataCount;race++)
         {
-            new Handle:raceInfo=GetArrayCell(raceData,race); // Player's races
-            if (raceInfo != INVALID_HANDLE)
+            HandleraceInfo=GetArrayCell(raceData,race); // Player's races
+            if (raceInfo != null)
             {
                 ClearArray(raceInfo);
                 CloseHandle(raceInfo);
@@ -1453,20 +1453,20 @@ ClearPlayer(client)
 
         ClearArray(raceData);
         CloseHandle(raceData);
-        SetRaceData(client, INVALID_HANDLE);
+        SetRaceData(client, null);
 
         TraceCat("Array", "CloseArray playerArray[%d,INFO_RACEDATA]=0x%08x", \
                  client, raceData);
     }
 
-    new Handle:techData = GetTechData(client); // Player's tech data
-    if (techData != INVALID_HANDLE)
+    HandletechData = GetTechData(client); // Player's tech data
+    if (techData != null)
     {
         new techDataCount=GetArraySize(techData);
         for(new techId=0;techId<techDataCount;techId++)
         {
-            new Handle:techInfo=GetArrayCell(techData,techId); // Player's tech info
-            if (techInfo != INVALID_HANDLE)
+            HandletechInfo=GetArrayCell(techData,techId); // Player's tech info
+            if (techInfo != null)
             {
                 ClearArray(techInfo);
                 CloseHandle(techInfo);
@@ -1478,7 +1478,7 @@ ClearPlayer(client)
 
         ClearArray(techData);
         CloseHandle(techData);
-        SetTechData(client, INVALID_HANDLE);
+        SetTechData(client, null);
 
         TraceCat("Array", "CloseArray playerArray[%d,INFO_TECHDATA]=0x%08x", \
                  client, techData);
@@ -1487,17 +1487,17 @@ ClearPlayer(client)
     TraceReturn();
 }
 
-Float:SumFloatClientProperty(client, PropInfo:pindex)
+float SumFloatClientProperty(client, PropInfo pindex)
 {
-    new Float:sum = 0.0;
-    new Handle:propData=GetPropData(client);
-    if (propData == INVALID_HANDLE)
+    float sum = 0.0;
+    Handle propData=GetPropData(client);
+    if (propData == null)
     {
         new numprops=GetArraySize(propData);
         for (new x=0;x<numprops;x++)
         {
-            new Handle:propInfo=GetArrayCell(propData,x);
-            if (propInfo != INVALID_HANDLE)
+            HandlepropInfo=GetArrayCell(propData,x);
+            if (propInfo != null)
                 sum += Float:GetArrayCell(propInfo,_:pindex);
         }
     }
@@ -1506,14 +1506,14 @@ Float:SumFloatClientProperty(client, PropInfo:pindex)
 
 ResetPlayerProperties(client)
 {
-    new Handle:propData = GetPropData(client);
-    if (propData != INVALID_HANDLE)
+    HandlepropData = GetPropData(client);
+    if (propData != null)
     {
         new numprops=GetArraySize(propData);
         for (new x=0;x<numprops;x++)
         {
-            new Handle:propInfo=GetArrayCell(propData,x);
-            if (propInfo != INVALID_HANDLE)
+            HandlepropInfo=GetArrayCell(propData,x);
+            if (propInfo != null)
             {
                 SetPropInfoOverrideSpeed(propInfo,-1.0);
                 SetPropInfoSpeed(propInfo,-1.0);

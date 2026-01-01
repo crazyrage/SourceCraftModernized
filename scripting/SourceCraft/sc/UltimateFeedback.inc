@@ -19,7 +19,7 @@
 #include "effect/SendEffects"
 #include "effect/FlashScreen"
 
-stock const String:ultimateFeedbackSound[] = "sc/feedback.mp3";
+stock const char ultimateFeedbackSound[] = "sc/feedback.mp3";
 
 stock SetupUltimateFeedback()
 {
@@ -32,12 +32,12 @@ stock SetupUltimateFeedback()
     SetupSound(ultimateFeedbackSound);
 }
 
-stock UltimateFeedback(client, raceId, upgradeId, level, Float:feedbackRange[])
+stock UltimateFeedback(client, raceId, upgradeId, level, float feedbackRange[])
 {
     if (GetRestriction(client,Restriction_NoUltimates) ||
         GetRestriction(client,Restriction_Stunned))
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
         PrepareAndEmitSoundToClient(client,deniedWav);
         DisplayMessage(client, Display_Ultimate, "%t",
@@ -72,11 +72,11 @@ stock UltimateFeedback(client, raceId, upgradeId, level, Float:feedbackRange[])
 
         static const lightningColor[4] = { 10, 200, 255, 255 };
 
-        new Float:range = feedbackRange[level];
+        float range = feedbackRange[level];
 
-        new Float:lastLoc[3];
-        new Float:indexLoc[3];
-        new Float:targetLoc[3];
+        float lastLoc[3];
+        float indexLoc[3];
+        float targetLoc[3];
         GetClientAbsOrigin(client, lastLoc);
         lastLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
@@ -195,7 +195,7 @@ stock UltimateFeedback(client, raceId, upgradeId, level, Float:feedbackRange[])
             }
         }
 
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
 
         if (count)

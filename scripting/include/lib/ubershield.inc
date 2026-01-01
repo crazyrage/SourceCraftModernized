@@ -47,7 +47,7 @@ enum ShieldFlags (<<= 1)
  * @param plugin_only 	Set to 1 to assume complete control of the Uber Shield plugin.
  * @return		    	none
  */
-native ControlUberShield(bool:plugin_only=true);
+native ControlUberShield(bool plugin_only=true);
 
 /**
  * Give a player one or more uber shields to invoke
@@ -77,7 +77,7 @@ native TakeUberShield(client);
  * @param duration  The duration of the shield (in seconds, 0 = infinite, < 0 to use convar).
  * @return			none
  */
-native UberShieldTarget(client,Float:duration=-1.0,
+native UberShieldTarget(client,Float duration=-1.0,
                         ShieldFlags:flags=ShieldDefault);
 
 /**
@@ -88,7 +88,7 @@ native UberShieldTarget(client,Float:duration=-1.0,
  * @param duration  The duration of the shield (in seconds, 0 = infinite, < 0 to use convar).
  * @return			none
  */
-native UberShieldLocation(client,Float:duration=-1.0,
+native UberShieldLocation(client,Float duration=-1.0,
                           ShieldFlags:flags=ShieldDefault);
 
 /**
@@ -102,8 +102,8 @@ native UberShieldLocation(client,Float:duration=-1.0,
  * @param duration  The duration of the shield (in seconds, 0 = infinite, < 0 to use convar).
  * @return			none
  */
-native UberShield(client,target=0,const Float:pos[3]=NULL_VECTOR,
-                  Float:duration=-1.0,
+native UberShield(client,target=0,const Float pos[3]=NULL_VECTOR,
+                  Float duration=-1.0,
                   ShieldFlags:flags=ShieldDefault);
 
 /**
@@ -116,18 +116,18 @@ native UberShield(client,target=0,const Float:pos[3]=NULL_VECTOR,
  * @param stopTime      The duration of the Alternate Shield Stop Sound
  * @return		        none
  */
-native SetAlternateShieldSound(const String:startSound[] = "",
-                               const String:activeSound[] = "",
-                               const String:stopSound[] = "",
-                               Float:startTime=2.0,
-                               Float:stopTime=2.0);
+native SetAlternateShieldSound(const char[] startSound = "",
+                               const char[] activeSound = "",
+                               const char[] stopSound = "",
+                               Float startTime=2.0,
+                               Float stopTime=2.0);
 
 /**
  * Gets called when an ubershield is deployed
  * @param client:   The index of the client that deployed the ubershield.
  * @param target 	Target index (set to client to shield self, set to 0 for a location)
  */
-forward Action:OnDeployUberShield(client, target);
+forward Action OnDeployUberShield(client, target);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

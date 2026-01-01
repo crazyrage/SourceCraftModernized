@@ -8,7 +8,7 @@
 
 #define PLUGIN_VERSION "1.0"
 
-public Plugin:myinfo = {
+public Plugin myinfo = {
 	name = "Just another damn Grenade plugin-mod",
 	author = "Assyrian/Nergal, thanks to CrancK and ^Pb | chicken aka solly :P",
 	description = "Brings back Original TF Grenades into TF2.",
@@ -17,21 +17,21 @@ public Plugin:myinfo = {
 };
 
 //convar handles
-new Handle:PluginEnabled;
-new Handle:AllowBlu;
-new Handle:AllowRed;
-new Handle:GrenadeFromSpencer;
-new Handle:FragDamage;
-new Handle:FragsMax;
-new Handle:AmountSpawn;
-new Handle:GrenadeRadius;
+Handle PluginEnabled;
+Handle AllowBlu;
+Handle AllowRed;
+Handle GrenadeFromSpencer;
+Handle FragDamage;
+Handle FragsMax;
+Handle AmountSpawn;
+Handle GrenadeRadius;
 
-new Handle:HudMessage;
+Handle HudMessage;
 
 //grenade flags
 #define GRENFLAG_GRENPRIMED		(1 << 0)
 #define GRENFLAG_GRENHOLDING		(1 << 1)
-new GrenFlags[MAXPLAYERS+1];
+int GrenFlags[MAXPLAYERS+1];
 
 //defines
 #define GrenadeRingModel	"sprites/laser.vmt"
@@ -42,7 +42,7 @@ new GrenFlags[MAXPLAYERS+1];
 #define SND_NADE_FRAG		"weapons/explode"
 #define SND_PRIMENADE		"grenade/prime_grenade.mp3"
 
-new String:GrenadeSoundTimers[][] = { //PROPS TO FLAMIN' SARGE
+char GrenadeSoundTimers[][] = { //PROPS TO FLAMIN' SARGE
 	"grenade/default.mp3",
 	"grenade/detpack_timer1.mp3",
 	"grenade/detpack_timer2.mp3",
@@ -53,28 +53,28 @@ new String:GrenadeSoundTimers[][] = { //PROPS TO FLAMIN' SARGE
 };
 
 //ints
-new GrenadePrimary[MAXPLAYERS+1][2]; //(2 = Current amount, Max amount)
-new LaserRingModel;
-new g_NadeId;
-new GrenadeCount = 0;
+int GrenadePrimary[MAXPLAYERS+1][2]; //(2 = Current amount, Max amount)
+int LaserRingModel;
+int g_NadeId;
+int GrenadeCount = 0;
 
 //non-cvar handles?
-new Handle:NadeTimers[MAXPLAYERS+1][6];
-new Handle:HudTimer[MAXPLAYERS+1];
-new Handle:DispenserTimer[MAXPLAYERS+1];
-new Handle:SoundCookie;
+Handle NadeTimers[MAXPLAYERS+1][6];
+Handle HudTimer[MAXPLAYERS+1];
+Handle DispenserTimer[MAXPLAYERS+1];
+Handle SoundCookie;
 
 //floats
-new Float:gHoldingArea[3]; //Holding area Origin in client/player
-new Float:GrenadeSpeed = 900.0;
+float gHoldingArea[3]; //Holding area Origin in client/player
+float GrenadeSpeed = 900.0;
 
 //strings
-new String:GrenadeName[256]; //Grenade name obviously
-new String:GrenadeSkin[16];
+char GrenadeName[256]; //Grenade name obviously
+char GrenadeSkin[16];
 
 //BOOLS
-new bool:g_bThrown[2048];
-new bool:g_bPlayerIsDead[MAXPLAYERS+1];
+bool g_bThrown[2048];
+bool g_bPlayerIsDead[MAXPLAYERS+1];
 
 public OnPluginStart() 
 {
@@ -114,11 +114,11 @@ public OnPluginStart()
 
 	HudMessage = CreateHudSynchronizer();
 
-	for (new c = 0; c < 3; c++)
+	for(int c= 0; c < 3; c++)
 	{
 		gHoldingArea[c] = -10000.0; //DON'T FUCKING TOUCH THIS
 	}
-	for (new i = 1; i <= MaxClients; i++)
+	for(int i= 1; i <= MaxClients; i++)
 	{
 		if (!IsClientInGame(i) || !IsValidClient(i)) continue;
 		OnClientPutInServer(i);
@@ -133,35 +133,35 @@ public OnClientPutInServer(client)
 		HudTimer[client] = CreateTimer(0.3, Timer_GrenadeHud, GetClientUserId(client), TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 		DispenserTimer[client] = CreateTimer(0.5, Timer_DispenserRefillNades, GetClientUserId(client), TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 		GrenFlags[client] = 0;
-		new String:check[64];
+		char check[64];
 		GetClientCookie(client, SoundCookie, check, sizeof(check));
 		if (!StrContains(check, "grenades/", false)) SetSoundSetting(client, GrenadeSoundTimers[0]);
 	}
 }
 public OnClientDisconnect(client)
 {
-	for (new i = 0; i < 2; i++)
+	for(int i= 0; i < 2; i++)
 	{
 		GrenadePrimary[client][i] = 0;
 	}
-	if (HudTimer[client] != INVALID_HANDLE) ClearTimer(HudTimer[client]);
-	if (DispenserTimer[client] != INVALID_HANDLE) ClearTimer(DispenserTimer[client]);
+	if (HudTimer[client] != null) ClearTimer(HudTimer[client]);
+	if (DispenserTimer[client] != null) ClearTimer(DispenserTimer[client]);
 	GrenFlags[client] = 0;
 }
-public Action:Timer_GrenadeHud(Handle:timer, any:userid)
+public Action Timer_GrenadeHud(Handle timer, any:userid)
 {
-	new client = GetClientOfUserId(userid);
+	int client = GetClientOfUserId(userid);
 	if (client && IsClientInGame(client) && GetConVarBool(PluginEnabled)) UpdateGrenHUD(client);
 	return Plugin_Continue;
 }
-public Action:Timer_DispenserRefillNades(Handle:timer, any:userid)
+public Action Timer_DispenserRefillNades(Handle timer, any:userid)
 {
-	new client = GetClientOfUserId(userid);
+	int client = GetClientOfUserId(userid);
 	if (client && IsClientInGame(client) && GetConVarBool(PluginEnabled) && GetConVarBool(GrenadeFromSpencer))
 	{
 		if (IsNearSpencer(client))
 		{
-			new GrenadeProbability = GetRandomInt(0, 100);
+			int GrenadeProbability = GetRandomInt(0, 100);
 			if (GrenadeProbability >= 70) GrenadePrimary[client][0] += 1;
 
 			if (GrenadePrimary[client][0] > GrenadePrimary[client][1])
@@ -172,7 +172,7 @@ public Action:Timer_DispenserRefillNades(Handle:timer, any:userid)
 }
 public OnMapStart()
 {
-	decl String:s[PLATFORM_MAX_PATH];
+	char s[PLATFORM_MAX_PATH];
 	// precache models
 	PrecacheModel(MDL_FRAG, true);
 	LaserRingModel = PrecacheModel(GrenadeRingModel, true);
@@ -191,14 +191,14 @@ public OnMapStart()
 
 	//precache sounds heer!
 	PrecacheSound(SND_THROWNADE, true);
-	for (new f = 0; f < sizeof(GrenadeSoundTimers); f++)
+	for(int f= 0; f < sizeof(GrenadeSoundTimers); f++)
 	{
 		Format(s, PLATFORM_MAX_PATH, "%s", GrenadeSoundTimers[f]);
 		PrecacheSound(s, true);
 		Format(s, PLATFORM_MAX_PATH, "sound/%s", s);
 		AddFileToDownloadsTable(s);
 	}
-	for (new e = 1; e <= 3; e++)
+	for(int e= 1; e <= 3; e++)
 	{
 		Format(s, PLATFORM_MAX_PATH, "%s%i.wav", SND_NADE_FRAG, e);
 		PrecacheSound(s, true);
@@ -207,13 +207,13 @@ public OnMapStart()
 	Format(s, PLATFORM_MAX_PATH, "sound/%s", SND_PRIMENADE);
 	AddFileToDownloadsTable(s);
 
-	for (new i = 1; i <= MaxClients; i++)
+	for(int i= 1; i <= MaxClients; i++)
 		GrenFlags[i] = 0;
 }
-public Action:PlayerSpawn(Handle:event, const String:name[], bool:dontBroadcast)
+public Action PlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 {
 	if (!GetConVarBool(PluginEnabled)) return Plugin_Continue;
-	new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	if (client && IsClientInGame(client))
 	{
 		g_bPlayerIsDead[client] = false;
@@ -221,10 +221,10 @@ public Action:PlayerSpawn(Handle:event, const String:name[], bool:dontBroadcast)
 	}
 	return Plugin_Continue;
 }
-public Action:PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
+public Action PlayerDeath(Handle event, const char[] name, bool dontBroadcast)
 {
 	if (!GetConVarBool(PluginEnabled)) return Plugin_Continue;
-	new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	if (client && IsClientInGame(client))
 	{
 		if ((GrenFlags[client] & GRENFLAG_GRENHOLDING) && !g_bThrown[EntRefToEntIndex(g_NadeId)])
@@ -233,7 +233,7 @@ public Action:PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
 			ThrowNade(GetClientUserId(client), g_NadeId);
 		}
 	}
-	new String:weapon[64];
+	char weapon[64];
 	GetEventString(event, "weapon_logclassname", weapon, sizeof(weapon));
 	if(strcmp(weapon[0], "env_explosion", false) == 0)
 	{
@@ -243,8 +243,8 @@ public Action:PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
 	}
 	return Plugin_Continue;
 }
-new bool:l_bPressed[MAXPLAYERS+1] = { false, ... };
-public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:angles[3], &weapon, &subtype, &cmdnum, &tickcount, &seed, mouse[2])
+bool l_bPressed[MAXPLAYERS+1] = { false, ... };
+public Action OnPlayerRunCmd(client, &buttons, &impulse, float vel[3], float angles[3], &weapon, &subtype, &cmdnum, &tickcount, &seed, mouse[2])
 {
 	if (!GetConVarBool(PluginEnabled)) return Plugin_Continue;
 
@@ -253,7 +253,7 @@ public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:ang
 	if (!GetConVarBool(AllowBlu) && (GetClientTeam(client) == 3)) return Plugin_Continue;
 	if (!GetConVarBool(AllowRed) && (GetClientTeam(client) == 2)) return Plugin_Continue;
 
-	new cond = GetEntProp(client, Prop_Send, "m_nPlayerCond");
+	int cond = GetEntProp(client, Prop_Send, "m_nPlayerCond");
 	if (cond & 16 || cond & 128 || cond & 16384) return Plugin_Continue;
 
 	if (!l_bPressed[client] && (buttons & IN_ATTACK3))
@@ -271,7 +271,7 @@ public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:ang
 }
 public PrimeGrenade(any:userid/*, */)
 {
-	new client = GetClientOfUserId(userid);
+	int client = GetClientOfUserId(userid);
 	if (!IsPlayerAlive(client) || !IsValidClient(client)) return;
 
 	if ((GrenFlags[client] & GRENFLAG_GRENPRIMED) || (GrenFlags[client] & GRENFLAG_GRENHOLDING)) return;
@@ -279,7 +279,7 @@ public PrimeGrenade(any:userid/*, */)
 	if (GrenadePrimary[client][0] > 0) GrenadePrimary[client][0] -= 1; //we primed a grenade, so we have 1 less saved
 	else
 	{
-		new ZeroNadeMSG = GetRandomInt(0, 5);
+		int ZeroNadeMSG = GetRandomInt(0, 5);
 		switch (ZeroNadeMSG)
 		{
 			case 0: PrintToChat(client, "Hey Rambo, you're out of grenades...");
@@ -294,16 +294,16 @@ public PrimeGrenade(any:userid/*, */)
 	GrenFlags[client] |= GRENFLAG_GRENPRIMED; //set flag that grenade is primed + being held
 	GrenFlags[client] |= GRENFLAG_GRENHOLDING;
 
-	new nadeid = SpawnGrenade(client); //create the actual grenade
+	int nadeid = SpawnGrenade(client); //create the actual grenade
 	g_NadeId = EntIndexToEntRef(nadeid); //convert index to a ref and apply it on a global var
 
-	new String:lol[PLATFORM_MAX_PATH];
+	char lol[PLATFORM_MAX_PATH];
 	if (IsValidClient(client) && AreClientCookiesCached(client)) GetClientCookie(client, SoundCookie, lol, sizeof(lol));
 	EmitSoundToAll(SND_PRIMENADE, client); //let nearby players know that player has primed a nade.
 	EmitSoundToClient(client, SND_PRIMENADE);
 	EmitSoundToClient(client, lol); //emit custom grenade timer sound for personalizing client :3
 
-	new Handle:GrenadeDataPack; //This datapack importante, it allows us to remember which nade should explode first or whatev
+	Handle GrenadeDataPack; //This datapack importante, it allows us to remember which nade should explode first or whatev
 	if (GrenadeCount == 6) GrenadeCount = 0;
 	NadeTimers[client][GrenadeCount] = CreateDataTimer(3.8, NadeExplode, GrenadeDataPack, TIMER_DATA_HNDL_CLOSE);
 	WritePackCell(GrenadeDataPack, g_NadeId);
@@ -312,7 +312,7 @@ public PrimeGrenade(any:userid/*, */)
 }
 public ThrowNade(userid, NadeId)
 {
-	new client = GetClientOfUserId(userid);
+	int client = GetClientOfUserId(userid);
 	if (!IsValidClient(client)) return;
 	//new TFClassType:class = TF2_GetPlayerClass(client);
 	if (IsValidEdict(NadeId))
@@ -321,7 +321,7 @@ public ThrowNade(userid, NadeId)
 		GrenFlags[client] &= ~GRENFLAG_GRENPRIMED;
 		g_bThrown[EntRefToEntIndex(NadeId)] = true;
 
-		new team = GetClientTeam(client), color[4], rand[] = {30, 50, 90, 128, 180, 255};
+		int team = GetClientTeam(client), color[4], rand[] = {30, 50, 90, 128, 180, 255};
 		color[0] = rand[GetRandomInt(0, sizeof(rand)-1)];
 		color[1] = rand[GetRandomInt(0, sizeof(rand)-1)];
 		color[2] = rand[GetRandomInt(0, sizeof(rand)-1)];
@@ -336,7 +336,7 @@ public ThrowNade(userid, NadeId)
 		DispatchKeyValue(NadeId, "skin", GrenadeSkin);
 
 		// get position and angles
-		new Float:startpt[3], Float:angle[3], Float:speed[3];
+		float startpt[3], float angle[3], float speed[3];
 		GetClientEyePosition(client, startpt);
 
 		angle[0] = GetRandomFloat(-180.0, 180.0);
@@ -349,7 +349,7 @@ public ThrowNade(userid, NadeId)
 
 		if (g_bPlayerIsDead[client])
 		{
-			new Float:deadangle[3] = {0.0, 0.0, 200.0}; //IF player is dead, the grenade should be thrown straight up.
+			float deadangle[3] = {0.0, 0.0, 200.0}; //IF player is dead, the grenade should be thrown straight up.
 			TeleportEntity(NadeId, startpt, deadangle, NULL_VECTOR);
 		}
 		else
@@ -370,18 +370,18 @@ public ShowTrail(nade, color[4])
 	TE_SetupBeamFollow(nade, LaserRingModel, 0, Float:2.0, Float:30.0, Float:30.0, 5, color);
 	TE_SendToAll();
 }
-public Action:NadeExplode(Handle:timer, Handle:pack)
+public Action NadeExplode(Handle timer, Handle pack)
 {
 	ResetPack(pack);
-	new grenade = ReadPackCell(pack);
-	new clientID = ReadPackCell(pack);
-	new client = GetClientOfUserId(clientID);
+	int grenade = ReadPackCell(pack);
+	int clientID = ReadPackCell(pack);
+	int client = GetClientOfUserId(clientID);
 	if (IsValidClient(client) && IsValidEdict(grenade)) ExplodeNade(clientID, grenade);
 	return Plugin_Continue;
 }
 public ExplodeNade(userid, NadeId)
 {
-	new client = GetClientOfUserId(userid);
+	int client = GetClientOfUserId(userid);
 	if (IsValidEdict(NadeId) && IsValidClient(client))
 	{
 		if ((GrenFlags[client] & GRENFLAG_GRENHOLDING) && !g_bThrown[EntRefToEntIndex(NadeId)])
@@ -390,9 +390,9 @@ public ExplodeNade(userid, NadeId)
 		}
 		g_bThrown[EntRefToEntIndex(NadeId)] = false;
 
-		new Float:center[3];
-		new String:sound[PLATFORM_MAX_PATH];
-		new damage = GetConVarInt(FragDamage); //Get damage
+		float center[3];
+		char sound[PLATFORM_MAX_PATH];
+		int damage = GetConVarInt(FragDamage); //Get damage
 		GetEntPropVector(NadeId, Prop_Send, "m_vecOrigin", center); //get nades origin vecs
 		MakeParticles(NadeId, "ExplosionCore_MidAir", NULL_VECTOR, 2.0); //make sexy visuals
 		Format(sound, PLATFORM_MAX_PATH, "%s%i.wav", SND_NADE_FRAG, GetRandomInt(1, 3)); //play boom sounds
@@ -402,17 +402,17 @@ public ExplodeNade(userid, NadeId)
 		CreateTimer(0.0, RemoveEnt, NadeId); //safely remove nade
 	}
 }
-public Action:RemoveEnt(Handle:timer, any:entid)
+public Action RemoveEnt(Handle timer, any:entid)
 {
-	new ent = EntRefToEntIndex(entid);
+	int ent = EntRefToEntIndex(entid);
 	if (ent > 0 && IsValidEdict(ent)) AcceptEntityInput(ent, "Kill");
 	return Plugin_Continue;
 }
-public CreateExplosion(client, Float:pos[3], dmg)
+public CreateExplosion(client, float pos[3], dmg)
 {
-	new radius = GetConVarInt(GrenadeRadius);
-        new String:weapon[32];
-	new splodey = CreateEntityByName("env_explosion");
+	int radius = GetConVarInt(GrenadeRadius);
+        char weapon[32];
+	int splodey = CreateEntityByName("env_explosion");
 	if (IsValidEdict(splodey))
 	{
 		DispatchKeyValue(splodey, "spawnflags", "4");
@@ -448,7 +448,7 @@ public UpdateGrenHUD(client)
 	}
 	if (IsClientObserver(client) || !IsPlayerAlive(client))
 	{
-		new spec = GetEntPropEnt(client, Prop_Send, "m_hObserverTarget");
+		int spec = GetEntPropEnt(client, Prop_Send, "m_hObserverTarget");
 		if (IsValidClient(spec) && IsPlayerAlive(spec) && spec != client)
 		{
 			SetHudTextParams(0.15, 0.95, 1.0, 100, 85, 106, 255);
@@ -456,13 +456,13 @@ public UpdateGrenHUD(client)
 		}
 	}
 }
-public EntityOutput_OnPlayerTouch(const String:output[], caller, activator, Float:delay)
+public EntityOutput_OnPlayerTouch(const char[] output, caller, activator, float delay)
 {
 	if (GetConVarBool(PluginEnabled))
 	{
 		if (IsValidEdict(caller))
 		{
-			new String:classname[128];
+			char classname[128];
 			GetEdictClassname(caller, classname, sizeof(classname));
 			if (StrEqual(classname, "item_ammopack_full"))
 			{
@@ -504,10 +504,10 @@ public EntityOutput_OnPlayerTouch(const String:output[], caller, activator, Floa
 	}
 	return;
 }
-public Action:Event_Resupply(Handle:hEvent, const String:name[], bool:dontBroadcast)
+public Action Event_Resupply(Handle hEvent, const char[] name, bool dontBroadcast)
 {
 	if (!GetConVarBool(PluginEnabled)) return Plugin_Continue;
-	new client = GetClientOfUserId(GetEventInt(hEvent, "userid"));
+	int client = GetClientOfUserId(GetEventInt(hEvent, "userid"));
 	if (client && IsClientInGame(client))
 	{
 		if (!GetConVarBool(AllowBlu) && GetClientTeam(client) == 3) return Plugin_Continue;
@@ -519,28 +519,28 @@ public Action:Event_Resupply(Handle:hEvent, const String:name[], bool:dontBroadc
 	}
 	return Plugin_Continue;
 }
-SetSoundSetting(client, String:sound[])
+SetSoundSetting(client, char sound[])
 {
 	if (!IsValidClient(client)) return;
 	if (IsFakeClient(client)) return;
 	if (!AreClientCookiesCached(client)) return;
-	decl String:sndpick[64];
+	char sndpick[64];
 	strcopy(sndpick, sizeof(sndpick), sound);
 	SetClientCookie(client, SoundCookie, sndpick);
 }
 /*
-new myArray[8][16][32];
+int myArray[8][16][32];
 sizeof(myArray) //returns 8
 sizeof(myArray[]) //returns 16
 sizeof(myArray[][]) //returns 32
 */
-public Action:Command_SetPlayerNadeTimerSound(client, args)
+public Action Command_SetPlayerNadeTimerSound(client, args)
 {
 	if (IsValidClient(client) && IsClientInGame(client) && GetConVarBool(PluginEnabled))
 	{
-		new Handle:SNDMenu = CreateMenu(MenuHandler_SetPlayerNadeTimerSound);
+		Handle SNDMenu = CreateMenu(MenuHandler_SetPlayerNadeTimerSound);
 		SetMenuTitle(SNDMenu, "TF2Nades: Select your Grenade Timer sound");
-		for (new i = 0; i < sizeof(GrenadeSoundTimers); i++) //multidimensional array
+		for(int i= 0; i < sizeof(GrenadeSoundTimers); i++) //multidimensional array
 		{
 			AddMenuItem(SNDMenu, "sound", GrenadeSoundTimers[i]);
 		}
@@ -548,9 +548,9 @@ public Action:Command_SetPlayerNadeTimerSound(client, args)
 		DisplayMenu(SNDMenu, client, MENU_TIME_FOREVER);
 	}
 }
-public MenuHandler_SetPlayerNadeTimerSound(Handle:menu, MenuAction:action, client, param2)
+public MenuHandler_SetPlayerNadeTimerSound(Handle menu, MenuAction action, client, param2)
 {
-	decl String:sndslct[64];
+	char sndslct[64];
 	GetMenuItem(menu, param2, sndslct, sizeof(sndslct));
 	if (action == MenuAction_Select)
         {
@@ -564,7 +564,7 @@ public MenuHandler_SetPlayerNadeTimerSound(Handle:menu, MenuAction:action, clien
 	}
 }
 ////////////////////////////////////////////////////// S T O C K S ///////////////////////////////////////////////////////////////
-stock bool:IsValidClient(iClient, bool:bReplay = true)
+stock bool IsValidClient(iClient, bool bReplay = true)
 {
 	if (iClient <= 0 || iClient > MaxClients) return false;
 	if (!IsClientInGame(iClient)) return false;
@@ -573,8 +573,8 @@ stock bool:IsValidClient(iClient, bool:bReplay = true)
 }
 stock GetHealingTarget(client)
 {
-	new String:s[64];
-	new medigun = GetPlayerWeaponSlot(client, TFWeaponSlot_Secondary);
+	char s[64];
+	int medigun = GetPlayerWeaponSlot(client, TFWeaponSlot_Secondary);
 	if (medigun <= MaxClients || !IsValidEdict(medigun)) return -1;
 	GetEdictClassname(medigun, s, sizeof(s));
 	if (strcmp(s, "tf_weapon_medigun", false) == 0)
@@ -584,13 +584,13 @@ stock GetHealingTarget(client)
 	}
 	return -1;
 }
-stock bool:IsNearSpencer(client)
+stock bool IsNearSpencer(client)
 {
-	new bool:dispenserheal, medics = 0;
-	new healers = GetEntProp(client, Prop_Send, "m_nNumHealers");
+	bool dispenserheal, medics = 0;
+	int healers = GetEntProp(client, Prop_Send, "m_nNumHealers");
 	if (healers > 0)
 	{
-		for (new i = 1; i <= MaxClients; i++)
+		for(int i= 1; i <= MaxClients; i++)
 		{
 			if (IsValidClient(i) && IsPlayerAlive(i) && GetHealingTarget(i) == client)
 				medics++;
@@ -599,20 +599,20 @@ stock bool:IsNearSpencer(client)
 	dispenserheal = (healers > medics) ? true : false;
 	return dispenserheal;
 }
-stock ClearTimer(&Handle:Timer)
+stock ClearTimer(&Handle Timer)
 {
-	if (Timer != INVALID_HANDLE)
+	if (Timer != null)
 	{
 		CloseHandle(Timer);
-		Timer = INVALID_HANDLE;
+		Timer = null;
 	}
 }
-stock MakeParticles(entity, String:particlename[], Float:addPos[3]=NULL_VECTOR, Float:time)
+stock MakeParticles(entity, char particlename[], float addPos[3]=NULL_VECTOR, float time)
 {
-	new mparticle = CreateEntityByName("info_particle_system");
+	int mparticle = CreateEntityByName("info_particle_system");
 	if (IsValidEdict(mparticle))
 	{
-		new Float:pos[3];
+		float pos[3];
 		GetEntPropVector(entity, Prop_Send, "m_vecOrigin", pos);
 		AddVectors(pos, addPos, pos);
 		TeleportEntity(mparticle, pos, NULL_VECTOR, NULL_VECTOR);
@@ -623,11 +623,11 @@ stock MakeParticles(entity, String:particlename[], Float:addPos[3]=NULL_VECTOR, 
 	}
 	else LogError("************ShowParticle: could not create info_particle_system************");
 }
-stock AttachParticle(ent, String:particleType[], Float:offset = 0.0, Float:killtime = 0.0, bool:battach = true)
+stock AttachParticle(ent, char particleType[], float offset = 0.0, float killtime = 0.0, bool battach = true)
 {
-	new particle = CreateEntityByName("info_particle_system");
-	decl String:tName[128];
-	decl Float:pos[3];
+	int particle = CreateEntityByName("info_particle_system");
+	char tName[128];
+	decl float pos[3];
 	GetEntPropVector(ent, Prop_Send, "m_vecOrigin", pos);
 	pos[2] += offset;
 	TeleportEntity(particle, pos, NULL_VECTOR, NULL_VECTOR);
@@ -650,7 +650,7 @@ stock AttachParticle(ent, String:particleType[], Float:offset = 0.0, Float:killt
 }
 stock SpawnGrenade(client)
 {
-	new Nade = CreateEntityByName("prop_physics_override");
+	int Nade = CreateEntityByName("prop_physics_override");
 	if (IsValidEdict(Nade) && IsValidEntity(Nade))
 	{
 		/*GetClientEyeAngles(iClient, angles);

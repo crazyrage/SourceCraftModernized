@@ -53,7 +53,7 @@ stock DeleteHealthParticle(client)
 	}
 }
 
-public Action:DeleteHealthParticles(Handle:timer, any:particle)
+public Action DeleteHealthParticles(Handle timer, any:particle)
 {
     DeleteParticle(particle);
 

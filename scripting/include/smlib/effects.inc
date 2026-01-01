@@ -31,7 +31,7 @@ enum DissolveType
  * @param magnitude		How strongly to push away from the center.
  * @return				True on success, otherwise false.
  */
-stock bool:Effect_DissolveEntity(entity, DissolveType:dissolveType=DISSOLVE_NORMAL, magnitude=1)
+stock bool Effect_DissolveEntity(entity, DissolveType:dissolveType=DISSOLVE_NORMAL, magnitude=1)
 {
 	new env_entity_dissolver = CreateEntityByName("env_entity_dissolver");
 
@@ -55,7 +55,7 @@ stock bool:Effect_DissolveEntity(entity, DissolveType:dissolveType=DISSOLVE_NORM
  * @param dissolveType	Dissolve Type, use the DissolveType enum.
  * @return				True on success, otherwise false.
  */
-stock bool:Effect_DissolvePlayerRagDoll(client, DissolveType:dissolveType=DISSOLVE_NORMAL)
+stock bool Effect_DissolvePlayerRagDoll(client, DissolveType:dissolveType=DISSOLVE_NORMAL)
 {
 	new m_hRagdoll = GetEntPropEnt(client, Prop_Send, "m_hRagdoll");
 
@@ -66,7 +66,7 @@ stock bool:Effect_DissolvePlayerRagDoll(client, DissolveType:dissolveType=DISSOL
 	return Effect_DissolveEntity(m_hRagdoll, dissolveType);
 }
 
-//functag EffectCallback public(entity, any:data);
+//functag EffectCallback public(entity, any data);
 typedef EffectCallback = function void (int entity, any data);
 
 /**
@@ -85,9 +85,9 @@ typedef EffectCallback = function void (int entity, any data);
  * @param data			Optional: You can pass any data to the callback.
  * @return				True on success, otherwise false.
  */
-stock Effect_Fade(entity, fadeOut=true, kill=false, fast=true, EffectCallback:callback=INVALID_FUNCTION, any:data=0)
+stock Effect_Fade(entity, fadeOut=true, kill=false, fast=true, EffectCallback:callback=INVALID_FUNCTION, any data=0)
 {
-	new Float:timerTime = 0.0;
+	float timerTime = 0.0;
 
 	if (fast) {
 		timerTime = 0.6;
@@ -113,7 +113,7 @@ stock Effect_Fade(entity, fadeOut=true, kill=false, fast=true, EffectCallback:ca
 	ChangeEdictState(entity, GetEntSendPropOffs(entity, "m_nRenderFX", true));
 
 	if (kill || callback != INVALID_FUNCTION) {
-		new Handle:dataPack = INVALID_HANDLE;
+		Handle dataPack = null;
 		CreateDataTimer(timerTime, _smlib_Timer_Effect_Fade, dataPack, TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE);
 
 		WritePackCell(dataPack, EntIndexToEntRef(entity));
@@ -138,7 +138,7 @@ stock Effect_Fade(entity, fadeOut=true, kill=false, fast=true, EffectCallback:ca
  * @param data			Optional: You can pass any data to the callback.
  * @return				True on success, otherwise false.
  */
-stock Effect_FadeIn(entity, fast=true, EffectCallback:callback=INVALID_FUNCTION, any:data=0)
+stock Effect_FadeIn(entity, fast=true, EffectCallback:callback=INVALID_FUNCTION, any data=0)
 {
 	Effect_Fade(entity, false, false, fast, callback, data);
 }
@@ -155,12 +155,12 @@ stock Effect_FadeIn(entity, fast=true, EffectCallback:callback=INVALID_FUNCTION,
  * @param data			Optional: You can pass any data to the callback.
  * @return				True on success, otherwise false.
  */
-stock Effect_FadeOut(entity, kill=false, fast=true, EffectCallback:callback=INVALID_FUNCTION, any:data=0)
+stock Effect_FadeOut(entity, kill=false, fast=true, EffectCallback:callback=INVALID_FUNCTION, any data=0)
 {
 	Effect_Fade(entity, true, kill, fast, callback, data);
 }
 
-public Action:_smlib_Timer_Effect_Fade(Handle:Timer, Handle:dataPack)
+public Action _smlib_Timer_Effect_Fade(Handle Timer, Handle dataPack)
 {
 	new entity = ReadPackCell(dataPack);
 	new kill = ReadPackCell(dataPack);
@@ -169,10 +169,10 @@ public Action:_smlib_Timer_Effect_Fade(Handle:Timer, Handle:dataPack)
 #else
 	new Function:callback = Function:ReadPackCell(dataPack);
 #endif
-	new any:data = any:ReadPackCell(dataPack);
+	new any data = any ReadPackCell(dataPack);
 
 	if (callback != INVALID_FUNCTION) {
-		Call_StartFunction(INVALID_HANDLE, callback);
+		Call_StartFunction(null, callback);
 		Call_PushCell(entity);
 		Call_PushCell(data);
 		Call_Finish();
@@ -208,17 +208,17 @@ public Action:_smlib_Timer_Effect_Fade(Handle:Timer, Handle:dataPack)
  */
 stock Effect_DrawBeamBoxToClient(
 	client,
-	const Float:bottomCorner[3],
-	const Float:upperCorner[3],
+	const Float bottomCorner[3],
+	const Float upperCorner[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float:life=5.0,
-	Float:width=5.0,
-	Float:endWidth=5.0,
+	Float life=5.0,
+	Float width=5.0,
+	Float endWidth=5.0,
 	fadeLength=2,
-	Float:amplitude=1.0,
+	Float amplitude=1.0,
 	const color[4]={ 255, 0, 0, 255 },
 	speed=0
 ) {
@@ -248,17 +248,17 @@ stock Effect_DrawBeamBoxToClient(
  * @noreturn
  */
 stock Effect_DrawBeamBoxToAll(
-	const Float:bottomCorner[3],
-	const Float:upperCorner[3],
+	const Float bottomCorner[3],
+	const Float upperCorner[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float:life=5.0,
-	Float:width=5.0,
-	Float:endWidth=5.0,
+	Float life=5.0,
+	Float width=5.0,
+	Float endWidth=5.0,
 	fadeLength=2,
-	Float:amplitude=1.0,
+	Float amplitude=1.0,
 	const color[4]={ 255, 0, 0, 255 },
 	speed=0
 )
@@ -294,22 +294,22 @@ stock Effect_DrawBeamBoxToAll(
 stock Effect_DrawBeamBox(
 	clients[],
 	numClients,
-	const Float:bottomCorner[3],
-	const Float:upperCorner[3],
+	const Float bottomCorner[3],
+	const Float upperCorner[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float:life=5.0,
-	Float:width=5.0,
-	Float:endWidth=5.0,
+	Float life=5.0,
+	Float width=5.0,
+	Float endWidth=5.0,
 	fadeLength=2,
-	Float:amplitude=1.0,
+	Float amplitude=1.0,
 	const color[4]={ 255, 0, 0, 255 },
 	speed=0
 ) {
 	// Create the additional corners of the box
-	decl Float:corners[8][3];
+	decl Float corners[8][3];
 
 	for (new i=0; i < 4; i++) {
 		Array_Copy(bottomCorner,	corners[i],		3);
@@ -375,19 +375,19 @@ stock Effect_DrawBeamBox(
  */
 stock Effect_DrawBeamBoxRotatableToClient(
 	client,
-	const Float:origin[3],
-	const Float:mins[3],
-	const Float:maxs[3],
-	const Float:angles[3],
+	const Float origin[3],
+	const Float mins[3],
+	const Float maxs[3],
+	const Float angles[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float:life=5.0,
-	Float:width=5.0,
-	Float:endWidth=5.0,
+	Float life=5.0,
+	Float width=5.0,
+	Float endWidth=5.0,
 	fadeLength=2,
-	Float:amplitude=1.0,
+	Float amplitude=1.0,
 	const color[4]={ 255, 0, 0, 255 },
 	speed=0
 ) {
@@ -421,19 +421,19 @@ stock Effect_DrawBeamBoxRotatableToClient(
  * @noreturn
  */
 stock Effect_DrawBeamBoxRotatableToAll(
-	const Float:origin[3],
-	const Float:mins[3],
-	const Float:maxs[3],
-	const Float:angles[3],
+	const Float origin[3],
+	const Float mins[3],
+	const Float maxs[3],
+	const Float angles[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float:life=5.0,
-	Float:width=5.0,
-	Float:endWidth=5.0,
+	Float life=5.0,
+	Float width=5.0,
+	Float endWidth=5.0,
 	fadeLength=2,
-	Float:amplitude=1.0,
+	Float amplitude=1.0,
 	const color[4]={ 255, 0, 0, 255 },
 	speed=0
 )
@@ -471,24 +471,24 @@ stock Effect_DrawBeamBoxRotatableToAll(
 stock Effect_DrawBeamBoxRotatable(
 	clients[],
 	numClients,
-	const Float:origin[3],
-	const Float:mins[3],
-	const Float:maxs[3],
-	const Float:angles[3],
+	const Float origin[3],
+	const Float mins[3],
+	const Float maxs[3],
+	const Float angles[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float:life=5.0,
-	Float:width=5.0,
-	Float:endWidth=5.0,
+	Float life=5.0,
+	Float width=5.0,
+	Float endWidth=5.0,
 	fadeLength=2,
-	Float:amplitude=1.0,
+	Float amplitude=1.0,
 	const color[4]={ 255, 0, 0, 255 },
 	speed=0
 ) {
 	// Create the additional corners of the box
-	decl Float:corners[8][3];
+	decl Float corners[8][3];
 	Array_Copy(mins, corners[0], 3);
 	Math_MakeVector(maxs[0], mins[1], mins[2], corners[1]);
 	Math_MakeVector(maxs[0], maxs[1], mins[2], corners[2]);
@@ -553,18 +553,18 @@ stock Effect_DrawBeamBoxRotatable(
  */
 stock Effect_DrawAxisOfRotationToClient(
 	client,
-	const Float:origin[3],
-	const Float:angles[3],
-	const Float:length[3],
+	const Float origin[3],
+	const Float angles[3],
+	const Float length[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float:life=5.0,
-	Float:width=5.0,
-	Float:endWidth=5.0,
+	Float life=5.0,
+	Float width=5.0,
+	Float endWidth=5.0,
 	fadeLength=2,
-	Float:amplitude=1.0,
+	Float amplitude=1.0,
 	speed=0
 ) {
     new clients[1];
@@ -592,18 +592,18 @@ stock Effect_DrawAxisOfRotationToClient(
  * @noreturn
  */
 stock Effect_DrawAxisOfRotationToAll(
-	const Float:origin[3],
-	const Float:angles[3],
-	const Float:length[3],
+	const Float origin[3],
+	const Float angles[3],
+	const Float length[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float:life=5.0,
-	Float:width=5.0,
-	Float:endWidth=5.0,
+	Float life=5.0,
+	Float width=5.0,
+	Float endWidth=5.0,
 	fadeLength=2,
-	Float:amplitude=1.0,
+	Float amplitude=1.0,
 	speed=0
 )
 {
@@ -637,22 +637,22 @@ stock Effect_DrawAxisOfRotationToAll(
 stock Effect_DrawAxisOfRotation(
 	clients[],
 	numClients,
-	const Float:origin[3],
-	const Float:angles[3],
-	const Float:length[3],
+	const Float origin[3],
+	const Float angles[3],
+	const Float length[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float:life=5.0,
-	Float:width=5.0,
-	Float:endWidth=5.0,
+	Float life=5.0,
+	Float width=5.0,
+	Float endWidth=5.0,
 	fadeLength=2,
-	Float:amplitude=1.0,
+	Float amplitude=1.0,
 	speed=0
 ) {
 	// Create the additional corners of the box
-	new Float:xAxis[3], Float:yAxis[3], Float:zAxis[3];
+	float xAxis[3], Float yAxis[3], Float zAxis[3];
 	xAxis[0] = length[0];
 	yAxis[1] = length[1];
 	zAxis[2] = length[2];
@@ -697,18 +697,18 @@ stock Effect_DrawAxisOfRotation(
  * @return					Entity Index of the created Sprite.
  */
 stock Effect_EnvSprite(
-	const Float:origin[3],
+	const Float origin[3],
 	modelIndex,
 	const color[4]={255, 255, 255, 255},
-	Float:scale=0.25,
+	Float scale=0.25,
 	const String:targetName[MAX_NAME_LENGTH]="",
 	parent=-1,
 	RenderMode:renderMode=RENDER_WORLDGLOW,
 	RenderFx:renderFx=RENDERFX_NONE,
-	Float:glowProxySize=2.0,
-	Float:framerate=10.0,
-	Float:hdrColorScale=1.0,
-	bool:receiveShadows = true
+	Float glowProxySize=2.0,
+	Float framerate=10.0,
+	Float hdrColorScale=1.0,
+	bool receiveShadows = true
 ) {
 	new entity = Entity_Create("env_sprite");
 

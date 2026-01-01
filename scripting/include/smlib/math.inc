@@ -43,9 +43,9 @@ stock Math_Abs(value)
  * @param tolerance 	If you want to check that those vectors are somewhat even. 0.0 means they are 100% even if this function returns true.
  * @return				True if vectors are equal, false otherwise.
  */
-stock bool:Math_VectorsEqual(Float:vec1[3], Float:vec2[3], Float:tolerance=0.0)
+stock bool Math_VectorsEqual(Float vec1[3], Float vec2[3], Float tolerance=0.0)
 {
-	new Float:distance = GetVectorDistance(vec1, vec2, true);
+	float distance = GetVectorDistance(vec1, vec2, true);
 
 	return distance <= (tolerance * tolerance);
 }
@@ -58,7 +58,7 @@ stock bool:Math_VectorsEqual(Float:vec1[3], Float:vec2[3], Float:tolerance=0.0)
  * @param min			Min Value used as lower border
  * @return				Correct value not lower than min
  */
-stock any:Math_Min(any:value, any:min)
+stock any Math_Min(any value, any min)
 {
 	if (value < min) {
 		value = min;
@@ -75,7 +75,7 @@ stock any:Math_Min(any:value, any:min)
  * @param max			Max Value used as upper border
  * @return				Correct value not upper than max
  */
-stock any:Math_Max(any:value, any:max)
+stock any Math_Max(any value, any max)
 {
 	if (value > max) {
 		value = max;
@@ -96,7 +96,7 @@ stock any:Math_Max(any:value, any:max)
  * @param max			Max value used as upper border
  * @return				Correct value not lower than min and not greater than max.
  */
-stock any:Math_Clamp(any:value, any:min, any:max)
+stock any Math_Clamp(any value, any min, any max)
 {
 	value = Math_Min(value, min);
 	value = Math_Max(value, max);
@@ -112,7 +112,7 @@ stock any:Math_Clamp(any:value, any:min, any:max)
  * @param max		The upper border.
  * @return			True if the value is within bounds (bigger or equal min / smaller or equal max), false otherwise.
  */
-stock bool:Math_IsInBounds(any:value, any:min, any:max)
+stock bool Math_IsInBounds(any value, any min, any max)
 {
 	if (value < min || value > max) {
 		return false;
@@ -131,7 +131,7 @@ stock bool:Math_IsInBounds(any:value, any:min, any:max)
  * @param max			Max value used as upper border
  * @return				Overflowed number
  */
-stock any:Math_Overflow(any:value, any:min, any:max)
+stock any Math_Overflow(any value, any min, any max)
 {
 	return (value % max) + min;
 }
@@ -166,7 +166,7 @@ stock Math_GetRandomInt(min, max)
  * @param max			Max value used as upper border
  * @return				Random Float number between min and max
  */
-stock Float:Math_GetRandomFloat(Float:min, Float:max)
+stock Float Math_GetRandomFloat(Float min, Float max)
 {
 	return (GetURandomFloat() * (max  - min)) + min;
 }
@@ -193,7 +193,7 @@ stock Math_GetPercentage(value, all) {
  * @param all			Float value
  * @return				A Float value between 0.0 and 100.0 (inclusive).
  */
-stock Float:Math_GetPercentageFloat(Float:value, Float:all) {
+stock Float Math_GetPercentageFloat(Float value, Float all) {
 	return (value / all) * 100.0;
 }
 
@@ -208,7 +208,7 @@ stock Float:Math_GetPercentageFloat(Float:value, Float:all) {
  * @param output		Output vector
  * @noreturn
  */
-stock Math_MoveVector(const Float:start[3], const Float:end[3], Float:scale, Float:output[3])
+stock Math_MoveVector(const Float start[3], const Float end[3], Float scale, Float output[3])
 {
 	SubtractVectors(end,start,output);
 	ScaleVector(output,scale);
@@ -224,7 +224,7 @@ stock Math_MoveVector(const Float:start[3], const Float:end[3], Float:scale, Flo
  * @param result		Output vector.
  * @noreturn
  */
-stock Math_MakeVector(const Float:x, const Float:y, const Float:z, Float:result[3])
+stock Math_MakeVector(const Float x, const Float y, const Float z, Float result[3])
 {
 	result[0] = x;
 	result[1] = y;
@@ -244,10 +244,10 @@ stock Math_MakeVector(const Float:x, const Float:y, const Float:z, Float:result[
  * @param result		Output vector.
  * @noreturn
  */
-stock Math_RotateVector(const Float:vec[3], const Float:angles[3], Float:result[3])
+stock Math_RotateVector(const Float vec[3], const Float angles[3], Float result[3])
 {
 	// First the angle/radiant calculations
-	decl Float:rad[3];
+	decl Float rad[3];
 	// I don't really know why, but the alpha, beta, gamma order of the angles are messed up...
 	// 2 = xAxis
 	// 0 = yAxis
@@ -257,16 +257,16 @@ stock Math_RotateVector(const Float:vec[3], const Float:angles[3], Float:result[
 	rad[2] = DegToRad(angles[1]);
 
 	// Pre-calc function calls
-	new Float:cosAlpha = Cosine(rad[0]);
-	new Float:sinAlpha = Sine(rad[0]);
-	new Float:cosBeta = Cosine(rad[1]);
-	new Float:sinBeta = Sine(rad[1]);
-	new Float:cosGamma = Cosine(rad[2]);
-	new Float:sinGamma = Sine(rad[2]);
+	float cosAlpha = Cosine(rad[0]);
+	float sinAlpha = Sine(rad[0]);
+	float cosBeta = Cosine(rad[1]);
+	float sinBeta = Sine(rad[1]);
+	float cosGamma = Cosine(rad[2]);
+	float sinGamma = Sine(rad[2]);
 
 	// 3D rotation matrix for more information: http://en.wikipedia.org/wiki/Rotation_matrix#In_three_dimensions
-	new Float:x = vec[0], Float:y = vec[1], Float:z = vec[2];
-	new Float:newX, Float:newY, Float:newZ;
+	float x = vec[0], Float y = vec[1], Float z = vec[2];
+	float newX, Float newY, Float newZ;
 	newY = cosAlpha*y - sinAlpha*z;
 	newZ = cosAlpha*z + sinAlpha*y;
 	y = newY;
@@ -294,7 +294,7 @@ stock Math_RotateVector(const Float:vec[3], const Float:angles[3], Float:result[
  * @param units			Float value
  * @return				Meters as Float value.
  */
-stock Float:Math_UnitsToMeters(Float:units)
+stock Float Math_UnitsToMeters(Float units)
 {
 	return (units * GAMEUNITS_TO_METERS);
 }
@@ -305,7 +305,7 @@ stock Float:Math_UnitsToMeters(Float:units)
  * @param units			Float value
  * @return				Feet as Float value.
  */
-stock Float:Math_UnitsToFeet(Float:units)
+stock Float Math_UnitsToFeet(Float units)
 {
 	return (Math_UnitsToMeters(units) * METERS_TO_FEET);
 }
@@ -316,7 +316,7 @@ stock Float:Math_UnitsToFeet(Float:units)
  * @param units			Float value
  * @return				Centimeters as Float value.
  */
-stock Float:Math_UnitsToCentimeters(Float:units)
+stock Float Math_UnitsToCentimeters(Float units)
 {
 	return (Math_UnitsToMeters(units) * 100.0);
 }
@@ -327,7 +327,7 @@ stock Float:Math_UnitsToCentimeters(Float:units)
  * @param units			Float value
  * @return				Kilometers as Float value.
  */
-stock Float:Math_UnitsToKilometers(Float:units)
+stock Float Math_UnitsToKilometers(Float units)
 {
 	return (Math_UnitsToMeters(units) / 1000.0);
 }
@@ -338,7 +338,7 @@ stock Float:Math_UnitsToKilometers(Float:units)
  * @param units			Float value
  * @return				Miles as Float value.
  */
-stock Float:Math_UnitsToMiles(Float:units)
+stock Float Math_UnitsToMiles(Float units)
 {
 	return (Math_UnitsToKilometers(units) * KILOMETERS_TO_MILES);
 }

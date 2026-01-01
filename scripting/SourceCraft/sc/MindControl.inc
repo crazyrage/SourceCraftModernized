@@ -23,9 +23,9 @@
  * @param replace   Set to true to replace the object instead of changing the Team.
  * @return			returns true for success.
  */
-native bool:MindControl(client, Float:range, percent, &builder=0,
+native bool MindControl(client, float range, percent, &builder=0,
                         &TFExtObjectType:type=TFExtObject_Unknown,
-                        bool:replace=false);
+                        bool replace=false);
 
 /**
  * MindControl a Specified Object.
@@ -36,7 +36,7 @@ native bool:MindControl(client, Float:range, percent, &builder=0,
  * @param type      Set to type of object controlled.
  * @return			returns true for sucess.
  */
-native bool:ControlObject(client, target, &builder=0,
+native bool ControlObject(client, target, &builder=0,
                           &TFObjectType:type=TFObject_Unknown);
 
 /**
@@ -48,7 +48,7 @@ native bool:ControlObject(client, target, &builder=0,
  * @param type      Set to type of object controlled.
  * @return			returns true for sucess.
  */
-native bool:ReplaceObject(client, target, &builder=0,
+native bool ReplaceObject(client, target, &builder=0,
                           &TFObjectType:type=TFObject_Unknown);
 
 /**
@@ -58,7 +58,7 @@ native bool:ReplaceObject(client, target, &builder=0,
  * @param remove    Set to true to remove all object controlled by client.
  * @return			none
  */
-native ResetMindControlledObjects(client, bool:remove);
+native ResetMindControlledObjects(client, bool remove);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

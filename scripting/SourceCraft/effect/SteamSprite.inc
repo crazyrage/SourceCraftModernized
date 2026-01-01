@@ -16,4 +16,4 @@
 #define SteamSprite()      PrepareModel(g_steamModel, g_steamSprite)
 
 stock g_steamSprite;
-stock const String:g_steamModel[] = "materials/sprites/steam1.vmt";
+static const char g_steamModel[] = "materials/sprites/steam1.vmt";

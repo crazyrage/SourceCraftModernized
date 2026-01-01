@@ -37,8 +37,8 @@ native War3_AddItemBuff(item_ID, W3Buff:buff, any:value);
 // RECALL safe
 // no return
 native War3_AddAuraSkillBuff(race_ID, skill_ID, W3Buff:buff, any:values[], 
-                             String:auraShortName[], Float:distance, 
-                             bool:trackotherteam);
+                             char[] auraShortName, float distance, 
+                             bool trackotherteam);
 
 //is a buff index valid? X > 0 and X <  MaxBuffLoopLimitTemp
 stock ValidBuff(W3Buff:buffindex) {
@@ -102,12 +102,12 @@ stock W3ResetPlayerColor(client, raceid) {
 //getting buffs
 native W3GetBuffLoopLimit(); //buff loop size , item count + race count + others, loop from 0 to <this return value
 native any:W3GetBuff(client,W3Buff:buffindex,RaceIDorItemID,IPassedItemID=false);
-native bool:W3GetBuffHasTrue(client,W3Buff:buffindex); //does this buff have one true (activated?)
+native bool W3GetBuffHasTrue(client,W3Buff:buffindex); //does this buff have one true (activated?)
 native W3GetBuffSumInt(client,W3Buff:buffindex);
-native Float:W3GetBuffStackedFloat(client,W3Buff:buffindex); //get buff stacked value of an buff, use appropriately
-native Float:W3GetBuffSumFloat(client,W3Buff:buffindex);
-native Float:W3GetBuffMinFloat(client,W3Buff:buffindex);
-native Float:W3GetBuffMaxFloat(client,W3Buff:buffindex);
+native float W3GetBuffStackedFloat(client,W3Buff:buffindex); //get buff stacked value of an buff, use appropriately
+native float W3GetBuffSumFloat(client,W3Buff:buffindex);
+native float W3GetBuffMinFloat(client,W3Buff:buffindex);
+native float W3GetBuffMaxFloat(client,W3Buff:buffindex);
 native W3GetBuffLastValue(client,W3Buff:buffindex);
 native W3GetBuffMinInt(client,W3Buff:buffindex);
 
@@ -123,7 +123,7 @@ native W3ReapplySpeed(client);
 native W3GetSpeedMulti(client); 
 #endif
 
-stock bool:W3HasImmunity(client,War3Immunity:immunityindex) 
+stock bool W3HasImmunity(client,War3Immunity:immunityindex) 
 {
 #if !defined SOURCECRAFT
     if(!ValidPlayer(client))
@@ -154,7 +154,7 @@ stock bool:W3HasImmunity(client,War3Immunity:immunityindex)
 
 }
 //Is the player immune to other people's skills
-stock bool:IsSkillImmune(client) {
+stock bool IsSkillImmune(client) {
 #if !defined SOURCECRAFT
     return W3GetBuffHasTrue(client,bImmunitySkills);
 #else
@@ -163,7 +163,7 @@ stock bool:IsSkillImmune(client) {
 }
 
 //Is the player immune to other people's ultimates
-stock bool:IsUltImmune(client) {
+stock bool IsUltImmune(client) {
 #if !defined SOURCECRAFT
     return W3GetBuffHasTrue(client,bImmunityUltimates);
 #else
@@ -172,7 +172,7 @@ stock bool:IsUltImmune(client) {
 }
 
 //is player stunned?
-stock bool:Stunned(client) {
+stock bool Stunned(client) {
 #if !defined SOURCECRAFT
     return W3GetBuffHasTrue(client,bStunned);
 #else
@@ -184,11 +184,11 @@ stock bool:Stunned(client) {
 //block active skill ACTIVATION
 //silence still should allow skill PROC, item PROC, and item ACTIVATION
 //auto cast spells should be blocked
-stock bool:Silenced(client,printSilenced=true) {
+stock bool Silenced(client,printSilenced=true) {
 #if !defined SOURCECRAFT
-    new bool:silenced=(W3GetBuffHasTrue(client,bSilenced)||Stunned(client));
+    bool silenced=(W3GetBuffHasTrue(client,bSilenced)||Stunned(client));
 #else
-    new bool:silenced=GetRestriction(client,Restriction_Silenced|Restriction_Stunned);
+    bool silenced=GetRestriction(client,Restriction_Silenced|Restriction_Stunned);
 #endif
     if(silenced&&printSilenced) {
         if(IsPlayerAlive(client)) {
@@ -214,11 +214,11 @@ stock bool:Silenced(client,printSilenced=true) {
 }
 
 //is player hexed? (OUR definition is: no skill proc, usually from chance based skills)
-stock bool:Hexed(client,printmsg=true) {
+stock bool Hexed(client,printmsg=true) {
 #if !defined SOURCECRAFT
-    new bool:status=(W3GetBuffHasTrue(client,bHexed)||W3GetBuffHasTrue(client,bStunned));
+    bool status=(W3GetBuffHasTrue(client,bHexed)||W3GetBuffHasTrue(client,bStunned));
 #else
-    new bool:status=GetRestriction(client,Restriction_Hexed|Restriction_Stunned);
+    bool status=GetRestriction(client,Restriction_Hexed|Restriction_Stunned);
 #endif
     if(status&&printmsg) {
 
@@ -235,11 +235,11 @@ stock bool:Hexed(client,printmsg=true) {
 }
 
 //is player perplexed, (no item activation, no item proc by chance)
-stock bool:Perplexed(client,printmsg=true) {
+stock bool Perplexed(client,printmsg=true) {
 #if !defined SOURCECRAFT
-    new bool:perplexed=(W3GetBuffHasTrue(client,bPerplexed)||W3GetBuffHasTrue(client,bStunned));
+    bool perplexed=(W3GetBuffHasTrue(client,bPerplexed)||W3GetBuffHasTrue(client,bStunned));
 #else
-    new bool:perplexed=GetRestriction(client,Restriction_Perplexed|Restriction_Stunned);
+    bool perplexed=GetRestriction(client,Restriction_Perplexed|Restriction_Stunned);
 #endif
     if(perplexed&&printmsg) {
 
@@ -257,18 +257,18 @@ stock bool:Perplexed(client,printmsg=true) {
 
 //simple buff application which the plugin does internal tracking so you don't have to
 //given a race, buffindex, and its value, applies that buff for a certain duration then calls buffReset 
-//@allowReapplyToExtendDuration if true, means a new call to the same race-buff combination will renew its duration, otherwise it will be blocked and the existing duration is kept
+//@allowReapplyToExtendDuration if true, means a int call to the same race-buff combination will renew its duration, otherwise it will be blocked and the existing duration is kept
 #if !defined SOURCECRAFT
-native W3ApplyBuffSimple(client,W3Buff:buffindex,raceid,any:appliedBuffValue,Float:duration,bool:allowReapplyToExtendDuration=true);
+native W3ApplyBuffSimple(client,W3Buff:buffindex,raceid,any:appliedBuffValue,float duration,bool allowReapplyToExtendDuration=true);
 #else
-stock W3ApplyBuffSimple(client,W3Buff:buffindex,raceid,any:initialbuffvalue,Float:duration,bool:allowReapplyToExtendDuration=true)
+stock W3ApplyBuffSimple(client,W3Buff:buffindex,raceid,any:initialbuffvalue,float duration,bool allowReapplyToExtendDuration=true)
 {
     #pragma unused allowReapplyToExtendDuration
     War3_SetBuff(client,buffindex,raceid,initialbuffvalue);
 
-    new Handle:pack;
+    Handle pack;
     CreateDataTimer(duration, ResetBuffTimer, pack, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
-    if (pack != INVALID_HANDLE)
+    if (pack != null)
     {
         WritePackCell(pack, client);
         WritePackCell(pack, _:buffindex);
@@ -276,14 +276,14 @@ stock W3ApplyBuffSimple(client,W3Buff:buffindex,raceid,any:initialbuffvalue,Floa
     }
 }
 
-public Action:ResetBuffTimer(Handle:timer,any:pack)
+public Action ResetBuffTimer(Handle timer,any:pack)
 {
-    if (pack != INVALID_HANDLE)
+    if (pack != null)
     {
         ResetPack(pack);
-        new client=ReadPackCell(pack);
-        new W3Buff:buffindex=W3Buff:ReadPackCell(pack);
-        new raceid=ReadPackCell(pack);
+        int client=ReadPackCell(pack);
+        int W3Buff:buffindex=W3Buff:ReadPackCell(pack);
+        int raceid=ReadPackCell(pack);
         W3ResetBuffRace(client,buffindex,raceid);
     }
 }

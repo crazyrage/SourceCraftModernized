@@ -24,7 +24,7 @@ enum RoundStates
        	GameOver
 };
 
-stock String:RoundStateNames[][] = 
+stock char RoundStateNames[][] = 
 {
     "Unknown",
     "Waiting",

@@ -15,7 +15,7 @@
  * @param start			Optional: Offset where to start (0 - (size-1)).
  * @return				Array index, or -1 if the value couldn't be found.
  */
-stock Array_FindValue(any:array[], size, any:value, start=0)
+stock Array_FindValue(any array[], size, any value, start=0)
 {
 	if (start < 0) {
 		start = 0;
@@ -41,7 +41,7 @@ stock Array_FindValue(any:array[], size, any:value, start=0)
  * @param start			Optional: Offset where to start(0 - (size-1)).
  * @return				Array index, or -1 if the value couldn't be found.
  */
-stock Array_FindString(const String:array[][], size, const String:str[], bool:caseSensitive=true, start=0)
+stock Array_FindString(const char[] array[], size, const char[] str, bool caseSensitive=true, start=0)
 {
 	if (start < 0) {
 		start = 0;
@@ -65,14 +65,14 @@ stock Array_FindString(const String:array[][], size, const String:str[], bool:ca
  * @param start			Optional: Offset where to start (0 - (size-1)).
  * @return				Array index.
  */
-stock Array_FindLowestValue(any:array[], size, start=0)
+stock Array_FindLowestValue(any array[], size, start=0)
 {
 	if (start < 0) {
 		start = 0;
 	}
 
-	new any:value = array[start];
-	new any:tempValue;
+	new any value = array[start];
+	new any tempValue;
 	new x = start;
 
 	for (new i=start; i < size; i++) {
@@ -97,14 +97,14 @@ stock Array_FindLowestValue(any:array[], size, start=0)
  * @param start			Optional: Offset where to start (0 - (size-1)).
  * @return				Array index.
  */
-stock Array_FindHighestValue(any:array[], size, start=0)
+stock Array_FindHighestValue(any array[], size, start=0)
 {
 	if (start < 0) {
 		start = 0;
 	}
 
-	new any:value = array[start];
-	new any:tempValue;
+	new any value = array[start];
+	new any tempValue;
 	new x = start;
 
 	for (new i=start; i < size; i++) {
@@ -131,7 +131,7 @@ stock Array_FindHighestValue(any:array[], size, start=0)
  * @param start			Optional: Offset where to start (0 - (size-1)).
  * @noreturn
  */
-stock Array_Fill(any:array[], size, any:value, start=0)
+stock Array_Fill(any array[], size, any value, start=0)
 {
 	if (start < 0) {
 		start = 0;
@@ -150,7 +150,7 @@ stock Array_Fill(any:array[], size, any:value, start=0)
  * @param size			Size of the array (or number of cells to copy)
  * @noreturn
  */
-stock Array_Copy(const any:array[], any:newArray[], size)
+stock Array_Copy(const any array[], any newArray[], size)
 {
 	for (new i=0; i < size; i++) {
 		newArray[i] = array[i];

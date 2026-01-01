@@ -12,9 +12,9 @@
 
 #include <tf2_stocks>
 
-stock Handle:TF2WeaponConf = INVALID_HANDLE;
-stock Handle:hTF2GiveNamedItem = INVALID_HANDLE;
-stock Handle:hTF2WeaponEquip = INVALID_HANDLE;
+stock Handle TF2WeaponConf = null;
+stock Handle hTF2GiveNamedItem = null;
+stock Handle hTF2WeaponEquip = null;
 
 stock LoadWeaponConf()
 {
@@ -36,7 +36,7 @@ stock LoadWeaponConf()
     hTF2WeaponEquip = EndPrepSDKCall();
 }
 
-stock bool:TF2_GiveNamedItem(client, const String:item[])
+stock bool TF2_GiveNamedItem(client, const char[] item)
 {
     if (!hTF2GiveNamedItem)
         LoadWeaponConf();
@@ -44,7 +44,7 @@ stock bool:TF2_GiveNamedItem(client, const String:item[])
     return SDKCall(hTF2GiveNamedItem, client, item, 0, 0);
 }
 
-stock bool:TF2_WeaponEquip(client, entity)
+stock bool TF2_WeaponEquip(client, entity)
 {
     if (!hTF2WeaponEquip)
         LoadWeaponConf();
@@ -57,7 +57,7 @@ stock GetActiveWeapon(client)
     return GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
 }
 
-stock GetCurrentWeaponClass(client, String:name[], maxlength)
+stock GetCurrentWeaponClass(client, char[] name, maxlength)
 {
     new index = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
     if (index > 0 && IsValidEntity(index))
@@ -119,7 +119,7 @@ stock TF2_RemoveOnlyWeapons(client)
  * @param pda           Set true to include spy's pda & engies build & destroy.
  * @noreturn
  */
-stock TF2_RemoveNonMelee(client, bool:pda=false)
+stock TF2_RemoveNonMelee(client, bool pda=false)
 {
     for (new i = 0; i <= 1; i++)
     {
@@ -146,7 +146,7 @@ stock TF2_RemoveNonMelee(client, bool:pda=false)
  * @return				False if weapon could not be created, true on success
  * @error				Invalid client index or lack of mod support
  */
-stock bool:TF2_GivePlayerWeapon(client, const String:weapon[])
+stock bool TF2_GivePlayerWeapon(client, const char[] weapon)
 {
     //new weaponIndex = GivePlayerItem(client, weapon);
     new weaponIndex = TF2_GiveNamedItem(client, weapon);
@@ -169,7 +169,7 @@ stock bool:TF2_GivePlayerWeapon(client, const String:weapon[])
  * @param class			TFClasssType class symbol.
  * @noreturn
  */
-stock TF2_EquipPlayerClassWeapons(client, TFClassType:class, bool:onlyWeapons=false)
+stock TF2_EquipPlayerClassWeapons(client, TFClassType:class, bool onlyWeapons=false)
 {
     switch(class)
     {

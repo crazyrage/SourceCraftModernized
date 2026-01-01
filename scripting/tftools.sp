@@ -8,7 +8,7 @@
 
 #define PL_VERSION "1.2.1"
 
-public Plugin:myinfo = 
+public Plugin myinfo =
 {
   name = "TF Tools",
   author = "Nican132",
@@ -17,11 +17,11 @@ public Plugin:myinfo =
   url = "http://sourcemod.net/"
 };       
 
-new SentryModel[4];
-new SentryShells[4] = {0, 100, 120, 144};
-new Handle:hGameConf, Handle:OffsetSentryModel;
+int SentryModel[4];
+int SentryShells[4] = {0, 100, 120, 144};
+Handle hGameConf; Handle OffsetSentryModel;
 
-new TF_TRoffsets[8];
+int TF_TRoffsets[8];
 #define TURRET_LEVEL 0
 #define TURRET_STATE 1
 #define TURRET_SHELLS 2
@@ -33,8 +33,8 @@ new TF_TRoffsets[8];
 
 public OnPluginStart(){
 	CreateConVar("sm_tf_tools", PL_VERSION, "TF2 tools", FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
-	
-	new i;
+
+	int i;
 	
 	TF_TRoffsets[TURRET_LEVEL] = FindSendPropOffs("CObjectSentrygun", "m_iUpgradeLevel");
 	TF_TRoffsets[TURRET_STATE] = FindSendPropOffs("CObjectSentrygun", "m_iState");
@@ -62,7 +62,7 @@ public OnMapStart(){
 	SentryModel[0] = 0;
 }
 
-public bool:AskPluginLoad(Handle:myself, bool:late, String:Error[])
+public bool AskPluginLoad(Handle myself, bool late, char[] Error)
 {
   // General
   CreateNative("TF_TurretLevel", SetTurretLevel);
@@ -71,9 +71,9 @@ public bool:AskPluginLoad(Handle:myself, bool:late, String:Error[])
   return true;
 }
 
-public SetTurretLevel(Handle:plugin,argc){
+public SetTurretLevel(Handle plugin, int argc){
 	if(argc==2){
-		new index, level;
+		int index; int level;
 		index = GetNativeCell(1);
 		
 		//Oh uh... Find sentry if player index is giving
@@ -87,7 +87,7 @@ public SetTurretLevel(Handle:plugin,argc){
 				return 4;
 		}else{
 		 	//LogMessage("D");
-		 	new String:classname[64];
+		 	char classname[64];
 			GetEntityNetClass(index, classname, 64);
 			if(!StrEqual(classname, "CObjectSentrygun"))
 				//Idiot, that is not a turret
@@ -113,10 +113,10 @@ public SetTurretLevel(Handle:plugin,argc){
 		}
 		
 		SetEntData(index, TF_TRoffsets[TURRET_LEVEL], level, 4); //level
-		if(OffsetSentryModel == INVALID_HANDLE)
+		if(OffsetSentryModel == null)
 			SetEntData(index,TF_TRoffsets[TURRET_MODEL], SentryModel[level], 4);
-		else
-			SDKCall(OffsetSentryModel, index, SentryModel[level]); //model, Use SDK or the render will bug :/
+	else
+		SDKCall(OffsetSentryModel, index, SentryModel[level]); //model, Use SDK or the render will bug :/
 		SetEntData(index,TF_TRoffsets[TURRET_SHELLS], SentryShells[level], 4); //shells 100-120-144
 		SetEntData(index,TF_TRoffsets[TURRET_ROCKETS], level == 3 ? 20 : 0, 4); //rockets
 		SetEntData(index,TF_TRoffsets[TURRET_HEALTH], level == 3 ? 180 : 150, 4); //health 150-150-180
@@ -151,11 +151,11 @@ stock DiscoverModel(levela, ida, statea){
 	}
 }
 
-stock FindSentryByOwner(index){
-	new i, String:classname[64];
+stock FindSentryByOwner(int index){
+	int i; char classname[64];
 	
 	//Isen't there a easier way?
-	new maxents = GetMaxEntities();
+	int maxents = GetMaxEntities();
 	for(i = GetMaxClients(); i <= maxents; i++){
 	 	if(IsValidEntity(i)){
 			GetEntityNetClass(i, classname, 64);
@@ -169,19 +169,19 @@ stock FindSentryByOwner(index){
 }
 
 
-public GetPlayerEyes(Handle:plugin,argc){
+public GetPlayerEyes(Handle plugin, int argc){
  	if(argc==1){
-		new client;
+		int client;
 		client= GetNativeCell(1);
 		
 		if(!IsClientInGame(client))
 			return false;
-			
-		new Float:vAngles[3], Float:vOrigin[3];
+
+		float vAngles[3]; float vOrigin[3];
 		GetClientEyePosition(client,vOrigin);
 		GetClientEyeAngles(client, vAngles);
-		
-		new Handle:trace = TR_TraceRayFilterEx(vOrigin, vAngles, MASK_SHOT, RayType_Infinite, TraceEntityFilterSentry);
+
+		Handle trace = TR_TraceRayFilterEx(vOrigin, vAngles, MASK_SHOT, RayType_Infinite, TraceEntityFilterSentry);
 		
 		if(TR_DidHit(trace)){
 			return TR_GetEntityIndex(trace);
@@ -190,8 +190,8 @@ public GetPlayerEyes(Handle:plugin,argc){
 	return 0;
 }
 
-public bool:TraceEntityFilterSentry(entity, contentsMask){
- 	new String:classname[64];
+public bool TraceEntityFilterSentry(int entity, int contentsMask){
+ 	char classname[64];
  	GetEntityNetClass(entity, classname, 64);
  	return StrEqual(classname, "CObjectSentrygun");
 }

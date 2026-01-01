@@ -30,18 +30,18 @@
 #define EYEBOSS_MODEL		"models/props_halloween/halloween_demoeye.mdl"
 #define EYEROCKET_MODEL     "models/props_halloween/eyeball_projectile.mdl"
 
-new Handle:Cvar_Eyeboss_AllowPublic = INVALID_HANDLE;
-new Handle:Cvar_Eyeboss_Votesneeded = INVALID_HANDLE;
-new Handle:Cvar_Eyeboss_VoteDelay = INVALID_HANDLE;
+Handle Cvar_Eyeboss_AllowPublic = null;
+Handle Cvar_Eyeboss_Votesneeded = null;
+Handle Cvar_Eyeboss_VoteDelay = null;
 
-new Handle:v_BaseHP_Level2 = INVALID_HANDLE;
-new Handle:v_HP_Per_Player = INVALID_HANDLE;
-new Handle:v_HP_Per_Level = INVALID_HANDLE;
+Handle v_BaseHP_Level2 = null;
+Handle v_HP_Per_Player = null;
+Handle v_HP_Per_Level = null;
 
-new Handle:hAdminMenu = INVALID_HANDLE;
+Handle hAdminMenu = null;
 
-new Float:g_pos[3];
-new Float:g_fVotesNeeded;
+float g_pos[3];
+float g_fVotesNeeded;
 
 new g_eyeBossModel = 0;
 new g_eyeRocketModel = 0;
@@ -52,15 +52,15 @@ new g_Voters = 0;
 new g_VotesNeeded = 0;
 new g_voteDelayTime;
 
-new bool:g_bIsEnabled = true;
-new bool:g_bVotesStarted = false;
-new bool:g_bNativeOverride = false;
-new bool:g_bSoundsPrecached = false;
-new bool:g_bModelsPrecached = false;
-new bool:g_bHasVoted[MAXPLAYERS + 1] = { false, ... };
-//new bool:g_IsMonoculus[MAXPLAYERS+1] = { false, ...};
+bool g_bIsEnabled = true;
+bool g_bVotesStarted = false;
+bool g_bNativeOverride = false;
+bool g_bSoundsPrecached = false;
+bool g_bModelsPrecached = false;
+bool g_bHasVoted[MAXPLAYERS + 1] = { false, ... };
+//bool g_IsMonoculus[MAXPLAYERS+1] = { false, ...};
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
 	name = "[TF2] Monoculus Spawner",
 	author = "DarthNinja, FlaminSarge, retsam, -=JFH=-Naris",
@@ -97,8 +97,8 @@ public OnPluginStart()
 
 	if (LibraryExists("adminmenu"))
 	{
-		new Handle:topmenu = GetAdminTopMenu();
-		if (topmenu != INVALID_HANDLE)
+		Handle topmenu = GetAdminTopMenu();
+		if (topmenu != null)
 			OnAdminMenuReady(topmenu);
 	}
 }
@@ -138,12 +138,12 @@ public OnConfigsExecuted()
 public OnMapStart()
 {
     #if !defined _ResourceManager_included
-        if (g_soundTrie == INVALID_HANDLE)
+        if (g_soundTrie == null)
             g_soundTrie = CreateTrie();
         else
             ClearTrie(g_soundTrie);
 
-        if (g_modelTrie == INVALID_HANDLE)
+        if (g_modelTrie == null)
             g_modelTrie = CreateTrie();
         else
             ClearTrie(g_modelTrie);
@@ -160,7 +160,7 @@ public OnMapStart()
     g_iVotes = 0;
 }
 
-PrepareEyebossModel(const String:model[])
+PrepareEyebossModel(const char[] model)
 {
     if (!g_bModelsPrecached)
     {
@@ -214,12 +214,12 @@ PrepareEyebossSounds()
 
 // FUNCTIONS
 
-public Action:BossSummoned(Handle:event, const String:name[], bool:dontBroadcast)
+public Action BossSummoned(Handle event, const char[] name, bool dontBroadcast)
 {
 	if (g_iLetsChangeThisEvent != 0)
 	{
-		new Handle:hEvent = CreateEvent(name);
-		if (hEvent == INVALID_HANDLE)
+		Handle hEvent = CreateEvent(name);
+		if (hEvent == null)
 			return Plugin_Handled;
 		
 		SetEventInt(hEvent, "level", g_iLetsChangeThisEvent);
@@ -231,7 +231,7 @@ public Action:BossSummoned(Handle:event, const String:name[], bool:dontBroadcast
 }
 
 
-public Action:Command_VoteSpawnEyeboss(client, args)
+public Action Command_VoteSpawnEyeboss(client, args)
 {
 	if(client < 1 || !IsClientInGame(client))
 		return Plugin_Handled;
@@ -285,7 +285,7 @@ stock IsValidClient(client)
 	return client > 0 && client <= MaxClients && IsClientInGame(client);
 }
 
-public Action:GreatBallRockets(client, args)
+public Action GreatBallRockets(client, args)
 {
     if (g_bNativeOverride)
 	{
@@ -301,12 +301,12 @@ public Action:GreatBallRockets(client, args)
     new iLevel = 0;
     if (args >= 1)
     {
-        decl String:buffer[15];
+        char buffer[15];
         GetCmdArg(1, buffer, sizeof(buffer));
         iLevel = StringToInt(buffer);
     }
 
-    decl String:modelname[PLATFORM_MAX_PATH+1];
+    char modelname[PLATFORM_MAX_PATH+1];
     if (args >= 2)
     {
         GetCmdArg(2, modelname, sizeof(modelname));
@@ -346,7 +346,7 @@ public Action:GreatBallRockets(client, args)
     return Plugin_Stop;
 }
 
-SpawnEyeBoss(client, iLevel, const String:model[])
+SpawnEyeBoss(client, iLevel, const char[] model)
 {
     if (GetEntityCount() >= GetMaxEntities()-32)
         return 1;
@@ -397,17 +397,17 @@ SpawnEyeBoss(client, iLevel, const String:model[])
 
 SetTeleportEndPoint(client)
 {
-	decl Float:vAngles[3];
-	decl Float:vOrigin[3];
-	decl Float:vBuffer[3];
-	decl Float:vStart[3];
-	decl Float:Distance;
+	decl float vAngles[3];
+	decl float vOrigin[3];
+	decl float vBuffer[3];
+	decl float vStart[3];
+	decl float Distance;
 	
 	GetClientEyePosition(client,vOrigin);
 	GetClientEyeAngles(client, vAngles);
 	
 	//get endpoint for teleport
-	new Handle:trace = TR_TraceRayFilterEx(vOrigin, vAngles, MASK_SHOT, RayType_Infinite, TraceEntityFilterPlayer);
+	Handle trace = TR_TraceRayFilterEx(vOrigin, vAngles, MASK_SHOT, RayType_Infinite, TraceEntityFilterPlayer);
 
 	if(TR_DidHit(trace))
 	{   	 
@@ -430,9 +430,9 @@ SetTeleportEndPoint(client)
 }
 
 /*
-public Action:Command_Summon(client, args)
+public Action Command_Summon(client, args)
 {
-    decl String:modelname[256];
+    char modelname[256];
     if (args == 0)
         modelname[0] = '\0';
     else
@@ -474,7 +474,7 @@ public Action:Command_Summon(client, args)
     return Plugin_Stop;
 }
 
-SummonEyeBoss(client, const String:model[])
+SummonEyeBoss(client, const char[] model)
 {
 	PrepareEyebossModel(model);
 	if (model[0] != '\0' && !IsModelPrecached(model))
@@ -509,11 +509,11 @@ public Colorize(client, color[4])
 {	
 	//Colorize the weapons
 	new m_hMyWeapons = FindSendPropOffs("CBasePlayer", "m_hMyWeapons");	
-	new String:classname[256];
+	char classname[256];
 	new type;
 	new TFClassType:class = TF2_GetPlayerClass(client);
 	
-	for(new i = 0, weapon; i < 47; i += 4)
+	for (int i = 0, weapon; i < 47; i += 4)
 	{
 		weapon = GetEntDataEnt2(client, m_hMyWeapons + i);
 		
@@ -542,7 +542,7 @@ public Colorize(client, color[4])
 	InvisibleHideFixes(client, class, type);
 }
 
-SetWearablesRGBA_Impl( client,  const String:entClass[], const String:serverClass[], color[4])
+SetWearablesRGBA_Impl( client,  const char[] entClass, const char[] serverClass, color[4])
 {
 	new ent = -1;
 	while( (ent = FindEntityByClassname(ent, entClass)) != -1 )
@@ -599,12 +599,12 @@ InvisibleHideFixes(client, TFClassType:class, type)
 }
 */
 
-public bool:TraceEntityFilterPlayer(entity, contentsMask)
+public bool TraceEntityFilterPlayer(entity, contentsMask)
 {
 	return entity > GetMaxClients() || !entity;
 }
 
-public Action:Timer_ResetVotes(Handle:timer)
+public Action Timer_ResetVotes(Handle timer)
 {
 	if(g_bVotesStarted)
 	{
@@ -619,7 +619,7 @@ ResetAllVotes()
 	g_bVotesStarted = false;
 	g_iVotes = 0;
 	
-	for(new x = 1; x <= MaxClients; x++) 
+	for (int x = 1; x <= MaxClients; x++) 
 	{
 		if(!IsClientInGame(x))
 		{
@@ -633,7 +633,7 @@ ResetAllVotes()
 	}
 }
 
-public Cvars_Changed(Handle:convar, const String:oldValue[], const String:newValue[])
+public Cvars_Changed(Handle convar, const char[] oldValue, const char[] newValue)
 {
 	if(convar == Cvar_Eyeboss_AllowPublic)
 	{
@@ -652,15 +652,15 @@ public Cvars_Changed(Handle:convar, const String:oldValue[], const String:newVal
 	}
 }
 
-public OnLibraryRemoved(const String:name[])
+public OnLibraryRemoved(const char[] name)
 {
 	if (StrEqual(name, "adminmenu")) 
 	{
-		hAdminMenu = INVALID_HANDLE;
+		hAdminMenu = null;
 	}
 }
 
-public OnAdminMenuReady(Handle:topmenu)
+public OnAdminMenuReady(Handle topmenu)
 {
 	if (!g_bNativeOverride && topmenu != hAdminMenu)
 	{
@@ -680,7 +680,7 @@ public OnAdminMenuReady(Handle:topmenu)
 	}
 }
 
-public AdminMenu_eyeboss(Handle:topmenu, TopMenuAction:action, TopMenuObject:object_id, param, String:buffer[], maxlength )
+public AdminMenu_eyeboss(Handle topmenu, TopMenuAction:action, TopMenuObject:object_id, param, char buffer[], maxlength )
 {
 	if (action == TopMenuAction_DisplayOption)
 	{
@@ -692,7 +692,7 @@ public AdminMenu_eyeboss(Handle:topmenu, TopMenuAction:action, TopMenuObject:obj
 	}
 }
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char error[], err_max)
 {
     // Register Native
     CreateNative("ControlMonoculus",Native_Control);
@@ -702,23 +702,23 @@ public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
     return APLRes_Success;
 }
 
-public Native_Control(Handle:plugin,numParams)
+public Native_Control(Handle plugin,numParams)
 {
     g_bNativeOverride |= GetNativeCell(1);
 }
 
-public Native_SpawnEyeBoss(Handle:plugin,numParams)
+public Native_SpawnEyeBoss(Handle plugin,numParams)
 {
-    decl String:model[PLATFORM_MAX_PATH+1];
+    char model[PLATFORM_MAX_PATH+1];
     GetNativeString(3, model, sizeof(model));
 
     return SpawnEyeBoss(GetNativeCell(1), GetNativeCell(2), model);
 }
 
 /*
-public Native_SummonEyeBoss(Handle:plugin,numParams)
+public Native_SummonEyeBoss(Handle plugin,numParams)
 {
-    decl String:model[PLATFORM_MAX_PATH+1];
+    char model[PLATFORM_MAX_PATH+1];
     GetNativeString(2, model, sizeof(model));
 
     return SummonEyeBoss(GetNativeCell(1), model);

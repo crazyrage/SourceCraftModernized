@@ -1,19 +1,19 @@
 #include <sourcemod>
 #include "W3SIncs/War3Source_Interface"
 
-public Plugin:myinfo =
+public Plugin myinfo =
 {
     name = "War3Source - Engine - Ward Behavior",
     author = "War3Source Team",
     description="Ward Behavior controller engine"
 };
 // Ward behavior data structure
-new Handle:g_hBehaviorName = INVALID_HANDLE;
-new Handle:g_hBehaviorShortname = INVALID_HANDLE;
-new Handle:g_hBehaviorDescription = INVALID_HANDLE;
+Handle g_hBehaviorName = null;
+Handle g_hBehaviorShortname = null;
+Handle g_hBehaviorDescription = null;
 
 
-public bool:InitNativesForwards()
+public bool InitNativesForwards()
 {
     CreateNative("War3_CreateWardBehavior", Native_War3_CreateWardBehavior);
     CreateNative("War3_GetWardBehaviorsLoaded", Native_War3_GetWardBehaviorsLoaded);
@@ -29,75 +29,75 @@ public bool:InitNativesForwards()
     return true;
 }
 
-public Native_War3_GetWardBehaviorsLoaded(Handle:plugin, numParams)
+public int Native_War3_GetWardBehaviorsLoaded(Handle plugin, numParams)
 {
     return GetArraySize(g_hBehaviorShortname);
 }
 
-public Native_War3_GetWardBehaviorName(Handle:plugin, numParams)
+public int Native_War3_GetWardBehaviorName(Handle plugin, int numParams)
 {
-    new id=GetNativeCell(1);
-    new maxlen=GetNativeCell(3);
+    int id=GetNativeCell(1);
+    int maxlen=GetNativeCell(3);
 
-    new String:name[WARDNAMELEN];
+    char name[WARDNAMELEN];
     GetBehaviorName(id,name,sizeof(name));
     SetNativeString(2,name,maxlen);
 }
 
-public Native_War3_GetWardBehaviorShortname(Handle:plugin, numParams)
+public int Native_War3_GetWardBehaviorShortname(Handle plugin, int numParams)
 {
-    new id=GetNativeCell(1);
-    new maxlen=GetNativeCell(3);
+    int id=GetNativeCell(1);
+    int maxlen=GetNativeCell(3);
 
-    new String:shortname[WARDSNAMELEN];
+    char shortname[WARDSNAMELEN];
     GetBehaviorShortname(id, shortname, sizeof(shortname));
     SetNativeString(2,shortname,maxlen);
 }
 
-public Native_War3_GetWardBehaviorDesc(Handle:plugin, numParams)
+public int Native_War3_GetWardBehaviorDesc(Handle plugin, int numParams)
 {
-    new id=GetNativeCell(1);
-    new maxlen=GetNativeCell(3);
+    int id=GetNativeCell(1);
+    int maxlen=GetNativeCell(3);
 
-    new String:desc[WARDDESCLEN];
+    char desc[WARDDESCLEN];
     GetBehaviorDesc(id,desc,sizeof(desc));
     SetNativeString(2,desc,maxlen);
 }
 
-public Native_War3_GetWardBehaviorByShortname(Handle:plugin, numParams)
+public int Native_War3_GetWardBehaviorByShortname(Handle plugin, int numParams)
 {
-    new String:shortname[WARDSNAMELEN];
+    char shortname[WARDSNAMELEN];
     GetNativeString(1,shortname,sizeof(shortname));
     return _:GetWardBehaviorByShortname(shortname);
 }
 
 // Non Native getters :)
 
-GetBehaviorShortname(id,String:retstr[],maxlen)
+void GetBehaviorShortname(id,char retstr[],int maxlen)
 {
     GetArrayString(g_hBehaviorShortname, id, retstr, maxlen);
 }
 
-GetBehaviorName(id,String:retstr[],maxlen)
+void GetBehaviorName(id,char retstr[],int maxlen)
 {
     GetArrayString(g_hBehaviorName, id, retstr, maxlen);
 }
 
-GetBehaviorDesc(id,String:retstr[],maxlen)
+void GetBehaviorDesc(id,char retstr[],int maxlen)
 {
     GetArrayString(g_hBehaviorDescription, id, retstr, maxlen);
 }
 
-GetWardBehaviorByShortname(String:shortname[])
+void GetWardBehaviorByShortname(char shortname[])
 {
     return FindStringInArray(g_hBehaviorShortname, shortname);
 }
 
 // Constructors
 
-public Native_War3_CreateWardBehavior(Handle:plugin, numParams)
+public int Native_War3_CreateWardBehavior(Handle plugin, int numParams)
 {
-    decl String:name[WARDNAMELEN], String:shortname[WARDSNAMELEN], String:desc[WARDDESCLEN];
+    char name[WARDNAMELEN], shortname[WARDSNAMELEN], desc[WARDDESCLEN];
     GetNativeString(1, shortname, sizeof(shortname));
     GetNativeString(2, name, sizeof(name));
     GetNativeString(3, desc, sizeof(desc));
@@ -105,7 +105,7 @@ public Native_War3_CreateWardBehavior(Handle:plugin, numParams)
     return CreateWardBehavior(shortname,name,desc);
 }
 
-bool:BehaviorExistsByShortname(String:shortname[])
+bool BehaviorExistsByShortname(char shortname[])
 {
     if(FindStringInArray(g_hBehaviorShortname, shortname) != -1)
     {
@@ -115,11 +115,11 @@ bool:BehaviorExistsByShortname(String:shortname[])
     return false;
 }
 
-CreateWardBehavior(String:shortname[], String:name[], String:desc[])
+void CreateWardBehavior(char shortname[], char name[], char desc[])
 {
     if(BehaviorExistsByShortname(shortname))
     {
-        new oldid = GetWardBehaviorByShortname(shortname);
+        int oldid = GetWardBehaviorByShortname(shortname);
 
         War3_LogInfo("Ward Behavior already exists: %s, returning old behavior id %d", shortname, oldid);
         

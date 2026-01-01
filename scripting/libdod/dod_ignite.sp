@@ -34,7 +34,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 // Plugin Info
 
-public Plugin:myinfo =
+public Plugin myinfo =
 {
     name = "dod_ignite",
     author = "Daedilus/-=|JFH|=-Naris",
@@ -43,13 +43,13 @@ public Plugin:myinfo =
     url = "http://www.budznetwork.com"
 };
 
-new Handle:cvarBurnTime;
-new Float:flBurnTime[MAXENTITIES+1];
+HandlecvarBurnTime;
+floatflBurnTime[MAXENTITIES+1];
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // AskPluginLoad
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLResAskPluginLoad2(Handle myself, bool late, char[] error, err_max)
 {
     // Register Natives
     CreateNative("DOD_IgniteEntity",Native_DOD_IgniteEntity);
@@ -92,17 +92,17 @@ public OnConVarChange(Handle:hHandle, String:strOldVal[], String:strNewVal[])
 ///////////////////////////////////////////////////////////////////////////////////////
 // NormalSoundHook
 
-public Action:NormalSoundHook(clients[64], &client_count, String:sample[PLATFORM_MAX_PATH],
+public ActionNormalSoundHook(clients[64], &client_count, String:sample[PLATFORM_MAX_PATH],
                               &entity, &channel, &Float:volume, &level, &pitch, &flags)
 {
     if (strcmp(FIRE_SMALL_LOOP2, sample, false) == 0)
     {
-        new Float:time = flBurnTime[entity];
+        floattime = flBurnTime[entity];
         if (time <= 0.0)
             time = flBurnTime[0];
         if (time > 0.0)
         {
-            new Handle:pack = CreateDataPack();
+            Handlepack = CreateDataPack();
             WritePackCell(pack,entity);
             WritePackCell(pack,channel);
             CreateTimer(time, KillSound, pack);
@@ -118,9 +118,9 @@ public Action:NormalSoundHook(clients[64], &client_count, String:sample[PLATFORM
 ///////////////////////////////////////////////////////////////////////////////////////
 // KillSound
 
-public Action:KillSound(Handle:timer, Handle:pack)
+public ActionKillSound(Handle timer, Handle pack)
 {
-    if (pack != INVALID_HANDLE)
+    if (pack != null)
     {
         ResetPack(pack);
         new entity = ReadPackCell(pack);
@@ -138,10 +138,10 @@ public Action:KillSound(Handle:timer, Handle:pack)
 ///////////////////////////////////////////////////////////////////////////////////////
 // Native_DOD_Ignite
 
-public Native_DOD_IgniteEntity(Handle:plugin,numParams)
+public Native_DOD_IgniteEntity(Handle plugin,numParams)
 {
     new entity = GetNativeCell(1);
-    new Float:time = Float:GetNativeCell(2);
+    floattime = Float:GetNativeCell(2);
     flBurnTime[entity] = time;
     IgniteEntity(entity, time, bool:GetNativeCell(3),
                  Float:GetNativeCell(4), bool:GetNativeCell(5));

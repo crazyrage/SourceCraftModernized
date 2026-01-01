@@ -7,7 +7,7 @@
 #define PLUGIN_VERSION "0.5"
   
   // Plugin definitions
-public Plugin:myinfo =
+public Plugin myinfo =
 {
        name = "SentrySpawner",
        author = "HL-SDK",
@@ -16,12 +16,12 @@ public Plugin:myinfo =
        url = "."
 } 
  
-new gSentRemaining[MAXPLAYERS+1];    // how many sentries player has available
+int gSentRemaining[MAXPLAYERS+1];    // how many sentries player has available
  
-new Handle:g_IsSpawnSentryOn = INVALID_HANDLE;
-new Handle:g_SentryInitLevel = INVALID_HANDLE;
-new Handle:g_NumSentries = INVALID_HANDLE;
-new Handle:g_SpawnSentryChance = INVALID_HANDLE;
+Handle g_IsSpawnSentryOn = null;
+Handle g_SentryInitLevel = null;
+Handle g_NumSentries = null;
+Handle g_SpawnSentryChance = null;
 
 
 public OnPluginStart()
@@ -46,13 +46,13 @@ public void OnClientConnected(client)
 
 public OnClientDisconnect(client) //Destroy all of a player's sentries when he/she disconnects Credit to loop goes to bl4nk
 {
-    new maxentities = GetMaxEntities();
-    for (new i = MAXPLAYERS+1; i <= maxentities; i++)
+    int maxentities = GetMaxEntities();
+    for(int i= MAXPLAYERS+1; i <= maxentities; i++)
     {
         if (!IsValidEntity(i))
             continue;
 
-        decl String:netclass[32];
+        char netclass[32];
         GetEntityNetClass(i, netclass, sizeof(netclass));
 
         if (!strcmp(netclass, "CObjectSentrygun") && GetEntDataEnt2(i, FindSendPropOffs("CObjectSentrygun","m_hBuilder")) == client)
@@ -63,17 +63,17 @@ public OnClientDisconnect(client) //Destroy all of a player's sentries when he/s
     }
 }  
 
-public Action:Event_PlayerChangeTeam(Handle:event, const String:name[], bool:dontBroadcast) //Destroy all of a player's sentries when he/she Changes teams
+public Action Event_PlayerChangeTeam(Handle event, const char[] name, bool dontBroadcast) //Destroy all of a player's sentries when he/she Changes teams
 {
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));   //The deal with this is, it seems that the player changes
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));   //The deal with this is, it seems that the player changes
 
-    new maxentities = GetMaxEntities(); //Teams before he/she dies... so the sentry will still be of the
-    for (new i = MAXPLAYERS+1; i <= maxentities; i++)   //team switched to :(
+    int maxentities = GetMaxEntities(); //Teams before he/she dies... so the sentry will still be of the
+    for(int i= MAXPLAYERS+1; i <= maxentities; i++)   //team switched to :(
     {
         if (!IsValidEntity(i))
             continue;
 
-        decl String:netclass[32];
+        char netclass[32];
         GetEntityNetClass(i, netclass, sizeof(netclass));
 
         if (!strcmp(netclass, "CObjectSentrygun") && GetEntDataEnt2(i, FindSendPropOffs("CObjectSentrygun","m_hBuilder")) == client)
@@ -88,17 +88,17 @@ public Action:Event_PlayerChangeTeam(Handle:event, const String:name[], bool:don
     return Plugin_Continue
 }
 
-public Action:Event_ObjectDestroyed(Handle:event, const String:name[], bool:dontBroadcast)  //Keep track of a player's sentry count
+public Action Event_ObjectDestroyed(Handle event, const char[] name, bool dontBroadcast)  //Keep track of a player's sentry count
 {
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));   //I don't know how to determine whether a sentry was created
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));   //I don't know how to determine whether a sentry was created
     //by this plugin or by engie as build 
-    new maxentities = GetMaxEntities();
-    for (new i = MAXPLAYERS+1; i <= maxentities; i++)
+    int maxentities = GetMaxEntities();
+    for(int i= MAXPLAYERS+1; i <= maxentities; i++)
     {
         if (!IsValidEntity(i))
             continue;
 
-        decl String:netclass[32];
+        char netclass[32];
         GetEntityNetClass(i, netclass, sizeof(netclass));
 
         if (!strcmp(netclass, "CObjectSentrygun") && GetEntDataEnt2(i, FindSendPropOffs("CObjectSentrygun","m_hBuilder")) == client)
@@ -110,25 +110,25 @@ public Action:Event_ObjectDestroyed(Handle:event, const String:name[], bool:dont
     return Plugin_Continue
 }
 
-public Action:Event_PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)        //Meaty code goodness
+public Action Event_PlayerDeath(Handle event, const char[] name, bool dontBroadcast)        //Meaty code goodness
 {
     if (GetConVarInt(g_IsSpawnSentryOn) == 1)
     {
-        new userid = GetEventInt(event, "userid")
+        int userid = GetEventInt(event, "userid")
         
-        decl String:vicname[64]
-        new client = GetClientOfUserId(userid)
+        char vicname[64]
+        int client = GetClientOfUserId(userid)
         GetClientName(client, vicname, sizeof(vicname))
 
-        new Float:vicorigvec[3];
-        GetClientAbsOrigin(client, Float:vicorigvec)
+        float vicorigvec[3];
+        GetClientAbsOrigin(client, float vicorigvec)
         
-        new Float:angl[3];
+        float angl[3];
         angl[0] = 0.0;
         angl[1] = 0.0;
         angl[2] = 0.0;
         
-        new Float:rand = GetRandomFloat(0.0, 1.0);
+        float rand = GetRandomFloat(0.0, 1.0);
         
         if (gSentRemaining[client]>0 && GetConVarFloat(g_SpawnSentryChance) >= rand)
         {
@@ -148,7 +148,7 @@ public Action:Event_PlayerDeath(Handle:event, const String:name[], bool:dontBroa
  */
 #tryinclude <tf2_objects>
 #if !defined _tf2_objects_included
-    stock const String:TF2_ObjectClassNames[TFObjectType][] =
+    stock const TF2_ObjectClassNames[TFObjectType][] =
     {
 	"obj_dispenser",
 	"obj_teleporter",
@@ -170,19 +170,19 @@ public Action:Event_PlayerDeath(Handle:event, const String:name[], bool:dontBroa
  */
 #tryinclude <tf2_build>
 #if !defined _tf2_build_included
-    stock BuildSentry(hBuilder, const Float:fOrigin[3], const Float:fAngle[3], iLevel=1, 
-                      bool:bDisabled=false, bool:bMini=false, bool:bShielded=false,
+    stock BuildSentry(hBuilder, const float fOrigin[3], const float fAngle[3], iLevel=1, 
+                      bool bDisabled=false, bool bMini=false, bool bShielded=false,
                       iHealth=-1, iMaxHealth=-1, iShells=-1, iRockets=-1,
-                      Float:flPercentage=1.0)
+                      float flPercentage=1.0)
     {
-        static const Float:fBuildMaxs[3] = { 24.0, 24.0, 66.0 };
-        //static const Float:fMdlWidth[3] = { 1.0, 0.5, 0.0 };
+        static const float fBuildMaxs[3] = { 24.0, 24.0, 66.0 };
+        //static const float fMdlWidth[3] = { 1.0, 0.5, 0.0 };
 
-        new iTeam = GetClientTeam(hBuilder);
+        int iTeam = GetClientTeam(hBuilder);
 
-        new iSentryHealth;
-        new iMaxSentryShells;
-        new iMaxSentryRockets;
+        int iSentryHealth;
+        int iMaxSentryShells;
+        int iMaxSentryRockets;
         if (iLevel >= 1 && iLevel <= 3)
         {
             iSentryHealth = TF2_SentryHealth[iLevel];
@@ -223,14 +223,14 @@ public Action:Event_PlayerDeath(Handle:event, const String:name[], bool:dontBroa
         if (iHealth < 0 || iHealth > iMaxHealth)
             iHealth = iMaxHealth;
 
-        new iSentry = CreateEntityByName(TF2_ObjectClassNames[TFObject_Sentry]);
+        int iSentry = CreateEntityByName(TF2_ObjectClassNames[TFObject_Sentry]);
         if (iSentry)
         {
             DispatchSpawn(iSentry);
 
             TeleportEntity(iSentry, fOrigin, fAngle, NULL_VECTOR);
 
-            decl String:sModel[64];
+            char sModel[64];
             if (bMini)
                 strcopy(sModel, sizeof(sModel),"models/buildables/sentry1.mdl");
             else
@@ -295,8 +295,8 @@ public Action:Event_PlayerDeath(Handle:event, const String:name[], bool:dontBroa
             SetVariantInt(hBuilder);
             AcceptEntityInput(iSentry, "SetBuilder", -1, -1, 0);
 
-            new Handle:event = CreateEvent("player_builtobject");
-            if (event != INVALID_HANDLE)
+            Handle event = CreateEvent("player_builtobject");
+            if (event != null)
             {
                 SetEventInt(event, "userid", GetClientUserId(hBuilder));
                 SetEventInt(event, "object", _:TFObject_Sentry);

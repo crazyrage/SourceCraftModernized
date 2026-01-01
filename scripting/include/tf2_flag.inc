@@ -10,7 +10,7 @@
 #endif
 #define _tf2_flag_included
 
-stock bool:TF2_HasTheFlag(client)
+stock bool TF2_HasTheFlag(client)
 {
     new ent = -1;
     while ((ent = FindEntityByClassname(ent, "item_teamflag")) != -1)

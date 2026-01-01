@@ -10,48 +10,48 @@
 #endif
 #define _log_included
 
-stock Log(const String:message[])
+stock Log(const char message[])
 {
     PrintToServer(message);
     LogMessage(message);
 }
 
-stock Error(const String:message[])
+stock Error(const char message[])
 {
     PrintToServer(message);
     LogError(message);
 }
 
-stock Fail(const String:message[])
+stock Fail(const char message[])
 {
     PrintToServer(message);
     SetFailState(message);
 }
 
-stock LogEventDamage(Handle:event,damage,const String:source[], race_id)
+stock LogEventDamage(Handle event,damage,const char source[], race_id)
 {
     new userid=GetEventInt(event,"userid");
     new victim=GetClientOfUserId(userid);
     new victim_player=GetPlayerHandle(victim);
-    new victim_race=(victim_player != INVALID_HANDLE) ? GetRace(victim_player) : -1;
+    new victim_race=(victim_player != null) ? GetRace(victim_player) : -1;
 
     new attacker_uid=GetEventInt(event,"attacker");
     new attacker=GetClientOfUserId(attacker_uid);
     new attacker_player=GetPlayerHandle(attacker);
-    new attacker_race=(attacker_player != INVALID_HANDLE) ? GetRace(attacker_player) : -1;
+    new attacker_race=(attacker_player != null) ? GetRace(attacker_player) : -1;
 
     new assister_uid = GetEventInt(event,"assister");
     new assister=GetClientOfUserId(assister_uid);
     new assister_player=GetPlayerHandle(assister);
-    new assister_race=(assister_player != INVALID_HANDLE) ? GetRace(assister_player) : -1;
+    new assister_race=(assister_player != null) ? GetRace(assister_player) : -1;
 
     if (race_id == victim_race   || race_id == attacker_race ||
         race_id == assister_race || race_id < 0)
     {
         new health=0;
-        decl String:team[64];
-        decl String:steamID[64];
-        decl String:attacker_weapon[64];
+        char team[64];
+        char steamID[64];
+        char attacker_weapon[64];
         if (attacker)
         {
             GetClientAuthId(attacker, AuthId_Steam2, steamID, sizeof(steamID));
@@ -66,28 +66,28 @@ stock LogEventDamage(Handle:event,damage,const String:source[], race_id)
             strcopy(steamID,sizeof(steamID), "World");
         }
 
-        decl String:victimID[64];
+        char victimID[64];
         GetClientAuthId(victim, AuthId_Steam2, victimID, sizeof(victimID));
 
-        decl String:victimTeam[64];
+        char victimTeam[64];
         GetTeamName(GetClientTeam(victim), victimTeam, sizeof(victimTeam));
 
         new victimHealth=GetClientHealth(victim);
 
-        decl String:event_weapon[64];
+        char event_weapon[64];
         GetEventString(event,"weapon",event_weapon,sizeof(event_weapon));
 
         new event_damage = GetEventInt(event, "damage");
 
         if (assister)
         {
-            decl String:assisterID[64];
+            char assisterID[64];
             GetClientAuthId(assister, AuthId_Steam2, assisterID, sizeof(assisterID));
 
-            decl String:assisterTeam[64];
+            char assisterTeam[64];
             GetTeamName(GetClientTeam(assister), assisterTeam, sizeof(assisterTeam));
 
-            decl String:assister_weapon[64];
+            char assister_weapon[64];
             GetClientWeapon(assister, assister_weapon, sizeof(assister_weapon));
 
             new assisterHealth=GetClientHealth(assister);

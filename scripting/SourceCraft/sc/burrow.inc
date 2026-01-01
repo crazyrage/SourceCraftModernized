@@ -34,7 +34,7 @@ stock AddBurrowUpgrade(raceId, category=2, required_level=6, max_level=1, start_
 {
     AdditionalTranslations("sc.burrow.phrases.txt");
 
-    decl String:desc[NAME_STRING_LENGTH];
+    char desc[NAME_STRING_LENGTH];
     if (max_level >= start_level && start_level > 0 && start_level < 3)
         Format(desc, sizeof(desc), "%%burrow_%d.%d", start_level, max_level);
     else
@@ -58,7 +58,7 @@ stock AddBurrowUpgrade(raceId, category=2, required_level=6, max_level=1, start_
  * @param name:     What to call the additional armor in the HUD and messages - for Bunkers.
  * @return			Retruns true if the player succeeded in burrowing.
  */
-native bool:Burrow(client, level, depth=4, armor=0, const String:name[]="");
+native bool Burrow(client, level, depth=4, armor=0, const char name[]="");
 
 /**
  * Starts unburrowing, a player if they are burrowed.
@@ -84,7 +84,7 @@ native IsBurrowed(entity);
  * @param unborrow  Starts Unburrowing the player if true, instantly resets burrow if false.
  * @return			none
  */
-native ResetBurrow(client, bool:unburrow=false);
+native ResetBurrow(client, bool unburrow=false);
 
 /**
  * Starts burrowing, or unburrowing, one or more structures that belong
@@ -95,7 +95,7 @@ native ResetBurrow(client, bool:unburrow=false);
  * @param flags 	Flags that indicate whose buildings can be burrowed (Own, Team or Any).
  * @return			none
  */
-native BurrowStructure(client, Float:amount, flags=BURROW_OWN_STRUCTURES);
+native BurrowStructure(client, float amount, flags=BURROW_OWN_STRUCTURES);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

@@ -28,10 +28,10 @@
 #include "effect/SendEffects"
 #include "effect/Shake"
 
-new const String:spawnWav[]      = "sc/zbgrdy00.wav";
-new const String:deathWav[]      = "sc/zbghit00.wav";
+new const char[] spawnWav[]      = "sc/zbgrdy00.wav";
+new const char[] deathWav[]      = "sc/zbghit00.wav";
 
-new const String:infestedWav[][] = { "sc/zbgwht00.wav" ,
+new const char[] infestedWav[][] = { "sc/zbgwht00.wav" ,
                                      "sc/zbgwht01.wav" ,
                                      "sc/zbgwht02.wav" ,
                                      "sc/zbgwht03.wav" ,
@@ -41,17 +41,17 @@ new const String:infestedWav[][] = { "sc/zbgwht00.wav" ,
                                      "sc/zbgpss03.wav" ,
                                      "sc/zbgyes03.wav" };
 
-new Float:g_SpeedLevels[]        = {   -1.0,  1.05,  1.07,  1.09, 1.11 };
-new Float:g_ExplodeRadius[]      = { 1000.0, 800.0, 600.0, 450.0, 300.0 };
-new g_ExplodePlayerDamage[]      = {    800,   900,  1000,  1100, 1200  };
-new g_ExplodeBuildingDamage[]    = {   1000,  1250,  1500,  1750, 2000  };
+float g_SpeedLevels[]        = {   -1.0,  1.05,  1.07,  1.09, 1.11 };
+float g_ExplodeRadius[]      = { 1000.0, 800.0, 600.0, 450.0, 300.0 };
+	int g_ExplodePlayerDamage[]      = {    800,   900,  1000,  1100, 1200  };
+	int g_ExplodeBuildingDamage[]    = {   1000,  1250,  1500,  1750, 2000  };
 
 new raceID, burrowID, boostID, explodeID;
 
-new m_LastRace[MAXPLAYERS+1];
-new m_Countdown[MAXPLAYERS+1];
+	int m_LastRace[MAXPLAYERS+1];
+	int m_Countdown[MAXPLAYERS+1];
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "SourceCraft Race - Infested",
     author = "-=|JFH|=-Naris",
@@ -60,7 +60,7 @@ public Plugin:myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.infested.phrases.txt");
 
@@ -97,7 +97,7 @@ public OnSourceCraftReady()
                    g_ExplodeBuildingDamage, raceID, explodeID);
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupSpeed();
 
@@ -106,21 +106,21 @@ public OnMapStart()
     SetupSound(spawnWav);
     SetupSound(deathWav);
 
-    for (new i = 0; i < sizeof(infestedWav); i++)
+    for (int i = 0; i < sizeof(infestedWav); i++)
         SetupSound(infestedWav[i]);
 }
 
-public OnMapEnd()
+public void OnMapEnd()
 {
     ResetAllClientTimers();
 }
 
-public OnClientDisconnect(client)
+public void OnClientDisconnect(client)
 {
     KillClientTimer(client);
 }
 
-public Action:OnRaceDeselected(client,oldrace,newrace)
+public Action OnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
@@ -137,7 +137,7 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
         return Plugin_Continue;
 }
 
-public Action:OnRaceSelected(client,oldrace,newrace)
+public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
@@ -158,7 +158,7 @@ public Action:OnRaceSelected(client,oldrace,newrace)
                       .r=r, .g=g, .b=b,
                       .apply=false);
 
-        new boost_level = GetUpgradeLevel(client,raceID,boostID);
+        int boost_level = GetUpgradeLevel(client,raceID,boostID);
         SetSpeedBoost(client, boost_level, true, g_SpeedLevels);
 
         if (IsValidClientAlive(client))
@@ -193,14 +193,14 @@ public OnItemPurchase(client,item)
 
         if (item == g_bootsItem)
         {
-            new boost_level = GetUpgradeLevel(client,race,boostID);
+            int boost_level = GetUpgradeLevel(client,race,boostID);
             if (boost_level > 0)
                 SetSpeedBoost(client, boost_level, true, g_SpeedLevels);
         }
     }
 }
 
-public OnUltimateCommand(client,race,bool:pressed,arg)
+public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (pressed && race==raceID && IsValidClientAlive(client))
     {
@@ -230,7 +230,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
 }
 
 // Events
-public OnPlayerSpawnEvent(Handle:event, client, race)
+public OnPlayerSpawnEvent(Handle event, client, race)
 {
     if (race == raceID)
     {
@@ -251,7 +251,7 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
                       .r=r, .g=g, .b=b,
                       .apply=false);
 
-        new boost_level = GetUpgradeLevel(client,raceID,boostID);
+        int boost_level = GetUpgradeLevel(client,raceID,boostID);
         SetSpeedBoost(client, boost_level, true, g_SpeedLevels);
 
         PrepareAndEmitSoundToAll(spawnWav,client);
@@ -264,10 +264,10 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
     }
 }
 
-public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_index,
+public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_index,
                           attacker_race, assister_index, assister_race, damage,
-                          const String:weapon[], bool:is_equipment, customkill,
-                          bool:headshot, bool:backstab, bool:melee)
+                          const char[] weapon[], bool is_equipment, customkill,
+                          bool headshot, bool backstab, bool melee)
 {
     KillClientTimer(victim_index);
 
@@ -283,7 +283,7 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
                       OnDeathExplosion, 0);
 
         // Default race to human for new players.
-        new race = m_LastRace[victim_index];
+        int race = m_LastRace[victim_index];
         if (race <= 0)
             race = FindRace("human");
 
@@ -292,9 +292,9 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
     }
 }
 
-public Action:Exclaimation(Handle:timer, any:userid)
+public Action Exclaimation(Handle timer, any:userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client))
     {
         if (GetRace(client) == raceID)
@@ -308,10 +308,10 @@ public Action:Exclaimation(Handle:timer, any:userid)
                                           TF_STUNFLAG_THIRDPERSON);
             }
 
-            new Float:clientLoc[3];
+            float clientLoc[3];
             GetClientAbsOrigin(client, clientLoc);
 
-            new num = GetRandomInt(0,sizeof(infestedWav)-1);
+            int num = GetRandomInt(0,sizeof(infestedWav)-1);
             PrepareAndEmitAmbientSound(infestedWav[num], clientLoc, client);
 
             if (--m_Countdown[client] <= 0)

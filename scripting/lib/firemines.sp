@@ -1179,11 +1179,11 @@ public Action MineSeek(Handle timer, any mineRef)
 
             //TR_TraceRayFilter(minePos, vecBelow, MASK_PLAYERSOLID, RayType_EndPoint, TraceRayDontHitSelf, mine);
             TR_TraceHullFilter(minePos, vecBelow, vecMins, vecMaxs, MASK_PLAYERSOLID, TraceRayDontHitSelf, mine);
-            if (TR_DidHit(INVALID_HANDLE))
+            if (TR_DidHit(null))
             {
                 // Move mine down to ground.
                 //LogMessage("MineSeek: teleport to ground mine=%d, pos=%f,%f,%f", mine,  minePos[0], minePos[1], minePos[2]);
-                TR_GetEndPosition(minePos, INVALID_HANDLE);
+                TR_GetEndPosition(minePos, null);
                 TeleportEntity(mine, minePos, NULL_VECTOR, NULL_VECTOR);
             }
 

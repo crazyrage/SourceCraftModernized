@@ -17,7 +17,7 @@
  * @param force     Set to true to force wrangling even if someone else already is.
  * @return          Returns Plugin_Handled if a Monoculus was wrangled successfully.
  */
-native Action:TF2_WrangleMonoculus(client, bool:force=false);
+native Action TF2_WrangleMonoculus(client, bool force=false);
 
 /**
  * Assume control of this plugin
@@ -25,7 +25,7 @@ native Action:TF2_WrangleMonoculus(client, bool:force=false);
  * @param plugin_only   Set to 1 to assume control and disable admin functions.
  * @return              none
  */
-native ControlWrangleMonoculus(bool:plugin_only=true);
+native ControlWrangleMonoculus(bool plugin_only=true);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

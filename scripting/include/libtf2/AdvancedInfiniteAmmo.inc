@@ -78,7 +78,7 @@ forward void AIA_OnAIAChanged(int client, int flags, bool onoff);
  * @param announce	 	Set to 1 to show Advanced Infinite Ammo changes in chat.
  * @return		    	none
  */
-native AIA_Control(bool:plugin_only=true, bool:announce=false);
+native AIA_Control(bool plugin_only=true, bool announce=false);
 
 /**
  * Give a player ammo for the weapon in a slot

@@ -15,10 +15,10 @@
 // Global Definitions
 #define PLUGIN_VERSION "1.0.3"
 
-new Handle:hKV = INVALID_HANDLE;
+Handle hKV = null;
 
 // Functions
-public Plugin:myinfo =
+public Plugin myinfo =
 {
 	name = "GiveNamedItem",
 	author = "bl4nk",
@@ -34,12 +34,12 @@ public OnPluginStart()
 
 	hKV = CreateKeyValues("TF2WeaponData");
 
-	new String:file[128];
+	char file[128];
 	BuildPath(Path_SM, file, sizeof(file), "data/tf2weapondata.txt");
 	FileToKeyValues(hKV, file);
 }
 
-public Action:Command_GiveWeapon(client, args)
+public Action Command_GiveWeapon(int client, int args)
 {
 	if (args < 1)
 	{
@@ -47,11 +47,11 @@ public Action:Command_GiveWeapon(client, args)
 		return Plugin_Handled;
 	}
 
-	decl String:name[65];
+	char name[65];
 	GetCmdArg(1, name, sizeof(name));
 
-	decl String:target_name[MAX_TARGET_LENGTH];
-	decl target_list[MAXPLAYERS], target_count, bool:tn_is_ml;
+	char target_name[MAX_TARGET_LENGTH];
+	int target_list[MAXPLAYERS]; int target_count; bool tn_is_ml;
 
 	if ((target_count = ProcessTargetString(
 			name,
@@ -67,7 +67,7 @@ public Action:Command_GiveWeapon(client, args)
 		return Plugin_Handled;
 	}
 
-	decl String:weaponName[32];
+	char weaponName[32];
 	GetCmdArg(2, weaponName, sizeof(weaponName));
 
 	if (!KvJumpToKey(hKV, weaponName))
@@ -76,15 +76,15 @@ public Action:Command_GiveWeapon(client, args)
 		return Plugin_Handled;
 	}
 
-	new weaponSlot = KvGetNum(hKV, "slot");
-	//new weaponClip = KvGetNum(hKV, "clip");
-	new weaponMax = KvGetNum(hKV, "max");
+	int weaponSlot = KvGetNum(hKV, "slot");
+	//int weaponClip = KvGetNum(hKV, "clip");
+	int weaponMax = KvGetNum(hKV, "max");
 
 	KvRewind(hKV);
 
-	for (new i = 0; i < target_count; i++)
+	for (int i = 0; i < target_count; i++)
 	{
-		new target = target_list[i];
+		int target = target_list[i];
 		TF2_RemoveWeaponSlot(target, weaponSlot - 1);
 		TF2_GivePlayerWeapon(target, weaponName);
 

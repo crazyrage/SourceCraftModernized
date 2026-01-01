@@ -21,7 +21,7 @@ public __pl_serverredir_SetNTVOptional()
 	MarkNativeAsOptional("LoadServerRedirectListFiltered");
 }
 
-functag OnRedirectServersLoaded public(serverCount, const String:error[], Handle:serverList, any:data);
+functag OnRedirectServersLoaded public(serverCount, const char[] error, Handle serverList, any data);
  
 /**
  * Adds two numbers together.
@@ -40,7 +40,7 @@ native ShowServerRedirectMenu(client);
  * @param data				User data
  * @return					Returns nothing.
  */
-native LoadServerRedirectList(OnRedirectServersLoaded:callback, any:data);
+native LoadServerRedirectList(OnRedirectServersLoaded:callback, any data);
 
 /**
  * Loads the list of servers available for redirection. This call will use the
@@ -53,4 +53,4 @@ native LoadServerRedirectList(OnRedirectServersLoaded:callback, any:data);
  * @param data				User data
  * @return					Returns nothing.
  */
-native LoadServerRedirectListFiltered(bool:showCurrent, bool:showOffline, OnRedirectServersLoaded:callback, any:data);
+native LoadServerRedirectListFiltered(bool showCurrent, bool showOffline, OnRedirectServersLoaded:callback, any data);

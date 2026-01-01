@@ -16,4 +16,4 @@
 #define HaloSprite()       PrepareModel(g_haloModel, g_haloSprite)
 
 stock g_haloSprite;
-stock const String:g_haloModel[] = "materials/sprites/halo01.vmt";
+static const char g_haloModel[] = "materials/sprites/halo01.vmt";

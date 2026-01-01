@@ -1,4 +1,4 @@
-public Plugin:myinfo = 
+public Plugin myinfo =
 {
 	name = "Fun Cvars",
 	author = "Wild1234",
@@ -12,11 +12,11 @@ public Plugin:myinfo =
 #undef REQUIRE_PLUGIN
 #include <adminmenu>
 
-new Handle:g_Cvar_Gravity = INVALID_HANDLE;
-new Handle:g_Cvar_AllTalk = INVALID_HANDLE;
-new Handle:g_Cvar_FF = INVALID_HANDLE;
-new Handle:g_Cvar_RSTime = INVALID_HANDLE;
-new Handle:hTopMenu = INVALID_HANDLE;
+Handle g_Cvar_Gravity = null;
+Handle g_Cvar_AllTalk = null;
+Handle g_Cvar_FF = null;
+Handle g_Cvar_RSTime = null;
+Handle hTopMenu = null;
 
 public OnPluginStart()
 {
@@ -33,14 +33,14 @@ public OnPluginStart()
 	RegAdminCmd("sm_mprst", Command_SetRSTime, ADMFLAG_CUSTOM1, "sm_mprst <time> Respawn delay time. Default: 10");
 
 	/* Account for late loading */
-	new Handle:topmenu;
-	if (LibraryExists("adminmenu") && ((topmenu = GetAdminTopMenu()) != INVALID_HANDLE))
+	Handle topmenu;
+	if (LibraryExists("adminmenu") && ((topmenu = GetAdminTopMenu()) != null))
 	{
 		OnAdminMenuReady(topmenu);
 	}
 }
 
-public Action:Command_SetGrav(client, args)
+public Action Command_SetGrav(int client, int args)
 {
 	if (args < 1)
 	{
@@ -48,7 +48,7 @@ public Action:Command_SetGrav(client, args)
 		return Plugin_Handled;
 	}
 
-	decl String:arg[64];
+	char arg[64];
 	GetCmdArg(1, arg, sizeof(arg));
 
 	SetConVarInt(g_Cvar_Gravity, StringToInt(arg));
@@ -58,7 +58,7 @@ public Action:Command_SetGrav(client, args)
 	return Plugin_Handled;
 }
 
-public Action:Command_SetFF(client, args)
+public Action Command_SetFF(int client, int args)
 {
 	if (args < 1)
 	{
@@ -66,9 +66,9 @@ public Action:Command_SetFF(client, args)
 		return Plugin_Handled;
 	}
 
-	decl String:arg[64];
+	char arg[64];
 	GetCmdArg(1, arg, sizeof(arg));
-	new argi = StringToInt(arg);
+	int argi = StringToInt(arg);
 
 	if (argi != 0 && argi != 1)
 	{
@@ -83,7 +83,7 @@ public Action:Command_SetFF(client, args)
 	return Plugin_Handled;
 }
 
-public Action:Command_SetAllTalk(client, args)
+public Action Command_SetAllTalk(int client, int args)
 {
 	if (args < 1)
 	{
@@ -91,9 +91,9 @@ public Action:Command_SetAllTalk(client, args)
 		return Plugin_Handled;
 	}
 
-	decl String:arg[64];
+	char arg[64];
 	GetCmdArg(1, arg, sizeof(arg));
-	new argi = StringToInt(arg);
+	int argi = StringToInt(arg);
 
 	if (argi != 0 && argi != 1)
 	{
@@ -108,7 +108,7 @@ public Action:Command_SetAllTalk(client, args)
 	return Plugin_Handled;
 }
 
-public Action:Command_SetRSTime(client, args)
+public Action Command_SetRSTime(int client, int args)
 {
 	if (args < 1)
 	{
@@ -116,7 +116,7 @@ public Action:Command_SetRSTime(client, args)
 		return Plugin_Handled;
 	}
 
-	decl String:arg[64];
+	char arg[64];
 	GetCmdArg(1, arg, sizeof(arg));
 
 	SetConVarInt(g_Cvar_RSTime, StringToInt(arg));
@@ -126,7 +126,7 @@ public Action:Command_SetRSTime(client, args)
 	return Plugin_Handled;
 }
 
-public OnAdminMenuReady(Handle:topmenu)
+public OnAdminMenuReady(Handle topmenu)
 {
 	/* Block us from being called twice */
 	if (topmenu == hTopMenu)
@@ -137,7 +137,7 @@ public OnAdminMenuReady(Handle:topmenu)
 	/* Save the Handle */
 	hTopMenu = topmenu;
 
-	new TopMenuObject:fun_commands = FindTopMenuCategory(hTopMenu, ADMINMENU_SERVERCOMMANDS);
+	TopMenuObject fun_commands = FindTopMenuCategory(hTopMenu, ADMINMENU_SERVERCOMMANDS);
 
 	AddToTopMenu(hTopMenu, 
 		"sm_svgrav",
@@ -172,12 +172,12 @@ public OnAdminMenuReady(Handle:topmenu)
 		ADMFLAG_CUSTOM1);
 }
 
-public AdminMenu_Grav(Handle:topmenu, 
-			TopMenuAction:action,
-			TopMenuObject:object_id,
-			param,
-			String:buffer[],
-			maxlength)
+public AdminMenu_Grav(Handle topmenu,
+			TopMenuAction action,
+			TopMenuObject object_id,
+			int param,
+			char[] buffer,
+			int maxlength)
 {
 	if (action == TopMenuAction_DisplayOption)
 	{
@@ -190,12 +190,12 @@ public AdminMenu_Grav(Handle:topmenu,
 	}
 }
 
-public AdminMenu_FF(Handle:topmenu, 
-			TopMenuAction:action,
-			TopMenuObject:object_id,
-			param,
-			String:buffer[],
-			maxlength)
+public AdminMenu_FF(Handle topmenu,
+			TopMenuAction action,
+			TopMenuObject object_id,
+			int param,
+			char[] buffer,
+			int maxlength)
 {
 	if (action == TopMenuAction_DisplayOption)
 	{
@@ -218,12 +218,12 @@ public AdminMenu_FF(Handle:topmenu,
 	}
 }
 
-public AdminMenu_AllTalk(Handle:topmenu, 
-			TopMenuAction:action,
-			TopMenuObject:object_id,
-			param,
-			String:buffer[],
-			maxlength)
+public AdminMenu_AllTalk(Handle topmenu,
+			TopMenuAction action,
+			TopMenuObject object_id,
+			int param,
+			char[] buffer,
+			int maxlength)
 {
 	if (action == TopMenuAction_DisplayOption)
 	{
@@ -246,12 +246,12 @@ public AdminMenu_AllTalk(Handle:topmenu,
 	}
 }
 
-public AdminMenu_RSTime(Handle:topmenu, 
-			TopMenuAction:action,
-			TopMenuObject:object_id,
-			param,
-			String:buffer[],
-			maxlength)
+public AdminMenu_RSTime(Handle topmenu,
+			TopMenuAction action,
+			TopMenuObject object_id,
+			int param,
+			char[] buffer,
+			int maxlength)
 {
 	if (action == TopMenuAction_DisplayOption)
 	{
@@ -264,11 +264,11 @@ public AdminMenu_RSTime(Handle:topmenu,
 	}
 }
 
-DisplayGravityMenu(client)
+DisplayGravityMenu(int client)
 {
-	new Handle:menu = CreateMenu(MenuHandler_Grav);
-	
-	decl String:title[100];
+	Handle menu = CreateMenu(MenuHandler_Grav);
+
+	char title[100];
 	Format(title, sizeof(title), "Select Gravity", client);
 	SetMenuTitle(menu, title);
 	SetMenuExitBackButton(menu, true);
@@ -282,7 +282,7 @@ DisplayGravityMenu(client)
 	DisplayMenu(menu, client, MENU_TIME_FOREVER);
 }
 
-public MenuHandler_Grav(Handle:menu, MenuAction:action, param1, param2)
+public MenuHandler_Grav(Handle menu, MenuAction action, int param1, int param2)
 {
 	// param1 = client, param2 = grav
 	if (action == MenuAction_End)
@@ -291,14 +291,14 @@ public MenuHandler_Grav(Handle:menu, MenuAction:action, param1, param2)
 	}
 	else if (action == MenuAction_Cancel)
 	{
-		if (param2 == MenuCancel_ExitBack && hTopMenu != INVALID_HANDLE)
+		if (param2 == MenuCancel_ExitBack && hTopMenu != null)
 		{
 			DisplayTopMenu(hTopMenu, param1, TopMenuPosition_LastCategory);
 		}
 	}
 	else if (action == MenuAction_Select)
 	{
-		decl String:GravLev[32];
+		char GravLev[32];
 		
 		GetMenuItem(menu, param2, GravLev, sizeof(GravLev));
 
@@ -309,11 +309,11 @@ public MenuHandler_Grav(Handle:menu, MenuAction:action, param1, param2)
 	}
 }
 
-DisplayRSTMenu(client)
+DisplayRSTMenu(int client)
 {
-	new Handle:menu = CreateMenu(MenuHandler_RST);
-	
-	decl String:title[100];
+	Handle menu = CreateMenu(MenuHandler_RST);
+
+	char title[100];
 	Format(title, sizeof(title), "Set Respawn Time", client);
 	SetMenuTitle(menu, title);
 	SetMenuExitBackButton(menu, true);
@@ -327,7 +327,7 @@ DisplayRSTMenu(client)
 	DisplayMenu(menu, client, MENU_TIME_FOREVER);
 }
 
-public MenuHandler_RST(Handle:menu, MenuAction:action, param1, param2)
+public MenuHandler_RST(Handle menu, MenuAction action, int param1, int param2)
 {
 	// param1 = client, param2 = grav
 	if (action == MenuAction_End)
@@ -336,14 +336,14 @@ public MenuHandler_RST(Handle:menu, MenuAction:action, param1, param2)
 	}
 	else if (action == MenuAction_Cancel)
 	{
-		if (param2 == MenuCancel_ExitBack && hTopMenu != INVALID_HANDLE)
+		if (param2 == MenuCancel_ExitBack && hTopMenu != null)
 		{
 			DisplayTopMenu(hTopMenu, param1, TopMenuPosition_LastCategory);
 		}
 	}
 	else if (action == MenuAction_Select)
 	{
-		decl String:RSTimer[32];
+		char RSTimer[32];
 		
 		GetMenuItem(menu, param2, RSTimer, sizeof(RSTimer));
 

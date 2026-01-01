@@ -228,23 +228,23 @@ stock const bool:g_bCookieFlip[Settings_Cookies] =
     true    // Debug_Other
 };
 
-new Handle:g_hDisplayCookie[Display_Cookies];
-new Handle:g_hCookie[Settings_Cookies];
+Handle g_hDisplayCookie[Display_Cookies];
+Handle g_hCookie[Settings_Cookies];
 new g_bCookieSelected[MAXPLAYERS];
 
-InitCookies()
+void InitCookies()
 {
-    decl String:buffer[LONG_STRING_LENGTH];
+    char buffer[LONG_STRING_LENGTH];
 
     // Setup Display Settings Cookies
-    for (new any:i = 0; i < Display_Cookies; i++)
+    for (int i = 0; i < view_as<int>(Display_Cookies); i++)
     {
         Format(buffer, sizeof(buffer), "%T", g_strDisplayCookiePrompt[i], LANG_SERVER);
         g_hDisplayCookie[i] = RegClientCookie(g_strDisplayCookieName[i], buffer, CookieAccess_Public);
     }
 
     // Setup Settings Cookies
-    for (new any:i = 0; i < Settings_Cookies; i++)
+    for (int i = 0; i < view_as<int>(Settings_Cookies); i++)
     {
         Format(buffer, sizeof(buffer), "%T", g_strCookiePrompt[i], LANG_SERVER);
         g_hCookie[i] = RegClientCookie(g_strCookieName[i], buffer, CookieAccess_Public);
@@ -257,15 +257,15 @@ InitCookies()
     SetCookieMenuItem(SourceCraftCookieMenu, 0, "SourceCraft Prefs");
 }
 
-public OnClientCookiesCached(client)
+public void OnClientCookiesCached(int client)
 {
     // SourceCraft DataBase info takes precedence over clientprefs
     if (GetDatabaseLoaded(client) < DataLoaded)
     {
-        decl String:strCookie[2];
+        char strCookie[2];
 
         // Get Display Cookies
-        for (new Display_Cookies:i = Display_Cookies:0; i < Display_Cookies; i++)
+        for (Display_Cookies i = view_as<Display_Cookies>(0); i < Display_Cookies; i++)
         {
             GetClientCookie(client, g_hDisplayCookie[i], strCookie, sizeof(strCookie));
             if (g_bDisplayCookieFlip[i])
@@ -281,7 +281,7 @@ public OnClientCookiesCached(client)
         }
 
         // Get Cookies
-        for (new Settings_Cookies:i = Settings_Cookies:0; i < Settings_Cookies; i++)
+        for (Settings_Cookies i = view_as<Settings_Cookies>(0); i < Settings_Cookies; i++)
         {
             GetClientCookie(client, g_hCookie[i], strCookie, sizeof(strCookie));
             if (g_bCookieFlip[i])
@@ -298,19 +298,19 @@ public OnClientCookiesCached(client)
     }
 }
 
-public CookieSelected(client, CookieMenuAction:action, any:info, String:buffer[], maxlen)
+public void CookieSelected(int client, CookieMenuAction action, any info, char[] buffer, int maxlen)
 {
     if (action == CookieMenuAction_DisplayOption )
     {
-        if (info >= 0 && info < Display_Cookies)
+        if (info >= 0 && info < view_as<int>(Display_Cookies))
         {
             // Translate the buffer
             Format(buffer, maxlen, "%T", g_strDisplayCookiePrompt[info], client);
         }
-        else if (info >= Display_Cookies && info < _:Display_Cookies+_:Settings_Cookies)
+        else if (info >= view_as<int>(Display_Cookies) && info < view_as<int>(Display_Cookies)+view_as<int>(Settings_Cookies))
         {
             // Translate the buffer
-            Format(buffer, maxlen, "%T", g_strCookiePrompt[info-_:Display_Cookies], client);
+            Format(buffer, maxlen, "%T", g_strCookiePrompt[info-view_as<int>(Display_Cookies)], client);
         }
         else
             LogError("Invalid cookie %d requested", info);
@@ -321,62 +321,62 @@ public CookieSelected(client, CookieMenuAction:action, any:info, String:buffer[]
     }
 }
 
-public Action:CookieTextHook(UserMsg:msg_id, Handle:bf, const players[], playersNum, bool:reliable, bool:init)
+public Action CookieTextHook(UserMsg msg_id, Handle bf, const int[] players, int playersNum, bool reliable, bool init)
 {
     if (playersNum == 1)
     {
-        new client = players[0];
+        int client = players[0];
         if (client > 0)
         {
-            new any:info = g_bCookieSelected[client]-1;
+            int info = g_bCookieSelected[client]-1;
             if (info >= 0)
             {
-                new String:text[LONG_STRING_LENGTH];
+                char text[LONG_STRING_LENGTH];
                 BfReadByte(bf);
                 BfReadString(bf, text, sizeof(text));
-                if (info < Display_Cookies)
+                if (info < view_as<int>(Display_Cookies))
                 {
                     if (strncmp(text, "[SM]", 4) == 0 && StrContains(text, "\"sc_") >= 0)
                     {
-                        decl String:strCookie[2];
+                        char strCookie[2];
                         GetClientCookie(client, g_hDisplayCookie[info], strCookie, sizeof(strCookie));
 
-                        if (g_bCookieFlip[info])
+                        if (g_bDisplayCookieFlip[info])
                         {
                             if (strCookie[0] != '1')
-                                g_ClientDisplayBits[client] |= Display:(1 << info);
+                                g_ClientDisplayBits[client] |= view_as<Display>(1 << info);
                             else
-                                g_ClientDisplayBits[client] &= Display:(~(1 << info));
+                                g_ClientDisplayBits[client] &= view_as<Display>(~(1 << info));
                         }
                         else
                         {
                             if (strCookie[0] == '1')
-                                g_ClientDisplayBits[client] |= Display:(1 << info);
+                                g_ClientDisplayBits[client] |= view_as<Display>(1 << info);
                             else
-                                g_ClientDisplayBits[client] &= Display:(~(1 << info));
+                                g_ClientDisplayBits[client] &= view_as<Display>(~(1 << info));
                         }
                     }
                 }
-                else if (info < _:Display_Cookies+_:Settings_Cookies)
+                else if (info < view_as<int>(Display_Cookies)+view_as<int>(Settings_Cookies))
                 {
                     if (strncmp(text, "[SM]", 4) == 0 && StrContains(text, "\"sc_") >= 0)
                     {
-                        decl String:strCookie[2];
-                        GetClientCookie(client, g_hCookie[info], strCookie, sizeof(strCookie));
+                        char strCookie[2];
+                        GetClientCookie(client, g_hCookie[info-view_as<int>(Display_Cookies)], strCookie, sizeof(strCookie));
 
-                        if (g_bCookieFlip[info])
+                        if (g_bCookieFlip[info-view_as<int>(Display_Cookies)])
                         {
                             if (strCookie[0] != '1')
-                                g_ClientSettingsBits[client] |= Settings:(1 << (info-_:Display_Cookies));
+                                g_ClientSettingsBits[client] |= view_as<Settings>(1 << (info-view_as<int>(Display_Cookies)));
                             else
-                                g_ClientSettingsBits[client] &= Settings:(~(1 << (info-_:Display_Cookies)));
+                                g_ClientSettingsBits[client] &= view_as<Settings>(~(1 << (info-view_as<int>(Display_Cookies))));
                         }
                         else
                         {
                             if (strCookie[0] == '1')
-                                g_ClientSettingsBits[client] |= Settings:(1 << (info-_:Display_Cookies));
+                                g_ClientSettingsBits[client] |= view_as<Settings>(1 << (info-view_as<int>(Display_Cookies)));
                             else
-                                g_ClientSettingsBits[client] &= Settings:(~(1 << (info-_:Display_Cookies)));
+                                g_ClientSettingsBits[client] &= view_as<Settings>(~(1 << (info-view_as<int>(Display_Cookies))));
                         }
                     }
                 }
@@ -388,7 +388,7 @@ public Action:CookieTextHook(UserMsg:msg_id, Handle:bf, const players[], players
 }
 
 //add to clientpref's built-in !settings menu
-public SourceCraftCookieMenu(client, CookieMenuAction:action, any:info, String:buffer[], maxlen)
+public void SourceCraftCookieMenu(int client, CookieMenuAction action, any info, char[] buffer, int maxlen)
 {
     if (action == CookieMenuAction_SelectOption)
     {
@@ -396,37 +396,37 @@ public SourceCraftCookieMenu(client, CookieMenuAction:action, any:info, String:b
     }
 }
 
-ChangeSettings(client, bool:fromMain)
+void ChangeSettings(int client, bool fromMain)
 {
-    new Handle:SettingsMenu=CreateMenu(Settings_Select);
+    Handle SettingsMenu=CreateMenu(Settings_Select);
     SetMenuTitle(SettingsMenu,"[SC] %T", "ChooseSetting", client);
     SetMenuExitButton(SettingsMenu,true);
     if (fromMain)
         SetMenuExitBackButton(SettingsMenu,true);
 
-    new AdminId:aid = GetUserAdmin(client);
-    new bool:isAdmin = (aid != INVALID_ADMIN_ID) && GetAdminFlag(aid, Admin_Generic, Access_Effective);
+    AdminId aid = GetUserAdmin(client);
+    bool isAdmin = (aid != INVALID_ADMIN_ID) && GetAdminFlag(aid, Admin_Generic, Access_Effective);
 
-    decl String:buf[12];
-    new Display:displayFlags = g_ClientDisplayBits[client];
+    char buf[12];
+    Display displayFlags = g_ClientDisplayBits[client];
     //LogMessage("%d:%N's Client Bits=%08x", client, ValidClientIndex(client), flags);
-    for (new any:i = 0; i < Display_Cookies; i++)
+    for (int i = 0; i < view_as<int>(Display_Cookies); i++)
     {
         IntToString(i, buf, sizeof(buf));
-        new bool:value = FlipBit_IsSet(displayFlags & Display:(1 << i));
+        bool value = FlipBit_IsSet(displayFlags & view_as<Display>(1 << i));
         //LogMessage("Setting #%d [Flip:%d] %s=%d",i,g_bCookieFlip[i],g_strCookiePrompt[i],value);
         AddSetting(client, SettingsMenu, buf, g_strDisplayCookiePrompt[i], g_bDisplayCookieFlip[i] ? !value : value);
     }
 
-    new Settings:flags = g_ClientSettingsBits[client];
+    Settings flags = g_ClientSettingsBits[client];
     //LogMessage("%d:%N's Client Bits=%08x", client, ValidClientIndex(client), flags);
-    for (new any:i = 0; i < Settings_Cookies; i++)
+    for (int i = 0; i < view_as<int>(Settings_Cookies); i++)
     {
         // Only allow Admins to enable Debug modes
         if (isAdmin || strncmp(g_strCookiePrompt[i], "Debug", 5, false) != 0)
         {
-            IntToString(i+_:Display_Cookies, buf, sizeof(buf));
-            new bool:value = FlipBit_IsSet(flags & Settings:(1 << i));
+            IntToString(i+view_as<int>(Display_Cookies), buf, sizeof(buf));
+            bool value = FlipBit_IsSet(flags & view_as<Settings>(1 << i));
             //LogMessage("Setting #%d [Flip:%d] %s=%d",i,g_bCookieFlip[i],g_strCookiePrompt[i],value);
             AddSetting(client, SettingsMenu, buf, g_strCookiePrompt[i], g_bCookieFlip[i] ? !value : value);
         }
@@ -435,21 +435,21 @@ ChangeSettings(client, bool:fromMain)
     DisplayMenu(SettingsMenu,client,MENU_TIME_FOREVER);
 }
 
-ChangeDisplaySettings(client, bool:fromMain)
+void ChangeDisplaySettings(int client, bool fromMain)
 {
-    new Handle:SettingsMenu=CreateMenu(Settings_Select);
+    Handle SettingsMenu=CreateMenu(Settings_Select);
     SetMenuTitle(SettingsMenu,"[SC] %T", "ChooseSetting", client);
     SetMenuExitButton(SettingsMenu,true);
     if (fromMain)
         SetMenuExitBackButton(SettingsMenu,true);
 
-    decl String:buf[12];
-    new Display:displayFlags = g_ClientDisplayBits[client];
+    char buf[12];
+    Display displayFlags = g_ClientDisplayBits[client];
     //LogMessage("%d:%N's Client Bits=%08x", client, ValidClientIndex(client), flags);
-    for (new any:i = 0; i < Display_Cookies; i++)
+    for (int i = 0; i < view_as<int>(Display_Cookies); i++)
     {
         IntToString(i, buf, sizeof(buf));
-        new bool:value = FlipBit_IsSet(displayFlags & Display:(1 << i));
+        bool value = FlipBit_IsSet(displayFlags & view_as<Display>(1 << i));
         //LogMessage("Setting #%d [Flip:%d] %s=%d",i,g_bCookieFlip[i],g_strCookiePrompt[i],value);
         AddSetting(client, SettingsMenu, buf, g_strDisplayCookiePrompt[i], g_bDisplayCookieFlip[i] ? !value : value);
     }
@@ -457,27 +457,27 @@ ChangeDisplaySettings(client, bool:fromMain)
     DisplayMenu(SettingsMenu,client,MENU_TIME_FOREVER);
 }
 
-ChangeGameSettings(client, bool:fromMain)
+void ChangeGameSettings(int client, bool fromMain)
 {
-    new Handle:SettingsMenu=CreateMenu(Settings_Select);
+    Handle SettingsMenu=CreateMenu(Settings_Select);
     SetMenuTitle(SettingsMenu,"[SC] %T", "ChooseSetting", client);
     SetMenuExitButton(SettingsMenu,true);
     if (fromMain)
         SetMenuExitBackButton(SettingsMenu,true);
 
-    new AdminId:aid = GetUserAdmin(client);
-    new bool:isAdmin = (aid != INVALID_ADMIN_ID) && GetAdminFlag(aid, Admin_Generic, Access_Effective);
+    AdminId aid = GetUserAdmin(client);
+    bool isAdmin = (aid != INVALID_ADMIN_ID) && GetAdminFlag(aid, Admin_Generic, Access_Effective);
 
-    decl String:buf[12];
-    new Settings:flags = g_ClientSettingsBits[client];
+    char buf[12];
+    Settings flags = g_ClientSettingsBits[client];
     //LogMessage("%d:%N's Client Bits=%08x", client, ValidClientIndex(client), flags);
-    for (new any:i = 0; i < Settings_Cookies; i++)
+    for (int i = 0; i < view_as<int>(Settings_Cookies); i++)
     {
         // Only allow Admins to enable Debug modes
         if (isAdmin || strncmp(g_strCookiePrompt[i], "Debug", 5, false) != 0)
         {
-            IntToString(i+_:Display_Cookies, buf, sizeof(buf));
-            new bool:value = FlipBit_IsSet(flags & Settings:(1 << i));
+            IntToString(i+view_as<int>(Display_Cookies), buf, sizeof(buf));
+            bool value = FlipBit_IsSet(flags & view_as<Settings>(1 << i));
             //LogMessage("Setting #%d [Flip:%d] %s=%d",i,g_bCookieFlip[i],g_strCookiePrompt[i],value);
             AddSetting(client, SettingsMenu, buf, g_strCookiePrompt[i], g_bCookieFlip[i] ? !value : value);
         }
@@ -486,20 +486,20 @@ ChangeGameSettings(client, bool:fromMain)
     DisplayMenu(SettingsMenu,client,MENU_TIME_FOREVER);
 }
 
-public Settings_Select(Handle:menu,MenuAction:action,client,selection)
+public int Settings_Select(Handle menu, MenuAction action, int client, int selection)
 {
     if (action == MenuAction_Select)
     {
-        decl String:SelectionInfo[SMALL_STRING_LENGTH];
+        char SelectionInfo[SMALL_STRING_LENGTH];
         GetMenuItem(menu,selection,SelectionInfo,sizeof(SelectionInfo));
 
         // Update the settings bits
-        new any:info = StringToInt(SelectionInfo);
+        int info = StringToInt(SelectionInfo);
         if (info >= 0)
         {
-            if (info < Display_Cookies)
+            if (info < view_as<int>(Display_Cookies))
             {
-                new Display:bit = Display:(1 << info);
+                Display bit = view_as<Display>(1 << info);
                 g_ClientDisplayBits[client] ^= bit;
 
                 // Set the cookie
@@ -509,10 +509,10 @@ public Settings_Select(Handle:menu,MenuAction:action,client,selection)
                 PrepareAndEmitSoundToClient(client,buttonWav);
                 ChangeSettings(client,false);
             }
-            else if (info < _:Display_Cookies+_:Settings_Cookies)
+            else if (info < view_as<int>(Display_Cookies)+view_as<int>(Settings_Cookies))
             {
-                new setting = info - _:Display_Cookies;
-                new Settings:bit = Settings:(1 << setting);
+                int setting = info - view_as<int>(Display_Cookies);
+                Settings bit = view_as<Settings>(1 << setting);
                 g_ClientSettingsBits[client] ^= bit;
 
                 // Set the cookie
@@ -534,11 +534,13 @@ public Settings_Select(Handle:menu,MenuAction:action,client,selection)
     }
     else if (action == MenuAction_End)
         CloseHandle(menu);
+
+    return 0;
 }
 
-AddSetting(client, Handle:SettingsMenu, const String:info[], const String:setting[], bool:value)
+void AddSetting(int client, Handle SettingsMenu, const char[] info, const char[] setting, bool value)
 {
-    decl String:buffer[ITEM_STRING_LENGTH];
+    char buffer[ITEM_STRING_LENGTH];
     Format(buffer, sizeof(buffer), "[%s] %T", value ? "Y" : "N", setting, client);
     AddMenuItem(SettingsMenu,info,buffer);
 }

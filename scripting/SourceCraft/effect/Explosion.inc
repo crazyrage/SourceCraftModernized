@@ -29,12 +29,12 @@ stock g_fire2Sprite;
 stock g_explosionSprite;
 stock g_bigExplosionSprite;
 
-stock const String:g_fireModel[]         = "sprites/sprite_fire01.vmt";
-stock const String:g_fire2Model[]        = "sprites/sprite_fire2.vmt";
-stock const String:g_explosionModel[]    = "materials/sprites/zerogxplode.vmt";
-stock const String:g_bigExplosionModel[] = "materials/particles/explosion/explosionfiresmoke.vmt";
+static const char g_fireModel[]         = "sprites/sprite_fire01.vmt";
+static const char g_fire2Model[]        = "sprites/sprite_fire2.vmt";
+static const char g_explosionModel[]    = "materials/sprites/zerogxplode.vmt";
+static const char g_bigExplosionModel[] = "materials/particles/explosion/explosionfiresmoke.vmt";
 
-stock bool:SetupBigExplosion()
+stock bool SetupBigExplosion()
 {
     if (GameType == tf2)
     {

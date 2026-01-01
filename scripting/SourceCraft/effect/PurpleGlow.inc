@@ -16,4 +16,4 @@
 #define PurpleGlow()       PrepareModel(g_purpleModel, g_purpleGlow)
 
 stock g_purpleGlow;
-stock const String:g_purpleModel[] = "materials/sprites/purpleglow1.vmt";
+static const char g_purpleModel[] = "materials/sprites/purpleglow1.vmt";

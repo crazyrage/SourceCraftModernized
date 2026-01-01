@@ -34,7 +34,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of ztf2grab.
  * @return		    	none
  */
-native ControlZtf2grab(bool:plugin_only=true);
+native ControlZtf2grab(bool plugin_only=true);
 
 /**
  * Give a gravgun to the player
@@ -46,7 +46,7 @@ native ControlZtf2grab(bool:plugin_only=true);
  * @param permissions   Permissions to use (default=-1 to use ConVars)
  * @return		    	none
  */
-native GiveGravgun(client, Float:duration=-1.0, Float:throw_speed=-1.0, Float:throw_gravity=-1.0, permissions=-1);
+native GiveGravgun(client, Float duration=-1.0, Float throw_speed=-1.0, Float throw_gravity=-1.0, permissions=-1);
 
 /**
  * Take the gravgun from the player
@@ -106,7 +106,7 @@ native RotateObject(client);
  * @param gravity 	gravity to set object to (-1.0 to leave unchanged)
  * @return			none
  */
-native DropEntity(entity, Float:speed=-1.0, Float:gravity=10.0);
+native DropEntity(entity, Float speed=-1.0, Float gravity=10.0);
 
 /**
  * Returns reference to object client is holding with the gravgun
@@ -115,7 +115,7 @@ native DropEntity(entity, Float:speed=-1.0, Float:gravity=10.0);
  * @param getref 	If true, return the reference of object client is holding or INVALID_ENT_REFERENCE
  * @return			Otherwise returns true if the client is holding a valid object or false if not.
  */
-native HasObject(client, bool:getref=false);
+native HasObject(client, bool getref=false);
 
 /**
  * Gets called an object is picked up
@@ -125,7 +125,7 @@ native HasObject(client, bool:getref=false);
  * @param ent:      The index of the object that was grabbed
  * @return		    Plugin_Stop will prevent the pickup.
  */
-forward Action:OnPickupObject(client,builder,ent);
+forward Action OnPickupObject(client,builder,ent);
 
 /**
  * Gets called when an object is thrown
@@ -134,7 +134,7 @@ forward Action:OnPickupObject(client,builder,ent);
  * @param ent:      The index of the object that was grabbed
  * @return		    Plugin_Stop will prevent the throw.
  */
-forward Action:OnThrowObject(client,ent);
+forward Action OnThrowObject(client,ent);
 
 /**
  * Gets called while a grabbed object is carried
@@ -144,7 +144,7 @@ forward Action:OnThrowObject(client,ent);
  * @param time:     The EngineTime() when the object was picked up.
  * @return		    Plugin_Stop will cause the object to be dropped.
  */
-forward Action:OnCarryObject(client,ent,Float:time);
+forward Action OnCarryObject(client,ent,Float time);
 
 /**
  * Gets called when an object is dropped

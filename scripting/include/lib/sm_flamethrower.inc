@@ -16,7 +16,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of the Flamethrower plugin.
  * @return		    	none
  */
-native ControlFlamethrower(bool:plugin_only=true);
+native ControlFlamethrower(bool plugin_only=true);
 
 /**
  * Give a Flamethrower to a player.
@@ -26,7 +26,7 @@ native ControlFlamethrower(bool:plugin_only=true);
  * @param range  	The range of the flamethrower (-1.0 = use convar)
  * @return			none
  */
-native GiveFlamethrower(client,amount=-1,Float:range=-1.0);
+native GiveFlamethrower(client,amount=-1,Float range=-1.0);
 
 /**
  * Take the Flamethrower from a player.
@@ -59,7 +59,7 @@ native GetFlamethrowerFuel(client);
  * @param sound 	Sound to use for the flamethrower.
  * @return			none
  */
-native SetFlamethrowerSound(const String:sound[]);
+native SetFlamethrowerSound(const char[] sound);
 
 /**
  * Use the Flamethrower
@@ -76,7 +76,7 @@ native UseFlamethrower(client);
  * @param victim:   The victim's index.
  * @return		    Plugin_Stop will prevent the target from being bombed.
  */
-forward Action:OnPlayerFlamed(attacker,victim);
+forward Action OnPlayerFlamed(attacker,victim);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

@@ -16,4 +16,4 @@
 #define Lightning()      PrepareModel(g_lightningModel, g_lightningSprite)
 
 stock g_lightningSprite;
-stock const String:g_lightningModel[] = "materials/sprites/lgtning.vmt";
+static const char g_lightningModel[] = "materials/sprites/lgtning.vmt";

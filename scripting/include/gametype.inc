@@ -27,7 +27,7 @@ enum Mode
     MvM,
 };
 
-stock const String:GameTypes[][] = 
+stock const char GameTypes[][] =
 {
     "undetected",
     "tf2",
@@ -42,7 +42,7 @@ stock const String:GameTypes[][] =
     "other_game"
 };
 
-stock String:GameModeNames[][] = 
+stock char GameModeNames[][] =
 {
     "Undefined",
     "Medieval",
@@ -57,14 +57,14 @@ stock String:GameModeNames[][] =
     "MvM",
 };
 
-stock Game:GameType = undetected;
-stock Mode:GameMode = Undefined;
+stock Game GameType = undetected;
+stock Mode GameMode = Undefined;
 
-stock Game:GetGameType()
+stock Game GetGameType()
 {
     if (GameType == undetected)
     {
-        new String:modname[30];
+        char modname[30];
         GetGameFolderName(modname, sizeof(modname));
         if (StrEqual(modname,"tf",false)) 
             GameType=tf2;
@@ -95,7 +95,7 @@ stock Game:GetGameType()
 #define GetGameTypeIsCS()   (GetGameType() == cstrike || GameType == csgo)
 #define GameTypeIsCS()      (GameType      == cstrike || GameType == csgo)
 
-stock Mode:GetGameMode(bool:forceUpdate=false)
+stock Mode GetGameMode(bool forceUpdate=false)
 {
     if ((forceUpdate || GameMode == Undefined) && GetGameType() == tf2)
         GameMode = GetTF2GameMode();
@@ -103,7 +103,7 @@ stock Mode:GetGameMode(bool:forceUpdate=false)
     return GameMode;
 }
 
-stock Mode:GetTF2GameMode()
+stock Mode GetTF2GameMode()
 {
     new entity = FindEntityByClassname(-1, "tf_logic_mann_vs_machine");
     if (entity > MaxClients && IsValidEntity(entity))

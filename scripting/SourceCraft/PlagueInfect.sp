@@ -37,23 +37,23 @@
 #include "effect/FlashScreen"
 #include "effect/Shake"
 
-new const String:explodeWav[] = "weapons/explode5.wav";
+new const char[] explodeWav[] = "weapons/explode5.wav";
 
-new const String:HurtSound[][] = { "player/pain.wav",     "player/pl_pain5.wav",
+new const char[] HurtSound[][] = { "player/pain.wav",     "player/pl_pain5.wav",
                                    "player/pl_pain6.wav", "player/pl_pain7.wav" };
 
-new m_PlagueDuration[MAXPLAYERS+1];
-new m_PlagueAmount[MAXPLAYERS+1];
-new m_PlagueInflicter[MAXPLAYERS+1];
-new bool:m_HasExploded[MAXPLAYERS+1];
+	int m_PlagueDuration[MAXPLAYERS+1];
+	int m_PlagueAmount[MAXPLAYERS+1];
+	int m_PlagueInflicter[MAXPLAYERS+1];
+bool m_HasExploded[MAXPLAYERS+1];
 new PlagueType:m_PlagueType[MAXPLAYERS+1];
-new Handle:m_PlagueVictimTimers[MAXPLAYERS+1];
-new String:m_PlagueShort[MAXPLAYERS+1][32];
-new String:m_PlagueName[MAXPLAYERS+1][64];
+Handle m_PlagueVictimTimers[MAXPLAYERS+1];
+char m_PlagueShort[MAXPLAYERS+1][32];
+char m_PlagueName[MAXPLAYERS+1][64];
 
-new Handle:m_TransmitTimer = INVALID_HANDLE;
+Handle m_TransmitTimer = null;
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "SourceCraft Upgrade - Plague Infect",
     author = "-=|JFH|=-Naris",
@@ -62,7 +62,7 @@ public Plugin:myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLRes:AskPluginLoad2(Handle myself, bool late, char error[], err_max)
 {
     // Register Natives
     CreateNative("PlagueInfect",Native_PlagueInfect);
@@ -73,12 +73,12 @@ public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
     return APLRes_Success;
 }
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     GetGameType();
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupLightning();
     SetupHaloSprite();
@@ -88,41 +88,41 @@ public OnMapStart()
 
     SetupSound(explodeWav);
 
-    for (new i = 0; i < sizeof(HurtSound); i++)
+    for (int i = 0; i < sizeof(HurtSound); i++)
         SetupSound(HurtSound[i]);
 }
 
-public OnMapEnd()
+public void OnMapEnd()
 {
-    for (new index=1;index<=MaxClients;index++)
+    for (int index=1;index<=MaxClients;index++)
         ResetPlagueVictim(index);
 
-    if (m_TransmitTimer != INVALID_HANDLE)
+    if (m_TransmitTimer != null)
     {
         KillTimer(m_TransmitTimer);
-        m_TransmitTimer = INVALID_HANDLE;
+        m_TransmitTimer = null;
     }
 }
 
-public OnClientConnected(client)
+public void OnClientConnected(client)
 {
     ResetPlagueVictim(client);
     m_HasExploded[client]=false;
 }
 
-public OnClientDisconnect(client)
+public void OnClientDisconnect(client)
 {
     ResetPlagueVictim(client);
     m_HasExploded[client]=false;
 }
 
-public Action:OnPlayerRestored(client)
+public Action OnPlayerRestored(client)
 {
     ResetPlagueVictim(client);
     return Plugin_Continue;
 }
 
-public OnPlayerSpawnEvent(Handle:event, client, race)
+public OnPlayerSpawnEvent(Handle event, client, race)
 {
     if (client > 0)
     {
@@ -131,32 +131,32 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
     }
 }
 
-public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_index,
+public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_index,
                           attacker_race, assister_index, assister_race, damage,
-                          const String:weapon[], bool:is_equipment, customkill,
-                          bool:headshot, bool:backstab, bool:melee)
+                          const char[] weapon[], bool is_equipment, customkill,
+                          bool headshot, bool backstab, bool melee)
 {
     ResetPlagueVictim(victim_index);
 }
 
-ResetPlagueVictim(client)
+void ResetPlagueVictim(client)
 {
     m_PlagueType[client] = NormalPlague;
     m_PlagueAmount[client] = 0;
     m_PlagueDuration[client] = 0;
     m_PlagueInflicter[client] = 0;
 
-    if (m_PlagueVictimTimers[client] != INVALID_HANDLE)
+    if (m_PlagueVictimTimers[client] != null)
     {
         KillTimer(m_PlagueVictimTimers[client]);
-        m_PlagueVictimTimers[client] = INVALID_HANDLE;	
+        m_PlagueVictimTimers[client] = null;	
     }
 
     SetOverrideSpeed(client,-1.0);
     SetVisibility(client, NormalVisibility);
 }
 
-public Action:PlagueVictimTimer(Handle:timer, any:client)
+public Action PlagueVictimTimer(Handle timer, any:client)
 {
     SetTraceCategory("Damage,Immunity");
     TraceInto("PlagueInfect", "PlagueVictimTimer", "client=%d:%N", \
@@ -197,20 +197,20 @@ public Action:PlagueVictimTimer(Handle:timer, any:client)
             }
             else
             {
-                new duration = m_PlagueDuration[client];
-                new amount = (duration > 0) ? duration * m_PlagueAmount[client]
+                int duration = m_PlagueDuration[client];
+                int amount = (duration > 0) ? duration * m_PlagueAmount[client]
                                             : m_PlagueAmount[client];
                 if (amount < 1)
                     amount = 1;
 
-                new health = GetClientHealth(client);
+                int health = GetClientHealth(client);
                 if (!IsInvulnerable(client))
                 {
                     if (!GetImmunity(client,Immunity_HealthTaking))
                     {
                         if (health > amount)
                         {
-                            new num = GetRandomInt(0,sizeof(HurtSound)-1);
+                            int num = GetRandomInt(0,sizeof(HurtSound)-1);
                             PrepareAndEmitSoundToAll(HurtSound[num], client);
 
                             if (plagueType & IrradiatePlague)
@@ -247,8 +247,8 @@ public Action:PlagueVictimTimer(Handle:timer, any:client)
                             m_PlagueDuration[client] = 0;
                             if (m_PlagueType[client] & ExplosivePlague)
                             {
-                                new inflicter = m_PlagueInflicter[client];
-                                new team = (inflicter > 0 && client != inflicter) ? GetClientTeam(inflicter) : 0;
+                                int inflicter = m_PlagueInflicter[client];
+                                int team = (inflicter > 0 && client != inflicter) ? GetClientTeam(inflicter) : 0;
                                 ExplodePlayer(client, inflicter, team, 500.0, 800, 800, NormalExplosion,
                                               10, "sc_explode");
                                 health = 0;
@@ -294,7 +294,7 @@ public Action:PlagueVictimTimer(Handle:timer, any:client)
         SetVisibility(client, NormalVisibility);
     }
 
-    m_PlagueVictimTimers[client] = INVALID_HANDLE;	
+    m_PlagueVictimTimers[client] = null;	
     m_PlagueInflicter[client] = 0;
     m_PlagueDuration[client] = 0;
     m_PlagueAmount[client] = 0;
@@ -306,12 +306,12 @@ public Action:PlagueVictimTimer(Handle:timer, any:client)
     return Plugin_Stop;
 }
 
-ExplodePlayer(client, inflicter=0, team=0, Float:radius=500.0, damage=800, building=800,
+ExplodePlayer(client, inflicter=0, team=0, float radius=500.0, damage=800, building=800,
               ExplosionType:type=NormalExplosion, xp=10,
-              const String:weapon_name[]="sc_explode",
-              const String:weapon_desc[]="")
+              const char[] weapon_name[]="sc_explode",
+              const char[] weapon_desc[]="")
 {
-    new clientTeam = GetClientTeam(client);
+    int clientTeam = GetClientTeam(client);
     if (clientTeam >= 2 && !m_HasExploded[client])
     {
         if ((type & NonFatalExplosion) != NonFatalExplosion)
@@ -322,7 +322,7 @@ ExplodePlayer(client, inflicter=0, team=0, Float:radius=500.0, damage=800, build
                 KillPlayer(client, inflicter, weapon_name, weapon_desc, .explode=true);
         }
 
-        new Float:client_location[3];
+        float client_location[3];
         GetClientAbsOrigin(client,client_location);
         client_location[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
@@ -333,7 +333,7 @@ ExplodePlayer(client, inflicter=0, team=0, Float:radius=500.0, damage=800, build
 
         if ((type & RingExplosion) == ParticleExplosion && GameType == tf2 && GetMode() != MvM)
         {
-            new entities = EntitiesAvailable(200, .message="Reducing Explosion Effects");
+            int entities = EntitiesAvailable(200, .message="Reducing Explosion Effects");
             if (entities > 50)
             {
                 CreateParticle("ExplosionCore_buildings",  5.0, .pos=client_location);
@@ -351,7 +351,7 @@ ExplodePlayer(client, inflicter=0, team=0, Float:radius=500.0, damage=800, build
                                   0, 15, 0.5, 10.0, 10.0, {255,255,255,33}, 120, 0);
             TE_SendEffectToAll();
 
-            new beamcolor[]={0,200,255,255}; //blue //secondary ring
+            int beamcolor[]={0,200,255,255}; //blue //secondary ring
             if (clientTeam == 2)
             { //TERRORISTS/RED in TF
                 beamcolor[0]=255;
@@ -374,12 +374,12 @@ ExplodePlayer(client, inflicter=0, team=0, Float:radius=500.0, damage=800, build
         else
             immunity_flag = Immunity_None;
 
-        new bool:flaming         = ((type & FlamingExplosion) == FlamingExplosion);
-        new bool:ignoreHealth    = ((type & IgnoreHealthImmunity) == IgnoreHealthImmunity);
-        new bool:ignoreBurning   = ((type & IgnoreBurningImmunity) == IgnoreBurningImmunity);
-        new bool:ignoreExplosion = ((type & IgnoreExplosionImmunity) == IgnoreExplosionImmunity);
-        new bool:ignoreStructure = ((type & IgnoreStructureImmunity) == IgnoreStructureImmunity);
-        for (new index=1;index<=MaxClients;index++)
+        bool flaming         = ((type & FlamingExplosion) == FlamingExplosion);
+        bool ignoreHealth    = ((type & IgnoreHealthImmunity) == IgnoreHealthImmunity);
+        bool ignoreBurning   = ((type & IgnoreBurningImmunity) == IgnoreBurningImmunity);
+        bool ignoreExplosion = ((type & IgnoreExplosionImmunity) == IgnoreExplosionImmunity);
+        bool ignoreStructure = ((type & IgnoreStructureImmunity) == IgnoreStructureImmunity);
+        for (int index=1;index<=MaxClients;index++)
         {
             if (index != client && IsClientInGame(index) &&
                 IsPlayerAlive(index) && GetClientTeam(index) != team)
@@ -388,11 +388,11 @@ ExplodePlayer(client, inflicter=0, team=0, Float:radius=500.0, damage=800, build
                     (immunity_flag == Immunity_None || !GetImmunity(index,immunity_flag)) &&
                     !IsInvulnerable(index))
                 {
-                    new Float:check_location[3];
+                    float check_location[3];
                     GetClientAbsOrigin(index,check_location);
 
-                    new Float:distance;
-                    new dmg = PowerOfRange(client_location, radius, check_location,
+                    float distance;
+                    int dmg = PowerOfRange(client_location, radius, check_location,
                                            damage, .distance=distance);
                     if (dmg > 0 || flaming)
                     {
@@ -400,14 +400,14 @@ ExplodePlayer(client, inflicter=0, team=0, Float:radius=500.0, damage=800, build
                         {
                             if (dmg > 0 && (ignoreHealth || !GetImmunity(index,Immunity_HealthTaking)))
                             {
-                                new hp = HurtPlayer(index, dmg, inflicter, weapon_name, weapon_desc,
+                                int hp = HurtPlayer(index, dmg, inflicter, weapon_name, weapon_desc,
                                                     xp, .explode=true, .type=DMG_BLAST|DMG_ALWAYSGIB);
                                 if (hp > 0)
                                 {
                                     /*
                                     if (!IsFakeClient(client))
                                     {
-                                        new Float:factor = (radius-distance)/radius;
+                                        float factor = (radius-distance)/radius;
                                         if (factor > 0.0 &&
                                             !GetSetting(client,Remove_Queasiness) &&
                                             !GetImmunity(client,Immunity_Drugs))
@@ -435,7 +435,7 @@ ExplodePlayer(client, inflicter=0, team=0, Float:radius=500.0, damage=800, build
                                 /*
                                 if (!IsFakeClient(client))
                                 {
-                                    new Float:factor = (radius-distance)/radius;
+                                    float factor = (radius-distance)/radius;
                                     if (factor > 0.0 &&
                                         !GetSetting(client,Remove_Queasiness) &&
                                         !GetImmunity(client,Immunity_Drugs))
@@ -463,10 +463,10 @@ ExplodePlayer(client, inflicter=0, team=0, Float:radius=500.0, damage=800, build
 
         if (building > 0 && GetGameType() == tf2)
         {
-            new Float:pos[3];
-            new maxents = GetMaxEntities();
+            float pos[3];
+            int maxents = GetMaxEntities();
 
-            for (new ent = MaxClients; ent < maxents; ent++)
+            for (int ent = MaxClients; ent < maxents; ent++)
             {
                 if (IsValidEdict(ent) && IsValidEntity(ent))
                 {
@@ -474,13 +474,13 @@ ExplodePlayer(client, inflicter=0, team=0, Float:radius=500.0, damage=800, build
                     {
                         if (GetEntProp(ent, Prop_Send, "m_iTeamNum") != team)
                         {
-                            new builder = GetEntPropEnt(ent, Prop_Send, "m_hBuilder");
+                            int builder = GetEntPropEnt(ent, Prop_Send, "m_hBuilder");
                             if (builder <= 0 || ignoreStructure ||
                                 (!GetImmunity(builder,Immunity_Explosion) &&
                                  (immunity_flag == Immunity_None || !GetImmunity(builder,immunity_flag))))
                             {
                                 GetEntPropVector(ent, Prop_Send, "m_vecOrigin", pos);
-                                new dmg = PowerOfRange(client_location, radius, pos, building);
+                                int dmg = PowerOfRange(client_location, radius, pos, building);
                                 if (dmg > 0)
                                 {
                                     if (TraceTargetEntity(client, ent, client_location, pos))
@@ -498,16 +498,16 @@ ExplodePlayer(client, inflicter=0, team=0, Float:radius=500.0, damage=800, build
     }
 }
 
-public Action:TransmitPlague(Handle:timer)
+public Action TransmitPlague(Handle timer)
 {
-    static Float:InfectedVec[MAXPLAYERS + 1][3];
-    static Float:NotInfectedVec[MAXPLAYERS + 1][3];
+    static float InfectedVec[MAXPLAYERS + 1][3];
+    static float NotInfectedVec[MAXPLAYERS + 1][3];
     static InfectedPlayerVec[MAXPLAYERS + 1];
     static NotInfectedPlayerVec[MAXPLAYERS + 1];
 
-    new InfectedCount = 0, NotInfectedCount = 0;
+    int InfectedCount = 0, NotInfectedCount = 0;
 
-    for (new client = 1; client <= MaxClients; client++)
+    for (int client = 1; client <= MaxClients; client++)
     {
         if (IsClientInGame(client) && IsPlayerAlive(client))
         {
@@ -532,13 +532,13 @@ public Action:TransmitPlague(Handle:timer)
 
     if (NotInfectedCount == 0 || InfectedCount == 0)
     {
-        m_TransmitTimer = INVALID_HANDLE;
+        m_TransmitTimer = null;
         return Plugin_Stop;
     }
 
-    new check;
-    new Float:distance = 2000.0; // GetConVarFloat(Cvar_SpreadDistance);
-    for (new infected = 0; infected < InfectedCount; infected++)
+    int check;
+    float distance = 2000.0; // GetConVarFloat(Cvar_SpreadDistance);
+    for (int infected = 0; infected < InfectedCount; infected++)
     {
         for (check = 0; check < NotInfectedCount; check++)
         {
@@ -553,7 +553,7 @@ public Action:TransmitPlague(Handle:timer)
 
 stock TransmitInfection(to,from)
 {
-    new team = GetClientTeam(to);
+    int team = GetClientTeam(to);
     if (GetClientTeam(from) == team)
     {
         m_PlagueType[to] = m_PlagueType[from];
@@ -584,7 +584,7 @@ stock TransmitInfection(to,from)
         if (m_PlagueType[to] & EnsnaringPlague)
             SetOverrideSpeed(to, 0.75);
 
-        if (m_PlagueVictimTimers[to] == INVALID_HANDLE)
+        if (m_PlagueVictimTimers[to] == null)
             m_PlagueVictimTimers[to] = CreateTimer(1.0,PlagueVictimTimer,to,TIMER_REPEAT);
     }
 }
@@ -602,17 +602,17 @@ stock TransmitInfection(to,from)
  * @noreturn
  * native PlagueInfect(inflicter, index, duration=1, amount=1,
  *                     PlagueType:type=NormalPlague,
- *                     const String:weapon_name[]="plague",
- *                     const String:weapon_desc[]="Plague");
+ *                     const char[] weapon_name[]="plague",
+ *                     const char[] weapon_desc[]="Plague");
  */
-public Native_PlagueInfect(Handle:plugin,numParams)
+public int Native_PlagueInfect(Handle plugin,numParams)
 {
-    new inflicter = GetNativeCell(1);
-    new index = GetNativeCell(2);
+    int inflicter = GetNativeCell(1);
+    int index = GetNativeCell(2);
     if (IsClient(index) &&
         m_PlagueInflicter[index] != inflicter)
     {
-        new bool:immune = GetImmunity(index,Immunity_Restore) ||
+        bool immune = GetImmunity(index,Immunity_Restore) ||
                           IsInvulnerable(index);
 
         new PlagueType:plagueType = PlagueType:GetNativeCell(5);
@@ -647,7 +647,7 @@ public Native_PlagueInfect(Handle:plugin,numParams)
 
         if (plagueType & ContagiousPlague)
         {
-            if (m_TransmitTimer != INVALID_HANDLE)
+            if (m_TransmitTimer != null)
             {
                 m_TransmitTimer = CreateTimer(1.0,TransmitPlague,0,TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
                 immune = false;
@@ -681,7 +681,7 @@ public Native_PlagueInfect(Handle:plugin,numParams)
                           .mode=RENDER_GLOW,
                           .r=r, .b=b, .g=g);
 
-            if (m_PlagueVictimTimers[index] == INVALID_HANDLE)
+            if (m_PlagueVictimTimers[index] == null)
             {
                 m_PlagueVictimTimers[index] = CreateTimer(1.0, PlagueVictimTimer,
                                                           index, TIMER_REPEAT);
@@ -704,21 +704,21 @@ public Native_PlagueInfect(Handle:plugin,numParams)
  * @param weapon_name: The name of the weapon used for the explosion.
  * @param weapon_desc: The description of the weapon used for the explosion.
  * @noreturn
- * native ExplodePlayer(client, inflicter=0, team=0, Float:radius=500.0, damage=800,
+ * native ExplodePlayer(client, inflicter=0, team=0, float radius=500.0, damage=800,
  *                      building=800, ExplosionType:type=NormalExplosion, xp=10,
- *                      const String:weapon_name[]="sc_explode",
- *                      const String:weapon_desc[]="");
+ *                      const char[] weapon_name[]="sc_explode",
+ *                      const char[] weapon_desc[]="");
  */
-public Native_ExplodePlayer(Handle:plugin,numParams)
+public int Native_ExplodePlayer(Handle plugin,numParams)
 {
-    decl String:short[sizeof(m_PlagueShort[])];
-    decl String:name[sizeof(m_PlagueName[])];
+    char short[sizeof(m_PlagueShort[])];
+    char name[sizeof(m_PlagueName[])];
 
     GetNativeString(9,short,sizeof(short));
     GetNativeString(10,name,sizeof(name));
 
     ExplodePlayer(GetNativeCell(1), GetNativeCell(2), GetNativeCell(3),
-                  Float:GetNativeCell(4), GetNativeCell(5), GetNativeCell(6),
+                  float GetNativeCell(4), GetNativeCell(5), GetNativeCell(6),
                   ExplosionType:GetNativeCell(7), GetNativeCell(8),
                   short, name);
 }
@@ -728,9 +728,9 @@ public Native_ExplodePlayer(Handle:plugin,numParams)
  *
  * @param client:      The client to check
  * @return             Returns true if the client has exploded.
- * native bool:HasPlayerExploded(client);
+ * native bool HasPlayerExploded(client);
  */
-public Native_HasPlayerExploded(Handle:plugin,numParams)
+public int Native_HasPlayerExploded(Handle plugin,numParams)
 {
     return m_HasExploded[GetNativeCell(1)];
 }

@@ -23,27 +23,27 @@
 //                 PARTICLES
 //==========================================
 
-stock ThrowAwayParticle(const String:effectName[], const Float:fPos[3], const Float:lifetime, const Float:fAngles[3]=NULL_VECTOR)
+stock ThrowAwayParticle(const char effectName[], const float fPos[3], const float lifetime, const float fAngles[3]=NULL_VECTOR)
 {    
-    new particle = CreateW3SParticle(effectName, fPos, fAngles);
+    int particle = CreateW3SParticle(effectName, fPos, fAngles);
     ModifyEntityAddDeathTimer(particle, lifetime);
     
     return particle;
 }
 
 // If you have an attachment point you can pass NULL_VECTOR to fPos
-stock AttachParticle(const client, const String:effectName[], const Float:fPos[3], const String:attachTo[]="", const Float:fAngles[3]=NULL_VECTOR)
+stock AttachParticle(const client, const char effectName[], const float fPos[3], const char attachTo[]="", const float fAngles[3]=NULL_VECTOR)
 {    
-    new particle = CreateW3SParticle(effectName, fPos, fAngles);
+    int particle = CreateW3SParticle(effectName, fPos, fAngles);
     ModifyEntityAttach(particle, client, attachTo);
     
     return particle;
 }
 
 // If you have an attachment point you can pass NULL_VECTOR to fPos
-stock AttachThrowAwayParticle(const client, const String:effectName[], const Float:fPos[3], const String:attachTo[], const Float:lifetime, const Float:fAngles[3]=NULL_VECTOR)
+stock AttachThrowAwayParticle(const client, const char effectName[], const float fPos[3], const char attachTo[], const float lifetime, const float fAngles[3]=NULL_VECTOR)
 {    
-    new particle = CreateW3SParticle(effectName, fPos, fAngles);
+    int particle = CreateW3SParticle(effectName, fPos, fAngles);
     ModifyEntityAttach(particle, client, attachTo);
     ModifyEntityAddDeathTimer(particle, lifetime);
     
@@ -54,25 +54,25 @@ stock AttachThrowAwayParticle(const client, const String:effectName[], const Flo
 //                 LIGHTS
 //==========================================
 
-stock ThrowAwayLightEmitter(const Float:fPos[3], const String:color[], const String:style[], const Float:distance, const Float:lifetime)
+stock ThrowAwayLightEmitter(const float fPos[3], const char color[], const char style[], const float distance, const float lifetime)
 {    
-    new light = CreateW3SLight(fPos, color, style, distance);
+    int light = CreateW3SLight(fPos, color, style, distance);
     ModifyEntityAddDeathTimer(light, lifetime);
 }
 
 // If you have an attachment point you can pass NULL_VECTOR to fPos
-stock AttachLight(const client, const Float:fPos[3], const String:color[], const String:style[], const Float:distance, const String:attachTo[])
+stock AttachLight(const client, const float fPos[3], const char color[], const char style[], const float distance, const char attachTo[])
 {    
-    new light = CreateW3SLight(fPos, color, style, distance);
+    int light = CreateW3SLight(fPos, color, style, distance);
     ModifyEntityAttach(light, client, attachTo);
     
     return light;
 }
 
 // If you have an attachment point you can pass NULL_VECTOR to fPos
-stock AttachThrowAwayLight(const client, const Float:fPos[3], const String:color[], const String:style[], const Float:distance, const String:attachTo[], const Float:lifetime)
+stock AttachThrowAwayLight(const client, const float fPos[3], const char color[], const char style[], const float distance, const char attachTo[], const float lifetime)
 {    
-    new light = CreateW3SLight(fPos, color, style, distance);
+    int light = CreateW3SLight(fPos, color, style, distance);
     ModifyEntityAttach(light, client, attachTo);
     ModifyEntityAddDeathTimer(light, lifetime);
     
@@ -83,7 +83,7 @@ stock AttachThrowAwayLight(const client, const Float:fPos[3], const String:color
 //                                 Temp Entitys
 //=============================================================================
 
-stock TE_SetupBubbles(const Float:vecOrigin[3], const Float:vecFinish[3],modelIndex,const Float:heightF,count,const Float:speedF)
+stock TE_SetupBubbles(const float vecOrigin[3], const float vecFinish[3],modelIndex,const float heightF,count,const float speedF)
 {
     TE_Start("Bubbles");
     TE_WriteVector("m_vecMins", vecOrigin);
@@ -107,7 +107,7 @@ stock TE_SetupBubbles(const Float:vecOrigin[3], const Float:vecFinish[3],modelIn
  * @noreturn
  */
 #if !defined SOURCECRAFT
-native W3FlashScreen(client,color[4],Float:holdduration=0.1,Float:fadeduration=0.2,flags=FFADE_IN);
+native W3FlashScreen(client,color[4],float holdduration=0.1,float fadeduration=0.2,flags=FFADE_IN);
 #else
 #define W3FlashScreen FlashScreen
 #endif
@@ -121,7 +121,7 @@ native W3FlashScreen(client,color[4],Float:holdduration=0.1,Float:fadeduration=0
  * @noreturn
  */
 #if !defined SOURCECRAFT
-native War3_ShakeScreen(client,Float:duration=1.0,Float:magnitude=40.0,Float:noise=30.0);
+native War3_ShakeScreen(client,float duration=1.0,float magnitude=40.0,float noise=30.0);
 #else
 #define War3_ShakeScreen ShakeScreen
 #endif
@@ -132,7 +132,7 @@ native War3_ShakeScreen(client,Float:duration=1.0,Float:magnitude=40.0,Float:noi
 
 stock War3_PrecacheBeamSprite() 
 {
-    new spriteIndex = PrecacheModel(GAMECSGO ? BEAMSPRITE_CSGO : BEAMSPRITE_SOURCE);
+    int spriteIndex = PrecacheModel(GAMECSGO ? BEAMSPRITE_CSGO : BEAMSPRITE_SOURCE);
 
     if(spriteIndex == -1) 
     {
@@ -144,7 +144,7 @@ stock War3_PrecacheBeamSprite()
 
 stock War3_PrecacheHaloSprite() 
 {
-    new spriteIndex = PrecacheModel(GAMECSGO ? HALOSPRITE_CSGO : HALOSPRITE_SOURCE);
+    int spriteIndex = PrecacheModel(GAMECSGO ? HALOSPRITE_CSGO : HALOSPRITE_SOURCE);
 
     if(spriteIndex == -1) 
     {
@@ -167,13 +167,13 @@ stock War3_PrecacheHaloSprite()
  * 
  * @param String:effectName Name of the particle effect you want to spawn.
  *                             Don't forget to precache this OnMapStart!
- * @param Float:fPos[3] Position to spawn the particle at
+ * @param float fPos[3] Position to spawn the particle at
  * 
  * @returns entity index for the particle or -1 if no particle was spawned
  */
-stock CreateW3SParticle(const String:effectName[], const Float:fPos[3], const Float:fAngles[3])
+stock CreateW3SParticle(const char effectName[], const float fPos[3], const float fAngles[3])
 {
-    new particle = CreateEntityByName("info_particle_system");
+    int particle = CreateEntityByName("info_particle_system");
     if (IsValidEdict(particle))
     {
         TeleportEntity(particle, fPos, fAngles, NULL_VECTOR);
@@ -198,16 +198,16 @@ stock CreateW3SParticle(const String:effectName[], const Float:fPos[3], const Fl
  * 
  * Spawns a light_dynamic at a fixed position.
  * 
- * @param Float:fPos[3] Position to spawn the light at
+ * @param float fPos[3] Position to spawn the light at
  * @param String:color RGBA value of the color like "255 255 255 255"
  * @param String:style See http://developer.valvesoftware.com/wiki/Light under "Appearances"
  * @param distance how far the light stretches
  * 
  * @returns the entinty index of the light or -1 if there was none created
  */
-stock CreateW3SLight(const Float:fPos[3], const String:color[], const String:style[], const Float:distance)
+stock CreateW3SLight(const float fPos[3], const char color[], const char style[], const float distance)
 {
-    new light = CreateEntityByName("light_dynamic");
+    int light = CreateEntityByName("light_dynamic");
     if (IsValidEdict(light))
     {
         DispatchKeyValue(light, "_light", color);
@@ -240,13 +240,13 @@ stock CreateW3SLight(const Float:fPos[3], const String:color[], const String:sty
  * ModifyEntityAddDeathTimer
  * 
  * @param entityIndex Entity index you want to modify
- * @param Float:lifetime Seconds after wich the entity should be killed
+ * @param float lifetime Seconds after wich the entity should be killed
  */
-stock ModifyEntityAddDeathTimer(const entityIndex, const Float:lifetime)
+stock ModifyEntityAddDeathTimer(const entityIndex, const float lifetime)
 {
     if (IsValidEdict(entityIndex))
     {
-        decl String:variantString[60];
+        char variantString[60];
         Format(variantString, sizeof(variantString), "OnUser1 !self:Kill::%f:-1", lifetime);
                 
         SetVariantString(variantString);
@@ -266,7 +266,7 @@ stock ModifyEntityAddDeathTimer(const entityIndex, const Float:lifetime)
  *                           Leave this out or set it to "" when you don't want
  *                           to attach to any specific point.
  */
-stock ModifyEntityAttach(const entityIndex, const otherEntityIndex, const String:attachTo[]="")
+stock ModifyEntityAttach(const entityIndex, const otherEntityIndex, const char attachTo[]="")
 {    
     if (IsValidEdict(entityIndex))
     {

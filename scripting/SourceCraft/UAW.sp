@@ -37,28 +37,28 @@
 #include "effect/PurpleGlow"
 #include "effect/SendEffects"
 
-new const String:explodeWav[] = "weapons/explode5.wav";
+new const char[] explodeWav[] = "weapons/explode5.wav";
 
-new g_BuyoutChance[]        = { 0, 9, 22, 50, 63 };
-new g_JobsBankChance[]      = { 0, 7, 15, 30, 50 };
-new g_ShelteredChance[]     = { 0, 5, 10, 20, 35 };
+	int g_BuyoutChance[]        = { 0, 9, 22, 50, 63 };
+	int g_JobsBankChance[]      = { 0, 7, 15, 30, 50 };
+	int g_ShelteredChance[]     = { 0, 5, 10, 20, 35 };
 
-new g_HookDuration[]        = { 0,    10,    20,    40,   -1  };
-new Float:g_HookCooldown[]  = { 0.0,  20.0,  15.0,  10.0, 5.0 };
-new Float:g_HookRange[]     = { 0.0, 150.0, 300.0, 450.0, 0.0 };
+	int g_HookDuration[]        = { 0,    10,    20,    40,   -1  };
+float g_HookCooldown[]  = { 0.0,  20.0,  15.0,  10.0, 5.0 };
+float g_HookRange[]     = { 0.0, 150.0, 300.0, 450.0, 0.0 };
 
-new g_RopeDuration[]        = { 0,     5,    10,    20,   -1  };
-new Float:g_RopeCooldown[]  = { 0.0,  20.0,  15.0,  10.0, 0.0 };
-new Float:g_RopeRange[]     = { 0.0, 150.0, 300.0, 450.0, 0.0 };
+	int g_RopeDuration[]        = { 0,     5,    10,    20,   -1  };
+float g_RopeCooldown[]  = { 0.0,  20.0,  15.0,  10.0, 0.0 };
+float g_RopeRange[]     = { 0.0, 150.0, 300.0, 450.0, 0.0 };
 
 new raceID, wageID, seniorityID, negotiationID, rulesID, hookID, ropeID;
 
 // Reincarnation variables
-new bool:m_JobsBank[MAXPLAYERS+1];
-new bool:m_TeleportOnSpawn[MAXPLAYERS+1];
-new Float:m_SpawnLoc[MAXPLAYERS+1][3];
+bool m_JobsBank[MAXPLAYERS+1];
+bool m_TeleportOnSpawn[MAXPLAYERS+1];
+float m_SpawnLoc[MAXPLAYERS+1][3];
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "SourceCraft Race - UAW",
     author = "-=|JFH|=-Naris (Murray Wilson)",
@@ -67,7 +67,7 @@ public Plugin:myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.common.phrases.txt");
     LoadTranslations("sc.uaw.phrases.txt");
@@ -131,7 +131,7 @@ public OnSourceCraftReady()
                         raceID, ropeID);
 }
 
-public OnLibraryAdded(const String:name[])
+public OnLibraryAdded(const char[] name[])
 {
     if (StrEqual(name, "hgrsource"))
     {
@@ -143,13 +143,13 @@ public OnLibraryAdded(const String:name[])
     }
 }
 
-public OnLibraryRemoved(const String:name[])
+public OnLibraryRemoved(const char[] name[])
 {
     if (StrEqual(name, "hgrsource"))
         m_HGRSourceAvailable = false;
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupPurpleGlow();
     SetupBigExplosion();
@@ -159,17 +159,17 @@ public OnMapStart()
     SetupSound(explodeWav);
 }
 
-public OnMapEnd()
+public void OnMapEnd()
 {
     ResetAllClientTimers();
 }
 
-public OnClientDisconnect(client)
+public void OnClientDisconnect(client)
 {
     KillClientTimer(client);
 }
 
-public Action:OnRaceDeselected(client,oldrace,newrace)
+public Action OnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
@@ -181,7 +181,7 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
             TakeRope(client);
         }
 
-        new maxCrystals = GetMaxCrystals();
+        int maxCrystals = GetMaxCrystals();
         if (GetCrystals(client) > maxCrystals)
         {
             SetCrystals(client, maxCrystals);
@@ -195,14 +195,14 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
         return Plugin_Continue;
 }
 
-public Action:OnRaceSelected(client,oldrace,newrace)
+public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
         m_JobsBank[client]=false;
         m_TeleportOnSpawn[client]=false;
 
-        new rules_level = GetUpgradeLevel(client,raceID,rulesID);
+        int rules_level = GetUpgradeLevel(client,raceID,rulesID);
         SetEnergyRate(client, (rules_level > 0) ? float(rules_level) : -1.0);
 
         new hook_level=GetUpgradeLevel(client,raceID,hookID);
@@ -236,7 +236,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
     }
 }
 
-public OnUltimateCommand(client,race,bool:pressed,arg)
+public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (m_HGRSourceAvailable && race==raceID && IsValidClientAlive(client))
     {
@@ -245,7 +245,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             case 4,3,2:
             {
                 TraceInto("UAW", "OnUltimateCommand", "%N Roping/Detaching", client);
-                new rope_level = GetUpgradeLevel(client,raceID,ropeID);
+                int rope_level = GetUpgradeLevel(client,raceID,ropeID);
                 if (rope_level > 0)
                 {
                     if (m_HGRSourceAvailable)
@@ -267,7 +267,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                     }
                     else if (pressed)
                     {
-                        decl String:upgradeName[64];
+                        char upgradeName[64];
                         GetUpgradeName(raceID, ropeID, upgradeName, sizeof(upgradeName), client);
                         PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
                     }
@@ -279,7 +279,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             {
                 TraceInto("UAW", "OnUltimateCommand", "%N Hooking/Unhooking", client);
 
-                new hook_level = GetUpgradeLevel(client,raceID,hookID);
+                int hook_level = GetUpgradeLevel(client,raceID,hookID);
                 if (hook_level > 0)
                 {
                     if (m_HGRSourceAvailable)
@@ -301,7 +301,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                     }
                     else if (pressed)
                     {
-                        decl String:upgradeName[64];
+                        char upgradeName[64];
                         GetUpgradeName(raceID, hookID, upgradeName, sizeof(upgradeName), client);
                         PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
                     }
@@ -313,23 +313,23 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
     }
 }
 
-public RoundStartEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public RoundStartEvent(Handle event,const char[] name[],bool dontBroadcast)
 {
-    for (new x=1;x<=MaxClients;x++)
+    for (int x=1;x<=MaxClients;x++)
     {
         m_TeleportOnSpawn[x]=false;
         m_JobsBank[x]=false;
     }
 }
 
-public OnPlayerSpawnEvent(Handle:event, client, race)
+public OnPlayerSpawnEvent(Handle event, client, race)
 {
     if (race == raceID)
     {
         CreateClientTimer(client, 10.0, Negotiations,
                           TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 
-        new rules_level = GetUpgradeLevel(client,raceID,rulesID);
+        int rules_level = GetUpgradeLevel(client,raceID,rulesID);
         SetEnergyRate(client, (rules_level > 0) ? float(rules_level) : -1.0);
 
         new hook_level=GetUpgradeLevel(client,raceID,hookID);
@@ -369,10 +369,10 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
     }
 }
 
-public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_index,
+public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_index,
                           attacker_race, assister_index, assister_race, damage,
-                          const String:weapon[], bool:is_equipment, customkill,
-                          bool:headshot, bool:backstab, bool:melee)
+                          const char[] weapon[], bool is_equipment, customkill,
+                          bool headshot, bool backstab, bool melee)
 {
     KillClientTimer(victim_index);
 
@@ -382,7 +382,7 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
         if (seniority_level > 0 && !GetRestriction(victim_index, Restriction_NoUpgrades) &&
             !GetRestriction(victim_index, Restriction_Stunned))
         {
-            new chance = GetRandomInt(1,100);
+            int chance = GetRandomInt(1,100);
             if (chance<=g_ShelteredChance[seniority_level] &&
                 !IsMole(victim_index))
             {
@@ -420,7 +420,7 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
             else if (chance<=g_BuyoutChance[seniority_level])
             {
                 // No monetary limit on UAW Buyout offers!
-                new amount = GetRandomInt(1,100);
+                int amount = GetRandomInt(1,100);
                 IncrementCrystals(victim_index, amount,false);
                 DisplayMessage(victim_index,Display_Message, "%t", "Buyout", amount);
             }
@@ -428,9 +428,9 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
     }
 }
 
-public Action:TeleportOnSpawn(Handle:timer,any:userid)
+public Action TeleportOnSpawn(Handle timer,any:userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client))
     {
         TeleportEntity(client,m_SpawnLoc[client], NULL_VECTOR, NULL_VECTOR);
@@ -440,7 +440,7 @@ public Action:TeleportOnSpawn(Handle:timer,any:userid)
     return Plugin_Stop;
 }
 
-public Action:OnXPGiven(client,&amount,bool:taken)
+public Action OnXPGiven(client,&amount,bool taken)
 {
     if (GetRace(client)==raceID && IsPlayerAlive(client) &&
         !GetRestriction(client, Restriction_NoUpgrades) &&
@@ -450,7 +450,7 @@ public Action:OnXPGiven(client,&amount,bool:taken)
         if (inflated_wages_level > 0)
         {
             amount=RoundToNearest(float(amount)*(1.0 + (float(inflated_wages_level)*0.5)));
-            new cap = GetLevelXP(client, raceID);
+            int cap = GetLevelXP(client, raceID);
             if (amount > cap)
                 amount = cap;
             return Plugin_Changed;
@@ -462,7 +462,7 @@ public Action:OnXPGiven(client,&amount,bool:taken)
         return Plugin_Continue;
 }
 
-public Action:OnCrystalsGiven(client,&amount,bool:taken)
+public Action OnCrystalsGiven(client,&amount,bool taken)
 {
     if (GetRace(client)==raceID && IsPlayerAlive(client) &&
         !GetRestriction(client, Restriction_NoUpgrades) &&
@@ -503,7 +503,7 @@ public SetupRope(client, level)
     }
 }
 
-public Action:OnHook(client)
+public Action OnHook(client)
 {
     if (GetRestriction(client,Restriction_NoUltimates) ||
         GetRestriction(client,Restriction_Grounded) ||
@@ -522,7 +522,7 @@ public Action:OnHook(client)
     }
 }
 
-public Action:OnRope(client)
+public Action OnRope(client)
 {
     if (GetRestriction(client,Restriction_NoUltimates) ||
         GetRestriction(client,Restriction_Grounded) ||
@@ -536,9 +536,9 @@ public Action:OnRope(client)
         return Plugin_Continue;
 }
 
-public Action:Negotiations(Handle:timer, any:userid)
+public Action Negotiations(Handle timer, any:userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client) &&
         !GetRestriction(client, Restriction_NoUpgrades) &&
         !GetRestriction(client, Restriction_Stunned))
@@ -559,7 +559,7 @@ public Action:Negotiations(Handle:timer, any:userid)
                  */
                 // No monetary limit on UAW Money!
 
-                new option;
+                int option;
                 if (GetRandomInt(1,100) <= percent[negotiations_level])
                 {
                     option = GetRandomInt(1,21);
@@ -585,31 +585,31 @@ public Action:Negotiations(Handle:timer, any:userid)
                         AddCrystals(client, GetRandomInt(negotiations_level,10*negotiations_level), "Bonus");
                     case 7: // Grievance
                     {
-                        new amount = GetRandomInt(negotiations_level,10*negotiations_level);
+                        int amount = GetRandomInt(negotiations_level,10*negotiations_level);
                         ResetXP(client, raceID, GetXP(client, raceID)+amount);
                         DisplayMessage(client,Display_Message, "%t", "Grievance", amount);
                     }
                     case 8: // Shop Steward
                     {
-                        new amount = GetRandomInt(negotiations_level,10*negotiations_level);
+                        int amount = GetRandomInt(negotiations_level,10*negotiations_level);
                         ResetXP(client, raceID, GetXP(client, raceID)+amount);
                         DisplayMessage(client,Display_Message, "%t", "ShopSteward", amount);
                     }
                     case 9: // Arbitration
                     {
-                        new amount = GetRandomInt(negotiations_level,10*negotiations_level);
+                        int amount = GetRandomInt(negotiations_level,10*negotiations_level);
                         ResetXP(client, raceID, GetXP(client, raceID)+amount);
                         DisplayMessage(client,Display_Message, "%t", "Arbitration",amount);
                     }
                     case 10: // Collective Bargaining
                     {
-                        new amount = GetRandomInt(negotiations_level,10*negotiations_level);
+                        int amount = GetRandomInt(negotiations_level,10*negotiations_level);
                         ResetXP(client, raceID, GetXP(client, raceID)+amount);
                         DisplayMessage(client,Display_Message, "%t", "Bargaining", amount);
                     }
                     case 11: // Fringe Benefits
                     {
-                        new amount = GetRandomInt(negotiations_level,10*negotiations_level);
+                        int amount = GetRandomInt(negotiations_level,10*negotiations_level);
                         ResetXP(client, raceID, GetXP(client, raceID)+amount);
                         DisplayMessage(client,Display_Message, "%t", "Benefits",amount);
                     }
@@ -636,7 +636,7 @@ public Action:Negotiations(Handle:timer, any:userid)
                         {
                             DisplayMessage(client,Display_Deaths, "%t", "Lockout");
 
-                            new Float:location[3];
+                            float location[3];
                             GetClientAbsOrigin(client,location);
                             TE_SetupExplosion(location, BigExplosion(), 10.0, 30, 0, 50, 20);
                             TE_SendEffectToAll();
@@ -653,7 +653,7 @@ public Action:Negotiations(Handle:timer, any:userid)
                         {
                             DisplayMessage(client,Display_Deaths, "%t", "Reduction");
 
-                            new Float:location[3];
+                            float location[3];
                             GetClientAbsOrigin(client,location);
                             TE_SetupExplosion(location, BigExplosion(), 10.0, 30, 0, 50, 20);
                             TE_SendEffectToAll();
@@ -664,15 +664,15 @@ public Action:Negotiations(Handle:timer, any:userid)
                     }
                     case 17: // Forced Buyout
                     {
-                        new level = GetLevel(client, raceID);
+                        int level = GetLevel(client, raceID);
                         if (level < 8 || GetRandomInt(1,100) > 9-negotiations_level)
                             TriggerTimer(timer); // Get a different Negotiation
                         else
                         {
-                            new amount = GetRandomInt(100,200 * negotiations_level);
+                            int amount = GetRandomInt(100,200 * negotiations_level);
                             SetCrystals(client, GetCrystals(client)+amount,false);
 
-                            new reduction = GetRandomInt(0,level) - (level/4);
+                            int reduction = GetRandomInt(0,level) - (level/4);
                             if (reduction > 0)
                             {
                                 DisplayMessage(client,Display_Deaths,"%t", "BuyoutReduction", amount, reduction);
@@ -682,7 +682,7 @@ public Action:Negotiations(Handle:timer, any:userid)
                                 DisplayMessage(client,Display_Deaths,"%t", "Buyout", amount);
                             }
 
-                            new Float:location[3];
+                            float location[3];
                             GetClientAbsOrigin(client,location);
                             TE_SetupExplosion(location, BigExplosion(), 10.0, 30, 0, 50, 20);
                             TE_SendEffectToAll();
@@ -696,12 +696,12 @@ public Action:Negotiations(Handle:timer, any:userid)
                     }
                     case 18: // Bankruptcy
                     {
-                        new level = GetLevel(client, raceID);
+                        int level = GetLevel(client, raceID);
                         if (level < 8 || GetRandomInt(1,100) > 9-negotiations_level)
                             TriggerTimer(timer); // Get a different Negotiation
                         else
                         {
-                            new reduction = GetRandomInt(0,level) - (level/2);
+                            int reduction = GetRandomInt(0,level) - (level/2);
                             if (reduction > 0)
                             {
                                 DisplayMessage(client,Display_Deaths,"%t", "BankruptcyReduction", reduction);
@@ -711,7 +711,7 @@ public Action:Negotiations(Handle:timer, any:userid)
                                 DisplayMessage(client,Display_Deaths,"%t", "Bankruptcy");
                             }
 
-                            new Float:location[3];
+                            float location[3];
                             GetClientAbsOrigin(client,location);
                             TE_SetupExplosion(location, BigExplosion(), 10.0, 30, 0, 50, 20);
                             TE_SendEffectToAll();
@@ -725,10 +725,10 @@ public Action:Negotiations(Handle:timer, any:userid)
                     }
                     case 19: // Union Dues
                     {
-                        new balance = GetCrystals(client);
+                        int balance = GetCrystals(client);
                         if (balance > 0)
                         {
-                            new amount = GetRandomInt(1,balance-(negotiations_level*2));
+                            int amount = GetRandomInt(1,balance-(negotiations_level*2));
                             SetCrystals(client, balance-amount,false);
                             DisplayMessage(client,Display_Message,
                                            "%t", "UnionDues", amount);
@@ -738,7 +738,7 @@ public Action:Negotiations(Handle:timer, any:userid)
                     {
                         DisplayMessage(client,Display_Deaths, "%t", "OSHA");
 
-                        new Float:location[3];
+                        float location[3];
                         GetClientAbsOrigin(client,location);
                         TE_SetupExplosion(location, BigExplosion(), 10.0, 30, 0, 50, 20);
                         TE_SendEffectToAll();
@@ -753,7 +753,7 @@ public Action:Negotiations(Handle:timer, any:userid)
     return Plugin_Continue;
 }
 
-AddCrystals(client, amount, const String:reason[])
+AddCrystals(client, amount, const char[] reason[])
 {
     SetCrystals(client, GetCrystals(client)+amount, false);
     DisplayMessage(client,Display_Message, "%t", reason, amount);

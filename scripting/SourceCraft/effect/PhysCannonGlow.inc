@@ -16,4 +16,4 @@
 #define PhysCannonGlow()       PrepareModel(g_physCannonModel, g_physCannonGlow)
 
 stock g_physCannonGlow;
-stock const String:g_physCannonModel[] = "materials/sprites/physcannon_blueglow.vmt";
+static const char g_physCannonModel[] = "materials/sprites/physcannon_blueglow.vmt";

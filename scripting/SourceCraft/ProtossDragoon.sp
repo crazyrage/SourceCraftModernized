@@ -34,37 +34,37 @@
 #include "effect/HaloSprite"
 #include "effect/SendEffects"
 
-new const String:spawnWav[]               = "sc/pdrrdy00.wav";
-new const String:deathWav[]               = "sc/pdrdth00.wav";
+static const char[] spawnWav[]               = "sc/pdrrdy00.wav";
+static const char[] deathWav[]               = "sc/pdrdth00.wav";
 
-new const String:g_SingularityFireWav[]   = "sc/DragBull.wav";
-new const String:g_SingularityReadyWav[]  = "sc/pdryes01.wav";
-new const String:g_SingularityExpireWav[] = "sc/pdrwht05.wav";
+static const char[] g_SingularityFireWav[]   = "sc/DragBull.wav";
+static const char[] g_SingularityReadyWav[]  = "sc/pdryes01.wav";
+static const char[] g_SingularityExpireWav[] = "sc/pdrwht05.wav";
 
-new const String:g_MissileAttackSound[]   = "sc/pdrfir00.wav";
+static const char[] g_MissileAttackSound[]   = "sc/pdrfir00.wav";
 
-new raceID, immunityID, speedID, shieldsID, missileID, singularityID,  reaverID;
+int raceID, immunityID, speedID, shieldsID, missileID, singularityID,  reaverID;
 
-new g_MissileAttackChance[]               = { 5, 10, 15, 25, 35 };
-new Float:g_MissileAttackPercent[]        = { 0.15, 0.30, 0.40, 0.50, 0.70 };
+int g_MissileAttackChance[]               = { 5, 10, 15, 25, 35 };
+float g_MissileAttackPercent[]        = { 0.15, 0.30, 0.40, 0.50, 0.70 };
 
-new Float:g_SpeedLevels[]                 = { 0.80, 0.90, 0.95, 1.00, 1.05 };
+float g_SpeedLevels[]                 = { 0.80, 0.90, 0.95, 1.00, 1.05 };
 
-new g_SingularityChance[]                 = { 50, 60, 80, 90, 100 };
+int g_SingularityChance[]                 = { 50, 60, 80, 90, 100 };
 
-new Float:g_InitialShields[]              = { 0.05, 0.10, 0.25, 0.50, 0.75 };
+float g_InitialShields[]              = { 0.05, 0.10, 0.25, 0.50, 0.75 };
 
-new Float:g_ShieldsPercent[][2]           = { {0.05, 0.10},
+float g_ShieldsPercent[][2]           = { {0.05, 0.10},
                                               {0.10, 0.20},
                                               {0.15, 0.30},
                                               {0.20, 0.40},
                                               {0.25, 0.50} };
 
-new g_reaverRace = -1;
+int g_reaverRace = -1;
 
-new bool:m_SingularityActive[MAXPLAYERS+1];
+bool m_SingularityActive[MAXPLAYERS+1];
 
-public Plugin:myinfo = 
+public Plugin myinfo =
 {
     name = "SourceCraft Race - Protoss Dragoon",
     author = "-=|JFH|=-Naris",
@@ -73,7 +73,7 @@ public Plugin:myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.common.phrases.txt");
     LoadTranslations("sc.dragoon.phrases.txt");
@@ -146,9 +146,9 @@ public OnSourceCraftReady()
     GetConfigFloatArray("shields_amount", g_InitialShields, sizeof(g_InitialShields),
                         g_InitialShields, raceID, shieldsID);
 
-    for (new level=0; level < sizeof(g_ShieldsPercent); level++)
+    for (int level=0; level < sizeof(g_ShieldsPercent); level++)
     {
-        decl String:key[32];
+        char key[32];
         Format(key, sizeof(key), "shields_percent_level_%d", level);
         GetConfigFloatArray(key, g_ShieldsPercent[level], sizeof(g_ShieldsPercent[]),
                             g_ShieldsPercent[level], raceID, shieldsID);
@@ -167,7 +167,7 @@ public OnSourceCraftReady()
                    g_SingularityChance, raceID, singularityID);
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupSmokeSprite();
     SetupHaloSprite();
@@ -192,12 +192,12 @@ public OnPlayerAuthed(client)
     m_SingularityActive[client] = false;
 }
 
-public OnClientDisconnect(client)
+public void OnClientDisconnect(client)
 {
     m_SingularityActive[client] = false;
 }
 
-public Action:OnRaceDeselected(client,oldrace,newrace)
+public Action OnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
@@ -205,11 +205,11 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
         SetSpeed(client,-1.0, true);
 
         // Turn off Immunities
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, false);
 
         if (m_SingularityActive[client])
-            EndSingularity(INVALID_HANDLE, GetClientUserId(client));
+            EndSingularity(null, GetClientUserId(client));
     }
     else
     {
@@ -227,7 +227,7 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
     return Plugin_Continue;
 }
 
-public Action:OnRaceSelected(client,oldrace,newrace)
+public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
@@ -238,13 +238,13 @@ public Action:OnRaceSelected(client,oldrace,newrace)
             PrepareAndEmitSoundToAll(spawnWav, client);
 
             // Turn on Immunities
-            new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+            int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
             DoImmunity(client, immunity_level, true);
 
-            new speed_level = GetUpgradeLevel(client,raceID,speedID);
+            int speed_level = GetUpgradeLevel(client,raceID,speedID);
             SetSpeedBoost(client, speed_level, true, g_SpeedLevels);
 
-            new shields_level = GetUpgradeLevel(client,raceID,shieldsID);
+            int shields_level = GetUpgradeLevel(client,raceID,shieldsID);
             SetupShields(client, shields_level, g_InitialShields, g_ShieldsPercent);
         }
         return Plugin_Handled;
@@ -271,7 +271,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
 public OnItemPurchase(client,item)
 {
-    new race=GetRace(client);
+    int race=GetRace(client);
     if (race == raceID && IsValidClientAlive(client))
     {
         if (g_bootsItem < 0)
@@ -279,13 +279,13 @@ public OnItemPurchase(client,item)
 
         if (item == g_bootsItem)
         {
-            new speed_level = GetUpgradeLevel(client,race,speedID);
+            int speed_level = GetUpgradeLevel(client,race,speedID);
             SetSpeedBoost(client, speed_level, true, g_SpeedLevels);
         }
     }
 }
 
-public OnUltimateCommand(client,race,bool:pressed,arg)
+public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (pressed && race==raceID && IsValidClientAlive(client))
     {
@@ -293,19 +293,19 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
         {
             case 4,3,2:
             {
-                new reaver_level = GetUpgradeLevel(client,race,reaverID);
+                int reaver_level = GetUpgradeLevel(client,race,reaverID);
                 if (reaver_level > 0)
                     SummonReaver(client);
                 else
                 {
-                    new singularity_level=GetUpgradeLevel(client,race,singularityID);
+                    int singularity_level=GetUpgradeLevel(client,race,singularityID);
                     if (singularity_level)
                         Singularity(client, singularity_level);
                 }
             }
             default:
             {
-                new singularity_level=GetUpgradeLevel(client,race,singularityID);
+                int singularity_level=GetUpgradeLevel(client,race,singularityID);
                 if (singularity_level)
                     Singularity(client, singularity_level);
             }
@@ -313,15 +313,15 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
     }
 }
 
-public RoundEndEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public RoundEndEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    for (new index=1;index<=MaxClients;index++)
+    for (int index=1;index<=MaxClients;index++)
     {
         m_SingularityActive[index] = false;
     }
 }
 
-public OnPlayerSpawnEvent(Handle:event, client, race)
+public OnPlayerSpawnEvent(Handle event, client, race)
 {
     if (race == raceID)
     {
@@ -329,31 +329,31 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
 
         PrepareAndEmitSoundToAll(spawnWav, client);
 
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
-        new speed_level = GetUpgradeLevel(client,raceID,speedID);
+        int speed_level = GetUpgradeLevel(client,raceID,speedID);
         SetSpeedBoost(client, speed_level, true, g_SpeedLevels);
 
-        new shields_level = GetUpgradeLevel(client,raceID,shieldsID);
+        int shields_level = GetUpgradeLevel(client,raceID,shieldsID);
         SetupShields(client, shields_level, g_InitialShields, g_ShieldsPercent);
     }
 }
 
-public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacker_index,
-                                attacker_race, damage, absorbed, bool:from_sc)
+public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
+                                attacker_race, damage, absorbed, bool from_sc)
 {
-    if (!from_sc && attacker_index > 0 && 
+    if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index &&
         attacker_race == raceID)
     {
-        new weapons_level=GetUpgradeLevel(attacker_index,raceID,missileID);
+        int weapons_level=GetUpgradeLevel(attacker_index,raceID,missileID);
         if (m_SingularityActive[attacker_index])
         {
-            decl Float:singularityPercent[sizeof(g_MissileAttackPercent)];
-            new singularity_level= GetUpgradeLevel(attacker_index,raceID,singularityID);
-            new Float:increase = (float(singularity_level) * 0.25) + 1.0;
-            for (new i = 0; i < sizeof(g_MissileAttackPercent); i++)
+            float singularityPercent[sizeof(g_MissileAttackPercent)];
+            int singularity_level= GetUpgradeLevel(attacker_index,raceID,singularityID);
+            float increase = (float(singularity_level) * 0.25) + 1.0;
+            for (int i = 0; i < sizeof(g_MissileAttackPercent); i++)
             {
                 singularityPercent[i] = g_MissileAttackPercent[i] * increase;
             }
@@ -381,15 +381,15 @@ public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacke
     return Plugin_Continue;
 }
 
-public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_index,
+public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_index,
                           attacker_race, assister_index, assister_race, damage,
-                          const String:weapon[], bool:is_equipment, customkill,
-                          bool:headshot, bool:backstab, bool:melee)
+                          const char[] weapon, bool is_equipment, customkill,
+                          bool headshot, bool backstab, bool melee)
 {
     if (victim_race == raceID)
     {
         if (m_SingularityActive[victim_index])
-            EndSingularity(INVALID_HANDLE, GetClientUserId(victim_index));
+            EndSingularity(null, GetClientUserId(victim_index));
 
         PrepareAndEmitSoundToAll(deathWav,victim_index);
         DissolveRagdoll(victim_index, 0.1);
@@ -409,7 +409,7 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
     }
 }
 
-DoImmunity(client, level, bool:value)
+void DoImmunity(client, level, bool value)
 {
     SetImmunity(client,Immunity_MotionTaking, (value && level >= 1));
     SetImmunity(client,Immunity_ShopItems, (value && level >= 2));
@@ -418,7 +418,7 @@ DoImmunity(client, level, bool:value)
 
     if (value && IsValidClientAlive(client))
     {
-        new Float:start[3];
+        float start[3];
         GetClientAbsOrigin(client, start);
 
         static const color[4] = { 0, 255, 50, 128 };
@@ -428,14 +428,14 @@ DoImmunity(client, level, bool:value)
     }
 }
 
-Singularity(client, level)
+void Singularity(client, level)
 {
     if (level > 0)
     {
         if (GetRestriction(client,Restriction_NoUltimates) ||
             GetRestriction(client,Restriction_Stunned))
         {
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, singularityID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -452,9 +452,9 @@ Singularity(client, level)
     }
 }
 
-public Action:EndSingularity(Handle:timer,any:userid)
+public Action EndSingularity(Handle timer,any userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (IsValidClient(client) && m_SingularityActive[client])
     {
         m_SingularityActive[client]=false;
@@ -470,14 +470,14 @@ public Action:EndSingularity(Handle:timer,any:userid)
     }
 }
 
-SummonReaver(client)
+void SummonReaver(client)
 {
     if (g_reaverRace < 0)
         g_reaverRace = FindRace("reaver");
 
     if (g_reaverRace < 0)
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceID, reaverID, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "IsNotAvailable", upgradeName);
         LogError("***The Protoss Reaver race is not Available!");
@@ -486,14 +486,14 @@ SummonReaver(client)
     else if (GetRestriction(client,Restriction_NoUltimates) ||
              GetRestriction(client,Restriction_Stunned))
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceID, reaverID, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "PreventedFromSummoningReaver");
         PrepareAndEmitSoundToClient(client,deniedWav);
     }
     else if (CanInvokeUpgrade(client, raceID, reaverID))
     {
-        new Float:clientLoc[3];
+        float clientLoc[3];
         GetClientAbsOrigin(client, clientLoc);
         clientLoc[2] += 40.0; // Adjust position to the middle
 

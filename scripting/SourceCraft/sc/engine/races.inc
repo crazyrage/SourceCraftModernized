@@ -90,14 +90,14 @@ enum ConfigLoadedStatus
 #define GetRaceCount()                           GetArraySize(raceArray)
 #define GetRaceIndexCount()                      GetArraySize(raceIndex)
 
-#define GetRaceHandle(%1)                        (Handle:GetArrayCell(raceArray,%1))
-#define GetRaceIndexHandle(%1)                   (Handle:GetArrayCell(raceIndex,%1))
+#define GetRaceHandle(%1)                        (Handle GetArrayCell(raceArray,%1))
+#define GetRaceIndexHandle(%1)                   (Handle GetArrayCell(raceIndex,%1))
 
 // Accessor Macros for Race Data
 #define GetRaceId(%1)                            GetArrayCell(%1,_:RaceData_Id)
 #define SetRaceId(%1,%2)                         SetArrayCell(%1,_:RaceData_Id,%2)
 
-#define GetRacePlugin(%1)                        (Handle:GetArrayCell(%1,_:RaceData_Plugin))
+#define GetRacePlugin(%1)                        (Handle GetArrayCell(%1,_:RaceData_Plugin))
 #define SetRacePlugin(%1,%2)                     SetArrayCell(%1,_:RaceData_Plugin,%2)
 
 #define GetRaceIdent(%1)                         GetArrayCell(%1,_:RaceData_Ident)
@@ -112,13 +112,13 @@ enum ConfigLoadedStatus
 #define GetRaceMaxLevel(%1)                      GetArrayCell(%1,_:RaceData_MaxLevel)
 #define SetRaceMaxLevel(%1,%2)                   SetArrayCell(%1,_:RaceData_MaxLevel,%2)
 
-#define GetRaceInitialEnergy(%1)                 (Float:GetArrayCell(%1,_:RaceData_InitialEnergy))
+#define GetRaceInitialEnergy(%1)                 (float GetArrayCell(%1,_:RaceData_InitialEnergy))
 #define SetRaceInitialEnergy(%1,%2)              SetArrayCell(%1,_:RaceData_InitialEnergy,%2)
 
-#define GetRaceEnergyLimit(%1)                   (Float:GetArrayCell(%1,_:RaceData_EnergyLimit))
+#define GetRaceEnergyLimit(%1)                   (float GetArrayCell(%1,_:RaceData_EnergyLimit))
 #define SetRaceEnergyLimit(%1,%2)                SetArrayCell(%1,_:RaceData_EnergyLimit,%2)
 
-#define GetRaceEnergyRate(%1)                    (Float:GetArrayCell(%1,_:RaceData_EnergyRate))
+#define GetRaceEnergyRate(%1)                    (float GetArrayCell(%1,_:RaceData_EnergyRate))
 #define SetRaceEnergyRate(%1,%2)                 SetArrayCell(%1,_:RaceData_EnergyRate,%2)
 
 #define GetRaceEnergyFlags(%1)                   (EnergyFlags:GetArrayCell(%1,_:RaceData_EnergyFlags))
@@ -130,23 +130,23 @@ enum ConfigLoadedStatus
 #define GetRaceType(%1)                          (UnitType:GetArrayCell(%1,_:RaceData_Type))
 #define SetRaceType(%1,%2)                       SetArrayCell(%1,_:RaceData_Type,_:%2)
 
-#define GetRaceIsNew(%1)                         (bool:GetArrayCell(%1,_:RaceData_IsNew))
+#define GetRaceIsNew(%1)                         (bool GetArrayCell(%1,_:RaceData_IsNew))
 #define SetRaceIsNew(%1,%2)                      SetArrayCell(%1,_:RaceData_IsNew,%2)
 
-#define GetRaceConfigHandle(%1)                  (Handle:GetArrayCell(%1,_:RaceData_ConfigHandle))
+#define GetRaceConfigHandle(%1)                  (Handle GetArrayCell(%1,_:RaceData_ConfigHandle))
 #define SetRaceConfigHandle(%1,%2)               SetArrayCell(%1,_:RaceData_ConfigHandle,_:%2)
 
 #define GetRaceConfigIsLoaded(%1)                (ConfigLoadedStatus:GetArrayCell(%1,_:RaceData_ConfigLoaded))
 #define SetRaceConfigIsLoaded(%1,%2)             SetArrayCell(%1,_:RaceData_ConfigLoaded,_:%2)
 
-#define GetRaceHasBeenCompleted(%1)              (bool:GetArrayCell(%1,_:RaceData_Completed))
+#define GetRaceHasBeenCompleted(%1)              (bool GetArrayCell(%1,_:RaceData_Completed))
 #define SetRaceHasBeenCompleted(%1,%2)           SetArrayCell(%1,_:RaceData_Completed,%2)
 
 #define GetRaceTranslation(%1)                   (Translation:GetArrayCell(%1,_:RaceData_Translation))
 #define SetRaceTranslation(%1,%2)                SetArrayCell(%1,_:RaceData_Translation,_:%2)
 
 // Accessor Macros for Race Strings
-#define GetRaceStringHandle(%1)                  (Handle:GetArrayCell(%1,_:RaceData_Strings))
+#define GetRaceStringHandle(%1)                  (Handle GetArrayCell(%1,_:RaceData_Strings))
 
 #define GetRaceHShortName(%1,%2,%3)              GetArrayString(%1,_:RaceString_ShortName,%2,%3)
 #define SetRaceHShortName(%1,%2)                 SetArrayString(%1,_:RaceString_ShortName,%2)
@@ -167,7 +167,7 @@ enum ConfigLoadedStatus
 #define SetRaceParentName(%1,%2)                 SetRaceHParentName(GetRaceStringHandle(%1),%2)
 
 // Accessor Macros for Race Messages
-#define GetRaceMessageHandle(%1)                 (Handle:GetArrayCell(%1,_:RaceData_Messages))
+#define GetRaceMessageHandle(%1)                 (Handle GetArrayCell(%1,_:RaceData_Messages))
 
 #define GetRaceHSwitchString(%1,%2,%3)           GetArrayString(%1,_:RaceMessage_Switch,%2,%3)
 #define SetRaceHSwitchString(%1,%2)              SetArrayString(%1,_:RaceMessage_Switch,%2)
@@ -188,19 +188,19 @@ enum ConfigLoadedStatus
 #define SetRaceTranslationFile(%1,%2)            SetRaceHTranslationFile(GetRaceMessageHandle(%1),%2)
 
 // Accessor Macros for Upgrade Data
-#define GetUpgradeListHandle(%1)                 (Handle:GetArrayCell(%1,_:RaceData_Upgrades))
-#define GetUpgradeHandle(%1,%2)                  (Handle:GetArrayCell(GetUpgradeListHandle(%1),%2))
+#define GetUpgradeListHandle(%1)                 (Handle GetArrayCell(%1,_:RaceData_Upgrades))
+#define GetUpgradeHandle(%1,%2)                  (Handle GetArrayCell(GetUpgradeListHandle(%1),%2))
 
-#define GetUpgradeEnergy(%1,%2)                  (Float:GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Energy))
+#define GetUpgradeEnergy(%1,%2)                  (float GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Energy))
 #define SetUpgradeEnergy(%1,%2,%3)               SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Energy,%3)
 
-#define GetUpgradeRecurringEnergy(%1,%2)         (Float:GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_RecurringEnergy))
+#define GetUpgradeRecurringEnergy(%1,%2)         (float GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_RecurringEnergy))
 #define SetUpgradeRecurringEnergy(%1,%2,%3)      SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_RecurringEnergy,%3)
 
-#define GetUpgradeRecurringInterval(%1,%2)       (Float:GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_RecurringInterval))
+#define GetUpgradeRecurringInterval(%1,%2)       (float GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_RecurringInterval))
 #define SetUpgradeRecurringInterval(%1,%2,%3)    SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_RecurringInterval,%3)
 
-#define GetUpgradeCanUseAccumulated(%1,%2)       (bool:GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Accumulated))
+#define GetUpgradeCanUseAccumulated(%1,%2)       (bool GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Accumulated))
 #define SetUpgradeUseAccumulated(%1,%2,%3)       SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Accumulated,_:%3)
 
 #define GetUpgradeCrystals(%1,%2)                GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Crystals)
@@ -215,7 +215,7 @@ enum ConfigLoadedStatus
 #define GetUpgradeCostVespene(%1,%2)             GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_CostVespene)
 #define SetUpgradeCostVespene(%1,%2,%3)          SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_CostVespene,%3)
 
-#define GetUpgradeCooldownDuration(%1,%2)        (Float:GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Cooldown))
+#define GetUpgradeCooldownDuration(%1,%2)        (float GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Cooldown))
 #define SetUpgradeCooldownDuration(%1,%2,%3)     SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Cooldown,_:%3)
 
 #define GetUpgradeCooldownType(%1,%2)            (CooldownType:GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_CooldownType))
@@ -261,12 +261,12 @@ enum ConfigLoadedStatus
 #define SetUpgradeParameter(%1,%2,%3,%4)         SetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_Parm+%3,%4)
 
 // A vector of race infomation
-new Handle:raceArray = INVALID_HANDLE;
-new Handle:raceIndex = INVALID_HANDLE;
+Handle raceArray = null;
+Handle raceIndex = null;
 
-bool:InitRaceArray()
+bool InitRaceArray()
 {
-    if (raceArray == INVALID_HANDLE)
+    if (raceArray == null)
     {
         raceArray = CreateArray();
 
@@ -275,7 +275,7 @@ bool:InitRaceArray()
         #endif
     }
 
-    if (raceIndex == INVALID_HANDLE)
+    if (raceIndex == null)
     {
         raceIndex = CreateArray();
 
@@ -284,15 +284,15 @@ bool:InitRaceArray()
         #endif
     }
 
-    if (raceArray != INVALID_HANDLE &&
-        raceIndex != INVALID_HANDLE)
+    if (raceArray != null &&
+        raceIndex != null)
     {
         // Use up the the 0 index so actual races start at 1
         #if defined _TRACE
-            PushArrayCell(raceArray, INVALID_HANDLE);
-            PushArrayCell(raceIndex, INVALID_HANDLE);
+            PushArrayCell(raceArray, null);
+            PushArrayCell(raceIndex, null);
         #else
-            new raceZero = CreateRace("", -1, -1, -1, 0.0, 0.0, 0.0, Generic, GenericUnit, "", Translation_None);
+            int raceZero = CreateRace("", -1, -1, -1, 0.0, 0.0, 0.0, Generic, GenericUnit, "", Translation_None);
             RaceComplete(raceZero);
         #endif
         return true;
@@ -305,18 +305,18 @@ ClearRaceArray()
 {
     TraceInto("Race", "ClearRaceArray");
 
-    if (raceArray == INVALID_HANDLE)
+    if (raceArray == null)
     {
-        new raceCount = GetRaceCount();
-        for(new race=1;race<raceCount;race++)
+        int raceCount = GetRaceCount();
+        for(int race=1;race<raceCount;race++)
         {
-            new Handle:raceHandle=GetArrayCell(raceArray,race);
-            new Handle:upgradeListHandle=GetUpgradeListHandle(raceHandle);
-            new upgradeCount = GetArraySize(upgradeListHandle);
-            for(new upgrade=0;upgrade<upgradeCount;upgrade++)
+            int Handle raceHandle=GetArrayCell(raceArray,race);
+            int Handle upgradeListHandle=GetUpgradeListHandle(raceHandle);
+            int upgradeCount = GetArraySize(upgradeListHandle);
+            for(int upgrade=0;upgrade<upgradeCount;upgrade++)
             {
-                new Handle:upgradeHandle=GetArrayCell(upgradeListHandle,upgrade);
-                new Handle:upgradeStringHandle=GetArrayCell(upgradeHandle,_:UpgradeData_Strings);
+                int Handle upgradeHandle=GetArrayCell(upgradeListHandle,upgrade);
+                int Handle upgradeStringHandle=GetArrayCell(upgradeHandle,_:UpgradeData_Strings);
 
                 ClearArray(upgradeHandle);
                 CloseHandle(upgradeHandle);
@@ -330,11 +330,11 @@ ClearRaceArray()
                          race, upgrade, upgradeStringHandle);
             }
 
-            new Handle:stringsHandle=GetRaceStringHandle(raceHandle);
+            int Handle stringsHandle=GetRaceStringHandle(raceHandle);
             ClearArray(stringsHandle);
             CloseHandle(stringsHandle);
 
-            new Handle:messagesHandle=GetRaceMessageHandle(raceHandle);
+            int Handle messagesHandle=GetRaceMessageHandle(raceHandle);
             ClearArray(messagesHandle);
             CloseHandle(messagesHandle);
 
@@ -362,31 +362,31 @@ ClearRaceArray()
 
         ClearArray(raceArray);
         CloseHandle(raceArray);
-        raceArray = INVALID_HANDLE;
+        raceArray = null;
 
         ClearArray(raceIndex);
         CloseHandle(raceIndex);
-        raceIndex = INVALID_HANDLE;
+        raceIndex = null;
     }
 
     TraceReturn();
 }
 
-CreateRace(const String:short[], required_level=0, tech_level=0, max_level=16,
-           Float:initial_energy=30.0, Float:energy_limit=100.0, Float:energy_rate=1.0, Faction:faction=Generic,
-           UnitType:type=GenericUnit, const String:parent[]="", Translation:translation=Translation_Auto,
-           const String:translation_file[]="", const String:name[]="", const String:switch_message[]="",
-           const String:pending_message[]="", const String:desc[]="", const String:image[]="",
-           Handle:plugin=INVALID_HANDLE)
+CreateRace(const char[] short[], required_level=0, tech_level=0, max_level=16,
+           float initial_energy=30.0, float energy_limit=100.0, float energy_rate=1.0, Faction:faction=Generic,
+           UnitType:type=GenericUnit, const char[] parent[]="", Translation:translation=Translation_Auto,
+           const char[] translation_file[]="", const char[] name[]="", const char[] switch_message[]="",
+           const char[] pending_message[]="", const char[] desc[]="", const char[] image[]="",
+           Handle plugin=null)
 {
-    new Handle:raceConfig;
-    new Handle:raceHandle;
-    new ConfigLoadedStatus:raceLoaded;
+    new Handle raceConfig;
+    new Handle raceHandle;
+    ConfigLoadedStatus raceLoaded;
 
     TraceInto("Race", "CreateRace", "short=%s, required_level=%d, tech_level=%d, max_level=%d, initial_energy=%f, energy_limit=%f, energy_rate=%f, faction=%d, type=%d, parent=%s, translation=%d, file=%s, name=%s, switch_message=%s, pending_message=%s, desc=%s, image=%s", short, required_level, tech_level, max_level, initial_energy, energy_limit, energy_rate, faction, type, parent, translation, translation_file, name, switch_message, pending_message, desc, image);
 
     // Load translation_file, if any
-    decl String:translation_path[PLATFORM_MAX_PATH];
+    char translation_path[PLATFORM_MAX_PATH];
     if (translation_file[0] != '\0')
     {
         strcopy(translation_path, sizeof(translation_path), translation_file);
@@ -399,7 +399,7 @@ CreateRace(const String:short[], required_level=0, tech_level=0, max_level=16,
 
     // Load race config, if any
     if (short[0] == '\0')
-        raceConfig = INVALID_HANDLE;
+        raceConfig = null;
     else
     {
         raceConfig = LoadRaceConfig(short, raceLoaded);
@@ -440,7 +440,7 @@ CreateRace(const String:short[], required_level=0, tech_level=0, max_level=16,
         if (translation_file[0] == '\0')
         {
             // Check for and Load Translations, if any
-            decl String:file[NAME_STRING_LENGTH];
+            char file[NAME_STRING_LENGTH];
 
             switch (translation)
             {
@@ -502,14 +502,14 @@ CreateRace(const String:short[], required_level=0, tech_level=0, max_level=16,
         }
     }
 
-    new raceId = FindRace(short);
+    int raceId = FindRace(short);
     if (raceId > 0)
     {
         raceHandle=GetRaceHandle(raceId);
 
         // Toss out the old config handle, if any.
-        new Handle:oldConfig = GetRaceConfigHandle(raceHandle);
-        if (oldConfig != INVALID_HANDLE)
+        int Handle oldConfig = GetRaceConfigHandle(raceHandle);
+        if (oldConfig != null)
             CloseHandle(oldConfig);
 
         // Assign the new values
@@ -528,12 +528,12 @@ CreateRace(const String:short[], required_level=0, tech_level=0, max_level=16,
         SetRacePlugin(raceHandle,plugin);
         SetRaceId(raceHandle,raceId);
 
-        new Handle:messagesHandle=GetRaceMessageHandle(raceHandle);
+        int Handle messagesHandle=GetRaceMessageHandle(raceHandle);
         SetArrayString(messagesHandle, _:RaceMessage_Switch,            switch_message);
         SetArrayString(messagesHandle, _:RaceMessage_SwitchDead,        pending_message);
         SetArrayString(messagesHandle, _:RaceMessage_TranslationFile,   translation_path);
 
-        new Handle:stringsHandle=GetRaceStringHandle(raceHandle);
+        int Handle stringsHandle=GetRaceStringHandle(raceHandle);
         SetArrayString(stringsHandle, _:RaceString_Name,       name);
         SetArrayString(stringsHandle, _:RaceString_ShortName,  short);
         SetArrayString(stringsHandle, _:RaceString_ParentName, parent);
@@ -541,22 +541,22 @@ CreateRace(const String:short[], required_level=0, tech_level=0, max_level=16,
     else
     {
         // Setup Race Strings.
-        new Handle:messagesHandle=CreateArray(ByteCountToCells(LONG_STRING_LENGTH));
+        int Handle messagesHandle=CreateArray(ByteCountToCells(LONG_STRING_LENGTH));
         PushArrayString(messagesHandle,switch_message);
         PushArrayString(messagesHandle,pending_message);
         PushArrayString(messagesHandle,translation_path);
 
         // Setup Race Messages.
-        new Handle:stringsHandle=CreateArray(ByteCountToCells(NAME_STRING_LENGTH));
+        int Handle stringsHandle=CreateArray(ByteCountToCells(NAME_STRING_LENGTH));
         PushArrayString(stringsHandle,name);
         PushArrayString(stringsHandle,short);
         PushArrayString(stringsHandle,parent);
 
         // Setup Race Upgrade array.
-        new Handle:upgradeListHandle=CreateArray();
+        int Handle upgradeListHandle=CreateArray();
 
         // Setup race_ident and is_new flag
-        new raceIdent;
+        int raceIdent;
         if (short[0] == '\0')
             raceIdent = 0;
         else if (faction <= Unassigned)
@@ -564,7 +564,7 @@ CreateRace(const String:short[], required_level=0, tech_level=0, max_level=16,
         else
             raceIdent = LoadRaceIdent(short);
 
-        new bool:raceIsNew = (raceIdent < 0);
+        int bool raceIsNew = (raceIdent < 0);
 
         if (faction <= Unassigned)
             faction = Generic;
@@ -615,13 +615,13 @@ CreateRace(const String:short[], required_level=0, tech_level=0, max_level=16,
 
             if (translation > Translation_Auto)
             {
-                decl String:raceName[NAME_STRING_LENGTH];
+                char raceName[NAME_STRING_LENGTH];
                 GetRaceName(raceHandle, raceName, sizeof(raceName));
 
-                decl String:raceDesc[DESCRIPTION_LENGTH];
+                char raceDesc[DESCRIPTION_LENGTH];
                 GetRaceDescription(raceHandle, raceDesc, sizeof(raceDesc), desc);
 
-                decl String:raceImage[NAME_STRING_LENGTH];
+                char raceImage[NAME_STRING_LENGTH];
                 GetRaceImage(raceHandle, raceImage, sizeof(raceImage), image);
 
                 raceIdent = InsertRace(short, raceName, required_level, tech_level,
@@ -639,13 +639,13 @@ CreateRace(const String:short[], required_level=0, tech_level=0, max_level=16,
         {
             if (translation > Translation_Auto)
             {
-                decl String:raceName[NAME_STRING_LENGTH];
+                char raceName[NAME_STRING_LENGTH];
                 GetRaceName(raceHandle, raceName, sizeof(raceName));
 
-                decl String:raceDesc[DESCRIPTION_LENGTH];
+                char raceDesc[DESCRIPTION_LENGTH];
                 GetRaceDescription(raceHandle, raceDesc, sizeof(raceDesc), desc);
 
-                decl String:raceImage[NAME_STRING_LENGTH];
+                char raceImage[NAME_STRING_LENGTH];
                 GetRaceImage(raceHandle, raceImage, sizeof(raceImage), image);
 
                 UpdateRace(raceIdent, short, raceName, required_level, tech_level,
@@ -663,46 +663,46 @@ CreateRace(const String:short[], required_level=0, tech_level=0, max_level=16,
     return raceId;
 }
 
-RaceComplete(race, const String:desc[]="", const String:image[]="")
+RaceComplete(race, const char[] desc[]="", const char[] image[]="")
 {
-    new Handle:raceHandle = GetRaceHandle(race);
-    if (raceHandle != INVALID_HANDLE)
+    new Handle raceHandle = GetRaceHandle(race);
+    if (raceHandle != null)
     {
         SetRaceHasBeenCompleted(raceHandle,true);
 
         // Add new Race Data into Race Index.
-        decl String:raceName[NAME_STRING_LENGTH];
+        char raceName[NAME_STRING_LENGTH];
         GetRaceName(raceHandle, raceName, sizeof(raceName));
 
-        decl String:raceFactionName[NAME_STRING_LENGTH];
+        char raceFactionName[NAME_STRING_LENGTH];
         GetFactionName(GetRaceFaction(raceHandle),raceFactionName,sizeof(raceFactionName));
 
-        decl String:raceParent[NAME_STRING_LENGTH];
+        char raceParent[NAME_STRING_LENGTH];
         GetRaceParentName(raceHandle,raceParent,sizeof(raceParent));
-        new raceLevel = (raceParent[0] != '\0') ? 32767 : GetRaceRequiredLevel(raceHandle);
+        int raceLevel = (raceParent[0] != '\0') ? 32767 : GetRaceRequiredLevel(raceHandle);
         if (raceLevel < 0)
             raceLevel = 65535;
 
-        new index=1;
-        new indexCount=GetRaceIndexCount();
+        int index=1;
+        int indexCount=GetRaceIndexCount();
         for(;index<indexCount;index++)
         {
-            decl String:indexFactionName[NAME_STRING_LENGTH];
-            new Handle:indexHandle = GetRaceIndexHandle(index);
-            new Faction:indexFaction = GetRaceFaction(indexHandle);
+            char indexFactionName[NAME_STRING_LENGTH];
+            int Handle indexHandle = GetRaceIndexHandle(index);
+            int Faction:indexFaction = GetRaceFaction(indexHandle);
             GetFactionName(indexFaction,indexFactionName,sizeof(indexFactionName));
-            new cmpFaction = strcmp(raceFactionName,indexFactionName,false);
+            int cmpFaction = strcmp(raceFactionName,indexFactionName,false);
             if (cmpFaction <= 0)
             {
-                decl String:indexParent[SHORT_STRING_LENGTH];
+                char indexParent[SHORT_STRING_LENGTH];
                 GetRaceParentName(indexHandle,indexParent,sizeof(indexParent));
-                new indexLevel = (indexParent[0] != '\0') ? 32767 : GetRaceRequiredLevel(indexHandle);
+                int indexLevel = (indexParent[0] != '\0') ? 32767 : GetRaceRequiredLevel(indexHandle);
                 if (indexLevel < 0)
                     indexLevel = 65535;
 
                 if (cmpFaction <= 0 || raceLevel <= indexLevel)
                 {
-                    decl String:indexName[NAME_STRING_LENGTH];
+                    char indexName[NAME_STRING_LENGTH];
                     GetRaceName(indexHandle, indexName, sizeof(indexName));
                     if (cmpFaction < 0 || raceLevel < indexLevel ||
                         (cmpFaction == 0 && raceLevel == indexLevel &&
@@ -721,81 +721,81 @@ RaceComplete(race, const String:desc[]="", const String:image[]="")
             PushArrayCell(raceIndex,raceHandle);
 
         // Save and Close the race's config file
-        new Handle:raceConfig = GetRaceConfigHandle(raceHandle);
-        if (raceConfig != INVALID_HANDLE)
+        int Handle raceConfig = GetRaceConfigHandle(raceHandle);
+        if (raceConfig != null)
         {
             if (GetRaceConfigIsLoaded(raceHandle) != ConfigWasLoaded)
             {
-                decl String:short[SHORT_STRING_LENGTH];
+                char short[SHORT_STRING_LENGTH];
                 GetRaceShortName(raceHandle, short, sizeof(short));
                 SaveConfig(raceConfig, short);
             }
 
             CloseHandle(raceConfig);
-            SetRaceConfigHandle(raceHandle,INVALID_HANDLE);
+            SetRaceConfigHandle(raceHandle,null);
             SetRaceConfigIsLoaded(raceHandle,ConfigNotLoaded);
         }
 
         // Update the database, if specified
         if (g_bCreate || g_bUpdate)
         {
-            new raceIdent = GetRaceIdent(raceHandle);
-            new Faction:faction = GetRaceFaction(raceHandle);
+            int raceIdent = GetRaceIdent(raceHandle);
+            int Faction:faction = GetRaceFaction(raceHandle);
             if (raceIdent > 0 && faction > Unassigned)
             {
-                new tech_level = GetRaceTechLevel(raceHandle);
-                new required_level = GetRaceRequiredLevel(raceHandle);
-                new UnitType:type = GetRaceType(raceHandle);
+                int tech_level = GetRaceTechLevel(raceHandle);
+                int required_level = GetRaceRequiredLevel(raceHandle);
+                int UnitType:type = GetRaceType(raceHandle);
 
-                decl String:short[SHORT_STRING_LENGTH];
+                char short[SHORT_STRING_LENGTH];
                 GetRaceShortName(raceHandle, short, sizeof(short));
 
-                decl String:raceDesc[DESCRIPTION_LENGTH];
+                char raceDesc[DESCRIPTION_LENGTH];
                 GetRaceDescription(raceHandle, raceDesc, sizeof(raceDesc), desc);
 
-                decl String:raceImage[NAME_STRING_LENGTH];
+                char raceImage[NAME_STRING_LENGTH];
                 GetRaceImage(raceHandle, raceImage, sizeof(raceImage), image);
 
                 UpdateRace(raceIdent, short, raceName, required_level, tech_level,
                            raceParent, faction, type, raceDesc, raceImage);
 
                 // Update all upgrades that have been modifed since they were created
-                new upgradeCount = GetUpgradeCount(raceHandle);
-                for(new upgrade=0;upgrade<upgradeCount;upgrade++)
+                int upgradeCount = GetUpgradeCount(raceHandle);
+                for(int upgrade=0;upgrade<upgradeCount;upgrade++)
                 {
-                    new Handle:upgradeHandle=GetUpgradeHandle(raceHandle, upgrade);
+                    int Handle upgradeHandle=GetUpgradeHandle(raceHandle, upgrade);
                     if (!GetArrayCell(upgradeHandle, _:UpgradeData_Completed))
                     {
-                        decl String:upgradeShortName[NAME_STRING_LENGTH];
+                        char upgradeShortName[NAME_STRING_LENGTH];
                         GetUpgradeShortName(raceHandle, upgrade, upgradeShortName, sizeof(upgradeShortName));
 
-                        decl String:upgradeName[NAME_STRING_LENGTH];
+                        char upgradeName[NAME_STRING_LENGTH];
                         GetUpgradeName(raceHandle, upgrade, upgradeName, sizeof(upgradeName));
 
-                        decl String:upgradeDesc[DESCRIPTION_LENGTH];
+                        char upgradeDesc[DESCRIPTION_LENGTH];
                         GetUpgradeDescription(raceHandle, upgrade, upgradeDesc, sizeof(upgradeDesc));
 
-                        decl String:upgradeInvoke[DESCRIPTION_LENGTH];
+                        char upgradeInvoke[DESCRIPTION_LENGTH];
                         GetUpgradeInvoke(raceHandle, upgrade, upgradeInvoke, sizeof(upgradeInvoke));
 
-                        decl String:upgradeBind[DESCRIPTION_LENGTH];
+                        char upgradeBind[DESCRIPTION_LENGTH];
                         GetUpgradeBind(raceHandle, upgrade, upgradeBind, sizeof(upgradeBind));
 
-                        decl String:upgradeImage[NAME_STRING_LENGTH];
+                        char upgradeImage[NAME_STRING_LENGTH];
                         GetUpgradeImage(raceHandle, upgrade, upgradeImage, sizeof(upgradeImage));
 
                         new upgrade_category         = GetArrayCell(upgradeHandle, _:UpgradeData_Category);
                         new req_level                = GetArrayCell(upgradeHandle, _:UpgradeData_RequiredLevel);
                         new max_level                = GetArrayCell(upgradeHandle, _:UpgradeData_MaxLevel);
-                        new Float:energy             = GetArrayCell(upgradeHandle, _:UpgradeData_Energy);
-                        new Float:recurring_energy   = GetArrayCell(upgradeHandle, _:UpgradeData_RecurringEnergy);
-                        new Float:recurring_interval = GetArrayCell(upgradeHandle, _:UpgradeData_RecurringInterval);
-                        new bool:accumulated         = GetArrayCell(upgradeHandle, _:UpgradeData_Accumulated);
+                        new float energy             = GetArrayCell(upgradeHandle, _:UpgradeData_Energy);
+                        new float recurring_energy   = GetArrayCell(upgradeHandle, _:UpgradeData_RecurringEnergy);
+                        new float recurring_interval = GetArrayCell(upgradeHandle, _:UpgradeData_RecurringInterval);
+                        new bool accumulated         = GetArrayCell(upgradeHandle, _:UpgradeData_Accumulated);
                         new crystals                 = GetArrayCell(upgradeHandle, _:UpgradeData_Crystals);
                         new vespene                  = GetArrayCell(upgradeHandle, _:UpgradeData_Vespene);
                         new cost_crystals            = GetArrayCell(upgradeHandle, _:UpgradeData_CostCrystals);
                         new cost_vespene             = GetArrayCell(upgradeHandle, _:UpgradeData_Vespene);
-                        new Float:cooldown           = GetArrayCell(upgradeHandle, _:UpgradeData_Cooldown);
+                        new float cooldown           = GetArrayCell(upgradeHandle, _:UpgradeData_Cooldown);
 
                         // Update database
                         if (InsertUpgrade(GetRaceIdent(raceHandle), upgrade, upgrade_category,
@@ -814,13 +814,13 @@ RaceComplete(race, const String:desc[]="", const String:image[]="")
     }
 }
 
-AddUpgrade(race, Handle:raceHandle, const String:short[], upgrade_category=0, required_level=-1, max_level=4,
-           Float:energy=0.0, Float:recurring_energy=0.0, Float:recurring_interval=0.0, bool:accumulated=false,
-           crystals=0, vespene=0, cost_crystals=-1, cost_vespene=-1, Float:cooldown=0.0,
-           CooldownType:cooldown_type=Cooldown_None, bool:disabled=false, const String:name[]="",
-           const String:desc[]="", const String:invoke[]="", const String:bind[]="", const String:image[]="",
-           const String:p1[]="", const String:p2[]="", const String:p3[]="", const String:p4[]="",
-           const String:p5[]="", const String:p6[]="", const String:p7[]="")
+AddUpgrade(race, Handle raceHandle, const char[] short[], upgrade_category=0, required_level=-1, max_level=4,
+           float energy=0.0, float recurring_energy=0.0, float recurring_interval=0.0, bool accumulated=false,
+           crystals=0, vespene=0, cost_crystals=-1, cost_vespene=-1, float cooldown=0.0,
+           CooldownType:cooldown_type=Cooldown_None, bool disabled=false, const char[] name[]="",
+           const char[] desc[]="", const char[] invoke[]="", const char[] bind[]="", const char[] image[]="",
+           const char[] p1[]="", const char[] p2[]="", const char[] p3[]="", const char[] p4[]="",
+           const char[] p5[]="", const char[] p6[]="", const char[] p7[]="")
 {
     #if defined _TRACE
         TraceInto("Race", "AddUpgrade", "race=%d, raceHandle=0x%08x, short=%s, upgrade_category=%d, required_level=%d, max_level=%d, energy=%f, recurring_energy=%f, recurring_interval=%f, accumulated=%d, crystals=%d, vespene=%d, cost_crystals=%d, cost_vespene=%d, cooldown=%f, cooldown_type=%d, disabled=%d, name=%s, desc=%s, invoke=%s, bind=%s, image=%s, p1=%s, p2=%s, p3=%s, p4=%s, p5=%s, p6=%s, p7=%s", race, raceHandle, short, upgrade_category, required_level, max_level, energy, recurring_energy, recurring_interval, accumulated, crystals, vespene, cost_crystals, cost_vespene, cooldown, cooldown_type, disabled, name, desc, invoke, bind, image, p1, p2, p3, p4, p5, p6, p7);
@@ -828,12 +828,12 @@ AddUpgrade(race, Handle:raceHandle, const String:short[], upgrade_category=0, re
         #pragma unused race
     #endif
 
-    new ConfigLoadedStatus:raceLoaded;
-    new Handle:raceConfig = GetRaceConfig(raceHandle, raceLoaded);
-    if (raceConfig != INVALID_HANDLE)
+    ConfigLoadedStatus raceLoaded;
+    new Handle raceConfig = GetRaceConfig(raceHandle, raceLoaded);
+    if (raceConfig != null)
     {
-        new bool:upgradeFound;
-        new raceMaxLevel = GetRaceMaxLevel(raceHandle);
+        int bool upgradeFound;
+        int raceMaxLevel = GetRaceMaxLevel(raceHandle);
         if (raceLoaded != ConfigNotLoaded)
         {
             KvRewind(raceConfig);
@@ -907,12 +907,12 @@ AddUpgrade(race, Handle:raceHandle, const String:short[], upgrade_category=0, re
     if (cost_vespene < 0)
         cost_vespene = g_iUpgradeVespeneCost;
 
-    new Handle:upgradeHandle;
-    new Handle:upgradeStringHandle;
+    new Handle upgradeHandle;
+    new Handle upgradeStringHandle;
     new upgrade = FindUpgrade(raceHandle, short);
     if (upgrade >= 0)
     {
-        new Handle:upgradeListHandle=GetUpgradeListHandle(raceHandle);
+        int Handle upgradeListHandle=GetUpgradeListHandle(raceHandle);
 
         upgradeHandle=GetArrayCell(upgradeListHandle, upgrade);
         SetArrayCell(upgradeHandle, _:UpgradeData_Energy,            energy);
@@ -970,7 +970,7 @@ AddUpgrade(race, Handle:raceHandle, const String:short[], upgrade_category=0, re
         PushArrayCell(upgradeHandle,disabled);
         PushArrayCell(upgradeHandle,false);
 
-        new Handle:upgradeListHandle=GetUpgradeListHandle(raceHandle);
+        int Handle upgradeListHandle=GetUpgradeListHandle(raceHandle);
         upgrade = PushArrayCell(upgradeListHandle, upgradeHandle); // return index
 
         SetTraceCategory("Array");
@@ -1019,12 +1019,12 @@ AddUpgrade(race, Handle:raceHandle, const String:short[], upgrade_category=0, re
     // change the race's energy limit.
     if (energy > 0.0)
     {
-        new Float:limit = GetRaceEnergyLimit(raceHandle);
+        int float limit = GetRaceEnergyLimit(raceHandle);
         if (limit >= 0.0 && energy > limit)
             SetRaceEnergyLimit(raceHandle, energy);
 
         // set the race's EnergyFlags
-        new EnergyFlags:energy_flags = GetRaceEnergyFlags(raceHandle) | UsesEnergy;
+        int EnergyFlags:energy_flags = GetRaceEnergyFlags(raceHandle) | UsesEnergy;
 
         if (accumulated)
             energy_flags |= UsesAccumulated;
@@ -1035,22 +1035,22 @@ AddUpgrade(race, Handle:raceHandle, const String:short[], upgrade_category=0, re
 
     if (GetRaceIsNew(raceHandle) || g_bCreate || g_bUpdate)
     {
-        decl String:upgradeShortName[SHORT_STRING_LENGTH];
+        char upgradeShortName[SHORT_STRING_LENGTH];
         GetUpgradeShortName(raceHandle, upgrade, upgradeShortName, sizeof(upgradeShortName));
 
-        decl String:upgradeName[NAME_STRING_LENGTH];
+        char upgradeName[NAME_STRING_LENGTH];
         GetUpgradeName(raceHandle, upgrade, upgradeName, sizeof(upgradeName));
 
-        decl String:upgradeDesc[DESCRIPTION_LENGTH];
+        char upgradeDesc[DESCRIPTION_LENGTH];
         GetUpgradeDescription(raceHandle, upgrade, upgradeDesc, sizeof(upgradeDesc));
 
-        decl String:upgradeInvoke[DESCRIPTION_LENGTH];
+        char upgradeInvoke[DESCRIPTION_LENGTH];
         GetUpgradeInvoke(raceHandle, upgrade, upgradeInvoke, sizeof(upgradeInvoke), invoke);
 
-        decl String:upgradeBind[DESCRIPTION_LENGTH];
+        char upgradeBind[DESCRIPTION_LENGTH];
         GetUpgradeBind(raceHandle, upgrade, upgradeBind, sizeof(upgradeBind), bind);
 
-        decl String:upgradeImage[NAME_STRING_LENGTH];
+        char upgradeImage[NAME_STRING_LENGTH];
         GetUpgradeImage(raceHandle, upgrade, upgradeImage, sizeof(upgradeImage), image);
 
         // Update database with upgrade description
@@ -1072,7 +1072,7 @@ AddUpgrade(race, Handle:raceHandle, const String:short[], upgrade_category=0, re
     return upgrade;
 }
 
-SetUpgradeCooldown(race, Handle:raceHandle, upgrade, Float:cooldown, CooldownType:cooldown_type)
+SetUpgradeCooldown(race, Handle raceHandle, upgrade, float cooldown, CooldownType:cooldown_type)
 {
     #if defined _TRACE
         TraceInto("Race", "SetUpgradeCooldown", "race=%d, raceHandle=0x%08x, cooldown=%f,cooldown_type=%d", \
@@ -1081,7 +1081,7 @@ SetUpgradeCooldown(race, Handle:raceHandle, upgrade, Float:cooldown, CooldownTyp
         #pragma unused race
     #endif
 
-    new Handle:upgradeHandle=GetUpgradeHandle(raceHandle,   upgrade);
+    new Handle upgradeHandle=GetUpgradeHandle(raceHandle,   upgrade);
     SetArrayCell(upgradeHandle, _:UpgradeData_Cooldown,     cooldown);
     SetArrayCell(upgradeHandle, _:UpgradeData_CooldownType, cooldown_type);
     SetArrayCell(upgradeHandle, _:UpgradeData_Completed,    false);
@@ -1091,7 +1091,7 @@ SetUpgradeCooldown(race, Handle:raceHandle, upgrade, Float:cooldown, CooldownTyp
     #endif
 }
 
-Float:GetUpgradeCooldown(race, Handle:raceHandle, upgrade, &CooldownType:cooldown_type)
+float GetUpgradeCooldown(race, Handle raceHandle, upgrade, &CooldownType:cooldown_type)
 {
     #if defined _TRACE
         TraceInto("Race", "GetUpgradeCooldown", "race=%d, raceHandle=0x%08x", \
@@ -1100,11 +1100,11 @@ Float:GetUpgradeCooldown(race, Handle:raceHandle, upgrade, &CooldownType:cooldow
         #pragma unused race
     #endif
 
-    new Handle:upgradeListHandle=GetArrayCell(raceHandle,    _:RaceData_Upgrades);
-    new Handle:upgradeHandle=GetArrayCell(upgradeListHandle, upgrade);
+    new Handle upgradeListHandle=GetArrayCell(raceHandle,    _:RaceData_Upgrades);
+    new Handle upgradeHandle=GetArrayCell(upgradeListHandle, upgrade);
 
     cooldown_type = CooldownType:GetArrayCell(upgradeHandle, _:UpgradeData_CooldownType);
-    new Float:cooldown = Float:GetArrayCell(upgradeHandle,   _:UpgradeData_Cooldown);
+    new float cooldown = float GetArrayCell(upgradeHandle,   _:UpgradeData_Cooldown);
 
     #if defined _TRACE
         TraceReturn("cooldown=%f,cooldown_type=%d", cooldown, cooldown_type);
@@ -1113,20 +1113,20 @@ Float:GetUpgradeCooldown(race, Handle:raceHandle, upgrade, &CooldownType:cooldow
     return cooldown;
 }
 
-Faction:GetRaceFactionId(Handle:raceHandle)
+Faction:GetRaceFactionId(Handle raceHandle)
 {
     new Faction:factionId=GetRaceFaction(raceHandle);
     return (factionId < Generic) ? Generic : factionId;
 }
 
-GetRaceParentId(Handle:raceHandle)
+GetRaceParentId(Handle raceHandle)
 {
-    if (raceHandle != INVALID_HANDLE)
+    if (raceHandle != null)
     {
-        new parent = GetArrayCell(raceHandle,_:RaceData_ParentId);
+        int parent = GetArrayCell(raceHandle,_:RaceData_ParentId);
         if (parent == 0)
         {
-            decl String:name[NAME_STRING_LENGTH]; name[0] = '\0';
+            char name[NAME_STRING_LENGTH]; name[0] = '\0';
             GetRaceParentName(raceHandle, name, sizeof(name));
             parent = (name[0] != '\0') ? FindRace(name) : -1;
             SetArrayCell(raceHandle,_:RaceData_ParentId,parent);
@@ -1139,24 +1139,24 @@ GetRaceParentId(Handle:raceHandle)
     }
 }
 
-GetRaceName(Handle:raceHandle, String:name[], maxlength, lang=LANG_SERVER)
+GetRaceName(Handle raceHandle, String:name[], maxlength, lang=LANG_SERVER)
 {
     GetRaceNameString(raceHandle,name,maxlength);
     if (name[0] == '%')
         Format(name,maxlength,"%T",name[1],lang);
     else
     {
-        new Translation:translation = GetRaceTranslation(raceHandle);
+        int Translation:translation = GetRaceTranslation(raceHandle);
         if (translation > Translation_Auto)
         {
             // Translate the short name to get the name
-            decl String:short[NAME_STRING_LENGTH];
+            char short[NAME_STRING_LENGTH];
             GetRaceShortName(raceHandle, short, sizeof(short));
 
             if (translation == Translation_W3S)
             {
                 // Use the War3Source key
-                decl String:key[ITEM_STRING_LENGTH];
+                char key[ITEM_STRING_LENGTH];
                 Format(key,sizeof(key),"%s_RaceName",short);
                 Format(name,maxlength,"%T",key,lang);
             }
@@ -1169,28 +1169,28 @@ GetRaceName(Handle:raceHandle, String:name[], maxlength, lang=LANG_SERVER)
     }
 }
 
-GetRaceDescription(Handle:raceHandle, String:desc[], maxlength,
-                   const String:descString[]="", lang=LANG_SERVER,
-                   bool:query=false)
+GetRaceDescription(Handle raceHandle, String:desc[], maxlength,
+                   const char[] descString[]="", lang=LANG_SERVER,
+                   bool query=false)
 {
     // Translate the short name to get the description
-    decl String:short[SHORT_STRING_LENGTH];
+    char short[SHORT_STRING_LENGTH];
     GetRaceShortName(raceHandle, short, sizeof(short));
 
     new Translation:translation = GetRaceTranslation(raceHandle);
     if (translation == Translation_SC)
     {
-        decl String:key[ITEM_STRING_LENGTH];
+        char key[ITEM_STRING_LENGTH];
         Format(key,sizeof(key),"%s_desc",short);
         Format(desc,maxlength,"%T",key,lang);
     }
     else
     {
-        decl String:file[LONG_STRING_LENGTH];
+        char file[LONG_STRING_LENGTH];
         GetRaceTranslationFile(raceHandle, file, sizeof(file));
         if (file[0])
         {
-            decl String:key[ITEM_STRING_LENGTH];
+            char key[ITEM_STRING_LENGTH];
             Format(key,sizeof(key),"%s_Desc",short);
             if (file[0] && FileContains(file, key))
             {
@@ -1212,28 +1212,28 @@ GetRaceDescription(Handle:raceHandle, String:desc[], maxlength,
     }
 }
 
-GetRaceImage(Handle:raceHandle, String:image[], maxlength,
-             const String:imageString[]="", lang=LANG_SERVER,
-             bool:query=false)
+GetRaceImage(Handle raceHandle, String:image[], maxlength,
+             const char[] imageString[]="", lang=LANG_SERVER,
+             bool query=false)
 {
     // Translate the short name + _image to get the image 
-    decl String:short[SHORT_STRING_LENGTH];
+    char short[SHORT_STRING_LENGTH];
     GetRaceShortName(raceHandle, short, sizeof(short));
 
     new Translation:translation = GetRaceTranslation(raceHandle);
     if (translation == Translation_SC)
     {
-        decl String:key[ITEM_STRING_LENGTH];
+        char key[ITEM_STRING_LENGTH];
         Format(key,sizeof(key),"%s_image",short);
         Format(image,maxlength,"%T",key,lang);
     }
     else
     {
-        decl String:file[LONG_STRING_LENGTH];
+        char file[LONG_STRING_LENGTH];
         GetRaceTranslationFile(raceHandle, file, sizeof(file));
         if (file[0])
         {
-            decl String:key[ITEM_STRING_LENGTH];
+            char key[ITEM_STRING_LENGTH];
             Format(key,sizeof(key),"%s_Image",short);
             if (FileContains(file, key))
                 Format(image,maxlength,"%T",key,lang);
@@ -1247,7 +1247,7 @@ GetRaceImage(Handle:raceHandle, String:image[], maxlength,
     }
 }
 
-GetRaceSwitchMessage(Handle:raceHandle, String:message[], maxlength, lang)
+GetRaceSwitchMessage(Handle raceHandle, String:message[], maxlength, lang)
 {
     GetRaceSwitchString(raceHandle, message, maxlength);
     if (message[0] == '%')
@@ -1257,23 +1257,23 @@ GetRaceSwitchMessage(Handle:raceHandle, String:message[], maxlength, lang)
     else
     {
         // Translate the short name to get the switch message
-        decl String:short[SHORT_STRING_LENGTH];
+        char short[SHORT_STRING_LENGTH];
         GetRaceShortName(raceHandle, short, sizeof(short));
 
-        new Translation:translation = GetRaceTranslation(raceHandle);
+        int Translation:translation = GetRaceTranslation(raceHandle);
         if (translation == Translation_SC)
         {
-            decl String:key[ITEM_STRING_LENGTH];
+            char key[ITEM_STRING_LENGTH];
             Format(key,sizeof(key),"%s_switch",short);
             Format(message,maxlength,"%T",key,lang);
         }
         else
         {
-            decl String:file[LONG_STRING_LENGTH];
+            char file[LONG_STRING_LENGTH];
             GetRaceTranslationFile(raceHandle, file, sizeof(file));
             if (file[0])
             {
-                decl String:key[ITEM_STRING_LENGTH];
+                char key[ITEM_STRING_LENGTH];
                 Format(key,sizeof(key),"%s_Switch",short);
                 if (FileContains(file, key))
                 {
@@ -1285,13 +1285,13 @@ GetRaceSwitchMessage(Handle:raceHandle, String:message[], maxlength, lang)
 
     if (message[0] == '\0')
     {
-        decl String:raceName[NAME_STRING_LENGTH];
+        char raceName[NAME_STRING_LENGTH];
         GetRaceName(raceHandle, raceName, sizeof(raceName));
         Format(message, maxlength, "%T", "RaceChanged", lang, raceName);
     }
 }
 
-GetRaceSwitchMessageDead(Handle:raceHandle, String:message[], maxlength, lang)
+GetRaceSwitchMessageDead(Handle raceHandle, String:message[], maxlength, lang)
 {
     GetRaceSwitchStringDead(raceHandle, message, maxlength);
     if (message[0] == '%')
@@ -1301,23 +1301,23 @@ GetRaceSwitchMessageDead(Handle:raceHandle, String:message[], maxlength, lang)
     else
     {
         // Translate the short name to get the pending message
-        decl String:short[SHORT_STRING_LENGTH];
+        char short[SHORT_STRING_LENGTH];
         GetRaceShortName(raceHandle, short, sizeof(short));
 
-        new Translation:translation = GetRaceTranslation(raceHandle);
+        int Translation:translation = GetRaceTranslation(raceHandle);
         if (translation == Translation_SC)
         {
-            decl String:key[ITEM_STRING_LENGTH];
+            char key[ITEM_STRING_LENGTH];
             Format(key,sizeof(key),"%s_pending",short);
             Format(message,maxlength,"%T",key,lang);
         }
         else
         {
-            decl String:file[LONG_STRING_LENGTH];
+            char file[LONG_STRING_LENGTH];
             GetRaceTranslationFile(raceHandle, file, sizeof(file));
             if (file[0])
             {
-                decl String:key[ITEM_STRING_LENGTH];
+                char key[ITEM_STRING_LENGTH];
                 Format(key,sizeof(key),"%s_Pending",short);
                 if (FileContains(file, key))
                     Format(message,maxlength,"%T",key,lang);
@@ -1327,13 +1327,13 @@ GetRaceSwitchMessageDead(Handle:raceHandle, String:message[], maxlength, lang)
 
     if (message[0] == '\0')
     {
-        decl String:raceName[NAME_STRING_LENGTH];
+        char raceName[NAME_STRING_LENGTH];
         GetRaceName(raceHandle, raceName, sizeof(raceName));
         Format(message, maxlength, "%T", "PendingRaceChange", lang, raceName);
     }
 }
 
-GetUpgradeName(Handle:raceHandle, upgrade, String:name[], maxlength, lang=LANG_SERVER)
+GetUpgradeName(Handle raceHandle, upgrade, String:name[], maxlength, lang=LANG_SERVER)
 {
     GetUpgradeNameString(raceHandle,upgrade,name,maxlength);
     if (name[0] == '%')
@@ -1342,16 +1342,16 @@ GetUpgradeName(Handle:raceHandle, upgrade, String:name[], maxlength, lang=LANG_S
     }
     else
     {
-        new Translation:translation = GetRaceTranslation(raceHandle);
+        int Translation:translation = GetRaceTranslation(raceHandle);
         if (translation > Translation_Auto)
         {
-            decl String:race[NAME_STRING_LENGTH];
+            char race[NAME_STRING_LENGTH];
             GetRaceShortName(raceHandle, race,sizeof(race));
 
-            decl String:short[NAME_STRING_LENGTH];
+            char short[NAME_STRING_LENGTH];
             GetUpgradeShortName(raceHandle,upgrade,short,sizeof(short));
 
-            decl String:key[ITEM_STRING_LENGTH];
+            char key[ITEM_STRING_LENGTH];
             if (translation == Translation_W3S)
             {
                 // Use the War3Source key
@@ -1369,7 +1369,7 @@ GetUpgradeName(Handle:raceHandle, upgrade, String:name[], maxlength, lang=LANG_S
     }
 }
 
-GetUpgradeDescription(Handle:raceHandle, upgrade, String:desc[], maxlength, lang=LANG_SERVER)
+GetUpgradeDescription(Handle raceHandle, upgrade, String:desc[], maxlength, lang=LANG_SERVER)
 {
     new category = 0;
 
@@ -1383,16 +1383,16 @@ GetUpgradeDescription(Handle:raceHandle, upgrade, String:desc[], maxlength, lang
     }
     else
     {
-        new Translation:translation = GetRaceTranslation(raceHandle);
+        int Translation:translation = GetRaceTranslation(raceHandle);
         if (translation > Translation_Auto)
         {
-            decl String:race[NAME_STRING_LENGTH];
+            char race[NAME_STRING_LENGTH];
             GetRaceShortName(raceHandle, race,sizeof(race));
 
-            decl String:short[NAME_STRING_LENGTH];
+            char short[NAME_STRING_LENGTH];
             GetUpgradeShortName(raceHandle,upgrade,short,sizeof(short));
 
-            decl String:key[ITEM_STRING_LENGTH];
+            char key[ITEM_STRING_LENGTH];
             if (translation == Translation_W3S)
             {
                 // Use the War3Source key
@@ -1413,9 +1413,9 @@ GetUpgradeDescription(Handle:raceHandle, upgrade, String:desc[], maxlength, lang
     return category;
 }
 
-GetUpgradeImage(Handle:raceHandle, upgrade, String:image[], maxlength,
-                const String:imageString[]="", lang=LANG_SERVER,
-                bool:query=false)
+GetUpgradeImage(Handle raceHandle, upgrade, String:image[], maxlength,
+                const char[] imageString[]="", lang=LANG_SERVER,
+                bool query=false)
 {
     TraceInto("Race", "GetUpgradeImage", "raceHandle=0x%08x", raceHandle);
 
@@ -1433,20 +1433,20 @@ GetUpgradeImage(Handle:raceHandle, upgrade, String:image[], maxlength,
         }
         else if (image[0] == '\0')
         {
-            new Translation:translation = GetRaceTranslation(raceHandle);
+            int Translation:translation = GetRaceTranslation(raceHandle);
             if (translation > Translation_Auto)
             {
-                decl String:file[LONG_STRING_LENGTH];
+                char file[LONG_STRING_LENGTH];
                 GetRaceTranslationFile(raceHandle, file, sizeof(file));
                 if (file[0])
                 {
-                    decl String:race[NAME_STRING_LENGTH];
+                    char race[NAME_STRING_LENGTH];
                     GetRaceShortName(raceHandle, race,sizeof(race));
 
-                    decl String:short[NAME_STRING_LENGTH];
+                    char short[NAME_STRING_LENGTH];
                     GetUpgradeShortName(raceHandle,upgrade,short,sizeof(short));
 
-                    decl String:key[ITEM_STRING_LENGTH];
+                    char key[ITEM_STRING_LENGTH];
                     if (translation == Translation_W3S)
                     {
                         // Use the War3Source key
@@ -1490,8 +1490,8 @@ GetUpgradeImage(Handle:raceHandle, upgrade, String:image[], maxlength,
     TraceReturn("image=%s", image);
 }
 
-GetUpgradeInvoke(Handle:raceHandle, upgrade, String:invoke[], maxlength,
-                 const String:invokeString[]="", lang=LANG_SERVER)
+GetUpgradeInvoke(Handle raceHandle, upgrade, String:invoke[], maxlength,
+                 const char[] invokeString[]="", lang=LANG_SERVER)
 {
     TraceInto("Race", "GetUpgradeInvoke", "raceHandle=0x%08x", raceHandle);
 
@@ -1510,20 +1510,20 @@ GetUpgradeInvoke(Handle:raceHandle, upgrade, String:invoke[], maxlength,
         }
         else if (invoke[0] == '\0')
         {
-            new Translation:translation = GetRaceTranslation(raceHandle);
+            int Translation:translation = GetRaceTranslation(raceHandle);
             if (translation > Translation_Auto)
             {
-                decl String:file[LONG_STRING_LENGTH];
+                char file[LONG_STRING_LENGTH];
                 GetRaceTranslationFile(raceHandle, file, sizeof(file));
                 if (file[0])
                 {
-                    decl String:race[NAME_STRING_LENGTH];
+                    char race[NAME_STRING_LENGTH];
                     GetRaceShortName(raceHandle, race,sizeof(race));
 
-                    decl String:short[NAME_STRING_LENGTH];
+                    char short[NAME_STRING_LENGTH];
                     GetUpgradeShortName(raceHandle,upgrade,short,sizeof(short));
 
-                    decl String:key[ITEM_STRING_LENGTH];
+                    char key[ITEM_STRING_LENGTH];
                     if (translation == Translation_W3S)
                     {
                         // Use the War3Source key
@@ -1563,8 +1563,8 @@ GetUpgradeInvoke(Handle:raceHandle, upgrade, String:invoke[], maxlength,
     TraceReturn("invoke=%s", invoke);
 }
 
-GetUpgradeBind(Handle:raceHandle, upgrade, String:bind[], maxlength,
-                const String:bindString[]="", lang=LANG_SERVER)
+GetUpgradeBind(Handle raceHandle, upgrade, String:bind[], maxlength,
+                const char[] bindString[]="", lang=LANG_SERVER)
 {
     TraceInto("Race", "GetUpgradeBind", "raceHandle=0x%08x", raceHandle);
 
@@ -1583,20 +1583,20 @@ GetUpgradeBind(Handle:raceHandle, upgrade, String:bind[], maxlength,
         }
         else if (bind[0] == '\0')
         {
-            new Translation:translation = GetRaceTranslation(raceHandle);
+            int Translation:translation = GetRaceTranslation(raceHandle);
             if (translation > Translation_Auto)
             {
-                decl String:file[LONG_STRING_LENGTH];
+                char file[LONG_STRING_LENGTH];
                 GetRaceTranslationFile(raceHandle, file, sizeof(file));
                 if (file[0])
                 {
-                    decl String:race[NAME_STRING_LENGTH];
+                    char race[NAME_STRING_LENGTH];
                     GetRaceShortName(raceHandle, race,sizeof(race));
 
-                    decl String:short[NAME_STRING_LENGTH];
+                    char short[NAME_STRING_LENGTH];
                     GetUpgradeShortName(raceHandle,upgrade,short,sizeof(short));
 
-                    decl String:key[ITEM_STRING_LENGTH];
+                    char key[ITEM_STRING_LENGTH];
                     if (translation == Translation_W3S)
                     {
                         // Use the War3Source key
@@ -1636,13 +1636,13 @@ GetUpgradeBind(Handle:raceHandle, upgrade, String:bind[], maxlength,
     TraceReturn("bind=%s", bind);
 }
 
-GetUpgradeStrings(Handle:raceHandle, upgrade, String:name[], maxName,
+GetUpgradeStrings(Handle raceHandle, upgrade, String:name[], maxName,
                   String:desc[], maxDesc, String:invoke[], maxInvoke,
                   String:bind[], maxBind, lang=LANG_SERVER)
 {
     TraceInto("Race", "GetUpgradeStrings", "raceHandle=0x%08x, upgrade=%d", raceHandle, upgrade);
 
-    new Handle:upgradeStringHandle=GetUpgradeStringHandle(raceHandle,upgrade);
+    new Handle upgradeStringHandle=GetUpgradeStringHandle(raceHandle,upgrade);
     GetArrayString(upgradeStringHandle, _:UpgradeString_Name, name, maxName);
     GetArrayString(upgradeStringHandle, _:UpgradeString_Desc, desc, maxDesc);
     GetArrayString(upgradeStringHandle, _:UpgradeString_Bind, bind, maxBind);
@@ -1653,13 +1653,13 @@ GetUpgradeStrings(Handle:raceHandle, upgrade, String:name[], maxName,
     new Translation:translation = GetRaceTranslation(raceHandle);
     if (translation > Translation_Auto)
     {
-        decl String:race[NAME_STRING_LENGTH];
+        char race[NAME_STRING_LENGTH];
         GetRaceShortName(raceHandle, race,sizeof(race));
 
-        decl String:short[NAME_STRING_LENGTH];
+        char short[NAME_STRING_LENGTH];
         GetUpgradeShortName(raceHandle,upgrade,short,sizeof(short));
 
-        decl String:key[ITEM_STRING_LENGTH];
+        char key[ITEM_STRING_LENGTH];
         if (translation == Translation_W3S)
         {
             // Use the War3Source key
@@ -1686,7 +1686,7 @@ GetUpgradeStrings(Handle:raceHandle, upgrade, String:name[], maxName,
         }
         else if (desc[0] == '\0')
         {
-            decl String:descKey[ITEM_STRING_LENGTH];
+            char descKey[ITEM_STRING_LENGTH];
             if (translation == Translation_W3S)
             {
                 // Use the War3Source key
@@ -1717,11 +1717,11 @@ GetUpgradeStrings(Handle:raceHandle, upgrade, String:name[], maxName,
             }
             else if (invoke[0] == '\0')
             {
-                decl String:file[LONG_STRING_LENGTH];
+                char file[LONG_STRING_LENGTH];
                 GetRaceTranslationFile(raceHandle, file, sizeof(file));
                 if (file[0])
                 {
-                    decl String:invokeKey[ITEM_STRING_LENGTH];
+                    char invokeKey[ITEM_STRING_LENGTH];
                     Format(invokeKey,sizeof(invokeKey),"%s_invoke",key);
                     if (FileContains(file, invokeKey))
                     {
@@ -1755,11 +1755,11 @@ GetUpgradeStrings(Handle:raceHandle, upgrade, String:name[], maxName,
             }
             else if (bind[0] == '\0')
             {
-                decl String:file[LONG_STRING_LENGTH];
+                char file[LONG_STRING_LENGTH];
                 GetRaceTranslationFile(raceHandle, file, sizeof(file));
                 if (file[0])
                 {
-                    decl String:bindKey[ITEM_STRING_LENGTH];
+                    char bindKey[ITEM_STRING_LENGTH];
                     Format(bindKey,sizeof(bindKey),"%s_bind",key);
                     if (FileContains(file, bindKey))
                     {
@@ -1783,8 +1783,8 @@ GetUpgradeStrings(Handle:raceHandle, upgrade, String:name[], maxName,
     return category;
 }
 
-FormatUpgradeDescription(Handle:raceHandle, upgrade, Translation:translation,
-                         const String:key[], String:desc[], maxlength, lang=LANG_SERVER)
+FormatUpgradeDescription(Handle raceHandle, upgrade, Translation:translation,
+                         const char[] key[], String:desc[], maxlength, lang=LANG_SERVER)
 {
     TraceInto("Race", "FormatUpgradeDescription", "raceHandle=0x%08x, key=%s", raceHandle, key);
 
@@ -1794,16 +1794,16 @@ FormatUpgradeDescription(Handle:raceHandle, upgrade, Translation:translation,
         Trace("Translate W3S key %s", key);
         Format(desc,maxlength,"%T",key,lang);
 
-        new Handle:upgradeListHandle=GetUpgradeListHandle(raceHandle);
-        new Handle:upgradeHandle=GetArrayCell(upgradeListHandle,upgrade);
-        new Handle:upgradeStringHandle=GetArrayCell(upgradeHandle,_:UpgradeData_Strings);
-        new numParms = GetArraySize(upgradeStringHandle) - _:UpgradeString_Parm;
+        int Handle upgradeListHandle=GetUpgradeListHandle(raceHandle);
+        int Handle upgradeHandle=GetArrayCell(upgradeListHandle,upgrade);
+        int Handle upgradeStringHandle=GetArrayCell(upgradeHandle,_:UpgradeData_Strings);
+        int numParms = GetArraySize(upgradeStringHandle) - _:UpgradeString_Parm;
         if (numParms > 0)
         {
             Trace("replace %d parms", numParms);
-            decl String:pkey[ITEM_STRING_LENGTH];
-            new String:parm[NAME_STRING_LENGTH];
-            for (new i=0; i < numParms; i++)
+            char pkey[ITEM_STRING_LENGTH];
+            char parm[NAME_STRING_LENGTH];
+            for (int i=0; i < numParms; i++)
             {
                 Format(pkey,sizeof(pkey),"#%d#",i+1);
                 GetUpgradeParameter(raceHandle,upgrade,i,parm,sizeof(parm));
@@ -1883,14 +1883,14 @@ FormatUpgradeDescription(Handle:raceHandle, upgrade, Translation:translation,
     }
     else
     {
-        new Handle:upgradeListHandle=GetUpgradeListHandle(raceHandle);
-        new Handle:upgradeHandle=GetArrayCell(upgradeListHandle,upgrade);
-        new Handle:upgradeStringHandle=GetArrayCell(upgradeHandle,_:UpgradeData_Strings);
-        new numParms = GetArraySize(upgradeStringHandle) - _:UpgradeString_Parm;
+        int Handle upgradeListHandle=GetUpgradeListHandle(raceHandle);
+        int Handle upgradeHandle=GetArrayCell(upgradeListHandle,upgrade);
+        int Handle upgradeStringHandle=GetArrayCell(upgradeHandle,_:UpgradeData_Strings);
+        int numParms = GetArraySize(upgradeStringHandle) - _:UpgradeString_Parm;
         if (numParms > 0)
         {
-            decl String:parm[8][NAME_STRING_LENGTH];
-            for (new i=0 ; i < numParms; i++)
+            char parm[8][NAME_STRING_LENGTH];
+            for (int i=0 ; i < numParms; i++)
             {
                 GetUpgradeParameter(raceHandle,upgrade,i,parm[i],sizeof(parm[]));
             }
@@ -1968,26 +1968,26 @@ FormatUpgradeDescription(Handle:raceHandle, upgrade, Translation:translation,
     return category;
 }
 
-GetUpgradeCount(Handle:raceHandle)
+GetUpgradeCount(Handle raceHandle)
 {
-    new Handle:upgradeListHandle=GetArrayCell(raceHandle,_:RaceData_Upgrades);
-    return (upgradeListHandle != INVALID_HANDLE) ? GetArraySize(upgradeListHandle) : 0;
+    new Handle upgradeListHandle=GetArrayCell(raceHandle,_:RaceData_Upgrades);
+    return (upgradeListHandle != null) ? GetArraySize(upgradeListHandle) : 0;
 }
 
-FindUpgrade(Handle:raceHandle, const String:short[])
+FindUpgrade(Handle raceHandle, const char[] short[])
 {
-    new Handle:upgradeListHandle=GetArrayCell(raceHandle,_:RaceData_Upgrades);
-    if (upgradeListHandle != INVALID_HANDLE)
+    new Handle upgradeListHandle=GetArrayCell(raceHandle,_:RaceData_Upgrades);
+    if (upgradeListHandle != null)
     {
-        decl String:curName[NAME_STRING_LENGTH];
-        new size = GetArraySize(upgradeListHandle);
-        for(new upgrade=0;upgrade<size;upgrade++)
+        char curName[NAME_STRING_LENGTH];
+        int size = GetArraySize(upgradeListHandle);
+        for(int upgrade=0;upgrade<size;upgrade++)
         {
-            new Handle:upgradeHandle=GetArrayCell(upgradeListHandle,upgrade);
-            if (upgradeHandle != INVALID_HANDLE)
+            int Handle upgradeHandle=GetArrayCell(upgradeListHandle,upgrade);
+            if (upgradeHandle != null)
             {
-                new Handle:upgradeStringHandle=GetArrayCell(upgradeHandle,_:UpgradeData_Strings);
-                if (upgradeStringHandle != INVALID_HANDLE)
+                int Handle upgradeStringHandle=GetArrayCell(upgradeHandle,_:UpgradeData_Strings);
+                if (upgradeStringHandle != null)
                 {
                     GetArrayString(upgradeStringHandle,_:UpgradeString_ShortName, curName, sizeof(curName));
                     if (StrEqual(short,curName,false))
@@ -1999,11 +1999,11 @@ FindUpgrade(Handle:raceHandle, const String:short[])
     return -1;
 }
 
-FindRace(const String:name[])
+FindRace(const char[] name[])
 {
-    decl String:curName[NAME_STRING_LENGTH];
+    char curName[NAME_STRING_LENGTH];
     new size = GetRaceCount();
-    for(new race=1;race<size;race++)
+    for(int race=1;race<size;race++)
     {
         GetRaceShortName(GetRaceHandle(race),curName,sizeof(curName));
         if (StrEqual(name,curName,false))
@@ -2015,10 +2015,10 @@ FindRace(const String:name[])
 FindRaceForIdent(ident)
 {
     new size = GetRaceCount();
-    for(new race=1;race<size;race++)
+    for(int race=1;race<size;race++)
     {
         //if (GetRaceIdent(GetRaceHandle(race)) == ident)
-        new Handle:raceHandle=GetRaceHandle(race);
+        int Handle raceHandle=GetRaceHandle(race);
         if (GetArrayCell(raceHandle,_:RaceData_Ident) == ident)
             return race;
     }
@@ -2036,34 +2036,34 @@ PendingCheck(client)
     new pendingRace = GetPendingRace(client);
     if (pendingRace > 0)
     {
-        decl String:buf[LONG_STRING_LENGTH];
+        char buf[LONG_STRING_LENGTH];
         SetPendingRace(client,-1);
         SetRace(client, pendingRace, false);
-        new Handle:raceHandle=GetRaceHandle(pendingRace);
+        int Handle raceHandle=GetRaceHandle(pendingRace);
         GetRaceSwitchMessage(raceHandle, buf, sizeof(buf), client);
         CPrintToChat(client,"{green}[SC]{default} %s", buf);
     }
     return pendingRace;
 }
 
-ChangeRace(client, race, Handle:raceHandle, bool:forceNow=false, bool:check=true, bool:saveEnergy=false)
+ChangeRace(client, race, Handle raceHandle, bool forceNow=false, bool check=true, bool saveEnergy=false)
 {
     TraceInto("Race", "ChangeRace", "Change %d:%N's race to %1, raceHandle=0x%08x, forceNow=%d, check=%d, saveEnergy=%d", \
               client, ValidClientIndex(client), race, raceHandle, forceNow, check, saveEnergy);
 
     if (check)
     {
-        new reqLevel = GetRaceRequiredLevel(raceHandle);
-        new techLevel = GetRaceTechLevel(raceHandle);
+        int reqLevel = GetRaceRequiredLevel(raceHandle);
+        int techLevel = GetRaceTechLevel(raceHandle);
         if (techLevel < 0 || reqLevel < 0)
         {
             // If forceNow is on and the reqLevel < 0 then
             //     Change to the parent race instead.
             if (forceNow)
             {
-                decl String:parent[NAME_STRING_LENGTH];
-                new Handle:oldHandle = raceHandle;
-                new oldRace = race;
+                char parent[NAME_STRING_LENGTH];
+                int Handle oldHandle = raceHandle;
+                int oldRace = race;
                 parent[0] = '\0';
 
                 do
@@ -2095,17 +2095,17 @@ ChangeRace(client, race, Handle:raceHandle, bool:forceNow=false, bool:check=true
 
             if (techLevel < 0 || reqLevel < 0)
             {
-                decl String:name[NAME_STRING_LENGTH];
+                char name[NAME_STRING_LENGTH];
                 GetRaceName(raceHandle, name, sizeof(name));
                 CPrintToChat(client,"{green}[SC]{default} %t", "IsNotAvailable", name);
                 return;
             }
         }
 
-        new level = GetOverallLevel(client);
+        int level = GetOverallLevel(client);
         if (level < reqLevel)
         {
-            decl String:name[NAME_STRING_LENGTH];
+            char name[NAME_STRING_LENGTH];
             GetRaceName(raceHandle, name, sizeof(name));
             CPrintToChat(client,"{green}[SC]{default} %t", "InsufficientLevels", reqLevel, name);
             return;
@@ -2113,16 +2113,16 @@ ChangeRace(client, race, Handle:raceHandle, bool:forceNow=false, bool:check=true
 
         if (techLevel > 0)
         {
-            new Faction:techId = GetRaceFaction(raceHandle, false);
+            int Faction:techId = GetRaceFaction(raceHandle, false);
             if (techId > Generic)
             {
-                new tlvl = GetTechLevel(client, techId);
+                int tlvl = GetTechLevel(client, techId);
                 if (tlvl < techLevel)
                 {
-                    decl String:tech[NAME_STRING_LENGTH];
+                    char tech[NAME_STRING_LENGTH];
                     GetFactionName(techId, tech, sizeof(tech));
 
-                    decl String:name[NAME_STRING_LENGTH];
+                    char name[NAME_STRING_LENGTH];
                     GetRaceName(raceHandle, name, sizeof(name));
                     CPrintToChat(client,"{green}[SC]{default} %t", "InsufficientTechLevels",
                                 techLevel, tech, name, tlvl);
@@ -2186,14 +2186,14 @@ ChangeRace(client, race, Handle:raceHandle, bool:forceNow=false, bool:check=true
 
         if (!forceNow && !g_FirstSpawn[client] && IsPlayerAlive(client))
         {
-            decl String:buf[LONG_STRING_LENGTH];
+            char buf[LONG_STRING_LENGTH];
             GetRaceSwitchMessageDead(raceHandle, buf, sizeof(buf), client);
             CPrintToChat(client, "{green}[SC]{default} %s", buf);
             SetPendingRace(client,race);
         }
         else
         {
-            decl String:buf[LONG_STRING_LENGTH];
+            char buf[LONG_STRING_LENGTH];
             GetRaceSwitchMessage(raceHandle, buf, sizeof(buf), client);
             CPrintToChat(client, "{green}[SC]{default} %s", buf);
             g_FirstSpawn[client]=false;
@@ -2217,7 +2217,7 @@ ResetUpgrades(client)
         ResetUpgradesNow(client, -1, true);
 }
 
-ResetUpgradesNow(client, race, bool:show=true)
+ResetUpgradesNow(client, race, bool show=true)
 {
     if (GetDatabaseLoaded(client) == DataLoading)
     {
@@ -2231,8 +2231,8 @@ ResetUpgradesNow(client, race, bool:show=true)
 
         if (race >= 0)
         {
-            new Handle:raceInfo = GetRaceInfo(client, race);
-            if (raceInfo != INVALID_HANDLE)
+            int Handle raceInfo = GetRaceInfo(client, race);
+            if (raceInfo != null)
             {
                 SetRaceInfoActiveUltimate1(raceInfo, -1);
                 SetRaceInfoActiveUltimate2(raceInfo, -1);
@@ -2243,11 +2243,11 @@ ResetUpgradesNow(client, race, bool:show=true)
                 //SetDatabaseSaved(client, false);
 
                 // Refund the crystal cost as +crystals
-                new Handle:raceHandle=GetRaceHandle(race);
-                new upgradeCount=GetUpgradeCount(raceHandle);
-                for (new upgrade=0;upgrade<upgradeCount;upgrade++)
+                int Handle raceHandle=GetRaceHandle(race);
+                int upgradeCount=GetUpgradeCount(raceHandle);
+                for (int upgrade=0;upgrade<upgradeCount;upgrade++)
                 {
-                    new level = GetRaceInfoSavedUpgradeLevel(raceInfo, upgrade);
+                    int level = GetRaceInfoSavedUpgradeLevel(raceInfo, upgrade);
                     if (level > 0)
                     {
                         new cost_crystals = GetUpgradeCostCrystals(raceHandle, upgrade);
@@ -2271,13 +2271,13 @@ ResetUpgradesNow(client, race, bool:show=true)
     }
 }
 
-bool:FileContains(const String:fileName[], const String:string[])
+bool FileContains(const char[] fileName[], const char[] string[])
 {
-    new bool:found = false;
-    new Handle:file = OpenFile(fileName, "r");
-    if (file != INVALID_HANDLE)
+    new bool found = false;
+    new Handle file = OpenFile(fileName, "r");
+    if (file != null)
     {
-        decl String:buffer[DESCRIPTION_LENGTH];
+        char buffer[DESCRIPTION_LENGTH];
         while (!IsEndOfFile(file))
         {
             if (ReadFileLine(file, buffer, sizeof(buffer)))

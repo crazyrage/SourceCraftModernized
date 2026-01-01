@@ -13,7 +13,7 @@
 
 #define PLUGIN_VERSION "1.0.0"
 
-public Plugin:myinfo =
+public Plugin myinfo =
 {
 	name = "TF2 Homing Projectiles",
 	author = "Tylerst",
@@ -22,9 +22,9 @@ public Plugin:myinfo =
 	url = "none"
 }
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char error[], err_max)
 {
-	new String:Game[32];
+	char Game[32];
 	GetGameFolderName(Game, sizeof(Game));
 	if(!StrEqual(Game, "tf"))
 	{
@@ -34,7 +34,7 @@ public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
 	return APLRes_Success;
 }
 
-new bool:g_HomingEnabled[MAXPLAYERS+1] = false;
+bool g_HomingEnabled[MAXPLAYERS+1] = false;
 
 public OnPluginStart()
 {	
@@ -54,7 +54,7 @@ public OnClientDisconnect_Post(client)
 	g_HomingEnabled[client] = false;
 }
 
-public Action:Command_Name(client, args)
+public Action Command_Name(client, args)
 {
 	if(args != 2)
 	{
@@ -62,7 +62,7 @@ public Action:Command_Name(client, args)
 		return Plugin_Handled;
 	}
 
-	new String:target[MAX_TARGET_LENGTH], String:strSwitch[2], Switch, String:target_name[MAX_TARGET_LENGTH], target_list[MAXPLAYERS], target_count, bool:tn_is_ml;
+	char target[MAX_TARGET_LENGTH], char strSwitch[2], Switch, char target_name[MAX_TARGET_LENGTH], target_list[MAXPLAYERS], target_count, bool tn_is_ml;
 	GetCmdArg(1, target, sizeof(target));
 	GetCmdArg(2, strSwitch, sizeof(strSwitch));
 	Switch = StringToInt(strSwitch);
@@ -83,7 +83,7 @@ public Action:Command_Name(client, args)
 
 	if(Switch)
 	{
-		for(new i = 0; i < target_count; i++)
+		for(int i= 0; i < target_count; i++)
 		{
 			g_HomingEnabled[target_list[i]] = true;
 		}
@@ -91,7 +91,7 @@ public Action:Command_Name(client, args)
 	}
 	else 
 	{
-		for(new i = 0; i < target_count; i++)
+		for(int i= 0; i < target_count; i++)
 		{
 			g_HomingEnabled[target_list[i]] = false;
 		}
@@ -106,7 +106,7 @@ public Action:Command_Name(client, args)
 
 public OnGameFrame()
 {
-	for(new i = 1; i <= MaxClients; i++)
+	for(int i= 1; i <= MaxClients; i++)
 	{
 		if(g_HomingEnabled[i])
 		{
@@ -121,19 +121,19 @@ public OnGameFrame()
 	}
 }
 
-SetHomingProjectile(client, const String:classname[])
+SetHomingProjectile(client, const char[] classname)
 {
-	new entity = -1; 
+	int entity = -1; 
 	while((entity = FindEntityByClassname(entity, classname))!=INVALID_ENT_REFERENCE)
 	{
-		new owner = GetEntPropEnt(entity, Prop_Data, "m_hOwnerEntity");
+		int owner = GetEntPropEnt(entity, Prop_Data, "m_hOwnerEntity");
 		if(!IsValidEntity(owner)) continue;
 		if(StrEqual(classname, "tf_projectile_sentryrocket", false)) owner = GetEntPropEnt(owner, Prop_Send, "m_hBuilder");		
-		new Target = GetClosestTarget(entity, owner);
+		int Target = GetClosestTarget(entity, owner);
 		if(!Target) continue;
 		if(owner == client)
 		{
-			new Float:ProjLocation[3], Float:ProjVector[3], Float:ProjSpeed, Float:ProjAngle[3], Float:TargetLocation[3], Float:AimVector[3];			
+			float ProjLocation[3], float ProjVector[3], float ProjSpeed, float ProjAngle[3], float TargetLocation[3], float AimVector[3];			
 			GetEntPropVector(entity, Prop_Data, "m_vecAbsOrigin", ProjLocation);
 			GetClientAbsOrigin(Target, TargetLocation);
 			TargetLocation[2] += 40.0;
@@ -153,16 +153,16 @@ SetHomingProjectile(client, const String:classname[])
 
 GetClosestTarget(entity, owner)
 {
-	new Float:TargetDistance = 0.0;
-	new ClosestTarget = 0;
-	for(new i = 1; i <= MaxClients; i++) 
+	float TargetDistance = 0.0;
+	int ClosestTarget = 0;
+	for(int i= 1; i <= MaxClients; i++) 
 	{
 		if(!IsClientConnected(i) || !IsPlayerAlive(i) || i == owner || (GetClientTeam(owner) == GetClientTeam(i))) continue;
-		new Float:EntityLocation[3], Float:TargetLocation[3];
+		float EntityLocation[3], float TargetLocation[3];
 		GetEntPropVector(entity, Prop_Data, "m_vecAbsOrigin", EntityLocation);
 		GetClientAbsOrigin(i, TargetLocation);
 		
-		new Float:distance = GetVectorDistance(EntityLocation, TargetLocation);
+		float distance = GetVectorDistance(EntityLocation, TargetLocation);
 		if(TargetDistance)
 		{
 			if(distance < TargetDistance) 

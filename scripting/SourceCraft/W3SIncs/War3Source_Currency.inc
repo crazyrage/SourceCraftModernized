@@ -38,9 +38,9 @@ native War3_GetCurrency(client);
  * @returns If the currency was changed or not
  */
 #if !defined SOURCECRAFT
-native bool:War3_AddCurrency(client, currencyToAdd);
+native bool War3_AddCurrency(client, currencyToAdd);
 #else
-stock bool:War3_AddCurrency(client, currencyToAdd)
+stock bool War3_AddCurrency(client, currencyToAdd)
 {
     return (SetMoney(client, GetMoney(client) + currencyToAdd) >= 0);
 }
@@ -52,9 +52,9 @@ stock bool:War3_AddCurrency(client, currencyToAdd)
  * @returns If the currency was changed or not
  */
 #if !defined SOURCECRAFT
-native bool:War3_SubstractCurrency(client, currencyToSubstract);
+native bool War3_SubstractCurrency(client, currencyToSubstract);
 #else
-stock bool:War3_SubstractCurrency(client, currencyToSubstract)
+stock bool War3_SubstractCurrency(client, currencyToSubstract)
 {
     return (SetMoney(client, GetMoney(client) - currencyToSubstract) >= 0);
 }
@@ -66,11 +66,11 @@ stock bool:War3_SubstractCurrency(client, currencyToSubstract)
 
 #if !defined SOURCECRAFT // Not Implemented!
 /**
- * Change the currency of this player to a new value
+ * Change the currency of this player to a int value
  * 
  * @returns If the currency was changed or not
  */
-native bool:War3_SetCurrency(client, newCurrency);
+native bool War3_SetCurrency(client, newCurrency);
 #endif
 
 /** 
@@ -90,7 +90,7 @@ native War3_SetGold(client, newGold);
  * 
  * Uses the value stored with SetTrans() for translating!
  */
-native War3_GetCurrencyName(amount, String:currencyName[], maxLength);
+native War3_GetCurrencyName(amount, char[] currencyName, maxLength);
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 

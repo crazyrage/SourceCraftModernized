@@ -28,7 +28,7 @@
  * @param client: The client's index you want.
  * @noreturn
  */
-stock SetInvulnerability(client, Float:duration)
+stock SetInvulnerability(client, float duration)
 {
     if (GameType == tf2)
         TF2_AddCondition(client, TFCond_Ubercharged, duration);
@@ -40,7 +40,7 @@ stock SetInvulnerability(client, Float:duration)
     }
 }
 
-public Action:ResetInvuln(Handle:timer,any:userid)
+public Action ResetInvuln(Handle timer,any:userid)
 {
     new client = GetClientOfUserId(userid);
     if (IsValidClient(client))
@@ -67,7 +67,7 @@ stock ResetInvulnerability(client)
  * @param client: The client's index you want.
  * @return The return value will be true if they are invulnerable or false if they aren't.
  */
-stock bool:IsInvulnerable(client)
+stock bool IsInvulnerable(client)
 {
     if (IsValidClient(client))
     {

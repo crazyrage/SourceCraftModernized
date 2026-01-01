@@ -34,7 +34,7 @@
 #define MDL_REDSHIELD           "models/shield/redshield.mdl"
 #define MDL_BLUESHIELD          "models/shield/blueshield.mdl"
 
-new const String:ShieldModelFiles[][][]  =
+new const char[]ShieldModelFiles[][][]  =
 {
     {
         "models/shield/redshield.phy",
@@ -95,20 +95,20 @@ enum ShieldFlags (<<= 1)
 
 new gShieldRedModelIndex;
 new gShieldBlueModelIndex;
-new Float:gAlternateStartTime;
-new Float:gAlternateStopTime;
-new Float:gStartTime;
-new Float:gStopTime;
+floatgAlternateStartTime;
+floatgAlternateStopTime;
+floatgStartTime;
+floatgStopTime;
 
-new String:mdlRedShield[256];
-new String:mdlBlueShield[256];
+charmdlRedShield[256];
+charmdlBlueShield[256];
 
-new String:gAlternateActiveSound[PLATFORM_MAX_PATH];
-new String:gAlternateStartSound[PLATFORM_MAX_PATH];
-new String:gAlternateStopSound[PLATFORM_MAX_PATH];
-new String:gStartSound[PLATFORM_MAX_PATH];
-new String:gActiveSound[PLATFORM_MAX_PATH];
-new String:gStopSound[PLATFORM_MAX_PATH];
+chargAlternateActiveSound[PLATFORM_MAX_PATH];
+chargAlternateStartSound[PLATFORM_MAX_PATH];
+chargAlternateStopSound[PLATFORM_MAX_PATH];
+chargStartSound[PLATFORM_MAX_PATH];
+chargActiveSound[PLATFORM_MAX_PATH];
+chargStopSound[PLATFORM_MAX_PATH];
 
 new gField[MAXPLAYERS+1]                = { INVALID_ENT_REFERENCE, ... };   // EntRef for the player's field
 new gShield[MAXPLAYERS+1]               = { INVALID_ENT_REFERENCE, ... };   // EntRef for the player's shield
@@ -116,33 +116,33 @@ new gParent[MAXPLAYERS+1]               = { INVALID_ENT_REFERENCE, ... };   // E
 new gAllowed[MAXPLAYERS+1];             // how many shields player allowed
 new gRemaining[MAXPLAYERS+1];           // how many shields player has this spawn
 new ShieldFlags:gFlags[MAXPLAYERS+1];   // Shield type/permissions flags for each player
-new bool:m_ShieldCharged[MAXPLAYERS+1]; // Shield charged flags for each player
-new Handle:gObjectTimers[MAXPLAYERS+1]  = { INVALID_HANDLE, ... };
+boolm_ShieldCharged[MAXPLAYERS+1]; // Shield charged flags for each player
+HandlegObjectTimers[MAXPLAYERS+1]  = { null, ... };
 
-new Handle:cvRedModel = INVALID_HANDLE;
-new Handle:cvBlueModel = INVALID_HANDLE;
+HandlecvRedModel = null;
+HandlecvBlueModel = null;
 
-new Handle:cvActiveSound = INVALID_HANDLE;
-new Handle:cvStartSound = INVALID_HANDLE;
-new Handle:cvStartTime = INVALID_HANDLE;
-new Handle:cvStopSound = INVALID_HANDLE;
-new Handle:cvStopTime = INVALID_HANDLE;
+HandlecvActiveSound = null;
+HandlecvStartSound = null;
+HandlecvStartTime = null;
+HandlecvStopSound = null;
+HandlecvStopTime = null;
 
-new Handle:cvPerLife = INVALID_HANDLE;
-new Handle:cvMinUber = INVALID_HANDLE;
-new Handle:cvMaxUber = INVALID_HANDLE;
-new Handle:cvKritzkrieg = INVALID_HANDLE;
-new Handle:cvMaxDuration = INVALID_HANDLE;
-new Handle:cvRechargeTime = INVALID_HANDLE;
-new Handle:cvMediShieldFlags = INVALID_HANDLE;
-new Handle:cvMediReloadShieldFlags = INVALID_HANDLE;
+HandlecvPerLife = null;
+HandlecvMinUber = null;
+HandlecvMaxUber = null;
+HandlecvKritzkrieg = null;
+HandlecvMaxDuration = null;
+HandlecvRechargeTime = null;
+HandlecvMediShieldFlags = null;
+HandlecvMediReloadShieldFlags = null;
 
-new bool:gNativeControl = false;
+boolgNativeControl = false;
 
 // forwards
-new Handle:fwdOnDeployUberShield;
+HandlefwdOnDeployUberShield;
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "Uber Shield",
     author = "-=|JFH|=-Naris",
@@ -151,7 +151,7 @@ public Plugin:myinfo =
     url = "http://www.jigglysfunhouse.net/"
 };
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLResAskPluginLoad2(Handle myself, bool late, char[] error, err_max)
 {
     // Register Natives
     CreateNative("SetAlternateShieldSound",Native_SetAlternateShieldSound);
@@ -261,9 +261,9 @@ public OnConfigsExecuted()
         SetupSound(gAlternateActiveSound, true, AUTO_DOWNLOAD, true, true);
 
     // Added custom models to download stack
-    new Handle:redFiles = CreateStack();
-    new Handle:blueFiles = CreateStack();
-    for (new i = 0; i < sizeof(ShieldModelFiles); i++)
+    HandleredFiles = CreateStack();
+    HandleblueFiles = CreateStack();
+    for (int i = 0; i < sizeof(ShieldModelFiles); i++)
     {
         PushStackString(redFiles, ShieldModelFiles[i][0]);
         PushStackString(blueFiles, ShieldModelFiles[i][1]);
@@ -288,10 +288,10 @@ public OnClientDisconnect(client)
 {
     RemoveShield(client);
 
-    new Handle:timer=gObjectTimers[client];
-    if (timer != INVALID_HANDLE)
+    Handletimer=gObjectTimers[client];
+    if (timer != null)
     {
-        gObjectTimers[client] = INVALID_HANDLE;
+        gObjectTimers[client] = null;
         KillTimer(timer, true);
     }
 }
@@ -300,7 +300,7 @@ public OnClientDisconnect(client)
 // able to parent entities to players, so fake it.
 public OnGameFrame()
 {
-    for(new i = 1; i <= MaxClients; i++)
+    for(int i = 1; i <= MaxClients; i++)
     {
         new ref = gParent[i];
         if (ref != INVALID_ENT_REFERENCE)
@@ -308,10 +308,10 @@ public OnGameFrame()
             new ent = EntRefToEntIndex(ref);
             if (ent > 0)
             {
-                new Float:pos[3];
+                floatpos[3];
                 GetClientAbsOrigin(i, pos);
 
-                new Float:vel[3];
+                floatvel[3];
                 GetEntPropVector(i, Prop_Data, "m_vecVelocity", vel);
 
                 TeleportEntity(ent, pos, NULL_VECTOR, vel);
@@ -320,7 +320,7 @@ public OnGameFrame()
     }
 }
 
-public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public PlayerSpawnEvent(Handle event,const char[]name[],bool dontBroadcast)
 {
     new client=GetClientOfUserId(GetEventInt(event,"userid")); // Get clients index
     new TFClassType:class = (GameType == tf2) ? TF2_GetPlayerClass(client) : TFClass_Unknown;
@@ -343,7 +343,7 @@ public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public PlayerDeathEvent(Handle event,const char[]name[],bool dontBroadcast)
 {
     if (GameType == tf2)
     {
@@ -363,15 +363,15 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
 
     RemoveShield(client);
 
-    new Handle:timer=gObjectTimers[client];
-    if (timer != INVALID_HANDLE)
+    Handletimer=gObjectTimers[client];
+    if (timer != null)
     {
-        gObjectTimers[client] = INVALID_HANDLE;
+        gObjectTimers[client] = null;
         KillTimer(timer, true);
     }
 }
 
-public EventFlagEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public EventFlagEvent(Handle event,const char[]name[],bool dontBroadcast)
 {
     new player = GetEventInt(event,"player");
     if (player > 0 && IsClientInGame(player))
@@ -380,10 +380,10 @@ public EventFlagEvent(Handle:event,const String:name[],bool:dontBroadcast)
         if (eventtype == 1) // Flag Picked Up
         {
             // Remove the UberShield and it's timer
-            new Handle:timer=gObjectTimers[player];
-            if (timer != INVALID_HANDLE)
+            Handletimer=gObjectTimers[player];
+            if (timer != null)
             {
-                gObjectTimers[player] = INVALID_HANDLE;
+                gObjectTimers[player] = null;
                 KillTimer(timer, true);
             }
 
@@ -392,7 +392,7 @@ public EventFlagEvent(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public Action:Timer_Advert(Handle:timer, any:client)
+public ActionTimer_Advert(Handle timer, any:client)
 {
     if (IsClientConnected(client) && IsClientInGame(client))
     {
@@ -408,16 +408,16 @@ public Action:Timer_Advert(Handle:timer, any:client)
     }
 }
 
-public Action:ShieldCommand(client, args)
+public ActionShieldCommand(client, args)
 {
     new ShieldFlags:flags = gFlags[client];
-    new Float:duration    = GetConVarFloat(cvMaxDuration);
+    floatduration    = GetConVarFloat(cvMaxDuration);
 
     if (GetGameType() == tf2)
     {
         if (TF2_GetPlayerClass(client) == TFClass_Medic)
         {
-            new Float:UberCharge = TF2_GetUberLevel(client);
+            floatUberCharge = TF2_GetUberLevel(client);
             if (UberCharge >= GetConVarFloat(cvMinUber))
             {
                 duration *= UberCharge;
@@ -444,7 +444,7 @@ public Action:ShieldCommand(client, args)
     return Plugin_Handled;
 }
 
-public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:angles[3], &weapon)
+public ActionOnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:angles[3], &weapon)
 {
     if (buttons & (IN_RELOAD|IN_ATTACK2) != 0 && gRemaining[client] != 0 &&
         TF2_GetPlayerClass(client) == TFClass_Medic && TF2_IsUberCharge(client) == 0) 
@@ -452,7 +452,7 @@ public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:ang
         new weaponent = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
         if (weaponent > 0)
         {
-            decl String:classname[32];
+            charclassname[32];
             if (GetEdictClassname(weaponent, classname , sizeof(classname)) &&
                 StrEqual(classname, "tf_weapon_medigun") )
             {
@@ -468,13 +468,13 @@ public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:ang
                         return Plugin_Continue;
                 }
 
-                new Float:UberCharge = TF2_GetUberLevel(client);
+                floatUberCharge = TF2_GetUberLevel(client);
                 if (buttons & IN_ATTACK2)
                 {
                     if (UberCharge >= GetConVarFloat(cvMinUber) &&
                         UberCharge < GetConVarFloat(cvMaxUber))
                     {
-                        new Float:duration = GetConVarFloat(cvMaxDuration)*UberCharge;
+                        floatduration = GetConVarFloat(cvMaxDuration)*UberCharge;
                         if (ShieldTarget(client, flags, duration))
                             TF2_SetUberLevel(client, 0.0);
                     }
@@ -487,7 +487,7 @@ public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:ang
                 {
                     if (UberCharge >= GetConVarFloat(cvMinUber))
                     {
-                        new Float:duration = GetConVarFloat(cvMaxDuration)*UberCharge;
+                        floatduration = GetConVarFloat(cvMaxDuration)*UberCharge;
                         if (flags & Shield_Reload_Location)
                         {
                             // Copy the Reload bits into the "normal" bits location
@@ -521,7 +521,7 @@ public Action:OnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:ang
 bool:ShieldTarget(client, ShieldFlags:flags, Float:duration)
 {
     new target = 0;
-    new Float:targetLoc[3];
+    floattargetLoc[3];
     if (flags & (Shield_Target_Self|Shield_Target_Team|Shield_Target_Enemy))
     {
         target = GetClientAimTarget(client);
@@ -564,7 +564,7 @@ bool:ShieldLocation(client, ShieldFlags:flags, Float:duration)
 {
     if (flags & Shield_Target_Location)
     {
-        new Float:targetLoc[3];
+        floattargetLoc[3];
         TraceAimPosition(client, targetLoc, true);
         return (CreateShield(client, 0, targetLoc, flags, duration) != 0);
     }
@@ -633,7 +633,7 @@ CreateShield(client, target, const Float:pos[3], ShieldFlags:flags, Float:Durati
             }
         }
 
-        new String:tmp[16];
+        chartmp[16];
         Format(tmp, sizeof(tmp), "shield%d", shield);
         DispatchKeyValue(shield, "targetname", tmp);
 
@@ -702,7 +702,7 @@ CreateShield(client, target, const Float:pos[3], ShieldFlags:flags, Float:Durati
 
         if (target > 0 && (flags & Shield_Mobile))
         {
-            new String:strTargetName[64];
+            charstrTargetName[64];
             Format(strTargetName, sizeof(strTargetName), "target%i", target);
             DispatchKeyValue(target, "targetname", strTargetName);
 
@@ -735,8 +735,8 @@ CreateShield(client, target, const Float:pos[3], ShieldFlags:flags, Float:Durati
             target = client;
         }
 
-        new Float:startTime = 0.0;
-        new bool:useAlt = ((flags & Shield_UseAlternateSounds) != Shield_None);
+        floatstartTime = 0.0;
+        booluseAlt = ((flags & Shield_UseAlternateSounds) != Shield_None);
         if (!(flags & Shield_DisableStartSound))
         {
             if (useAlt && gAlternateStartSound[0])
@@ -751,12 +751,12 @@ CreateShield(client, target, const Float:pos[3], ShieldFlags:flags, Float:Durati
             }
         }
 
-        new bool:longEnough = (Duration > startTime || Duration <= 0.0);
+        boollongEnough = (Duration > startTime || Duration <= 0.0);
         if (longEnough && !(flags & Shield_DisableActiveSound))
         {
             if (useAlt && gAlternateActiveSound[0])
             {
-                new Handle:pack;
+                Handlepack;
                 CreateDataTimer(startTime, PlaySound, pack, TIMER_FLAG_NO_MAPCHANGE);
                 WritePackCell(pack, shieldRef);
                 WritePackCell(pack, false);
@@ -764,7 +764,7 @@ CreateShield(client, target, const Float:pos[3], ShieldFlags:flags, Float:Durati
             }
             else if (gActiveSound[0])
             {
-                new Handle:pack;
+                Handlepack;
                 CreateDataTimer(startTime, PlaySound, pack, TIMER_FLAG_NO_MAPCHANGE);
                 WritePackCell(pack, shieldRef);
                 WritePackCell(pack, false);
@@ -776,12 +776,12 @@ CreateShield(client, target, const Float:pos[3], ShieldFlags:flags, Float:Durati
         {
             if (longEnough && !(flags & Shield_DisableStopSound))
             {
-                new Float:activeTime = Duration - ((useAlt) ? gAlternateStopTime : gStopTime);
+                floatactiveTime = Duration - ((useAlt) ? gAlternateStopTime : gStopTime);
                 if (activeTime > 0.0)
                 {
                     if (useAlt && gAlternateStopSound[0])
                     {
-                        new Handle:pack;
+                        Handlepack;
                         CreateDataTimer(activeTime, PlaySound, pack, TIMER_FLAG_NO_MAPCHANGE);
                         WritePackCell(pack, shieldRef);
                         WritePackCell(pack, true); // Stop active sound
@@ -789,7 +789,7 @@ CreateShield(client, target, const Float:pos[3], ShieldFlags:flags, Float:Durati
                     }
                     else if (gStopSound[0])
                     {
-                        new Handle:pack;
+                        Handlepack;
                         CreateDataTimer(activeTime, PlaySound, pack, TIMER_FLAG_NO_MAPCHANGE);
                         WritePackCell(pack, shieldRef);
                         WritePackCell(pack, true); // Stop active sound
@@ -798,7 +798,7 @@ CreateShield(client, target, const Float:pos[3], ShieldFlags:flags, Float:Durati
                 }
             }
 
-            new Handle:pack;
+            Handlepack;
             gObjectTimers[client] = CreateDataTimer(Duration, ShieldExpired, pack, TIMER_FLAG_NO_MAPCHANGE);
             WritePackCell(pack, client);
         }
@@ -806,7 +806,7 @@ CreateShield(client, target, const Float:pos[3], ShieldFlags:flags, Float:Durati
         if (gRemaining[client] > 0)
             gRemaining[client]--;
 
-        new Float:time = GetConVarFloat(cvRechargeTime);
+        floattime = GetConVarFloat(cvRechargeTime);
         if (time > 0.0)
         {
             m_ShieldCharged[client]=false;
@@ -822,9 +822,9 @@ CreateShield(client, target, const Float:pos[3], ShieldFlags:flags, Float:Durati
     return shield;
 }
 
-public Action:PlaySound(Handle:timer, Handle:pack)
+public ActionPlaySound(Handle timer, Handle pack)
 {
-    if (pack != INVALID_HANDLE)
+    if (pack != null)
     {
         ResetPack(pack);
         new shield = EntRefToEntIndex(ReadPackCell(pack));
@@ -840,7 +840,7 @@ public Action:PlaySound(Handle:timer, Handle:pack)
                     StopSound(shield, SNDCHAN_AUTO, gAlternateActiveSound);
             }
 
-            decl String:sound[PLATFORM_MAX_PATH+1];
+            charsound[PLATFORM_MAX_PATH+1];
             ReadPackString(pack, sound, sizeof(sound));
             if (sound[0])
             {
@@ -850,19 +850,19 @@ public Action:PlaySound(Handle:timer, Handle:pack)
     }
 }
 
-public Action:ShieldExpired(Handle:timer, Handle:pack)
+public ActionShieldExpired(Handle timer, Handle pack)
 {
-    if (pack != INVALID_HANDLE)
+    if (pack != null)
     {
         ResetPack(pack);
         new target = ReadPackCell(pack);
 
-        gObjectTimers[target] = INVALID_HANDLE;
+        gObjectTimers[target] = null;
         RemoveShield(target);
     }
 }
 
-public Action:RechargeShield(Handle:timer,any:index)
+public ActionRechargeShield(Handle timer,any:index)
 {
     m_ShieldCharged[index]=true;
     return Plugin_Stop;
@@ -897,12 +897,12 @@ RemoveShield(client)
     gField[client] = INVALID_ENT_REFERENCE;
 }
 
-public Native_ControlUberShield(Handle:plugin,numParams)
+public Native_ControlUberShield(Handle plugin,numParams)
 {
     gNativeControl = (numParams >= 1) ? (bool:GetNativeCell(1)) : true;
 }
 
-public Native_GiveUberShield(Handle:plugin,numParams)
+public Native_GiveUberShield(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -916,7 +916,7 @@ public Native_GiveUberShield(Handle:plugin,numParams)
     }
 }
 
-public Native_TakeUberShield(Handle:plugin,numParams)
+public Native_TakeUberShield(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
@@ -925,13 +925,13 @@ public Native_TakeUberShield(Handle:plugin,numParams)
     }
 }
 
-public Native_UberShieldTarget(Handle:plugin,numParams)
+public Native_UberShieldTarget(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
         new client = GetNativeCell(1);
 
-        new Float:duration = (numParams >= 2) ? (Float:GetNativeCell(2)) : -1.0;
+        floatduration = (numParams >= 2) ? (Float:GetNativeCell(2)) : -1.0;
         if (duration < 0.0)
             duration = GetConVarFloat(cvMaxDuration);
 
@@ -945,13 +945,13 @@ public Native_UberShieldTarget(Handle:plugin,numParams)
         return false;
 }
 
-public Native_UberShieldLocation(Handle:plugin,numParams)
+public Native_UberShieldLocation(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
         new client = GetNativeCell(1);
 
-        new Float:duration = (numParams >= 2) ? (Float:GetNativeCell(2)) : -1.0;
+        floatduration = (numParams >= 2) ? (Float:GetNativeCell(2)) : -1.0;
         if (duration < 0.0)
             duration = GetConVarFloat(cvMaxDuration);
 
@@ -965,20 +965,20 @@ public Native_UberShieldLocation(Handle:plugin,numParams)
         return false;
 }
 
-public Native_UberShield(Handle:plugin,numParams)
+public Native_UberShield(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
         new client = GetNativeCell(1);
         new target = (numParams >= 2) ? GetNativeCell(2) : 0;
 
-        decl Float:pos[3];
+        floatpos[3];
         if (numParams >= 3)
             GetNativeArray(3, pos, sizeof(pos));
         else
             pos[0] = pos[1] = pos[2] = 0.0;
 
-        new Float:duration = (numParams >= 4) ? (Float:GetNativeCell(4)) : -1.0;
+        floatduration = (numParams >= 4) ? (Float:GetNativeCell(4)) : -1.0;
         if (duration < 0.0)
             duration = GetConVarFloat(cvMaxDuration);
 
@@ -1000,7 +1000,7 @@ public Native_UberShield(Handle:plugin,numParams)
         return 0;
 }
 
-public Native_SetAlternateShieldSound(Handle:plugin,numParams)
+public Native_SetAlternateShieldSound(Handle plugin,numParams)
 {
     if (numParams >= 5)
     {

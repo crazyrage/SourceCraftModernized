@@ -11,9 +11,9 @@ Version : 1.0
 //PushClientToVector is deprecated use PushEntToVector instead
 #define PushClientToVector PushEntToVector
 
-stock PushEntToVector( edict, Float:pos1[3], Float:power )
+stock PushEntToVector( edict, float pos1[3], float power )
 {
-	new Float:pos2[3], Float:main_origin[3], Float:velo1[3], Float:velo2[3];
+	float pos2[3], float main_origin[3], float velo1[3], float velo2[3];
 	GetEntPropVector(edict, Prop_Send, "m_vecOrigin", pos2);
 
 	main_origin[0] = pos1[0] - pos2[0], main_origin[1] = pos1[1] - pos2[1], main_origin[2] = pos1[2] - pos2[2];
@@ -27,11 +27,11 @@ stock PushEntToVector( edict, Float:pos1[3], Float:power )
 	TeleportEntity( edict, NULL_VECTOR, NULL_VECTOR, velo2 );
 }
 
-stock CreateParticles(const client,bool:parentent,Float:fLifetime,Float:fAng[3],Float:BaseSpread,Float:StartSize,Float:EndSize,Float:Twist,String:material[],String:renderclr[],String:SpreadSpeed[],String:JetLength[],String:Speed[],String:Rate[]){
-	new particle = CreateEntityByName("env_smokestack");
+stock CreateParticles(const client,bool parentent,float fLifetime,float fAng[3],float BaseSpread,float StartSize,float EndSize,float Twist,char[] material,char[] renderclr,char[] SpreadSpeed,char[] JetLength,char[] Speed,char[] Rate){
+	int particle = CreateEntityByName("env_smokestack");
 	if(IsValidEdict(particle) && IsClientInGame(client))
 	{
-		decl String:Name[32], Float:fPos[3];
+		char Name[32], float fPos[3];
 		Format(Name, sizeof(Name), "W3S_particles_%i", client);
 		GetEntPropVector(client, Prop_Send, "m_vecOrigin", fPos);
 		fPos[2] += 50.0;
@@ -72,11 +72,11 @@ stock CreateParticles(const client,bool:parentent,Float:fLifetime,Float:fAng[3],
 	return -1;
 }
 
-stock CreateFire(const client,String:firesize[],String:health[],String:fireattack[],String:firetype[],String:flags[],Float:damagescale,Float:fLifetime){
-	new fire = CreateEntityByName("env_fire");
+stock CreateFire(const client,char[] firesize,char[] health,char[] fireattack,char[] firetype,char[] flags,float damagescale,float fLifetime){
+	int fire = CreateEntityByName("env_fire");
 	if(IsValidEdict(fire) && IsClientInGame(client))
 	{
-		decl String:Name[32], Float:fPos[3];
+		char Name[32], float fPos[3];
 		Format(Name, sizeof(Name), "W3S_fire_%i", client);
 		GetEntPropVector(client, Prop_Send, "m_vecOrigin", fPos);
 		DispatchKeyValueFloat(fire, "damagescale", damagescale);
@@ -102,11 +102,11 @@ stock CreateFire(const client,String:firesize[],String:health[],String:fireattac
 }
 
 
-stock CreateTesla(const client,Float:flifetime_min,Float:flifetime_max,Float:thick_min,Float:thick_max,Float:interval_min,Float:interval_max,Float:radiustesla,String:beamcount_min[],String:beamcount_max[],String:ColorTesla[],String:sound[],String:beammodel[],bool:spark){
-	new point_tesla = CreateEntityByName("point_tesla");
+stock CreateTesla(const client,float flifetime_min,float flifetime_max,float thick_min,float thick_max,float interval_min,float interval_max,float radiustesla,char[] beamcount_min,char[] beamcount_max,char[] ColorTesla,char[] sound,char[] beammodel,bool spark){
+	int point_tesla = CreateEntityByName("point_tesla");
 	if(IsValidEdict(point_tesla) && IsClientInGame(client))
 	{
-		decl String:Name[32], Float:fPos[3];
+		char Name[32], float fPos[3];
 		Format(Name, sizeof(Name), "W3S_tesla_%i", client);
 		GetEntPropVector(client, Prop_Send, "m_vecOrigin", fPos);
 		fPos[2]+=42.0;
@@ -141,9 +141,9 @@ stock CreateTesla(const client,Float:flifetime_min,Float:flifetime_max,Float:thi
 	return -1;
 }
 
-stock CreateExplosion(Float:VectorPos[3], owner, String:classname[], String:magnitude[])
+stock CreateExplosion(float VectorPos[3], owner, char[] classname, char[] magnitude)
 {
-	new g_ent = CreateEntityByName("env_explosion");
+	int g_ent = CreateEntityByName("env_explosion");
 	SetEntPropEnt(g_ent, Prop_Send, "m_hOwnerEntity", owner);
 	DispatchKeyValue(g_ent, "classname", classname);
 	DispatchKeyValue(g_ent, "iMagnitude", magnitude);
@@ -153,7 +153,7 @@ stock CreateExplosion(Float:VectorPos[3], owner, String:classname[], String:magn
 	RemoveEdict(g_ent);
 }
 
-public Action:INCTimer_RemoveEntity(Handle:timer, any:edict)
+public Action INCTimer_RemoveEntity(Handle timer, any:edict)
 {
 	if(IsValidEdict(edict))
 	{
@@ -163,7 +163,7 @@ public Action:INCTimer_RemoveEntity(Handle:timer, any:edict)
 
 stock SetEntityAimToClient( edict, target)
 {
-	new Float:spos[3],  Float:epos[3], Float:vecles[3], Float:angles[3];
+	float spos[3],  float epos[3], float vecles[3], float angles[3];
 	GetEntPropVector(edict, Prop_Send, "m_vecOrigin", spos);
 	GetClientAbsOrigin( target, epos );
 	SubtractVectors( epos, spos, vecles );

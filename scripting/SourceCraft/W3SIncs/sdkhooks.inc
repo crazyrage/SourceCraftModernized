@@ -195,30 +195,30 @@ funcenum SDKHookCB
 	
 	// OnTakeDamage
 	// Note: Force application is dependent on game and damage type(s)
-	Action:public(victim, &attacker, &inflictor, &Float:damage, &damagetype),
-	Action:public(victim, &attacker, &inflictor, &Float:damage, &damagetype, &weapon, Float:damageForce[3], Float:damagePosition[3]),
+	Action:public(victim, &attacker, &inflictor, &float damage, &damagetype),
+	Action:public(victim, &attacker, &inflictor, &float damage, &damagetype, &weapon, float damageForce[3], float damagePosition[3]),
 	
 	// OnTakeDamagePost
-	public(victim, attacker, inflictor, Float:damage, damagetype),
-	public(victim, attacker, inflictor, Float:damage, damagetype, weapon, const Float:damageForce[3], const Float:damagePosition[3]),
+	public(victim, attacker, inflictor, float damage, damagetype),
+	public(victim, attacker, inflictor, float damage, damagetype, weapon, const float damageForce[3], const float damagePosition[3]),
 	
 	// FireBulletsPost
-	public(client, shots, const String:weaponname[]),
+	public(client, shots, const char weaponname[]),
 	
 	// TraceAttack
-	Action:public(victim, &attacker, &inflictor, &Float:damage, &damagetype, &ammotype, hitbox, hitgroup),
+	Action:public(victim, &attacker, &inflictor, &float damage, &damagetype, &ammotype, hitbox, hitgroup),
 	
 	// TraceAttackPost
-	public(victim, attacker, inflictor, Float:damage, damagetype, ammotype, hitbox, hitgroup),
+	public(victim, attacker, inflictor, float damage, damagetype, ammotype, hitbox, hitgroup),
 	
 	// ShouldCollide
-	bool:public(entity, collisiongroup, contentsmask, bool:originalResult),
+	bool public(entity, collisiongroup, contentsmask, bool originalResult),
 	
 	// Use
-	Action:public(entity, activator, caller, UseType:type, Float:value),
+	Action:public(entity, activator, caller, UseType:type, float value),
 	
 	// UsePost
-	public(entity, activator, caller, UseType:type, Float:value)
+	public(entity, activator, caller, UseType:type, float value)
 };
 
 
@@ -229,7 +229,7 @@ funcenum SDKHookCB
  * @param		classname	Class name
  * @noreturn
  */
-forward OnEntityCreated(entity, const String:classname[]);
+forward OnEntityCreated(entity, const char classname[]);
 
 /**
  * @brief When an entity is destroyed
@@ -245,7 +245,7 @@ forward OnEntityDestroyed(entity);
  * @param		gameDesc		Game description
  * @noreturn
  */
-forward Action:OnGetGameDescription(String:gameDesc[64]);
+forward Action OnGetGameDescription(String:gameDesc[64]);
 
 /**
  * @brief When the level is initialized
@@ -254,7 +254,7 @@ forward Action:OnGetGameDescription(String:gameDesc[64]);
  * @param		mapEntities	Entities of the map
  * @noreturn
  */
-forward Action:OnLevelInit(const String:mapName[], String:mapEntities[2097152]);
+forward Action OnLevelInit(const char mapName[], String:mapEntities[2097152]);
 
 /**
  * @brief Hooks an entity
@@ -274,7 +274,7 @@ native SDKHook(entity, SDKHookType:type, SDKHookCB:callback);
  * @param		callback	Function to call when hook is called
  * @return		bool		Hook Successful
  */
-native bool:SDKHookEx(entity, SDKHookType:type, SDKHookCB:callback);
+native bool SDKHookEx(entity, SDKHookType:type, SDKHookCB:callback);
 
 /**
  * @brief Unhooks an entity
@@ -301,7 +301,7 @@ native SDKUnhook(entity, SDKHookType:type, SDKHookCB:callback);
  * @param    damagePosition Origin of damage
  * @noreturn
  */
-native SDKHooks_TakeDamage(entity, inflictor, attacker, Float:damage, damageType=DMG_GENERIC, weapon=-1, const Float:damageForce[3]=NULL_VECTOR, const Float:damagePosition[3]=NULL_VECTOR);
+native SDKHooks_TakeDamage(entity, inflictor, attacker, float damage, damageType=DMG_GENERIC, weapon=-1, const float damageForce[3]=NULL_VECTOR, const float damagePosition[3]=NULL_VECTOR);
 
 /**
  * @brief				Forces a client to drop the specified weapon
@@ -313,7 +313,7 @@ native SDKHooks_TakeDamage(entity, inflictor, attacker, Float:damage, damageType
  * @noreturn
  * @error				Invalid client or weapon entity, weapon not owned by client.
  */
-native SDKHooks_DropWeapon(client, weapon, const Float:vecTarget[3]=NULL_VECTOR, const Float:vecVelocity[3]=NULL_VECTOR);
+native SDKHooks_DropWeapon(client, weapon, const float vecTarget[3]=NULL_VECTOR, const float vecVelocity[3]=NULL_VECTOR);
 
 /** Do Not Edit Below This Line **/
 

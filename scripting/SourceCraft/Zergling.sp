@@ -40,35 +40,35 @@
 #include "effect/HaloSprite"
 #include "effect/SendEffects"
 
-new const String:spawnWav[] = "sc/zzerdy00.wav";  // Spawn sound
-new const String:deathWav[] = "sc/zzedth00.wav";  // Death sound
-new const String:bloodlustEndWav[] = "sc/zzewht00.wav";
-new const String:bloodlustWav[] = "sc/zzerdy00.wav";
+static const char[] spawnWav[] = "sc/zzerdy00.wav";  // Spawn sound
+static const char[] deathWav[] = "sc/zzedth00.wav";  // Death sound
+static const char[] bloodlustEndWav[] = "sc/zzewht00.wav";
+static const char[] bloodlustWav[] = "sc/zzerdy00.wav";
 
-new const Float:g_SpeedLevels[] = { -1.0, 1.05, 1.10, 1.15, 1.20 };
-//new const Float:g_SpeedLevels[] = { -1.0, 1.08, 1.19, 1.25, 1.36 };
+const float g_SpeedLevels[] = { -1.0, 1.05, 1.10, 1.15, 1.20 };
+//const float g_SpeedLevels[] = { -1.0, 1.08, 1.19, 1.25, 1.36 };
 
-new const String:g_AdrenalGlandsSound[] = "sc/zulhit00.wav";
-new Float:g_AdrenalGlandsPercent[] = { 0.0, 0.15, 0.30, 0.40, 0.50 };
+static const char[] g_AdrenalGlandsSound[] = "sc/zulhit00.wav";
+float g_AdrenalGlandsPercent[] = { 0.0, 0.15, 0.30, 0.40, 0.50 };
 
-new const String:g_ArmorName[] = "Carapace";
-new Float:g_InitialArmor[]     = { 0.0, 0.10, 0.20, 0.30, 0.40 };
-new Float:g_ArmorPercent[][2]  = { {0.00, 0.00},
+static const char[] g_ArmorName[] = "Carapace";
+float g_InitialArmor[]     = { 0.0, 0.10, 0.20, 0.30, 0.40 };
+float g_ArmorPercent[][2]  = { {0.00, 0.00},
                                    {0.00, 0.10},
                                    {0.00, 0.20},
                                    {0.10, 0.40},
                                    {0.10, 0.50} };
 
-new cfgMaxRespawns             = 4;
+int cfgMaxRespawns             = 4;
 
-new raceID, boostID, carapaceID, regenerationID, burrowID;
-new meleeID, spawningID, bloodlustID, banelingID;
+int raceID, boostID, carapaceID, regenerationID, burrowID;
+int meleeID, spawningID, bloodlustID, banelingID;
 
-new g_banelingRace = -1;
+int g_banelingRace = -1;
 
-new bool:m_BloodlustActive[MAXPLAYERS+1];
+bool m_BloodlustActive[MAXPLAYERS+1];
 
-public Plugin:myinfo = 
+public Plugin myinfo =
 {
     name = "SourceCraft Race - Zergling",
     author = "-=|JFH|=-Naris",
@@ -77,7 +77,7 @@ public Plugin:myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.common.phrases.txt");
     LoadTranslations("sc.respawn.phrases.txt");
@@ -163,16 +163,16 @@ public OnSourceCraftReady()
     GetConfigFloatArray("armor_amount", g_InitialArmor, sizeof(g_InitialArmor),
                         g_InitialArmor, raceID, carapaceID);
 
-    for (new level=0; level < sizeof(g_ArmorPercent); level++)
+    for (int level=0; level < sizeof(g_ArmorPercent); level++)
     {
-        decl String:key[32];
+        char key[32];
         Format(key, sizeof(key), "armor_percent_level_%d", level);
         GetConfigFloatArray(key, g_ArmorPercent[level], sizeof(g_ArmorPercent[]),
                             g_ArmorPercent[level], raceID, carapaceID);
     }
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupSmokeSprite();
     SetupHaloSprite();
@@ -202,12 +202,12 @@ public OnPlayerAuthed(client)
     #endif
 }
 
-public OnClientDisconnect(client)
+public void OnClientDisconnect(client)
 {
     m_BloodlustActive[client] = false;
 }
 
-public Action:OnRaceDeselected(client,oldrace,newrace)
+public Action OnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
@@ -219,7 +219,7 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
         ResetArmor(client);
 
         if (m_BloodlustActive[client])
-            EndBloodlust(INVALID_HANDLE, GetClientUserId(client));
+            EndBloodlust(null, GetClientUserId(client));
 
         TraceReturn();
         return Plugin_Handled;
@@ -240,7 +240,7 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
     }
 }
 
-public Action:OnRaceSelected(client,oldrace,newrace)
+public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
@@ -255,13 +255,13 @@ public Action:OnRaceSelected(client,oldrace,newrace)
         m_ReincarnationCount[client]=0;
         m_IsRespawning[client]=false;
 
-        new boost_level = GetUpgradeLevel(client,raceID,boostID);
+        int boost_level = GetUpgradeLevel(client,raceID,boostID);
         SetSpeedBoost(client, boost_level, true, g_SpeedLevels);
 
         new regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
         SetHealthRegen(client, float(regeneration_level));
 
-        new carapace_level = GetUpgradeLevel(client,raceID,carapaceID);
+        int carapace_level = GetUpgradeLevel(client,raceID,carapaceID);
         SetupArmor(client, carapace_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
@@ -304,14 +304,14 @@ public OnItemPurchase(client,item)
 
         if (item == g_bootsItem)
         {
-            new boost_level = GetUpgradeLevel(client,race,boostID);
+            int boost_level = GetUpgradeLevel(client,race,boostID);
             if (boost_level > 0)
                 SetSpeedBoost(client, boost_level, true, g_SpeedLevels);
         }
     }
 }
 
-public OnUltimateCommand(client,race,bool:pressed,arg)
+public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (race==raceID && IsValidClientAlive(client))
     {
@@ -375,9 +375,9 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
 }
 
 // Events
-public RoundEndEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public RoundEndEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    for (new index=1;index<=MaxClients;index++)
+    for (int index=1;index<=MaxClients;index++)
     {
         m_BloodlustActive[index] = false;
         m_ReincarnationCount[index]=0;
@@ -389,7 +389,7 @@ public RoundEndEvent(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public OnPlayerSpawnEvent(Handle:event, client, race)
+public OnPlayerSpawnEvent(Handle event, client, race)
 {
     if (race == raceID)
     {
@@ -401,11 +401,11 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
         m_BloodlustActive[client] = false;
         Respawned(client,true);
 
-        new carapace_level = GetUpgradeLevel(client,raceID,carapaceID);
+        int carapace_level = GetUpgradeLevel(client,raceID,carapaceID);
         SetupArmor(client, carapace_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        new boost_level = GetUpgradeLevel(client,raceID,boostID);
+        int boost_level = GetUpgradeLevel(client,raceID,boostID);
         SetSpeedBoost(client, boost_level, true, g_SpeedLevels);
 
         new regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
@@ -415,27 +415,27 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
     }
 }
 
-public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacker_index,
-                                attacker_race, damage, absorbed, bool:from_sc)
+public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
+                                attacker_race, damage, absorbed, bool from_sc)
 {
     if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index &&
         attacker_race == raceID)
     {
         new adrenal_glands_level=GetUpgradeLevel(attacker_index,raceID,meleeID);
-        new bloodlust = m_BloodlustActive[attacker_index];
+        int bloodlust = m_BloodlustActive[attacker_index];
         if (bloodlust && !GetRestriction(attacker_index,Restriction_NoUltimates) &&
             !GetRestriction(attacker_index,Restriction_Stunned))
         {
-            decl Float:bloodlustPercent[sizeof(g_AdrenalGlandsPercent)];
+            float bloodlustPercent[sizeof(g_AdrenalGlandsPercent)];
             new bloodlust_level= GetUpgradeLevel(attacker_index,raceID,bloodlustID);
-            new Float:increase = (float(bloodlust_level) * 0.25) + 1.0;
-            for (new i = 0; i < sizeof(g_AdrenalGlandsPercent); i++)
+            float increase = (float(bloodlust_level) * 0.25) + 1.0;
+            for (int i = 0; i < sizeof(g_AdrenalGlandsPercent); i++)
             {
                 bloodlustPercent[i] = g_AdrenalGlandsPercent[i] * increase;
             }
 
-            new attack_level = (bloodlust_level > adrenal_glands_level ?
+            int attack_level = (bloodlust_level > adrenal_glands_level ?
                                 bloodlust_level : adrenal_glands_level);
 
             if (MeleeAttack(raceID, meleeID, attack_level, event, damage + absorbed,
@@ -459,10 +459,10 @@ public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacke
     return Plugin_Continue;
 }
 
-public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_index,
+public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_index,
                           attacker_race, assister_index, assister_race, damage,
-                          const String:weapon[], bool:is_equipment, customkill,
-                          bool:headshot, bool:backstab, bool:melee)
+                          const char[] weapon, bool is_equipment, customkill,
+                          bool headshot, bool backstab, bool melee)
 {
     if (victim_race==raceID)
     {
@@ -473,7 +473,7 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
         SetSpeed(victim_index,-1.0);
 
         if (m_BloodlustActive[victim_index])
-            EndBloodlust(INVALID_HANDLE, GetClientUserId(victim_index));
+            EndBloodlust(null, GetClientUserId(victim_index));
 
         PrepareAndEmitSoundToAll(deathWav,victim_index);
 
@@ -508,7 +508,7 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
         {
             PrepareAndEmitSoundToClient(victim_index,deniedWav);
 
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, spawningID, upgradeName, sizeof(upgradeName), victim_index);
             DisplayMessage(victim_index, Display_Message, "%t", "NotAsMole", upgradeName);
             m_ReincarnationCount[victim_index] = 0;
@@ -585,8 +585,8 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
         }
         else
         {
-            new count = m_ReincarnationCount[victim_index];
-            new spawning_level = GetUpgradeLevel(victim_index, victim_race, spawningID);
+            int count = m_ReincarnationCount[victim_index];
+            int spawning_level = GetUpgradeLevel(victim_index, victim_race, spawningID);
             if (spawning_level > 0 && count < cfgMaxRespawns && count < spawning_level)
             {
                 if (count == 0 || GetRandomInt(1,100) <= (100 - (count*30)))
@@ -595,7 +595,7 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
                     {
                         Respawn(victim_index);
 
-                        decl String:suffix[3];
+                        char suffix[3];
                         count = m_ReincarnationCount[victim_index];
                         GetNumberSuffix(count, suffix, sizeof(suffix));
 
@@ -670,7 +670,7 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
     }
 }
 
-BanelingMorph(client)
+void BanelingMorph(client)
 {
     if (g_banelingRace < 0)
         g_banelingRace = FindRace("baneling");
@@ -690,7 +690,7 @@ BanelingMorph(client)
     }
     else if (HasCooldownExpired(client, raceID, banelingID))
     {
-        new Float:clientLoc[3];
+        float clientLoc[3];
         GetClientAbsOrigin(client, clientLoc);
         clientLoc[2] += 40.0; // Adjust position to the middle
 
@@ -707,26 +707,26 @@ BanelingMorph(client)
     }
 }
 
-Bloodlust(client, level)
+void Bloodlust(client, level)
 {
     if (level > 0)
     {
         if (GetRestriction(client,Restriction_NoUltimates) ||
             GetRestriction(client,Restriction_Stunned))
         {
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, bloodlustID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
         }
         else if (CanInvokeUpgrade(client, raceID, bloodlustID))
         {
-            new Float:speed=g_SpeedLevels[level] + (float(level)*0.05);
+            float speed=g_SpeedLevels[level] + (float(level)*0.05);
 
             /* If the Player also has the Boots of Speed,
              * Increase the speed further
              */
-            new boots = FindShopItem("boots");
+            int boots = FindShopItem("boots");
             if (boots != -1 && GetOwnsItem(client,boots))
             {
                 speed *= 1.1;
@@ -734,7 +734,7 @@ Bloodlust(client, level)
 
             SetSpeed(client,speed);
 
-            new Float:start[3];
+            float start[3];
             GetClientAbsOrigin(client, start);
 
             static const color[4] = { 255, 100, 100, 255 };
@@ -753,9 +753,9 @@ Bloodlust(client, level)
     }
 }
 
-public Action:EndBloodlust(Handle:timer,any:userid)
+public Action EndBloodlust(Handle timer,any userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (IsValidClient(client))
     {
         m_BloodlustActive[client] = false;
@@ -766,7 +766,7 @@ public Action:EndBloodlust(Handle:timer,any:userid)
             PrintHintText(client, "%t", "BloodlustEnded");
             ClearHud(client, "%t", "BloodlustHud");
 
-            new boost_level = GetUpgradeLevel(client,raceID,boostID);
+            int boost_level = GetUpgradeLevel(client,raceID,boostID);
             SetSpeedBoost(client, boost_level, true, g_SpeedLevels);
         }
         else

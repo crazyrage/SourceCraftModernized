@@ -13,7 +13,7 @@
  */
 stock War3_SetCSArmor(client, amount) {
     // Revan: thoose armor properities for CS:GO are the same as in CS:Source
-    new ValveGameEnum:war3Game = War3_GetGame();
+    int ValveGameEnum:war3Game = War3_GetGame();
     if (war3Game == Game_CS || war3Game == Game_CSGO) {
         if (amount > 125) {
             amount = 125;
@@ -29,7 +29,7 @@ stock War3_SetCSArmor(client, amount) {
  * @return              Armor value
  */
 stock War3_GetCSArmor(client) {
-    new ValveGameEnum:war3Game = War3_GetGame();
+    int ValveGameEnum:war3Game = War3_GetGame();
     if (war3Game == Game_CS || war3Game == Game_CSGO) {
         return GetEntProp(client, Prop_Send, "m_ArmorValue");
     }
@@ -42,8 +42,8 @@ stock War3_GetCSArmor(client) {
  * @param client      Client index
  * @return              True if client is wearing a helmet
  */
-stock bool:War3_GetCSArmorHasHelmet(client) {
-    return bool:GetEntProp(client, Prop_Send, "m_bHasHelmet");
+stock bool War3_GetCSArmorHasHelmet(client) {
+    return bool GetEntProp(client, Prop_Send, "m_bHasHelmet");
 }
 
 /**
@@ -53,7 +53,7 @@ stock bool:War3_GetCSArmorHasHelmet(client) {
  * @param hashelmet   True to give helmet, false to remove
  * @noreturn
  */
-stock void War3_SetCSArmorHasHelmet(client,bool:hashelmet) {
+stock void War3_SetCSArmorHasHelmet(client,bool hashelmet) {
     SetEntProp(client, Prop_Send, "m_bHasHelmet",hashelmet? 1:0, 1);
 }
 
@@ -66,6 +66,6 @@ stock void War3_SetCSArmorHasHelmet(client,bool:hashelmet) {
  */
 native War3_RestoreCachedCSArmor(client);
 
-native bool:War3_CSAddCustomModel(client,String:weapon[],modelIndex,mdltype);
-native bool:War3_CSRemoveCustomModel(client,String:weapon[],mdltype);
+native bool War3_CSAddCustomModel(client,char[] weapon,modelIndex,mdltype);
+native bool War3_CSRemoveCustomModel(client,char[] weapon,mdltype);
 #endif

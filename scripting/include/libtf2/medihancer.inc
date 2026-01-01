@@ -16,7 +16,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of the Medic Enhancer plugin.
  * @return		    	none
  */
-native ControlMedicEnhancer(bool:plugin_only=true);
+native ControlMedicEnhancer(bool plugin_only=true);
 
 /**
  * Give a hook to the player
@@ -26,7 +26,7 @@ native ControlMedicEnhancer(bool:plugin_only=true);
  * @param amount    Set to amount of uber per heartbeat, 0 = default amount from convar.
  * @return			none
  */
-native SetMedicEnhancement(client,bool:arm=true,amount=0);
+native SetMedicEnhancement(client,bool arm=true,amount=0);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

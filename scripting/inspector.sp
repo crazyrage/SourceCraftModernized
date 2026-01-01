@@ -14,9 +14,9 @@
 
 #define PL_VERSION "1.3"
 
-new Handle:g_InspectionEnabled = INVALID_HANDLE;
+Handle g_InspectionEnabled = null;
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "The Inspector",
     author = "-=|JFH|=-Naris",
@@ -50,16 +50,16 @@ public OnPluginStart()
 
 // Events
 
-public PlayerBuiltObject(Handle:event,const String:name[],bool:dontBroadcast)
+public PlayerBuiltObject(Handle event,const char[] name,bool dontBroadcast)
 {
     if (GetConVarBool(g_InspectionEnabled))
     {
-        new userid = GetEventInt(event,"userid");
-        new client = GetClientOfUserId(userid);
+        int userid = GetEventInt(event,"userid");
+        int client = GetClientOfUserId(userid);
         if (client > 0)
         {
             //new objects:type = unknown;
-            new objectid = GetEventInt(event,"index");
+            int objectid = GetEventInt(event,"index");
             new TFObjectType:obj = TFObjectType:GetEventInt(event,"object");
 
             LogMessage("%s: userid=%d:%d:%N, entity=%d, object=%d:%s",
@@ -71,16 +71,16 @@ public PlayerBuiltObject(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public ObjectRemoved(Handle:event,const String:name[],bool:dontBroadcast)
+public ObjectRemoved(Handle event,const char[] name,bool dontBroadcast)
 {
     if (GetConVarBool(g_InspectionEnabled))
     {
-        new userid = GetEventInt(event,"userid");
-        new client = GetClientOfUserId(userid);
+        int userid = GetEventInt(event,"userid");
+        int client = GetClientOfUserId(userid);
         if (client > 0)
         {
             //new objects:type = unknown;
-            new objectid = GetEventInt(event,"index");
+            int objectid = GetEventInt(event,"index");
             new TFObjectType:obj = TFObjectType:GetEventInt(event,"objecttype");
 
             LogMessage("%s: userid=%d:%d:%N, entity=%d, object=%d:%s",
@@ -91,9 +91,9 @@ public ObjectRemoved(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public Action:InspectCmd(client, args)
+public Action InspectCmd(client, args)
 {
-    new target = GetClientAimTarget(client, false);
+    int target = GetClientAimTarget(client, false);
     if (target > 0)
     {
         LogMessage("Inspected by %d:%N: entity=%d", client, client, target);
@@ -103,30 +103,30 @@ public Action:InspectCmd(client, args)
 
 InspectEntity(client, entity)
 {
-    decl String:class[32];
+    char class[32];
     if (!GetEdictClassname(entity,class,sizeof(class)))
         class[0] = '\0';
 
-    decl String:net_class[32];
+    char net_class[32];
     if (!GetEntityNetClass(entity,net_class,sizeof(net_class)))
         net_class[0] = '\0';
 
-    new flags = GetEdictFlags(entity);
+    int flags = GetEdictFlags(entity);
 
-    new m_nSkin = GetEntProp(entity, Prop_Send, "m_nSkin");
-    new m_nBody = GetEntProp(entity, Prop_Send, "m_nBody");
-    new m_iTeamNum = GetEntProp(entity, Prop_Send, "m_iTeamNum");
+    int m_nSkin = GetEntProp(entity, Prop_Send, "m_nSkin");
+    int m_nBody = GetEntProp(entity, Prop_Send, "m_nBody");
+    int m_iTeamNum = GetEntProp(entity, Prop_Send, "m_iTeamNum");
 
-    new Float:m_vecOrigin[3];
+    float m_vecOrigin[3];
     GetEntPropVector(entity, Prop_Send, "m_vecOrigin", m_vecOrigin);
 
-    new Float:m_angRotation[3];
+    float m_angRotation[3];
     GetEntPropVector(entity, Prop_Send, "m_angRotation", m_vecOrigin);
 
-    new Float:m_vecMaxs[3];
+    float m_vecMaxs[3];
     GetEntPropVector(entity, Prop_Send, "m_vecMaxs", m_vecMaxs);
 
-    new Float:m_vecMins[3];
+    float m_vecMins[3];
     GetEntPropVector(entity, Prop_Send, "m_vecMins", m_vecMins);
 
     LogMessage("%s/%s: flags=%x, skin=%d, body=%d, team=%d, maxs={%f,%f,%f}, mins={%f,%f,%f}, origin={%f,%f,%f}, angle={%f,%f,%f}",
@@ -142,34 +142,34 @@ InspectEntity(client, entity)
 
     if (strncmp(class, "obj_", 4) == 0)
     {
-        new Float:m_vecBuildMaxs[3];
+        float m_vecBuildMaxs[3];
         GetEntPropVector(entity, Prop_Send, "m_vecBuildMaxs", m_vecBuildMaxs);
 
-        new Float:m_vecBuildMins[3];
+        float m_vecBuildMins[3];
         GetEntPropVector(entity, Prop_Send, "m_vecBuildMins", m_vecBuildMins);
 
-        new m_iHealth = GetEntProp(entity, Prop_Send, "m_iHealth");
-        new m_iMaxHealth = GetEntProp(entity, Prop_Send, "m_iMaxHealth");
-        new m_bHasSapper = GetEntProp(entity, Prop_Send, "m_bHasSapper");
-        new m_iObjectType = GetEntProp(entity, Prop_Send, "m_iObjectType");
-        new m_iObjectMode = GetEntProp(entity, Prop_Send, "m_iObjectMode");
-        new m_iUpgradeMetal = GetEntProp(entity, Prop_Send, "m_iUpgradeMetal");
-        new m_iUpgradeLevel = GetEntProp(entity, Prop_Send, "m_iUpgradeLevel");
-        new m_iHighestUpgradeLevel = GetEntProp(entity, Prop_Send, "m_iHighestUpgradeLevel");
-        new m_fObjectFlags = GetEntProp(entity, Prop_Send, "m_fObjectFlags");
-        new m_bBuilding = GetEntProp(entity, Prop_Send, "m_bBuilding");
-        new m_bPlacing = GetEntProp(entity, Prop_Send, "m_bPlacing");
-        new m_bCarried = GetEntProp(entity, Prop_Send, "m_bCarried");
-        new m_bCarryDeploy = GetEntProp(entity, Prop_Send, "m_bCarryDeploy");
-        new m_bMiniBuilding = GetEntProp(entity, Prop_Send, "m_bMiniBuilding");
-        new m_hBuiltOnEntity = GetEntProp(entity, Prop_Send, "m_hBuiltOnEntity");
-        new m_bDisabled = GetEntProp(entity, Prop_Send, "m_bDisabled");
-        new m_iDesiredBuildRotations = GetEntProp(entity, Prop_Send, "m_iDesiredBuildRotations");
-        new m_bServerOverridePlacement = GetEntProp(entity, Prop_Send, "m_bServerOverridePlacement");
+        int m_iHealth = GetEntProp(entity, Prop_Send, "m_iHealth");
+        int m_iMaxHealth = GetEntProp(entity, Prop_Send, "m_iMaxHealth");
+        int m_bHasSapper = GetEntProp(entity, Prop_Send, "m_bHasSapper");
+        int m_iObjectType = GetEntProp(entity, Prop_Send, "m_iObjectType");
+        int m_iObjectMode = GetEntProp(entity, Prop_Send, "m_iObjectMode");
+        int m_iUpgradeMetal = GetEntProp(entity, Prop_Send, "m_iUpgradeMetal");
+        int m_iUpgradeLevel = GetEntProp(entity, Prop_Send, "m_iUpgradeLevel");
+        int m_iHighestUpgradeLevel = GetEntProp(entity, Prop_Send, "m_iHighestUpgradeLevel");
+        int m_fObjectFlags = GetEntProp(entity, Prop_Send, "m_fObjectFlags");
+        int m_bBuilding = GetEntProp(entity, Prop_Send, "m_bBuilding");
+        int m_bPlacing = GetEntProp(entity, Prop_Send, "m_bPlacing");
+        int m_bCarried = GetEntProp(entity, Prop_Send, "m_bCarried");
+        int m_bCarryDeploy = GetEntProp(entity, Prop_Send, "m_bCarryDeploy");
+        int m_bMiniBuilding = GetEntProp(entity, Prop_Send, "m_bMiniBuilding");
+        int m_hBuiltOnEntity = GetEntProp(entity, Prop_Send, "m_hBuiltOnEntity");
+        int m_bDisabled = GetEntProp(entity, Prop_Send, "m_bDisabled");
+        int m_iDesiredBuildRotations = GetEntProp(entity, Prop_Send, "m_iDesiredBuildRotations");
+        int m_bServerOverridePlacement = GetEntProp(entity, Prop_Send, "m_bServerOverridePlacement");
 
-        new m_hBuilder = GetEntPropEnt(entity, Prop_Send, "m_hBuilder");
+        int m_hBuilder = GetEntPropEnt(entity, Prop_Send, "m_hBuilder");
 
-        new Float:m_flPercentageConstructed = GetEntPropFloat(entity, Prop_Send, "m_flPercentageConstructed");
+        float m_flPercentageConstructed = GetEntPropFloat(entity, Prop_Send, "m_flPercentageConstructed");
 
         LogMessage("type=%d, mode=%d, mini=%d, oflags=%x, disabled=%d, level=%d, hlevel=%d, BuildMaxs={%f,%f,%f}, BuildMins={%f,%f,%f}",
                    m_iObjectType, m_iObjectMode, m_bMiniBuilding, m_fObjectFlags, m_bDisabled, m_iUpgradeLevel, m_iHighestUpgradeLevel,
@@ -193,15 +193,15 @@ InspectEntity(client, entity)
 
         if (StrEqual(class, "obj_sentrygun"))
         {
-            new m_iAmmoShells = GetEntProp(entity, Prop_Send, "m_iAmmoShells");
-            new m_iAmmoRockets = GetEntProp(entity, Prop_Send, "m_iAmmoRockets");
-            new m_iState = GetEntProp(entity, Prop_Send, "m_iState");
-            new m_bPlayerControlled = GetEntProp(entity, Prop_Send, "m_bPlayerControlled");
-            new m_bShielded = GetEntProp(entity, Prop_Send, "m_bShielded");
-            new m_hEnemy = GetEntProp(entity, Prop_Send, "m_hEnemy");
-            new m_hAutoAimTarget = GetEntProp(entity, Prop_Send, "m_hAutoAimTarget");
+            int m_iAmmoShells = GetEntProp(entity, Prop_Send, "m_iAmmoShells");
+            int m_iAmmoRockets = GetEntProp(entity, Prop_Send, "m_iAmmoRockets");
+            int m_iState = GetEntProp(entity, Prop_Send, "m_iState");
+            int m_bPlayerControlled = GetEntProp(entity, Prop_Send, "m_bPlayerControlled");
+            int m_bShielded = GetEntProp(entity, Prop_Send, "m_bShielded");
+            int m_hEnemy = GetEntProp(entity, Prop_Send, "m_hEnemy");
+            int m_hAutoAimTarget = GetEntProp(entity, Prop_Send, "m_hAutoAimTarget");
 
-            new Float:m_HackedGunPos[3];
+            float m_HackedGunPos[3];
             GetEntPropVector(entity, Prop_Data, "m_HackedGunPos", m_HackedGunPos);
 
             LogMessage("shells=%d, rockets=%d, shielded=%d, state=%d, controlled=%d, enemy=%d, target=%d, GunPos={%f,%f,%f}",
@@ -221,25 +221,25 @@ InspectEntity(client, entity)
     }
 }
 
-public Action:Command_ObjHealth(client, args)
+public Action Command_ObjHealth(client, args)
 {
-    new target = GetClientAimTarget(client, false);
+    int target = GetClientAimTarget(client, false);
     if (target > 0)
     {
-        decl String:class[32];
+        char class[32];
         if (GetEdictClassname(target,class,sizeof(class)))
         {
             if (strncmp(class, "obj_", 4) == 0)
             {
-                new m_iMaxHealth = GetEntProp(target, Prop_Send, "m_iMaxHealth");
-                new m_iHealth = GetEntProp(target, Prop_Send, "m_iHealth");
+                int m_iMaxHealth = GetEntProp(target, Prop_Send, "m_iMaxHealth");
+                int m_iHealth = GetEntProp(target, Prop_Send, "m_iHealth");
 
                 if (args >= 1)
                 {
-                    decl String:arg1[32];
+                    char arg1[32];
                     GetCmdArg(1, arg1, sizeof(arg1));
 
-                    new num=StringToInt(arg1);
+                    int num=StringToInt(arg1);
                     if (num != 0)
                     {
                         m_iHealth += num;
@@ -258,24 +258,24 @@ public Action:Command_ObjHealth(client, args)
     return Plugin_Handled;
 }
 
-public Action:Command_ObjShells(client, args)
+public Action Command_ObjShells(client, args)
 {
-    new target = GetClientAimTarget(client, false);
+    int target = GetClientAimTarget(client, false);
     if (target > 0)
     {
-        decl String:class[32];
+        char class[32];
         if (GetEdictClassname(target,class,sizeof(class)))
         {
             if (StrEqual(class, "obj_sentrygun"))
             {
-                new m_iAmmoShells = GetEntProp(target, Prop_Send, "m_iAmmoShells");
+                int m_iAmmoShells = GetEntProp(target, Prop_Send, "m_iAmmoShells");
 
                 if (args >= 1)
                 {
-                    decl String:arg1[32];
+                    char arg1[32];
                     GetCmdArg(1, arg1, sizeof(arg1));
 
-                    new num=StringToInt(arg1);
+                    int num=StringToInt(arg1);
                     if (num != 0)
                     {
                         m_iAmmoShells += num;
@@ -294,24 +294,24 @@ public Action:Command_ObjShells(client, args)
     return Plugin_Handled;
 }
 
-public Action:Command_ObjRockets(client, args)
+public Action Command_ObjRockets(client, args)
 {
-    new target = GetClientAimTarget(client, false);
+    int target = GetClientAimTarget(client, false);
     if (target > 0)
     {
-        decl String:class[32];
+        char class[32];
         if (GetEdictClassname(target,class,sizeof(class)))
         {
             if (StrEqual(class, "obj_sentrygun"))
             {
-                new m_iAmmoRockets = GetEntProp(target, Prop_Send, "m_iAmmoRockets");
+                int m_iAmmoRockets = GetEntProp(target, Prop_Send, "m_iAmmoRockets");
 
                 if (args >= 1)
                 {
-                    decl String:arg1[32];
+                    char arg1[32];
                     GetCmdArg(1, arg1, sizeof(arg1));
 
-                    new num=StringToInt(arg1);
+                    int num=StringToInt(arg1);
                     if (num != 0)
                     {
                         m_iAmmoRockets += num;
@@ -331,7 +331,7 @@ public Action:Command_ObjRockets(client, args)
 }
 
 
-public Action:TF2_CalcIsAttackCritical(client, weapon, String:weaponname[], &bool:result)
+public Action TF2_CalcIsAttackCritical(client, weapon, char weaponname[], &bool result)
 {
     if (client > 0 && weapon > 0)
     {

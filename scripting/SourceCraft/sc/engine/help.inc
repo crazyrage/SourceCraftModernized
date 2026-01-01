@@ -8,30 +8,30 @@
 
 #define HELPCOMMAND_COUNT GetArraySize(vecHelpCommands)
 
-new Handle:vecHelpCommands = INVALID_HANDLE;
+HandlevecHelpCommands = null;
 
 bool:InitHelpVector()
 {
     TraceInto("Help", "InitHelpVector");
 
-    if (vecHelpCommands == INVALID_HANDLE)
+    if (vecHelpCommands == null)
         vecHelpCommands=CreateArray();
 
     TraceReturn("vecHelpCommands=0x%08x", vecHelpCommands);
-    return (vecHelpCommands != INVALID_HANDLE);
+    return (vecHelpCommands != null);
 }
 
 ClearHelpVector()
 {
     TraceInto("Help", "ClearHelpVector");
 
-    if (vecHelpCommands != INVALID_HANDLE)
+    if (vecHelpCommands != null)
     {
         TraceCat("Array", "CloseArray vecHelpCommands=0x%08x", vecHelpCommands);
 
         ClearArray(vecHelpCommands);
         CloseHandle(vecHelpCommands);
-        vecHelpCommands = INVALID_HANDLE;
+        vecHelpCommands = null;
     }
 
     TraceReturn();
@@ -44,7 +44,7 @@ Handle:HelpItem(command)
 
 NewHelpCommand(String:name[],String:info[])
 {
-    new Handle:vec=CreateArray(ByteCountToCells(256));
+    Handlevec=CreateArray(ByteCountToCells(256));
     PushArrayString(vec,name);
     PushArrayString(vec,info);
     return PushArrayCell(vecHelpCommands,vec);
@@ -84,13 +84,13 @@ InitHelpCommands()
 
 Help(client)
 {
-    new Handle:helpMenu=CreateMenu(HelpMenu_Selected);
+    HandlehelpMenu=CreateMenu(HelpMenu_Selected);
     SetMenuExitButton(helpMenu,true);
     SetMenuTitle(helpMenu,"[SC] %T", "HelpTitle", client);
-    decl String:commandname[64];
-    decl String:helpbuf[4];
-    new Handle:commandHandle;
-    for(new x=0;x<HELPCOMMAND_COUNT;x++)
+    charcommandname[64];
+    charhelpbuf[4];
+    HandlecommandHandle;
+    for(intx=0;x<HELPCOMMAND_COUNT;x++)
     {
         Format(helpbuf,3,"%d",x);
         commandHandle=HelpItem(x);
@@ -106,7 +106,7 @@ public HelpMenu_Selected(Handle:menu,MenuAction:action,client,selection)
     {
         PrepareAndEmitSoundToClient(client,buttonWav);
 
-        decl String:SelectionInfo[SMALL_STRING_LENGTH];
+        charSelectionInfo[SMALL_STRING_LENGTH];
         GetMenuItem(menu,selection,SelectionInfo,sizeof(SelectionInfo));
 
         new command=StringToInt(SelectionInfo);
@@ -119,18 +119,18 @@ public HelpMenu_Selected(Handle:menu,MenuAction:action,client,selection)
 
 public HelpMenu_Command(client,command)
 {
-    new Handle:helpCommandHandle=HelpItem(command);
+    HandlehelpCommandHandle=HelpItem(command);
 
-    decl String:name[NAME_STRING_LENGTH];
+    charname[NAME_STRING_LENGTH];
     GetArrayString(helpCommandHandle,0,name,sizeof(name));
 
-    decl String:phrase[300];
+    charphrase[300];
     GetArrayString(helpCommandHandle,1,phrase,sizeof(phrase));
 
-    decl String:desc[300];
+    chardesc[300];
     Format(desc, sizeof(desc), "%T", phrase, client);
 
-    new Handle:helpMenu_Command=CreateMenu(HM_Command_Select);
+    HandlehelpMenu_Command=CreateMenu(HM_Command_Select);
     SetMenuExitButton(helpMenu_Command,true);
     SetMenuExitBackButton(helpMenu_Command,true);
     SetMenuTitle(helpMenu_Command, "%T", "HelpItemTitle", client, name, desc);

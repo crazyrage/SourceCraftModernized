@@ -16,4 +16,4 @@
 #define RedGlow()      PrepareModel(g_redModel, g_redGlow)
 
 stock g_redGlow;
-stock const String:g_redModel[] = "materials/sprites/redglow1.vmt";
+static const char g_redModel[] = "materials/sprites/redglow1.vmt";

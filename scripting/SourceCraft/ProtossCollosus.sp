@@ -41,37 +41,37 @@
 #include "effect/BeamSprite"
 #include "effect/SendEffects"
 
-new const String:spawnWav[]             = "sc/pdryes06.wav";
-new const String:deathWav[]             = "sc/pdrdth00.wav";
-new const String:thermalLanceWav[]      = "sc/phofir00.wav";
-new const String:thermalLanceHit[]      = "sc/phohit00.wav";
+static const char[] spawnWav[]             = "sc/pdryes06.wav";
+static const char[] deathWav[]             = "sc/pdrdth00.wav";
+static const char[] thermalLanceWav[]      = "sc/phofir00.wav";
+static const char[] thermalLanceHit[]      = "sc/phohit00.wav";
 
-new const String:g_MissileAttackSound[] = "sc/pdrfir00.wav";
+static const char[] g_MissileAttackSound[] = "sc/pdrfir00.wav";
 
 new raceID, immunityID, speedID, armorID, shieldsID;
 new missileID, extendedID, lanceID, nullFluxGeneratorID;
 
-new g_MissileAttackChance[]             = { 5, 10, 15, 25, 35 };
-new Float:g_MissileAttackPercent[]      = { 0.20, 0.30, 0.40, 0.50, 0.75 };
+	int g_MissileAttackChance[]             = { 5, 10, 15, 25, 35 };
+float g_MissileAttackPercent[]      = { 0.20, 0.30, 0.40, 0.50, 0.75 };
 
-new Float:g_SpeedLevels[]               = { 0.60, 0.70, 0.80, 0.90, 1.05 };
+float g_SpeedLevels[]               = { 0.60, 0.70, 0.80, 0.90, 1.05 };
 
-new Float:g_LanceRange[]                = { 350.0, 400.0, 650.0, 750.0, 900.0 };
-new g_LanceDamage[][2]                  = { { 10,  25},
+float g_LanceRange[]                = { 350.0, 400.0, 650.0, 750.0, 900.0 };
+	int g_LanceDamage[][2]                  = { { 10,  25},
                                             { 20,  50},
                                             { 40,  60},
                                             { 60,  75},
                                             { 75, 100} };
 
-new Float:g_InitialArmor[]              = { 0.10, 0.20, 0.30, 0.40, 0.50 };
-new Float:g_InitialShields[]            = { 0.05, 0.10, 0.25, 0.40, 0.50 };
-new Float:g_ShieldsPercent[][2]         = { {0.05, 0.10},
+float g_InitialArmor[]              = { 0.10, 0.20, 0.30, 0.40, 0.50 };
+float g_InitialShields[]            = { 0.05, 0.10, 0.25, 0.40, 0.50 };
+float g_ShieldsPercent[][2]         = { {0.05, 0.10},
                                             {0.10, 0.20},
                                             {0.15, 0.30},
                                             {0.20, 0.40},
                                             {0.25, 0.50} };
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "SourceCraft Race - Protoss Collosus",
     author = "-=|JFH|=-Naris",
@@ -80,7 +80,7 @@ public Plugin:myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.common.phrases.txt");
     LoadTranslations("sc.collosus.phrases.txt");
@@ -127,9 +127,9 @@ public OnSourceCraftReady()
     GetConfigFloatArray("shields_amount", g_InitialShields, sizeof(g_InitialShields),
                         g_InitialShields, raceID, shieldsID);
 
-    for (new level=0; level < sizeof(g_ShieldsPercent); level++)
+    for(int level=0; level < sizeof(g_ShieldsPercent); level++)
     {
-        decl String:key[32];
+        char key[32];
         Format(key, sizeof(key), "shields_percent_level_%d", level);
         GetConfigFloatArray(key, g_ShieldsPercent[level], sizeof(g_ShieldsPercent[]),
                             g_ShieldsPercent[level], raceID, shieldsID);
@@ -144,9 +144,9 @@ public OnSourceCraftReady()
     GetConfigFloatArray("damage_percent", g_MissileAttackPercent, sizeof(g_MissileAttackPercent),
                         g_MissileAttackPercent, raceID, missileID);
 
-    for (new level=0; level < sizeof(g_LanceDamage); level++)
+    for(int level=0; level < sizeof(g_LanceDamage); level++)
     {
-        decl String:key[32];
+        char key[32];
         Format(key, sizeof(key), "damage_level_%d", level);
         GetConfigArray(key, g_LanceDamage[level], sizeof(g_LanceDamage[]),
                        g_LanceDamage[level], raceID, lanceID);
@@ -156,7 +156,7 @@ public OnSourceCraftReady()
                         g_LanceRange, raceID, lanceID);
 }
 
-public OnLibraryAdded(const String:name[])
+public OnLibraryAdded(const char[] name)
 {
     if (StrEqual(name, "hgrsource"))
         IsHGRSourceAvailable(true);
@@ -164,7 +164,7 @@ public OnLibraryAdded(const String:name[])
         IsUberShieldAvailable(true);
 }
 
-public OnLibraryRemoved(const String:name[])
+public OnLibraryRemoved(const char[] name)
 {
     if (StrEqual(name, "hgrsource"))
         m_HGRSourceAvailable = false;
@@ -172,7 +172,7 @@ public OnLibraryRemoved(const String:name[])
         m_UberShieldAvailable = false;
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupBeamSprite();
     SetupHaloSprite();
@@ -193,7 +193,7 @@ public OnMapStart()
     SetupMissileAttack(g_MissileAttackSound);
 }
 
-public Action:OnRaceDeselected(client,oldrace,newrace)
+public Action OnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
@@ -212,13 +212,13 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
     return Plugin_Continue;
 }
 
-public Action:OnRaceSelected(client,oldrace,newrace)
+public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
         Levitation(client, 0.25, false);
 
-        new speed_level = GetUpgradeLevel(client,raceID,speedID);
+        int speed_level = GetUpgradeLevel(client,raceID,speedID);
         SetSpeedBoost(client, speed_level, false, g_SpeedLevels);
 
         // Turn on Immunities
@@ -229,8 +229,8 @@ public Action:OnRaceSelected(client,oldrace,newrace)
         if (null_flux_level > 0)
             SetupUberShield(client, null_flux_level);
 
-        new armor_level = GetUpgradeLevel(client,raceID,armorID);
-        new shields_level = GetUpgradeLevel(client,raceID,shieldsID);
+        int armor_level = GetUpgradeLevel(client,raceID,armorID);
+        int shields_level = GetUpgradeLevel(client,raceID,shieldsID);
         SetupArmorAndShields(client, armor_level, shields_level, g_InitialArmor,
                              g_ShieldsPercent, g_InitialShields);
 
@@ -257,8 +257,8 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
             SetupUberShield(client, new_level);
         else if (upgrade==armorID || upgrade==shieldsID)
         {
-            new armor_level = (upgrade==armorID) ? new_level : GetUpgradeLevel(client,raceID,armorID);
-            new shields_level = (upgrade==shieldsID) ? new_level : GetUpgradeLevel(client,raceID,shieldsID);
+            int armor_level = (upgrade==armorID) ? new_level : GetUpgradeLevel(client,raceID,armorID);
+            int shields_level = (upgrade==shieldsID) ? new_level : GetUpgradeLevel(client,raceID,shieldsID);
             SetupArmorAndShields(client, armor_level, shields_level, g_InitialArmor,
                                  g_ShieldsPercent, g_InitialShields, .upgrade=true);
         }
@@ -278,7 +278,7 @@ public OnItemPurchase(client,item)
 
         if (item == g_bootsItem)
         {
-            new speed_level = GetUpgradeLevel(client,race,speedID);
+            int speed_level = GetUpgradeLevel(client,race,speedID);
             SetSpeedBoost(client, speed_level, true, g_SpeedLevels);
         }
         else if (item == g_sockItem)
@@ -288,7 +288,7 @@ public OnItemPurchase(client,item)
     }
 }
 
-public Action:OnDropPlayer(client, target)
+public Action OnDropPlayer(client, target)
 {
     if (IsValidClient(target) && GetRace(target) == raceID)
     {
@@ -297,7 +297,7 @@ public Action:OnDropPlayer(client, target)
     return Plugin_Continue;
 }
 
-public OnUltimateCommand(client,race,bool:pressed,arg)
+public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (race==raceID && IsValidClientAlive(client) && pressed)
     {
@@ -331,7 +331,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
     }
 }
 
-public OnPlayerSpawnEvent(Handle:event, client, race)
+public OnPlayerSpawnEvent(Handle event, client, race)
 {
     if (race == raceID)
     {
@@ -339,27 +339,27 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
 
         Levitation(client, 0.25, false);
 
-        new speed_level = GetUpgradeLevel(client,raceID,speedID);
+        int speed_level = GetUpgradeLevel(client,raceID,speedID);
         SetSpeedBoost(client, speed_level, true, g_SpeedLevels);
 
         new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
-        new armor_level = GetUpgradeLevel(client,raceID,armorID);
-        new shields_level = GetUpgradeLevel(client,raceID,shieldsID);
+        int armor_level = GetUpgradeLevel(client,raceID,armorID);
+        int shields_level = GetUpgradeLevel(client,raceID,shieldsID);
         SetupArmorAndShields(client, armor_level, shields_level, g_InitialArmor,
                              g_ShieldsPercent, g_InitialShields);
     }
 }
 
-public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacker_index,
-                                attacker_race, damage, absorbed, bool:from_sc)
+public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
+                                attacker_race, damage, absorbed, bool from_sc)
 {
     if (victim_race == raceID)
     {
-        new armor_level = GetUpgradeLevel(victim_index,raceID,armorID);
-        new shields_level = GetUpgradeLevel(victim_index,raceID,shieldsID);
-        new level = (GetShields(victim_index) > g_InitialArmor[armor_level])
+        int armor_level = GetUpgradeLevel(victim_index,raceID,armorID);
+        int shields_level = GetUpgradeLevel(victim_index,raceID,shieldsID);
+        int level = (GetShields(victim_index) > g_InitialArmor[armor_level])
                     ? shields_level : armor_level;
 
         SetShieldsPercent(victim_index, g_ShieldsPercent[level]);
@@ -385,10 +385,10 @@ public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacke
     return Plugin_Continue;
 }
 
-public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_index,
+public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_index,
                           attacker_race, assister_index, assister_race, damage,
-                          const String:weapon[], bool:is_equipment, customkill,
-                          bool:headshot, bool:backstab, bool:melee)
+                          const char[] weapon, bool is_equipment, customkill,
+                          bool headshot, bool backstab, bool melee)
 {
     if (victim_race == raceID)
     {
@@ -397,7 +397,7 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
     }
 }
 
-DoImmunity(client, level, bool:value)
+void DoImmunity(client, level, bool value)
 {
     SetImmunity(client,Immunity_MotionTaking, (value && level >= 1));
     SetImmunity(client,Immunity_ShopItems, (value && level >= 2));
@@ -406,7 +406,7 @@ DoImmunity(client, level, bool:value)
 
     if (value && IsValidClientAlive(client))
     {
-        new Float:start[3];
+        float start[3];
         GetClientAbsOrigin(client, start);
 
         static const color[4] = { 0, 255, 50, 128 };
@@ -416,13 +416,13 @@ DoImmunity(client, level, bool:value)
     }
 }
 
-SetupUberShield(client, level)
+void SetupUberShield(client, level)
 {
     if (m_UberShieldAvailable)
     {
         if (level > 0)
         {
-            new num = level * 3;
+            int num = level * 3;
             GiveUberShield(client, num, num,
                            GetShieldFlags(level));
         }
@@ -452,9 +452,9 @@ ShieldFlags:GetShieldFlags(level)
     return flags;
 }
 
-NullFluxGenerator(client, null_flux_level)
+void NullFluxGenerator(client, null_flux_level)
 {
-    decl String:upgradeName[64];
+    char upgradeName[64];
     GetUpgradeName(raceID, nullFluxGeneratorID, upgradeName, sizeof(upgradeName), client);
 
     if (!m_UberShieldAvailable)
@@ -487,7 +487,7 @@ NullFluxGenerator(client, null_flux_level)
         }
         else if (CanInvokeUpgrade(client, raceID, nullFluxGeneratorID, false))
         {
-            new Float:duration = float(null_flux_level) * 3.0;
+            new float duration = float(null_flux_level) * 3.0;
             UberShieldTarget(client, duration, GetShieldFlags(null_flux_level));
             DisplayMessage(client,Display_Ultimate,"%t", "Invoked", upgradeName);
             CreateCooldown(client, raceID, nullFluxGeneratorID);
@@ -495,14 +495,14 @@ NullFluxGenerator(client, null_flux_level)
     }
 }
 
-public Action:OnDeployUberShield(client, target)
+public Action OnDeployUberShield(client, target)
 {
     if (GetRace(client) == raceID)
     {
         if (GetRestriction(client,Restriction_NoUltimates) ||
             GetRestriction(client,Restriction_Stunned))
         {
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, nullFluxGeneratorID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -510,7 +510,7 @@ public Action:OnDeployUberShield(client, target)
         }
         else if (IsMole(client))
         {
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, nullFluxGeneratorID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "CantUseAsMole", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -518,7 +518,7 @@ public Action:OnDeployUberShield(client, target)
         }
         else if (GameType == tf2 && TF2_HasTheFlag(client))
         {
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, nullFluxGeneratorID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "CantUseWithFlag", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -526,7 +526,7 @@ public Action:OnDeployUberShield(client, target)
         }
         else if (m_HGRSourceAvailable && IsGrabbed(client))
         {
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, nullFluxGeneratorID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "CantUseWhileHeld", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -534,7 +534,7 @@ public Action:OnDeployUberShield(client, target)
         }
         else if (target > 0 && GameType == tf2 && TF2_HasTheFlag(target))
         {
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, nullFluxGeneratorID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "CantUseOnFlagCarrier", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -542,7 +542,7 @@ public Action:OnDeployUberShield(client, target)
         }
         else if (target > 0 && m_HGRSourceAvailable && IsGrabbed(target))
         {
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, nullFluxGeneratorID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "CantUseOnSomeoneBeingHeld", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -554,19 +554,19 @@ public Action:OnDeployUberShield(client, target)
     return Plugin_Continue;
 }
 
-ThermalLance(client, level)
+void ThermalLance(client, level)
 {
     if (GetRestriction(client,Restriction_NoUltimates) ||
         GetRestriction(client,Restriction_Stunned))
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceID, lanceID, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
         PrepareAndEmitSoundToClient(client,deniedWav);
     }
     else if (IsMole(client))
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceID, lanceID, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "CantUseAsMole", upgradeName);
         PrepareAndEmitSoundToClient(client,deniedWav);
@@ -577,21 +577,21 @@ ThermalLance(client, level)
     }
     else if (CanInvokeUpgrade(client, raceID, lanceID))
     {
-        new Float:range = g_LanceRange[GetUpgradeLevel(client,raceID,extendedID)];
-        new dmg = GetRandomInt(g_LanceDamage[level][0], g_LanceDamage[level][1]);
+        new float range = g_LanceRange[GetUpgradeLevel(client,raceID,extendedID)];
+        int dmg = GetRandomInt(g_LanceDamage[level][0], g_LanceDamage[level][1]);
 
-        new Float:indexLoc[3];
-        new Float:targetLoc[3];
-        new Float:clientLoc[3];
+        float indexLoc[3];
+        float targetLoc[3];
+        float clientLoc[3];
         GetClientEyePosition(client, clientLoc);
 
         new lightning  = Lightning();
-        new haloSprite = HaloSprite();
-        new beamSprite = BeamSprite();
+        int haloSprite = HaloSprite();
+        int beamSprite = BeamSprite();
         static const lanceColor[4] = {139, 69, 19, 255};
 
         new count   = 0;
-        new xplevel = level+5;
+        int xplevel = level+5;
         new team    = GetClientTeam(client);
         new target  = GetClientAimTarget(client);
         if (target > 0)
@@ -635,8 +635,8 @@ ThermalLance(client, level)
 
         new b_count=0;
         new alt_count=0;
-        new list[MaxClients+1];
-        new alt_list[MaxClients+1];
+        int list[MaxClients+1];
+        int alt_list[MaxClients+1];
         SetupOBeaconLists(list, alt_list, b_count, alt_count, client);
 
         if (b_count > 0)
@@ -659,7 +659,7 @@ ThermalLance(client, level)
 
         targetLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
-        for (new index=1;index<=MaxClients;index++)
+        for(int index=1;index<=MaxClients;index++)
         {
             if (index != client && index != target && IsClientInGame(index) &&
                 IsPlayerAlive(index) && GetClientTeam(index) != team)
@@ -692,7 +692,7 @@ ThermalLance(client, level)
             }
         }
 
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceID, lanceID, upgradeName, sizeof(upgradeName), client);
 
         if (count)

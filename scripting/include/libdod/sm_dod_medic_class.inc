@@ -22,7 +22,7 @@
  * @param max_medics 	    Maximum number of Medics per team (0 = unlimited, -1 = use convar).
  * @return		    	    none
  */
-native ControlMedic(bool:control=true, max_health=-1, self_health=-1, restrict_class=-1, min_players=-1, max_medics=-1);
+native ControlMedic(bool control=true, max_health=-1, self_health=-1, restrict_class=-1, min_players=-1, max_medics=-1);
 
 /**
  * Assigns player to be a Medic.
@@ -41,7 +41,7 @@ native ControlMedic(bool:control=true, max_health=-1, self_health=-1, restrict_c
  * @param num_nades         The amount of nades to give to the Medic (-1 = use convar).
  * @return		    	    none
  */
-native AssignMedic(client, bool:keep_weapon, bool:pickup, Float:speed=-1.0, Float:weight=-1.0,
+native AssignMedic(client, bool keep_weapon, bool pickup, Float speed=-1.0, Float weight=-1.0,
                    health=-1, heal=-1, packs=-1, weapon=-1, ammo=-1, nades=-1, num_nades=-1);
 
 /**
@@ -58,7 +58,7 @@ native UnassignMedic(client);
  * @param client 	        Client index
  * @return		    	    none
  */
-native Float:GetMedicSpeed(client);
+native Float GetMedicSpeed(client);
 
 /**
  * Gets the specified medic's speed.
@@ -66,7 +66,7 @@ native Float:GetMedicSpeed(client);
  * @param client 	        Client index
  * @return		    	    none
  */
-native Float:GetMedicWeight(client);
+native Float GetMedicWeight(client);
 
 /**
  * Command for Medic to Heal a patient (player Medic is looking at).
@@ -82,7 +82,7 @@ native MedicHeal(client);
  * @param patient 	Client index of the player that was healed
  * @param amount 	Amount that patient was healed
  */
-forward Action:OnMedicHealed(client, patient, amount);
+forward Action OnMedicHealed(client, patient, amount);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

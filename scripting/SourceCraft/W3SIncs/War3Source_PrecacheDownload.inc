@@ -12,7 +12,7 @@
  * @param filename        File that will be added to downloadables table.
  * @noreturn
  */
-stock War3_AddFile(const String:filename[])
+stock War3_AddFile(const char filename[])
 {
 		if (FileExists(filename)) 
 		{
@@ -34,9 +34,9 @@ stock War3_AddFile(const String:filename[])
  * @return True if successfully precached, false otherwise.
  */
 #if !defined _ResourceManager_included
-stock bool:War3_AddCustomSound(const String:sound[], bool:precache = true, bool:preload = true)
+stock bool War3_AddCustomSound(const char sound[], bool precache = true, bool preload = true)
 {
-		decl String:path[PLATFORM_MAX_PATH];
+		char path[PLATFORM_MAX_PATH];
 		Format(path, sizeof(path), "sound/%s", sound);
 		if (FileExists(path)) 
 		{
@@ -55,7 +55,7 @@ stock bool:War3_AddCustomSound(const String:sound[], bool:precache = true, bool:
 		return false;
 }
 #else
-stock bool:War3_AddCustomSound(const String:sound[], bool:precache = true, bool:preload = true)
+stock bool War3_AddCustomSound(const char sound[], bool precache = true, bool preload = true)
 {
     return SetupSound(sound, .precache=precache, .preload=preload);
 }
@@ -71,7 +71,7 @@ stock bool:War3_AddCustomSound(const String:sound[], bool:precache = true, bool:
  * @return Model index or 0
  */
 #if !defined _ResourceManager_included
-stock War3_AddCustomModel(const String:model[], bool:precache = true, bool:preload = true)
+stock War3_AddCustomModel(const char model[], bool precache = true, bool preload = true)
 {
 		if (FileExists(model)) 
 		{
@@ -90,7 +90,7 @@ stock War3_AddCustomModel(const String:model[], bool:precache = true, bool:prelo
 		return 0;
 }
 #else
-stock War3_AddCustomModel(const String:model[], bool:precache = true, bool:preload = true)
+stock War3_AddCustomModel(const char model[], bool precache = true, bool preload = true)
 {
     return SetupModel(model, .download=true, .precache=precache, .preload=preload);
 }
@@ -106,7 +106,7 @@ stock War3_AddCustomModel(const String:model[], bool:precache = true, bool:prelo
  * @return True if successfully precached, false otherwise.
  */
 #if !defined _ResourceManager_included
-stock War3_AddCustomDecal(const String:decal[], bool:precache = true, bool:preload = true)
+stock War3_AddCustomDecal(const char decal[], bool precache = true, bool preload = true)
 {
 		if (FileExists(decal)) 
 		{
@@ -125,7 +125,7 @@ stock War3_AddCustomDecal(const String:decal[], bool:precache = true, bool:prelo
 		return false;
 }
 #else
-stock War3_AddCustomDecal(const String:decal[], bool:precache = true, bool:preload = true)
+stock War3_AddCustomDecal(const char decal[], bool precache = true, bool preload = true)
 {
     return SetupDecal(decal, .download=true, .precache=precache, .preload=preload);
 }
@@ -134,7 +134,7 @@ stock War3_AddCustomDecal(const String:decal[], bool:precache = true, bool:prelo
 /**
  * Precache a particle without adding it to the download table
  */
-stock War3_PrecacheParticle( const String:p_strEffectName[] )
+stock War3_PrecacheParticle( const char p_strEffectName[] )
 {
 		static s_numStringTable = INVALID_STRING_TABLE;
 		if (s_numStringTable == INVALID_STRING_TABLE)

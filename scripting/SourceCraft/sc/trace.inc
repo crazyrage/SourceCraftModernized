@@ -12,7 +12,7 @@
 
 new g_TraceFilterIndex;
 
-stock bool:TraceTarget(client, target, Float:clientLoc[3], Float:targetLoc[3])
+stock bool TraceTarget(client, target, float clientLoc[3], float targetLoc[3])
 {
     clientLoc[2] += 50.0; // Adjust trace position to the middle
     targetLoc[2] += 50.0; // of the person instead of the feet.
@@ -23,7 +23,7 @@ stock bool:TraceTarget(client, target, Float:clientLoc[3], Float:targetLoc[3])
 
 stock TraceAimTarget(client)
 {
-    new Float:clientloc[3],Float:clientang[3];
+    float clientloc[3],float clientang[3];
     GetClientEyePosition(client,clientloc);
     GetClientEyeAngles(client,clientang);
     g_TraceFilterIndex = client;
@@ -31,9 +31,9 @@ stock TraceAimTarget(client)
     return TR_GetEntityIndex();
 }
 
-stock bool:TraceAimPosition(client, Float:destLoc[3], bool:hitPlayers)
+stock bool TraceAimPosition(client, float destLoc[3], bool hitPlayers)
 {
-    new Float:clientloc[3],Float:clientang[3];
+    float clientloc[3],float clientang[3];
     GetClientEyePosition(client,clientloc);
     GetClientEyeAngles(client,clientang);
     g_TraceFilterIndex = client;
@@ -53,20 +53,20 @@ stock bool:TraceAimPosition(client, Float:destLoc[3], bool:hitPlayers)
  *Trace Filters*
 ****************/
 
-public bool:TraceRayFilterIndex(entity,mask)
+public bool TraceRayFilterIndex(entity,mask)
 {
   // Check if the beam hit the originating client (g_TraceFilterIndex)
   // and tell it to keep tracing if it did
   return (entity != g_TraceFilterIndex);
 }
 
-public bool:TraceRayTryToHit(entity,mask)
+public bool TraceRayTryToHit(entity,mask)
 {
   // Check if the beam hit a player and tell it to keep tracing if it did
   return (entity <= 0 || entity > GetMaxClients());
 }
 
-public bool:TraceRayDontHitSelf(entity, mask, any:data)
+public bool TraceRayDontHitSelf(entity, mask, any:data)
 {
     return (entity != data); // Check if the TraceRay hit the owning entity.
 }

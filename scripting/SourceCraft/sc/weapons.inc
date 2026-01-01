@@ -12,12 +12,12 @@
 
 #include "range"
 
-stock bool:GetWeapon(Handle:event, index,
-                     String:buffer[], buffersize)
+stock bool GetWeapon(Handle event, int index,
+                     char[] buffer, int buffersize)
 {
-    new bool:is_equipment;
+    bool is_equipment;
 
-    if (event != INVALID_HANDLE)
+    if (event != null)
     {
         buffer[0] = 0;
         GetEventString(event, "weapon", buffer, buffersize);
@@ -36,7 +36,7 @@ stock bool:GetWeapon(Handle:event, index,
     return is_equipment;
 }
 
-stock bool:IsEquipmentMelee(const String:weapon[])
+stock bool IsEquipmentMelee(const char[] weapon)
 {
     if (GameTypeIsCS())
     {
@@ -76,7 +76,7 @@ stock bool:IsEquipmentMelee(const String:weapon[])
     return false;
 }
 
-stock bool:IsDamageFromMelee(const String:weapon[])
+stock bool IsDamageFromMelee(const char[] weapon)
 {
     if (GameTypeIsCS())
     {
@@ -177,7 +177,7 @@ stock bool:IsDamageFromMelee(const String:weapon[])
     return false;
 }
 
-stock bool:IsEquipmentGrenadeOrRocket(const String:weapon[])
+stock bool IsEquipmentGrenadeOrRocket(const char[] weapon)
 {
     if (GameTypeIsCS())
     {
@@ -209,7 +209,7 @@ stock bool:IsEquipmentGrenadeOrRocket(const String:weapon[])
     return false;
 }
 
-stock bool:IsDamageFromGrenadeOrRocket(const String:weapon[])
+stock bool IsDamageFromGrenadeOrRocket(const char[] weapon)
 {
     if (GameTypeIsCS())
     {
@@ -260,7 +260,7 @@ stock bool:IsDamageFromGrenadeOrRocket(const String:weapon[])
     return false;
 }
 
-stock bool:IsMelee(const String:weapon[], bool:is_equipment, index, victim, Float:range=100.0)
+stock bool IsMelee(const char[] weapon, bool is_equipment, int index, int victim, float range=100.0)
 {
     if (is_equipment)
     {
@@ -273,7 +273,7 @@ stock bool:IsMelee(const String:weapon[], bool:is_equipment, index, victim, Floa
         return IsDamageFromMelee(weapon);
 }
 
-stock bool:IsNotMelee(const String:weapon[], bool:is_equipment, index, victim, Float:range=100.0)
+stock bool IsNotMelee(const char[] weapon, bool is_equipment, int index, int victim, float range=100.0)
 {
     if (is_equipment)
     {
@@ -286,7 +286,7 @@ stock bool:IsNotMelee(const String:weapon[], bool:is_equipment, index, victim, F
         return !IsDamageFromMelee(weapon);
 }
 
-stock bool:IsGrenadeOrRocket(const String:weapon[], bool:is_equipment)
+stock bool IsGrenadeOrRocket(const char[] weapon, bool is_equipment)
 {
     return (is_equipment) ? IsEquipmentGrenadeOrRocket(weapon)
                           : IsDamageFromGrenadeOrRocket(weapon);

@@ -44,7 +44,7 @@
 #define INVALID_DEPENDENCY -1 //describes the default/invalid value of a skill dependency
 
 // The enum W3Var is used with function W3SetVar and W3GetVar.
-// It is the first parameter, eg: new deathRace = W3GetVar(DeathRace)
+// It is the first parameter, eg: int deathRace = W3GetVar(DeathRace)
 enum W3Var
 {
 	OldRace, //the race he was before OnRaceChanged //REMOVE DEPRECATED
@@ -70,7 +70,7 @@ enum W3Var
 
 }
 
-stock String:W3VarStrings[][32] = {"OldRace",
+stock char W3VarStrings[][32] = {"OldRace",
 								"DeathRace",
 								"hDatabase",
 								"hDatabaseType",
@@ -270,7 +270,7 @@ enum ValveGameEnum
 //Basically Instance variables for the Player Class
 enum W3PlayerProp
 {
-	bool:bPutInServer,
+	bool bPutInServer,
 	CurrentRace,
 	PendingRace,
 	PlayerGold,
@@ -278,23 +278,23 @@ enum W3PlayerProp
 	iMaxHP,
 	bIsDucking,
 	
-	bool:xpLoaded,
-	Float:RaceChosenTime,
-	bool:RaceSetByAdmin,
-	bool:SpawnedOnce, //if player has spawned once
-	Float:sqlStartLoadXPTime,
+	bool xpLoaded,
+	float RaceChosenTime,
+	bool RaceSetByAdmin,
+	bool SpawnedOnce, //if player has spawned once
+	float sqlStartLoadXPTime,
 	
-	bool:isDeveloper,
-	Float:LastChangeTeamTime,
-	bool:bStatefulSpawn, //set true if spawn is a non repeated spawn. set to true on join and death, set false after spawn forward is finished.
+	bool isDeveloper,
+	float LastChangeTeamTime,
+	bool bStatefulSpawn, //set true if spawn is a non repeated spawn. set to true on join and death, set false after spawn forward is finished.
 }
 enum W3SkillProp
 {
-	bool:ActivateOnEnemy,
+	bool ActivateOnEnemy,
 	
 	///TO BE IMPLEMENTED
 	MaxLevel,
-	bool:IsUltimate,
+	bool IsUltimate,
 	SkillName[32],
 }
 //EXCLUSIVE: buffs that do not stack with itself: gravity, invisblity, however to make them stack use a second property ie gravity2, invisibilty2
@@ -418,7 +418,7 @@ stock MaxBuffLoopLimit=_:MaxBuffLoopLimitTemp;
 stock InitiateBuffPropertiesArray(buffpropertiesarray[W3Buff][W3BuffProperties])
 {
 	
-	for(new i=0;i<MaxBuffLoopLimit;i++)
+	for(int i=0;i<MaxBuffLoopLimit;i++)
 	{
 		buffpropertiesarray[W3Buff:i][DefaultValue]=-99;
 		buffpropertiesarray[W3Buff:i][BuffStackType]=ERRUNDEFINED;
@@ -599,7 +599,7 @@ stock InitiateBuffPropertiesArray(buffpropertiesarray[W3Buff][W3BuffProperties])
 	
 	
 	//check that all indexes have been set
-	for(new i=0;i<MaxBuffLoopLimit;i++)
+	for(int i=0;i<MaxBuffLoopLimit;i++)
 	{
 		if(buffpropertiesarray[W3Buff:i][DefaultValue]==-99)
 		{
@@ -751,7 +751,7 @@ stock any:W3GetHintPriorityType(W3HintPriority:priority){
 #define FFADE_IN			0x0001		// Just here so we don't pass 0 into the function, YOUR SCREEN DECAYS AND YOU SEE CLEARLY SLOWLY
 #define FFADE_OUT			0x0002		// Fade out (not in)
 #define FFADE_MODULATE		0x0004		// Modulate (don't blend)
-#define FFADE_STAYOUT		0x0008		// ignores the duration, stays faded out until new ScreenFade message received
+#define FFADE_STAYOUT		0x0008		// ignores the duration, stays faded out until int ScreenFade message received
 #define FFADE_PURGE			0x0010		// Purges all other fades, replacing them with this one
 #endif
 

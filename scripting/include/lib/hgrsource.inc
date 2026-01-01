@@ -20,7 +20,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of the HGR plugin.
  * @return		    	none
  */
-native ControlHookGrabRope(bool:plugin_only=true);
+native ControlHookGrabRope(bool plugin_only=true);
 
 /**
  * Give a hook to the player
@@ -32,7 +32,7 @@ native ControlHookGrabRope(bool:plugin_only=true);
  * @param flags     Not used yet.
  * @return			none
  */
-native GiveHook(client,duration=0,Float:range=0.0,Float:cooldown=0.0,flags=0);
+native GiveHook(client,duration=0,Float range=0.0,Float cooldown=0.0,flags=0);
 //native HGR_ClientAccess(client, access=0, action=0);
 
 /**
@@ -54,7 +54,7 @@ native TakeHook(client);
  * @param flags     1==Puller (drag victim closer), 0==Grabber (keep distance constant {more or less}) (default 0)
  * @return			none
  */
-native GiveGrab(client,duration=0,Float:range=0.0,Float:cooldown=0.0,flags=0);
+native GiveGrab(client,duration=0,Float range=0.0,Float cooldown=0.0,flags=0);
 //native HGR_ClientAccess(client, access=0, action=1);
 
 /**
@@ -76,7 +76,7 @@ native TakeGrab(client);
  * @param flags     Not used yet.
  * @return			none
  */
-native GiveRope(client,duration=0,Float:range=0.0,Float:cooldown=0.0,flags=0);
+native GiveRope(client,duration=0,Float range=0.0,Float cooldown=0.0,flags=0);
 //native HGR_ClientAccess(client, access=0, action=2);
 
 /**
@@ -95,7 +95,7 @@ native TakeRope(client);
  * @return			none
  */
 native Hook(client);
-//native bool:HGR_ForceHook(client);
+//native bool HGR_ForceHook(client);
 
 /**
  * Stop using the hook (bind to a keyup)
@@ -104,7 +104,7 @@ native Hook(client);
  * @return			none
  */
 native UnHook(client);
-//native bool:HGR_StopHook(client);
+//native bool HGR_StopHook(client);
 
 /**
  * Toggle the state of the hook
@@ -121,7 +121,7 @@ native ToggleHook(client);
  * @return			none
  */
 native Grab(client);
-//native bool:HGR_ForceGrab(client);
+//native bool HGR_ForceGrab(client);
 
 /**
  * Stop using the grabber (bind to a keyup)
@@ -130,7 +130,7 @@ native Grab(client);
  * @return			none
  */
 native Drop(client);
-//native bool:HGR_StopGrab(client);
+//native bool HGR_StopGrab(client);
 
 /**
  * Toggle the state of the grabber
@@ -147,7 +147,7 @@ native ToggleGrab(client);
  * @return			none
  */
 native Rope(client);
-//native bool:HGR_ForceRope(client);
+//native bool HGR_ForceRope(client);
 
 /**
  * Stop using the rope (bind to a keyup)
@@ -156,7 +156,7 @@ native Rope(client);
  * @return			none
  */
 native Detach(client);
-//native bool:HGR_StopRope(client);
+//native bool HGR_StopRope(client);
 
 /**
  * Toggle the state of the rope
@@ -173,10 +173,10 @@ native ToggleRope(client);
  * @param action	action to check (ACTION_HOOK,ACTION_GRAB or ACTION_ROPE)
  * @return			returns true is client is performing the given action.
  */
-native bool:HGRState(client,action);
-//native bool:HGR_IsHooking(client);
-//native bool:HGR_IsGrabbing(client);
-//native bool:HGR_IsRoping(client);
+native bool HGRState(client,action);
+//native bool HGR_IsHooking(client);
+//native bool HGR_IsGrabbing(client);
+//native bool HGR_IsRoping(client);
 
 /**
  * Check if a player has been grabbed.
@@ -184,8 +184,8 @@ native bool:HGRState(client,action);
  * @param client 	Client index
  * @return			returns true is client is grabbed.
  */
-native bool:IsGrabbed(client);
-//native bool:HGR_IsBeingGrabbed(client);
+native bool IsGrabbed(client);
+//native bool HGR_IsBeingGrabbed(client);
 
 /**
  * Check who a player is grabbing.
@@ -203,8 +203,8 @@ native GrabTarget(client);
  * @param target: The index of the target player that was grabbed
  * @return		  Plugin_Stop will prevent the target from being grabbed.
  */
-forward Action:OnGrabPlayer(client,target);
-//forward Action:HGR_OnClientGrab(client); //target=HGR_GetGrabTarget(client);
+forward Action OnGrabPlayer(client,target);
+//forward Action HGR_OnClientGrab(client); //target=HGR_GetGrabTarget(client);
 
 /**
  * Gets called when the grabber drags someone
@@ -213,7 +213,7 @@ forward Action:OnGrabPlayer(client,target);
  * @param target: The index of the target player that was grabbed
  * @return		  Plugin_Stop will cause the target player to be dropped.
  */
-forward Action:OnDragPlayer(client,target);
+forward Action OnDragPlayer(client,target);
 
 /**
  * Gets called when the grabber drops someone
@@ -222,24 +222,24 @@ forward Action:OnDragPlayer(client,target);
  * @param target: The index of the target player that was grabbed
  * @return		  none
  */
-forward Action:OnDropPlayer(client,target);
-//forward Action:HGR_OnClientGrabStop(client); //target=HGR_GetGrabTarget(client);
+forward Action OnDropPlayer(client,target);
+//forward Action HGR_OnClientGrabStop(client); //target=HGR_GetGrabTarget(client);
 
 /**
  * Gets called when hooking
  *
  * @param client: The index of the client that used the hook.
  */
-forward Action:OnHook(client);
-//forward Action:HGR_OnClientHook(client);
+forward Action OnHook(client);
+//forward Action HGR_OnClientHook(client);
 
 /**
  * Gets called when roping
  *
  * @param client: The index of the client that used the rope.
  */
-forward Action:OnRope(client);
-//forward Action:HGR_OnClientRope(client);
+forward Action OnRope(client);
+//forward Action HGR_OnClientRope(client);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

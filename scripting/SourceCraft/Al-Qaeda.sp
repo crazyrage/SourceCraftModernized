@@ -37,26 +37,26 @@
 #include "effect/FlashScreen"
 #include "effect/Shake"
 
-new const String:allahWav[] = "sc/allahuakbar.wav";
-new const String:kaboomWav[] = "sc/iraqi_engaging.wav";
+new const char[] allahWav[] = "sc/allahuakbar.wav";
+new const char[] kaboomWav[] = "sc/iraqi_engaging.wav";
 
-new g_ReincarnationChance[] = { 0, 9, 22, 36, 53 };
+	int g_ReincarnationChance[] = { 0, 9, 22, 36, 53 };
 
-new Float:g_WrathRange[]    = { 0.0, 300.0, 450.0, 650.0, 800.0 };
+float g_WrathRange[]    = { 0.0, 300.0, 450.0, 650.0, 800.0 };
 
-new g_BomberChance[]        = {   0,    75,    60,    40, 20 };
-new g_BomberDamage[]        = {   0,    25,    50,    70, 80 };
-new g_SucideBombDamage[]    = {   0,   300,   350,   400, 500 };
-new Float:g_BomberRadius[]  = { 0.0, 100.0, 200.0, 250.0, 300.0 };
+	int g_BomberChance[]        = {   0,    75,    60,    40, 20 };
+	int g_BomberDamage[]        = {   0,    25,    50,    70, 80 };
+	int g_SucideBombDamage[]    = {   0,   300,   350,   400, 500 };
+float g_BomberRadius[]  = { 0.0, 100.0, 200.0, 250.0, 300.0 };
 
 new cfgMaxRespawns          = 4;
 
 new raceID, reincarnationID, wrathID, suicideID, bomberID;
 
-new bool:m_Suicided[MAXPLAYERS+1];
-new Float:m_BomberTime[MAXPLAYERS+1];
+bool m_Suicided[MAXPLAYERS+1];
+float m_BomberTime[MAXPLAYERS+1];
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "SourceCraft Race - Al-Qaeda",
     author = "-=|JFH|=-Naris (Murray Wilson)",
@@ -65,7 +65,7 @@ public Plugin:myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.reincarnate.phrases.txt");
     LoadTranslations("sc.alqaeda.phrases.txt");
@@ -163,7 +163,7 @@ public OnSourceCraftReady()
                    g_SucideBombDamage, raceID, suicideID);
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupRespawn();
     SetupLightning();
@@ -177,7 +177,7 @@ public OnMapStart()
     SetupSound(allahWav);
 }
 
-public OnMapEnd()
+public void OnMapEnd()
 {
     ResetAllClientTimers();
 }
@@ -194,12 +194,12 @@ public OnPlayerAuthed(client)
     #endif
 }
 
-public OnClientDisconnect(client)
+public void OnClientDisconnect(client)
 {
     KillClientTimer(client);
 }
 
-public Action:OnRaceDeselected(client,oldrace,newrace)
+public Action OnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
@@ -223,7 +223,7 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
         return Plugin_Continue;
 }
 
-public Action:OnRaceSelected(client,oldrace,newrace)
+public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
@@ -276,7 +276,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
     }
 }
 
-public OnUltimateCommand(client,race,bool:pressed,arg)
+public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (pressed)
     {
@@ -285,7 +285,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
             TraceInto("Al-Qaeda", "OnUltimateCommand", "client=%d:%N, race=%d, pressed=%d, arg=%d", \
                       client,ValidClientIndex(client), race, pressed, arg);
 
-            new level = GetUpgradeLevel(client,race,bomberID);
+            int level = GetUpgradeLevel(client,race,bomberID);
             if (level > 0)
             {
                 if (GameType == tf2 && TF2_IsPlayerDisguised(client))
@@ -295,7 +295,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
                 else if (GetRestriction(client,Restriction_NoUltimates) ||
                          GetRestriction(client,Restriction_Stunned))
                 {
-                    decl String:upgradeName[64];
+                    char upgradeName[64];
                     GetUpgradeName(raceID, bomberID, upgradeName, sizeof(upgradeName), client);
                     DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
                     PrepareAndEmitSoundToClient(client,deniedWav);
@@ -313,9 +313,9 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
     }
 }
 
-public RoundEndEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public RoundEndEvent(Handle event,const char[] name[],bool dontBroadcast)
 {
-    for (new index=1;index<=MaxClients;index++)
+    for (int index=1;index<=MaxClients;index++)
     {
         m_ReincarnationCount[index]=0;
         m_IsRespawning[index]=false;
@@ -328,7 +328,7 @@ public RoundEndEvent(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public OnPlayerSpawnEvent(Handle:event, client, race)
+public OnPlayerSpawnEvent(Handle event, client, race)
 {
     if (race == raceID)
     {
@@ -340,7 +340,7 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
 
         Respawned(client,true);
 
-        new flaming_wrath_level = GetUpgradeLevel(client,raceID,wrathID);
+        int flaming_wrath_level = GetUpgradeLevel(client,raceID,wrathID);
         if (flaming_wrath_level > 0)
             CreateClientTimer(client, 3.0, FlamingWrath, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 
@@ -348,10 +348,10 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
     }
 }
 
-public OnPlayerDeathEvent(Handle:event,victim_index,victim_race, attacker_index,
+public OnPlayerDeathEvent(Handle event,victim_index,victim_race, attacker_index,
                           attacker_race,assister_index,assister_race,
-                          damage,const String:weapon[], bool:is_equipment,
-                          customkill,bool:headshot,bool:backstab,bool:melee)
+                          damage,const char[] weapon[], bool is_equipment,
+                          customkill,bool headshot,bool backstab,bool melee)
 {
     if (victim_index && victim_race == raceID)
     {
@@ -394,7 +394,7 @@ public OnPlayerDeathEvent(Handle:event,victim_index,victim_race, attacker_index,
         {
             PrepareAndEmitSoundToClient(victim_index,deniedWav);
 
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, reincarnationID, upgradeName, sizeof(upgradeName), victim_index);
             DisplayMessage(victim_index, Display_Message, "%t", "NotAsMole", upgradeName);
             m_ReincarnationCount[victim_index] = 0;
@@ -471,8 +471,8 @@ public OnPlayerDeathEvent(Handle:event,victim_index,victim_race, attacker_index,
         }
         else
         {
-            new count = m_ReincarnationCount[victim_index];
-            new reincarnation_level =GetUpgradeLevel(victim_index,victim_race,reincarnationID);
+            int count = m_ReincarnationCount[victim_index];
+            int reincarnation_level =GetUpgradeLevel(victim_index,victim_race,reincarnationID);
             if (reincarnation_level > 0 && count < cfgMaxRespawns && count < reincarnation_level)
             {
                 if (GetRandomInt(1,100)<=g_ReincarnationChance[reincarnation_level])
@@ -481,7 +481,7 @@ public OnPlayerDeathEvent(Handle:event,victim_index,victim_race, attacker_index,
                     {
                         Respawn(victim_index);
 
-                        decl String:suffix[3];
+                        char suffix[3];
                         count = m_ReincarnationCount[victim_index];
                         GetNumberSuffix(count, suffix, sizeof(suffix));
 
@@ -562,15 +562,15 @@ public OnPlayerDeathEvent(Handle:event,victim_index,victim_race, attacker_index,
     }
 }
 
-public Action:MadBomber(Handle:timer,any:userid)
+public Action MadBomber(Handle timer,any:userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (client > 0)
     {
         new ult_level=GetUpgradeLevel(client,raceID,bomberID);
         if (ult_level > 0)
         {
-            new Float:interval = GetGameTime() - m_BomberTime[client];
+            float interval = GetGameTime() - m_BomberTime[client];
             m_BomberTime[client] = GetGameTime();
             if (interval < 0.18 || GetRandomInt(1,100)<=g_BomberChance[ult_level])
             {
@@ -586,9 +586,9 @@ public Action:MadBomber(Handle:timer,any:userid)
     return Plugin_Stop;
 }
 
-public Action:Kaboom(Handle:timer,any:userid)
+public Action Kaboom(Handle timer,any:userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (client > 0)
     {
         new suicide_level=GetUpgradeLevel(client,raceID,suicideID);
@@ -597,7 +597,7 @@ public Action:Kaboom(Handle:timer,any:userid)
     return Plugin_Stop;
 }
 
-public Bomber(client,level,bool:ondeath)
+public Bomber(client,level,bool ondeath)
 {
     if (ondeath)
     {
@@ -613,9 +613,9 @@ public Bomber(client,level,bool:ondeath)
     }
 }
 
-public Action:FlamingWrath(Handle:timer, any:userid)
+public Action FlamingWrath(Handle timer, any:userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client))
     {
         if (GetRace(client) == raceID)
@@ -626,19 +626,19 @@ public Action:FlamingWrath(Handle:timer, any:userid)
                 !(GetRestriction(client,Restriction_NoUpgrades) ||
                   GetRestriction(client,Restriction_Stunned)))
             {
-                new Float:range=g_WrathRange[flaming_wrath_level];
+                float range=g_WrathRange[flaming_wrath_level];
 
-                new Float:indexLoc[3];
-                new Float:clientLoc[3];
+                float indexLoc[3];
+                float clientLoc[3];
                 GetClientAbsOrigin(client, clientLoc);
                 clientLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
-                new count = 0;
+                int count = 0;
                 new alt_count=0;
-                new list[MaxClients+1];
-                new alt_list[MaxClients+1];
+                int list[MaxClients+1];
+                int alt_list[MaxClients+1];
                 new team=GetClientTeam(client);
-                for (new index=1;index<=MaxClients;index++)
+                for (int index=1;index<=MaxClients;index++)
                 {
                     if (index != client && IsValidClientAlive(index))
                     {

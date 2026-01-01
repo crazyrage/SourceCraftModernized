@@ -7,77 +7,77 @@
 #include <sdktools_tempents>
 #include <sdktools_tempents_stocks>
 
-public Plugin:myinfo = 
+public Plugin myinfo =
 {
     name = "War3Source - Race - Warden",
     author = "War3Source Team",
     description = "The Warden race for War3Source"
 };
 
-new thisRaceID;
+	int thisRaceID;
 
-new String:sOldModel[MAXPLAYERSCUSTOM][256];
-new OriginOffset;
+char sOldModel[MAXPLAYERSCUSTOM][256];
+	int OriginOffset;
 
 //skill 1
-new Float:FanOfKnivesCSChanceArr[]={0.0,0.04,0.07,0.11,0.15}; //mole
-new Float:FanOfKnivesTFChanceArr[]={0.0,0.05,0.1,0.15,0.2};  
-new KnivesTFDamage = 50; 
-new Float:KnivesTFRadius = 300.0;
- 
+float FanOfKnivesCSChanceArr[]={0.0,0.04,0.07,0.11,0.15}; //mole
+float FanOfKnivesTFChanceArr[]={0.0,0.05,0.1,0.15,0.2};
+	int KnivesTFDamage = 50;
+float KnivesTFRadius = 300.0;
+
 //skill 2
-new Float:BlinkChanceArr[]={0.00,0.25,0.5,0.75,1.00};
+float BlinkChanceArr[]={0.00,0.25,0.5,0.75,1.00};
 
 //skill 3
-new ShadowStrikeInitialDamage=20;
-new ShadowStrikeTrailingDamage=5;
-new Float:ShadowStrikeChanceArr[]={0.0,0.05,0.1,0.15,0.2};
-new ShadowStrikeTimes[]={0,2,3,4,5};
-new BeingStrikedBy[MAXPLAYERSCUSTOM];
-new StrikesRemaining[MAXPLAYERSCUSTOM];
+int ShadowStrikeInitialDamage=20;
+int ShadowStrikeTrailingDamage=5;
+float ShadowStrikeChanceArr[]={0.0,0.05,0.1,0.15,0.2};
+	int ShadowStrikeTimes[]={0,2,3,4,5};
+	int BeingStrikedBy[MAXPLAYERSCUSTOM];
+	int StrikesRemaining[MAXPLAYERSCUSTOM];
 
 //ultimate
 #if defined SOURCECRAFT
-new max_ult = 0;
+	int max_ult = 0;
 #else
-new Handle:ultCooldownCvar;
-new Handle:ultMaxCvar;
+Handle ultCooldownCvar;
+Handle ultMaxCvar;
 #endif
 
-new ultUsedTimes[MAXPLAYERSCUSTOM];
-new VengenceCSStartHP[]={0,40,50,60,70}; 
-new Float:VengenceTFHealHPPercent[]={0.0,0.25,0.5,0.75,1.0}; 
+	int ultUsedTimes[MAXPLAYERSCUSTOM];
+	int VengenceCSStartHP[]={0,40,50,60,70};
+float VengenceTFHealHPPercent[]={0.0,0.25,0.5,0.75,1.0};
 
 #define IMMUNITYBLOCKDISTANCE 300.0
 
 
 new SKILL_FANOFKNIVES, SKILL_BLINK,SKILL_SHADOWSTRIKE,ULT_VENGENCE;
 
-//new String:shadowstrikestr[]="war3source/shadowstrikebirth.wav";
-//new String:ultimateSound[]="war3source/MiniSpiritPissed1.wav";
+//char shadowstrikestr[]="war3source/shadowstrikebirth.wav";
+//char ultimateSound[]="war3source/MiniSpiritPissed1.wav";
 
-new String:shadowstrikestr[256]; //="war3source/shadowstrikebirth.mp3";
-new String:ultimateSound[256]; //="war3source/MiniSpiritPissed1.mp3";
+char shadowstrikestr[256]; //="war3source/shadowstrikebirth.mp3";
+char ultimateSound[256]; //="war3source/MiniSpiritPissed1.mp3";
 
-new BeamSprite;
-new HaloSprite;
-new KnifeModel;
+	int BeamSprite;
+	int HaloSprite;
+	int KnifeModel;
 
 // Offsets
 new MyWeaponsOffset,AmmoOffset;//,Clip1Offset;
 
-public OnPluginStart()
+public void OnPluginStart()
 {
-#if !defined SOURCECRAFT    
+#if !defined SOURCECRAFT
     ultCooldownCvar=CreateConVar("war3_warden_vengence_cooldown","20","Cooldown between Warden Vengence (ultimate)");
 #endif
-    
+
     CreateTimer(0.2,CalcBlink,_,TIMER_REPEAT);
     FindSendPropInfo("CBaseEntity", "m_vecOrigin", .local_offset=OriginOffset);
     FindSendPropInfo("CBaseCombatCharacter", "m_hMyWeapons", .local_offset=MyWeaponsOffset);
 //  FindSendPropInfo("CBaseCombatWeapon", "m_iClip1", .local_offset=Clip1Offset);
     FindSendPropInfo("CBasePlayer", "m_iAmmo", .local_offset=AmmoOffset);
-    
+
     if(GAMECSANY){
         HookEvent("player_death",PlayerDeathEvent);
         HookEvent("round_start",RoundStartEvent);
@@ -102,7 +102,7 @@ public OnPluginStart()
     LoadTranslations("w3s.race.warden.phrases");
 }
 
-public OnWar3LoadRaceOrItemOrdered(num)
+public void OnWar3LoadRaceOrItemOrdered(num)
 {
     if(num==70)
     {
@@ -115,7 +115,7 @@ public OnWar3LoadRaceOrItemOrdered(num)
         SKILL_FANOFKNIVES=War3_AddRaceSkillT(thisRaceID,GAMECSANY?"FanOfKnivesCS":"FanOfKnivesTF",false,4);
         SKILL_BLINK=War3_AddRaceSkillT(thisRaceID,"Immunity",false,4);
         SKILL_SHADOWSTRIKE=War3_AddRaceSkillT(thisRaceID,"ShadowStrike",false,4);
-        ULT_VENGENCE=War3_AddRaceSkillT(thisRaceID,GAMECSANY?"VengenceCS":"VengenceTF",true,4); 
+        ULT_VENGENCE=War3_AddRaceSkillT(thisRaceID,GAMECSANY?"VengenceCS":"VengenceTF",true,4);
 
 #if defined SOURCECRAFT
 	// Setup upgrade costs & energy use requirements
@@ -170,13 +170,13 @@ public OnWar3LoadRaceOrItemOrdered(num)
 #endif
 
         War3_CreateRaceEnd(thisRaceID);
-    
+
     }
-        
-    
+
+
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     War3_AddSoundFolder(shadowstrikestr, sizeof(shadowstrikestr), "shadowstrikebirth.mp3");
     War3_AddSoundFolder(ultimateSound, sizeof(ultimateSound), "MiniSpiritPissed1.mp3");
@@ -192,24 +192,24 @@ public OnMapStart()
             PrecacheModel("models/player/ctm_gsg9.mdl");
             PrecacheModel("models/player/tm_leet_variantb.mdl");
         }
-    }    
+    }
 }
 
-public OnWar3EventSpawn(client){
+public void OnWar3EventSpawn(client){
     StrikesRemaining[client]=0;
 }
 
 public OnRaceChanged(client,oldrace,newrace)
 {
     if(newrace!=thisRaceID)
-    {    
+    {
         War3_SetBuff(client,bImmunityUltimates,thisRaceID,false);
     }
 
 }
 
 
-public OnUltimateCommand(client,race,bool:pressed)
+public OnUltimateCommand(client,race,bool pressed)
 {
     // TODO: Increment UltimateUsed[client]
     if(race==thisRaceID && pressed && IsPlayerAlive(client))
@@ -228,28 +228,28 @@ public OnUltimateCommand(client,race,bool:pressed)
                 if(!blockingVengence(client))
                 {
                     new maxhp=War3_GetMaxHP(client);
-                
+
                     new heal=RoundToCeil(float(maxhp)*VengenceTFHealHPPercent[ult_level]);
                     War3_HealToBuffHP(client,heal);
                     W3FlashScreen(client,{0,255,0,20},0.5,_,FFADE_OUT);
-                    
+
                     W3EmitSoundToAll(ultimateSound,client);
                     W3EmitSoundToAll(ultimateSound,client);
-                    
+
 #if defined SOURCECRAFT
-                    new Float:cooldown= GetUpgradeCooldown(thisRaceID,ULT_VENGENCE);
+                    float cooldown= GetUpgradeCooldown(thisRaceID,ULT_VENGENCE);
                     War3_CooldownMGR(client,cooldown,thisRaceID,ULT_VENGENCE,_,_);
 #else
                     War3_CooldownMGR(client,GetConVarFloat(ultCooldownCvar),thisRaceID,ULT_VENGENCE,_,_);
-#endif                    
+#endif
                 }
                 else
                 {
                     W3MsgUltimateBlocked(client);
                 }
-                
+
             }
-            
+
         }
         else
         {
@@ -260,18 +260,18 @@ public OnUltimateCommand(client,race,bool:pressed)
 
 
 
-public OnW3TakeDmgBullet(victim,attacker,Float:damage)
+public OnW3TakeDmgBullet(victim,attacker,float damage)
 {
     if(IS_PLAYER(victim)&&IS_PLAYER(attacker)&&victim>0&&attacker>0&&attacker!=victim)
     {
         if(IsPlayerAlive(attacker)&&IsPlayerAlive(victim)&&GetClientTeam(victim)!=GetClientTeam(attacker))
         {
-            //VICTIM IS WAREN!!! 
+            //VICTIM IS WAREN!!!
             if(War3_GetRace(victim)==thisRaceID)
             {
-                new Float:chance_mod=W3ChanceModifier(attacker);
+                float chance_mod=W3ChanceModifier(attacker);
                 /// CHANCE MOD BY ATTACKER
-                new skill_level = War3_GetSkillLevel(victim,thisRaceID,SKILL_FANOFKNIVES);
+                int skill_level = War3_GetSkillLevel(victim,thisRaceID,SKILL_FANOFKNIVES);
                 if(War3_GetGame()==Game_TF)
                 {
                     if(!Hexed(victim,false)&&GetRandomFloat(0.0,1.0)<=chance_mod*FanOfKnivesTFChanceArr[skill_level])
@@ -282,17 +282,17 @@ public OnW3TakeDmgBullet(victim,attacker,Float:damage)
 #endif
                         //knives damage hp around the victim
                         W3MsgThrewKnives(victim);
-                        new Float:playerVec[3];
+                        float playerVec[3];
                         GetClientAbsOrigin(victim,playerVec);
-                        
+
                         playerVec[2]+=20;
                         TE_SetupBeamRingPoint(playerVec, 10.0, KnivesTFRadius, BeamSprite, HaloSprite, 0, 15, 0.5, 10.0, 10.0, {255,255,255,155}, 100, 0);
                         TE_SendToAll();
                         playerVec[2]-=20;
-                        
-                        new Float:otherVec[3];
-                        new team = GetClientTeam(victim);
-                        for(new i=1;i<=MaxClients;i++)
+
+                        float otherVec[3];
+                        int team = GetClientTeam(victim);
+                        for(int i=1;i<=MaxClients;i++)
                         {
                             if(ValidPlayer(i,true)&&GetClientTeam(i)!=team)
                             {
@@ -303,11 +303,11 @@ public OnW3TakeDmgBullet(victim,attacker,Float:damage)
                                     {
                                         W3FlashScreen(i,RGBA_COLOR_RED);
                                         W3MsgHitByKnives(i);
-                                        decl Float:StartPos[3];
+                                        float StartPos[3];
                                         GetClientAbsOrigin(victim,StartPos);
                                         StartPos[2]+=40;
                                         if(GAMECSANY){
-                                            decl Float:TargetPos[3];
+                                            float TargetPos[3];
                                             TargetPos[0]=StartPos[0];
                                             TargetPos[1]=StartPos[1];
                                             TargetPos[2]=StartPos[2]+50;
@@ -339,9 +339,9 @@ public OnW3TakeDmgBullet(victim,attacker,Float:damage)
             if(War3_GetRace(attacker)==thisRaceID)
             {
                 //shadow strike poison
-                new Float:chance_mod=W3ChanceModifier(attacker);
+                float chance_mod=W3ChanceModifier(attacker);
                 /// CHANCE MOD BY VICTIM
-                new skill_level = War3_GetSkillLevel(attacker,thisRaceID,SKILL_SHADOWSTRIKE);
+                int skill_level = War3_GetSkillLevel(attacker,thisRaceID,SKILL_SHADOWSTRIKE);
                 if(skill_level>0 && StrikesRemaining[victim]==0 && !Hexed(attacker,false)&&GetRandomFloat(0.0,1.0)<=chance_mod*ShadowStrikeChanceArr[skill_level])
                 {
                     if(W3HasImmunity(victim,Immunity_Skills))
@@ -355,12 +355,12 @@ public OnW3TakeDmgBullet(victim,attacker,Float:damage)
                     {
                         W3MsgAttackedBy(victim,"Shadow Strike");
                         W3MsgActivated(attacker,"Shadow Strike");
-                        
+
                         BeingStrikedBy[victim]=attacker;
                         StrikesRemaining[victim]=ShadowStrikeTimes[skill_level];
                         War3_DealDamage(victim,ShadowStrikeInitialDamage,attacker,DMG_BULLET,"shadowstrike");
                         W3FlashScreen(victim,RGBA_COLOR_RED);
-                        
+
                         W3EmitSoundToAll(shadowstrikestr,attacker);
                         W3EmitSoundToAll(shadowstrikestr,attacker);
                         CreateTimer(1.0,ShadowStrikeLoop,GetClientUserId(victim));
@@ -370,23 +370,23 @@ public OnW3TakeDmgBullet(victim,attacker,Float:damage)
         }
     }
 }
-public Action:ShadowStrikeLoop(Handle:timer,any:userid)
+public Action ShadowStrikeLoop(Handle timer,any userid)
 {
-    new victim = GetClientOfUserId(userid);
+    int victim = GetClientOfUserId(userid);
     if(StrikesRemaining[victim]>0 && ValidPlayer(BeingStrikedBy[victim]) && ValidPlayer(victim,true))
     {
         War3_DealDamage(victim,ShadowStrikeTrailingDamage,BeingStrikedBy[victim],DMG_BULLET,"shadowstrike");
         StrikesRemaining[victim]--;
         W3FlashScreen(victim,RGBA_COLOR_RED);
         CreateTimer(1.0,ShadowStrikeLoop,userid);
-        decl Float:StartPos[3];
+        float StartPos[3];
         GetClientAbsOrigin(victim,StartPos);
         TE_SetupDynamicLight(StartPos,255,255,100,100,100.0,0.3,3.0);
         TE_SendToAll();
     }
 }
 
-stock TE_SetupDynamicLight(const Float:vecOrigin[3], r,g,b,iExponent,Float:fRadius,Float:fTime,Float:fDecay)
+stock TE_SetupDynamicLight(const float vecOrigin[3], r,g,b,iExponent,float fRadius,float fTime,float fDecay)
 {
     TE_Start("Dynamic Light");
     TE_WriteVector("m_vecOrigin",vecOrigin);
@@ -399,14 +399,14 @@ stock TE_SetupDynamicLight(const Float:vecOrigin[3], r,g,b,iExponent,Float:fRadi
     TE_WriteFloat("m_fDecay",fDecay);
 }
 
-public RoundStartEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public RoundStartEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    for(new i=1;i<=MaxClients;i++)
+    for(int i=1;i<=MaxClients;i++)
     {
         ultUsedTimes[i]=0;
         War3_CooldownReset(i,thisRaceID,ULT_VENGENCE);
-        
-        
+
+
         StrikesRemaining[i]=0;
         if(ValidPlayer(i,true)&&War3_GetRace(i)==thisRaceID)
         {
@@ -422,30 +422,30 @@ public RoundStartEvent(Handle:event,const String:name[],bool:dontBroadcast)
 
 public StartMole(client)
 {
-    new Float:mole_time=5.0;
+    float mole_time=5.0;
     W3MsgMoleIn(client,mole_time);
     CreateTimer(0.2+mole_time,DoMole,client);
 }
-public Action:DoMole(Handle:timer,any:client)
+public Action DoMole(Handle timer,any client)
 {
     if(ValidPlayer(client,true))
     {
         new team=GetClientTeam(client);
         new searchteam=(team==2)?3:2;
-        
-        new Float:emptyspawnlist[100][3];
+
+        float emptyspawnlist[100][3];
         new availablelocs=0;
-        
-        new Float:playerloc[3];
-        new Float:spawnloc[3];
+
+        float playerloc[3];
+        float spawnloc[3];
         new ent=-1;
         while((ent = FindEntityByClassname(ent,(searchteam==2)?"info_player_terrorist":"info_player_counterterrorist"))!=-1)
         {
             if(!IsValidEdict(ent)) continue;
             GetEntDataVector(ent,OriginOffset,spawnloc);
-            
-            new bool:is_conflict=false;
-            for(new i=1;i<=MaxClients;i++)
+
+            bool is_conflict=false;
+            for(int i=1;i<=MaxClients;i++)
             {
                 if(ValidPlayer(i,true)){
                     GetClientAbsOrigin(i,playerloc);
@@ -453,7 +453,7 @@ public Action:DoMole(Handle:timer,any:client)
                     {
                         is_conflict=true;
                         break;
-                    }                
+                    }
                 }
             }
             if(!is_conflict)
@@ -484,7 +484,7 @@ public Action:DoMole(Handle:timer,any:client)
     }
     return;
 }
-public Action:ResetModel(Handle:timer,any:client)
+public Action ResetModel(Handle timer,any client)
 {
     if(ValidPlayer(client,true))
     {
@@ -493,18 +493,18 @@ public Action:ResetModel(Handle:timer,any:client)
     }
 }
 
-  
 
-public Action:CalcBlink(Handle:timer,any:userid)
+
+public Action CalcBlink(Handle timer,any userid)
 {
     if(thisRaceID>0)
     {
-        for(new i=1;i<=MaxClients;i++)
+        for(int i=1;i<=MaxClients;i++)
         {
             if(ValidPlayer(i,true)&&War3_GetRace(i)==thisRaceID)
             {
 #if defined SOURCECRAFT
-                new bool:value = (GetRandomFloat(0.0,1.0)<BlinkChanceArr[War3_GetSkillLevel(i,thisRaceID,SKILL_BLINK)]) &&
+                bool value = (GetRandomFloat(0.0,1.0)<BlinkChanceArr[War3_GetSkillLevel(i,thisRaceID,SKILL_BLINK)]) &&
                                  CanProcessUpgrade(i,thisRaceID,SKILL_BLINK);
 
                 War3_SetBuff(i,bImmunityUltimates,thisRaceID, value);
@@ -517,12 +517,12 @@ public Action:CalcBlink(Handle:timer,any:userid)
 }
 
 
-public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public PlayerDeathEvent(Handle event,const char[] name,bool dontBroadcast)
 {
     new victim=GetClientOfUserId(GetEventInt(event,"userid"));
     new attacker=GetClientOfUserId(GetEventInt(event,"attacker"));
-    new bool:should_vengence=false;
-    
+    bool should_vengence=false;
+
     if(victim>0 && attacker>0 && attacker!=victim)
     {
         if(W3GetVar(DeathRace)==thisRaceID && War3_GetSkillLevel(victim,thisRaceID,ULT_VENGENCE)>0 && War3_SkillNotInCooldown(victim,thisRaceID,ULT_VENGENCE,false) )
@@ -551,7 +551,7 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
             }
         }
     }
-    
+
     //did he use it too much?
     if(victim>0){
 #if defined SOURCECRAFT
@@ -560,7 +560,7 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
         if(ultUsedTimes[victim]>=GetConVarInt(ultMaxCvar)&&GetConVarInt(ultMaxCvar)>0){
 #endif
             should_vengence=false;
-            new String:str[100];
+            char str[100];
 #if defined SOURCECRAFT
             Format(str,sizeof(str),"max %d times per round",max_ult);
 #else
@@ -572,8 +572,8 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
     if(should_vengence)
     {
         new victimTeam=GetClientTeam(victim);
-        new playersAliveSameTeam;
-        for(new i=1;i<=MaxClients;i++)
+        int playersAliveSameTeam;
+        for(int i=1;i<=MaxClients;i++)
         {
             if(i!=victim&&ValidPlayer(i,true)&&GetClientTeam(i)==victimTeam)
             {
@@ -597,12 +597,12 @@ public GiveDeathWeapons(client)
     {
         // reincarnate with weapons
         // drop weapons beside c4 and knife
-        for(new s=0;s<10;s++)
+        for(int s=0;s<10;s++)
         {
             new ent=GetEntDataEnt2(client,MyWeaponsOffset+(s*4));
             if(ent>0 && IsValidEdict(ent))
             {
-                new String:ename[64];
+                char ename[64];
                 GetEdictClassname(ent,ename,64);
                 if(StrEqual(ename,"weapon_c4") || StrEqual(ename,"weapon_knife"))
                 {
@@ -613,14 +613,14 @@ public GiveDeathWeapons(client)
             }
         }
         // restore iAmmo
-        for(new s=0;s<32;s++)
+        for(int s=0;s<32;s++)
         {
             SetEntData(client,AmmoOffset+(s*4),War3_CachedDeadAmmo(client,s),4);
         }
         // give them their weapons
-        for(new s=0;s<10;s++)
+        for(int s=0;s<10;s++)
         {
-            new String:wep_check[64];
+            char wep_check[64];
             War3_CachedDeadWeaponName(client,s,wep_check,64);
             if(!StrEqual(wep_check,"") && !StrEqual(wep_check,"",false) && !StrEqual(wep_check,"weapon_c4") && !StrEqual(wep_check,"weapon_knife"))
             {
@@ -635,7 +635,7 @@ public GiveDeathWeapons(client)
     }
 }
 
-public Action:VengenceRespawn(Handle:t,any:userid)
+public Action VengenceRespawn(Handle t,any userid)
 {
     new client=GetClientOfUserId(userid);
     if(client>0 && War3_GetRace(client)==thisRaceID) //did he become alive?
@@ -644,10 +644,10 @@ public Action:VengenceRespawn(Handle:t,any:userid)
             W3MsgVengenceWasBlocked(client,"you are alive");
         }
         else{
-        
-            new alivecount;
+
+            int alivecount;
             new team=GetClientTeam(client);
-            for(new i=1;i<=MaxClients;i++){
+            for(int i=1;i<=MaxClients;i++){
                 if(ValidPlayer(i,true)&&GetClientTeam(i)==team){
                     alivecount++;
                     break;
@@ -660,7 +660,7 @@ public Action:VengenceRespawn(Handle:t,any:userid)
             {
                 War3_SpawnPlayer(client);
                 GiveDeathWeapons(client);
-                
+
                 War3_ChatMessage(client,"%T","Revived by Vengence",client);
                 new ult_level=War3_GetSkillLevel(client,thisRaceID,ULT_VENGENCE);
                 //if(GetClientHealth(client)<VengenceCSStartHP[ult_level])
@@ -668,10 +668,10 @@ public Action:VengenceRespawn(Handle:t,any:userid)
                 SetEntityHealth(client,VengenceCSStartHP[ult_level]);
                 War3_SetCSArmor(client,100);
                 War3_SetCSArmorHasHelmet(client,true);
-                //}    
+                //}
                 ultUsedTimes[client]++;
 #if defined SOURCECRAFT
-                new Float:cooldown= GetUpgradeCooldown(thisRaceID,ULT_VENGENCE);
+                float cooldown= GetUpgradeCooldown(thisRaceID,ULT_VENGENCE);
                 War3_CooldownMGR(client,cooldown,thisRaceID,ULT_VENGENCE,false,true);
 #else
                 War3_CooldownMGR(client,GetConVarFloat(ultCooldownCvar),thisRaceID,ULT_VENGENCE,false,true);
@@ -679,18 +679,18 @@ public Action:VengenceRespawn(Handle:t,any:userid)
             }
         }
     }
-    
+
 }
 
-public bool:blockingVengence(client)  //TF2 only
+public bool blockingVengence(client)  //TF2 only
 {
     //ELIMINATE ULTIMATE IF THERE IS IMMUNITY AROUND
-    new Float:playerVec[3];
+    float playerVec[3];
     GetClientAbsOrigin(client,playerVec);
-    new Float:otherVec[3];
-    new team = GetClientTeam(client);
+    float otherVec[3];
+    int team = GetClientTeam(client);
 
-    for(new i=1;i<=MaxClients;i++)
+    for(int i=1;i<=MaxClients;i++)
     {
         if(ValidPlayer(i,true)&&GetClientTeam(i)!=team&&W3HasImmunity(i,Immunity_Ultimates))
         {

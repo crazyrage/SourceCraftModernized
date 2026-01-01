@@ -36,7 +36,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of remotesentries.
  * @return		    	none
  */
-native ControlRemote(bool:plugin_only=true);
+native ControlRemote(bool plugin_only=true);
 
 /**
  * Give a remote control to the player
@@ -48,7 +48,7 @@ native ControlRemote(bool:plugin_only=true);
  * @param jump_speed    Speed used when Remote Controlled objects jump.
  * @return		    	none
  */
-native SetRemoteControl(client, permissions=-1, Float:speed=-1.0, Float:fall_speed=-1.0, Float:jump_speed=-1.0);
+native SetRemoteControl(client, permissions=-1, Float speed=-1.0, Float fall_speed=-1.0, Float jump_speed=-1.0);
 
 /**
  * Remote Control an object
@@ -74,7 +74,7 @@ native StopControllingObject(client);
  * @param builder:  The index of the builder of the building that got controlled
  * @param ent:      The index of the building that got grabbed
  */
-forward Action:OnControlObject(client,builder,ent);
+forward Action OnControlObject(client,builder,ent);
 
 /**
  * Gets called when building a building
@@ -82,7 +82,7 @@ forward Action:OnControlObject(client,builder,ent);
  * @param client:   The index of the client that want to build a building.
  * @param ent:      The index of the building that got grabbed
  */
-forward Action:OnBuildObject(client,TFExtObjectType:type);
+forward Action OnBuildObject(client,TFExtObjectType:type);
 
 /**
  * Description: Native Interface to build
@@ -105,10 +105,10 @@ forward Action:OnBuildObject(client,TFExtObjectType:type);
  * @param flPercentage      Value to use for flPercentageConstructed
  * @return			        entity index of new Sentry
  */
-native BuildSentry(iBuilder, const Float:fOrigin[3], const Float:fAngle[3], iLevel=1,
-                   bool:bDisabled=false, bool:bMini=false, bool:bShielded=false,
+native BuildSentry(iBuilder, const Float fOrigin[3], const Float fAngle[3], iLevel=1,
+                   bool bDisabled=false, bool bMini=false, bool bShielded=false,
                    iHealth=-1, iMaxHealth=-1, iShells=-1, iRockets=-1,
-                   Float:flPercentage=1.0);
+                   Float flPercentage=1.0);
 
 /**
  * Build a Dispenser
@@ -126,9 +126,9 @@ native BuildSentry(iBuilder, const Float:fOrigin[3], const Float:fAngle[3], iLev
  * @return			        entity index of new Dispenser
  */
 
-native BuildDispenser(iBuilder, const Float:fOrigin[3], const Float:fAngle[3], iLevel=1,
-                      bool:iDisabled=false, iHealth=-1, iMaxHealth=-1, iMetal=-1,
-                      Float:flPercentage=1.0, TFExtObjectType:type=TFExtObject_Dispenser);
+native BuildDispenser(iBuilder, const Float fOrigin[3], const Float fAngle[3], iLevel=1,
+                      bool iDisabled=false, iHealth=-1, iMaxHealth=-1, iMetal=-1,
+                      Float flPercentage=1.0, TFExtObjectType:type=TFExtObject_Dispenser);
 
 /**
  * Build a Teleporter Entry
@@ -143,9 +143,9 @@ native BuildDispenser(iBuilder, const Float:fOrigin[3], const Float:fAngle[3], i
  * @param flPercentage      Value to use for flPercentageConstructed
  * @return			        entity index of new Teleporter Entry
  */
-native BuildTeleporterEntry(iBuilder, const Float:fOrigin[3], const Float:fAngle[3],
-                            iLevel=1, bool:iDisabled=false, iHealth=-1, iMaxHealth=-1,
-                            Float:flPercentage=1.0);
+native BuildTeleporterEntry(iBuilder, const Float fOrigin[3], const Float fAngle[3],
+                            iLevel=1, bool iDisabled=false, iHealth=-1, iMaxHealth=-1,
+                            Float flPercentage=1.0);
 
 /**
  * Build a Teleporter Exit
@@ -160,9 +160,9 @@ native BuildTeleporterEntry(iBuilder, const Float:fOrigin[3], const Float:fAngle
  * @param flPercentage      Value to use for flPercentageConstructed
  * @return			        entity index of new Teleporter Exit
  */
-native BuildTeleporterExit(iBuilder, const Float:fOrigin[3], const Float:fAngle[3],
-                           iLevel=1, bool:iDisabled=false, iHealth=-1, iMaxHealth=-1,
-                           Float:flPercentage=1.0);
+native BuildTeleporterExit(iBuilder, const Float fOrigin[3], const Float fAngle[3],
+                           iLevel=1, bool iDisabled=false, iHealth=-1, iMaxHealth=-1,
+                           Float flPercentage=1.0);
 
 /**
  * Build an object where the client is standing
@@ -181,10 +181,10 @@ native BuildTeleporterExit(iBuilder, const Float:fOrigin[3], const Float:fAngle[
  * @param pos               Returns the position the object was built at.
  * @return			        entity index of new Object
  */
-native BuildObject(client, TFExtObjectType:type, iLevel=1, bool:bMini=false,
-                   bool:bShielded=false, bool:bDisabled=true, iHealth=-1,
-                   iMaxHealth=-1, Float:flPercentage=1.0, bool:remote=false,
-                   bool:drop=true, bool:check=true, Float:pos[3]={0.0});
+native BuildObject(client, TFExtObjectType:type, iLevel=1, bool bMini=false,
+                   bool bShielded=false, bool bDisabled=true, iHealth=-1,
+                   iMaxHealth=-1, Float flPercentage=1.0, bool remote=false,
+                   bool drop=true, bool check=true, Float pos[3]={0.0});
 
 /**
  * Counts buildings of all classes owned by client
@@ -203,7 +203,7 @@ native CountBuildings(client, counts[TFOBJECT_COUNT]={0});
  * @param mode              m_iObjectMode of entities to count (-1=any)
  * @return			        count of all buildings.
  */
-native CountObjects(client, const String:class[], mode=-1);
+native CountObjects(client, const char[] class, mode=-1);
 
 /**
  * Adds buildings owned by client to a menu.
@@ -216,7 +216,7 @@ native CountObjects(client, const String:class[], mode=-1);
  * @param target            Entity ID of last object added to the menu
  * @return			        count of buildings added
  */
-native AddBuildingsToMenu(Handle:menu, client, bool:all=false,
+native AddBuildingsToMenu(Handle menu, client, bool all=false,
                           counts[TFOBJECT_COUNT]={0}, &target=0);
 
 /**
@@ -226,7 +226,7 @@ native AddBuildingsToMenu(Handle:menu, client, bool:all=false,
  * @param all    	        Set to false to only destroy buildings that have been spawned by this plugin
  * @return			        count of buildings destroyed
  */
-native DestroyBuildings(client=-1, bool:all=true);
+native DestroyBuildings(client=-1, bool all=true);
 
 /**
  * Presents a menu of buildings for client to pick one to destroy.
@@ -234,7 +234,7 @@ native DestroyBuildings(client=-1, bool:all=true);
  * @param client 	        Client index of builder
  * @return			        true if there were buildings to destroy
  */
-native bool:DestroyBuildingMenu(client);
+native bool DestroyBuildingMenu(client);
 
 /**
  * Destroys the specified building.
@@ -254,7 +254,7 @@ native DestroyBuilding(obj);
  * @param plugin_only 	Set to 1 to assume complete control of the Firemines plugin.
  * @return		    	none
  */
-native ControlBuild(bool:plugin_only=true);
+native ControlBuild(bool plugin_only=true);
 
 /**
  * Sets the number of buildings the payer can build.
@@ -285,7 +285,7 @@ native ResetBuild(client);
  * @param count     Reference that returns the number of existing buildings
  * @return			true if the building can be built.
  */
-native bool:CheckBuild(client,TFObjectType:type,mode=-1,&count=0);
+native bool CheckBuild(client,TFObjectType:type,mode=-1,&count=0);
 
 /**
  * Gets called when the build command is issued to build a building
@@ -296,7 +296,7 @@ native bool:CheckBuild(client,TFObjectType:type,mode=-1,&count=0);
  * @param count:    The number of that type of building already built by client
  * @return          Plugin_Handled will block building.
  */
-forward Action:OnBuildCommand(client,TFObjectType:type,mode,count);
+forward Action OnBuildCommand(client,TFObjectType:type,mode,count);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

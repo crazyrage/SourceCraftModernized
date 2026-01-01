@@ -79,7 +79,7 @@ stock min( a,b ) return ( a < b  ? a :  b );
 
 
 // Plugin definitions
-public Plugin:myinfo =
+public Plugin myinfo =
 {
     name			= "Fair Team Balancer",
     author			= "MistaGee",
@@ -88,18 +88,18 @@ public Plugin:myinfo =
     url			= "http://forums.alliedmods.net"
 };
 
-new Handle:cvarEnabled		    = INVALID_HANDLE,
-    Handle:cvarAdminsImmune	    = INVALID_HANDLE,
-    Handle:cvarThreshold	    = INVALID_HANDLE,
-    Handle:cvarScoreThreshold	= INVALID_HANDLE,
-    Handle:cvarLevelThreshold	= INVALID_HANDLE,
+Handle cvarEnabled		    = null,
+    Handle cvarAdminsImmune	    = null,
+    Handle cvarThreshold	    = null,
+    Handle cvarScoreThreshold	= null,
+    Handle cvarLevelThreshold	= null,
     biggerTeam			        = 0,
     dCount			            = 0,
     switches_pending		    = 0,
-    bool:game_is_tf2		    = false,
-    bool:tf2ExtAvail	        = false,
-    bool:cstrikeExtAvail	    = false,
-    bool:sourcecraftModAvail	= false,
+    bool game_is_tf2		    = false,
+    bool tf2ExtAvail	        = false,
+    bool cstrikeExtAvail	    = false,
+    bool sourcecraftModAvail	= false,
     clientLastSwitched[MAXPLAYERS],
     plID[MAXPLAYERS];				// Player IDs of players to be switched
 
@@ -148,7 +148,7 @@ public OnPluginStart()
 
     RegAdminCmd( "sm_teams", Command_Teams, ADMFLAG_KICK, "Balance teams" );
 
-    decl String:theFolder[40];
+    char theFolder[40];
     GetGameFolderName( theFolder, sizeof(theFolder) );
 
     game_is_tf2 = StrEqual( theFolder, "tf" );
@@ -173,20 +173,20 @@ public OnPluginStart()
     }
 }
 
-public Action:Command_Teams( client, args )
+public Action Command_Teams( client, args )
 {
     PerformTeamCheck( true );
     return Plugin_Handled;
 }
 
-void:PerformTeamCheck( bool:switchImmed = false )
+void:PerformTeamCheck( bool switchImmed = false )
 {
     // If we are disabled - exit
     if( !GetConVarBool(cvarEnabled) )
         return;
 
     // Count the size and frags of each team
-    new tPlayers[2] = { 0, 0 },
+    int tPlayers[2] = { 0, 0 },
         tFrags[2]   = { 0, 0 },
         tScore[2]   = { 0, 0 },
         tLevels[2]  = { 0, 0 },
@@ -200,10 +200,10 @@ void:PerformTeamCheck( bool:switchImmed = false )
         pScore[MAXPLAYERS] = { 0, ... },
         pLevel[MAXPLAYERS] = { 0, ... },
         mc          = GetMaxClients(),
-        Handle:pHandle,
+        Handle pHandle,
         cTeam;
 
-    for( new i = 1; i < mc; i++ )
+    for(int i= 1; i < mc; i++ )
     {
         if( IsClientInGame(i) )
         {
@@ -211,7 +211,7 @@ void:PerformTeamCheck( bool:switchImmed = false )
             // Thanks to lambdacore for the hint
             if( cTeam >= 2 )
             {
-                new t =cTeam-2;
+                int t =cTeam-2;
                 tPlayers[t]++;
                 tFrags[t] += (pFrags[i] = GetClientFrags(i));
                 if (tFragsLo[t] > pFrags[i])
@@ -231,7 +231,7 @@ void:PerformTeamCheck( bool:switchImmed = false )
                 if (sourcecraftModAvail)
                 {
                     pHandle = GetPlayerHandle(i);
-                    if (pHandle != INVALID_HANDLE)
+                    if (pHandle != null)
                     {
                         tLevels[t] += (pLevel[i] = GetOverallLevel(pHandle));
                         if (tLevelLo[t] > pLevel[i])
@@ -250,15 +250,15 @@ void:PerformTeamCheck( bool:switchImmed = false )
     // who has 2 frags ((diff/2)/players).
 
     dCount = abs(tPlayers[0]-tPlayers[1]) / 2;
-    new dFrags = ( abs(tFrags[0]-tFrags[1]) / 2 ) / max( dCount, 1 );
-    new dScore = ( abs(tScore[0]-tScore[1]) / 2 ) / max( dCount, 1 );
-    new dLevel = ( abs(tLevels[0]-tLevels[1]) / 2 ) / max( dCount, 1 );
+    int dFrags = ( abs(tFrags[0]-tFrags[1]) / 2 ) / max( dCount, 1 );
+    int dScore = ( abs(tScore[0]-tScore[1]) / 2 ) / max( dCount, 1 );
+    int dLevel = ( abs(tLevels[0]-tLevels[1]) / 2 ) / max( dCount, 1 );
 
     if( dCount == 0  && dFrags == 0 && dScore == 0 && dLevel == 0 )
         return;
 
     // Purge the ID array
-    for( new n = 0; n < MAXPLAYERS; n++ )
+    for(int n= 0; n < MAXPLAYERS; n++ )
         plID[n] = 0;
 
     // Check team sizes and comparative score/levels/frags
@@ -285,7 +285,7 @@ void:PerformTeamCheck( bool:switchImmed = false )
     // Find the player(s) who fit best for team change
     // these are those n who come closest to the needed frag count
 
-    new plFragDelta[MAXPLAYERS],	// Difference of players' frags to dFrags
+    int plFragDelta[MAXPLAYERS],	// Difference of players' frags to dFrags
         plScoreDelta[MAXPLAYERS],	// Difference of players' level to dScore
         plLevelDelta[MAXPLAYERS],	// Difference of players' level to dLevel
         fragDelta,
@@ -293,7 +293,7 @@ void:PerformTeamCheck( bool:switchImmed = false )
         levelDelta,
         AdminId:plAdminID;
 
-    for( new i = 1; i < mc; i++ )
+    for(int i= 1; i < mc; i++ )
     {
 
         // Switch people from bigger team
@@ -312,7 +312,7 @@ void:PerformTeamCheck( bool:switchImmed = false )
             levelDelta = abs( pLevel[i] - dLevel );
 
             // Iterate through first n slots of array
-            for (new s = 0; s < dCount; s++ )
+            for(int s= 0; s < dCount; s++ )
             {
                 // if no player found or difference bigger
                 if (plID[s] == 0 || (plFragDelta[s] > fragDelta &&
@@ -333,7 +333,7 @@ void:PerformTeamCheck( bool:switchImmed = false )
     // Now we found the players to switch, so maybe do it
     if( switchImmed )
     {
-        for( new s = 0; s < dCount; s++ )
+        for(int s= 0; s < dCount; s++ )
         {
             PerformSwitch( plID[s] );
             plID[s] = 0;
@@ -344,7 +344,7 @@ void:PerformTeamCheck( bool:switchImmed = false )
     {
         // We're not to switch immediately, but maybe some of the players we want to
         // switch are already dead, so don't wait for them to die again
-        for( new s = 0; s < dCount; s++ )
+        for(int s= 0; s < dCount; s++ )
         {
             if( !IsPlayerAlive( plID[s] ) )
             {
@@ -355,13 +355,13 @@ void:PerformTeamCheck( bool:switchImmed = false )
     }
 }
 
-public Event_PlayerDeath( Handle:event, const String:name[], bool:dontBroadcast )
+public Event_PlayerDeath( Handle event, const char[] name, bool dontBroadcast )
 {
     // If we are disabled - exit
     if (!GetConVarBool(cvarEnabled))
         return;
 
-    new client = GetClientOfUserId( GetEventInt( event, "userid" ) ),
+    int client = GetClientOfUserId( GetEventInt( event, "userid" ) ),
         AdminId:plAdminID = GetUserAdmin(client);
 
     if (GetConVarBool(cvarAdminsImmune) &&
@@ -372,7 +372,7 @@ public Event_PlayerDeath( Handle:event, const String:name[], bool:dontBroadcast 
     }
 
     // Count the size and frags of each team
-    new tPlayers[2] = { 0, 0 },
+    int tPlayers[2] = { 0, 0 },
         tFrags[2]   = { 0, 0 },
         tLevels[2]  = { 0, 0 },
         tScore[2]  = { 0, 0 },
@@ -380,10 +380,10 @@ public Event_PlayerDeath( Handle:event, const String:name[], bool:dontBroadcast 
         pScore[MAXPLAYERS] = { 0, ... },
         pLevel[MAXPLAYERS] = { 0, ... },
         mc          = GetMaxClients(),
-        Handle:pHandle,
+        Handle pHandle,
         cTeam;
 
-    for( new i = 1; i < mc; i++ )
+    for(int i= 1; i < mc; i++ )
     {
         if( IsClientInGame(i) )
         {
@@ -391,7 +391,7 @@ public Event_PlayerDeath( Handle:event, const String:name[], bool:dontBroadcast 
             // Thanks to lambdacore for the hint
             if( cTeam >= 2 )
             {
-                new t =cTeam-2;
+                int t =cTeam-2;
                 tPlayers[t]++;
                 tFrags[t] += (pFrags[i] = GetClientFrags(i));
                 if (tf2ExtAvail)
@@ -399,7 +399,7 @@ public Event_PlayerDeath( Handle:event, const String:name[], bool:dontBroadcast 
                 if( sourcecraftModAvail )
                 {
                     pHandle = GetPlayerHandle(i);
-                    if (pHandle != INVALID_HANDLE)
+                    if (pHandle != null)
                         tLevels[t] += (pLevel[i] = GetOverallLevel(pHandle));
                 }
             }
@@ -412,9 +412,9 @@ public Event_PlayerDeath( Handle:event, const String:name[], bool:dontBroadcast 
     // who has 2 frags ((diff/2)/players).
 
     dCount = max( ( abs(tPlayers[0]-tPlayers[1]) / 2 ) - switches_pending, 0 );
-    new dFrags = ( abs(tFrags[0]-tFrags[1]) / 2 ) / max( dCount, 1 );
-    new dScore = ( abs(tScore[0]-tScore[1]) / 2 ) / max( dCount, 1 );
-    new dLevel = ( abs(tLevels[0]-tLevels[1]) / 2 ) / max( dCount, 1 );
+    int dFrags = ( abs(tFrags[0]-tFrags[1]) / 2 ) / max( dCount, 1 );
+    int dScore = ( abs(tScore[0]-tScore[1]) / 2 ) / max( dCount, 1 );
+    int dLevel = ( abs(tLevels[0]-tLevels[1]) / 2 ) / max( dCount, 1 );
 
     if( dCount == 0  && dFrags == 0 && dScore == 0 && dLevel == 0 )
         return;
@@ -453,7 +453,7 @@ void:PerformTimedSwitch( client )
     switches_pending++;
 }
 
-public Action:Timer_TeamSwitch( Handle:timer, any:client )
+public Action Timer_TeamSwitch( Handle timer, any:client )
 {
     if( !IsClientInGame( client ) )
         return Plugin_Stop;
@@ -478,7 +478,7 @@ void:PerformSwitch( client )
 
     if( game_is_tf2 )
     {
-        new Handle:event = CreateEvent( "teamplay_teambalanced_player" );
+        Handle event = CreateEvent( "teamplay_teambalanced_player" );
         SetEventInt( event, "player", client         );
         SetEventInt( event, "team",   5 - biggerTeam );
         FireEvent( event );
@@ -487,37 +487,37 @@ void:PerformSwitch( client )
         PrintToChatAll( "[SM] %N has been switched for team balance.", client );
 }
 
-public Event_RoundOver(Handle:event,const String:name[],bool:dontBroadcast)
+public Event_RoundOver(Handle event,const char[] name,bool dontBroadcast)
 {
     LogMessage("RoundOver(%s)", name);
 }
 
-public Event_RoundWin(Handle:event,const String:name[],bool:dontBroadcast)
+public Event_RoundWin(Handle event,const char[] name,bool dontBroadcast)
 {
-    new team  = GetEventInt(event,"team");
-    new caps  = GetEventInt(event,"flagcaplimit");
-    new lose  = GetEventInt(event,"losing_team_num_caps");
-    new death = GetEventInt(event,"was_sudden_death");
+    int team  = GetEventInt(event,"team");
+    int caps  = GetEventInt(event,"flagcaplimit");
+    int lose  = GetEventInt(event,"losing_team_num_caps");
+    int death = GetEventInt(event,"was_sudden_death");
     LogMessage("RoundWin(%s) winner=%d, caps=%d, loser_caps=%d, sudden_death=%d",
                name, team, caps, lose, death);
 }
 
-public Event_GameWin(Handle:event,const String:name[],bool:dontBroadcast)
+public Event_GameWin(Handle event,const char[] name,bool dontBroadcast)
 {
-    new team   = GetEventInt(event,"winning_team");
-    new score0 = GetEventInt(event,"blue_score");
-    new score1 = GetEventInt(event,"red_score");
-    new prev0  = GetEventInt(event,"blue_score_prev");
-    new prev1  = GetEventInt(event,"red_score_prev");
+    int team   = GetEventInt(event,"winning_team");
+    int score0 = GetEventInt(event,"blue_score");
+    int score1 = GetEventInt(event,"red_score");
+    int prev0  = GetEventInt(event,"blue_score_prev");
+    int prev1  = GetEventInt(event,"red_score_prev");
 
-    new index1 = GetEventInt(event, "player_1");
-    new index2 = GetEventInt(event, "player_2");
-    new index3 = GetEventInt(event, "player_3");
+    int index1 = GetEventInt(event, "player_1");
+    int index2 = GetEventInt(event, "player_2");
+    int index3 = GetEventInt(event, "player_3");
     LogMessage("GameWin(%s) winner=%d, blue=%d[%d], red=%d[%d], MVP1=%N,2=%N,3=%N",
                name, team, score0, prev0, score1, prev1, index1, index2, index3);
 }
 
-public Event_GameOver(Handle:event,const String:name[],bool:dontBroadcast)
+public Event_GameOver(Handle event,const char[] name,bool dontBroadcast)
 {
     LogMessage("GameOver(%s)", name);
 }

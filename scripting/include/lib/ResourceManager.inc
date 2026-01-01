@@ -26,9 +26,9 @@
  * @noreturn
  *
  */
-native AddDirToDownloadTable(const String:directory[], bool:recursive=false);
+native AddDirToDownloadTable(const char[] directory, bool recursive=false);
 
-stock AddFolderToDownloadTable(const String:directory[], bool:recursive=false)
+stock AddFolderToDownloadTable(const char[] directory, bool recursive=false)
 {
 #if defined REQUIRE_PLUGIN
     AddDirToDownloadTable(directory, recursive);
@@ -50,13 +50,13 @@ stock AddFolderToDownloadTable(const String:directory[], bool:recursive=false)
  *                      that list additional files to download (if any).
  * @return              Returns a model index (if precached).
  */
-native PreSetupModel(const String:model[], &index=0, bool:download=false,
-                     bool:precache=false, bool:preload=false,
-                     Handle:files=INVALID_HANDLE);
+native PreSetupModel(const char[] model, &index=0, bool download=false,
+                     bool precache=false, bool preload=false,
+                     Handle files=null);
 
-stock SetupModel(const String:model[], &index=0, bool:download=false,
-                 bool:precache=false, bool:preload=false,
-                 Handle:files=INVALID_HANDLE)
+stock SetupModel(const char[] model, &index=0, bool download=false,
+                 bool precache=false, bool preload=false,
+                 Handle files=null)
  {
 #if defined REQUIRE_PLUGIN
         return PreSetupModel(model, index, download, precache, preload,files);
@@ -81,9 +81,9 @@ stock SetupModel(const String:model[], &index=0, bool:download=false,
  * @param preload       If preload is true the file will be precached before level startup (if required).
  * @return              Returns a model index.
  */
-native PrepModel(const String:model[], &index=0, bool:preload=true);
+native PrepModel(const char[] model, &index=0, bool preload=true);
 
-stock PrepareModel(const String:model[], &index=0, bool:preload=true)
+stock PrepareModel(const char[] model, &index=0, bool preload=true)
 {
 #if defined REQUIRE_PLUGIN
     return PrepModel(model, index, preload);
@@ -104,11 +104,11 @@ stock PrepareModel(const String:model[], &index=0, bool:preload=true)
  * @param preload       If preload is true the file will be precached before level startup.
  * @return              Returns a decal index (if precached).
  */
-native PreSetupDecal(const String:decal[], &index=0, bool:download=false,
-                     bool:precache=false, bool:preload=false);
+native PreSetupDecal(const char[] decal, &index=0, bool download=false,
+                     bool precache=false, bool preload=false);
 
-stock SetupDecal(const String:decal[], &index=0, bool:download=false,
-                 bool:precache=false, bool:preload=false)
+stock SetupDecal(const char[] decal, &index=0, bool download=false,
+                 bool precache=false, bool preload=false)
  {
 #if defined REQUIRE_PLUGIN
     return PreSetupDecal(decal, index, download, precache, preload);
@@ -133,9 +133,9 @@ stock SetupDecal(const String:decal[], &index=0, bool:download=false,
  * @param preload       If preload is true the file will be precached before level startup (if required).
  * @return              Returns a decal index.
  */
-native PrepDecal(const String:decal[], &index=0, bool:preload=true);
+native PrepDecal(const char[] decal, &index=0, bool preload=true);
 
-stock PrepareDecal(const String:decal[], &index=0, bool:preload=true)
+stock PrepareDecal(const char[] decal, &index=0, bool preload=true)
 {
 #if defined REQUIRE_PLUGIN
     return PrepDecal(decal, index, preload);
@@ -157,11 +157,11 @@ stock PrepareDecal(const String:decal[], &index=0, bool:preload=true)
  * @param preload       If preload is true the file will be precached before level startup.
  * @return              Returns true if successfully precached.
  */
-native bool:PreSetupSound(const String:sound[], bool:force=false, download=AUTO_DOWNLOAD,
-                          bool:precache=false, bool:preload=false);
+native bool PreSetupSound(const char[] sound, bool force=false, download=AUTO_DOWNLOAD,
+                          bool precache=false, bool preload=false);
 
-stock bool:SetupSound(const String:sound[], bool:force=false, download=AUTO_DOWNLOAD,
-                       bool:precache=false, bool:preload=false)
+stock bool SetupSound(const char[] sound, bool force=false, download=AUTO_DOWNLOAD,
+                       bool precache=false, bool preload=false)
  {
 #if defined REQUIRE_PLUGIN
     return PreSetupSound(sound, force, download, precache, preload);
@@ -186,9 +186,9 @@ stock bool:SetupSound(const String:sound[], bool:force=false, download=AUTO_DOWN
  * @param preload       If preload is true the file will be precached before level startup (if required).
  * @return              Returns false if the sound limit has been reached.
  */
-native bool:PrepSound(const String:sound[], bool:force=false, bool:preload=true);
+native bool PrepSound(const char[] sound, bool force=false, bool preload=true);
 
-stock bool:PrepareSound(const String:sound[], bool:force=false, bool:preload=true)
+stock bool PrepareSound(const char[] sound, bool force=false, bool preload=true)
 {
 #if defined REQUIRE_PLUGIN
     return PrepSound(sound, force, preload);
@@ -212,14 +212,14 @@ stock bool:PrepareSound(const String:sound[], bool:force=false, bool:preload=tru
  * @param delay     Play delay.
  * @noreturn
  */
-stock PrepareAndEmitAmbientSound(const String:name[],
-                                 const Float:pos[3],
+stock PrepareAndEmitAmbientSound(const char[] name,
+                                 const Float pos[3],
                                  entity = SOUND_FROM_WORLD,
                                  level = SNDLEVEL_NORMAL,
                                  flags = SND_NOFLAGS,
-                                 Float:vol = SNDVOL_NORMAL,
+                                 Float vol = SNDVOL_NORMAL,
                                  pitch = SNDPITCH_NORMAL,
-                                 Float:delay = 0.0)
+                                 Float delay = 0.0)
 {
     if (GetGameType() == csgo)
     {
@@ -265,18 +265,18 @@ stock PrepareAndEmitAmbientSound(const String:name[],
  */
 stock PrepareAndEmitSound(const clients[],
                           numClients,
-                          const String:sample[],
+                          const char[] sample,
                           entity = SOUND_FROM_PLAYER,
                           channel = SNDCHAN_AUTO,
                           level = SNDLEVEL_NORMAL,
                           flags = SND_NOFLAGS,
-                          Float:volume = SNDVOL_NORMAL,
+                          Float volume = SNDVOL_NORMAL,
                           pitch = SNDPITCH_NORMAL,
                           speakerentity = -1,
-                          const Float:origin[3] = NULL_VECTOR,
-                          const Float:dir[3] = NULL_VECTOR,
-                          bool:updatePos = true,
-                          Float:soundtime = 0.0)
+                          const Float origin[3] = NULL_VECTOR,
+                          const Float dir[3] = NULL_VECTOR,
+                          bool updatePos = true,
+                          Float soundtime = 0.0)
 {
     if (GetGameType() == csgo)
     {
@@ -318,18 +318,18 @@ stock PrepareAndEmitSound(const clients[],
  * @error               Invalid client index.
  */
 stock PrepareAndEmitSoundToClient(client,
-                                  const String:sample[],
+                                  const char[] sample,
                                   entity = SOUND_FROM_PLAYER,
                                   channel = SNDCHAN_AUTO,
                                   level = SNDLEVEL_NORMAL,
                                   flags = SND_NOFLAGS,
-                                  Float:volume = SNDVOL_NORMAL,
+                                  Float volume = SNDVOL_NORMAL,
                                   pitch = SNDPITCH_NORMAL,
                                   speakerentity = -1,
-                                  const Float:origin[3] = NULL_VECTOR,
-                                  const Float:dir[3] = NULL_VECTOR,
-                                  bool:updatePos = true,
-                                  Float:soundtime = 0.0)
+                                  const Float origin[3] = NULL_VECTOR,
+                                  const Float dir[3] = NULL_VECTOR,
+                                  bool updatePos = true,
+                                  Float soundtime = 0.0)
 {
     if (GetGameType() == csgo)
     {
@@ -368,18 +368,18 @@ stock PrepareAndEmitSoundToClient(client,
  * @noreturn
  * @error               Invalid client index.
  */
-stock PrepareAndEmitSoundToAll(const String:sample[],
+stock PrepareAndEmitSoundToAll(const char[] sample,
                                entity = SOUND_FROM_PLAYER,
                                channel = SNDCHAN_AUTO,
                                level = SNDLEVEL_NORMAL,
                                flags = SND_NOFLAGS,
-                               Float:volume = SNDVOL_NORMAL,
+                               Float volume = SNDVOL_NORMAL,
                                pitch = SNDPITCH_NORMAL,
                                speakerentity = -1,
-                               const Float:origin[3] = NULL_VECTOR,
-                               const Float:dir[3] = NULL_VECTOR,
-                               bool:updatePos = true,
-                               Float:soundtime = 0.0)
+                               const Float origin[3] = NULL_VECTOR,
+                               const Float dir[3] = NULL_VECTOR,
+                               bool updatePos = true,
+                               Float soundtime = 0.0)
 {
     if (GetGameType() == csgo)
     {
@@ -405,7 +405,7 @@ stock PrepareAndEmitSoundToAll(const String:sample[],
 }
 
 #if !defined REQUIRE_PLUGIN
-stock bool:m_ResourceManagerAvailable = false;
+stock bool m_ResourceManagerAvailable = false;
 
 /**
  * Check if the plugin is available.
@@ -413,7 +413,7 @@ stock bool:m_ResourceManagerAvailable = false;
  * @param   force   If true, sets the plugin is available flag
  * @return  Returns true if the plugin is available.
  */
-stock bool:IsResourceManagerAvailable(bool:force=false)
+stock bool IsResourceManagerAvailable(bool force=false)
 {
     if (!m_ResourceManagerAvailable && (force || LibraryExists("ResourceManager")))
     {
@@ -428,7 +428,7 @@ stock bool:IsResourceManagerAvailable(bool:force=false)
  * @param   name    the name parameter from the OnLibraryLoaded() call
  * @return  Returns true if name is for this plugin
  */
-stock bool:WasResourceManagerAdded(const String:name[])
+stock bool WasResourceManagerAdded(const char[] name)
 {
     if (StrEqual(name, "ResourceManager"))
     {

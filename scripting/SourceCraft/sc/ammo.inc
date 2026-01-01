@@ -10,17 +10,17 @@
 #endif
 #define _ammo_included
 
-stock GetClip(weapon)
+stock GetClip(int weapon)
 {
     return GetEntProp(weapon, Prop_Send, "m_iClip1");
 }
 
-stock SetClip(weapon, amount)
+stock SetClip(int weapon, int amount)
 {
     SetEntProp(weapon, Prop_Send, "m_iClip1", amount);
 }
 
-stock GetAmmoType(weapon)
+stock GetAmmoType(int weapon)
 {
     return GetEntProp(weapon, Prop_Send, "m_iPrimaryAmmoType");
 }

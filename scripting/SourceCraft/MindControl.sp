@@ -30,11 +30,11 @@
 
 enum command { update, remove, reset, find_controller, find_builder };
 
-new const String:controlWav[] = "sc/pteSum00.wav";
+new const char[] controlWav[] = "sc/pteSum00.wav";
 
-new Handle:m_StolenObjectList[MAXPLAYERS+1] = { INVALID_HANDLE, ... };
+Handle m_StolenObjectList[MAXPLAYERS+1] = { null, ... };
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "SourceCraft Upgrade - MindControl",
     author = "-=|JFH|=-Naris",
@@ -43,7 +43,7 @@ public Plugin:myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLRes:AskPluginLoad2(Handle myself, bool late, char error[], err_max)
 {
     // Only load when running TF2
     if (GetGameType() == tf2)
@@ -63,7 +63,7 @@ public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
     }
 }
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.common.phrases.txt");
     LoadTranslations("sc.mind_control.phrases.txt");
@@ -81,7 +81,7 @@ public OnPluginStart()
     }
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupLightning();
     SetupHaloSprite();
@@ -95,30 +95,30 @@ public OnMapStart()
     SetupSound(controlWav);
 }
 
-public OnClientDisconnect(client)
+public void OnClientDisconnect(client)
 {
     ResetMindControlledObjects(client, false);
 }
 
-public ObjectDestroyed(Handle:event,const String:name[],bool:dontBroadcast)
+public ObjectDestroyed(Handle event,const char[] name[],bool dontBroadcast)
 {
-    new index = GetClientOfUserId(GetEventInt(event,"userid"));
-    new obj = GetEventInt(event,"index");
+    int index = GetClientOfUserId(GetEventInt(event,"userid"));
+    int obj = GetEventInt(event,"index");
     new TFExtObjectType:type = TFExtObjectType:GetEventInt(event,"objecttype");
-    ProcessMindControlledObjects(remove, obj, index, type, INVALID_HANDLE);
+    ProcessMindControlledObjects(remove, obj, index, type, null);
 }
 
-public Action:CorrectDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public Action CorrectDeathEvent(Handle event,const char[] name[],bool dontBroadcast)
 {
-    new attacker = GetClientOfUserId(GetEventInt(event,"attacker"));
+    int attacker = GetClientOfUserId(GetEventInt(event,"attacker"));
     if (attacker > 0)
     {
-        decl String:weapon[64];
+        char weapon[64];
         GetEventString(event, "weapon", weapon, sizeof(weapon));
 
         if (StrEqual(weapon, "obj_sentrygun"))
         {
-            new controller = ProcessMindControlledObjects(find_controller, -1, attacker, TFExtObject_Sentry);
+            int controller = ProcessMindControlledObjects(find_controller, -1, attacker, TFExtObject_Sentry);
             if (controller != attacker && IsValidClient(controller))
             {
                 SetEventInt(event,"attacker",GetClientUserId(controller));
@@ -129,7 +129,7 @@ public Action:CorrectDeathEvent(Handle:event,const String:name[],bool:dontBroadc
     return Plugin_Continue;
 }
 
-bool:MindControl(client, Float:range, percent, &builder, &TFExtObjectType:type, bool:replace=false)
+bool MindControl(client, float range, percent, &builder, &TFExtObjectType:type, bool replace=false)
 {
     if (GetGameType() == tf2)
     {
@@ -157,18 +157,18 @@ bool:MindControl(client, Float:range, percent, &builder, &TFExtObjectType:type, 
         }
     }
 
-    new target = TraceAimTarget(client);
+    int target = TraceAimTarget(client);
     if (target >= 0)
     {
-        new Float:clientLoc[3];
+        float clientLoc[3];
         GetClientAbsOrigin(client, clientLoc);
 
-        new Float:targetLoc[3];
+        float targetLoc[3];
         TR_GetEndPosition(targetLoc);
 
         if (IsPointInRange(clientLoc,targetLoc,range))
         {
-            new Float:distance=GetVectorDistance(clientLoc,targetLoc);
+            float distance=GetVectorDistance(clientLoc,targetLoc);
             if (GetRandomFloat(1.0,100.0) <= float(percent) * (1.0 - (distance / range) + 0.20))
             {
                 return replace ? ReplaceObject(client, target, builder, type)
@@ -194,7 +194,7 @@ bool:MindControl(client, Float:range, percent, &builder, &TFExtObjectType:type, 
     return false;
 }
 
-bool:ReplaceObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject_Unknown)
+bool ReplaceObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject_Unknown)
 {
     if (IsValidEntity(target) && IsValidEdict(target))
     {
@@ -202,9 +202,9 @@ bool:ReplaceObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject
         if (type != TFExtObject_Unknown)
         {
             //Check to see if the object is still being built
-            new placing = GetEntProp(target, Prop_Send, "m_bPlacing");
-            new building = GetEntProp(target, Prop_Send, "m_bBuilding");
-            new Float:complete = GetEntPropFloat(target, Prop_Send, "m_flPercentageConstructed");
+            int placing = GetEntProp(target, Prop_Send, "m_bPlacing");
+            int building = GetEntProp(target, Prop_Send, "m_bBuilding");
+            float complete = GetEntPropFloat(target, Prop_Send, "m_flPercentageConstructed");
             if (placing == 0 && building == 0 && complete >= 1.0)
             {
                 //Find the owner of the object m_hBuilder holds the client index 1 to Maxplayers
@@ -212,22 +212,22 @@ bool:ReplaceObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject
 
                 if (builder > 0 && !GetImmunity(builder,Immunity_Ultimates))
                 {
-                    new team = GetClientTeam(client);
+                    int team = GetClientTeam(client);
                     if (GetEntProp(target, Prop_Send, "m_iTeamNum") != team)
                     {
-                        new Float:pos[3];
+                        float pos[3];
                         GetEntPropVector(target, Prop_Send, "m_vecOrigin", pos);
 
-                        new Float:angles[3];
+                        float angles[3];
                         GetEntPropVector(target, Prop_Send, "m_angRotation", angles);
 
-                        new iMaxHealth = GetEntProp(target, Prop_Data, "m_iMaxHealth");
-                        new iHealth = GetEntProp(target, Prop_Send, "m_iHealth");
-                        new iLevel = GetEntProp(target, Prop_Send, "m_iUpgradeLevel");
+                        int iMaxHealth = GetEntProp(target, Prop_Data, "m_iMaxHealth");
+                        int iHealth = GetEntProp(target, Prop_Send, "m_iHealth");
+                        int iLevel = GetEntProp(target, Prop_Send, "m_iUpgradeLevel");
 
                         AcceptEntityInput(target, "kill");
 
-                        new obj;
+                        int obj;
                         switch (type)
                         {
                             case TFExtObject_Sentry:
@@ -296,7 +296,7 @@ bool:ReplaceObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject
 }
 
 
-bool:ControlObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject_Unknown)
+bool ControlObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject_Unknown)
 {
     if (IsValidEntity(target) && IsValidEdict(target))
     {
@@ -304,9 +304,9 @@ bool:ControlObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject
         if (type != TFExtObject_Unknown)
         {
             //Check to see if the object is still being built
-            new placing = GetEntProp(target, Prop_Send, "m_bPlacing");
-            new building = GetEntProp(target, Prop_Send, "m_bBuilding");
-            new Float:complete = GetEntPropFloat(target, Prop_Send, "m_flPercentageConstructed");
+            int placing = GetEntProp(target, Prop_Send, "m_bPlacing");
+            int building = GetEntProp(target, Prop_Send, "m_bBuilding");
+            float complete = GetEntPropFloat(target, Prop_Send, "m_flPercentageConstructed");
             if (placing == 0 && building == 0 && complete >= 1.0)
             {
                 //Find the owner of the object m_hBuilder holds the client index 1 to Maxplayers
@@ -314,7 +314,7 @@ bool:ControlObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject
 
                 if (builder > 0 && !GetImmunity(builder,Immunity_Ultimates))
                 {
-                    new team = GetClientTeam(client);
+                    int team = GetClientTeam(client);
                     if (GetEntProp(target, Prop_Send, "m_iTeamNum") != team)
                     {
                         // Check to see if this target has already been controlled.
@@ -345,16 +345,16 @@ bool:ControlObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject
 
                         PrepareAndEmitSoundToAll(controlWav,target);
 
-                        new color[4] = { 0, 0, 0, 255 };
+                        int color[4] = { 0, 0, 0, 255 };
                         if (team == 3)
                             color[2] = 255; // Blue
                         else
                             color[0] = 255; // Red
 
-                        new Float:clientLoc[3];
+                        float clientLoc[3];
                         GetClientAbsOrigin(client, clientLoc);
 
-                        new Float:targetLoc[3];
+                        float targetLoc[3];
                         GetEntPropVector(target, Prop_Send, "m_vecOrigin", targetLoc);
 
                         TE_SetupBeamPoints(clientLoc, targetLoc, Lightning(), HaloSprite(),
@@ -368,14 +368,14 @@ bool:ControlObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject
                                            5.0,5.0,255);
                         TE_SendEffectToAll();
 
-                        new Float:splashDir[3];
+                        float splashDir[3];
                         splashDir[0] = 0.0;
                         splashDir[1] = 0.0;
                         splashDir[2] = 100.0;
                         TE_SetupEnergySplash(targetLoc, splashDir, true);
 
-                        new target_ref = EntIndexToEntRef(target);
-                        new Handle:timer = INVALID_HANDLE;
+                        int target_ref = EntIndexToEntRef(target);
+                        Handle timer = null;
                         if (type == TFExtObject_Sentry)
                         {
                             timer = CreateTimer(0.1, CheckSentries, target_ref,
@@ -383,14 +383,14 @@ bool:ControlObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject
                         }
 
                         // Create the Tracking Package
-                        new Handle:pack = CreateDataPack();
+                        Handle pack = CreateDataPack();
                         WritePackCell(pack, target_ref);
                         WritePackCell(pack, builder);
                         WritePackCell(pack, _:timer);
                         WritePackCell(pack, _:type);
 
                         // And add it to the list
-                        if (m_StolenObjectList[client] == INVALID_HANDLE)
+                        if (m_StolenObjectList[client] == null)
                             m_StolenObjectList[client] = CreateArray();
 
                         PushArrayCell(m_StolenObjectList[client], pack);
@@ -434,9 +434,9 @@ bool:ControlObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject
     return false;
 }
 
-public Action:CheckSentries(Handle:timer,any:ref)
+public Action CheckSentries(Handle timer,any:ref)
 {
-    new obj = EntRefToEntIndex(ref);
+    int obj = EntRefToEntIndex(ref);
     if (obj > 0 && IsValidEdict(obj) && IsValidEntity(obj))
     {
         // disable the sentry if it is controlled.
@@ -454,31 +454,31 @@ public Action:CheckSentries(Handle:timer,any:ref)
 
 ProcessMindControlledObjects(command:cmd, obj=-1, builder=-1,
                              TFExtObjectType:type=TFExtObject_Unknown,
-                             Handle:timer=INVALID_HANDLE)
+                             Handle timer=null)
 {
     if (obj > 0 || builder > 0)
     {
-        for (new client=1;client<=MaxClients;client++)
+        for (int client=1;client<=MaxClients;client++)
         {
-            if (m_StolenObjectList[client] != INVALID_HANDLE)
+            if (m_StolenObjectList[client] != null)
             {
-                new size = GetArraySize(m_StolenObjectList[client]);
-                for (new index = 0; index < size; index++)
+                int size = GetArraySize(m_StolenObjectList[client]);
+                for (int index = 0; index < size; index++)
                 {
-                    new Handle:pack = GetArrayCell(m_StolenObjectList[client], index);
-                    if (pack != INVALID_HANDLE)
+                    Handle pack = GetArrayCell(m_StolenObjectList[client], index);
+                    if (pack != null)
                     {
                         ResetPack(pack);
-                        new pack_ref = ReadPackCell(pack);
-                        new pack_target = EntRefToEntIndex(pack_ref);
-                        new pack_builder = ReadPackCell(pack);
-                        new Handle:pack_timer = Handle:ReadPackCell(pack);
+                        int pack_ref = ReadPackCell(pack);
+                        int pack_target = EntRefToEntIndex(pack_ref);
+                        int pack_builder = ReadPackCell(pack);
+                        Handle pack_timer = Handle ReadPackCell(pack);
                         new TFExtObjectType:pack_type = TFExtObjectType:ReadPackCell(pack);
 
-                        new bool:found;
+                        bool found;
                         if (obj > 0)
                             found = (obj == pack_target);
-                        else if (timer != INVALID_HANDLE)
+                        else if (timer != null)
                             found = (timer == pack_timer);
                         else
                             found = (builder == pack_builder && type == pack_type);
@@ -489,7 +489,7 @@ ProcessMindControlledObjects(command:cmd, obj=-1, builder=-1,
                             {
                                 CloseHandle(pack);
                                 RemoveFromArray(m_StolenObjectList[client], index);
-                                if (pack_timer != INVALID_HANDLE && pack_target > 0)
+                                if (pack_timer != null && pack_target > 0)
                                     KillTimer(pack_timer);
                             }
                             else if (cmd == reset)
@@ -497,7 +497,7 @@ ProcessMindControlledObjects(command:cmd, obj=-1, builder=-1,
                                 CloseHandle(pack);
                                 RemoveFromArray(m_StolenObjectList[client], index);
                                 ResetObject(-1, pack_target, pack_builder, false);
-                                if (pack_timer != INVALID_HANDLE && pack_target > 0)
+                                if (pack_timer != null && pack_target > 0)
                                     KillTimer(pack_timer);
                             }
                             else if (cmd == update)
@@ -521,35 +521,35 @@ ProcessMindControlledObjects(command:cmd, obj=-1, builder=-1,
     return (cmd == find_controller) ? 0 : builder;
 }
 
-ResetMindControlledObjects(client, bool:kill)
+ResetMindControlledObjects(client, bool kill)
 {
-    if (m_StolenObjectList[client] != INVALID_HANDLE)
+    if (m_StolenObjectList[client] != null)
     {
-        new size = GetArraySize(m_StolenObjectList[client]);
-        for (new index = 0; index < size; index++)
+        int size = GetArraySize(m_StolenObjectList[client]);
+        for (int index = 0; index < size; index++)
         {
-            new Handle:pack = GetArrayCell(m_StolenObjectList[client], index);
-            if (pack != INVALID_HANDLE)
+            Handle pack = GetArrayCell(m_StolenObjectList[client], index);
+            if (pack != null)
             {
                 ResetPack(pack);
-                new target = EntRefToEntIndex(ReadPackCell(pack));
-                new builder = ReadPackCell(pack);
-                new Handle:timer = Handle:ReadPackCell(pack);
+                int target = EntRefToEntIndex(ReadPackCell(pack));
+                int builder = ReadPackCell(pack);
+                Handle timer = Handle ReadPackCell(pack);
                 CloseHandle(pack);
 
                 ResetObject(client, target, builder, kill);
-                //SetArrayCell(m_StolenObjectList[client], index, INVALID_HANDLE);
-                if (timer != INVALID_HANDLE && target > 0)
+                //SetArrayCell(m_StolenObjectList[client], index, null);
+                if (timer != null && target > 0)
                     KillTimer(timer);
             }
         }
         ClearArray(m_StolenObjectList[client]);
         CloseHandle(m_StolenObjectList[client]);
-        m_StolenObjectList[client] = INVALID_HANDLE;
+        m_StolenObjectList[client] = null;
     }
 }
 
-ResetObject(client, target, builder, bool:kill)
+ResetObject(client, target, builder, bool kill)
 {
     if (target > 0 && IsValidEntity(target) && IsValidEdict(target))
     {
@@ -567,7 +567,7 @@ ResetObject(client, target, builder, bool:kill)
             else
             {
                 // Give it back.
-                new team = GetClientTeam(builder);
+                int team = GetClientTeam(builder);
 
                 // Change the builder back
                 SetEntPropEnt(target, Prop_Send, "m_hBuilder", builder);
@@ -590,15 +590,15 @@ ResetObject(client, target, builder, bool:kill)
     }
 }
 
-public Native_MindControl(Handle:plugin,numParams)
+public int Native_MindControl(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
-    new Float:range = Float:GetNativeCell(2);
-    new percent = GetNativeCell(3);
-    new builder = GetNativeCellRef(4);
+    int client = GetNativeCell(1);
+    float range = float GetNativeCell(2);
+    int percent = GetNativeCell(3);
+    int builder = GetNativeCellRef(4);
     new TFExtObjectType:type = GetNativeCellRef(5);
-    new bool:replace = GetNativeCell(6);
-    new bool:success = MindControl(client,range,percent, builder, type, replace);
+    bool replace = GetNativeCell(6);
+    bool success = MindControl(client,range,percent, builder, type, replace);
     if (success)
     {
         SetNativeCellRef(4, builder);
@@ -607,13 +607,13 @@ public Native_MindControl(Handle:plugin,numParams)
     return success;
 }
 
-public Native_ControlObject(Handle:plugin,numParams)
+public int Native_ControlObject(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
-    new target = GetNativeCell(2);
-    new builder = GetNativeCellRef(3);
+    int client = GetNativeCell(1);
+    int target = GetNativeCell(2);
+    int builder = GetNativeCellRef(3);
     new TFExtObjectType:type = GetNativeCellRef(4);
-    new bool:success = ControlObject(client,target, builder, type);
+    bool success = ControlObject(client,target, builder, type);
     if (success)
     {
         SetNativeCellRef(3, builder);
@@ -622,13 +622,13 @@ public Native_ControlObject(Handle:plugin,numParams)
     return success;
 }
 
-public Native_ReplaceObject(Handle:plugin,numParams)
+public int Native_ReplaceObject(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
-    new target = GetNativeCell(2);
-    new builder = GetNativeCellRef(3);
+    int client = GetNativeCell(1);
+    int target = GetNativeCell(2);
+    int builder = GetNativeCellRef(3);
     new TFExtObjectType:type = GetNativeCellRef(4);
-    new bool:success = ReplaceObject(client,target, builder, type);
+    bool success = ReplaceObject(client,target, builder, type);
     if (success)
     {
         SetNativeCellRef(3, builder);
@@ -637,9 +637,9 @@ public Native_ReplaceObject(Handle:plugin,numParams)
     return success;
 }
 
-public Native_ResetMindControlledObjs(Handle:plugin,numParams)
+public int Native_ResetMindControlledObjs(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
-    new bool:kill = bool:GetNativeCell(2);
+    int client = GetNativeCell(1);
+    bool kill = bool GetNativeCell(2);
     ResetMindControlledObjects(client,kill);
 }

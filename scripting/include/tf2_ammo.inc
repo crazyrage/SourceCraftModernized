@@ -58,10 +58,10 @@ stock TF2_SetAmmoAmount(client, ammo = 999,TFAmmoTypes:type=Primary, weapon=0)
 
 // TF2 Weapon properties
 
-//stock Float:GetEnergyAmmo(weapon)
+//stock Float GetEnergyAmmo(weapon)
 #define TF2_GetEnergyAmmo(%1)     GetEntPropFloat(%1, Prop_Send, "m_flEnergy")
 
-//stock SetEnergyAmmo(weapon, Float:flEnergyAmmo)
+//stock SetEnergyAmmo(weapon, Float flEnergyAmmo)
 #define TF2_SetEnergyAmmo(%1,%2)  SetEntPropFloat(%1, Prop_Send, "m_flEnergy", %2);
 
 stock TF2_ResetCaber(weapon)

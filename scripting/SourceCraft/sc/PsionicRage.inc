@@ -16,19 +16,19 @@
 
 #define SetupPsionicRage() SetupDeniedSound()
 
-stock Float:m_PsionicRageTime = 2.0;
+stock float m_PsionicRageTime = 2.0;
 
 stock static m_raceId, m_upgradeId;
-stock static String:m_RageExpireSound[PLATFORM_MAX_PATH];
-stock bool:m_RageActive[MAXPLAYERS+1];
+stock static char m_RageExpireSound[PLATFORM_MAX_PATH];
+stock bool m_RageActive[MAXPLAYERS+1];
 
 PsionicRage(client, raceId, upgradeId, level,
-            const String:activeSound[],
-            const String:expireSound[])
+            const char activeSound[],
+            const char expireSound[])
 {
     if (level > 0)
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
 
         if (GetRestriction(client,Restriction_NoUltimates) ||
@@ -58,7 +58,7 @@ PsionicRage(client, raceId, upgradeId, level,
     }
 }
 
-public Action:EndRage(Handle:timer,any:userid)
+public Action EndRage(Handle timer,any:userid)
 {
     new client = GetClientOfUserId(userid);
     if (IsValidClient(client) && m_RageActive[client])
@@ -74,7 +74,7 @@ public Action:EndRage(Handle:timer,any:userid)
             PrintHintText(client, "%t", "YouStoppedRaging");
         }
 
-        decl String:message[64];
+        char message[64];
         Format(message, sizeof(message), "%T", "RageHud", client);
         ReplaceString(message, sizeof(message), "*", "");
         ReplaceString(message, sizeof(message), " ", "");

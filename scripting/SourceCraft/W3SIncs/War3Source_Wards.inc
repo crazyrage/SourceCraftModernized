@@ -40,7 +40,7 @@
 
  * @return ID for the ward created or INVALID_WARD if the ward was not created
  */
-native War3_CreateWard(client, Float:location[], radius, Float:duration, Float:pulseInterval, wardTarget=WARD_TARGET_ENEMYS, bool:disableOnDeath=true);
+native War3_CreateWard(client, float location[], radius, float duration, float pulseInterval, wardTarget=WARD_TARGET_ENEMYS, bool disableOnDeath=true);
 
 /**
  * Removes a ward given an id
@@ -48,7 +48,7 @@ native War3_CreateWard(client, Float:location[], radius, Float:duration, Float:p
  * @param wardindex: ward id
  * @return True if the ward was removed. False otherwise
  */
-native bool:War3_RemoveWard(wardindex);
+native bool War3_RemoveWard(wardindex);
 
 
 // WARD EVENTS
@@ -91,19 +91,19 @@ forward OnWardExpire(wardindex, owner, behaviorID);
  * @param customColor3: Custom color to use on team 3 (counter-terrorists in CS:S)
  * @return ID for the ward created or -1 if the ward was not created
  */
-native War3_CreateWardMod(client, Float:location[], radius, Float:duration, Float:pulseInterval, String:behavior[], skillNum, any:data[], 
-                          wardTarget=WARD_TARGET_ENEMYS, bool:disableOnDeath=true, 
-                          bool:useDefaultColors = true, customColor2[] = {0,0,0,0}, customColor3[] = {0,0,0,0});
+native War3_CreateWardMod(client, float location[], radius, float duration, float pulseInterval, char[] behavior, skillNum, any:data[], 
+                          wardTarget=WARD_TARGET_ENEMYS, bool disableOnDeath=true, 
+                          bool useDefaultColors = true, customColor2[] = {0,0,0,0}, customColor3[] = {0,0,0,0});
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Getters for the basic internal ward data structure
 
-native War3_GetWardLocation(wardindex, Float:location[]);
+native War3_GetWardLocation(wardindex, float location[]);
 native War3_GetWardRadius(wardindex);
 native War3_GetWardOwner(wardindex);
 native War3_GetWardCount(client);
-native Float:War3_GetWardInterval(wardindex);
+native float War3_GetWardInterval(wardindex);
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -111,7 +111,7 @@ native Float:War3_GetWardInterval(wardindex);
 // to implement ward logic that can be reused by other plugins
 
 /**
- * Creates a new ward behavior. 
+ * Creates a int ward behavior. 
  *
  * @param shortname: short name for the behavior
  * @param name: full name for the behavior (unused right now)
@@ -119,7 +119,7 @@ native Float:War3_GetWardInterval(wardindex);
  * 
  * @return ward behavior ID
  */
-native War3_CreateWardBehavior(String:shortname[], String:name[], String:desc[]);
+native War3_CreateWardBehavior(char[] shortname, char[] name, char[] desc);
 
 /**
  * Gets the number of ward behaviors loaded.
@@ -128,10 +128,10 @@ native War3_CreateWardBehavior(String:shortname[], String:name[], String:desc[])
  */
 native War3_GetWardBehaviorsLoaded();
 
-native War3_GetWardBehaviorName(id, String:retstr[], maxlen);
-native War3_GetWardBehaviorShortname(id, String:retstr[], maxlen);
-native War3_GetWardBehaviorDesc(id, String:retstr[], maxlen);
-native War3_GetWardBehaviorByShortname(String:shortname[]);
+native War3_GetWardBehaviorName(id, char[] retstr, maxlen);
+native War3_GetWardBehaviorShortname(id, char[] retstr, maxlen);
+native War3_GetWardBehaviorDesc(id, char[] retstr, maxlen);
+native War3_GetWardBehaviorByShortname(char[] shortname);
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -142,4 +142,4 @@ native War3_GetWardColor2(wardindex, color[]);
 native War3_GetWardColor3(wardindex, color[]);
 native War3_GetWardSkill(wardindex);
 native any:War3_GetWardData(wardindex, any:data[]);
-native bool:War3_GetWardUseDefaultColor(wardindex);
+native bool War3_GetWardUseDefaultColor(wardindex);

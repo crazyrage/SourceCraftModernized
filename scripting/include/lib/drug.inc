@@ -36,7 +36,7 @@
 #endif
 #define drug_included
 
-native bool:PerformDrug(target, toggle);
+native bool PerformDrug(target, toggle);
 native PerformBlind(target, amount);
 
 /**

@@ -32,7 +32,7 @@ enum DODClassType
 stock const String:DOD_TeamName[DODTeam][] = { "Unassigned", "Spectator", "Allies", "Axis" };
 #define DOD_GetTeamName(%1) DOD_TeamName[%1]
 
-stock const String:DOD_ClassName[][] = { "", "Rifleman", "Assault", "Support", "Sniper", "MachineGunner", "Rocketman" };
+stock const char[] DOD_ClassName[] = { "", "Rifleman", "Assault", "Support", "Sniper", "MachineGunner", "Rocketman" };
 #define DOD_GetClassName(%1) DOD_ClassName[%1]
 
 /**
@@ -42,7 +42,7 @@ stock const String:DOD_ClassName[][] = { "", "Rifleman", "Assault", "Support", "
  * @return				Current DODClassType of player.
  * @error				Invalid client index.
  */
-stock DODClassType:DOD_GetPlayerClass(client)
+stock DODClassType DOD_GetPlayerClass(client)
 {
 	return DODClassType:GetEntProp(client, Prop_Send, "m_iPlayerClass");
 }

@@ -27,7 +27,7 @@
  * @noparam
  * @return			True if one team is empty, false otherwise.
  */
-stock bool:Team_HaveAllPlayers(bool:countFakeClients=true) {
+stock bool Team_HaveAllPlayers(bool countFakeClients=true) {
 
 	new teamCount = GetTeamCount();
 	for (new i=2; i < teamCount; i++) {
@@ -104,7 +104,7 @@ stock Team_GetClientCounts(&team1=0, &team2=0, flags=0)
  * @param size			String Buffer Size
  * @return				True on success, false otherwise
  */
-stock bool:Team_GetName(index, String:str[], size)
+stock bool Team_GetName(index, char[] str, size)
 {
 	new edict = Team_GetEdict(index);
 
@@ -128,7 +128,7 @@ stock bool:Team_GetName(index, String:str[], size)
  * @param name			New Name String
  * @return				True on success, false otherwise
  */
-stock bool:Team_SetName(index, const String:name[])
+stock bool Team_SetName(index, const char[] name)
 {
 	new edict = Team_GetEdict(index);
 
@@ -168,7 +168,7 @@ stock Team_GetScore(index)
  * @param score			Score value.
  * @return				True on success, false otherwise
  */
-stock bool:Team_SetScore(index, score)
+stock bool Team_SetScore(index, score)
 {
 	new edict = Team_GetEdict(index);
 
@@ -202,7 +202,7 @@ stock Team_EdictGetNum(edict)
  * @param index			Index.
  * @return				True if the Index is a valid team, false otherwise.
  */
-stock bool:Team_IsValid(index)
+stock bool Team_IsValid(index)
 {
 	return (Team_GetEdict(index) != -1);
 }
@@ -240,7 +240,7 @@ stock Team_GetEdict(index)
 		return edict;
 	}
 
-	new bool:foundTeamManager = false;
+	bool foundTeamManager = false;
 
 	new maxEntities = GetMaxEntities();
 	for (new entity=MaxClients+1; entity < maxEntities; entity++) {

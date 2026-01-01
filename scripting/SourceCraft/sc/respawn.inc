@@ -30,16 +30,16 @@
 
 // Reincarnation variables
 stock m_ReincarnationCount[MAXPLAYERS+1];
-stock bool:m_IsRespawning[MAXPLAYERS+1];
-stock Float:m_DeathLoc[MAXPLAYERS+1][3];
-stock Float:m_DeathAng[MAXPLAYERS+1][3];
-stock bool:m_WasMole[MAXPLAYERS+1];
+stock bool m_IsRespawning[MAXPLAYERS+1];
+stock float m_DeathLoc[MAXPLAYERS+1][3];
+stock float m_DeathAng[MAXPLAYERS+1][3];
+stock bool m_WasMole[MAXPLAYERS+1];
 
 #if defined _TRACE
     stock m_SpawnCount[MAXPLAYERS+1]; // For Debugging
 #endif    
 
-stock GetNumberSuffix(number, String:suffix[], suffix_size)
+stock GetNumberSuffix(int number, char[] suffix, int suffix_size)
 {
     switch (number)
     {
@@ -50,7 +50,7 @@ stock GetNumberSuffix(number, String:suffix[], suffix_size)
     }
 }
 
-stock Respawn(client)
+stock Respawn(int client)
 {
     TraceInto("Respawn", "Respawn", "client=%d:%N", \
               client,ValidClientIndex(client));
@@ -74,7 +74,7 @@ stock Respawn(client)
                 client,m_ReincarnationCount[client]);
 }
 
-stock Respawned(client,bool:reposition)
+stock Respawned(int client,bool reposition)
 {
     TraceInto("Respawn", "Respawned", "client=%d:%N", \
               client,ValidClientIndex(client));
@@ -111,7 +111,7 @@ stock Respawned(client,bool:reposition)
         else
         {
             GetClientAbsOrigin(client, m_DeathLoc[client]);
-            ResetInvuln(INVALID_HANDLE,client);
+            ResetInvuln(null,client);
 
             Trace("%N respawned for the %d(%d) time, but was NOT teleported", \
                   client, m_ReincarnationCount[client], m_SpawnCount[client]);
@@ -122,7 +122,7 @@ stock Respawned(client,bool:reposition)
     }
     else
     {
-        ResetInvuln(INVALID_HANDLE,client);
+        ResetInvuln(null,client);
 
         Trace("%N spawned, counts=(%d,%d)", \
               client, m_ReincarnationCount[client], m_SpawnCount[client]);
@@ -131,9 +131,9 @@ stock Respawned(client,bool:reposition)
     TraceReturn();
 }
 
-public Action:RespawnPlayerHandler(Handle:timer,any:userid)
+public Action RespawnPlayerHandler(Handle timer,any userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (client)
     {
         RespawnPlayer(client);
@@ -141,9 +141,9 @@ public Action:RespawnPlayerHandler(Handle:timer,any:userid)
     return Plugin_Stop;
 }
 
-public Action:RespawnedPlayerHandler(Handle:timer,any:userid)
+public Action RespawnedPlayerHandler(Handle timer,any userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (IsValidClient(client))
     {
         TeleportEntity(client,m_DeathLoc[client], m_DeathAng[client], NULL_VECTOR);

@@ -8,9 +8,9 @@
 
 #define MDL_GIFT "models/props_halloween/halloween_gift.mdl"
 
-new Float:g_pos[3];
+float g_pos[3];
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
 	name = "[TF2] Fake Halloween Gift",
 	author = "Jocker",
@@ -34,7 +34,7 @@ public OnMapStart()
 
 // FUNCTIONS
 
-public Action:Command_Spawn(client, args)
+public Action Command_Spawn(int client, int args)
 {
 	if(!SetTeleportEndPoint(client))
 	{
@@ -42,14 +42,14 @@ public Action:Command_Spawn(client, args)
 		return Plugin_Handled;
 	}
 	g_pos[2] -= 10;
-	
+
 	if(GetEntityCount() >= GetMaxEntities()-32)
 	{
 		PrintToChat(client, "[SM] Entity limit is reached. Can't spawn anymore fake gifts. Change maps.");
 		return Plugin_Handled;
 	}
-	
-	new ent = CreateEntityByName("prop_physics_override");
+
+	int ent = CreateEntityByName("prop_physics_override");
 	SetEntityModel(ent,MDL_GIFT);
 	DispatchKeyValue(ent, "StartDisabled", "false");
 	DispatchSpawn(ent);
@@ -67,19 +67,19 @@ public Action:Command_Spawn(client, args)
 
 
 
-SetTeleportEndPoint(client)
+SetTeleportEndPoint(int client)
 {
-	decl Float:vAngles[3];
-	decl Float:vOrigin[3];
-	decl Float:vBuffer[3];
-	decl Float:vStart[3];
-	decl Float:Distance;
-	
+	float vAngles[3];
+	float vOrigin[3];
+	float vBuffer[3];
+	float vStart[3];
+	float Distance;
+
 	GetClientEyePosition(client,vOrigin);
 	GetClientEyeAngles(client, vAngles);
-	
+
     //get endpoint for teleport
-	new Handle:trace = TR_TraceRayFilterEx(vOrigin, vAngles, MASK_SHOT, RayType_Infinite, TraceEntityFilterPlayer);
+	Handle trace = TR_TraceRayFilterEx(vOrigin, vAngles, MASK_SHOT, RayType_Infinite, TraceEntityFilterPlayer);
 
 	if(TR_DidHit(trace))
 	{   	 
@@ -101,12 +101,12 @@ SetTeleportEndPoint(client)
 	return true;
 }
 
-public bool:TraceEntityFilterPlayer(entity, contentsMask)
+public bool TraceEntityFilterPlayer(int entity, int contentsMask)
 {
 	return entity > GetMaxClients() || !entity;
 }
 
-public OnGiftTouch(entity, other)
+public OnGiftTouch(int entity, int other)
 {
 	TF2_StunPlayer(other, 6.0, _, TF_STUNFLAGS_LOSERSTATE);
 	
@@ -115,7 +115,7 @@ public OnGiftTouch(entity, other)
 	OnGiftBreak(NULL_STRING, entity, other, 0.0); 
 }
 
-public OnGiftBreak(const String:output[], caller, activator, Float:delay)
+public OnGiftBreak(const char[] output, int caller, int activator, float delay)
 {
 	UnhookSingleEntityOutput(caller, "OnBreak", OnGiftBreak);
 	AcceptEntityInput(caller,"kill");

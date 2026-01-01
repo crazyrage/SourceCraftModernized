@@ -3,7 +3,7 @@
 #define PLUGIN_VERSION "1.0.3"
 
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
 	
 	name = "Set Cash",
@@ -16,9 +16,9 @@ public Plugin:myinfo =
 	
 }
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char error[], err_max)
 {
-	new String:Game[32];
+	char Game[32];
 	GetGameFolderName(Game, sizeof(Game));
 	if(!StrEqual(Game, "tf"))
 	{
@@ -37,7 +37,7 @@ public OnPluginStart()
 	RegAdminCmd("sm_removecash", Command_RemoveCash, ADMFLAG_GENERIC, "Add to target(s) cash for Mann vs Machine mode, Usage: sm_setcash \"target\" \"amount(0-32767)\"");
 }
 
-public Action:Command_SetCash(client, args)
+public Action Command_SetCash(client, args)
 {
 	if(args != 2)
 	{
@@ -45,7 +45,7 @@ public Action:Command_SetCash(client, args)
 		return Plugin_Handled;
 	}
 
-	new String:strTarget[MAX_TARGET_LENGTH], String:strCash[32], iCash, String:target_name[MAX_TARGET_LENGTH],target_list[MAXPLAYERS], target_count, bool:tn_is_ml;
+	char strTarget[MAX_TARGET_LENGTH], char strCash[32], iCash, char target_name[MAX_TARGET_LENGTH],target_list[MAXPLAYERS], target_count, bool tn_is_ml;
 	GetCmdArg(1, strTarget, sizeof(strTarget));
 	if((target_count = ProcessTargetString(strTarget, client, target_list, MAXPLAYERS, COMMAND_FILTER_CONNECTED|COMMAND_FILTER_NO_BOTS, target_name, sizeof(target_name), tn_is_ml)) <= 0)
 	{
@@ -58,14 +58,14 @@ public Action:Command_SetCash(client, args)
 	if(iCash < 0) iCash = 0;
 	if(iCash > 32767) iCash = 32767;
 
-	for(new i = 0; i < target_count; i++)
+	for(int i= 0; i < target_count; i++)
 	{
 		SetEntProp(target_list[i], Prop_Send, "m_nCurrency", iCash);
 	}
 	return Plugin_Handled;
 }
 
-public Action:Command_AddCash(client, args)
+public Action Command_AddCash(client, args)
 {
 	if(args != 2)
 	{
@@ -73,7 +73,7 @@ public Action:Command_AddCash(client, args)
 		return Plugin_Handled;
 	}
 
-	new String:strTarget[MAX_TARGET_LENGTH], String:strCash[32], iCash, String:target_name[MAX_TARGET_LENGTH],target_list[MAXPLAYERS], target_count, bool:tn_is_ml;
+	char strTarget[MAX_TARGET_LENGTH], char strCash[32], iCash, char target_name[MAX_TARGET_LENGTH],target_list[MAXPLAYERS], target_count, bool tn_is_ml;
 	GetCmdArg(1, strTarget, sizeof(strTarget));
 	if((target_count = ProcessTargetString(strTarget, client, target_list, MAXPLAYERS, COMMAND_FILTER_CONNECTED|COMMAND_FILTER_NO_BOTS, target_name, sizeof(target_name), tn_is_ml)) <= 0)
 	{
@@ -86,10 +86,10 @@ public Action:Command_AddCash(client, args)
 	if(iCash < 0) iCash = 0;
 	if(iCash > 32767) iCash = 32767;
 
-	for(new i = 0; i < target_count; i++)
+	for(int i= 0; i < target_count; i++)
 	{
-		new iCurrentCash = GetEntProp(target_list[i], Prop_Send, "m_nCurrency");
-		new iNewCash = iCurrentCash+iCash;
+		int iCurrentCash = GetEntProp(target_list[i], Prop_Send, "m_nCurrency");
+		int iNewCash = iCurrentCash+iCash;
 		if(iNewCash < 0) iNewCash = 0;
 		if(iNewCash > 32767) iNewCash = 32767;	
 		SetEntProp(target_list[i], Prop_Send, "m_nCurrency", iNewCash);
@@ -97,7 +97,7 @@ public Action:Command_AddCash(client, args)
 	return Plugin_Handled;
 }
 
-public Action:Command_RemoveCash(client, args)
+public Action Command_RemoveCash(client, args)
 {
 	if(args != 2)
 	{
@@ -105,7 +105,7 @@ public Action:Command_RemoveCash(client, args)
 		return Plugin_Handled;
 	}
 
-	new String:strTarget[MAX_TARGET_LENGTH], String:strCash[32], iCash, String:target_name[MAX_TARGET_LENGTH],target_list[MAXPLAYERS], target_count, bool:tn_is_ml;
+	char strTarget[MAX_TARGET_LENGTH], char strCash[32], iCash, char target_name[MAX_TARGET_LENGTH],target_list[MAXPLAYERS], target_count, bool tn_is_ml;
 	GetCmdArg(1, strTarget, sizeof(strTarget));
 	if((target_count = ProcessTargetString(strTarget, client, target_list, MAXPLAYERS, COMMAND_FILTER_CONNECTED|COMMAND_FILTER_NO_BOTS, target_name, sizeof(target_name), tn_is_ml)) <= 0)
 	{
@@ -118,10 +118,10 @@ public Action:Command_RemoveCash(client, args)
 	if(iCash < 0) iCash = 0;
 	if(iCash > 32767) iCash = 32767;
 
-	for(new i = 0; i < target_count; i++)
+	for(int i= 0; i < target_count; i++)
 	{
-		new iCurrentCash = GetEntProp(target_list[i], Prop_Send, "m_nCurrency");
-		new iNewCash = iCurrentCash-iCash;
+		int iCurrentCash = GetEntProp(target_list[i], Prop_Send, "m_nCurrency");
+		int iNewCash = iCurrentCash-iCash;
 		if(iNewCash < 0) iNewCash = 0;
 		if(iNewCash > 32767) iNewCash = 32767;	
 		SetEntProp(target_list[i], Prop_Send, "m_nCurrency", iNewCash);

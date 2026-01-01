@@ -15,7 +15,7 @@
 #include "SourceCraft/sc/maxhealth"
 #include "SourceCraft/sc/engine/damage"
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "test_damage",
     author = "Naris",
@@ -38,26 +38,26 @@ public OnGameFrame()
     SaveAllHealth();
 }
 
-public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public PlayerSpawnEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    new userid = GetEventInt(event,"userid");
-    new index = GetClientOfUserId(userid);
+    int userid = GetEventInt(event,"userid");
+    int index = GetClientOfUserId(userid);
     if (index && IsClientConnected(index) && IsPlayerAlive(index))
     {
         SaveHealth(index);
 
-        new health = GetClientHealth(index);
+        int health = GetClientHealth(index);
 
-        new offset2 = FindDataMapOffs(index,"m_iHealth");
-        new health2 = offset2 != -1 ? GetEntData(index,offset2) : -1;
+        int offset2 = FindDataMapOffs(index,"m_iHealth");
+        int health2 = offset2 != -1 ? GetEntData(index,offset2) : -1;
 
-        new offset3 = FindSendPropInfo("CTFPlayer","m_iHealth");
-        new health3 = offset3 != -1 ? GetEntData(index,offset3) : -1;
+        int offset3 = FindSendPropInfo("CTFPlayer","m_iHealth");
+        int health3 = offset3 != -1 ? GetEntData(index,offset3) : -1;
 
-        new maxhealth  = TF_GetMaxHealth(index);
+        int maxhealth  = TF_GetMaxHealth(index);
 
-        new maxoffset2 = FindDataMapOffs(index,"m_iMaxHealth");
-        new maxhealth2 = maxoffset2 != -1 ? GetEntData(index,maxoffset2) : -1; 
+        int maxoffset2 = FindDataMapOffs(index,"m_iMaxHealth");
+        int maxhealth2 = maxoffset2 != -1 ? GetEntData(index,maxoffset2) : -1; 
 
         LogMessage("[Spawn] %d - health=%d,%d,%d, maxHealth=%d,%d",
                    index, health, health2, health3, maxhealth, maxhealth2);
@@ -68,22 +68,22 @@ public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public PlayerHurtEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public PlayerHurtEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    new victimUserid = GetEventInt(event,"userid");
-    new victimIndex = GetClientOfUserId(victimUserid);
+    int victimUserid = GetEventInt(event,"userid");
+    int victimIndex = GetClientOfUserId(victimUserid);
 
-    new attackerUserid = GetEventInt(event,"attacker");
-    new attackerIndex = GetClientOfUserId(attackerUserid);
+    int attackerUserid = GetEventInt(event,"attacker");
+    int attackerIndex = GetClientOfUserId(attackerUserid);
 
-    new health = GetEventInt(event,"health");
-    new oldHealth = GetSavedHealth(victimIndex);
+    int health = GetEventInt(event,"health");
+    int oldHealth = GetSavedHealth(victimIndex);
 
-    new damage = GetDamage(event, victimIndex);
+    int damage = GetDamage(event, victimIndex);
 
-    decl String:victimName[64] = "";
-    decl String:attackerName[64] = "";
-    decl String:weapon[64] = "";
+    char victimName[64] = "";
+    char attackerName[64] = "";
+    char weapon[64] = "";
 
     if (victimIndex)
         GetClientName(victimIndex,victimName,sizeof(victimName));
@@ -108,18 +108,18 @@ public PlayerHurtEvent(Handle:event,const String:name[],bool:dontBroadcast)
     if (victimIndex)
         SaveHealth(victimIndex);
 
-    new health1 = GetClientHealth(victimIndex);
+    int health1 = GetClientHealth(victimIndex);
 
-    new offset2 = FindDataMapOffs(victimIndex,"m_iHealth");
-    new health2 = offset2 != -1 ? GetEntData(victimIndex,offset2) : -1;
+    int offset2 = FindDataMapOffs(victimIndex,"m_iHealth");
+    int health2 = offset2 != -1 ? GetEntData(victimIndex,offset2) : -1;
 
-    new offset3 = FindSendPropInfo("CTFPlayer","m_iHealth");
-    new health3 = offset3 != -1 ? GetEntData(victimIndex,offset3) : -1;
+    int offset3 = FindSendPropInfo("CTFPlayer","m_iHealth");
+    int health3 = offset3 != -1 ? GetEntData(victimIndex,offset3) : -1;
 
-    new maxhealth  = TF_GetMaxHealth(victimIndex);
+    int maxhealth  = TF_GetMaxHealth(victimIndex);
 
-    new maxoffset2 = FindDataMapOffs(victimIndex,"m_iMaxHealth");
-    new maxhealth2 = maxoffset2 != -1 ? GetEntData(victimIndex,maxoffset2) : -1; 
+    int maxoffset2 = FindDataMapOffs(victimIndex,"m_iMaxHealth");
+    int maxhealth2 = maxoffset2 != -1 ? GetEntData(victimIndex,maxoffset2) : -1; 
 
     LogMessage("[Hurt] %d - health=%d,%d,%d, maxHealth=%d,%d",
                victimIndex, health1, health2, health3, maxhealth, maxhealth2);

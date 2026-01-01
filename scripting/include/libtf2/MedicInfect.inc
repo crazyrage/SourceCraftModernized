@@ -16,7 +16,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of the MedicInfect plugin.
  * @return		    	none
  */
-native ControlMedicInfect(bool:plugin_only=true);
+native ControlMedicInfect(bool plugin_only=true);
 
 /**
  * Enable a player to utilize medic infections.
@@ -27,7 +27,7 @@ native ControlMedicInfect(bool:plugin_only=true);
  * @param chance    Set to % chance of infection per hit, 100 = default to always infect.
  * @return			none
  */
-native SetMedicInfect(client,bool:arm=true,amount=0,chance=100);
+native SetMedicInfect(client,bool arm=true,amount=0,chance=100);
 
 /**
  * Infect a player within the prescribed distance and parameters for Infection.
@@ -38,7 +38,7 @@ native SetMedicInfect(client,bool:arm=true,amount=0,chance=100);
  * @param irradiate Set to true for Irradiatation instead of Infection.
  * @return			none
  */
-native MedicInfect(target, client=0, bool:allow=false, bool:irradiate=false);
+native MedicInfect(target, client=0, bool allow=false, bool irradiate=false);
 
 /**
  * Infect a player unconditionally, without checking any parameters
@@ -50,7 +50,7 @@ native MedicInfect(target, client=0, bool:allow=false, bool:irradiate=false);
  * @param irradiate Set to true for Irradiatation instead of Infection.
  * @return			none
  */
-native Infect(target, client=0, bool:allow=false, bool:irradiate=false);
+native Infect(target, client=0, bool allow=false, bool irradiate=false);
 
 /**
  * Heal a player.
@@ -68,7 +68,7 @@ native HealInfect(target,client=0);
  * @param target    Client index of target
  * @return			Returns true if the target is infected.
  */
-native bool:IsInfected(target);
+native bool IsInfected(target);
 
 /**
  * Gets called when a player is infected or healed
@@ -80,7 +80,7 @@ native bool:IsInfected(target);
  * @param color: Array for color player was turned (r,b,g,a).
  * @return		false to prevent infection, true to allow infection.
  */
-//functag OnInfectedFunc Action:public(victim,infector,source,bool:infected,const color[4]);
+//functag OnInfectedFunc Action public(victim,infector,source,bool infected,const color[4]);
 typedef OnInfectedFunc = function Action (int victim,int infector,int source,bool infected,const int color[4]);
 
 /**
@@ -91,7 +91,7 @@ typedef OnInfectedFunc = function Action (int victim,int infector,int source,boo
  * @param amount: Reference for the amount of damage to do, can be altered.
  * @return		false to prevent infection, true to allow infection.
  */
-//functag OnInfectionHurtFunc Action:public(victim,infector,&amount);
+//functag OnInfectionHurtFunc Action public(victim,infector,&amount);
 typedef OnInfectionHurtFunc = function Action (int victim,int infector,int &amount);
 
 /**

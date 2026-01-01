@@ -18,8 +18,8 @@
 stock SetupBeaconLists(list[], alt_list[], &count, &alt_count)
 {
     count = alt_count = 0;
-    new maxClients = MaxClients;
-    for (new i=1; i<=maxClients; i++)
+    int maxClients = MaxClients;
+    for (int i=1; i<=maxClients; i++)
     {
         if (IsClientInGame(i) && !IsFakeClient(i))
         {
@@ -41,8 +41,8 @@ stock SetupBeaconLists(list[], alt_list[], &count, &alt_count)
 stock SetupOBeaconLists(list[], alt_list[], &count, &alt_count, client=0)
 {
     count = alt_count = 0;
-    new maxClients = MaxClients;
-    for (new i=1; i<=maxClients; i++)
+    int maxClients = MaxClients;
+    for (int i=1; i<=maxClients; i++)
     {
         if (IsClientInGame(i) && !IsFakeClient(i))
         {
@@ -78,12 +78,12 @@ stock SetupOBeaconLists(list[], alt_list[], &count, &alt_count, client=0)
  * @param delay		Delay in seconds to send the TE.
  * @noreturn
  */
-stock void TE_SendBeaconToAll(Float:delay=0.0)
+stock void TE_SendBeaconToAll(float delay=0.0)
 {
-	new maxClients = MaxClients;
-	new total = 0;
-	new clients[maxClients];
-	for (new i=1; i<=maxClients; i++)
+	int maxClients = MaxClients;
+	int total = 0;
+	int clients[maxClients];
+	for (int i=1; i<=maxClients; i++)
 	{
 		if (IsClientInGame(i) && !IsFakeClient(i) &&
             !GetSetting(i, Disable_Beacons))
@@ -102,12 +102,12 @@ stock void TE_SendBeaconToAll(Float:delay=0.0)
  * @param delay		Delay in seconds to send the TE.
  * @noreturn
  */
-stock void TE_SendOBeaconToAll(client=0, Float:delay=0.0)
+stock void TE_SendOBeaconToAll(client=0, float delay=0.0)
 {
-    new maxClients = MaxClients;
-    new total = 0;
-    new clients[maxClients];
-    for (new i=1; i<=maxClients; i++)
+    int maxClients = MaxClients;
+    int total = 0;
+    int clients[maxClients];
+    for (int i=1; i<=maxClients; i++)
     {
         if (IsClientInGame(i) && !IsFakeClient(i))
         {
@@ -133,12 +133,12 @@ stock void TE_SendOBeaconToAll(client=0, Float:delay=0.0)
  * @param delay		Delay in seconds to send the TE.
  * @noreturn
  */
-stock void TE_SendQEffectToAll(client=0, victim=0, Float:delay=0.0)
+stock void TE_SendQEffectToAll(client=0, victim=0, float delay=0.0)
 {
-    new maxClients = MaxClients;
-    new total = 0;
-    new clients[maxClients];
-    for (new i=1; i<=maxClients; i++)
+    int maxClients = MaxClients;
+    int total = 0;
+    int clients[maxClients];
+    for (int i=1; i<=maxClients; i++)
     {
         if (IsClientInGame(i) && !IsFakeClient(i))
         {
@@ -162,12 +162,12 @@ stock void TE_SendQEffectToAll(client=0, victim=0, Float:delay=0.0)
  * @param delay		Delay in seconds to send the TE.
  * @noreturn
  */
-stock void TE_SendDEffectToAll(Float:delay=0.0)
+stock void TE_SendDEffectToAll(float delay=0.0)
 {
-    new maxClients = MaxClients;
-    new total = 0;
-    new clients[maxClients];
-    for (new i=1; i<=maxClients; i++)
+    int maxClients = MaxClients;
+    int total = 0;
+    int clients[maxClients];
+    for (int i=1; i<=maxClients; i++)
     {
 		if (IsClientInGame(i) && !IsFakeClient(i) &&
             !GetSetting(i, Disable_Effects) &&
@@ -187,12 +187,12 @@ stock void TE_SendDEffectToAll(Float:delay=0.0)
  * @param delay		Delay in seconds to send the TE.
  * @noreturn
  */
-stock void TE_SendEffectToAll(Float:delay=0.0)
+stock void TE_SendEffectToAll(float delay=0.0)
 {
-	new maxClients = MaxClients;
-	new total = 0;
-	new clients[maxClients];
-	for (new i=1; i<=maxClients; i++)
+	int maxClients = MaxClients;
+	int total = 0;
+	int clients[maxClients];
+	for (int i=1; i<=maxClients; i++)
 	{
 		if (IsClientInGame(i) && !IsFakeClient(i) &&
             !GetSetting(i, Disable_Effects))
@@ -211,12 +211,12 @@ stock void TE_SendEffectToAll(Float:delay=0.0)
  * @param delay		Delay in seconds to send the TE.
  * @noreturn
  */
-stock void TE_SendEffectToOthers(client=0, victim=0, Float:delay=0.0)
+stock void TE_SendEffectToOthers(client=0, victim=0, float delay=0.0)
 {
-    new maxClients = MaxClients;
-    new total = 0;
-    new clients[maxClients];
-    for (new i=1; i<=maxClients; i++)
+    int maxClients = MaxClients;
+    int total = 0;
+    int clients[maxClients];
+    for (int i=1; i<=maxClients; i++)
     {
         if (IsClientInGame(i) && !IsFakeClient(i))
         {
@@ -239,11 +239,11 @@ stock void TE_SendEffectToOthers(client=0, victim=0, Float:delay=0.0)
  * @param delay		Delay in seconds to send the TE.
  * @noreturn
  */
-stock void TE_SendEffectToClient(client, Float:delay=0.0)
+stock void TE_SendEffectToClient(client, float delay=0.0)
 {
     if (!GetSetting(client, Disable_Effects))
     {
-        new players[1];
+        int players[1];
 
         players[0] = client;
 
@@ -260,11 +260,11 @@ stock void TE_SendEffectToClient(client, Float:delay=0.0)
  * @param delay		Delay in seconds to send the TE.
  * @noreturn
  */
-stock void TE_SendEffectToTeam(team,Float:delay=0.0)
+stock void TE_SendEffectToTeam(team,float delay=0.0)
 {
-    new total = 0;
-    new clients[MaxClients];
-    for (new i=1; i<=MaxClients; i++)
+    int total = 0;
+    int clients[MaxClients];
+    for (int i=1; i<=MaxClients; i++)
     {
         if (IsClientInGame(i) && !IsFakeClient(i))
         {
@@ -287,11 +287,11 @@ stock void TE_SendEffectToTeam(team,Float:delay=0.0)
  * @param delay		Delay in seconds to send the TE.
  * @noreturn
  */
-stock void TE_SendEffectToOtherTeam(team,Float:delay=0.0)
+stock void TE_SendEffectToOtherTeam(team,float delay=0.0)
 {
-    new total = 0;
-    new clients[MaxClients];
-    for (new i=1; i<=MaxClients; i++)
+    int total = 0;
+    int clients[MaxClients];
+    for (int i=1; i<=MaxClients; i++)
     {
         if (ValidPlayer(i,false)&&!IsFakeClient(i))
         {

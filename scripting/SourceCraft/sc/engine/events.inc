@@ -10,20 +10,20 @@
 #include <entlimit>
 #include <tf2_uber>
 
-new Handle:m_PackageTimer[MAXENTITIES];
-new Float:m_PackageEnergy[MAXENTITIES];
-new m_PackageRefs[MAXENTITIES];
-new m_PackageVictim[MAXENTITIES];
-new m_PackageCrystals[MAXENTITIES];
-new m_PackagePCrystals[MAXENTITIES];
-new m_PackageMoney[MAXENTITIES];
-new m_PackageXP[MAXENTITIES];
-new m_SpawnRace[MAXPLAYERS+1];
-new m_SpawnLevel[MAXPLAYERS+1];
+Handlem_PackageTimer[MAXENTITIES];
+floatm_PackageEnergy[MAXENTITIES];
+int m_PackageRefs[MAXENTITIES];
+int m_PackageVictim[MAXENTITIES];
+int m_PackageCrystals[MAXENTITIES];
+int m_PackagePCrystals[MAXENTITIES];
+int m_PackageMoney[MAXENTITIES];
+int m_PackageXP[MAXENTITIES];
+int m_SpawnRace[MAXPLAYERS+1];
+int m_SpawnLevel[MAXPLAYERS+1];
 
-new g_PackageCount = 0;
+int g_PackageCount = 0;
 
-bool:HookEvents()
+bool HookEvents()
 {
     if (!HookEventEx("player_spawn",PlayerSpawnEvent))
     {
@@ -101,9 +101,9 @@ public SpawnEndTouch(spawn, client)
         g_IsInSpawn[client] = false;
 }
 
-public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public PlayerSpawnEvent(Handle event,const char name[],bool dontBroadcast)
 {
-    new client = GetClientOfUserId(GetEventInt(event,"userid"));
+    int client = GetClientOfUserId(GetEventInt(event,"userid"));
     if (client > 0)
     {
         TraceInto("Events", "PlayerSpawnEvent", "client=%d:%L", \
@@ -111,23 +111,23 @@ public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
 
         PendingCheck(client);
 
-        new race=GetRace(client);
-        new Handle:raceHandle = (race > 0) ? GetRaceHandle(race) : INVALID_HANDLE;
+        int race=GetRace(client);
+        HandleraceHandle = (race > 0) ? GetRaceHandle(race) : null;
 
         if (IsFakeClient(client))
         {
             if (raceHandle)
             {
                 // Level up the bot?
-                new max = GetUpgradeLevelCount(client,race);
-                new level = GetLevel(client,race);
+                int max = GetUpgradeLevelCount(client,race);
+                int level = GetLevel(client,race);
                 if (level < max)
                 {
-                    new count = GetUpgradeCount(raceHandle)-1;
+                    int count = GetUpgradeCount(raceHandle)-1;
                     if (count >= 0 )
                     {
                         // Count the current upgrade levels
-                        for(new upgrade=0;upgrade<count;upgrade++)
+                        for(intupgrade=0;upgrade<count;upgrade++)
                         {
                             level -= GetUpgradeLevel(client, race, upgrade);
                         }
@@ -135,9 +135,9 @@ public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
                         // And pick which ones to, err, upgrade (if any)...
                         while (level > 0)
                         {
-                            new upgrade = GetRandomInt(0, count);
-                            new ulevel = GetUpgradeLevel(client, race, upgrade);
-                            new maxLevel = GetUpgradeMaxLevel(raceHandle,upgrade);
+                            int upgrade = GetRandomInt(0, count);
+                            int ulevel = GetUpgradeLevel(client, race, upgrade);
+                            int maxLevel = GetUpgradeMaxLevel(raceHandle,upgrade);
                             if (ulevel < maxLevel)
                             {
                                 SetUpgradeLevel(client, race, upgrade, ++ulevel);
@@ -170,7 +170,7 @@ public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
             }
         }
 
-        new Float:initial = GetInitialEnergy(client);
+        floatinitial = GetInitialEnergy(client);
 
         Trace("%d:%N's initial energy is %1.0f", \
               client, ValidClientIndex(client), initial);
@@ -180,7 +180,7 @@ public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
             initial = GetRaceInitialEnergy(raceHandle);
 
             #if defined _TRACE
-                decl String:rname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
+                charrname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
                 Trace("Race %d:%s's initial energy is %d", race, rname, initial);
             #endif
         }
@@ -213,8 +213,8 @@ public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
         #if defined _TRACE
             if (GameType == tf2)
             {
-                new hp = m_BaseHealth[client] = m_SpawnHealth[client] = GetClientHealth(client);
-                new Float:speed = m_BaseSpeed[client] = m_SpawnSpeed[client] = GetEntPropFloat(client, Prop_Send, "m_flMaxspeed");
+                int hp = m_BaseHealth[client] = m_SpawnHealth[client] = GetClientHealth(client);
+                floatspeed = m_BaseSpeed[client] = m_SpawnSpeed[client] = GetEntPropFloat(client, Prop_Send, "m_flMaxspeed");
                 TraceCat("Speed", "%d:%N spawned with %d hp and speed=%1.0f", client, ValidClientIndex(client), hp, speed);
             }
         #endif
@@ -232,7 +232,7 @@ public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
 
         CooldownSpawn(client);
 
-        new Action:result;
+        Actionresult;
         Call_StartForward(g_OnPlayerSpawnEventHandle);
         Call_PushCell(event);
         Call_PushCell(client);
@@ -250,7 +250,7 @@ public PlayerSpawnEvent(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public Action:OnJetpack(client)
+public Action OnJetpack(client)
 {
     if (GetRestriction(client,Restriction_Grounded))
     {
@@ -260,7 +260,7 @@ public Action:OnJetpack(client)
     return Plugin_Continue;
 }
 
-public Action:OnWeaponSwitch(client, weapon)
+public Action OnWeaponSwitch(client, weapon)
 {
         TraceInto("Events", "OnWeaponSwitch", "client=%d:%L, weapon=%d", \
                   client, ValidClientIndex(client), weapon);
@@ -268,12 +268,12 @@ public Action:OnWeaponSwitch(client, weapon)
     #if defined _TRACE
         if (weapon > 0)
         {
-            decl String:sWeapon[32];
+            charsWeapon[32];
             GetEdictClassname(weapon, sWeapon, sizeof(sWeapon));
             Trace("weapon class=%s", sWeapon);
         }
 
-        new Float:speed = m_BaseSpeed[client] = GetEntPropFloat(client, Prop_Send, "m_flMaxspeed");
+        floatspeed = m_BaseSpeed[client] = GetEntPropFloat(client, Prop_Send, "m_flMaxspeed");
         TraceCat("Speed", "%d:%N's speed=%1.0f", client, ValidClientIndex(client), speed);
     #endif
 
@@ -286,7 +286,7 @@ public Action:OnWeaponSwitch(client, weapon)
     return Plugin_Continue;
 }
 
-public Action:OnTakeDamage(victim,&attacker,&inflictor,&Float:damage,&damagetype)
+public Action OnTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype)
 {
     static bool:inTakeDamage = false;
     new    Action:result     = Plugin_Continue;
@@ -388,7 +388,7 @@ public Action:OnTakeDamage(victim,&attacker,&inflictor,&Float:damage,&damagetype
     return result;
 }
 
-public Action:OnEntityTakeDamage(victim,&attacker,&inflictor,&Float:damage,&damagetype)
+public Action OnEntityTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype)
 {
     static bool:inTakeDamage = false;
     new    Action:result     = Plugin_Continue;
@@ -432,7 +432,7 @@ public Action:OnEntityTakeDamage(victim,&attacker,&inflictor,&Float:damage,&dama
     return result;
 }
 
-public Action:OnObjectTakeDamage(victim,&attacker,&inflictor,&Float:damage,&damagetype)
+public Action OnObjectTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype)
 {
     static bool:inTakeDamage = false;
     new    Action:result     = Plugin_Continue;
@@ -447,7 +447,7 @@ public Action:OnObjectTakeDamage(victim,&attacker,&inflictor,&Float:damage,&dama
 
     if (!inTakeDamage)
     {
-        new builder = GetEntPropEnt(victim, Prop_Send, "m_hBuilder");
+        int builder = GetEntPropEnt(victim, Prop_Send, "m_hBuilder");
 
         Trace("OnObjectTakeDamage: %d was damaged by %d:%N for %f", \
               victim, attacker, ValidClientIndex(attacker), \
@@ -467,7 +467,7 @@ public Action:OnObjectTakeDamage(victim,&attacker,&inflictor,&Float:damage,&dama
         if (result == Plugin_Continue && IsClient(attacker))
         {
             // Simulate a sourcecraft entity hurt handler for objects
-            ProcessEntityHurt(INVALID_HANDLE, victim, attacker, RoundToNearest(damage));
+            ProcessEntityHurt(null, victim, attacker, RoundToNearest(damage));
         }
 #endif
 
@@ -485,14 +485,14 @@ public Action:OnObjectTakeDamage(victim,&attacker,&inflictor,&Float:damage,&dama
     return result;
 }
 
-ProcessEntityHurt(Handle:event, victim_index, attacker_index, damage)
+ProcessEntityHurt(Handle event, victim_index, attacker_index, damage)
 {
     SetTraceCategory("Event");
     TraceInto("Events", "ProcessEntityHurt", "victim=%d:%L, attacker=%d:%L, damage=%f", \
               victim_index, ValidClientIndex(victim_index), attacker_index, ValidClientIndex(attacker_index), damage);
 
-    new Action:result = Plugin_Continue;
-    new attacker_race = GetRace(attacker_index);
+    Actionresult = Plugin_Continue;
+    int attacker_race = GetRace(attacker_index);
 
     if (IsValidClient(victim_index))
     {
@@ -520,11 +520,11 @@ ProcessEntityHurt(Handle:event, victim_index, attacker_index, damage)
 
     if (result < Plugin_Handled)
     {
-        new assister_index, assister_race;
+        int assister_index, assister_race;
         if (CheckAssist(attacker_index, assister_index, assister_race) &&
             assister_index > 0)
         {
-            new Action:rcassist = Plugin_Continue;
+            Actionrcassist = Plugin_Continue;
             if (IsValidClient(victim_index))
             {
                 Call_StartForward(g_OnPlayerAssistEventHandle);
@@ -555,10 +555,10 @@ ProcessEntityHurt(Handle:event, victim_index, attacker_index, damage)
     TraceReturn();
 }
 
-bool:CheckAssist(attacker_index, &assister_index, &assister_race)
+bool CheckAssist(attacker_index, &assister_index, &assister_race)
 {
     // Check for an "assister" (Medic ubering/criting/healing)
-    new numHealers = TF2_GetNumHealers(attacker_index);
+    int numHealers = TF2_GetNumHealers(attacker_index);
 
     Trace("numHealers=%d, pcond=%08x", numHealers, \
           TF2_GetPlayerConditionLowBits(attacker_index));
@@ -568,7 +568,7 @@ bool:CheckAssist(attacker_index, &assister_index, &assister_race)
         TF2_IsPlayerKritzkrieged(attacker_index) ||
         TF2_IsPlayerHealing(attacker_index))
     {
-        for(new index=1;index<=MaxClients;index++)
+        for(intindex=1;index<=MaxClients;index++)
         {
             if (IsClientInGame(index))
             {
@@ -587,9 +587,9 @@ bool:CheckAssist(attacker_index, &assister_index, &assister_race)
     return false;
 }
 
-public Action:PlayerHurtPreEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public Action PlayerHurtPreEvent(Handle event,const char name[],bool dontBroadcast)
 {
-    new victim_index = GetClientOfUserId(GetEventInt(event,"userid"));
+    int victim_index = GetClientOfUserId(GetEventInt(event,"userid"));
 
     TraceInto("Events", "PlayerHurtPreEvent", "victim_index=%d:%L", \
               victim_index, ValidClientIndex(victim_index));
@@ -603,14 +603,14 @@ public Action:PlayerHurtPreEvent(Handle:event,const String:name[],bool:dontBroad
             return Plugin_Handled;
         }
 
-        new attacker_index = GetClientOfUserId(GetEventInt(event,"attacker"));
+        int attacker_index = GetClientOfUserId(GetEventInt(event,"attacker"));
         if (attacker_index > 0 && attacker_index != victim_index &&
             GetImmunity(victim_index, Immunity_RangedAttacks) &&
             !IsInRange(attacker_index,victim_index,300.0))
         {
             #if defined _TRACE
-                new health = GetClientHealth(victim_index);
-                new damage = GetDamage(event, victim_index);
+                int health = GetClientHealth(victim_index);
+                int damage = GetDamage(event, victim_index);
                 Trace("%N was protected by Immunity to Ranged Attacks in PlayerHurtPreEvent, health was left at %d, damage was %d", victim_index, health, damage);
             #endif
 
@@ -633,20 +633,20 @@ public Action:PlayerHurtPreEvent(Handle:event,const String:name[],bool:dontBroad
     return Plugin_Continue;
 }
 
-public Action:PlayerHurtEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public Action PlayerHurtEvent(Handle event,const char name[],bool dontBroadcast)
 {
-    new Action:result = Plugin_Continue;
-    new victim_index = GetClientOfUserId(GetEventInt(event,"userid"));
+    Actionresult = Plugin_Continue;
+    int victim_index = GetClientOfUserId(GetEventInt(event,"userid"));
     if (IsClient(victim_index))
     {
-        new damage = GetDamage(event, victim_index);
-        new attacker_index = GetClientOfUserId(GetEventInt(event,"attacker"));
+        int damage = GetDamage(event, victim_index);
+        int attacker_index = GetClientOfUserId(GetEventInt(event,"attacker"));
 
         TraceInto("Events", "PlayerHurtEvent", "victim_index=%d:%L, attacker_index=%d:%L, damage=%d", \
                   victim_index, ValidClientIndex(victim_index), attacker_index, \
                   ValidClientIndex(attacker_index), damage);
 
-        new injured_by = g_InjuredBy[victim_index];
+        int injured_by = g_InjuredBy[victim_index];
         if (injured_by == attacker_index)
             g_InjuredBy[victim_index] = 0;
 
@@ -677,12 +677,12 @@ public Action:PlayerHurtEvent(Handle:event,const String:name[],bool:dontBroadcas
         }
         else
         {
-            new amount = 0;
-            new absorbed = GetEventInt(event, "absorbed");
-            new armor = GetArmor(victim_index);
+            int amount = 0;
+            int absorbed = GetEventInt(event, "absorbed");
+            int armor = GetArmor(victim_index);
             if (armor > 0)
             {
-                new all_damage = damage+absorbed;
+                int all_damage = damage+absorbed;
                 amount = RoundFloat(float(all_damage)
                          * GetRandomFloat(m_ArmorPercent[victim_index][0],
                                           m_ArmorPercent[victim_index][1]));
@@ -694,9 +694,9 @@ public Action:PlayerHurtEvent(Handle:event,const String:name[],bool:dontBroadcas
 
                     if (absorbed < amount)
                     {
-                        new delta = amount-absorbed;
-                        new newhp = GetClientHealth(victim_index)+delta;
-                        new maxhp = GetMaxHealth(victim_index);
+                        int delta = amount-absorbed;
+                        int newhp = GetClientHealth(victim_index)+delta;
+                        int maxhp = GetMaxHealth(victim_index);
                         if (newhp > maxhp)
                             newhp = maxhp;
 
@@ -721,9 +721,9 @@ public Action:PlayerHurtEvent(Handle:event,const String:name[],bool:dontBroadcas
                 }
             }
 
-            new victim_race   = GetRace(victim_index);
-            new attacker_race = (attacker_index > 0) ? GetRace(attacker_index) : 0;
-            new bool:from_sc  = (injured_by == attacker_index) ||
+            int victim_race   = GetRace(victim_index);
+            int attacker_race = (attacker_index > 0) ? GetRace(attacker_index) : 0;
+            boolfrom_sc  = (injured_by == attacker_index) ||
                                 GetEventBool(event, "sourcecraft");
 
             Call_StartForward(g_OnPlayerHurtEventHandle);
@@ -740,7 +740,7 @@ public Action:PlayerHurtEvent(Handle:event,const String:name[],bool:dontBroadcas
             if (!from_sc && GameType == tf2 && result < Plugin_Handled &&
                 attacker_index > 0 && victim_index != attacker_index)
             {
-                new assister_index, assister_race;
+                int assister_index, assister_race;
                 if (CheckAssist(attacker_index, assister_index, assister_race) &&
                     assister_index > 0)
                 {
@@ -769,7 +769,7 @@ public Action:PlayerHurtEvent(Handle:event,const String:name[],bool:dontBroadcas
                         SaveHealth(assister_index);
                 }
 
-                new health = SaveHealth(victim_index);
+                int health = SaveHealth(victim_index);
                 if (result != Plugin_Continue)
                     SetEventInt(event, "health", health);
             #else
@@ -785,20 +785,20 @@ public Action:PlayerHurtEvent(Handle:event,const String:name[],bool:dontBroadcas
     return result;
 }
 
-public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public PlayerDeathEvent(Handle event,const char name[],bool dontBroadcast)
 {
-    new victim = GetEventInt(event,"userid");
-    new victim_index = GetClientOfUserId(victim);
+    int victim = GetEventInt(event,"userid");
+    int victim_index = GetClientOfUserId(victim);
 
     TraceInto("Events", "PlayerDeathEvent", "victim_index=%d:%L", \
               victim_index, ValidClientIndex(victim_index));
 
     if (victim_index > 0 && !g_Dead[victim_index])
     {
-        new customkill;
-        new deathFlags;
-        new bool:backstab;
-        new bool:headshot;
+        int customkill;
+        int deathFlags;
+        boolbackstab;
+        boolheadshot;
 
         g_InjuredBy[victim_index] = 0;
         g_KilledBy[victim_index] = 0;
@@ -844,16 +844,16 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
             }
         }
 
-        new victim_race=(victim_index > 0) ? GetRace(victim_index) : -1;
+        int victim_race=(victim_index > 0) ? GetRace(victim_index) : -1;
 
-        new attacker_index=GetClientOfUserId(GetEventInt(event,"attacker"));
-        new attacker_race=(attacker_index > 0) ? GetRace(attacker_index) : -1;
+        int attacker_index=GetClientOfUserId(GetEventInt(event,"attacker"));
+        int attacker_race=(attacker_index > 0) ? GetRace(attacker_index) : -1;
 
-        new assister_index=GetClientOfUserId(GetEventInt(event,"assister"));
-        new assister_race=(assister_index > 0) ? GetRace(assister_index) : -1;
+        int assister_index=GetClientOfUserId(GetEventInt(event,"assister"));
+        int assister_race=(assister_index > 0) ? GetRace(assister_index) : -1;
 
-        decl String:weapon[64];
-        new bool:is_equipment = GetWeapon(event, attacker_index,
+        charweapon[64];
+        boolis_equipment = GetWeapon(event, attacker_index,
                                           weapon, sizeof(weapon));
 
         KillHUDTimer(victim_index);
@@ -872,11 +872,11 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
         ClearSyncHud(victim_index, m_HudSynch[3]);
 
         new damage     = GetDamage(event, victim_index);
-        new bool:melee = backstab || IsMelee(weapon, is_equipment,
+        boolmelee = backstab || IsMelee(weapon, is_equipment,
                                              attacker_index,
                                              victim_index);
 
-        new Action:result;
+        Actionresult;
         Call_StartForward(g_OnPlayerDeathEventHandle);
         Call_PushCell(event);
         Call_PushCell(victim_index);
@@ -903,8 +903,8 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
                                .message="Unable to spawn anymore packages"))
         {
             // Determine if player earned resources this life and if he should drop any
-            new money;
-            new drop_money = 0;
+            int money;
+            int drop_money = 0;
             if (g_bUseMoney && GetGameMode() != MvM)
             {
                 // Don't drop money in MvM
@@ -919,8 +919,8 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
                 }
             }
 
-            new crystals = GetCrystals(victim_index);
-            new drop_crystals = 0;
+            int crystals = GetCrystals(victim_index);
+            int drop_crystals = 0;
             if (crystals > m_PackageCrystals[victim_index])
             {
                 drop_crystals = GetRandomInt(g_iDropCrystalBias, crystals-m_PackageCrystals[victim_index]);
@@ -930,8 +930,8 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
                     drop_crystals = g_iMaxDropCrystals;
             }
 
-            new pcrystals = GetPCrystals(victim_index);
-            new drop_pcrystals = 0;
+            int pcrystals = GetPCrystals(victim_index);
+            int drop_pcrystals = 0;
             if (pcrystals > m_PackagePCrystals[victim_index])
             {
                 drop_pcrystals = GetRandomInt(g_iDropCrystalBias, pcrystals-m_PackagePCrystals[victim_index]);
@@ -941,10 +941,10 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
                     drop_pcrystals = g_iMaxDropPCrystals;
             }
 
-            new xp;
-            new drop_xp = 0;
-            new race = GetRace(victim_index);
-            new level = GetLevel(victim_index,race);
+            int xp;
+            int drop_xp = 0;
+            int race = GetRace(victim_index);
+            int level = GetLevel(victim_index,race);
             if (race == m_SpawnRace[victim_index] && level == m_SpawnLevel[victim_index])
             {
                 // Don't drop any XP if the race or level changed
@@ -959,8 +959,8 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
                 }
             }
 
-            new Float:energy = GetEnergy(victim_index);
-            new Float:drop_energy = (energy >= g_fMinPackageEnergy)
+            floatenergy = GetEnergy(victim_index);
+            floatdrop_energy = (energy >= g_fMinPackageEnergy)
                                   ? ((energy <= g_fMaxPackageEnergy && g_fMaxPackageEnergy > 0.0) ? energy : g_fMaxPackageEnergy)
                                   : 0.0;
 
@@ -969,11 +969,11 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
 
             if (drop_xp > 0 || drop_crystals > 0 || drop_money > 0 || drop_energy > g_fReqPackageEnergy)
             {
-                new pkg = CreateEntityByName("prop_physics_override");
+                int pkg = CreateEntityByName("prop_physics_override");
                 if (pkg > 0 && IsValidEntity(pkg))
                 {
-                    new drop_model;
-                    new drop_amount = drop_money + drop_crystals + drop_xp;
+                    int drop_model;
+                    int drop_amount = drop_money + drop_crystals + drop_xp;
                     if (drop_amount == 0 || (drop_energy > g_fEnergyPackageAmt && drop_energy > (float(drop_amount) * 2.0)))
                         drop_model = 0;
                     else if (drop_amount > 100 || GetGameMode() == MvM)
@@ -988,13 +988,13 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
                     SetEntityModel(pkg, mdlPackage[drop_model]);
                     DispatchSpawn(pkg);
 
-                    new Float:origin[3];
+                    floatorigin[3];
                     GetClientAbsOrigin(victim_index, origin);
 
-                    new Float:angles[3];
+                    floatangles[3];
                     GetClientEyeAngles(victim_index, angles);
 
-                    new Float:velocity[3];
+                    floatvelocity[3];
                     GetAngleVectors(angles, velocity, NULL_VECTOR, NULL_VECTOR);
                     NormalizeVector(velocity,velocity);
                     ScaleVector(velocity,350.0);
@@ -1108,25 +1108,25 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
 
         if (victim_index > 0)
         {
-            new Float:initial = GetInitialEnergy(victim_index);
+            floatinitial = GetInitialEnergy(victim_index);
             if (initial < 0.0 && victim_race > 0)
                 initial = GetRaceInitialEnergy(GetRaceHandle(victim_race));
 
             // Accumulate energy and zero the players active energy.
-            new Float:energy = GetEnergy(victim_index) - initial;
+            floatenergy = GetEnergy(victim_index) - initial;
             if (energy > 0.0 && victim_race > 0)
                 IncrementAccumulatedEnergy(victim_index, victim_race, energy);
 
             SetEnergy(victim_index, 0.0);
 
             // Check for pending race change.
-            new race = GetRace(victim_index);
+            int race = GetRace(victim_index);
             if (race > 0)
             {
                 if (PendingCheck(victim_index) < 0)
                 {
-                    new Handle:raceHandle = GetRaceHandle(race);
-                    new parentRace = GetRaceParentId(raceHandle);
+                    HandleraceHandle = GetRaceHandle(race);
+                    int parentRace = GetRaceParentId(raceHandle);
                     if (parentRace > 0)
                     {
                         // Revert back to Parent race after death as a Summoned race.
@@ -1155,13 +1155,13 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
         if (IsFakeClient(victim_index))
         {
             // Should the Bot buy a mole?
-            new amount = GetCrystals(victim_index);
+            int amount = GetCrystals(victim_index);
             if (GetRandomInt(0,100) >= ((amount >= 100) ? 10 : 50))
             {
-                new mole = FindShopItem("mole");
+                int mole = FindShopItem("mole");
                 if (mole >= 0)
                 {
-                    new Handle:moleHandle = GetShopItemHandle(mole);
+                    HandlemoleHandle = GetShopItemHandle(mole);
                     if (moleHandle && amount >= GetItemCrystals(moleHandle))
                         PurchaseShopItem(victim_index, mole);
                 }
@@ -1173,7 +1173,7 @@ public PlayerDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
     TraceReturn();
 }
 
-public Action:OnPackageTouched(pkg, client)
+public Action OnPackageTouched(pkg, client)
 {
     if (IsValidClientAlive(client) && pkg > 0 && IsValidEdict(pkg) &&
         EntRefToEntIndex(m_PackageRefs[pkg]) == pkg)
@@ -1182,25 +1182,25 @@ public Action:OnPackageTouched(pkg, client)
         m_PackageRefs[pkg] = INVALID_ENT_REFERENCE;
         g_PackageCount--;
 
-        new Handle:timer = m_PackageTimer[pkg];
-        if (timer != INVALID_HANDLE)
+        Handletimer = m_PackageTimer[pkg];
+        if (timer != null)
         {
             PrepareAndEmitSoundToClient(client, sndPickup, .channel=SNDCHAN_WEAPON);
 
             CloseHandle(m_PackageTimer[pkg]);
-            m_PackageTimer[pkg] = INVALID_HANDLE;
+            m_PackageTimer[pkg] = null;
 
-            new origin = GetClientOfUserId(m_PackageVictim[pkg]);
+            int origin = GetClientOfUserId(m_PackageVictim[pkg]);
 
-            new money = m_PackageMoney[pkg];
+            int money = m_PackageMoney[pkg];
             if (money > 0)
             {
                 SetMoney(client, GetMoney(client) + money);
                 m_PackageMoney[pkg] = 0;
             }
 
-            new crystals = m_PackageCrystals[pkg];
-            new pcrystals = m_PackagePCrystals[pkg];
+            int crystals = m_PackageCrystals[pkg];
+            int pcrystals = m_PackagePCrystals[pkg];
             if (client == origin)
             {
                 if (crystals > 0)
@@ -1224,8 +1224,8 @@ public Action:OnPackageTouched(pkg, client)
                     m_PackagePCrystals[pkg] = 0;
                 }
 
-                new Float:energy = m_PackageEnergy[pkg];
-                new Float:extra  = GetRandomFloat(0.0, 10.0) - GetEnergy(client);
+                floatenergy = m_PackageEnergy[pkg];
+                floatextra  = GetRandomFloat(0.0, 10.0) - GetEnergy(client);
                 if (extra > 0)
                     energy += extra;
 
@@ -1236,7 +1236,7 @@ public Action:OnPackageTouched(pkg, client)
                 }
             }
 
-            new xp = m_PackageXP[pkg];
+            int xp = m_PackageXP[pkg];
             if (xp > 0)
             {
                 GiveXP(client, xp, (client == origin) ? "Recovered" : "Package");
@@ -1246,7 +1246,7 @@ public Action:OnPackageTouched(pkg, client)
     }
 }
 
-public Action:RemoveDroppedPackage(Handle:timer, any:pkg)
+public Action RemoveDroppedPackage(Handle timer, any pkg)
 {
     if (EntRefToEntIndex(m_PackageRefs[pkg]) == pkg &&
         IsValidEdict(pkg))
@@ -1257,22 +1257,22 @@ public Action:RemoveDroppedPackage(Handle:timer, any:pkg)
 
         if (m_PackageTimer[pkg] == timer)
         {
-            m_PackageTimer[pkg] = INVALID_HANDLE;
+            m_PackageTimer[pkg] = null;
 
-            new client = GetClientOfUserId(m_PackageVictim[pkg]);
+            int client = GetClientOfUserId(m_PackageVictim[pkg]);
             if (IsValidClient(client))
             {
                 PrepareAndEmitSoundToClient(client, sndPickup, .channel=SNDCHAN_WEAPON);
 
-                new money = m_PackageMoney[pkg];
+                int money = m_PackageMoney[pkg];
                 if (money > 0)
                     SetMoney(client, GetMoney(client) + money);
 
-                new crystals = m_PackageCrystals[pkg];
+                int crystals = m_PackageCrystals[pkg];
                 if (crystals > 0)
                     GiveCrystals(client, crystals, "Recovered");
 
-                new xp = m_PackageXP[pkg];
+                int xp = m_PackageXP[pkg];
                 if (xp > 0)
                     GiveXP(client, xp, "Recovered");
             }
@@ -1286,7 +1286,7 @@ public Action:RemoveDroppedPackage(Handle:timer, any:pkg)
     return Plugin_Handled;
 }
 
-public Action:CorrectDeathEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public Action CorrectDeathEvent(Handle event,const char name[],bool dontBroadcast)
 {
     new victim_index=GetClientOfUserId(GetEventInt(event,"userid"));
     if (victim_index > 0)
@@ -1296,8 +1296,8 @@ public Action:CorrectDeathEvent(Handle:event,const String:name[],bool:dontBroadc
             return Plugin_Handled;
         else
         {
-            new attacker_index=GetClientOfUserId(GetEventInt(event,"attacker"));
-            new killed_by = g_KilledBy[victim_index];
+            int attacker_index=GetClientOfUserId(GetEventInt(event,"attacker"));
+            int killed_by = g_KilledBy[victim_index];
             if (killed_by != attacker_index && IsValidClient(killed_by) &&
                 !GetEventBool(event,"fake"))
             {
@@ -1310,7 +1310,7 @@ public Action:CorrectDeathEvent(Handle:event,const String:name[],bool:dontBroadc
     return Plugin_Continue;
 }
 
-public PlayerChangeClassEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public PlayerChangeClassEvent(Handle event,const char name[],bool dontBroadcast)
 {
     new userid = GetEventInt(event,"userid");
     if (userid > 0)
@@ -1325,7 +1325,7 @@ public PlayerChangeClassEvent(Handle:event,const String:name[],bool:dontBroadcas
                 m_IsChangingClass[index] = true;
 
             // Reset energy when changing class
-            new Float:initial = GetInitialEnergy(index);
+            floatinitial = GetInitialEnergy(index);
 
             Trace("%d:%N's initial energy is %1.0f", \
                   index, ValidClientIndex(index), initial);
@@ -1333,13 +1333,13 @@ public PlayerChangeClassEvent(Handle:event,const String:name[],bool:dontBroadcas
             new race = GetRace(index);
             if (race > 0)
             {
-                new Handle:raceHandle = GetRaceHandle(race);
+                HandleraceHandle = GetRaceHandle(race);
                 if (raceHandle && initial < 0.0)
                 {
                     initial = GetRaceInitialEnergy(raceHandle);
 
                     #if defined _TRACE
-                        decl String:rname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
+                        charrname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
                         Trace("Race %d:%s's initial energy is %1.0f", race, rname, initial);
                     #endif
                 }
@@ -1357,17 +1357,17 @@ public PlayerChangeClassEvent(Handle:event,const String:name[],bool:dontBroadcas
     }
 }
 
-public RoundStart(Handle:event,const String:name[],bool:dontBroadcast)
+public RoundStart(Handle event,const char name[],bool dontBroadcast)
 {
     g_RoundState = RoundStarted;
     g_iRoundNumber++;
 
     if (GameType == cstrike)
     {
-        new Handle:freezeTimeCvar=FindConVar("mp_freezetime");
+        HandlefreezeTimeCvar=FindConVar("mp_freezetime");
         if (freezeTimeCvar)
         {
-            new Float:fFreezeTime=GetConVarFloat(freezeTimeCvar);
+            floatfFreezeTime=GetConVarFloat(freezeTimeCvar);
             if (fFreezeTime>0.0)
             {
                 CreateTimer(fFreezeTime,EndFreezeTime,g_iRoundNumber);
@@ -1380,20 +1380,20 @@ public RoundStart(Handle:event,const String:name[],bool:dontBroadcast)
         LogRoundEvent(event,name,dontBroadcast);
     #endif
 
-    for(new index=1;index<=MaxClients;index++)
+    for(intindex=1;index<=MaxClients;index++)
     {
         if (IsClientInGame(index))
             ResetInvulnerability(index);
     }
 }
 
-public Action:EndFreezeTime(Handle:timer,any:roundNumber)
+public Action EndFreezeTime(Handle timer,any roundNumber)
 {
     if (roundNumber==g_iRoundNumber)
         g_RoundState = RoundActive;
 }
 
-public EventRoundActive(Handle:event,const String:name[],bool:dontBroadcast)
+public EventRoundActive(Handle event,const char name[],bool dontBroadcast)
 {
     g_RoundState = RoundActive;
 
@@ -1401,14 +1401,14 @@ public EventRoundActive(Handle:event,const String:name[],bool:dontBroadcast)
         LogRoundEvent(event,name,dontBroadcast);
     #endif
 
-    for(new index=1;index<=MaxClients;index++)
+    for(intindex=1;index<=MaxClients;index++)
     {
         if (IsClientInGame(index))
             ResetInvulnerability(index);
     }
 }
 
-public EventRoundSuddenDeath(Handle:event,const String:name[],bool:dontBroadcast)
+public EventRoundSuddenDeath(Handle event,const char name[],bool dontBroadcast)
 {
     g_RoundState = RoundSuddenDeath;
 
@@ -1416,7 +1416,7 @@ public EventRoundSuddenDeath(Handle:event,const String:name[],bool:dontBroadcast
         LogRoundEvent(event,name,dontBroadcast);
     #endif
 
-    for(new index=1;index<=MaxClients;index++)
+    for(intindex=1;index<=MaxClients;index++)
     {
         m_IsChangingClass[index]=false;
         if (IsClientInGame(index))
@@ -1424,7 +1424,7 @@ public EventRoundSuddenDeath(Handle:event,const String:name[],bool:dontBroadcast
     }
 }
 
-public EventRoundOver(Handle:event,const String:name[],bool:dontBroadcast)
+public EventRoundOver(Handle event,const char name[],bool dontBroadcast)
 {
     g_RoundState = RoundOver;
 
@@ -1432,7 +1432,7 @@ public EventRoundOver(Handle:event,const String:name[],bool:dontBroadcast)
         LogRoundEvent(event,name,dontBroadcast);
     #endif
 
-    for(new index=1;index<=MaxClients;index++)
+    for(intindex=1;index<=MaxClients;index++)
     {
         m_IsChangingClass[index]=false;
         if (IsClientInGame(index))
@@ -1440,7 +1440,7 @@ public EventRoundOver(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public EventRoundWin(Handle:event,const String:name[],bool:dontBroadcast)
+public EventRoundWin(Handle event,const char name[],bool dontBroadcast)
 {
     g_RoundState = RoundOver;
 
@@ -1449,7 +1449,7 @@ public EventRoundWin(Handle:event,const String:name[],bool:dontBroadcast)
     #endif
 
     new team  = GetEventInt(event,"team");
-    for(new index=1;index<=MaxClients;index++)
+    for(intindex=1;index<=MaxClients;index++)
     {
         m_IsChangingClass[index]=false;
         if (IsClientInGame(index))
@@ -1467,7 +1467,7 @@ public EventRoundWin(Handle:event,const String:name[],bool:dontBroadcast)
     //    SaveAllPlayersData();
 }
 
-public EventGameOver(Handle:event,const String:name[],bool:dontBroadcast)
+public EventGameOver(Handle event,const char name[],bool dontBroadcast)
 {
     g_RoundState = GameOver;
     g_MapChanging = true;
@@ -1477,7 +1477,7 @@ public EventGameOver(Handle:event,const String:name[],bool:dontBroadcast)
     #endif
 }
 
-public BombPlantedEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public BombPlantedEvent(Handle event,const char name[],bool dontBroadcast)
 {
     new index = GetClientOfUserId(GetEventInt(event,"userid"));
     if (index > 0)
@@ -1487,7 +1487,7 @@ public BombPlantedEvent(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public BombDefusedEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public BombDefusedEvent(Handle event,const char name[],bool dontBroadcast)
 {
     new index = GetClientOfUserId(GetEventInt(event,"userid"));
     if (index > 0)
@@ -1497,7 +1497,7 @@ public BombDefusedEvent(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public BombExplodedEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public BombExplodedEvent(Handle event,const char name[],bool dontBroadcast)
 {
     new index = GetClientOfUserId(GetEventInt(event,"userid"));
     if (index > 0)
@@ -1508,12 +1508,12 @@ public BombExplodedEvent(Handle:event,const String:name[],bool:dontBroadcast)
 }
 
 #if defined _TRACE
-    public LogEvent(Handle:event,const String:name[],bool:dontBroadcast)
+    public LogEvent(Handle event,const char name[],bool dontBroadcast)
     {
         SetTraceCategory("Event");
         TraceInto("Events_TF2", "LogEvent");
 
-        if (event == INVALID_HANDLE)
+        if (event == null)
             TraceError("event=%s", name);
         else
         {
@@ -1541,12 +1541,12 @@ public BombExplodedEvent(Handle:event,const String:name[],bool:dontBroadcast)
         TraceReturn();
     }
 
-    public LogRoundEvent(Handle:event,const String:name[],bool:dontBroadcast)
+    public LogRoundEvent(Handle event,const char name[],bool dontBroadcast)
     {
         SetTraceCategory("Event");
         TraceInto("Events_TF2", "LogRoundEvent");
 
-        if (event == INVALID_HANDLE)
+        if (event == null)
             TraceError("event=%s, RoundState=%d(%s)", name, g_RoundState, RoundStateNames[g_RoundState]);
         else
         {
@@ -1561,12 +1561,12 @@ public BombExplodedEvent(Handle:event,const String:name[],bool:dontBroadcast)
         TraceReturn();
     }
 
-    public LogBuildingEvent(Handle:event,const String:name[],bool:dontBroadcast)
+    public LogBuildingEvent(Handle event,const char name[],bool dontBroadcast)
     {
         SetTraceCategory("Event");
         TraceInto("Events_TF2", "LogBuildingEvent");
 
-        if (event == INVALID_HANDLE)
+        if (event == null)
             TraceError("event=%s", name);
         else
         {

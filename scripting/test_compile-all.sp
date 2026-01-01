@@ -29,7 +29,7 @@
 
 *****************************************************************/
 
-public Plugin:myinfo = {
+public Plugin myinfo = {
 	name = "smlib Testing Suite",
 	author = "Berni, Chanz",
 	description = "Plugin by Berni",
@@ -63,11 +63,11 @@ public Plugin:myinfo = {
 
 public OnPluginStart() {
 
-	new arr[1], String:arr_str[1][1], arr_4[4];
-	decl Float:vec[3];
-	decl String:buf[1], String:buf_10[10], String:twoDimStrArr[1][1];
-	new variable;
-	new Handle:handle;
+	int arr[1], char arr_str[1][1], arr_4[4];
+	decl float vec[3];
+	char buf[1], char buf_10[10], char twoDimStrArr[1][1];
+	int variable;
+	Handle handle;
 
 	// File: arrays.inc
 	Array_FindValue(arr, sizeof(arr), 1);
@@ -221,9 +221,9 @@ public OnPluginStart() {
 	ConCommand_RemoveFlags("", 0);
 
 	// File: convars.inc
-	Convar_HasFlags(INVALID_HANDLE, 0);
-	Convar_AddFlags(INVALID_HANDLE, 0);
-	Convar_RemoveFlags(INVALID_HANDLE, 0);
+	Convar_HasFlags(null, 0);
+	Convar_AddFlags(null, 0);
+	Convar_RemoveFlags(null, 0);
 	Convar_IsValidName("");
 
 	// File: crypt.inc
@@ -239,7 +239,7 @@ public OnPluginStart() {
 	Debug_FloatArray(vec);
 
 	// File: dynarrays.inc
-	DynArray_GetBool(INVALID_HANDLE, 0);
+	DynArray_GetBool(null, 0);
 
 	// File: edicts.inc
 	Edict_FindByName("");
@@ -434,8 +434,8 @@ public OnPluginStart() {
 	Math_Overflow(0, 0, 0);
 
 	// File: menus.inc
-	Menu_AddIntItem(INVALID_HANDLE, 0, "");
-	Menu_GetIntItem(INVALID_HANDLE, 0);
+	Menu_AddIntItem(null, 0, "");
+	Menu_GetIntItem(null, 0);
 
 	// File: server.inc
 	Server_GetIP();
@@ -444,11 +444,11 @@ public OnPluginStart() {
 	Server_GetHostName(buf, sizeof(buf));
 
 	// File: sql.inc
-	SQL_TQueryF(INVALID_HANDLE, INVALID_FUNCTION, 0, DBPrio_Normal, "");
-	SQL_FetchIntByName(INVALID_HANDLE, "");
-	SQL_FetchBoolByName(INVALID_HANDLE, "");
-	SQL_FetchFloatByName(INVALID_HANDLE, "");
-	SQL_FetchStringByName(INVALID_HANDLE, "", buf, sizeof(buf));
+	SQL_TQueryF(null, INVALID_FUNCTION, 0, DBPrio_Normal, "");
+	SQL_FetchIntByName(null, "");
+	SQL_FetchBoolByName(null, "");
+	SQL_FetchFloatByName(null, "");
+	SQL_FetchStringByName(null, "", buf, sizeof(buf));
 
 	// File: strings.inc
 	String_IsNumeric("");

@@ -34,17 +34,17 @@
 
 new raceID, burrowID, boostID, rollID, meleeID, explodeID, volatileID;
 
-new Float:g_SpeedLevels[]           = {  0.60,  0.70,  0.80,  1.00, 1.10 };
-new Float:g_AdrenalGlandsPercent[]  = {  0.15,  0.30,  0.40,  0.50, 0.70 };
-new Float:g_ExplodeRadius[]         = { 300.0, 450.0, 500.0, 650.0, 800.0 };
-new g_ExplodePlayerDamage[]         = {   800,   900,  1000,  1100, 1200  };
-new g_ExplodeBuildingDamage[]       = {  1000,  1250,  1500,  1750, 2000  };
+float g_SpeedLevels[]           = {  0.60,  0.70,  0.80,  1.00, 1.10 };
+float g_AdrenalGlandsPercent[]  = {  0.15,  0.30,  0.40,  0.50, 0.70 };
+float g_ExplodeRadius[]         = { 300.0, 450.0, 500.0, 650.0, 800.0 };
+	int g_ExplodePlayerDamage[]         = {   800,   900,  1000,  1100, 1200  };
+	int g_ExplodeBuildingDamage[]       = {  1000,  1250,  1500,  1750, 2000  };
 
-new const String:spawnWav[] = "sc/zzeyes02.wav";  // Spawn sound
-new const String:deathWav[] = "sc/zbghit00.wav";  // Death sound
-new const String:g_AdrenalGlandsSound[] = "sc/zulhit00.wav";
+new const char[] spawnWav[] = "sc/zzeyes02.wav";  // Spawn sound
+new const char[] deathWav[] = "sc/zbghit00.wav";  // Death sound
+new const char[] g_AdrenalGlandsSound[] = "sc/zulhit00.wav";
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "SourceCraft Race - Baneling",
     author = "-=|JFH|=-Naris",
@@ -53,7 +53,7 @@ public Plugin:myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     LoadTranslations("sc.common.phrases.txt");
     LoadTranslations("sc.explode.phrases.txt");
@@ -100,7 +100,7 @@ public OnSourceCraftReady()
                    g_ExplodeBuildingDamage, raceID, explodeID);
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     SetupSpeed();
     SetupSmokeSprite();
@@ -112,7 +112,7 @@ public OnMapStart()
     SetupSound(deathWav);
 }
 
-public Action:OnRaceDeselected(client,oldrace,newrace)
+public Action OnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
@@ -123,7 +123,7 @@ public Action:OnRaceDeselected(client,oldrace,newrace)
     return Plugin_Continue;
 }
 
-public Action:OnRaceSelected(client,oldrace,newrace)
+public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
@@ -138,7 +138,7 @@ public Action:OnRaceSelected(client,oldrace,newrace)
                       .fx=RENDERFX_GLOWSHELL,
                       .r=r, .g=g, .b=b);
 
-        new boost_level = GetUpgradeLevel(client,raceID,boostID);
+        int boost_level = GetUpgradeLevel(client,raceID,boostID);
         SetSpeedBoost(client, boost_level, true, g_SpeedLevels);
 
         if (IsValidClientAlive(client))
@@ -168,13 +168,13 @@ public OnItemPurchase(client,item)
 
         if (item == g_bootsItem)
         {
-            new boost_level = GetUpgradeLevel(client,race,boostID);
+            int boost_level = GetUpgradeLevel(client,race,boostID);
             SetSpeedBoost(client, boost_level, true, g_SpeedLevels);
         }
     }
 }
 
-public OnUltimateCommand(client,race,bool:pressed,arg)
+public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (pressed && race==raceID && IsValidClientAlive(client))
     {
@@ -211,7 +211,7 @@ public OnUltimateCommand(client,race,bool:pressed,arg)
 }
 
 // Events
-public OnPlayerSpawnEvent(Handle:event, client, race)
+public OnPlayerSpawnEvent(Handle event, client, race)
 {
     if (race == raceID)
     {
@@ -229,19 +229,19 @@ public OnPlayerSpawnEvent(Handle:event, client, race)
                       .fx=RENDERFX_GLOWSHELL,
                       .r=r, .g=g, .b=b);
 
-        new boost_level = GetUpgradeLevel(client,raceID,boostID);
+        int boost_level = GetUpgradeLevel(client,raceID,boostID);
         SetSpeedBoost(client, boost_level, true, g_SpeedLevels);
     }
 }
 
-public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacker_index,
-                                attacker_race, damage, absorbed, bool:from_sc)
+public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
+                                attacker_race, damage, absorbed, bool from_sc)
 {
     if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index &&
         attacker_race == raceID)
     {
-        new adrenal_glands_level = GetUpgradeLevel(attacker_index,raceID,meleeID);
+        int adrenal_glands_level = GetUpgradeLevel(attacker_index,raceID,meleeID);
         if (adrenal_glands_level > 0)
         {
             if (MeleeAttack(raceID, meleeID, adrenal_glands_level, event, damage+absorbed,
@@ -255,10 +255,10 @@ public Action:OnPlayerHurtEvent(Handle:event, victim_index, victim_race, attacke
     return Plugin_Continue;
 }
 
-public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_index,
+public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_index,
                           attacker_race, assister_index, assister_race, damage,
-                          const String:weapon[], bool:is_equipment, customkill,
-                          bool:headshot, bool:backstab, bool:melee)
+                          const char[] weapon[], bool is_equipment, customkill,
+                          bool headshot, bool backstab, bool melee)
 {
     if (victim_race == raceID && !IsChangingClass(victim_index))
     {
@@ -277,7 +277,7 @@ public OnPlayerDeathEvent(Handle:event, victim_index, victim_race, attacker_inde
     }
 }
 
-Roll(client, level)
+void Roll(client, level)
 {
     if (IsValidClientAlive(client))
     {
@@ -290,7 +290,7 @@ Roll(client, level)
         }
         else if (CanInvokeUpgrade(client, raceID, rollID))
         {
-            new Float:speed=1.10 + (float(level)*0.15);
+            float speed=1.10 + (float(level)*0.15);
 
             /* If the Player also has the Boots of Speed,
              * Increase the speed further
@@ -305,7 +305,7 @@ Roll(client, level)
 
             SetSpeed(client,speed);
 
-            new Float:start[3];
+            float start[3];
             GetClientAbsOrigin(client, start);
 
             static const color[4] = { 255, 100, 100, 255 };
@@ -318,14 +318,14 @@ Roll(client, level)
     }
 }
 
-public Action:EndRoll(Handle:timer,any:userid)
+public Action EndRoll(Handle timer,any:userid)
 {
-    new index = GetClientOfUserId(userid);
+    int index = GetClientOfUserId(userid);
     if (IsValidClientAlive(index))
     {
         if (GetRace(index) == raceID)
         {
-            new boost_level = GetUpgradeLevel(index,raceID,boostID);
+            int boost_level = GetUpgradeLevel(index,raceID,boostID);
             SetSpeedBoost(index, boost_level, true, g_SpeedLevels);
         }
         else
@@ -333,7 +333,7 @@ public Action:EndRoll(Handle:timer,any:userid)
     }
 }
 
-Explode(client,bool:ondeath)
+void Explode(client,bool ondeath)
 {
     new ExplosionType:type = ondeath ? OnDeathExplosion : UltimateExplosion;
     new explode_level      = GetUpgradeLevel(client,raceID,explodeID);

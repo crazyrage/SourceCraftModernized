@@ -18,7 +18,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of Amplifier.
  * @return		    	none
  */
-native ControlAmpNode(bool:plugin_only=true);
+native ControlAmpNode(bool plugin_only=true);
 
 /**
  * Set the Building Type flag to Amplifier
@@ -32,8 +32,8 @@ native ControlAmpNode(bool:plugin_only=true);
  * @return		    none
  */
 native SetAmplifier(client, TFCond:condition=TFCond:-1,
-                    const Float:range[4]={-1.0,-1.0,-1.0,-1.0},
-                    percent=-1, bool:enable=true, bool:select=false);
+                    const Float range[4]={-1.0,-1.0,-1.0,-1.0},
+                    percent=-1, bool enable=true, bool select=false);
 
 /**
  * Set the Building Type flag to Repair Node
@@ -50,10 +50,10 @@ native SetAmplifier(client, TFCond:condition=TFCond:-1,
  * @param select    Set true to set player's BuildingType to Repair Node
  * @return		    none
  */
-native SetRepairNode(client, const Float:range[4]={-1.0,-1.0,-1.0,-1.0},
+native SetRepairNode(client, const Float range[4]={-1.0,-1.0,-1.0,-1.0},
                      const regen[4]={-1,-1,-1,-1},  const shells[4]={-1,-1,-1,-1},
                      const rockets=-1, team=-1, mini=-1, percent=-1,
-                     bool:enable=true, bool:select=false);
+                     bool enable=true, bool select=false);
 
 /**
  * Set the Building Type flag to Upgrade Station
@@ -63,7 +63,7 @@ native SetRepairNode(client, const Float:range[4]={-1.0,-1.0,-1.0,-1.0},
  * @param select    Set true to set player's BuildingType to Upgrade Station
  * @return		    none
  */
-native SetUpgradeStation(client, bool:enable=true, bool:select=false);
+native SetUpgradeStation(client, bool enable=true, bool select=false);
 
 /**
  * Count how many Buildings of a given type the client has constructed.
@@ -85,7 +85,7 @@ native CountConvertedBuildings(client, TFExtObjectType:type);
  * @return			none
  */
 native ConvertToAmplifier(entity, client, TFCond:condition=TFCond:-1,
-                          const Float:range[4]={-1.0,-1.0,-1.0,-1.0},
+                          const Float range[4]={-1.0,-1.0,-1.0,-1.0},
                           percent=-1);
 
 /**
@@ -102,7 +102,7 @@ native ConvertToAmplifier(entity, client, TFCond:condition=TFCond:-1,
  * @param percent   Percent (0-100) chance of repairing the building (-1=use convar)
  * @return			none
  */
-native ConvertToRepairNode(entity, client, const Float:range[4]={-1.0,-1.0,-1.0,-1.0},
+native ConvertToRepairNode(entity, client, const Float range[4]={-1.0,-1.0,-1.0,-1.0},
                            const regen[4]={-1,-1,-1,-1}, const shells[4]={-1,-1,-1,-1},
                            const rockets=-1, team=-1, mini=-1, percent=-1);
 
@@ -122,7 +122,7 @@ native ConvertToUpgradeStation(entity);
  * @param condition The condition beign applied to the client.
  * @return		    Plugin_Stop will prevent the client from being affected.
  */
-forward Action:OnAmplify(builder,client,TFCond:condition);
+forward Action OnAmplify(builder,client,TFCond:condition);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

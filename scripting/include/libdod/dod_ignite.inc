@@ -21,7 +21,7 @@
  * @noreturn
  * @error				Invalid entity or client not in game, or lack of mod support.
  */
-native DOD_IgniteEntity(entity, Float:time, bool:npc=false, Float:size=0.0, bool:level=false);
+native DOD_IgniteEntity(entity, Float time, bool npc=false, Float size=0.0, bool level=false);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

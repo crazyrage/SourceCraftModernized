@@ -37,55 +37,55 @@
 #define PLUGIN_VERSION "1.0.6"
 
 //Class related
-new deathcount[MAXPLAYERS + 1] = {0, ...};
-new ClassLimit = 4;
-new CurrentCount[TFTeam + TFTeam:1][TFClassType + TFClassType:1];
+int deathcount[MAXPLAYERS + 1] = {0, ...};
+int ClassLimit = 4;
+int CurrentCount[TFTeam + TFTeam:1][TFClassType + TFClassType:1];
 //Bot control related
-new bool:UnderControl[MAXPLAYERS + 1] = {false, ...};
-new ControlSkips[MAXPLAYERS + 1] = 0;
+bool UnderControl[MAXPLAYERS + 1] = {false, ...};
+int ControlSkips[MAXPLAYERS + 1] = 0;
 //Cvars
-new Handle:cvar1;
-new Handle:cvar2;
-new Handle:cvar3;
-new Handle:cvar4;
-new Handle:cvar5;
-new Handle:cvar6;
-new Handle:cvar6b;
-new Handle:cvar7;
-new Handle:cvar8;
-new Handle:cvar9;
-new Handle:cvar10;
-new Handle:cvar11;
-new Handle:cvar12;
-new Handle:cvar13;
-new Handle:cvarfile;
-new Handle:hooknamesfile;
-new Handle:botnames;
+Handle cvar1;
+Handle cvar2;
+Handle cvar3;
+Handle cvar4;
+Handle cvar5;
+Handle cvar6;
+Handle cvar6b;
+Handle cvar7;
+Handle cvar8;
+Handle cvar9;
+Handle cvar10;
+Handle cvar11;
+Handle cvar12;
+Handle cvar13;
+Handle cvarfile;
+Handle hooknamesfile;
+Handle botnames;
 //Temp, i love temp values/strings :D
-new String:temp[64];
-new itemp = 0;
+char temp[64];
+int itemp = 0;
 //Ping related
-new String:playermanager[64] = "tf_player_manager";
-new iPlayerManager;
-new iPing;
-new Handle:Pings[MAXPLAYERS + 1];
+char playermanager[64] = "tf_player_manager";
+int iPlayerManager;
+int iPing;
+Handle Pings[MAXPLAYERS + 1];
 //Misc/other
-new String:namespath[64];
-new bool:dedicated, bool:listen;
-new Handle:testsubject;
-new Handle:rcbotver;
+char namespath[64];
+bool dedicated, bool listen;
+Handle testsubject;
+Handle rcbotver;
 //Fast resp related
-new bool:Playing = true;
+bool Playing = true;
 //Cheats related
-new String:hooked[MAX_COMMANDS][128];
-new nextHooked=0;
-new Handle:consolecheats;
-new Handle:svcheats;
+char hooked[MAX_COMMANDS][128];
+int nextHooked=0;
+Handle consolecheats;
+Handle svcheats;
 
-new bool:NavExist=false;
-new bool:WaypointsExist=false;
+bool NavExist=false;
+bool WaypointsExist=false;
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
 	name = "TF2 RCbot Manager",
 	author = "Tom Hackers",
@@ -121,7 +121,7 @@ public OnPluginStart()
 	BuildPath(Path_SM, namespath, sizeof(namespath), temp);
 
 	rcbotver = FindConVar("rcbot_ver");
-	if (rcbotver == INVALID_HANDLE)
+	if (rcbotver == null)
 	{
 		LogMessage("RCBot is not loaded!");
 	}
@@ -152,7 +152,7 @@ public OnPluginStart()
 		LogMessage("your botnames.txt! Enjoy! :D");
 		LogMessage(" ");
 
-		if (rcbotver != INVALID_HANDLE)
+		if (rcbotver != null)
 		{
 			LogMessage("RCBot by Cheeseh.")
 			GetConVarString(rcbotver, temp, sizeof(temp));
@@ -163,7 +163,7 @@ public OnPluginStart()
 		LogMessage("Plugin version: %s", PLUGIN_VERSION);
 		
 		hooknamesfile = FindConVar("bot_names_file");
-		if (hooknamesfile != INVALID_HANDLE)
+		if (hooknamesfile != null)
 			HookConVarChange(hooknamesfile, OnNamesFileChange);
 		
 		//[1.0.6] This is my way to detect is this server Listen or Dedicated...
@@ -172,9 +172,9 @@ public OnPluginStart()
 		CreateTimer(2.0, TestingWhoIsServer);
 		
 		//This code below doesnt belong to me, thanks devicenull!
-		new String:cmdname[128];
-		new bool:iscmd, cmdflags;
-		new Handle:cmds = FindFirstConCommand(cmdname,128,iscmd,cmdflags);
+		char cmdname[128];
+		bool iscmd, cmdflags;
+		Handle cmds = FindFirstConCommand(cmdname,128,iscmd,cmdflags);
 		do
 		{
 			if (cmdflags&FCVAR_CHEAT && iscmd && nextHooked < MAX_COMMANDS)
@@ -189,7 +189,7 @@ public OnPluginStart()
 
 public OnPluginEnd()
 {
-	for (new i=0;i<nextHooked;i++)
+	for(int i=0;i<nextHooked;i++)
 	{
 		SetCommandFlags(hooked[i],GetCommandFlags(hooked[i])|FCVAR_CHEAT);
 	}
@@ -200,13 +200,13 @@ public OnMapStart()
 {
 	iPlayerManager	= FindEntityByClassname(MaxClients + 1, playermanager);
 
-	decl String:map[PLATFORM_MAX_PATH];
+	char map[PLATFORM_MAX_PATH];
 	GetCurrentMap(map, sizeof(map));
 
-	decl String:waypoints[PLATFORM_MAX_PATH];
+	char waypoints[PLATFORM_MAX_PATH];
 	Format(waypoints, sizeof(waypoints), "../../rcbot2/waypoints/orangebox/tf/%s.rcw", map);
 
-	decl String:nav[PLATFORM_MAX_PATH];
+	char nav[PLATFORM_MAX_PATH];
 	Format(nav, sizeof(nav), "../tf/maps/%s.nav", map);
 
 	NavExist = FileExists(nav);
@@ -215,7 +215,7 @@ public OnMapStart()
 	else
 	{
 		LogMessage("Map %s does NOT have navigation!", map);
-		if (rcbotver == INVALID_HANDLE)
+		if (rcbotver == null)
 			LogError("Map %s does NOT have navigation!", map);
 	}
 
@@ -225,14 +225,14 @@ public OnMapStart()
 	else
 	{
 		LogMessage("Map %s does NOT have waypoints!", map);
-		if (rcbotver != INVALID_HANDLE)
+		if (rcbotver != null)
 			LogError("Map %s does NOT have waypoints!", map);
 	}
 }
 
 public OnMapEnd()
 {
-	for (new i = 1; i <= MaxClients; i++) 
+	for(int i= 1; i <= MaxClients; i++) 
 	{
 		UnderControl[i] = false;
 		ControlSkips[i] = 0;
@@ -243,10 +243,10 @@ public OnClientPutInServer(client)
 {
 	if (IsFakeClient(client))
 	{		
-		new Handle:hTVName = FindConVar("tv_name"), String:sName[MAX_NAME_LENGTH], String:sTVName[MAX_NAME_LENGTH];
+		Handle hTVName = FindConVar("tv_name"), char sName[MAX_NAME_LENGTH], char sTVName[MAX_NAME_LENGTH];
 		GetClientName(client, sName, sizeof(sName));
 		
-		if (hTVName != INVALID_HANDLE) 
+		if (hTVName != null) 
 		{
 			GetConVarString(hTVName, sTVName, sizeof(sTVName));
 		}
@@ -262,9 +262,9 @@ public OnClientPutInServer(client)
 			ControlSkips[client] = 0;
 		}
 	}
-	else if ((rcbotver != INVALID_HANDLE) ? !NavExist : !WaypointsExist)
+	else if ((rcbotver != null) ? !NavExist : !WaypointsExist)
 	{
-		new target, sloop = 0;
+		int target, sloop = 0;
 		do
 		{
 			sloop++;
@@ -280,10 +280,10 @@ public OnClientPutInServer(client)
 	}
 }
 
-public Action:TakeControlOfBots(Handle:timer)
+public Action TakeControlOfBots(Handle timer)
 {
-	new iMaxClients = MaxClients, Team;
-	for (new i = 1; i <= iMaxClients; i++)
+	int iMaxClients = MaxClients, Team;
+	for(int i= 1; i <= iMaxClients; i++)
 	{
 		if (IsClientInGame(i) && IsFakeClient(i))
 		{
@@ -302,9 +302,9 @@ public Action:TakeControlOfBots(Handle:timer)
 				else if (ControlSkips[i] <= 4)
 				{
 					//I know that SourceTV has team by number 1, but i decided to leave old (1.0.5) part of code alone.
-					new Handle:hTVName = FindConVar("tv_name"), String:sName[MAX_NAME_LENGTH], String:sTVName[MAX_NAME_LENGTH];
+					Handle hTVName = FindConVar("tv_name"), char sName[MAX_NAME_LENGTH], char sTVName[MAX_NAME_LENGTH];
 					GetClientName(i, sName, sizeof(sName));
-					if (hTVName != INVALID_HANDLE) 
+					if (hTVName != null) 
 					{
 						GetConVarString(hTVName, sTVName, sizeof(sTVName));
 					}
@@ -323,11 +323,11 @@ public Action:TakeControlOfBots(Handle:timer)
 	}
 }
 
-public Action:EachSecond(Handle:timer)
+public Action EachSecond(Handle timer)
 {
-	new iBots = 0, iClients = GetClientCount(), iMaxClients = MaxClients, Team, target, iBlue, iRed, bool:bBlue = false, bool:bRed = false, sloop = 0;
+	int iBots = 0, iClients = GetClientCount(), iMaxClients = MaxClients, Team, target, iBlue, iRed, bool bBlue = false, bool bRed = false, sloop = 0;
 	//[1.0.6] Decided to rebuild this part of code...
-	for (new i = 1; i <= iMaxClients; i++)
+	for(int i= 1; i <= iMaxClients; i++)
 	{
 		if (IsClientInGame(i))
 		{
@@ -357,7 +357,7 @@ public Action:EachSecond(Handle:timer)
 			}
 		}
 	}
-	decl iTargets[MAXPLAYERS], bool:tn_is_ml, String:sName[MAX_NAME_LENGTH], String:sTarget[MAX_TARGET_LENGTH];
+	decl iTargets[MAXPLAYERS], bool tn_is_ml, char sName[MAX_NAME_LENGTH], char sTarget[MAX_TARGET_LENGTH];
 	GetArrayString(botnames,   GetRandomInt(0, GetArraySize(botnames) - 1), sName, sizeof(sName));
 	while (ProcessTargetString(sName,
 	0,
@@ -429,14 +429,14 @@ public Action:EachSecond(Handle:timer)
 	//[1.0.6] Just there, making sure that it's possible to add new bot into game. :D
 	else if (iClients < iMaxClients && iBlue < GetConVarInt(cvar1) && iRed >= iBlue)
 	{
-		if (rcbotver == INVALID_HANDLE)
+		if (rcbotver == null)
 			ServerCommand("tf_bot_add blue");
 		else
 			ServerCommand("bot -team blue -name \"%s\"", sName);
 	}
 	else if (iClients < iMaxClients && iRed < GetConVarInt(cvar2) && iRed <= iBlue)
 	{
-		if (rcbotver == INVALID_HANDLE)
+		if (rcbotver == null)
 			ServerCommand("tf_bot_add red");
 		else
 			ServerCommand("bot -team red -name \"%s\"", sName);
@@ -459,21 +459,21 @@ public Action:EachSecond(Handle:timer)
 	}
 }
 
-public Action:RoundStarted(Handle:event, const String:name[], bool:dontBroadcast)
+public Action RoundStarted(Handle event, const char[] name, bool dontBroadcast)
 {
 	Playing = true;
 }
 
-public Action:RoundEnded(Handle:event, const String:name[], bool:dontBroadcast)
+public Action RoundEnded(Handle event, const char[] name, bool dontBroadcast)
 {
 	Playing = false;
 }
 
-public Action:PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
+public Action PlayerDeath(Handle event, const char[] name, bool dontBroadcast)
 {
 	if (!GetConVarBool(cvar3) && GetConVarInt(cvar12) < 1)
 		return;
-	new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	if (GetConVarInt(cvar12) >= 1 && GetConVarBool(cvar13) && !IsFakeClient(client))
 	{
 		CreateTimer(GetConVarFloat(cvar12), RespawnPlayer, client);
@@ -489,7 +489,7 @@ public Action:PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
 	}
 }
 
-public Action:ChangeClass(Handle:timer, any:client)
+public Action ChangeClass(Handle timer, any:client)
 {
 	if (IsClientInGame(client))
 	{
@@ -498,10 +498,10 @@ public Action:ChangeClass(Handle:timer, any:client)
 			new TFTeam:team = TFTeam:GetClientTeam(client);
 			new TFClassType:oldclass;
 			oldclass == TF2_GetPlayerClass(client)
-			new newclass, iBots = 0, iMaxClients = MaxClients, Team, Teamc, sloop = 0;
+			int newclass, iBots = 0, iMaxClients = MaxClients, Team, Teamc, sloop = 0;
 			Teamc = GetClientTeam(client)
-			new bool:searchforfreeclass;
-			for (new i = 1; i <= iMaxClients; i++)
+			bool searchforfreeclass;
+			for(int i= 1; i <= iMaxClients; i++)
 			{
 				if (IsClientInGame(i))
 				{
@@ -524,7 +524,7 @@ public Action:ChangeClass(Handle:timer, any:client)
 					}
 				}
 			}
-			new bool:pass = true;
+			bool pass = true;
 			do
 			{
 				sloop++;
@@ -573,13 +573,13 @@ public Action:ChangeClass(Handle:timer, any:client)
 		}
 		if (GetConVarInt(cvar12) >= 1)
 		{
-			new Float:time = GetConVarFloat(cvar12) + 1.0;
+			float time = GetConVarFloat(cvar12) + 1.0;
 			CreateTimer(time, RespawnPlayer, client);
 		}
 	}
 }
 
-public Action:RespawnPlayer(Handle:timer, any:client)
+public Action RespawnPlayer(Handle timer, any:client)
 {
 	if (Playing && IsClientInGame(client) && !IsPlayerAlive(client))
 	{
@@ -595,7 +595,7 @@ RecountClasses()
 		CurrentCount[TFTeam_Blue][c] = 0;
 	}
 	
-	for (new i=1; i<=MaxClients; i++)
+	for(int i=1; i<=MaxClients; i++)
 	{
 		if (IsClientInGame(i))
 		{
@@ -604,9 +604,9 @@ RecountClasses()
 	}
 }
 
-public Action:PlayerSpawn(Handle:event, const String:name[], bool:dontBroadcast)
+public Action PlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 {
-	new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	
 	if (client && IsFakeClient(client) && GetClientTeam(client) > 1)
 	{
@@ -614,30 +614,30 @@ public Action:PlayerSpawn(Handle:event, const String:name[], bool:dontBroadcast)
 		SetEntityGravity(client, GetConVarFloat(cvar8));
 		if (GetConVarBool(cvar9)) 
 		{
-			if (Pings[client] == INVALID_HANDLE)
+			if (Pings[client] == null)
 			{
 				Pings[client] = CreateTimer(GetRandomFloat(1.0, 3.0), ChangePing, client, TIMER_REPEAT);
 			}
 			else
 			{
-				KillTimer(Pings[client]); Pings[client] = INVALID_HANDLE;
+				KillTimer(Pings[client]); Pings[client] = null;
 				CreateTimer(GetRandomFloat(1.0, 3.0), ChangePing, client, TIMER_REPEAT);
 			}
 		}
 	}
 }
 
-public Action:ChangePing(Handle:timer, any:client)
+public Action ChangePing(Handle timer, any:client)
 {
 	if (IsClientInGame(client))
 	{
-		for(new i = 1; i <= MaxClients; i++)
+		for(int i= 1; i <= MaxClients; i++)
 		{
 			if(IsValidEdict(i) && IsClientInGame(i) && IsFakeClient(i))
 			{
 				itemp = GetEntData(iPlayerManager, iPing + (i * 4), 4);
-				new randommin = itemp-10;
-				new randommax = itemp+10;
+				int randommin = itemp-10;
+				int randommax = itemp+10;
 				if (randommin < GetConVarInt(cvar10))
 					randommin = GetConVarInt(cvar10);
 				if (randommax > GetConVarInt(cvar11))
@@ -650,9 +650,9 @@ public Action:ChangePing(Handle:timer, any:client)
 
 ParseNames() 
 {
-	decl String:buffer[32];
-	new Handle:config = OpenFile(namespath, "r");
-	if (config != INVALID_HANDLE) 
+	char buffer[32];
+	Handle config = OpenFile(namespath, "r");
+	if (config != null) 
 	{
 		ClearArray(botnames);
 		while (ReadFileLine(config, buffer, sizeof(buffer))) 
@@ -667,7 +667,7 @@ ParseNames()
 	}
 }
 
-public OnNamesFileChange(Handle:cvar, const String:old[], const String:current[])
+public OnNamesFileChange(Handle cvar, const char[] old, const char[] current)
 {
 	Format(temp, sizeof(temp), "configs/%s", current);
 	BuildPath(Path_SM, namespath, sizeof(namespath), temp);
@@ -685,10 +685,10 @@ public OnNamesFileChange(Handle:cvar, const String:old[], const String:current[]
 }
 
 //[1.0.6] And this is code of Listen/Dedicated server detection...
-public Action:TestingWhoIsServer(Handle:timer)
+public Action TestingWhoIsServer(Handle timer)
 {
-	new value = GetConVarInt(testsubject);
-	for (new i = 1; i<=MaxClients; i++)
+	int value = GetConVarInt(testsubject);
+	for(int i= 1; i<=MaxClients; i++)
 	{
 		if (IsValidEdict(i) && !IsFakeClient(i))
 		{
@@ -701,7 +701,7 @@ public Action:TestingWhoIsServer(Handle:timer)
 	CreateTimer(2.0, Wait, value);
 }
 
-public Action:Wait(Handle:timer, any:value)
+public Action Wait(Handle timer, any:value)
 {
 	if (value == GetConVarInt(testsubject))
 	{
@@ -718,12 +718,12 @@ public Action:Wait(Handle:timer, any:value)
 	}
 	CreateTimer(1.0, EachSecond, _, TIMER_REPEAT);
 
-	if (rcbotver != INVALID_HANDLE && (WaypointsExist || !NavExist))
+	if (rcbotver != null && (WaypointsExist || !NavExist))
 		CreateTimer(1.0, TakeControlOfBots, _, TIMER_REPEAT);
 }
 
 //Here is bit modified code of admin cheats plugin...
-public Action:cheatcommand(client, args)
+public Action cheatcommand(client, args)
 {	
 	if (GetConVarBool(svcheats))
 	{
@@ -731,7 +731,7 @@ public Action:cheatcommand(client, args)
 	}
 	else
 	{
-		new String:argstring[256];
+		char argstring[256];
 		GetCmdArg(0,argstring,256);
 		if (client == 0 && GetConVarBool(consolecheats))
 		{

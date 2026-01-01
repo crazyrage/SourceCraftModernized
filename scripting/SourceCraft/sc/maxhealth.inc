@@ -59,7 +59,7 @@ stock SetMaxHealth(entity,amount)
         g_maxHealth[entity] = amount;
 }
 
-stock SetIncreasedHealth(client, amount, armor=0, const String:name[]="")
+stock SetIncreasedHealth(client, amount, armor=0, const char name[]="")
 {
     new maxhp = GetMaxHealth(client);
     new health = GetClientHealth(client)+amount;

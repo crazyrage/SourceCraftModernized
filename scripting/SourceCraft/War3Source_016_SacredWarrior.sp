@@ -3,44 +3,44 @@
 #include <sourcemod>
 #include "W3SIncs/War3Source_Interface"
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "War3Source - Race - Sacred Warrior",
     author = "War3Source Team",
     description = "The Sacred Warrior race for War3Source."
 };
 
-new thisRaceID;
+	int thisRaceID;
 new SKILL_VITALITY, SKILL_SPEAR, SKILL_BLOOD, ULT_BREAK;
 
 // Inner Vitality, HP healed
-new Float:VitalityHealed[]={0.0,1.0,2.0,3.0,4.0}; // How much HP Vitality heals each second
+new float VitalityHealed[]={0.0,1.0,2.0,3.0,4.0}; // How much HP Vitality heals each second
 
 // Burning Spear stacking effect
-new SpearDamage[]={0,1,2,3,4}; // How much damage does a stack do?
-new MaxSpearStacks=3; // How many stacks can the attacker dish out?
-//new Float:SpearUntil[MAXPLAYERSCUSTOM]; // Until when is the victim affected?
-new VictimSpearStacks[MAXPLAYERSCUSTOM]; // How many stacks does the victim have?
-new VictimSpearTicks[MAXPLAYERSCUSTOM];
-//new bool:bSpeared[MAXPLAYERSCUSTOM]; // Is this player speared (has DoT on him)?
-new SpearedBy[MAXPLAYERSCUSTOM]; // Who was the victim speared by?
-new bool:bSpearActivated[MAXPLAYERSCUSTOM]; // Does the player have Burning Spear activated?
+	int SpearDamage[]={0,1,2,3,4}; // How much damage does a stack do?
+int MaxSpearStacks=3; // How many stacks can the attacker dish out?
+//new float SpearUntil[MAXPLAYERSCUSTOM]; // Until when is the victim affected?
+	int VictimSpearStacks[MAXPLAYERSCUSTOM]; // How many stacks does the victim have?
+	int VictimSpearTicks[MAXPLAYERSCUSTOM];
+//new bool bSpeared[MAXPLAYERSCUSTOM]; // Is this player speared (has DoT on him)?
+	int SpearedBy[MAXPLAYERSCUSTOM]; // Who was the victim speared by?
+new bool bSpearActivated[MAXPLAYERSCUSTOM]; // Does the player have Burning Spear activated?
 
 // Buffs that berserker applys
-//new Float:BerserkerBuffDamage[]={0.0,0.005,0.01,0.015,0.02};  // each 7% you add one of these 
-new Float:BerserkerBuffASPD[]={0.0,0.01,0.02,0.03,0.04};      // to get the total buff...
+//new float BerserkerBuffDamage[]={0.0,0.005,0.01,0.015,0.02};  // each 7% you add one of these 
+new float BerserkerBuffASPD[]={0.0,0.01,0.02,0.03,0.04};      // to get the total buff...
 
 // Life Break costs / damage dealt
-new Float:LifeBreakHPVictim[]={0.0,0.20,0.30,0.40,0.50}; // Percentage of how much HP the caster loses
-new Float:LifeBreakHPCaster[]={0.0,0.10,0.15,0.20,0.25};    // Percentage of how much HP the victim loses
+new float LifeBreakHPVictim[]={0.0,0.20,0.30,0.40,0.50}; // Percentage of how much HP the caster loses
+new float LifeBreakHPCaster[]={0.0,0.10,0.15,0.20,0.25};    // Percentage of how much HP the victim loses
 
 #if !defined SOURCECRAFT
-new Handle:ultCooldownCvar;
+new Handle ultCooldownCvar;
 #endif
 
-new Float:ultmaxdistance = 500.0;
+new float ultmaxdistance = 500.0;
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     
     CreateTimer(0.3,BerserkerCalculateTimer,_,TIMER_REPEAT);      // Berserker ASPD Buff timer
@@ -51,7 +51,7 @@ public OnPluginStart()
     ultCooldownCvar=CreateConVar("war3_sacredw_ult_cooldown","20","Cooldown time for ult.");
 #endif
 }
-public OnWar3LoadRaceOrItemOrdered(num)
+public void OnWar3LoadRaceOrItemOrdered(num)
 {
     if(num==160)
     {
@@ -106,7 +106,7 @@ public OnWar3LoadRaceOrItemOrdered(num)
         War3_CreateRaceEnd(thisRaceID); ///DO NOT FORGET THE END!!!
     }
 }
-public OnWar3EventSpawn(client)
+public void OnWar3EventSpawn(client)
 {
     
     VictimSpearStacks[client] = 0;  // deactivate Burning Spear
@@ -115,13 +115,13 @@ public OnWar3EventSpawn(client)
     CheckSkills(client);
 }
 
-public Action:Heal_BurningSpearTimer(Handle:h,any:data) //1 sec
+public Action Heal_BurningSpearTimer(Handle h,any:data) //1 sec
 {
-    new attacker;
-    new damage;
+    int attacker;
+    int damage;
     //new SelfDamage;
-    new skill;
-    for(new i=1;i<=MaxClients;i++) // Iterate over all clients
+    int skill;
+    for(int i=1;i<=MaxClients;i++) // Iterate over all clients
     {
         if(ValidPlayer(i,true))
         {
@@ -171,11 +171,11 @@ public Action:Heal_BurningSpearTimer(Handle:h,any:data) //1 sec
 }
 
 
-public Action:BerserkerCalculateTimer(Handle:timer,any:userid) // Check each 0.5 second if the conditions for Berserkers Blood have changed
+public Action BerserkerCalculateTimer(Handle timer,any:userid) // Check each 0.5 second if the conditions for Berserkers Blood have changed
 {
     if(thisRaceID>0)
     {
-        for(new i=1;i<=MaxClients;i++)
+        for(int i=1;i<=MaxClients;i++)
         {
             if(ValidPlayer(i,true))
             {
@@ -184,10 +184,10 @@ public Action:BerserkerCalculateTimer(Handle:timer,any:userid) // Check each 0.5
                     new client=i;
                     
                     
-                    new Float:ASPD;
+                    new float ASPD;
                     
-                    new skilllvl = War3_GetSkillLevel(client,thisRaceID,SKILL_BLOOD);
-                    new VictimCurHP = GetClientHealth(client);
+                    int skilllvl = War3_GetSkillLevel(client,thisRaceID,SKILL_BLOOD);
+                    int VictimCurHP = GetClientHealth(client);
                     new MaxHP=War3_GetMaxHP(client);
                     if(VictimCurHP>=MaxHP){
                         ASPD=1.0;
@@ -198,7 +198,7 @@ public Action:BerserkerCalculateTimer(Handle:timer,any:userid) // Check each 0.5
                         {
 #endif
                         new missing=MaxHP-VictimCurHP;
-                        new Float:percentmissing=float(missing)/float(MaxHP);
+                        new float percentmissing=float(missing)/float(MaxHP);
                         ASPD=1.0+BerserkerBuffASPD[skilllvl]*(percentmissing/0.07);
 #if defined SOURCECRAFT
                         }
@@ -212,13 +212,13 @@ public Action:BerserkerCalculateTimer(Handle:timer,any:userid) // Check each 0.5
     }
 }
 
-public OnW3TakeDmgBullet(victim,attacker,Float:damage){
+public OnW3TakeDmgBullet(victim,attacker,float damage){
     if(ValidPlayer(victim,true)&&ValidPlayer(attacker,false)&&GetClientTeam(victim)!=GetClientTeam(attacker))
     {
         if(War3_GetRace(attacker)==thisRaceID)
         {
             // Apply Blood buff
-            new skilllvl = War3_GetSkillLevel(attacker,thisRaceID,SKILL_SPEAR);
+            int skilllvl = War3_GetSkillLevel(attacker,thisRaceID,SKILL_SPEAR);
             if(skilllvl>0&&!Hexed(attacker)&&!W3HasImmunity(attacker,Immunity_Skills)){
                 
                 if(W3Chance(W3ChanceModifier(attacker))){
@@ -249,10 +249,10 @@ CheckSkills(client){
         War3_SetBuff(client,fHPDecay,thisRaceID,0.0);
         return;
     }
-    new skill = War3_GetSkillLevel(client,thisRaceID,SKILL_VITALITY);
-    new VictimCurHP = GetClientHealth(client);
-    new VictimMaxHP = War3_GetMaxHP(client);
-    new Float:DoubleTrigger = VictimMaxHP * 0.4;
+    int skill = War3_GetSkillLevel(client,thisRaceID,SKILL_VITALITY);
+    int VictimCurHP = GetClientHealth(client);
+    int VictimMaxHP = War3_GetMaxHP(client);
+    new float DoubleTrigger = VictimMaxHP * 0.4;
     
     if(bSpearActivated[client]){
         War3_SetBuff(client,fHPRegen,thisRaceID,0.0);
@@ -267,9 +267,9 @@ CheckSkills(client){
     return;
 }
 
-public OnAbilityCommand(client,ability,bool:pressed)
+public OnAbilityCommand(client,ability,bool pressed)
 {
-    new skill = War3_GetSkillLevel(client, thisRaceID, SKILL_SPEAR);
+    int skill = War3_GetSkillLevel(client, thisRaceID, SKILL_SPEAR);
     if(skill>0 && War3_GetRace(client)==thisRaceID && ability==0 && pressed && IsPlayerAlive(client)&&!Silenced(client))
     {
 #if defined SOURCECRAFT
@@ -294,7 +294,7 @@ public OnAbilityCommand(client,ability,bool:pressed)
         PrintHintText(client, "Your Ability is not leveled");
     }
 }
-public OnUltimateCommand(client,race,bool:pressed)
+public OnUltimateCommand(client,race,bool pressed)
 {
     
     if(race==thisRaceID && pressed && ValidPlayer(client,true) &&!Silenced(client) )
@@ -302,10 +302,10 @@ public OnUltimateCommand(client,race,bool:pressed)
         new ult_level=War3_GetSkillLevel(client,race,ULT_BREAK);
         if(ult_level>0)
         {
-            new Float:AttackerMaxHP = float(War3_GetMaxHP(client));
-            new AttackerCurHP = GetClientHealth(client);
-            new SelfDamage = RoundToCeil(AttackerMaxHP * LifeBreakHPCaster[ult_level]);
-            new bool:bUltPossible = SelfDamage < AttackerCurHP;
+            new float AttackerMaxHP = float(War3_GetMaxHP(client));
+            int AttackerCurHP = GetClientHealth(client);
+            int SelfDamage = RoundToCeil(AttackerMaxHP * LifeBreakHPCaster[ult_level]);
+            new bool bUltPossible = SelfDamage < AttackerCurHP;
             if(!Silenced(client)&&War3_SkillNotInCooldown(client,thisRaceID,ULT_BREAK,true))
             {
                 if(!bUltPossible)
@@ -316,12 +316,12 @@ public OnUltimateCommand(client,race,bool:pressed)
                 {
                     
                     
-                    new target = War3_GetTargetInViewCone(client,ultmaxdistance,false,23.0,ConeTargetFilter);
+                    int target = War3_GetTargetInViewCone(client,ultmaxdistance,false,23.0,ConeTargetFilter);
                     if(target>0)
                     {
                         
-                        new Float:VictimMaxHP = float(War3_GetMaxHP(target));
-                        new Damage = RoundToFloor(LifeBreakHPVictim[ult_level] * VictimMaxHP);
+                        new float VictimMaxHP = float(War3_GetMaxHP(target));
+                        int Damage = RoundToFloor(LifeBreakHPVictim[ult_level] * VictimMaxHP);
                         
                         if(War3_DealDamage(target,Damage,client,DMG_BULLET|DMG_PREVENT_PHYSICS_FORCE,"lifebreak")) // do damage to nearest enemy
                         {
@@ -333,7 +333,7 @@ public OnUltimateCommand(client,race,bool:pressed)
                             War3_DealDamage(client,SelfDamage,client,DMG_BULLET|DMG_PREVENT_PHYSICS_FORCE,"lifebreak"); // Do damage to attacker
 
 #if defined SOURCECRAFT
-                            new Float:cooldown= GetUpgradeCooldown(thisRaceID,ULT_BREAK);
+                            new float cooldown= GetUpgradeCooldown(thisRaceID,ULT_BREAK);
                             War3_CooldownMGR(client,cooldown,thisRaceID,ULT_BREAK);
 #else
                             War3_CooldownMGR(client,GetConVarFloat(ultCooldownCvar),thisRaceID,ULT_BREAK); // invoke cooldown
@@ -355,7 +355,7 @@ public OnUltimateCommand(client,race,bool:pressed)
         }
     }
 }
-public bool:ConeTargetFilter(client)
+public bool ConeTargetFilter(client)
 {
     return (!W3HasImmunity(client,Immunity_Ultimates));
 }

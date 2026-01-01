@@ -990,7 +990,7 @@ public Action KillGas(Handle timer, Handle entitypack)
     CloseHandle(entitypack);
 }
 
-TheNipple(int client, int level)
+void TheNipple(int client, int level)
 {
     if (level > 0)
     {

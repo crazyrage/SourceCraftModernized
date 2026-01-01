@@ -18,7 +18,7 @@
  * @param model     Model to use for Merasmus, empty string uses TF2 model
  * @return			Returns 0 if Merasmus was spawned successfully.
  */
-native TF2_SpawnMerasmus(client, level=0, const String:model[]="");
+native TF2_SpawnMerasmus(client, level=0, const char[] model="");
 
 /**
  * Assume control of this plugin
@@ -26,7 +26,7 @@ native TF2_SpawnMerasmus(client, level=0, const String:model[]="");
  * @param plugin_only 	Set to 1 to assume control and disable admin functions.
  * @return		    	none
  */
-native ControlMerasmus(bool:plugin_only=true);
+native ControlMerasmus(bool plugin_only=true);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

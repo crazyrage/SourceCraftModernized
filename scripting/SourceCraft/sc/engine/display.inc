@@ -10,15 +10,15 @@
 #endif
 #define _display_included
 
-DisplayDamage(client, victim, hp, const String:weapon[],
-              const String:desc[], bool:no_translate=false)
+void DisplayDamage(int client, int victim, int hp, const char[] weapon,
+                   const char[] desc, bool no_translate=false)
 {
     if (victim > 0)
     {
-        new bool:clientInGame;
-        new bool:clientIsFake;
-        decl String:steamID[NAME_STRING_LENGTH];
-        decl String:team[NAME_STRING_LENGTH];
+        bool clientInGame;
+        bool clientIsFake;
+        char steamID[NAME_STRING_LENGTH];
+        char team[NAME_STRING_LENGTH];
 
         if (IsValidClient(client))
         {
@@ -35,12 +35,12 @@ DisplayDamage(client, victim, hp, const String:weapon[],
             team[0] = '\0';
         }
 
-        new bool:victimInGame;
-        new bool:victimIsFake;
-        new bool:victimIsValid;
-        decl String:victimID[NAME_STRING_LENGTH];
-        decl String:victimTeam[NAME_STRING_LENGTH];
-        decl String:victimName[NAME_STRING_LENGTH];
+        bool victimInGame;
+        bool victimIsFake;
+        bool victimIsValid;
+        char victimID[NAME_STRING_LENGTH];
+        char victimTeam[NAME_STRING_LENGTH];
+        char victimName[NAME_STRING_LENGTH];
 
         if (victim == client)
         {
@@ -143,11 +143,11 @@ DisplayDamage(client, victim, hp, const String:weapon[],
         {
             if (victimInGame && !victimIsFake)
             {
-                new Display:victimBits = g_ClientDisplayBits[victim];
+                Display victimBits = g_ClientDisplayBits[victim];
                 if (FlipBit_IsSet(victimBits & Display_Injury_Hints) ||
                     FlipBit_IsSet(victimBits & Display_Injury))
                 {
-                    new String:description[NAME_STRING_LENGTH];
+                    char description[NAME_STRING_LENGTH];
                     if (desc[0] == '%')
                         Format(description, sizeof(description), "%T", desc[1], victim);
                     else if (desc[0] == '\0' && weapon[0] != '\0' && !no_translate)
@@ -188,11 +188,11 @@ DisplayDamage(client, victim, hp, const String:weapon[],
         {
             if (victimInGame && !victimIsFake)
             {
-                new Display:victimBits = g_ClientDisplayBits[victim];
+                Display victimBits = g_ClientDisplayBits[victim];
                 if (FlipBit_IsSet(victimBits & Display_Injury_Hints) ||
                     FlipBit_IsSet(victimBits & Display_Injury))
                 {
-                    new String:description[NAME_STRING_LENGTH];
+                    char description[NAME_STRING_LENGTH];
                     if (desc[0] == '%')
                         Format(description, sizeof(description), "%T", desc[1], victim);
                     else if (desc[0] == '\0' && weapon[0] != '\0' && !no_translate)
@@ -263,11 +263,11 @@ DisplayDamage(client, victim, hp, const String:weapon[],
 
             if (clientInGame && !clientIsFake)
             {
-                new Display:displayBits = g_ClientDisplayBits[client];
+                Display displayBits = g_ClientDisplayBits[client];
                 if (FlipBit_IsSet(displayBits & Display_Damage_Hints) ||
                     FlipBit_IsSet(displayBits & Display_Damage))
                 {
-                    new String:description[NAME_STRING_LENGTH];
+                    char description[NAME_STRING_LENGTH];
                     if (desc[0] == '%')
                         Format(description, sizeof(description), "%T", desc[1], client);
                     else if (desc[0] == '\0' && weapon[0] != '\0' && !no_translate)
@@ -342,15 +342,15 @@ DisplayDamage(client, victim, hp, const String:weapon[],
     }
 }
 
-DisplayKill(client, victim, xp=0, const String:weapon[]="",
-            const String:desc[]="", bool:no_translate=false)
+void DisplayKill(int client, int victim, int xp=0, const char[] weapon="",
+                 const char[] desc="", bool no_translate=false)
 {
     if (victim > 0)
     {
-        new bool:clientInGame;
-        new bool:clientIsFake;
-        decl String:steamID[NAME_STRING_LENGTH];
-        decl String:team[NAME_STRING_LENGTH];
+        bool clientInGame;
+        bool clientIsFake;
+        char steamID[NAME_STRING_LENGTH];
+        char team[NAME_STRING_LENGTH];
 
         if (IsValidClient(client))
         {
@@ -367,12 +367,12 @@ DisplayKill(client, victim, xp=0, const String:weapon[]="",
             team[0] = 0;
         }
 
-        new bool:victimInGame;
-        new bool:victimIsFake;
-        new bool:victimIsValid;
-        decl String:victimID[NAME_STRING_LENGTH];
-        decl String:victimTeam[NAME_STRING_LENGTH];
-        decl String:victimName[NAME_STRING_LENGTH];
+        bool victimInGame;
+        bool victimIsFake;
+        bool victimIsValid;
+        char victimID[NAME_STRING_LENGTH];
+        char victimTeam[NAME_STRING_LENGTH];
+        char victimName[NAME_STRING_LENGTH];
 
         if (victim == client)
         {
@@ -555,11 +555,11 @@ DisplayKill(client, victim, xp=0, const String:weapon[]="",
         {
             if (victimInGame && !victimIsFake)
             {
-                new Display:victimBits = g_ClientDisplayBits[victim];
+                Display victimBits = g_ClientDisplayBits[victim];
                 if (FlipBit_IsSet(victimBits & Display_Death_Hints) ||
                     FlipBit_IsSet(victimBits & Display_Deaths))
                 {
-                    new String:description[NAME_STRING_LENGTH];
+                    char description[NAME_STRING_LENGTH];
                     if (desc[0] == '%')
                         Format(description, sizeof(description), "%T", desc[1], victim);
                     else if (desc[0] == '\0' && weapon[0] != '\0' && !no_translate)
@@ -600,11 +600,11 @@ DisplayKill(client, victim, xp=0, const String:weapon[]="",
         {
             if (victimInGame && !victimIsFake)
             {
-                new Display:victimBits = g_ClientDisplayBits[victim];
+                Display victimBits = g_ClientDisplayBits[victim];
                 if (FlipBit_IsSet(victimBits & Display_Death_Hints) ||
                     FlipBit_IsSet(victimBits & Display_Deaths))
                 {
-                    new String:description[NAME_STRING_LENGTH];
+                    char description[NAME_STRING_LENGTH];
                     if (desc[0] == '%')
                         Format(description, sizeof(description), "%T", desc[1], victim);
                     else if (desc[0] == '\0' && weapon[0] != '\0' && !no_translate)
@@ -642,11 +642,11 @@ DisplayKill(client, victim, xp=0, const String:weapon[]="",
 
                 if (clientInGame && !clientIsFake)
                 {
-                    new Display:displayBits = g_ClientDisplayBits[client];
+                    Display displayBits = g_ClientDisplayBits[client];
                     if (FlipBit_IsSet(displayBits & Display_Kill_Hints) ||
                         FlipBit_IsSet(displayBits & Display_Kills))
                     {
-                        new String:description[NAME_STRING_LENGTH];
+                        char description[NAME_STRING_LENGTH];
                         if (desc[0] == '%')
                             Format(description, sizeof(description), "%T", desc[1], client);
                         else if (desc[0] == '\0' && weapon[0] != '\0' && !no_translate)
@@ -789,9 +789,9 @@ DisplayKill(client, victim, xp=0, const String:weapon[]="",
     }
 }
 
-DisplayMessage(client, Display:flags, const String:fmt[], any:...)
+void DisplayMessage(int client, Display flags, const char[] fmt, any ...)
 {
-    decl String:buffer[1024];
+    char buffer[1024];
 
     SetGlobalTransTarget(client);
     VFormat(buffer, sizeof(buffer), fmt, 4);
@@ -804,12 +804,12 @@ DisplayMessage(client, Display:flags, const String:fmt[], any:...)
         return;
     }
 
-    new bool:displayHint = false;
-    new HintSlot:slot = HintSlot_Default;
-    new bool:displayToClient = (IsValidClient(client) && !IsFakeClient(client));
+    bool displayHint = false;
+    HintSlot slot = HintSlot_Default;
+    bool displayToClient = (IsValidClient(client) && !IsFakeClient(client));
     if (displayToClient)
     {
-        new Display:displayBits = g_ClientDisplayBits[client];
+        Display displayBits = g_ClientDisplayBits[client];
         if (Bit_IsSet(flags & Display_Damage))
         {
             displayHint = FlipBit_IsSet(displayBits & Display_Damage_Hints);
@@ -902,10 +902,10 @@ DisplayMessage(client, Display:flags, const String:fmt[], any:...)
     }
 }
 
-DisplayHint(client, HintSlot:slot=HintSlot_Generic, bool:exclusive=false,
-            Float:duration=5.0, const String:fmt[]="", any:...)
+void DisplayHint(int client, HintSlot slot=HintSlot_Generic, bool exclusive=false,
+                 float duration=5.0, const char[] fmt="", any ...)
 {
-    decl String:buffer[LONG_STRING_LENGTH];
+    char buffer[LONG_STRING_LENGTH];
 
     SetGlobalTransTarget(client);
     VFormat(buffer, sizeof(buffer), fmt, 6);
@@ -914,19 +914,19 @@ DisplayHint(client, HintSlot:slot=HintSlot_Generic, bool:exclusive=false,
     SubmitHint(client, slot, exclusive, duration, buffer);
 }
 
-SubmitHint(client, HintSlot:slot=HintSlot_Generic, bool:exclusive=false,
-           Float:duration=5.0, const String:buffer[]="", bool:update=true)
+void SubmitHint(int client, HintSlot slot=HintSlot_Generic, bool exclusive=false,
+                float duration=5.0, const char[] buffer="", bool update=true)
 {
-    new Handle:hintSlot=g_HintStack[client][slot];
-    if (hintSlot == INVALID_HANDLE)
+    Handle hintSlot=g_HintStack[client][slot];
+    if (hintSlot == null)
         g_HintStack[client][slot] = hintSlot = CreateArray();
 
-    new Handle:pack = INVALID_HANDLE;
-    new size = GetArraySize(hintSlot);
-    for (new index=0; index < size; index++)
+    Handle pack = null;
+    int size = GetArraySize(hintSlot);
+    for (int index=0; index < size; index++)
     {
-        new Handle:cell = Handle:GetArrayCell(hintSlot,index);
-        if (cell != INVALID_HANDLE)
+        Handle cell = view_as<Handle>(GetArrayCell(hintSlot,index));
+        if (cell != null)
         {
             if (exclusive)
             {
@@ -937,7 +937,7 @@ SubmitHint(client, HintSlot:slot=HintSlot_Generic, bool:exclusive=false,
                 ResetPack(cell);
                 ReadPackFloat(cell);
 
-                decl String:line[LONG_STRING_LENGTH];
+                char line[LONG_STRING_LENGTH];
                 ReadPackString(cell, line, sizeof(line));
 
                 if (StrEqual(buffer,line,false))
@@ -954,7 +954,7 @@ SubmitHint(client, HintSlot:slot=HintSlot_Generic, bool:exclusive=false,
         ClearArray(hintSlot);
     }
 
-    if (pack == INVALID_HANDLE)
+    if (pack == null)
     {
         pack = CreateDataPack();
         WritePackFloat(pack, GetEngineTime() + duration);
@@ -974,7 +974,7 @@ SubmitHint(client, HintSlot:slot=HintSlot_Generic, bool:exclusive=false,
     }
 }
 
-CleanMessage(String:buffer[], maxlen)
+void CleanMessage(char[] buffer, int maxlen)
 {
     // Remove color codes
     ReplaceString(buffer, maxlen, "{default}", "", false);
@@ -986,18 +986,18 @@ CleanMessage(String:buffer[], maxlen)
     ReplaceString(buffer, maxlen, "{custom}", "", false);
 
     // Convert control characters (color codes) to spaces
-    for (new i = strlen(buffer)-1; i >= 0; i--)
+    for (int i = strlen(buffer)-1; i >= 0; i--)
     {
         if (buffer[i] < ' ')
             buffer[i] = ' ';
     }
 }
 
-CleanServerMessage(client, String:buffer[], maxlen)
+void CleanServerMessage(int client, char[] buffer, int maxlen)
 {
     if (StrContains(buffer, "Your", false) != -1)
     {
-        decl String:owner[MAX_NAME_LENGTH];
+        char owner[MAX_NAME_LENGTH];
         GetClientName(client,owner,sizeof(owner));
         StrCat(owner, sizeof(owner), "'s");
         ReplaceString(buffer, maxlen, "Your", owner, false);
@@ -1005,7 +1005,7 @@ CleanServerMessage(client, String:buffer[], maxlen)
 
     if (StrContains(buffer, "You have", false) != -1)
     {
-        decl String:name[MAX_NAME_LENGTH];
+        char name[MAX_NAME_LENGTH];
         GetClientName(client,name,sizeof(name));
         StrCat(name, sizeof(name), " has");
         ReplaceString(buffer, maxlen, "You have", name, false);
@@ -1013,28 +1013,28 @@ CleanServerMessage(client, String:buffer[], maxlen)
 
     if (StrContains(buffer, "You", false) != -1)
     {
-        decl String:name[MAX_NAME_LENGTH];
+        char name[MAX_NAME_LENGTH];
         GetClientName(client,name,sizeof(name));
         ReplaceString(buffer, maxlen, "You", name, false);
     }
 }
 
-InitHint()
+void InitHint()
 {
     // Hook HintText messages
     HookUserMessage(GetUserMessageId("HintText"), HintTextHook);
 }
 
-public Action:HintTextHook(UserMsg:msg_id, Handle:bf, const players[], playersNum, bool:reliable, bool:init)
+public Action HintTextHook(UserMsg msg_id, Handle bf, const int[] players, int playersNum, bool reliable, bool init)
 {
-    new String:str[LONG_STRING_LENGTH];
-    BfReadString(Handle:bf, str, sizeof(str), false);
+    char str[LONG_STRING_LENGTH];
+    BfReadString(bf, str, sizeof(str), false);
 
     if (str[0] != ' ' && str[0] != '#')
     {
-        for (new i = 0; i < playersNum; i++)
+        for (int i = 0; i < playersNum; i++)
         {
-            new client = players[i];
+            int client = players[i];
             if (client != 0 && IsClientInGame(client) && !IsFakeClient(client))
             {
                 StopSound(client, SNDCHAN_STATIC, "UI/hint.wav");
@@ -1047,9 +1047,9 @@ public Action:HintTextHook(UserMsg:msg_id, Handle:bf, const players[], playersNu
         return Plugin_Continue;
 }
 
-bool:GetEntityName(entIndex, String:entName[], nameMax, lang=LANG_SERVER)
+bool GetEntityName(int entIndex, char[] entName, int nameMax, int lang=LANG_SERVER)
 {
-    decl String:entClass[NAME_STRING_LENGTH];
+    char entClass[NAME_STRING_LENGTH];
     GetEdictClassname(entIndex, entClass, sizeof(entClass));
 
     if (StrEqual(entClass, "headless_hatman")               ||
@@ -1069,7 +1069,7 @@ bool:GetEntityName(entIndex, String:entName[], nameMax, lang=LANG_SERVER)
     }
     else
     {
-        decl String:translation_path[PLATFORM_MAX_PATH];
+        char translation_path[PLATFORM_MAX_PATH];
         BuildPath(Path_SM, translation_path, sizeof(translation_path), "translations/sc.entity.phrases.txt");
         if (FileContains("", entClass))
         {

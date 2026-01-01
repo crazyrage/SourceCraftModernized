@@ -46,7 +46,7 @@ enum NadeType
  * @param targetting 	Set to 1 to assume control of targetting.
  * @return		    	none
  */
-native ControlNades(bool:plugin_only=true, bool:targetting=false);
+native ControlNades(bool plugin_only=true, bool targetting=false);
 
 /**
  * Give nades to the player
@@ -139,7 +139,7 @@ native HasSpecialNades(client, property=0);
  * @param pressed   Set true when pressed, false when released
  * @return			none
  */
-native ThrowFragNade(client, bool:pressed);
+native ThrowFragNade(client, bool pressed);
 
 /**
  * Throw a Special nade
@@ -148,7 +148,7 @@ native ThrowFragNade(client, bool:pressed);
  * @param pressed   Set true when pressed, false when released
  * @return			none
  */
-native ThrowSpecialNade(client, bool:pressed);
+native ThrowSpecialNade(client, bool pressed);
 
 /**
  * Damage Buildings in range of an attack
@@ -161,7 +161,7 @@ native ThrowSpecialNade(client, bool:pressed);
  * @param trace     Set true to check using trace
  * @return			none
  */
-native DamageBuildings(attacker, Float:start[3], Float:radius, damage, ent, bool:trace);
+native DamageBuildings(attacker, Float start[3], Float radius, damage, ent, bool trace);
 
 /**
  * Always throw specified type of nade, does NOT alter remaining count.
@@ -171,7 +171,7 @@ native DamageBuildings(attacker, Float:start[3], Float:radius, damage, ent, bool
  * @param type      Type of nade to throw
  * @return			none
  */
-native ThrowNade(client, bool:pressed, NadeType:type=DefaultNade);
+native ThrowNade(client, bool pressed, NadeType:type=DefaultNade);
 
 /**
  * Returns if a player has been targetted by the targetting drone
@@ -189,7 +189,7 @@ native IsTargeted(client);
  * @param type      The type of nade
  * @param pos 	    The location of the nade
  */
-forward Action:OnNadeExplode(victim, attacker, &damage, NadeType:type, const Float:pos[3]);
+forward Action OnNadeExplode(victim, attacker, &damage, NadeType:type, const Float pos[3]);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

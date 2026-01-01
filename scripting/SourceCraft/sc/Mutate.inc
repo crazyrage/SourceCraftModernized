@@ -24,10 +24,10 @@
 #include "sc/burrow"
 #include "sc/sounds"
 
-stock const String:mutateWav[] = "sc/zchrdy00.wav";
-stock const String:mutateErr[] = "sc/zzdmin00.wav";
+stock const char mutateWav[] = "sc/zchrdy00.wav";
+stock const char mutateErr[] = "sc/zzdmin00.wav";
 
-stock Float:m_MutateAmpRange[][] =
+stock float m_MutateAmpRange[][] =
 {
     { 0.0,    0.0,   0.0,   0.0 },
     { 0.0 , 100.0, 150.0, 200.0 },
@@ -36,7 +36,7 @@ stock Float:m_MutateAmpRange[][] =
     { 0.0 , 250.0, 300.0, 350.0 }
 };
 
-stock Float:m_MutateNodeRange[][] =
+stock float m_MutateNodeRange[][] =
 {
     { 0.0,    0.0,   0.0,   0.0 },
     { 0.0 , 100.0, 150.0, 200.0 },
@@ -66,8 +66,8 @@ stock m_MutateNodeShells[][] =
 stock m_MutateNodeRockets[] = { 0,  0,  0,  2,  4 };
 
 stock m_MutateDisableLevel        = 0;
-stock bool:m_MutateMultiplyEnergy = false;
-stock bool:m_MutateMultiplyVespene= false;
+stock bool m_MutateMultiplyEnergy = false;
+stock bool m_MutateMultiplyVespene= false;
 
 stock static m_raceId, m_upgradeId;
 stock static m_maxUpgradeID, m_maxObjects;
@@ -81,11 +81,11 @@ stock SetupMutate()
 }
 
 stock Mutate(client, level, raceId, upgradeId, maxUpgradeID=-1,
-             maxObjects=5, bool:engineersOnly=false)
+             maxObjects=5, bool engineersOnly=false)
 {
     if (GetGameType() != tf2 || !m_BuildAvailable)
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
         PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
         PrepareAndEmitSoundToClient(client,mutateErr);
@@ -94,28 +94,28 @@ stock Mutate(client, level, raceId, upgradeId, maxUpgradeID=-1,
     {
         PrepareAndEmitSoundToClient(client,mutateErr);
 
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "YouHaveDied", upgradeName);
     }
     else if (GetRestriction(client,Restriction_NoUltimates) ||
              GetRestriction(client,Restriction_Stunned))
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
         PrepareAndEmitSoundToClient(client,mutateErr);
     }
     else if (IsBurrowed(client))
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "NotWhileBurrowed", upgradeName);
         PrepareAndEmitSoundToClient(client,mutateErr);
     }
     else if (IsMole(client))
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
         PrepareAndEmitSoundToClient(client,mutateErr);
@@ -124,7 +124,7 @@ stock Mutate(client, level, raceId, upgradeId, maxUpgradeID=-1,
     {
         if (engineersOnly && TF2_GetPlayerClass(client) != TFClass_Engineer)
         {
-            decl String:upgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "EngineersOnly", upgradeName);
             PrepareAndEmitSoundToClient(client,mutateErr);
@@ -154,20 +154,20 @@ stock Mutate(client, level, raceId, upgradeId, maxUpgradeID=-1,
             }
         }
 
-        new Handle:menu=CreateMenu(Mutate_Selected);
+        Handle menu=CreateMenu(Mutate_Selected);
         SetMenuTitle(menu, "[SC] %T", "MutateTitle", client);
 
         new maxCount=(maxUpgradeID >= 0) ? GetUpgradeLevel(client,raceId,maxUpgradeID) + 1 : 1;
         if (maxCount > maxObjects)
             maxCount = maxObjects;
 
-        new Float:energy      = GetEnergy(client);
-        new Float:energy_cost = GetUpgradeEnergy(raceId, upgradeId);
+        float energy      = GetEnergy(client);
+        float energy_cost = GetUpgradeEnergy(raceId, upgradeId);
 
         new vespene           = GetVespene(client);
         new vespene_cost      = GetUpgradeVespene(raceId, upgradeId);
 
-        new bool:ok           = (energy >= energy_cost && vespene >= vespene_cost);
+        bool ok           = (energy >= energy_cost && vespene >= vespene_cost);
 
         new counts[TFOBJECT_COUNT];
         new sum = CountBuildings(client, counts);
@@ -207,7 +207,7 @@ stock Mutate(client, level, raceId, upgradeId, maxUpgradeID=-1,
     }
 }
 
-public Mutate_Selected(Handle:menu,MenuAction:action,client,selection)
+public Mutate_Selected(Handle menu,MenuAction:action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -215,7 +215,7 @@ public Mutate_Selected(Handle:menu,MenuAction:action,client,selection)
 
         if (GetRace(client) == m_raceId)
         {
-            decl String:SelectionInfo[12];
+            char SelectionInfo[12];
             GetMenuItem(menu,selection,SelectionInfo,sizeof(SelectionInfo));
 
             new item = StringToInt(SelectionInfo);
@@ -242,12 +242,12 @@ public Mutate_Selected(Handle:menu,MenuAction:action,client,selection)
 }
 
 stock MutateInto(client, raceId, upgradeId, maxUpgradeID, maxObjects=5,
-                 TFExtObjectType:type, level=1, bool:bMini=false,
-                 bool:bShielded=false, bool:bDisabled=true)
+                 TFExtObjectType:type, level=1, bool bMini=false,
+                 bool bShielded=false, bool bDisabled=true)
 {
     if (!IsValidClientAlive(client))
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "YouHaveDied", upgradeName);
         PrepareAndEmitSoundToClient(client,mutateErr);
@@ -255,21 +255,21 @@ stock MutateInto(client, raceId, upgradeId, maxUpgradeID, maxObjects=5,
     else if (GetRestriction(client,Restriction_NoUltimates) ||
              GetRestriction(client,Restriction_Stunned))
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
         PrepareAndEmitSoundToClient(client,mutateErr);
     }
     else if (IsBurrowed(client))
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "NotWhileBurrowed", upgradeName);
         PrepareAndEmitSoundToClient(client,mutateErr);
     }
     else if (IsMole(client))
     {
-        decl String:upgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
         PrepareAndEmitSoundToClient(client,mutateErr);
@@ -313,8 +313,8 @@ stock MutateInto(client, raceId, upgradeId, maxUpgradeID, maxObjects=5,
             return;
         }
 
-        new Float:energy = GetEnergy(client);
-        new Float:energy_cost = GetUpgradeEnergy(raceId, upgradeId);
+        float energy = GetEnergy(client);
+        float energy_cost = GetUpgradeEnergy(raceId, upgradeId);
 
         new vespene = GetVespene(client);
         new vespene_cost = GetUpgradeVespene(raceId, upgradeId);
@@ -326,7 +326,7 @@ stock MutateInto(client, raceId, upgradeId, maxUpgradeID, maxObjects=5,
                 energy_cost *= float(costNum);
                 if (energy < energy_cost)
                 {
-                    decl String:upgradeName[64];
+                    char upgradeName[64];
                     GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
                     DisplayMessage(client, Display_Energy, "%t", "InsufficientEnergyFor", upgradeName, energy_cost);
                     EmitEnergySoundToClient(client,GetRaceFaction(raceId));
@@ -339,7 +339,7 @@ stock MutateInto(client, raceId, upgradeId, maxUpgradeID, maxObjects=5,
                 vespene_cost *= costNum;
                 if (vespene < vespene_cost)
                 {
-                    decl String:upgradeName[64];
+                    char upgradeName[64];
                     GetUpgradeName(raceId, upgradeId, upgradeName, sizeof(upgradeName), client);
                     DisplayMessage(client, Display_Energy, "%t", "InsufficientVespeneFor", upgradeName, vespene_cost);
                     EmitVespeneSoundToClient(client,GetRaceFaction(raceId));
@@ -348,7 +348,7 @@ stock MutateInto(client, raceId, upgradeId, maxUpgradeID, maxObjects=5,
             }
         }
 
-        new Float:pos[3];
+        float pos[3];
         new ent = BuildObject(client, type, (bMini || type == TFExtObject_MiniSentry) ? 1 : level,
                               bMini, bShielded, .iHealth=GetClientHealth(client),
                               .pos=pos, .check=false, .bDisabled=bDisabled);
@@ -363,7 +363,7 @@ stock MutateInto(client, raceId, upgradeId, maxUpgradeID, maxObjects=5,
             DisplayMessage(client, Display_Ultimate, "%t",
                            "Mutated", TF2_ObjectNames[type]);
 
-            new Float:cooldown = GetUpgradeCooldown(raceId, upgradeId) * float(costNum * 2);
+            float cooldown = GetUpgradeCooldown(raceId, upgradeId) * float(costNum * 2);
             CreateCooldown(client, raceId, upgradeId, cooldown);
 
             if (m_AmpNodeAvailable)

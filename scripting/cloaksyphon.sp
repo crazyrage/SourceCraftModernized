@@ -9,10 +9,10 @@
 
 #include <sourcemod>
 
-new g_cloakOffset;
-new Handle:cloakValue
+int g_cloakOffset;
+Handle cloakValue
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
     name = "Cloak Syphon",
     author = "Muridias",
@@ -30,21 +30,21 @@ public OnPluginStart()
 
 setCloakValue(client)
 {
-    new Float:entValue = GetEntDataFloat(client, g_cloakOffset);
-    new Float:cValue = GetConVarFloat(cloakValue);
+    float entValue = GetEntDataFloat(client, g_cloakOffset);
+    float cValue = GetConVarFloat(cloakValue);
     if (cValue < 100.0)
     {
-        new Float:sum = entValue + cValue;
-        SetEntDataFloat(client, g_cloakOffset, Float:sum);
+        float sum = entValue + cValue;
+        SetEntDataFloat(client, g_cloakOffset, float sum);
     }
 }
 
-public Action:Event_PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Event_PlayerDeath(Handle event, const char[] name, bool dontBroadcast)
 {
-    new attacker_userid = GetEventInt(event,"attacker");
+    int attacker_userid = GetEventInt(event,"attacker");
     if (attacker_userid > 0)
     {
-        new attacker=GetClientOfUserId(attacker_userid);
+        int attacker=GetClientOfUserId(attacker_userid);
         if (attacker > 0)
         {
             if (IsClientInGame(attacker) && IsPlayerAlive(attacker))

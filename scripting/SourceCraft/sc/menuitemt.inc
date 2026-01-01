@@ -22,13 +22,13 @@
  * @return					True on success, false on failure.
  * @error					Invalid Handle or item limit reached.
  */
-stock AddMenuItemT(Handle:menu, 
-					const String:info[], 
-					const String:display[],
+stock AddMenuItemT(Handle menu, 
+					const char info[], 
+					const char display[],
                     lang=LANG_SERVER,
 					style=ITEMDRAW_DEFAULT)
 {
-    decl String:translated[128];
+    char translated[128];
     Format(translated, sizeof(translated), "%T", display, lang);
     return AddMenuItem(menu, info, translated, style);
 }

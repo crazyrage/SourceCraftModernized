@@ -23,7 +23,7 @@ stock const String:TF2_ClassName[/*TFClassType*/][] = {"", "Scout", "Sniper", "S
 stock const TF2_ClassHealth[/*TFClassType*/] = { 0, 125, 125, 200, 175, 150, 300, 175, 125, 125 };
 #define TF2_GetClassHealth(%1) TF2_ClassHealth[%1]
 
-stock const Float:TF2_ClassSpeed[/*TFClassType*/] = { 0.0, 400.0, 300.0, 240.0, 280.0, 320.0, 230.0, 300.0, 300.0, 300.0 };
+stock const Float TF2_ClassSpeed[/*TFClassType*/] = { 0.0, 400.0, 300.0, 240.0, 280.0, 320.0, 230.0, 300.0, 300.0, 300.0 };
 #define TF2_GetClassSpeed(%1) TF2_ClassSpeed[%1]
 
 #define TF2_IsPlayerSlowed(%1)              TF2_IsPlayerInCondition(%1,TFCond_Slowed)
@@ -82,9 +82,9 @@ stock const Float:TF2_ClassSpeed[/*TFClassType*/] = { 0.0, 400.0, 300.0, 240.0, 
  * @param client		Player's index.
  * @return				Player's estimated speed
  */
-stock Float:TF2_GetPlayerSpeed(client)
+stock Float TF2_GetPlayerSpeed(client)
 {
-    new Float:speed;
+    float speed;
     new TFClassType:class = TF2_GetPlayerClass(client);
     switch (class)
     {
@@ -342,14 +342,14 @@ stock TF2_GetPlayerConditionHighBits(client)
  * @param client		Player's index.
  * @return				String representing the Player's condition bits
  */
-stock TF2_GetPlayerConditionString(client, String:condStr[], condStrLen, &pcond=0, &pcond2)
+stock TF2_GetPlayerConditionString(client, char[] condStr, condStrLen, &pcond=0, &pcond2)
 {
     pcond = TF2_GetPlayerConditionLowBits(client);
     pcond2 = TF2_GetPlayerConditionHighBits(client);
     
     //                        00000000001111111111222222222233333333334
     //                        01234567890123456789012345678901234567890
-    new String:condFlags[] = "                                        ";
+    char condFlags[] = "                                        ";
     if (TF2_IsPlayerSlowed(client))
         condFlags[0]  = 'S';
     if (TF2_IsPlayerZoomed(client))

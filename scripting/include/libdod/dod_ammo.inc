@@ -16,7 +16,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of the DOD Ammo plugin.
  * @return		    	none
  */
-native ControlDodAmmo(bool:plugin_only=true);
+native ControlDodAmmo(bool plugin_only=true);
 
 /**
  * Enable DOD Ammo Packs for a player.

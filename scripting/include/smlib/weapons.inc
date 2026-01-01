@@ -65,7 +65,7 @@ stock Weapon_IsValid(weapon)
  * @param absAngles		Absolute Angles Vector.
  * @return				Weapon Index of the created weapon or INVALID_ENT_REFERENCE on error.
  */
-stock Weapon_Create(const String:className[], Float:absOrigin[3], Float:absAngles[3])
+stock Weapon_Create(const char[] className, Float absOrigin[3], Float absAngles[3])
 {
 	new weapon = Entity_Create(className);
 
@@ -89,9 +89,9 @@ stock Weapon_Create(const String:className[], Float:absOrigin[3], Float:absAngle
  * @param absAngles		Absolute Angles Vector.
  * @return				Weapon Index of the created weapon or INVALID_ENT_REFERENCE on error.
  */
-stock Weapon_CreateForOwner(client, const String:className[])
+stock Weapon_CreateForOwner(client, const char[] className)
 {
-	decl Float:absOrigin[3], Float:absAngles[3];
+	decl Float absOrigin[3], Float absAngles[3];
 	Entity_GetAbsOrigin(client, absOrigin);
 	Entity_GetAbsAngles(client, absAngles);
 
@@ -124,9 +124,9 @@ stock Weapon_GetSubType(weapon)
  * @param weapon		Weapon Entity.
  * @return				True if weapon is currently reloading, false if not.
  */
-stock bool:Weapon_IsReloading(weapon)
+stock bool Weapon_IsReloading(weapon)
 {
-	return bool:GetEntProp(weapon, Prop_Data, "m_bInReload");
+	return bool GetEntProp(weapon, Prop_Data, "m_bInReload");
 }
 
 /*
@@ -156,9 +156,9 @@ stock Weapon_GetState(weapon)
  * @param weapon		Weapon Entity.
  * @return				True or False.
  */
-stock bool:Weapon_FiresUnderWater(weapon)
+stock bool Weapon_FiresUnderWater(weapon)
 {
-	return bool:GetEntProp(weapon, Prop_Data, "m_bFiresUnderwater");
+	return bool GetEntProp(weapon, Prop_Data, "m_bFiresUnderwater");
 }
 
 /*
@@ -168,7 +168,7 @@ stock bool:Weapon_FiresUnderWater(weapon)
  * @param can			True or False.
  * @noreturn
  */
-stock Weapon_SetFiresUnderWater(weapon, bool:can=true)
+stock Weapon_SetFiresUnderWater(weapon, bool can=true)
 {
 	SetEntProp(weapon, Prop_Data, "m_bFiresUnderwater", _:can);
 }
@@ -179,9 +179,9 @@ stock Weapon_SetFiresUnderWater(weapon, bool:can=true)
  * @param weapon		Weapon Entity.
  * @return				True or False.
  */
-stock bool:Weapon_FiresUnderWaterAlt(weapon)
+stock bool Weapon_FiresUnderWaterAlt(weapon)
 {
-	return bool:GetEntProp(weapon, Prop_Data, "m_bAltFiresUnderwater");
+	return bool GetEntProp(weapon, Prop_Data, "m_bAltFiresUnderwater");
 }
 
 /*
@@ -191,7 +191,7 @@ stock bool:Weapon_FiresUnderWaterAlt(weapon)
  * @param can			True or False.
  * @noreturn
  */
-stock Weapon_SetFiresUnderWaterAlt(weapon, bool:can=true)
+stock Weapon_SetFiresUnderWaterAlt(weapon, bool can=true)
 {
 	SetEntProp(weapon, Prop_Data, "m_bAltFiresUnderwater", _:can);
 }

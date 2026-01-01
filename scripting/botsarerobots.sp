@@ -10,7 +10,7 @@
 #define PLUGIN_VERSION      "1.1a"
 #define PLUGIN_CONTACT      "grognak.tf2@gmail.com"
 
-public Plugin:myinfo =
+public Plugin myinfo =
 {
     name        = PLUGIN_NAME,
     author      = PLUGIN_AUTHOR,
@@ -19,8 +19,8 @@ public Plugin:myinfo =
     url         = PLUGIN_CONTACT
 };
 
-new bool:isMvM = false;
-new bool:isRobot[MAXPLAYERS + 1] = { false, ... };
+bool isMvM = false;
+bool isRobot[MAXPLAYERS + 1] = { false, ... };
 
 public OnPluginStart()
 {
@@ -37,7 +37,7 @@ public OnMapStart()
         isMvM = (FindEntityByClassname(-1, "tf_logic_mann_vs_machine") > 0);
 }
 
-public bool:MakeRobot(iClient, bool:bToggle)
+public bool MakeRobot(iClient, bool bToggle)
 {
 	if (isMvM || !IsValidClient(iClient) || !IsPlayerAlive(iClient)) 
 		return false;
@@ -65,26 +65,26 @@ public OnClientDisconnect(iClient)
 	isRobot[iClient] = false;
 }
 
-public Action:Event_PostInventory(Handle:event, const String:name[], bool:dontBroadcast)
+public Action Event_PostInventory(Handle event, const char[] name, bool dontBroadcast)
 {
 	if (!isMvM)
 		CreateTimer(0.1, tSetRobot, GetEventInt(event, "userid"));
 }
 
-public Action:tSetRobot(Handle:hTimer, any:userid)
+public Action tSetRobot(Handle hTimer, any:userid)
 {
-	new iClient = GetClientOfUserId(userid);
+	int iClient = GetClientOfUserId(userid);
 	if (IsValidClient(iClient))
 		MakeRobot(iClient, IsFakeClient(iClient));
 }
 
-public Action:SoundHook(clients[64], &numClients, String:sound[PLATFORM_MAX_PATH], &client, &channel, &Float:volume, &level, &pitch, &flags)
+public Action SoundHook(clients[64], &numClients, char sound[PLATFORM_MAX_PATH], &client, &channel, &float volume, &level, &pitch, &flags)
 {
 	if (isMvM || !IsValidClient(client)) return Plugin_Continue;
 	if (!isRobot[client]) return Plugin_Continue;
 	if (StrContains(sound, "player/footsteps/", false) != -1)
 	{
-		new rand = GetRandomInt(1,18);
+		int rand = GetRandomInt(1,18);
 		Format(sound, sizeof(sound), "mvm/player/footsteps/robostep_%s%i.wav", (rand < 10) ? "0" : "", rand);
 		pitch = GetRandomInt(95, 100);
 		EmitSoundToClient(client, sound, _, _, _, _, 0.25, pitch);
@@ -106,16 +106,16 @@ public Action:SoundHook(clients[64], &numClients, String:sound[PLATFORM_MAX_PATH
 		case TFClass_Spy: ReplaceString(sound, sizeof(sound), "spy_", "spy_mvm_", false);
 		case TFClass_Engineer: ReplaceString(sound, sizeof(sound), "engineer_", "engineer_mvm_", false);
 	}
-	new String:soundchk[PLATFORM_MAX_PATH];
+	char soundchk[PLATFORM_MAX_PATH];
 	Format(soundchk, sizeof(soundchk), "sound/%s", sound);
 	if (!FileExists(soundchk)) return Plugin_Continue;
 	PrecacheSound(sound);
 	return Plugin_Changed;
 }
 
-stock bool:SetModel(client)
+stock bool SetModel(client)
 {
-	new String:Mdl[PLATFORM_MAX_PATH];
+	char Mdl[PLATFORM_MAX_PATH];
 	switch (TF2_GetPlayerClass(client))
 	{
 		case TFClass_Scout: Format(Mdl, sizeof(Mdl), "scout");
@@ -136,14 +136,14 @@ stock bool:SetModel(client)
 	return true;
 }
 
-stock bool:RemoveModel(client)
+stock bool RemoveModel(client)
 {
 	SetVariantString("");
 	AcceptEntityInput(client, "SetCustomModel");
 	return true;
 }
 
-stock bool:IsValidClient(client)
+stock bool IsValidClient(client)
 {
 	if (client <= 0 || client > MaxClients) return false;
 	if (!IsClientInGame(client)) return false;

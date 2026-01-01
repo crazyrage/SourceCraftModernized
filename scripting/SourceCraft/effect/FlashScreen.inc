@@ -42,7 +42,7 @@
  * @param flags: Flags of Flash user message, optional.
  * @noreturn
  */
-stock FlashScreen(client,const color[4],Float:fade=0.1,Float:hold=0.2,flags=FFADE_IN)
+stock FlashScreen(client,const color[4],float fade=0.1,float hold=0.2,flags=FFADE_IN)
 {
     FadeOne(client, RoundFloat(255.0*fade), RoundFloat(255.0*hold), color, flags);
 }

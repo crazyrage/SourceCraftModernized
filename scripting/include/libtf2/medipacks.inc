@@ -16,7 +16,7 @@
  * @param plugin_only 	Set to 1 to assume complete control of the Medipacks plugin.
  * @return		    	none
  */
-native ControlMedipacks(bool:plugin_only=true);
+native ControlMedipacks(bool plugin_only=true);
 
 /**
  * Enable Medipacks for a player.
@@ -38,7 +38,7 @@ native SetMedipack(client, enable=3, amount=0, TFHoliday:type=TFHoliday:0);
  * @param type      What type of medipack to drop (0=default | TFHoliday_Birthday | TFHoliday_Halloween)
  * @return			true if a medipack was successfully dropped
  */
-native bool:DropMedipack(client, charge=-1, TFHoliday:type=TFHoliday:0);
+native bool DropMedipack(client, charge=-1, TFHoliday:type=TFHoliday:0);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

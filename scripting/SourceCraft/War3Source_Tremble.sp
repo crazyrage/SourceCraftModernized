@@ -24,67 +24,67 @@
 #define DARKSWARMDUR 8.0
 #define MAX_BEAM_SCROLLSPEED 100
 #define MAXEDICT 2048
-new thisRaceID;
+	int thisRaceID;
 
 #if defined SOURCECRAFT
-new Float:ultCooldown = 5.0; // 20.0 / 4.0;
-new Float:abiCooldown = 3.0;
-new Float:TrembleDist = 200.0;
-new Float:PushForce = 0.1;
-new bool:ReUseOnDeath = true;
-new bool:TeleportWhenAlive = true;
+new float ultCooldown = 5.0; // 20.0 / 4.0;
+new float abiCooldown = 3.0;
+new float TrembleDist = 200.0;
+new float PushForce = 0.1;
+new bool ReUseOnDeath = true;
+new bool TeleportWhenAlive = true;
 #else
-new Handle:ultCooldownCvar;
-new Handle:abiCooldownCvar;
-new Handle:TrembleDistCvar;
-//new Handle:ImpalerChanceCvar;
-new Handle:CvarPushForce;
-new Handle:ReUseOnDeathCvar;
-new Handle:TeleportWhenAliveCvar;
+new Handle ultCooldownCvar;
+new Handle abiCooldownCvar;
+new Handle TrembleDistCvar;
+//new Handle ImpalerChanceCvar;
+new Handle CvarPushForce;
+new Handle ReUseOnDeathCvar;
+new Handle TeleportWhenAliveCvar;
 #endif
 
 new SKILL_1,SKILL_2,SKILL_3,SKILL_4,ULT;
 new LargeBeam,BeamSprite,Bug1,Bug2,Bug3,Bug4;
 
-new MasterLevel[MAXPLAYERS];
-new nTrembleCount[MAXPLAYERS];
-new nTrembleOwner[MAXPLAYERS];
+	int MasterLevel[MAXPLAYERS];
+	int nTrembleCount[MAXPLAYERS];
+	int nTrembleOwner[MAXPLAYERS];
 
-new Float:nLastBuff[MAXPLAYERS];
-new Float:nLastLongBuff[MAXPLAYERS];
-new Float:SavedPos[TREMBLEMAX][3];
+new float nLastBuff[MAXPLAYERS];
+new float nLastLongBuff[MAXPLAYERS];
+new float SavedPos[TREMBLEMAX][3];
 
-new bool:bSwarmed[MAXPLAYERS];
-new bool:bSwarmEffect[MAXPLAYERS];
-new bool:bImpaled[MAXPLAYERS];
-new bool:bShudderSpawnd[MAXPLAYERS];
-new ShudderEntity[MAXPLAYERS];
+new bool bSwarmed[MAXPLAYERS];
+new bool bSwarmEffect[MAXPLAYERS];
+new bool bImpaled[MAXPLAYERS];
+new bool bShudderSpawnd[MAXPLAYERS];
+	int ShudderEntity[MAXPLAYERS];
 
-new String:BuffSound[] = "ambient/machines/teleport4.wav";
-new String:Spawn[]="ambient/levels/citadel/weapon_disintegrate2.wav";
-new String:Impalers[]="weapons/mortar/mortar_explode2.wav";
+new char BuffSound[] = "ambient/machines/teleport4.wav";
+new char Spawn[]="ambient/levels/citadel/weapon_disintegrate2.wav";
+new char Impalers[]="weapons/mortar/mortar_explode2.wav";
 
 //npcsoundset - defined
-new String:NPCHurt1[] = "npc/antlion_guard/angry1.wav";
-new String:NPCHurt2[] = "npc/antlion_guard/angry2.wav";
-new String:NPCHurt3[] = "npc/antlion_guard/angry3.wav";
-new String:NPCHit1[] = "npc/antlion_guard/foot_heavy2.wav";
-new String:NPCHit2[] = "npc/antlion_guard/foot_light2.wav";
-new String:NPCDeath[] = "npc/antlion_guard/antlion_guard_die1.wav";
+new char NPCHurt1[] = "npc/antlion_guard/angry1.wav";
+new char NPCHurt2[] = "npc/antlion_guard/angry2.wav";
+new char NPCHurt3[] = "npc/antlion_guard/angry3.wav";
+new char NPCHit1[] = "npc/antlion_guard/foot_heavy2.wav";
+new char NPCHit2[] = "npc/antlion_guard/foot_light2.wav";
+new char NPCDeath[] = "npc/antlion_guard/antlion_guard_die1.wav";
 
 //darkswarm
-new Float:SwarmChance[5] = { 0.0, 0.10, 0.12, 0.15, 0.18 };
-new Float:SwarmPercent[5] = { 1.0, 0.9, 0.88, 0.70, 0.65};
-new SwarmDamage[5] = { 0, 2, 3, 3, 4 };
+new float SwarmChance[5] = { 0.0, 0.10, 0.12, 0.15, 0.18 };
+new float SwarmPercent[5] = { 1.0, 0.9, 0.88, 0.70, 0.65};
+	int SwarmDamage[5] = { 0, 2, 3, 3, 4 };
 //impalers
-new Float:ImpChance[5] = { 0.0, 0.14, 0.22, 0.30, 0.38 };
-new Float:ImpAtkSlow[5] = { 1.0, 0.9, 0.88, 0.82, 0.78};
-new Float:ImpAgiSlow[5] = { 1.0, 0.9, 0.8, 0.75, 0.70};
-new ImpDamage[5] = { 0, 2, 4, 6, 7};
-new Float:ImpTime[5] = { 0.0, 0.65, 0.70, 0.88, 0.9};
+new float ImpChance[5] = { 0.0, 0.14, 0.22, 0.30, 0.38 };
+new float ImpAtkSlow[5] = { 1.0, 0.9, 0.88, 0.82, 0.78};
+new float ImpAgiSlow[5] = { 1.0, 0.9, 0.8, 0.75, 0.70};
+	int ImpDamage[5] = { 0, 2, 4, 6, 7};
+new float ImpTime[5] = { 0.0, 0.65, 0.70, 0.88, 0.9};
 //terror
-new Float:BuffSpeed[5]={1.0,1.10,1.12,1.18,1.23};
-new Float:BuffInvis[5]={1.0,0.9,0.8,0.72,0.66};
+new float BuffSpeed[5]={1.0,1.10,1.12,1.18,1.23};
+new float BuffInvis[5]={1.0,0.9,0.8,0.72,0.66};
 
 // = Shudder Settings =
 
@@ -98,19 +98,19 @@ new Float:BuffInvis[5]={1.0,0.9,0.8,0.72,0.66};
 #define shudder_classname "shudder" //used for dmg classname too
 
 //-> PER LEVEL SETTINGS:
-new ShudderHealth[5]={0,300,600,900,1500};
-new Float:ShudderRange[5]={0.0,250.0,500.0,600.0,1500.0};
-new Float:ShudderAtkRadius[5]={0.0,50.0,60.0,80.0,150.0};
+	int ShudderHealth[5]={0,300,600,900,1500};
+new float ShudderRange[5]={0.0,250.0,500.0,600.0,1500.0};
+new float ShudderAtkRadius[5]={0.0,50.0,60.0,80.0,150.0};
 
 //-> DAMAGE SETTINGS
-new SHUDMIN = 40;//60;
-new SHUDMAX = 60;//80;
+	int SHUDMIN = 40;//60;
+	int SHUDMAX = 60;//80;
 
 //new ShudderMove[MAXEDICT+1];
 //new ShudderFocus[MAXEDICT+1];
-new bool:IsNPC[MAXEDICT+1];
+new bool IsNPC[MAXEDICT+1];
 
-public Plugin:myinfo = 
+public Plugin myinfo = 
 {
 	name = "War3Source Race - Tremble",
 	author = "Revan",
@@ -119,7 +119,7 @@ public Plugin:myinfo =
 	url = "www.wcs-lagerhaus.de"
 };
 
-public OnMapStart()
+public void OnMapStart()
 {
 	War3_PrecacheSound(BuffSound);
 	War3_PrecacheSound(Spawn);
@@ -140,7 +140,7 @@ public OnMapStart()
 	PrecacheModel("models/antlion_guard.mdl");
 }
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     CreateTimer(0.42,CalcTremble,_,TIMER_REPEAT);
 
@@ -180,20 +180,20 @@ public OnPluginStart()
 }
 
 #if !defined SOURCECRAFT
-public UltimateCvarChange(Handle:Enabled, const String:OldValue[], const String:Value[])
+public UltimateCvarChange(Handle Enabled, const char[] OldValue[], const char[] Value[])
 {
     if (StringToInt(Value) > 0)
         W3SkillCooldownOnSpawn( thisRaceID, ULT, GetConVarFloat(ultCooldownCvar));
 }
 
-public AbilitysCvarChange(Handle:h_ScjEnabled, const String:s_ScjOldValue[], const String:Value[])
+public AbilitysCvarChange(Handle h_ScjEnabled, const char[] s_ScjOldValue[], const char[] Value[])
 {
     if (StringToInt(Value) > 0)
         W3SkillCooldownOnSpawn( thisRaceID, SKILL_2, GetConVarFloat(abiCooldownCvar));
 }
 #endif
 
-public OnWar3PluginReady()
+public void OnWar3PluginReady()
 {
 #if defined SOURCECRAFT
     thisRaceID=CreateRace("tremble", .name="[HoN] Tremble", .faction=Hellbourne, .type=Biological, .required_level=64);
@@ -267,8 +267,8 @@ public OnWar3PluginReady()
             ImpTime, thisRaceID, SKILL_3);
 
     PushForce=GetConfigFloat("push_force", PushForce, thisRaceID, ULT);
-    ReUseOnDeath=bool:GetConfigNum("reuse_on_death", ReUseOnDeath, thisRaceID, ULT);
-    TeleportWhenAlive=bool:GetConfigNum("teleport_when_alive", TeleportWhenAlive, thisRaceID, ULT);
+    ReUseOnDeath=bool GetConfigNum("reuse_on_death", ReUseOnDeath, thisRaceID, ULT);
+    TeleportWhenAlive=bool GetConfigNum("teleport_when_alive", TeleportWhenAlive, thisRaceID, ULT);
 
     SHUDMIN=GetConfigNum("damage_min", SHUDMIN, thisRaceID, ULT);
     SHUDMAX=GetConfigNum("damage_max", SHUDMAX, thisRaceID, ULT);
@@ -289,7 +289,7 @@ public OnWar3PluginReady()
 	War3_CreateRaceEnd( thisRaceID );
 }
 
-public OnWar3EventSpawn(client)
+public void OnWar3EventSpawn(client)
 {
 	nTrembleCount[client]=-1;
 	bSwarmed[client]=false;
@@ -297,21 +297,21 @@ public OnWar3EventSpawn(client)
 	W3ResetPlayerColor(client,thisRaceID); //just to be sure...
 }
 
-public OnW3TakeDmgBulletPre( victim, attacker, Float:damage )
+public OnW3TakeDmgBulletPre( victim, attacker, float damage )
 {
 	if( IS_PLAYER( victim ) && IS_PLAYER( attacker ) && victim > 0 && attacker > 0 && attacker != victim )
 	{
 		if( GetClientTeam( victim ) != GetClientTeam( attacker ))
 		{
-			new race_victim = War3_GetRace( victim );
-			new skill = War3_GetSkillLevel( victim, thisRaceID, SKILL_1 );
+	int race_victim = War3_GetRace( victim );
+	int skill = War3_GetSkillLevel( victim, thisRaceID, SKILL_1 );
 			if( race_victim == thisRaceID && skill > 0 && !Hexed( victim, false ) ) 
 			{
 #if defined SOURCECRAFT
    		    	if (CanInvokeUpgrade(victim,thisRaceID,SKILL_1, .notify=false))
         		{
 #endif
-				new Float:percent = SwarmChance[skill];
+				new float percent = SwarmChance[skill];
 				if( GetRandomFloat( 0.0, 1.0 ) <= percent && !bSwarmed[victim])
 				{
 					War3_DamageModPercent(SwarmPercent[skill]);
@@ -329,19 +329,19 @@ public OnW3TakeDmgBulletPre( victim, attacker, Float:damage )
 #endif
 			}
 			/*new race_attacker = War3_GetRace( attacker );
-			new skill2 = War3_GetSkillLevel( attacker, thisRaceID, SKILL_3 );
+	int skill2 = War3_GetSkillLevel( attacker, thisRaceID, SKILL_3 );
 			if( race_attacker == thisRaceID && skill2 > 0 && !Hexed( attacker, false ) ) 
 			{
 				if( !bImpaled[victim] && !W3HasImmunity(victim,Immunity_Skills) )
 				{
-					new Float:percent = GetConVarFloat(ImpalerChanceCvar);
+					new float percent = GetConVarFloat(ImpalerChanceCvar);
 					if( GetRandomFloat( 0.0, 1.0 ) <= percent) {
 						W3FlashScreen( victim, {128,60,128,120}, 0.6, 0.1);
 						W3SetPlayerColor( victim, thisRaceID, 128, 60, 128, _, GLOW_DEFAULT);
 						War3_SetBuff( victim, fAttackSpeed, thisRaceID, ImpAtkSlow[skill2] );
 						War3_SetBuff( victim, fSlow, thisRaceID, ImpAgiSlow[skill2] );
 						War3_DealDamage( victim, ImpDamage[skill2], attacker, DMG_BULLET, "impalers");
-						new String:namebuffer[64];
+						new char namebuffer[64];
 						GetClientName(victim,namebuffer,sizeof(namebuffer));
 						PrintCenterText(attacker,"Impaled %s!",namebuffer);
 						GetClientName(attacker,namebuffer,sizeof(namebuffer));
@@ -354,14 +354,14 @@ public OnW3TakeDmgBulletPre( victim, attacker, Float:damage )
 		}
 	}
 }
-public OnW3TakeDmgBullet( victim, attacker, Float:damage )
+public OnW3TakeDmgBullet( victim, attacker, float damage )
 {
 	if( IS_PLAYER( victim ) && IS_PLAYER( attacker ) && victim > 0 && attacker > 0 && attacker != victim )
 	{
 		if( GetClientTeam( victim ) != GetClientTeam( attacker ))
 		{
-			new race_attacker = War3_GetRace( attacker );
-			new skill2 = War3_GetSkillLevel( attacker, thisRaceID, SKILL_3 );
+	int race_attacker = War3_GetRace( attacker );
+	int skill2 = War3_GetSkillLevel( attacker, thisRaceID, SKILL_3 );
 			if( race_attacker == thisRaceID && skill2 > 0 && !Hexed( attacker, false ) ) 
 			{
 				if( !bImpaled[victim] && !W3HasImmunity(victim,Immunity_Skills) )
@@ -370,14 +370,14 @@ public OnW3TakeDmgBullet( victim, attacker, Float:damage )
        		    	if (CanInvokeUpgrade(victim,thisRaceID,SKILL_3, .notify=false))
             		{
 #endif
-					new Float:percent = ImpChance[skill2]*W3ChanceModifier(attacker);
+					new float percent = ImpChance[skill2]*W3ChanceModifier(attacker);
 					if( GetRandomFloat( 0.0, 1.0 ) <= percent) {
 						W3FlashScreen( victim, {128,60,128,120}, 0.6, 0.1);
 						W3SetPlayerColor( victim, thisRaceID, 128, 60, 128, _, GLOW_DEFAULT);
 						War3_SetBuff( victim, fAttackSpeed, thisRaceID, ImpAtkSlow[skill2] );
 						War3_SetBuff( victim, fSlow, thisRaceID, ImpAgiSlow[skill2] );
 						War3_DealDamage( victim, ImpDamage[skill2], attacker, DMG_BULLET, "impalers");
-						new String:namebuffer[64];
+						new char namebuffer[64];
 						GetClientName(victim,namebuffer,sizeof(namebuffer));
 						PrintCenterText(attacker,"Impaled %s!",namebuffer);
 						GetClientName(attacker,namebuffer,sizeof(namebuffer));
@@ -396,11 +396,11 @@ public OnW3TakeDmgBullet( victim, attacker, Float:damage )
 
 
 ImpalerFX(attacker,victim) {
-	new Float:apos[3];
+	new float apos[3];
 	GetClientAbsOrigin(attacker,apos);
-	new Float:vpos[3];
+	new float vpos[3];
 	GetClientAbsOrigin(victim,vpos);
-	new Float:vpos2[3];
+	new float vpos2[3];
 	GetClientAbsOrigin(victim,vpos2);
 	apos[2]+=80;
 	vpos[2]+=35;
@@ -419,12 +419,12 @@ ImpalerFX(attacker,victim) {
         TE_SendToAll();
     #endif
 
-	new Float:fx_delay = 0.1;
-	new Float:fx_showtime = 0.1;	
-	new axis = GetRandomInt(0,1);
+	new float fx_delay = 0.1;
+	new float fx_showtime = 0.1;	
+	int axis = GetRandomInt(0,1);
 	vpos[axis] += 150;
 	vpos2[axis] += 150;
-	for(new i=0;i<30;i++)
+	for(int i=0;i<30;i++)
 	{
 		TE_SetupBeamRingPoint(vpos,200.0,100.0,BeamSprite,BeamSprite,0,28,fx_showtime,25.0,1.0,{128,60,128,255},6,0);
 #if defined SOURCECRAFT
@@ -454,11 +454,11 @@ ImpalerFX(attacker,victim) {
 	EmitSoundToAll(Impalers,victim);
 }
 
-public OnAbilityCommand(client,ability,bool:pressed)
+public OnAbilityCommand(client,ability,bool pressed)
 {
 	if(War3_GetRace(client)==thisRaceID && pressed && IsPlayerAlive(client))
 	{
-		new skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_2);
+		int skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_2);
 		if(skill_level>0&&War3_SkillNotInCooldown(client,thisRaceID,SKILL_2,true))
 		{
 			if(ability==0) {
@@ -472,7 +472,7 @@ public OnAbilityCommand(client,ability,bool:pressed)
 					PrintHintText(client,"Building up a Terror Mound(#%i)",nTrembleCount[client]);
 					W3FlashScreen(client,RGBA_COLOR_RED, 0.3,0.4);
 					CreateMount(client);
-					//new Float:direction[3] = {0.0,0.0,-90.0};
+					//new float direction[3] = {0.0,0.0,-90.0};
 #if defined SOURCECRAFT
 				    War3_CooldownMGR(client,abiCooldown,thisRaceID,SKILL_2,_,_);
 #else
@@ -505,7 +505,7 @@ thx to ownz&pimpin (terrorthing works like a ward)
 */
 public CreateMount(client)
 {
-	for(new i=0;i<TREMBLEMAX;i++)
+	for(int i=0;i<TREMBLEMAX;i++)
 	{
 		if(nTrembleOwner[i]==0)
 		{
@@ -518,16 +518,16 @@ public CreateMount(client)
 
 public MountPlayer(client)
 {
-	for(new i=0;i<TREMBLEMAX;i++)
+	for(int i=0;i<TREMBLEMAX;i++)
 	{
 		if(nTrembleOwner[i]==client)
 		{
-			new tremble = i;
-			new Float:actualpos[3];
+	int tremble = i;
+			new float actualpos[3];
 			GetClientAbsOrigin( client, actualpos );
 
 #if !defined SOURCECRAFT
-            new Float:TrembleDist = GetConVarFloat(TrembleDistCvar);
+            new float TrembleDist = GetConVarFloat(TrembleDistCvar);
 #endif
 
 			if(GetVectorDistance(SavedPos[tremble],actualpos) <= TrembleDist) {
@@ -567,7 +567,7 @@ public MountPlayer(client)
 
 						TeleportEntity(client, SavedPos[i], NULL_VECTOR, NULL_VECTOR);
 #if defined SOURCECRAFT
-        				new Float:cooldown= GetUpgradeCooldown(thisRaceID,SKILL_2);
+        				new float cooldown= GetUpgradeCooldown(thisRaceID,SKILL_2);
 	        			War3_CooldownMGR(client,cooldown,thisRaceID,SKILL_2,_,_);
 #else
 						War3_CooldownMGR(client,10.0,thisRaceID,SKILL_2,_,_);
@@ -579,9 +579,9 @@ public MountPlayer(client)
 	}
 }
 
-public RemoveMount(client,bool:showexplosion)
+public RemoveMount(client,bool showexplosion)
 {
-	for(new i=0;i<TREMBLEMAX;i++)
+	for(int i=0;i<TREMBLEMAX;i++)
 	{
 		if(nTrembleOwner[i]==client)
 		{
@@ -596,10 +596,10 @@ public RemoveMount(client,bool:showexplosion)
 	nTrembleCount[client]--;
 }
 
-public Action:CalcTremble(Handle:timer, any:uid)
+public Action CalcTremble(Handle timer, any:uid)
 {
-	new client;
-	for(new i=0;i<TREMBLEMAX;i++)
+	int client;
+	for(int i=0;i<TREMBLEMAX;i++)
 	{
 		if(nTrembleOwner[i]!=0)
 		{
@@ -610,7 +610,7 @@ public Action:CalcTremble(Handle:timer, any:uid)
 			}
 			else
 			{
-				new level = War3_GetSkillLevel(client,thisRaceID,SKILL_2);
+	int level = War3_GetSkillLevel(client,thisRaceID,SKILL_2);
 				if (level > 0)
 					MountAoE(client,i,level); //checks for targets
 				else
@@ -622,29 +622,29 @@ public Action:CalcTremble(Handle:timer, any:uid)
 
 public MountAoE(owner,tremble,level)
 {
-	new team=GetClientTeam(owner);
-	new Float:start_pos[3];
-	new Float:end_pos[3];
+	int team=GetClientTeam(owner);
+	new float start_pos[3];
+	new float end_pos[3];
 	
-	new Float:tempVec1[]={0.0,0.0,-2.0};
-	new Float:tempVec2[]={0.0,0.0,150.0};
+	new float tempVec1[]={0.0,0.0,-2.0};
+	new float tempVec2[]={0.0,0.0,150.0};
 	AddVectors(SavedPos[tremble],tempVec1,start_pos);
 	AddVectors(SavedPos[tremble],tempVec2,end_pos);
 	
-	new Float:BeamXY[3];
-	for(new x=0;x<3;x++) BeamXY[x]=start_pos[x]; //only compare xy
-	new Float:BeamZ= BeamXY[2];
+	new float BeamXY[3];
+	for(int x=0;x<3;x++) BeamXY[x]=start_pos[x]; //only compare xy
+	new float BeamZ= BeamXY[2];
 	BeamXY[2]=0.0;
 	
-	new dice = GetRandomInt(0,3);
-	new Sprite=Bug1;
+	int dice = GetRandomInt(0,3);
+	int Sprite=Bug1;
 	if(dice==1)
 		Sprite=Bug2;
 	else if(dice==2)
 		Sprite=Bug3;
 	else if(dice==3)
 		Sprite=Bug4;
-	for(new reptimes=0;reptimes<=3;reptimes++) {
+	for(int reptimes=0;reptimes<=3;reptimes++) {
 		TE_SetupBubbles(start_pos,end_pos,Sprite,220.0,2,GetRandomFloat(28.0,30.0));
 #if defined SOURCECRAFT
         TE_SendEffectToAll();
@@ -654,10 +654,10 @@ public MountAoE(owner,tremble,level)
 	}
 
     #if !defined SOURCECRAFT
-                new Float:TrembleDist = GetConVarFloat(TrembleDistCvar);
+                new float TrembleDist = GetConVarFloat(TrembleDistCvar);
     #endif
 
-	new Float:dist_tr=TrembleDist-30.0;
+	new float dist_tr=TrembleDist-30.0;
 	if(dist_tr<1)
 		dist_tr=170.0;
 	TE_SetupDynamicLight(start_pos, 140,74,0,2,dist_tr,1.5,2.0);
@@ -667,9 +667,9 @@ public MountAoE(owner,tremble,level)
 	TE_SendToAll();
 #endif
 
-	new Float:VictimPos[3];
-	new Float:tempZ;
-	for(new i=1;i<=MaxClients;i++)
+	new float VictimPos[3];
+	new float tempZ;
+	for(int i=1;i<=MaxClients;i++)
 	{
 		if(ValidPlayer(i,true)&& GetClientTeam(i)==team )
 		{
@@ -692,8 +692,8 @@ public MountAoE(owner,tremble,level)
 					  W3FlashScreen(i,flashscreened);*/
 					if(nLastLongBuff[i]<GetGameTime()-4){
 						W3FlashScreen(i,{100,64,10,120});
-						new Float:speedbuffer=BuffSpeed[level];
-						new Float:invisbuffer=BuffInvis[level];
+						new float speedbuffer=BuffSpeed[level];
+						new float invisbuffer=BuffInvis[level];
 						War3_SetBuff(i,fMaxSpeed,thisRaceID,speedbuffer);
 						War3_SetBuff(i,fInvisibilitySkill,thisRaceID,invisbuffer);
 						CreateTimer(3.90, Timer_RemoveTrembleBuff, i); //0.1 sec unbuffed should be ok^^
@@ -711,9 +711,9 @@ public MountAoE(owner,tremble,level)
 	}
 }
 
-public RoundStartEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public RoundStartEvent(Handle event,const char[] name[],bool dontBroadcast)
 {
-    for(new x=1;x<=64;x++)
+    for(int x=1;x<=64;x++)
     {
         if(ValidPlayer(x,false))
         {
@@ -725,7 +725,7 @@ public RoundStartEvent(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-stock TE_SetupDynamicLight(const Float:vecOrigin[3], r,g,b,iExponent,Float:fRadius,Float:fTime,Float:fDecay)
+stock TE_SetupDynamicLight(const float vecOrigin[3], r,g,b,iExponent,float fRadius,float fTime,float fDecay)
 {
 	//If someone need's a list, check this -> http://88.198.9.70/coding/33
 	TE_Start("Dynamic Light");
@@ -739,7 +739,7 @@ stock TE_SetupDynamicLight(const Float:vecOrigin[3], r,g,b,iExponent,Float:fRadi
 	TE_WriteFloat("m_fDecay",fDecay);
 }
 
-public Action:DoSwarm(client)
+public Action DoSwarm(client)
 {
     new level=War3_GetSkillLevel(client,thisRaceID,SKILL_1);
     if(level>0)
@@ -749,13 +749,13 @@ public Action:DoSwarm(client)
    		{
 #endif
         PrintCenterText(client,"DarkSwarm active...");
-        for(new i=1;i<=MaxClients;i++)
+        for(int i=1;i<=MaxClients;i++)
         {
             if(ValidPlayer(i,true))
             {
-                new Float:origin[3];
+                new float origin[3];
                 GetClientAbsOrigin(client,origin);
-                new Float:VictimPos[3];
+                new float VictimPos[3];
                 GetClientAbsOrigin(i,VictimPos);
                 if(GetVectorDistance(VictimPos,origin) < SWARMRANGE && GetClientTeam(i) != GetClientTeam(client))
                 {
@@ -765,11 +765,11 @@ public Action:DoSwarm(client)
                     }
                     else
                     {
-                        new damage = SwarmDamage[level];
+                        int damage = SwarmDamage[level];
                         if(War3_DealDamage(i,damage,client,DMG_BULLET,"darkswarm",W3DMGORIGIN_SKILL,W3DMGTYPE_PHYSICAL,true))
                         {
                             PrintHintText(client,"Dark Swarm caused %d dmg",damage);
-                            new dice = GetRandomInt(0,3);
+                            int dice = GetRandomInt(0,3);
                             new Sprite=Bug1;
                             if(dice==1)
                                 Sprite=Bug2;
@@ -803,7 +803,7 @@ public Action:DoSwarm(client)
     }
 }
 
-public OnUltimateCommand(client,race,bool:pressed)
+public OnUltimateCommand(client,race,bool pressed)
 {
     if(race==thisRaceID && pressed && ValidPlayer(client,true))
     {
@@ -822,15 +822,15 @@ public OnUltimateCommand(client,race,bool:pressed)
                     {
                         bShudderSpawnd[client]=true;
                         PrintHintText(client,"Summoning Shudder...");
-                        new Float:actualpos[3];
+                        new float actualpos[3];
                         GetClientAbsOrigin(client,actualpos);
                         //CreateNPC(actualpos, 60.0, 500.0, client, ShudderHealth[ult_level], GetClientTeam(client), 10, 20, "models/antlion_guard.mdl", "npc_shudder",true,true,true,NPC_ANTLIONGUARD);
-                        new npc_ent = CreateEntityByName("prop_dynamic_override");
+                        int npc_ent = CreateEntityByName("prop_dynamic_override");
                         if (npc_ent > 0 && IsValidEdict(npc_ent))
                         {
                             ShudderEntity[client]=npc_ent;
-                            new npcteam = GetClientTeam(client);
-                            decl String:entname[16];
+                            int npcteam = GetClientTeam(client);
+                            decl char entname[16];
                             Format(entname, sizeof(entname), "shudder%i_team%i",client,npcteam);
                             SetEntityModel(npc_ent, "models/antlion_guard.mdl");
                             DispatchKeyValue(npc_ent, "StartDisabled", "false");
@@ -875,7 +875,7 @@ public OnUltimateCommand(client,race,bool:pressed)
                         EmitSoundToAll(Spawn,client,SNDCHAN_AUTO);
 
 #if !defined SOURCECRAFT
-        				new Float:ultCooldown=GetConVarFloat(ultCooldownCvar)/4.0;
+        				new float ultCooldown=GetConVarFloat(ultCooldownCvar)/4.0;
 #endif
                         War3_CooldownMGR(client,ultCooldown,thisRaceID,ULT,true,true);
                     }
@@ -886,15 +886,15 @@ public OnUltimateCommand(client,race,bool:pressed)
                 else if(GetConVarBool(TeleportWhenAliveCvar))
 #endif
                 {
-                    new npc_ent = ShudderEntity[client];
+                    int npc_ent = ShudderEntity[client];
                     if(IsValidEntity(npc_ent))
                     {
-                        new Float:actualpos[3];
+                        new float actualpos[3];
                         GetClientAbsOrigin(client,actualpos);
                         TeleportEntity(npc_ent, actualpos, NULL_VECTOR, NULL_VECTOR);
 
 #if !defined SOURCECRAFT
-        				new Float:ultCooldown=GetConVarFloat(ultCooldownCvar)/4.0;
+        				new float ultCooldown=GetConVarFloat(ultCooldownCvar)/4.0;
 #endif
                         War3_CooldownMGR(client,ultCooldown,thisRaceID,ULT,true,true);
                     }
@@ -922,7 +922,7 @@ public OnUltimateCommand(client,race,bool:pressed)
 /// Set View Angles
 public SetEntityAimToClient( edict, target)
 {
-	new Float:spos[3],  Float:epos[3], Float:vecles[3], Float:angles[3];
+	new float spos[3],  float epos[3], float vecles[3], float angles[3];
 	GetEntPropVector(edict, Prop_Send, "m_vecOrigin", spos);
 	GetClientAbsOrigin( target, epos );
 	SubtractVectors( epos, spos, vecles );
@@ -932,8 +932,8 @@ public SetEntityAimToClient( edict, target)
 }
 
 /// Animation
-new bool:InAnimation[MAXEDICT+1];
-Shudder_Animate(entity,const String:animation[],Float:duration)
+new bool InAnimation[MAXEDICT+1];
+void Shudder_Animate(entity,const char[] animation[],float duration)
 {
     if (IsNPC[entity])
     {
@@ -947,9 +947,9 @@ Shudder_Animate(entity,const String:animation[],Float:duration)
     }
 }
 
-public Action:Shudder_Idle( Handle:timer, any:ref )//same as Timer_IdleAnim except the bool check
+public Action Shudder_Idle( Handle timer, any:ref )//same as Timer_IdleAnim except the bool check
 {
-    new caller = EntRefToEntIndex(ref);
+    int caller = EntRefToEntIndex(ref);
     if (IsValidEntity(caller) && IsNPC[caller])
     {
         InAnimation[caller]=false;
@@ -958,11 +958,11 @@ public Action:Shudder_Idle( Handle:timer, any:ref )//same as Timer_IdleAnim exce
     } 
 }
 
-Shudder_Invalid(entity)
+void Shudder_Invalid(entity)
 {
     Shudder_Disable(entity);
 
-    for(new i=1; i < sizeof(ShudderEntity); i++)
+    for(int i=1; i < sizeof(ShudderEntity); i++)
     {
         if(ShudderEntity[i] == entity)
         {
@@ -979,7 +979,7 @@ Shudder_Invalid(entity)
                     bShudderSpawnd[i]=false;
                     PrintCenterText(i,"You can Respawn Shudder!");
 #if defined SOURCECRAFT
-    				new Float:cooldown= GetUpgradeCooldown(thisRaceID,ULT);
+    				new float cooldown= GetUpgradeCooldown(thisRaceID,ULT);
 	    			War3_CooldownMGR(i,cooldown,thisRaceID,ULT,true,true);
 #else
                     War3_CooldownMGR(i,GetConVarFloat(ultCooldownCvar),thisRaceID,ULT,true,true);
@@ -993,7 +993,7 @@ Shudder_Invalid(entity)
 }
 
 /// Removing
-Shudder_Disable(entity)
+void Shudder_Disable(entity)
 {
     IsNPC[entity]=false;
     if(IsValidEntity(entity))
@@ -1004,7 +1004,7 @@ Shudder_Disable(entity)
     }
 }
 
-Shudder_Slay(entity,bool:noticeowner)
+void Shudder_Slay(entity,bool noticeowner)
 {
     if(IsNPC[entity])
     {
@@ -1019,23 +1019,23 @@ Shudder_Slay(entity,bool:noticeowner)
     }
 }
 
-new Float:LastHit[MAXPLAYERS];
+new float LastHit[MAXPLAYERS];
 /// Damage
-Shudder_Attack(entity,owner,target,mindamage,maxdamage,bool:flashscreen,bool:animation,bool:push)
+void Shudder_Attack(entity,owner,target,mindamage,maxdamage,bool flashscreen,bool animation,bool push)
 {
 	if(IsNPC[entity])
 	{
 		if(LastHit[target]<GetGameTime()-0.50)
 		{
-			decl Float:AttackerPos[3];
+			decl float AttackerPos[3];
 			GetEntPropVector(target, Prop_Send, "m_vecOrigin", AttackerPos);
-			decl String:classname[32]; 
+			decl char classname[32]; 
 			GetEdictClassname(entity, classname, sizeof(classname));		
 
 			if(push)
             {
 #if !defined SOURCECRAFT
-                new Float:PushForce = GetConVarFloat(CvarPushForce);
+                new float PushForce = GetConVarFloat(CvarPushForce);
 #endif
 				PushClientToVector( target, AttackerPos, -PushForce);		
             }
@@ -1058,14 +1058,14 @@ Shudder_Attack(entity,owner,target,mindamage,maxdamage,bool:flashscreen,bool:ani
 }
 
 /// Move -.- i hate math
-Shudder_Move(entity,Float:StartPos[3],Float:EndPos[3],Float:MoveSpeed)
+void Shudder_Move(entity,float StartPos[3],float EndPos[3],float MoveSpeed)
 {
 	if(IsNPC[entity])
 	{
 		/*
 		What I'm doing here?...
-		new Float:Float:TargetPos[3];
-		new Float:bp0, Float:bp1, Float:bp2;
+		new float float TargetPos[3];
+		new float bp0, float bp1, float bp2;
 
 		bp0 = SquareRoot( StartPos[0] -= StartPos[0] *= 2);
 		bp1 = SquareRoot( StartPos[1] -= StartPos[1] *= 2);
@@ -1079,7 +1079,7 @@ Shudder_Move(entity,Float:StartPos[3],Float:EndPos[3],Float:MoveSpeed)
 		StartPos[2]+=45;
 		EndPos[2]+=45;
 		TR_TraceRayFilter(StartPos, EndPos, MASK_SOLID, RayType_EndPoint, NpcTraceHitFilter, 0);
-		if (!TR_DidHit(INVALID_HANDLE)) {
+		if (!TR_DidHit(null)) {
 			StartPos[2]-=45;
 			EndPos[2]-=45;
 			//1 - move x
@@ -1113,29 +1113,29 @@ Shudder_Move(entity,Float:StartPos[3],Float:EndPos[3],Float:MoveSpeed)
 }
 
 /// Core
-public Action:Shudder_Think( Handle:timer, any:ref )
+public Action Shudder_Think( Handle timer, any:ref )
 {
-    new caller = EntRefToEntIndex(ref);
+    int caller = EntRefToEntIndex(ref);
     if (caller > 0)
     {
         if (IsNPC[caller] && IsValidEntity(caller))
         {
-            new owner = GetEntPropEnt(caller, Prop_Send, "m_hOwnerEntity");
+            int owner = GetEntPropEnt(caller, Prop_Send, "m_hOwnerEntity");
             if (ValidPlayer(owner,false))
             {
                 CreateTimer(0.1, Shudder_Think, ref);
-                new SkillLevel = 4;
-                new ClosestTarget = 0;
-                new Float:Distance;
-                new Float:ClosestDistance = ShudderRange[SkillLevel]; //maxrange
-                decl Float:StartPos[3];
-                //decl Float:EndPos[3];
+                int SkillLevel = 4;
+                int ClosestTarget = 0;
+                new float Distance;
+                new float ClosestDistance = ShudderRange[SkillLevel]; //maxrange
+                decl float StartPos[3];
+                //decl float EndPos[3];
                 GetEntPropVector(caller, Prop_Send, "m_vecOrigin", StartPos);
-                for (new i = 1; i <= MaxClients; i++)
+                for (int i = 1; i <= MaxClients; i++)
                 {
                     if(ValidPlayer(i,true) && GetClientTeam(i) != GetClientTeam(owner))
                     {
-                        decl Float:TargetPos[3];
+                        decl float TargetPos[3];
                         GetClientAbsOrigin(i, TargetPos);
                         Distance = GetVectorDistance(StartPos, TargetPos);
                         if (Distance < ClosestDistance)
@@ -1144,7 +1144,7 @@ public Action:Shudder_Think( Handle:timer, any:ref )
                               StartPos[2]+=20;
                               EndPos[2]+=20;*/
                             //TR_TraceRayFilter(StartPos, EndPos, MASK_SOLID, RayType_EndPoint, NpcTraceHitFilter, 0);
-                            //if (!TR_DidHit(INVALID_HANDLE)) {
+                            //if (!TR_DidHit(null)) {
                             //StartPos[2]-=20;
                             //EndPos[2]-=20;
                             if(IsClientInLOSofEntity(caller,i))
@@ -1158,9 +1158,9 @@ public Action:Shudder_Think( Handle:timer, any:ref )
                 }
                 if(ValidPlayer(ClosestTarget,true))
                 {
-                    decl Float:EnemyPos[3];
+                    decl float EnemyPos[3];
                     GetClientAbsOrigin(ClosestTarget, EnemyPos );
-                    new Float:AffectDistance = GetVectorDistance(StartPos, EnemyPos);
+                    new float AffectDistance = GetVectorDistance(StartPos, EnemyPos);
                     SetEntityAimToClient( caller, ClosestTarget);
                     if (AffectDistance <= ShudderAtkRadius[SkillLevel])
                     {
@@ -1170,7 +1170,7 @@ public Action:Shudder_Think( Handle:timer, any:ref )
                     {
                         SetEntityAimToClient( caller, ClosestTarget);
 
-                        decl Float:Pos[3];
+                        decl float Pos[3];
                         GetEntPropVector(caller, Prop_Send, "m_vecOrigin", Pos);
                         Shudder_Move(caller,Pos,EnemyPos,15.0);
                     }
@@ -1184,24 +1184,24 @@ public Action:Shudder_Think( Handle:timer, any:ref )
     }
 }
 
-public OnShudderDamage(const String:output[], caller, activator, Float:delay)
+public OnShudderDamage(const char[] output[], caller, activator, float delay)
 {
     if(IsNPC[caller])
     {
         if(IsValidEntity(caller))
         {
-            decl String:classname[32]; 
+            decl char classname[32]; 
             if (GetEdictClassname(caller, classname, sizeof(classname) && StrEqual(classname, shudder_classname)))
             {
-                new owner = GetEntPropEnt(caller, Prop_Send, "m_hOwnerEntity");
+                int owner = GetEntPropEnt(caller, Prop_Send, "m_hOwnerEntity");
                 if(ValidPlayer(owner,false))
                 {
                     if(ValidPlayer(activator,true))
                     {
-                        new SkillLevel = MasterLevel[owner];
+                        int SkillLevel = MasterLevel[owner];
                         SetEntityAimToClient( caller, activator);
                         //SetEntityAimToClient( activator, caller);
-                        new Float:pos[3],Float:pos2[3];
+                        new float pos[3],float pos2[3];
                         GetEntPropVector(caller, Prop_Send, "m_vecOrigin", pos);
                         GetClientAbsOrigin( activator, pos2 );
                         //ShudderFocus[caller] = activator;
@@ -1211,7 +1211,7 @@ public OnShudderDamage(const String:output[], caller, activator, Float:delay)
                             Shudder_Attack(caller,owner,activator,SHUDMIN,SHUDMAX,true,true,true);
                         }
                         pos[2]+=60;
-                        new dice = GetRandomInt(1,3);
+                        int dice = GetRandomInt(1,3);
                         if(dice==1)
                             EmitSoundToAll(NPCHurt1,caller); //EmitSoundToAll(NPCHurt1, caller, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, 100, -1, pos, NULL_VECTOR, true, 0.0);
                         else if(dice==2)
@@ -1233,15 +1233,15 @@ public OnShudderDamage(const String:output[], caller, activator, Float:delay)
     }
 }
 
-public OnShudderKilled(const String:output[], caller, activator, Float:delay)
+public OnShudderKilled(const char[] output[], caller, activator, float delay)
 {
     if(IsNPC[caller])
     {
         EmitSoundToAll(NPCDeath,caller);
-        new Float:pos[3],Float:angles[3];
+        new float pos[3],float angles[3];
         GetEntPropVector(caller, Prop_Send, "m_vecOrigin", pos);
         GetVectorAngles( pos, angles );
-        new owner = GetEntPropEnt(caller, Prop_Send, "m_hOwnerEntity");
+        int owner = GetEntPropEnt(caller, Prop_Send, "m_hOwnerEntity");
         ShudderEntity[owner]=0;
         if(ValidPlayer(owner,false))
         {
@@ -1253,7 +1253,7 @@ public OnShudderKilled(const String:output[], caller, activator, Float:delay)
 #endif
             {
 #if defined SOURCECRAFT
-                new Float:cooldown= GetUpgradeCooldown(thisRaceID,ULT);
+                new float cooldown= GetUpgradeCooldown(thisRaceID,ULT);
                 War3_CooldownMGR(owner,cooldown,thisRaceID,ULT,true,true);
 #else
                 War3_CooldownMGR(owner,GetConVarFloat(ultCooldownCvar),thisRaceID,ULT,true,true);
@@ -1269,9 +1269,9 @@ public OnShudderKilled(const String:output[], caller, activator, Float:delay)
     }
 }
 
-SpawnRagdoll(Float:Position[3],Float:Angles[3])  
+SpawnRagdoll(float Position[3],float Angles[3])  
 {
-    new Ragdoll = CreateEntityByName("prop_ragdoll"); 
+    int Ragdoll = CreateEntityByName("prop_ragdoll"); 
     if(IsValidEntity(Ragdoll))
     {
         SetEntityModel(Ragdoll, "models/antlion_guard.mdl");
@@ -1285,15 +1285,15 @@ SpawnRagdoll(Float:Position[3],Float:Angles[3])
     }
 }
 
-public Action:Dissolve(Handle:timer, any:entref)
+public Action Dissolve(Handle timer, any:entref)
 {
-    new ragdoll = EntRefToEntIndex(entref);
+    int ragdoll = EntRefToEntIndex(entref);
     if (ragdoll > 0 && IsValidEntity(ragdoll))
     {
-        new String:dname[32];
+        new char dname[32];
         Format(dname, sizeof(dname), "dis_%d", ragdoll);
 
-        new ent = CreateEntityByName("env_entity_dissolver");
+        int ent = CreateEntityByName("env_entity_dissolver");
         if (ent > 0 && IsValidEdict(ent))
         {
             DispatchKeyValue(ragdoll, "targetname", dname);
@@ -1308,12 +1308,12 @@ public Action:Dissolve(Handle:timer, any:entref)
     }
 }
 
-public Action:RemoveRagdoll(Handle:timer, any:entref)
+public Action RemoveRagdoll(Handle timer, any:entref)
 {
-    new ragdoll = EntRefToEntIndex(entref);
+    int ragdoll = EntRefToEntIndex(entref);
     if (ragdoll > 0 && IsValidEntity(ragdoll))
     {
-        decl String:classname[32]; 
+        decl char classname[32]; 
         if (GetEdictClassname(ragdoll, classname, sizeof(classname) && StrEqual(classname, "prop_ragdoll")))
         {
             AcceptEntityInput(ragdoll, "kill");
@@ -1332,10 +1332,10 @@ public OnShudderTouch(caller, activator)
     {
         if(IsValidEntity(caller))
         {
-            decl String:classname[32]; 
+            decl char classname[32]; 
             if (GetEdictClassname(caller, classname, sizeof(classname) && StrEqual(classname, shudder_classname)))
             {
-                new owner = GetEntPropEnt(caller, Prop_Send, "m_hOwnerEntity");
+                int owner = GetEntPropEnt(caller, Prop_Send, "m_hOwnerEntity");
                 if(ValidPlayer(owner,false))
                 {
                     if( ValidPlayer( activator, true ))
@@ -1358,14 +1358,14 @@ public OnShudderTouch(caller, activator)
     }
 }
 
-new whitelist;
-public bool:IsClientInLOSofEntity(entity,client)
+	int whitelist;
+public bool IsClientInLOSofEntity(entity,client)
 {
     //Pos1 = entity position | Pos2 = client position
-    decl Float:Pos1[3];
+    decl float Pos1[3];
     GetEntPropVector(entity, Prop_Send, "m_vecOrigin", Pos1);
     Pos1[2]+=45;
-    decl Float:Pos2[3];
+    decl float Pos2[3];
     GetClientAbsOrigin(client, Pos2);
     whitelist = entity;
     TR_TraceRayFilter(Pos1,Pos2,MASK_SOLID,RayType_EndPoint,AimTargetFilter);
@@ -1380,19 +1380,19 @@ public bool:IsClientInLOSofEntity(entity,client)
     return false;
 }
 
-public bool:AimTargetFilter(entity,mask)
+public bool AimTargetFilter(entity,mask)
 {
 	return !(entity==whitelist);
 }
 
-public bool:NpcTraceHitFilter(entity, mask, any:data)
+public bool NpcTraceHitFilter(entity, mask, any:data)
 {
 	return false;
 }
 
 // ---- Shudder
 
-public Action:Timer_IdleAnim(Handle:timer, any:i)
+public Action Timer_IdleAnim(Handle timer, any:i)
 {
 	if (i > 0 && IsValidEdict(i)) {
 		SetVariantString("idle");
@@ -1400,7 +1400,7 @@ public Action:Timer_IdleAnim(Handle:timer, any:i)
 	}
 }
 
-public Action:Timer_RemoveTrembleBuff(Handle:timer, any:i)
+public Action Timer_RemoveTrembleBuff(Handle timer, any:i)
 {
 	if(ValidPlayer(i,false))
 	{
@@ -1409,7 +1409,7 @@ public Action:Timer_RemoveTrembleBuff(Handle:timer, any:i)
 	}
 }
 
-public Action:Timer_LoopSwarm(Handle:timer, any:i)
+public Action Timer_LoopSwarm(Handle timer, any:i)
 {
 	if(ValidPlayer(i,true))
 	{
@@ -1420,15 +1420,15 @@ public Action:Timer_LoopSwarm(Handle:timer, any:i)
 			//if(bSwarmEffect[i]) {
 			bSwarmEffect[i]=false;
 			CreateTimer(GetRandomFloat(1.0,1.3), Timer_ReallowEffects, i);
-			new Float:effectVector1[3];
+			new float effectVector1[3];
 			GetClientAbsOrigin(i,effectVector1);
-			decl Float:effectVector2[3];
+			decl float effectVector2[3];
 			GetClientEyePosition(i,effectVector2);
 			effectVector2[2] -= 22.0;
 
-			new Float:fxtimer = 0.0; //start delay before first effect get displayed!
-			new nBugs = GetRandomInt(2,4); //amount of bugs to be displayed!
-			for(new reptimes=0;reptimes<=nBugs;reptimes++) {
+			new float fxtimer = 0.0; //start delay before first effect get displayed!
+	int nBugs = GetRandomInt(2,4); //amount of bugs to be displayed!
+			for(int reptimes=0;reptimes<=nBugs;reptimes++) {
 				TE_SetupBubbles(effectVector1,effectVector2,Bug1,900.0,2,GetRandomFloat(28.0,150.0));
 #if defined SOURCECRAFT
                 TE_SendEffectToAll(fxtimer);
@@ -1439,7 +1439,7 @@ public Action:Timer_LoopSwarm(Handle:timer, any:i)
 			}
 			fxtimer = 0.3;
 			nBugs = GetRandomInt(4,7);
-			for(new reptimes=0;reptimes<=nBugs;reptimes++) {
+			for(int reptimes=0;reptimes<=nBugs;reptimes++) {
 				TE_SetupBubbles(effectVector1,effectVector2,Bug2,500.0,2,GetRandomFloat(28.0,150.0));
 #if defined SOURCECRAFT
                 TE_SendEffectToAll(fxtimer);
@@ -1450,7 +1450,7 @@ public Action:Timer_LoopSwarm(Handle:timer, any:i)
 			}
 			fxtimer = 0.5;
 			nBugs = GetRandomInt(3,5);
-			for(new reptimes=0;reptimes<=nBugs;reptimes++) {
+			for(int reptimes=0;reptimes<=nBugs;reptimes++) {
 				TE_SetupBubbles(effectVector1,effectVector2,Bug3,500.0,2,GetRandomFloat(28.0,150.0));
 #if defined SOURCECRAFT
                 TE_SendEffectToAll(fxtimer);
@@ -1461,7 +1461,7 @@ public Action:Timer_LoopSwarm(Handle:timer, any:i)
 			}
 			fxtimer = 0.8;
 			nBugs = 3;
-			for(new reptimes=0;reptimes<=nBugs;reptimes++) {
+			for(int reptimes=0;reptimes<=nBugs;reptimes++) {
 				TE_SetupBubbles(effectVector1,effectVector2,Bug4,600.0,2,GetRandomFloat(28.0,150.0));
 #if defined SOURCECRAFT
                 TE_SendEffectToAll(fxtimer);
@@ -1477,7 +1477,7 @@ public Action:Timer_LoopSwarm(Handle:timer, any:i)
 	}
 }
 
-public Action:Timer_DeCastImpale(Handle:timer, any:i)
+public Action Timer_DeCastImpale(Handle timer, any:i)
 {
 	if(ValidPlayer(i,false)) {
 		W3ResetPlayerColor(i , thisRaceID);
@@ -1486,22 +1486,22 @@ public Action:Timer_DeCastImpale(Handle:timer, any:i)
 	}
 }
 
-public Action:Timer_DeCastSwarm(Handle:timer, any:i)
+public Action Timer_DeCastSwarm(Handle timer, any:i)
 {
 	if(ValidPlayer(i,false))
 		bSwarmed[i]=false;
 }
 
-public Action:Timer_ReallowEffects(Handle:timer, any:i)
+public Action Timer_ReallowEffects(Handle timer, any:i)
 {
 	if(ValidPlayer(i,false))
 		bSwarmEffect[i]=false;
 	//effects granted
 }
 
-public Action:PushClientToVector( victim, Float:pos1[3], Float:power )
+public Action PushClientToVector( victim, float pos1[3], float power )
 {
-	new Float:pos2[3], Float:main_origin[3], Float:velo1[3], Float:velo2[3];
+	new float pos2[3], float main_origin[3], float velo1[3], float velo2[3];
 	GetClientAbsOrigin( victim, pos2 );
 
 	main_origin[0] = pos1[0] - pos2[0], main_origin[1] = pos1[1] - pos2[1], main_origin[2] = pos1[2] - pos2[2];
@@ -1515,12 +1515,12 @@ public Action:PushClientToVector( victim, Float:pos1[3], Float:power )
 	TeleportEntity(victim, NULL_VECTOR, NULL_VECTOR, velo2);
 }
 
-public CreateTesla(const client,Float:flifetime_min,Float:flifetime_max,Float:thick_min,Float:thick_max,Float:interval_min,Float:interval_max,Float:radiustesla,String:beamcount_min[],String:beamcount_max[],String:ColorTesla[],String:sound[],String:beammodel[],bool:spark)
+public CreateTesla(const client,float flifetime_min,float flifetime_max,float thick_min,float thick_max,float interval_min,float interval_max,float radiustesla,char beamcount_min[],char beamcount_max[],char ColorTesla[],char sound[],char beammodel[],bool spark)
 {
-	new point_tesla = CreateEntityByName("point_tesla");
+	int point_tesla = CreateEntityByName("point_tesla");
 	if(IsValidEdict(point_tesla) && IsClientInGame(client))
 	{
-		decl String:Name[32], Float:fPos[3];
+		decl char Name[32], float fPos[3];
 		Format(Name, sizeof(Name), "tesla_%i", client);
 		GetEntPropVector(client, Prop_Send, "m_vecOrigin", fPos);
 		fPos[2]+=42.0;
@@ -1555,7 +1555,7 @@ public CreateTesla(const client,Float:flifetime_min,Float:flifetime_max,Float:th
 	return -1;
 }
 
-public Action:INCTimer_RemoveEntity(Handle:timer, any:edict)
+public Action INCTimer_RemoveEntity(Handle timer, any:edict)
 {
 	if(IsValidEdict(edict))
 	{
