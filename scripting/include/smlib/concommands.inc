@@ -15,7 +15,7 @@
  */
 stock bool ConCommand_HasFlags(const char[] command, const flags)
 {
-    return bool:(GetCommandFlags(command) & flags);
+    return view_as<bool>(GetCommandFlags(command) & flags);
 }
 
 /**

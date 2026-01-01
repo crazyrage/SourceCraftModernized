@@ -696,7 +696,7 @@ void LaunchScarab(client, level, model, pressed)
     else if (CanInvokeUpgrade(client, raceID, scarabID))
     {
         // throw scarab
-        int bool siege = m_SiegeActive[client];
+        bool siege = m_SiegeActive[client];
         int float throwspeed = float(GetUpgradeLevel(client,raceID,velocityID)+1)*1000.0;
         if (siege)
             throwspeed *= 5.0;
@@ -793,7 +793,7 @@ void ShowBar(client, float curTime, float totTime)
 {
     char gauge[30] = "[=====================]";
     int float percent = curTime/totTime;
-    int bool partial = (percent < 1.0);
+    bool partial = (percent < 1.0);
     if (partial)
     {
         int pos = RoundFloat(percent * 20.0) + 1;
@@ -842,12 +842,12 @@ public Action TrackObject(Handle timer, Handle pack)
         if (speed < 0)
             speed *= -1.0;
 
-        int bool bStop = (speed < stopSpeed);
+        bool bStop = (speed < stopSpeed);
         int float height = 0.0;
         float vecBelow[3];
         float vecCheckBelow[3];
 
-        int bool bGround = ((GetEntityFlags(ent) & FL_ONGROUND) != 0);
+        bool bGround = ((GetEntityFlags(ent) & FL_ONGROUND) != 0);
         //if (!bGround) // F_ONGROUND flag lies!!!
         {
             //Check below the object for the ground

@@ -324,11 +324,11 @@ public OnConfigsExecuted()
 public CvarChange(Handle convar, const char oldValue[], const char newValue[])
 {
     if (convar == cvAllowSpectators)
-        gAllowSpectators = bool:StringToInt(newValue);
+        gAllowSpectators = view_as<bool>(StringToInt(newValue);
     else if (convar == cvTeamSpecific)
-        gTeamSpecific = bool:StringToInt(newValue);
+        gTeamSpecific = view_as<bool>(StringToInt(newValue);
     else if (convar == cvTeamSpecific)
-        gTouch = bool:StringToInt(newValue);
+        gTouch = view_as<bool>(StringToInt(newValue);
     else if (convar == cvPlacedSound)
         strcopy(gSndPlaced, sizeof(gSndPlaced), newValue);
     else if (convar == cvRemovedSound)
@@ -454,7 +454,7 @@ public Action RemovePlayersTripmines(Handle timer, Handle pack)
 { 
     ResetPack(pack);
     int client = ReadPackCell(pack);
-    bool explode = bool:ReadPackCell(pack);
+    bool explode = view_as<bool>(ReadPackCell(pack);
     RemoveTripmines(client, explode);
     gActive[client] = 0;
     return Plugin_Stop;
@@ -488,7 +488,7 @@ public Action RoundEnd(Handle event, const char name[], bool dontBroadcast)
     }
 }
 
-RemoveTripmines(client, bool:explode=false)
+RemoveTripmines(client, bool explode=false)
 {
     float time=0.1;
     char classname[64];
@@ -518,7 +518,7 @@ RemoveTripmines(client, bool:explode=false)
     }
 }
 
-RemoveEntities(mine_ent, beam_ent, client, bool:explode=false, float & time=0.0)
+RemoveEntities(mine_ent, beam_ent, client, bool explode=false, float & time=0.0)
 {
     RemoveBeamEntity(beam_ent);
 
@@ -621,7 +621,7 @@ public Action Command_TripMine(client, args)
     return Plugin_Handled;
 }
 
-bool:SetMine(client)
+bool SetMine(client)
 {
     if (gRemaining[client] <= 0)
     {
@@ -1008,7 +1008,7 @@ CountMines(client)
     return count;
 }
 
-bool:CheckMineCount(client, clientMax, globalMax)
+bool CheckMineCount(client, clientMax, globalMax)
 {
     char classname[64];
 

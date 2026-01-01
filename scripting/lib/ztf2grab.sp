@@ -745,7 +745,7 @@ public Action Command_UnGrab(client, args)
     return Plugin_Handled;
 }
 
-Drop(client, bool:throwIt)
+Drop(client, bool throwIt)
 {
     bool groundmode = GetConVarBool(cvGround);
     if (!groundmode) // no sound in ground mode

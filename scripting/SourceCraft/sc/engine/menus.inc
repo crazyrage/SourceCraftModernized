@@ -162,7 +162,7 @@ RaceMenu(client,MenuMode:mode)
         {
             new lastIndex = indexCount - 1;
             new level = GetOverallLevel(client);
-            bool change   = bool:(mode & ChangeRaceMode);
+            bool change   = view_as<bool>(mode & ChangeRaceMode);
             Handle crMenu = CreateMenu(Faction_Selected);
 
             if (change)
@@ -284,7 +284,7 @@ FactionMenu(client, start=-1)
     if (start > 0 && start < indexCount)
     {
         int level              = GetOverallLevel(client);
-        bool change        = bool:(gRaceMenuMode[client] & ChangeRaceMode);
+        bool change        = view_as<bool>(gRaceMenuMode[client] & ChangeRaceMode);
         Handle crMenu      = CreateMenu(RaceMenu_Selected);
         int Faction:theFaction = GetRaceFaction(GetRaceIndexHandle(start));
 
@@ -326,7 +326,7 @@ FactionMenu(client, start=-1)
     }
 }
 
-GetRaceMenuItem(char[] item, maxlength, client, Handle raceHandle, reqLevel, bool:disable)
+GetRaceMenuItem(char[] item, maxlength, client, Handle raceHandle, reqLevel, bool disable)
 {
     int  char flag[3] = " ";
     int id = GetRaceId(raceHandle);
@@ -397,14 +397,14 @@ public RaceMenu_Selected(Handle menu,MenuAction:action,client,selection)
         delete menu;
 }
 
-UpgradeMenu(client, MenuMode:mode, bool:int eractive)
+UpgradeMenu(client, MenuMode:mode, bool int eractive)
 {
     TraceInto("Menus", "UpgradeMenu", "client=%d:%N, mode=%d", \
               client, ValidClientIndex(client), mode);
 
     if (IsValidClient(client) && !IsFakeClient(client))
     {
-        bool fromMain = bool:(mode & FromMainMenu);
+        bool fromMain = view_as<bool>(mode & FromMainMenu);
         if (GetRaceCount() <= 1)
         {
             CPrintToChat(client, "{green}[SC]{default} %t", "NoRacesOrUpgrades");

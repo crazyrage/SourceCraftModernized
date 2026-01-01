@@ -173,7 +173,7 @@ stock const char g_strCookiePrompt[Settings_Cookies][] =
     "DebugOther"
 };
 
-stock const bool:g_bDisplayCookieFlip[Display_Cookies] =
+stock const bool g_bDisplayCookieFlip[Display_Cookies] =
 {
     false,  // Display_Defense
     false,  // Display_Defense_Hints
@@ -208,7 +208,7 @@ stock const bool:g_bDisplayCookieFlip[Display_Cookies] =
     true,   // Display_All_Hints
 };
 
-stock const bool:g_bCookieFlip[Settings_Cookies] =
+stock const bool g_bCookieFlip[Settings_Cookies] =
 {
     true,   // Reduce_Queasiness
     true,   // Remove_Queasiness

@@ -230,8 +230,8 @@ ShowXP(client, Display:displayFlags=Display_XP)
     }
 }
 
-GiveKillXP(index, victim, bool:headshot, bool:backstab, bool:melee,
-           bool:dominated, bool:revenge, bool:assist)
+GiveKillXP(index, victim, bool headshot, bool backstab, bool melee,
+           bool dominated, bool revenge, bool assist)
 {
     if (GetRaceCount() > 1 && CheckClientCount(g_iMinPlayers, COUNT_ACTIVE, true))
     {
@@ -290,7 +290,7 @@ GiveKillXP(index, victim, bool:headshot, bool:backstab, bool:melee,
     }
 }
 
-GiveBossStunXP(index, level, bool:assist)
+GiveBossStunXP(index, level, bool assist)
 {
     int amount = STUN_BOSS_XP + (BOSS_LEVEL_XP * level);
 
@@ -303,7 +303,7 @@ GiveBossStunXP(index, level, bool:assist)
     GiveXP(index, amount, "BossStun");
 }
 
-GiveBossKillXP(index, level, bool:assist)
+GiveBossKillXP(index, level, bool assist)
 {
     int amount = KILL_BOSS_XP + (BOSS_LEVEL_XP * level);
 
@@ -365,7 +365,7 @@ GiveObjectBuiltXP(client,TFObjectType:obj)
            .obj=obj);
 }
 
-GiveObjectUpgradedXP(client,TFObjectType:obj, bool:isBuilder)
+GiveObjectUpgradedXP(client,TFObjectType:obj, bool isBuilder)
 {
     // Called when a player upgrades an object
     GiveXP(client, isBuilder ? UPGRADE_XP : UPGRADE_XP*2,

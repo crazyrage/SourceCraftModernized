@@ -577,7 +577,7 @@ public Action Parasite(Handle timer, any client)
         GetClientAbsOrigin(client, clientLoc);
         clientLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
-        int bool decloaked=false;
+        bool decloaked=false;
         if (GetGameType() == tf2 &&
             !GetImmunity(client,Immunity_Upgrades))
         {
@@ -647,7 +647,7 @@ public Action Parasite(Handle timer, any client)
             {
                 if (GetClientTeam(index) == team)
                 {
-                    int bool detect = !GetImmunity(index,Immunity_Detection) &&
+                    bool detect = !GetImmunity(index,Immunity_Detection) &&
                                       !GetImmunity(index,Immunity_Upgrades) &&
                                       IsPlayerAlive(index) &&
                                       IsInRange(client,index,500.0);

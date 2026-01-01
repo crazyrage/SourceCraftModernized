@@ -1074,22 +1074,22 @@ SetVisibility(client, visibility, RenderMode:mode, RenderFx:fx,
        mode = RENDER_TRANSCOLOR;
     }
 
-    int bool setMode = (GetEntityRenderMode(client) != mode);
+    bool setMode = (GetEntityRenderMode(client) != mode);
     if (setMode)
     {
         SetEntityRenderMode(client,mode);
         m_VisibilityAltered[client]=true;
     }
 
-    int bool setFx = (GetEntityRenderFx(client) != fx);
+    bool setFx = (GetEntityRenderFx(client) != fx);
     if (setFx)
     {
         SetEntityRenderFx(client,fx);
         m_VisibilityAltered[client]=true;
     }
 
-    int bool setAlpha = (GetEntityRenderAlpha(client) != visibility);
-    int bool setColor = (GetEntityRenderRed(client) != r ||
+    bool setAlpha = (GetEntityRenderAlpha(client) != visibility);
+    bool setColor = (GetEntityRenderRed(client) != r ||
                          GetEntityRenderGreen(client) != g ||
                          GetEntityRenderBlue(client) != b);
     if (setAlpha || setColor)

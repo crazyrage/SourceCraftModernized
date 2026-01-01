@@ -233,7 +233,7 @@ KillAllDrugs()
     }
 }
 
-bool:PerformDrug(target, toggle, type, float magnitude)
+bool PerformDrug(target, toggle, type, float magnitude)
 {
     switch (toggle)
     {

@@ -14,7 +14,7 @@
  */
 stock bool Convar_HasFlags(Handle convar, flags)
 {
-	return bool:(GetConVarFlags(convar) & flags);
+	return view_as<bool>(GetConVarFlags(convar) & flags);
 }
 
 /**

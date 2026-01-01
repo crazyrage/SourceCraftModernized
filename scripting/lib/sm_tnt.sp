@@ -1036,7 +1036,7 @@ public Native_SetTNT(Handle plugin, numParams)
 {
     int client = GetNativeCell(1);
     g_tntMode[client] = GetNativeCell(3);
-    g_tntDeath[client] = bool:GetNativeCell(4);
+    g_tntDeath[client] = view_as<bool>(GetNativeCell(4));
     g_tntDetDelay[client] = float GetNativeCell(5);
     g_tntPrimeDelay[client] = float GetNativeCell(6);
     g_tntAmount[client] = g_tntAllowed[client] = GetNativeCell(2);

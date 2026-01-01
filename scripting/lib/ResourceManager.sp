@@ -183,8 +183,8 @@ public void OnMapEnd()
  * @param preload       If preload is true the file will be precached before level startup.
  * @return              Returns true if successfully precached.
  *
- * native bool:SetupSound(const char sound[], download=DOWNLOAD, bool force=false,
- *                        bool:precache=false, bool:preload=false);
+ * native bool SetupSound(const char sound[], download=DOWNLOAD, bool force=false,
+ *                        bool precache=false, bool preload=false);
  */
 public int Native_SetupSound(Handle plugin, int numParams)
 {
@@ -306,7 +306,7 @@ public int Native_SetupSound(Handle plugin, int numParams)
  * @param preload       If preload is true the file will be precached immdiately (if required).
  * @return              Returns false if the sound limit has been reached.
  *
- * native PrepareSound(const char sound[], bool force=false, bool:preload=false);
+ * native PrepareSound(const char sound[], bool force=false, bool preload=false);
  */
 public int Native_PrepareSound(Handle plugin, int numParams)
 {
@@ -347,8 +347,8 @@ public int Native_PrepareSound(Handle plugin, int numParams)
  * @param preload       If preload is true the file will be precached before level startup.
  * @return              Returns a model index (if precached).
  * 
- * native SetupModel(const char model[], &index=0, bool:download=true,
- *                   bool:precache=false, bool:preload=false);
+ * native SetupModel(const char model[], &index=0, bool download=true,
+ *                   bool precache=false, bool preload=false);
  */
 public int Native_SetupModel(Handle plugin, int numParams)
 {
@@ -407,7 +407,7 @@ public int Native_SetupModel(Handle plugin, int numParams)
  * @param preload       If preload is true the file will be precached before level startup (if required).
  * @return              Returns a model index.
  * 
- * native PrepareModel(const char model[], &index=0, bool:preload=true);
+ * native PrepareModel(const char model[], &index=0, bool preload=true);
  */
 public int Native_PrepareModel(Handle plugin, int numParams)
 {
@@ -441,8 +441,8 @@ public int Native_PrepareModel(Handle plugin, int numParams)
  * @param preload       If preload is true the file will be precached before level startup.
  * @return              Returns a decal index (if precached).
  *
- * native SetupDecal(const char decal[], &index=0, bool:download=true,
- *                   bool:precache=false, bool:preload=false);
+ * native SetupDecal(const char decal[], &index=0, bool download=true,
+ *                   bool precache=false, bool preload=false);
  */
 public int Native_SetupDecal(Handle plugin, int numParams)
 {
@@ -487,7 +487,7 @@ public int Native_SetupDecal(Handle plugin, int numParams)
  * @param preload       If preload is true the file will be precached before level startup (if required).
  * @return              Returns a decal index.
  *
- * native PrepareDecal(const char model[], &index=0, bool:preload=false);
+ * native PrepareDecal(const char model[], &index=0, bool preload=false);
  */
 public int Native_PrepareDecal(Handle plugin, int numParams)
 {
@@ -518,7 +518,7 @@ public int Native_PrepareDecal(Handle plugin, int numParams)
  * @param recursive     If true, descends child directories to recursively add all files therein.
  * @noreturn
  *
- * native AddDirToDownloadTable(const char directory[], bool:recursive=false);
+ * native AddDirToDownloadTable(const char directory[], bool recursive=false);
  */
 public int Native_AddDirToDownloadTable(Handle plugin, int numParams)
 {

@@ -875,7 +875,7 @@ Access(const char target[],HGRSourceAccess:access,HGRSourceAction:action)
     return count;
 }
 
-bool:ClientAccess(client,HGRSourceAccess:access,HGRSourceAction:action,duration,float range,float cooldown,flags)
+bool ClientAccess(client,HGRSourceAccess:access,HGRSourceAction:action,duration,float range,float cooldown,flags)
 {
     bool prevState = false;
     if(access==Give)
@@ -929,7 +929,7 @@ bool:ClientAccess(client,HGRSourceAccess:access,HGRSourceAction:action,duration,
     return prevState;
 }
 
-bool:HasAccess(client,HGRSourceAction:action)
+bool HasAccess(client,HGRSourceAction:action)
 {
     if (!g_bNativeOverride)
     {
@@ -958,7 +958,7 @@ bool:HasAccess(client,HGRSourceAction:action)
  *CVar*
  *******/
 
-bool:IsFeatureEnabled(HGRSourceAction:action)
+bool IsFeatureEnabled(HGRSourceAction:action)
 {
     if (g_bNativeOverride)
         return true;
@@ -971,7 +971,7 @@ bool:IsFeatureEnabled(HGRSourceAction:action)
     return false;
 }
 
-bool:IsFeatureAdminOnly(HGRSourceAction:action)
+bool IsFeatureAdminOnly(HGRSourceAction:action)
 {
     if (g_bNativeOverride)
         return false;

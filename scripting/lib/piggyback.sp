@@ -458,7 +458,7 @@ public bool TraceRayDontHitSelf(entity, mask, any data)
 
 public Native_ControlPiggyback(Handle plugin,numParams)
 {
-    gNativeControl = bool:GetNativeCell(1);
+    gNativeControl = view_as<bool>(GetNativeCell(1));
 }
 
 public Native_GivePiggyback(Handle plugin,numParams)

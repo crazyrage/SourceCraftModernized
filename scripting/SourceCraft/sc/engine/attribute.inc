@@ -181,7 +181,7 @@ public NWar3_CreateGenericSkill(Handle plugin,numParams)
 
 native War3_UseGenericSkill(raceid,char[] gskillname,Handle genericSkillData,char[] yourskillname,
                             char[] untranslatedSkillDescription="ERR: No Skill Description Entered.",
-                            bool:translated=false,bool:isUltimate=false,maxskilllevel=DEF_MAX_SKILL_LEVEL,any:...);
+                            bool translated=false,bool isUltimate=false,maxskilllevel=DEF_MAX_SKILL_LEVEL,any:...);
 
 public NWar3_UseGenericSkill(Handle plugin,numParams)
 {
@@ -206,7 +206,7 @@ public NWar3_UseGenericSkill(Handle plugin,numParams)
 				
 				//bool istranaslated=GetNativeCell(6);
 				
-				//native War3_UseGenericSkill(raceid,char[] gskillname,Handle genericSkillData,char[] yourskillname,char[] untranslatedSkillDescription,bool:translated=false,bool:isUltimate=false,maxskilllevel=DEF_MAX_SKILL_LEVEL,any:...);
+				//native War3_UseGenericSkill(raceid,char[] gskillname,Handle genericSkillData,char[] yourskillname,char[] untranslatedSkillDescription,bool translated=false,bool isUltimate=false,maxskilllevel=DEF_MAX_SKILL_LEVEL,any:...);
 
 				bool isult=GetNativeCell(7);
 				new tmaxskilllevel=GetNativeCell(8);

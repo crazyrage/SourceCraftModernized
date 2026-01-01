@@ -44,7 +44,7 @@ bool InitDatabase()
     else
         strcopy(g_DBConf, sizeof(g_DBConf), "default");
 
-    int bool status = true;
+    bool status = true;
     for (int i=0; i < sizeof(g_DbHandle); i++)
     {
         if (ConnectToDatabase(i, (i != DB_MAIN)) == null)
@@ -924,7 +924,7 @@ bool InsertUpgrade(race_ident, upgrade, upgrade_category, const char[] short[],
 
     TraceDebug("desc=(length=%d,string=%s)", strlen(desc), desc);
 
-    int bool status = false;
+    bool status = false;
 
     if (race_ident > 0)
     {
@@ -1730,7 +1730,7 @@ SavePlayerData(client)
     TraceInto("DB", "SavePlayerData", "client=%d:%L", \
               client, ValidClientIndex(client));
 
-    int bool threaded = true;
+    bool threaded = true;
     /*
     int timeleft;
     if (g_MapChanging)
@@ -2145,7 +2145,7 @@ InsertPlayerData(client, bool threaded)
             Trace("Inserting %d:%L's Player Data; steamid=%s, name='%s', race=%d, race_ident=%d, overall_level=%d, crystals=%d, vespene=%d", client, ValidClientIndex(client), steamid, name, race, race_ident, overall_level, crystals, vespene);
 
             int player_ident = -1;
-            int bool success = SQL_FastQuery(g_DbHandle[DB_MAIN],SQLString);
+            bool success = SQL_FastQuery(g_DbHandle[DB_MAIN],SQLString);
             if (success)
             {
                 player_ident = SQL_GetInsertId(g_DbHandle[DB_MAIN]);
@@ -2280,7 +2280,7 @@ bool SavePlayerRaceData(client, player_ident, race, bool threaded, const char[] 
               "client=%d:%L, player_ident=%d, race=%d, threaded=%d, key=%s", \
               client, ValidClientIndex(client), player_ident, race, threaded, key);
 
-    int bool success    = false;
+    bool success    = false;
     int Handle raceInfo = GetRaceInfo(client, race);
     if (raceInfo != null)
     {
@@ -2304,7 +2304,7 @@ bool SavePlayerRaceData(client, player_ident, race, bool threaded, const char[] 
             // (and the sc_player_races entry already exists)
             // Otherwise, attempt to save them AFTER saving
             // the player's race's data has completed!
-            int bool saveUpgrades = (GetRaceInfoLoaded(raceInfo) >= DataLoaded);
+            bool saveUpgrades = (GetRaceInfoLoaded(raceInfo) >= DataLoaded);
             //                      && (g_bSaveUpgrades || !g_bChargeForUpgrades);
 
             int Handle dataPack = CreateDataPack();
@@ -2453,7 +2453,7 @@ public SQL_SavePlayerRaceData(Handle owner, Handle hndl, const char[] error[], a
         int race_ident        = ReadPackCell(data);
         int xp                = ReadPackCell(data);
         int level             = ReadPackCell(data);
-        int bool saveUpgrades = bool ReadPackCell(data);
+        bool saveUpgrades = bool ReadPackCell(data);
 
         char key[CLASS_STRING_LENGTH];
         ReadPackString(data, key, sizeof(key));
@@ -2467,7 +2467,7 @@ public SQL_SavePlayerRaceData(Handle owner, Handle hndl, const char[] error[], a
         }
         else
         {
-            int bool clientIsValid = IsValidClient(client);
+            bool clientIsValid = IsValidClient(client);
             if (clientIsValid)
             {
                 SetSavedXP(client,race,0);
@@ -2550,7 +2550,7 @@ bool SavePlayerTechData(client, player_ident, Faction:techId, bool threaded, con
               "client=%d:%L, player_ident=%d, tech=%d, threaded=%d", \
               client, ValidClientIndex(client), player_ident, techId, threaded);
 
-    int bool success    = false;           
+    bool success    = false;           
     int Handle techInfo = GetTechInfo(client, techId);
     if (techInfo != null)
     {
@@ -2720,7 +2720,7 @@ bool SavePlayerUpgrades(client, player_ident, race_ident, raceId,
               "client=%d:%L, player_ident=%d, race_ident=%d, raceId=%d, raceInfo=0x%08x, raceHandle=0x%08x", \
               client, ValidClientIndex(client), player_ident, race_ident, raceId, raceInfo, raceHandle);
 
-    int bool success = true;
+    bool success = true;
     if (DatabaseAvailable(DB_MAIN))
     {
         static const char[] prepareStmt[] = "INSERT INTO sc_player_upgrades (player_ident,race_ident,upgrade,upgrade_level) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE upgrade_level=?";

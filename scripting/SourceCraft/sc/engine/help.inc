@@ -10,7 +10,7 @@
 
 Handle vecHelpCommands = null;
 
-bool:InitHelpVector()
+bool InitHelpVector()
 {
     TraceInto("Help", "InitHelpVector");
 

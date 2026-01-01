@@ -5,7 +5,7 @@
  * Author(s):  Naris (Murray Wilson)
  */
 
-bool:HookDodEvents()
+bool HookDodEvents()
 {
     if (!HookEventEx("dod_round_start",RoundStart,EventHookMode_PostNoCopy))
     {
@@ -94,7 +94,7 @@ bool:HookDodEvents()
     return true;
 }
 
-public KillPlanterEvent(Handle event,const char[] name,bool:dontBroadcast)
+public KillPlanterEvent(Handle event,const char[] name,bool dontBroadcast)
 {
     int index = GetClientOfUserId(GetEventInt(event,"userid"));
     if (index > 0)
@@ -104,7 +104,7 @@ public KillPlanterEvent(Handle event,const char[] name,bool:dontBroadcast)
     }
 }
 
-public KillDefuserEvent(Handle event,const char[] name,bool:dontBroadcast)
+public KillDefuserEvent(Handle event,const char[] name,bool dontBroadcast)
 {
     int index = GetClientOfUserId(GetEventInt(event,"userid"));
     if (index > 0)

@@ -564,7 +564,7 @@ CreateRace(const char[] short[], required_level=0, tech_level=0, max_level=16,
         else
             raceIdent = LoadRaceIdent(short);
 
-        int bool raceIsNew = (raceIdent < 0);
+        bool raceIsNew = (raceIdent < 0);
 
         if (faction <= Unassigned)
             faction = Generic;
@@ -832,7 +832,7 @@ AddUpgrade(race, Handle raceHandle, const char[] short[], upgrade_category=0, re
     int Handle raceConfig = GetRaceConfig(raceHandle, raceLoaded);
     if (raceConfig != null)
     {
-        int bool upgradeFound;
+        bool upgradeFound;
         int raceMaxLevel = GetRaceMaxLevel(raceHandle);
         if (raceLoaded != ConfigNotLoaded)
         {
@@ -2273,7 +2273,7 @@ ResetUpgradesNow(client, race, bool show=true)
 
 bool FileContains(const char[] fileName[], const char[] string[])
 {
-    int bool found = false;
+    bool found = false;
     int Handle file = OpenFile(fileName, "r");
     if (file != null)
     {

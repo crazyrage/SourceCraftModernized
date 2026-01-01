@@ -576,11 +576,11 @@ public Action HookRagdoll(Handle hTimer, any userid)
         int iRagdoll = GetEntPropEnt(index, Prop_Send, "m_hRagdoll");
         if (iRagdoll > 0 && IsValidEdict(iRagdoll))
         {
-            //burning = bool:GetEntProp(iRagdoll, Prop_Send, "m_bBurning");
+            //burning = view_as<bool>(GetEntProp(iRagdoll, Prop_Send, "m_bBurning");
             new offset = FindSendPropInfo("CTFRagdoll", "m_bBurning");
             if (offset > 0)
             {
-                burning = bool:GetEntData(iRagdoll, offset);
+                burning = view_as<bool>(GetEntData(iRagdoll, offset);
 
                 char sDissolveName[32];
                 Format(sDissolveName, sizeof(sDissolveName), "dis_%d", index);
@@ -872,7 +872,7 @@ public OnClientPutInServer(client)
     {
         char buffer[5];
         GetClientCookie(client, hCookie, buffer, sizeof(buffer));
-        g_bUseJetpack[client] = buffer[0] ? (bool:StringToInt(buffer)) : true;
+        g_bUseJetpack[client] = buffer[0] ? view_as<bool>(StringToInt(buffer)) : true;
     }
     else
         g_bUseJetpack[client] = true;
@@ -1195,8 +1195,8 @@ BurnEnemies(client)
 }
 
 stock bool CanTarget(origin, const float pos[3], target, const float targetPos[3],
-                     float range, float & distance=0.0, bool:throughPlayer=true,
-                     bool:throughBuild=false )
+                     float range, float & distance=0.0, bool throughPlayer=true,
+                     bool throughBuild=false )
 {
     distance = GetVectorDistance(pos, targetPos);
     if (distance >= range)
@@ -1266,8 +1266,8 @@ public bool TraceFilter(ent, contentMask)
     return (ent == g_FilteredEntity) ? false : true;
 }
 
-bool:CreateFlameAttack(any victim, any attacker, damage, bool:bExplosion=false,
-                       bool:bCrits=false, bool:bMiniCrits=false)
+bool CreateFlameAttack(any victim, any attacker, damage, bool bExplosion=false,
+                       bool bCrits=false, bool bMiniCrits=false)
 {
     if (!(GetEntityFlags(victim) & FL_INWATER) && !TF2_IsPlayerUbercharged(victim))
     {
@@ -1433,8 +1433,8 @@ public Native_GiveJetpack(Handle plugin,numParams)
         g_fRefuelingTime[client] = GetNativeCell(3);
         g_iMaxRefuels[client] = GetNativeCell(4);
         g_iNativeRate[client] = GetNativeCell(5);
-        g_bBurn[client] = bool:GetNativeCell(6);
-        g_bExplode[client] = bool:GetNativeCell(7);
+        g_bBurn[client] = view_as<bool>(GetNativeCell(6));
+        g_bExplode[client] = view_as<bool>(GetNativeCell(7));
 
         g_BurnRange[client] = GetConVarFloat(sm_jetpack_burn_range);
         g_BurnDamage[client] = GetConVarInt(sm_jetpack_burn_damage);
@@ -1642,9 +1642,9 @@ public Action Command_TakeJetpack(client,argc)
     return Plugin_Handled;
 }
 
-public SetJetpack(client,const char target[],bool:enable)
+public SetJetpack(client,const char target[],bool enable)
 {
-    int bool:isml, char name[64], clients[MAXPLAYERS+1];
+    bool isml; char name[64]; int clients[MAXPLAYERS+1];
     int count=ProcessTargetString(target,client,clients,MAXPLAYERS+1,COMMAND_FILTER_NO_BOTS,
                                   name,sizeof(name),isml);
     if (count)
@@ -1669,7 +1669,7 @@ public SetJetpack(client,const char target[],bool:enable)
     return count;
 }
 
-public PerformJetpack(client, target, bool:enable)
+public PerformJetpack(client, target, bool enable)
 {
     if (enable)
     {
@@ -1849,7 +1849,7 @@ public MenuHandler_Prefs(Handle menu, MenuAction:action, client, selection)
         char SelectionInfo[5];
         GetMenuItem(menu, selection, SelectionInfo, sizeof(SelectionInfo));
         SetClientCookie(client, hCookie, SelectionInfo);
-        g_bUseJetpack[client] = bool:StringToInt(SelectionInfo);
+        g_bUseJetpack[client] = view_as<bool>(StringToInt(SelectionInfo);
     }
     else if (action == MenuAction_End)
     {

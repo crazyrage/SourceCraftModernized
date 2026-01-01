@@ -263,7 +263,7 @@ stock bool ValidPlayer(int client, bool check_alive=false, bool alivecheckbyheal
 }
 
 stock bool ValidRace(int raceid_) {
-  return bool:(raceid_>0&&raceid_<=War3_GetRacesLoaded());
+  return view_as<bool>(raceid_>0&&raceid_<=War3_GetRacesLoaded());
 }
 /**
  * Respawns a dead player.
@@ -797,10 +797,10 @@ native W3SaveXP(int client, int race);
 
 //Skills
 #if !defined SOURCECRAFT // Not Implemented!
-native War3_SuicideBomber(client, float location[], float damage, race_skillid, float radius, bool:effect=true);
+native War3_SuicideBomber(client, float location[], float damage, race_skillid, float radius, bool effect=true);
 
 //disabled due to human race requirements..for now
-//native bool:War3_Teleport(client, float distance);
+//native bool War3_Teleport(client, float distance);
 #endif
 
 #if !defined SOURCECRAFT // Not Implemented!
@@ -1188,7 +1188,7 @@ stock bool IS_PLAYER(int x)
  There are two ways to get admin
  //need 
  //good if you need the string to admin flag like "o" -> number
- id= native bool:GetAdminFlag(AdminId:id, AdminFlag:flag, AdmAccessMode:mode=Access_Effective);
+ id= native bool GetAdminFlag(AdminId:id, AdminFlag:flag, AdmAccessMode:mode=Access_Effective);
  Admin_RCON,      
  Admin_Root,
  

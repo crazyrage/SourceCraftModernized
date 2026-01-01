@@ -159,7 +159,7 @@ KillAllDrugs()
     }
 }
 
-bool:PerformDrug(target, toggle)
+bool PerformDrug(target, toggle)
 {
     switch (toggle)
     {

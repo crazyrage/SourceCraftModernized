@@ -18,7 +18,7 @@
  * @param thirdPerson   true to change view to 3rd person (default to use convar)
  * @return			    Returns 0 if a horsemann was spawned successfully
  */
-native MakeHorsemann(client, health=-1, bool thirdPerson=bool:-1);
+native MakeHorsemann(client, health=-1, bool thirdPerson=view_as<bool>(-1);
 
 /**
  * Returns true if the client is a Horsemann

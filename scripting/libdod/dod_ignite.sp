@@ -143,6 +143,6 @@ public Native_DOD_IgniteEntity(Handle plugin,numParams)
     int entity = GetNativeCell(1);
     float time = float GetNativeCell(2);
     flBurnTime[entity] = time;
-    IgniteEntity(entity, time, bool:GetNativeCell(3),
-                 float GetNativeCell(4), bool:GetNativeCell(5));
+    IgniteEntity(entity, time, view_as<bool>(GetNativeCell(3)),
+                 float GetNativeCell(4), view_as<bool>(GetNativeCell(5)));
 }

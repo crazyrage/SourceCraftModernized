@@ -506,7 +506,7 @@ public Action TransfusionTimer(Handle timer, any userid)
                 {
                     if (index != client && IsClientInGame(index))
                     {
-                        int bool alive = IsPlayerAlive(index);
+                        bool alive = IsPlayerAlive(index);
                         GetClientAbsOrigin(index, indexLoc);
 
                         if (GetClientTeam(index) == team)
@@ -564,7 +564,7 @@ public Action TransfusionTimer(Handle timer, any userid)
                                 if (alive && IsPointInRange(clientLoc,indexLoc,detecting_range) &&
                                     TraceTargetIndex(client, index, clientLoc, indexLoc))
                                 {
-                                    int bool uncloaked = false;
+                                    bool uncloaked = false;
                                     if (GetGameType() == tf2 &&
                                         !GetImmunity(index,Immunity_Uncloaking) &&
                                         TF2_GetPlayerClass(index) == TFClass_Spy)

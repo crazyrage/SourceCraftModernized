@@ -1021,7 +1021,7 @@ GetNade(client)
     return nade;
 }
 
-ThrowNade(client, bool:Setup=false, HoldType:hold=HoldSpecial, NadeType:type=DefaultNade)
+ThrowNade(client, bool Setup=false, HoldType:hold=HoldSpecial, NadeType:type=DefaultNade)
 {
     int team = GetClientTeam(client);
     if (team < 2) // dont allow spectators to throw nades!
@@ -1187,7 +1187,7 @@ public Action NadeExplode(Handle timer, Handle pack)
         else
         {
             new NadeType:type = NadeType:ReadPackCell(pack);
-            bool special = bool:ReadPackCell(pack);
+            bool special = view_as<bool>(ReadPackCell(pack);
             ExplodeNade(client, team, type, special);
         }
     }
@@ -1232,7 +1232,7 @@ public NadeType GiveFullNades(client)
     return type;
 }
 
-ExplodeNade(client, team, NadeType:type, bool:special)
+ExplodeNade(client, team, NadeType:type, bool special)
 { 
     if (gHolding[client]>HoldNone)
     {
@@ -2099,7 +2099,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
     TeleportEntity(nade, gHoldingArea, NULL_VECTOR, NULL_VECTOR);   
 }
 
-SetupNade(NadeType:type, team, bool:special)
+SetupNade(NadeType:type, team, bool special)
 {
     // setup frag nade if not special
     if (!special || type >= FragNade)
@@ -2872,7 +2872,7 @@ AttachParticle(ent, char[] particleType, float time)
 }
 
 // players in range setup  (self = 0 if doesn't affect self)
-FindPlayersInRange(float location[3], float radius, team, self, bool:trace, donthit)
+FindPlayersInRange(float location[3], float radius, team, self, bool trace, donthit)
 {
     float rsquare = radius*radius;
     float orig[3];
@@ -2973,10 +2973,10 @@ public Action RemoveExplosion(Handle timer, any ref)
         AcceptEntityInput(ent, "kill");
 }
 
-bool:NadeHurtPlayer(client, attacker, damage, NadeType:type, const char weapon[],
+bool NadeHurtPlayer(client, attacker, damage, NadeType:type, const char weapon[],
                     float pos[3] = NULL_VECTOR, float knockbackmult = 4.0,
-                    bool:explosion=false, bool:napalm=false, bool:hold=false,
-                    bool:halluc=false)
+                    bool explosion=false, bool napalm=false, bool hold=false,
+                    bool halluc=false)
 {
     if (GameType == tf2 && TF2_IsPlayerUbercharged(client))
         return false;
@@ -3071,7 +3071,7 @@ bool:NadeHurtPlayer(client, attacker, damage, NadeType:type, const char weapon[]
         return false;
 }
 
-DamageBuildings(attacker, float start[3], float radius, damage, nade, bool:trace)
+DamageBuildings(attacker, float start[3], float radius, damage, nade, bool trace)
 {
     if (GameType != tf2)
         return;
@@ -3217,7 +3217,7 @@ public Action SayCommand(client,args)
     return Plugin_Continue;
 }
 
-bool:CommandCheck(const char compare[], const char command[])
+bool CommandCheck(const char compare[], const char command[])
 {
     if(!strcmp(compare,command,false))
         return true;
@@ -3278,7 +3278,7 @@ public Native_GiveNades(Handle plugin,numParams)
         gAllowed1[client] = GetNativeCell(3);
         gRemaining2[client] = GetNativeCell(4);
         gAllowed2[client] = GetNativeCell(5);
-        gCanRestock[client] = bool:GetNativeCell(6);
+        gCanRestock[client] = view_as<bool>(GetNativeCell(6));
         gSpecialType[client] = NadeType:GetNativeCell(7);
 
         #if defined SOURCECRAFT
@@ -3452,7 +3452,7 @@ public Native_DamageBuildings(Handle plugin,numParams)
         float radius = float GetNativeCell(3);
         int damage = GetNativeCell(4);
         int ent = GetNativeCell(5);
-        bool trace = bool:GetNativeCell(6);
+        bool trace = view_as<bool>(GetNativeCell(6));
         DamageBuildings(attacker, start, radius, damage, ent, trace);
     }
 }

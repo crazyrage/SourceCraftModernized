@@ -633,7 +633,7 @@ public Native_TakeGas(Handle plugin,numParams)
 public Native_EnableGas(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
-    gasEnabled[client] = bool:GetNativeCell(2);
+    gasEnabled[client] = view_as<bool>(GetNativeCell(2));
 }
 
 public Native_HasGas(Handle plugin,numParams)

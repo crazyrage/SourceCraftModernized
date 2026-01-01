@@ -104,8 +104,8 @@ public bool LoadConfigFile()
         gMaxDepth=KvGetNum(traceConfigHandle, "depth");
         gVerbosity=KvGetNum(traceConfigHandle, "verbosity");
         gCallLevel=KvGetNum(traceConfigHandle, "call_level");
-        gIndent=bool:KvGetNum(traceConfigHandle, "indent");
-        gEnable=bool:KvGetNum(traceConfigHandle, "enable");
+        gIndent=view_as<bool>(KvGetNum(traceConfigHandle, "indent");
+        gEnable=view_as<bool>(KvGetNum(traceConfigHandle, "enable");
 
         // Load category configuration
         KvRewind(traceConfigHandle);
@@ -159,9 +159,9 @@ public OnConfigsExecuted()
 public CvarChange(Handle convar, const char oldValue[], const char newValue[])
 {
     if (convar == gTraceVar)
-        gEnable = bool:StringToInt(newValue);
+        gEnable = view_as<bool>(StringToInt(newValue);
     else if (convar == gTraceIndentVar)
-        gIndent = bool:StringToInt(newValue);
+        gIndent = view_as<bool>(StringToInt(newValue);
     else if (convar == gTraceDepthVar)
         gMaxDepth = StringToInt(newValue);
     else if (convar == gTraceVerbosityVar)

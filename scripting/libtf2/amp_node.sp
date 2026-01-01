@@ -511,8 +511,8 @@ public OnClientAuthorized(client, const char[] auth)
     NativeRegen[client] = UseDefaultValues;
     NativeRockets[client] = -1;
     NativeRepairNodePercent[client] = -1;
-    RepairNodeTeam[client] = bool:-1;
-    RepairNodeMini[client] = bool:-1;
+    RepairNodeTeam[client] = true;
+    RepairNodeMini[client] = true;
 }
 
 public Action Timer_Announce(Handle hTimer)

@@ -409,8 +409,8 @@ bool ConsumeEnemy(damage, index, victim_index)
         !GetRestriction(index, Restriction_NoUpgrades) &&
         !GetRestriction(index, Restriction_Stunned))
     {
-        int bool victimIsNPC    = (victim_index > MaxClients);
-        int bool victimIsPlayer = !victimIsNPC && IsValidClientAlive(victim_index) &&
+        bool victimIsNPC    = (victim_index > MaxClients);
+        bool victimIsPlayer = !victimIsNPC && IsValidClientAlive(victim_index) &&
                                   !GetImmunity(victim_index,Immunity_HealthTaking) &&
                                   !GetImmunity(victim_index,Immunity_Upgrades) &&
                                   !IsInvulnerable(victim_index);

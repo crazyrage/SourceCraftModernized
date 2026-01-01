@@ -11,7 +11,7 @@ enum ItemInfo
     ItemInfo_Crystals,
     ItemInfo_Vespene,
     ItemInfo_Money,
-    bool:ItemInfo_CanUsePCrystals,
+    bool ItemInfo_CanUsePCrystals,
     ItemInfo_XP,
     ItemInfo_Max,
     ItemInfo_RequiredLevel,
@@ -54,7 +54,7 @@ enum ItemStringInfo
 #define GetItemVespene(%1)                  GetArrayCell(%1,_:ItemInfo_Vespene)
 #define SetItemVespene(%1,%2)               SetArrayCell(%1,_:ItemInfo_Vespene,%2)
 
-#define GetItemCanUsePCrystals(%1)          bool:GetArrayCell(%1,_:ItemInfo_CanUsePCrystals)
+#define GetItemCanUsePCrystals(%1)          bool GetArrayCell(%1,_:ItemInfo_CanUsePCrystals)
 #define SetItemCanUsePCrystals(%1,%2)       SetArrayCell(%1,_:ItemInfo_CanUsePCrystals,_:%2)
 
 #define GetItemMoney(%1)                    GetArrayCell(%1,_:ItemInfo_Money)
@@ -156,7 +156,7 @@ ClearShopVector()
     TraceReturn();
 }
 
-CreateShopItem(const char short[], crystals=0, vespene=0, money=0, bool:use_pcrystals=false, xp=0, max=1,
+CreateShopItem(const char short[], crystals=0, vespene=0, money=0, bool use_pcrystals=false, xp=0, max=1,
                required_level=0, storeId=0, Translation:translation=Translation_Auto, const char[] translation_file="",
                const char[] category="", const char[] name="", const char[] desc="", const char[] image="",
                Handle plugin=null)
@@ -190,7 +190,7 @@ CreateShopItem(const char short[], crystals=0, vespene=0, money=0, bool:use_pcry
                 crystals = KvGetNum(itemConfig,"crystals", crystals);
                 vespene = KvGetNum(itemConfig,"vespene", vespene);
                 money = KvGetNum(itemConfig,"money", money);
-                use_pcrystals = bool:KvGetNum(itemConfig,"can_use_pcrystals", use_pcrystals);
+                use_pcrystals = view_as<bool>(KvGetNum(itemConfig,"can_use_pcrystals", use_pcrystals);
                 xp = KvGetNum(itemConfig,"xp", xp);
                 max = KvGetNum(itemConfig,"max", max);
             }

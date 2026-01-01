@@ -44,7 +44,7 @@ bool g_bSupressOnPlayerTakeDamage = false;
  * Retrieves the SourceCraftLoaded flag.
  * @return The return value will be true if SourceCraft has completed loading.
  *
- * native bool:IsSourceCraftLoaded();
+ * native bool IsSourceCraftLoaded();
  */
 public Native_IsSourceCraftLoaded(Handle plugin,numParams)
 {
@@ -483,9 +483,9 @@ public Native_SetRaceEnergyFlags(Handle plugin,numParams)
  * @return The return value will be the upgrade index or -1 if there was a problem.
  *
  * native AddUpgrade(race, const char[] short, upgrade_category=0, required_level=-1, max_level=4, float energy=0.0,
- *                   float recurring_energy=0.0, float recurring_interval=0.0, bool:accumulated=false, crystals=0,
+ *                   float recurring_energy=0.0, float recurring_interval=0.0, bool accumulated=false, crystals=0,
  *                   vespene=0, cost_crystals=-1, cost_vespene=-1, float cooldown=0.0, CooldownType:cooldown_type=Cooldown_None,
- *                   bool:disabled=false, const char[] name="", const char[] desc="", const char[] invoke="",
+ *                   bool disabled=false, const char[] name="", const char[] desc="", const char[] invoke="",
  *                   const char[] bind="", const char[] image="", const char[] p1="", const char[] p2="",
  *                   const char[] p3="", const char[] p4="", const char[] p5="", const char[] p6="",
  *                   const char[] p7="");
@@ -505,14 +505,14 @@ public Native_AddUpgrade(Handle plugin,numParams)
         float energy               = float GetNativeCell(6);
         float recurring_energy     = float GetNativeCell(7);
         float recurring_interval   = float GetNativeCell(8);
-        bool accumulated           = bool:GetNativeCell(9);
+        bool accumulated           = view_as<bool>(GetNativeCell(9));
         int vespene                    = GetNativeCell(10);
         int crystals                   = GetNativeCell(11);
         int cost_crystals              = GetNativeCell(12);
         int cost_vespene               = GetNativeCell(13);
         float cooldown             = float GetNativeCell(14);
         CooldownType cooldown_type = CooldownType:GetNativeCell(15);
-        bool disabled              = bool:GetNativeCell(16);
+        bool disabled              = view_as<bool>(GetNativeCell(16));
 
         char name[LONG_STRING_LENGTH];
         GetNativeString(17,name,sizeof(name));
@@ -577,7 +577,7 @@ public Native_AddUpgrade(Handle plugin,numParams)
  * @param override:         Set true to override the config file.
  * @noreturn
  *
- * native SetUpgradeCost(race, upgrade, cost_crystals=-1, cost_vespene=-1, bool:override=false);
+ * native SetUpgradeCost(race, upgrade, cost_crystals=-1, cost_vespene=-1, bool override=false);
  */
 public Native_SetUpgradeCost(Handle plugin,numParams)
 {
@@ -702,7 +702,7 @@ public Native_SetUpgradeCost(Handle plugin,numParams)
  *
  * native SetUpgradeCooldown(race, upgrade, float cooldown=0.0,
  *                           CooldownType:cooldown_flags=Cooldown_None,
- *                           bool:override=false);
+ *                           bool override=false);
  */         
 public Native_SetUpgradeCooldown(Handle plugin,numParams)
 {
@@ -901,7 +901,7 @@ public Native_GetRaceParentId(Handle plugin,numParams)
  * @param validate: Set to true to return only valid faction indices (converts Unassigned to Generic)
  * @return The return value will be the Faction of the race
  *
- * native Faction:GetRaceFaction(race,bool:validate=true);
+ * native Faction:GetRaceFaction(race,bool validate=true);
  */
 public Native_GetRaceFaction(Handle plugin,numParams)
 {
@@ -1290,7 +1290,7 @@ public Native_GetUpgradeEnergy(Handle plugin,numParams)
  * @param override: Set true to override the config file.
  * @noreturn
  *
- * native SetUpgradeEnergy(race, upgrade, float energy, bool:override=false);
+ * native SetUpgradeEnergy(race, upgrade, float energy, bool override=false);
  */
 public Native_SetUpgradeEnergy(Handle plugin,numParams)
 {
@@ -1391,7 +1391,7 @@ public N_GetUpgradeRecurringEnergy(Handle plugin,numParams)
  * @param override: Set true to override the config file.
  * @noreturn
  *
- * native float SetUpgradeRecurringEnergy(race, upgrade, float amount, bool:override=false);
+ * native float SetUpgradeRecurringEnergy(race, upgrade, float amount, bool override=false);
  */
 public N_SetUpgradeRecurringEnergy(Handle plugin,numParams)
 {
@@ -1492,7 +1492,7 @@ public Native_GetUpgradeVespene(Handle plugin,numParams)
  * @param override: Set true to override the config file.
  * @noreturn
  *
- * native SetUpgradeVespene(race, upgrade, amount, bool:override=false);
+ * native SetUpgradeVespene(race, upgrade, amount, bool override=false);
  */
 public Native_SetUpgradeVespene(Handle plugin,numParams)
 {
@@ -1593,7 +1593,7 @@ public Native_GetUpgradeCrystals(Handle plugin,numParams)
  * @param override: Set true to override the config file.
  * @noreturn
  *
- * native SetUpgradeCrystals(race, upgrade, amount, bool:override=false);
+ * native SetUpgradeCrystals(race, upgrade, amount, bool override=false);
  */
 public Native_SetUpgradeCrystals(Handle plugin,numParams)
 {
@@ -1694,7 +1694,7 @@ public Native_GetUpgradeRequiredLevel(Handle plugin,numParams)
  * @param override: Set true to override the config file.
  * @noreturn
  *
- * native SetUpgradeRequiredLevel(race, upgrade, level, bool:override=false);
+ * native SetUpgradeRequiredLevel(race, upgrade, level, bool override=false);
  */
 public Native_SetUpgradeRequiredLevel(Handle plugin,numParams)
 {
@@ -1795,7 +1795,7 @@ public Native_GetUpgradeMaxLevel(Handle plugin,numParams)
  * @param override: Set true to override the config file.
  * @noreturn
  *
- * native SetUpgradeMaxLevel(race,upgrade, level, bool:override=false);
+ * native SetUpgradeMaxLevel(race,upgrade, level, bool override=false);
  */
 public Native_SetUpgradeMaxLevel(Handle plugin,numParams)
 {
@@ -1931,7 +1931,7 @@ public Native_GetUpgradeCount(Handle plugin,numParams)
  * @param image:            The image of the item, to be placed int o the database for the webapp. (defaults to translation)
  * @return The return value will be the item index or -1 if there was a problem.
  *
- * native CreateShopItem(const char[] short, crystals=0, vespene=0, pcrystals=0, money=0, bool:pcrystals=false, xp=0, max=1,
+ * native CreateShopItem(const char[] short, crystals=0, vespene=0, pcrystals=0, money=0, bool pcrystals=false, xp=0, max=1,
  *                       required_level=0, store=0, Translation:translation=Translation_Auto, const char[] translation_file="",
  *                       const char[] category="", const char[] name="",const char[] desc="", const char[] image="");
  */         
@@ -1943,7 +1943,7 @@ public Native_CreateShopItem(Handle plugin,numParams)
     int crystals = GetNativeCell(2);
     int vespene = GetNativeCell(3);
     int money = GetNativeCell(4);
-    bool pcrystals = bool:GetNativeCell(5);
+    bool pcrystals = view_as<bool>(GetNativeCell(5));
     int xp = GetNativeCell(6);
     int max = GetNativeCell(7);
     int required_level = GetNativeCell(8);
@@ -2218,11 +2218,11 @@ HealPlayer(client, amount, health=-1, maxhp=-1)
  * @return The return value will be the victims remaining health
  *
  * native HurtPlayer(victim, damage, attacker=0, const char[] weapon_name="",
- *                   const char[] weapon_desc="", xp=0, bool:explode=false,
+ *                   const char[] weapon_desc="", xp=0, bool explode=false,
  *                   type=DMG_GENERIC, DamageFrom:category=DamageFrom_None,
- *                   float limit=0.90, bool:ignore_armor=false, bool:ignore_immunity=false,
- *                   bool:in_hurt_event=false, bool:no_suicide=false, bool:no_forward=false,
- *                   bool:no_translate=false, bool:prevent_stack=true);
+ *                   float limit=0.90, bool ignore_armor=false, bool ignore_immunity=false,
+ *                   bool in_hurt_event=false, bool no_suicide=false, bool no_forward=false,
+ *                   bool no_translate=false, bool prevent_stack=true);
  */
 public Native_HurtPlayer(Handle plugin,numParams)
 {
@@ -2231,17 +2231,17 @@ public Native_HurtPlayer(Handle plugin,numParams)
     int attacker = GetNativeCell(3);
 
     int xp = GetNativeCell(6);
-    bool explode = bool:GetNativeCell(7);
+    bool explode = view_as<bool>(GetNativeCell(7));
     int type = GetNativeCell(8);
     DamageFrom category = DamageFrom:GetNativeCell(9);
     float limit = float GetNativeCell(10);
-    bool ignore_armor = bool:GetNativeCell(11);
-    bool ignore_immunity = bool:GetNativeCell(12);
-    bool in_hurt_event = bool:GetNativeCell(13);
-    bool no_suicide = bool:GetNativeCell(14);
-    bool no_forward = bool:GetNativeCell(15);
-    bool no_translate = bool:GetNativeCell(16);
-    bool prevent_stack = bool:GetNativeCell(17);
+    bool ignore_armor = view_as<bool>(GetNativeCell(11));
+    bool ignore_immunity = view_as<bool>(GetNativeCell(12));
+    bool in_hurt_event = view_as<bool>(GetNativeCell(13));
+    bool no_suicide = view_as<bool>(GetNativeCell(14));
+    bool no_forward = view_as<bool>(GetNativeCell(15));
+    bool no_translate = view_as<bool>(GetNativeCell(16));
+    bool prevent_stack = view_as<bool>(GetNativeCell(17));
 
     char weapon_name[NAME_STRING_LENGTH];
     GetNativeString(4,weapon_name,sizeof(weapon_name));
@@ -2257,11 +2257,11 @@ public Native_HurtPlayer(Handle plugin,numParams)
 }
 
 HurtPlayer(victim, damage, attacker=0, const char[] weapon_name="",
-           const char[] weapon_desc="", xp=0, bool:explode=false,
+           const char[] weapon_desc="", xp=0, bool explode=false,
            type=DMG_GENERIC, DamageFrom:category=DamageFrom_None,
-           float limit=0.90, bool:ignore_armor=false, bool:ignore_immunity=false,
-           bool:in_hurt_event=false, bool:no_suicide=false, bool:no_forward=false,
-           bool:no_translate=false, bool:prevent_stack=true)
+           float limit=0.90, bool ignore_armor=false, bool ignore_immunity=false,
+           bool in_hurt_event=false, bool no_suicide=false, bool no_forward=false,
+           bool no_translate=false, bool prevent_stack=true)
 {
     int health=0;
 
@@ -2464,9 +2464,9 @@ HurtPlayer(victim, damage, attacker=0, const char[] weapon_name="",
  *
  * native KillPlayer(victim, attacker=0, const char[] weapon_name="",
  *                   const char[] weapon_desc="", xp=0,
- *                   bool:explode=false, type=DMG_GENERIC,
- *                   bool:silent=false, bool:no_suicide=false,
- *                   bool:no_translate=false);
+ *                   bool explode=false, type=DMG_GENERIC,
+ *                   bool silent=false, bool no_suicide=false,
+ *                   bool no_translate=false);
  */
 public Native_KillPlayer(Handle plugin,numParams)
 {
@@ -2480,7 +2480,7 @@ public Native_KillPlayer(Handle plugin,numParams)
         int type = GetNativeCell(7);
         bool silent = GetNativeCell(8);
         bool no_suicide = GetNativeCell(9);
-        bool no_translate = bool:GetNativeCell(10);
+        bool no_translate = view_as<bool>(GetNativeCell(10));
 
         char weapon_name[NAME_STRING_LENGTH];
         GetNativeString(3,weapon_name,sizeof(weapon_name));
@@ -2503,8 +2503,8 @@ public Native_KillPlayer(Handle plugin,numParams)
 } 
 
 KillPlayer(victim, attacker, const char[] weapon_name, const char[] weapon_desc,
-           xp=0, bool:explode=false, type=DMG_GENERIC, bool:silent=false,
-           bool:no_suicide=false, bool:no_translate=false, health=0)
+           xp=0, bool explode=false, type=DMG_GENERIC, bool silent=false,
+           bool no_suicide=false, bool no_translate=false, health=0)
 {
     TraceInto("Native", "KillPlayer", "victim=%d:%L, attacker=%d:%L, explode=%d, no_suicide=%d, health=%d, weapon=%s", \
               victim, ValidClientIndex(victim), attacker, ValidClientIndex(attacker), explode, no_suicide, health, weapon_name);
@@ -2771,7 +2771,7 @@ public Native_DamageEntity(Handle plugin,numParams)
  *
  * @return The return value will be the Suppress Damage Forwarding flag.
  *
- * native bool:GetDamageFromPlayerHurt();
+ * native bool GetDamageFromPlayerHurt();
  */
 public Native_GetDamageFromPlayerHurt(Handle plugin,numParams)
 {
@@ -2784,7 +2784,7 @@ public Native_GetDamageFromPlayerHurt(Handle plugin,numParams)
  *
  * @return The return value will be the Suppress Damage Forwarding flag.
  *
- * native bool:GetSuppressDamageForward();
+ * native bool GetSuppressDamageForward();
  */
 public Native_GetSuppressDamageForward(Handle plugin,numParams)
 {
@@ -2819,7 +2819,7 @@ public Native_GetDamage(Handle plugin,numParams)
  *
  * native DisplayDamage(client, victim, hp=0, const char[] weapon,
  *                      const char[] description,
- *                      bool:no_translate=false);
+ *                      bool no_translate=false);
  */
 public Native_DisplayDamage(Handle plugin,numParams)
 {
@@ -2829,7 +2829,7 @@ public Native_DisplayDamage(Handle plugin,numParams)
     int hp = GetNativeCell(3);
     GetNativeString(4,weapon,sizeof(weapon));
     GetNativeString(5,desc,sizeof(desc));
-    bool no_translate = bool:GetNativeCell(6);
+    bool no_translate = view_as<bool>(GetNativeCell(6));
     DisplayDamage(client, victim, hp, weapon,
                   desc, no_translate);
 }
@@ -2845,7 +2845,7 @@ public Native_DisplayDamage(Handle plugin,numParams)
  * @noreturn
  *
  * native DisplayKill(client, victim, const char[] weapon, const char[] description,
- *                    xp=0, bool:no_translate=false);
+ *                    xp=0, bool no_translate=false);
  */
 public Native_DisplayKill(Handle plugin,numParams)
 {
@@ -2855,7 +2855,7 @@ public Native_DisplayKill(Handle plugin,numParams)
     int xp = GetNativeCell(3);
     GetNativeString(4,weapon,sizeof(weapon));
     GetNativeString(5,desc,sizeof(desc));
-    bool no_translate = bool:GetNativeCell(6);
+    bool no_translate = view_as<bool>(GetNativeCell(6));
 
     g_Killed[victim] = true;
     g_KilledBy[victim] = client;
@@ -2931,14 +2931,14 @@ public Native_DisplayMessage(Handle plugin,numParams)
  * @param ...:          Format arguments (if any)
  * @noreturn
  *
- * native DisplayHint(client, HintSlot:slot, bool:exclusive, float duration, const char[] fmt, any:...);
+ * native DisplayHint(client, HintSlot:slot, bool exclusive, float duration, const char[] fmt, any:...);
  */
 public Native_DisplayHint(Handle plugin,numParams)
 {
     char buffer[1024], written;
     int client = GetNativeCell(1);
     HintSlot slot = HintSlot:GetNativeCell(2);
-    bool exclusive = bool:GetNativeCell(3);
+    bool exclusive = view_as<bool>(GetNativeCell(3));
     float duration = float GetNativeCell(4);
 
     SetGlobalTransTarget(client);
@@ -3000,7 +3000,7 @@ public Native_HudMessage(Handle plugin,numParams)
  *						If false, search is case insensitive.
  * @noreturn
  *
- * native ClearHud(client, const char[] contains="", bool:caseSensitive=true);
+ * native ClearHud(client, const char[] contains="", bool caseSensitive=true);
  */
 public Native_ClearHud(Handle plugin,numParams)
 {
@@ -3124,7 +3124,7 @@ public Native_ShowEnergy(Handle plugin,numParams)
  * @param nameMax:      Max size of the entName string.
  * @noreturn
  *
- * native bool:GetEntityName(entIndex, char[] entName, nameMax, lang=LANG_SERVER)
+ * native bool GetEntityName(entIndex, char[] entName, nameMax, lang=LANG_SERVER)
  */
 public Native_GetEntityName(Handle plugin,numParams)
 {
@@ -3381,10 +3381,10 @@ public Native_DecrementArmor(Handle plugin,numParams)
 public Native_RegenerateShields(Handle plugin,numParams)
 {
     RegenerateShields(GetNativeCell(1), GetNativeCell(2),
-                      GetNativeCell(3), bool:GetNativeCell(4));
+                      GetNativeCell(3), view_as<bool>(GetNativeCell(4)));
 }
 
-stock RegenerateShields(client, amount=1, float power=-1.0, bool:limitToMaxHP=true)
+stock RegenerateShields(client, amount=1, float power=-1.0, bool limitToMaxHP=true)
 {
     int shields = GetMaxShields(client);
 
@@ -3447,7 +3447,7 @@ public Native_GetDisplayBits(Handle plugin,numParams)
  * @param client: The index of the player to get the settings for
  * @return The return value will be all of the client's settings bits.
  *
- * native bool:GetDisplaySetting(client,Settings:setting);
+ * native bool GetDisplaySetting(client,Settings:setting);
  */
 public Native_GetDisplaySetting(Handle plugin,numParams)
 {
@@ -3479,7 +3479,7 @@ public Native_GetSettingsBits(Handle plugin,numParams)
  * @param client: The index of the player to get the settings for
  * @return The return value will be all of the client's settings bits.
  *
- * native bool:GetSetting(client,Settings:setting);
+ * native bool GetSetting(client,Settings:setting);
  */
 public Native_GetSetting(Handle plugin,numParams)
 {
@@ -3496,7 +3496,7 @@ public Native_GetSetting(Handle plugin,numParams)
  * @param client 	Client
  * @return			true if the client is in the process of changing class
  * 
- * native bool:IsChangingClass(client);
+ * native bool IsChangingClass(client);
  */
 public Native_IsChangingClass(Handle plugin,numParams)
 {
@@ -3513,7 +3513,7 @@ public Native_IsChangingClass(Handle plugin,numParams)
  * @param client 	Client
  * @return			true if the client is in a spawn area
  * 
- * native bool:IsInSpawn(client);
+ * native bool IsInSpawn(client);
  */
 public Native_IsInSpawn(Handle plugin,numParams)
 {
@@ -3549,7 +3549,7 @@ public Native_GetRace(Handle plugin,numParams)
  * @param saveEnergy:   Save the client's remaining energy int o accumulated energy (for summons).
  * @noreturn
  *
- * native ChangeRace(client, race, bool:force=false, bool:check=true, bool:saveEnergy=false);
+ * native ChangeRace(client, race, bool force=false, bool check=true, bool saveEnergy=false);
  */
 public Native_ChangeRace(Handle plugin,numParams)
 {
@@ -3560,9 +3560,9 @@ public Native_ChangeRace(Handle plugin,numParams)
         if (race > 0)
         {
             ChangeRace(client, race, GetRaceHandle(race),
-                       bool:GetNativeCell(3),
-                       bool:GetNativeCell(4),
-                       bool:GetNativeCell(5));
+                       view_as<bool>(GetNativeCell(3)),
+                       view_as<bool>(GetNativeCell(4)),
+                       view_as<bool>(GetNativeCell(5)));
         }
     }
 }
@@ -3598,7 +3598,7 @@ public Native_GetLevel(Handle plugin,numParams)
  * @param update:   If true, updates the overall and tech levels also.
  * @noreturn
  *
- * native SetLevel(client,race,newlevel,bool:update=true);
+ * native SetLevel(client,race,newlevel,bool update=true);
  */
 public Native_SetLevel(Handle plugin,numParams)
 {
@@ -3608,7 +3608,7 @@ public Native_SetLevel(Handle plugin,numParams)
         race = GetRace(client);
 
     if (race > 0 && IsValidClient(client))
-        SetLevel(client,race,GetNativeCell(3), bool:GetNativeCell(4));
+        SetLevel(client,race,GetNativeCell(3), view_as<bool>(GetNativeCell(4)));
 }
 
 /**
@@ -3639,7 +3639,7 @@ public Native_ResetLevel(Handle plugin,numParams)
  * @param check:    Set true to check the race. If the client's race != race, return 0.
  * @return          The return value will be the upgrade level or 0 if it failed.
  *
- * native GetUpgradeLevel(client,race,upgrade,bool:check=false);
+ * native GetUpgradeLevel(client,race,upgrade,bool check=false);
  */
 public Native_GetUpgradeLevel(Handle plugin,numParams)
 {
@@ -3647,7 +3647,7 @@ public Native_GetUpgradeLevel(Handle plugin,numParams)
     int client      = GetNativeCell(1);
     int race        = GetNativeCell(2);
     int upgrade     = GetNativeCell(3);
-    bool check  = bool:GetNativeCell(4);
+    bool check  = view_as<bool>(GetNativeCell(4));
 
     TraceInto("Natives", "GetUpgradeLevel", "client=%d, race=%d, upgrade=%d; level=%d", \
               client, race, upgrade, level);
@@ -3711,7 +3711,7 @@ public Native_ResetUpgradeLevels(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
-        ResetUpgradesNow(client, GetNativeCell(2), bool:GetNativeCell(3));
+        ResetUpgradesNow(client, GetNativeCell(2), view_as<bool>(GetNativeCell(3)));
 }
 
 /**
@@ -3868,7 +3868,7 @@ public Native_GetReqLevelXP(Handle plugin,numParams)
  * @param scale:    Scale the returned amount by the energy_factor
  * @return          The return value will be the amount of energy or -1 if it failed.
  *
- * native GetEnergy(client, bool:scale=false);
+ * native GetEnergy(client, bool scale=false);
  */
 public Native_GetEnergy(Handle plugin,numParams)
 {
@@ -3891,7 +3891,7 @@ public Native_GetEnergy(Handle plugin,numParams)
  * @param scale:    Scale the amount by the energy_factor
  * @noreturn
  *
- * native SetEnergy(client,float amount, bool:scale=false);
+ * native SetEnergy(client,float amount, bool scale=false);
  */
 public Native_SetEnergy(Handle plugin,numParams)
 {
@@ -3913,7 +3913,7 @@ public Native_SetEnergy(Handle plugin,numParams)
  * @param scale:    Scale the amount by the energy_factor
  * @noreturn
  *
- * native IncrementEnergy(client, float amount, bool:scale=true);
+ * native IncrementEnergy(client, float amount, bool scale=true);
  */
 public Native_IncrementEnergy(Handle plugin,numParams)
 {
@@ -3935,7 +3935,7 @@ public Native_IncrementEnergy(Handle plugin,numParams)
  * @param scale:    Scale the amount by the energy_factor
  * @noreturn
  *
- * native DecrementEnergy(client, float amount, bool:scale=false, bool:check=true);
+ * native DecrementEnergy(client, float amount, bool scale=false, bool check=true);
  */
 public Native_DecrementEnergy(Handle plugin,numParams)
 {
@@ -4130,7 +4130,7 @@ public Native_GetCrystals(Handle plugin,numParams)
  * @param overflow: Set true to allow overflow topcrystals
  * @return          The return value will be the amount of crystals set or -1 if it failed.
  *
- * native SetCrystals(client,amount,bool:check=true,bool:overflow=true);
+ * native SetCrystals(client,amount,bool check=true,bool overflow=true);
  */
 public Native_SetCrystals(Handle plugin,numParams)
 {
@@ -4158,7 +4158,7 @@ public Native_SetCrystals(Handle plugin,numParams)
  * @param overflow: Set true to allow overflow topcrystals
  * @return          The return value will be the amount of crystals set or -1 if it failed.
  *
- * native IncrementCrystals(client,amount,bool:check=true,bool:overflow=true);
+ * native IncrementCrystals(client,amount,bool check=true,bool overflow=true);
  */
 public Native_IncrementCrystals(Handle plugin,numParams)
 {
@@ -4280,7 +4280,7 @@ public Native_DecrementPCrystals(Handle plugin,numParams)
  * Returns true if the Game supports Money
  * @return The return value will be true if the game itself has a currency
  *
- * native bool:GameHasMoney();
+ * native bool GameHasMoney();
  */
 public Native_GameHasMoney(Handle plugin,numParams)
 {
@@ -4547,7 +4547,7 @@ public Native_SetAttributeBits(Handle plugin,numParams)
  * @param attribute: The attribute or attributes you want to check. 
  * @return The return value will be true if the attribute is set or false if it isn't.
  *
- * native bool:GetAttribute(client,Attribute:attribute);
+ * native bool GetAttribute(client,Attribute:attribute);
  */
 public Native_GetAttribute(Handle plugin,numParams)
 {
@@ -4565,14 +4565,14 @@ public Native_GetAttribute(Handle plugin,numParams)
  * @param imm_state: The state to set the attribute to.
  * @noreturn
  *
- * native SetAttribute(client,Attribute:attribute,bool:attrib_state=true);
+ * native SetAttribute(client,Attribute:attribute,bool attrib_state=true);
  */
 public Native_SetAttribute(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
     {
-        bool attrib_state = (numParams >= 3) ? (bool:GetNativeCell(3)) : true;
+        bool attrib_state = (numParams >= 3) ? (view_as<bool>(GetNativeCell(3))) : true;
         SetAttribute(client,Attribute:GetNativeCell(2),attrib_state);
     }
 }
@@ -4621,7 +4621,7 @@ public Native_SetImmunityBits(Handle plugin,numParams)
  * @param immunity: The immunity or immunities you want to check. 
  * @return The return value will be true if they are immune or false if they aren't.
  *
- * native bool:GetImmunity(client,Immunity:immunity);
+ * native bool GetImmunity(client,Immunity:immunity);
  */
 public Native_GetImmunity(Handle plugin,numParams)
 {
@@ -4641,7 +4641,7 @@ public Native_GetImmunity(Handle plugin,numParams)
  * @param pluginid:  Handle of the plugin to set immunity for (defaults to calling plugin)
  * @noreturn
  *
- * native SetImmunity(client,Immunity:immunity,bool:imm_state=true,
+ * native SetImmunity(client,Immunity:immunity,bool imm_state=true,
  *                    id=0,Handle pluginid=null);
  */
 public Native_SetImmunity(Handle plugin,numParams)
@@ -4650,7 +4650,7 @@ public Native_SetImmunity(Handle plugin,numParams)
     if (IsValidClient(client))
     {
         Immunity imm = Immunity:GetNativeCell(2);
-        bool imm_state = (numParams >= 3) ? (bool:GetNativeCell(3)) : true;
+        bool imm_state = (numParams >= 3) ? (view_as<bool>(GetNativeCell(3))) : true;
 
         Handle propData=GetPropData(client);
         if (propData != null)
@@ -4746,7 +4746,7 @@ public Native_SetRestrictionBits(Handle plugin,numParams)
  * @param restriction: The restriction or restrictions you want to check. 
  * @return The return value will be true if they are restricted or false if they aren't.
  *
- * native bool:GetRestriction(client,Restriction:restriction);
+ * native bool GetRestriction(client,Restriction:restriction);
  */
 public Native_GetRestriction(Handle plugin,numParams)
 {
@@ -4766,7 +4766,7 @@ public Native_GetRestriction(Handle plugin,numParams)
  * @param pluginid:         Handle of the plugin to set restriction for (defaults to calling plugin)
  * @noreturn
  *
- * native SetRestriction(client, Restriction:restriction, bool:restrict_state=true,
+ * native SetRestriction(client, Restriction:restriction, bool restrict_state=true,
  *                       id=0, Handle pluginid=null);
  */
 public Native_SetRestriction(Handle plugin,numParams)
@@ -4775,7 +4775,7 @@ public Native_SetRestriction(Handle plugin,numParams)
     if (IsValidClient(client))
     {
         Restriction restrict = Restriction:GetNativeCell(2);
-        bool restrict_state = (numParams >= 3) ? (bool:GetNativeCell(3)) : true;
+        bool restrict_state = (numParams >= 3) ? (view_as<bool>(GetNativeCell(3))) : true;
 
         Handle propData=GetPropData(client);
         if (propData != null)
@@ -4839,7 +4839,7 @@ public Native_SetRestriction(Handle plugin,numParams)
  * @param pluginid: Handle of the plugin to set speed for (defaults to calling plugin)
  * @noreturn
  *
- * native SetSpeed(client, float speed=-1.0, bool:apply=false,
+ * native SetSpeed(client, float speed=-1.0, bool apply=false,
  *                 id=0, Handle pluginid=null);
  */
 public Native_SetSpeed(Handle plugin,numParams)
@@ -4895,7 +4895,7 @@ public Native_SetSpeed(Handle plugin,numParams)
  * @param pluginid: Handle of the plugin to set gravity for (defaults to calling plugin)
  * @noreturn
  *
- * native SetGravity(client, float gravity=-1.0, bool:apply=false,
+ * native SetGravity(client, float gravity=-1.0, bool apply=false,
  *                   id=0, Handle pluginid=null);
  */
 public Native_SetGravity(Handle plugin,numParams)
@@ -4968,9 +4968,9 @@ public Native_SetGravity(Handle plugin,numParams)
  * native SetVisibility(client, VisibilityType:type=NormalVisibility,
  *                      visibility=-1, float factor1=-1.0, float factor2=-1.0,
  *                      RenderMode:mode=RenderMode:-1, RenderFx:fx=RenderFx:-1,
- *                      r=-1, g=-1, b=-1, weaponAlpha=-1,bool:colorWeapons=false,
+ *                      r=-1, g=-1, b=-1, weaponAlpha=-1,bool colorWeapons=false,
  *                      VisibilityPriority:priority=VisibilityPriorityNotSpecified,
- *                      float timestamp=0.0, bool:apply=false,
+ *                      float timestamp=0.0, bool apply=false,
  *                      id=0, Handle pluginid=null);
  */
 public Native_SetVisibility(Handle plugin,numParams)
@@ -5098,7 +5098,7 @@ public Native_SetVisibility(Handle plugin,numParams)
  * @param pluginid: Handle of the plugin to set speed for (defaults to calling plugin)
  * @noreturn
  *
- * native SetOverrideSpeed(client, float speed=-1.0, bool:apply=false,
+ * native SetOverrideSpeed(client, float speed=-1.0, bool apply=false,
  *                         id=0, Handle pluginid=null);
  */
 public Native_SetOverrideSpeed(Handle plugin,numParams)
@@ -5153,7 +5153,7 @@ public Native_SetOverrideSpeed(Handle plugin,numParams)
  * @param pluginid: Handle of the plugin to set gravity for (defaults to calling plugin)
  * @noreturn
  *
- * native SetOverrideGravity(client, float gravity=-1.0, bool:apply=false,
+ * native SetOverrideGravity(client, float gravity=-1.0, bool apply=false,
  *                           id=0, Handle pluginid=null);
  */
 public Native_SetOverrideGravity(Handle plugin,numParams)
@@ -5208,7 +5208,7 @@ public Native_SetOverrideGravity(Handle plugin,numParams)
  * @param pluginid:   Handle of the plugin to set visibility for (defaults to calling plugin)
  * @noreturn
  *
- * native SetOverrideVisiblity(client, visibility=-1, bool:apply=false,
+ * native SetOverrideVisiblity(client, visibility=-1, bool apply=false,
  *                             id=0, Handle pluginid=null);
  */
 public Native_SetOverrideVisiblity(Handle plugin,numParams)
@@ -5265,7 +5265,7 @@ public Native_SetOverrideVisiblity(Handle plugin,numParams)
  * @param pluginid: Handle of the plugin to set MoveType for (defaults to calling plugin)
  * @noreturn
  *
- * native SetMoveType(client, MoveType:mt=MOVETYPE_DEFAULT, bool:apply=false,
+ * native SetMoveType(client, MoveType:mt=MOVETYPE_DEFAULT, bool apply=false,
  *                    id=0, Handle pluginid=null);
  */
 public Native_SetMoveType(Handle plugin,numParams)
@@ -5616,7 +5616,7 @@ public Native_GetMagicalArmorSum(Handle plugin,numParams)
  * @param apply: Set to true to apply the setting immedately.
  * @return The return value will be true if the restore succeeded.
  *
- * native bool:RestorePlayer(client,bool:apply=false);
+ * native bool RestorePlayer(client,bool apply=false);
  */
 public Native_RestorePlayer(Handle plugin,numParams)
 {
@@ -5782,7 +5782,7 @@ public Native_ResetCooldown(Handle plugin,numParams)
     if (IsClient(client))
     {
         ResetCooldown(client, GetNativeCell(2),
-                      GetNativeCell(3), bool:GetNativeCell(4));
+                      GetNativeCell(3), view_as<bool>(GetNativeCell(4)));
     }
 }
 
@@ -5794,7 +5794,7 @@ public Native_ResetCooldown(Handle plugin,numParams)
  * @param notify:   Set to true to display a message to the client if the cooldown hasn't expired yet.
  * @return The return value will be true if the cooldown has expired (or there is no cooldown)
  * 
- * native bool:HasCooldownExpired(client, race, upgrade, bool:notify=true);
+ * native bool HasCooldownExpired(client, race, upgrade, bool notify=true);
  */
 public Native_HasCooldownExpired(Handle plugin,numParams)
 {
@@ -5802,7 +5802,7 @@ public Native_HasCooldownExpired(Handle plugin,numParams)
     if (IsClient(client))
     {
         return HasCooldownExpired(client, GetNativeCell(2),
-                                  GetNativeCell(3), bool:GetNativeCell(4));
+                                  GetNativeCell(3), view_as<bool>(GetNativeCell(4)));
     }
     else
         return true;
@@ -5818,15 +5818,15 @@ public Native_HasCooldownExpired(Handle plugin,numParams)
  * @return         The return value will be true if there is sufficient resources
  *                 and the upgrade can be invoked.
  * 
- * bool:CanInvokeUpgrade(client, race, upgrade, bool:char ge=true, bool:notify=true)
+ * bool CanInvokeUpgrade(client, race, upgrade, bool char ge=true, bool notify=true)
  */
 public Native_CanInvokeUpgrade(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     int race = GetNativeCell(2);
     int upgrade = GetNativeCell(3);
-    bool char geCosts = bool:GetNativeCell(4);
-    bool notify = bool:GetNativeCell(5);
+    bool char geCosts = view_as<bool>(GetNativeCell(4));
+    bool notify = view_as<bool>(GetNativeCell(5));
 
     if (race <= 0)
         race = GetRace(client);
@@ -5951,15 +5951,15 @@ public Native_CanInvokeUpgrade(Handle plugin,numParams)
  * @return         The return value will be true if there is sufficient resources
  *                 and the upgrade can be invoked.
  *
- * native bool:CanProcessUpgrade(client, race, upgrade, bool:char ge=true, bool:notify=true);
+ * native bool CanProcessUpgrade(client, race, upgrade, bool char ge=true, bool notify=true);
  */
 public Native_CanProcessUpgrade(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     int race = GetNativeCell(2);
     int upgrade = GetNativeCell(3);
-    bool char geCosts = bool:GetNativeCell(4);
-    bool notify = bool:GetNativeCell(5);
+    bool char geCosts = view_as<bool>(GetNativeCell(4));
+    bool notify = view_as<bool>(GetNativeCell(5));
 
     TraceInto("Natives", "Native_CanProcessUpgrade", "client=%d:%N, race=%d, upgrade=%d, char geCosts=%d, notify=%d", \
               client, ValidClientIndex(client), race, upgrade, char geCosts, notify);
@@ -6083,7 +6083,7 @@ public Native_HasAttribute(Handle plugin,numParams)
  * @param data:     The data handle to associate with the attribute.
  * @return			True on success, false on failure.
  * 
- * native bool:AssignAttribute(client, const char[] attrName, Handle data);
+ * native bool AssignAttribute(client, const char[] attrName, Handle data);
  */         
 public Native_AssignAttribute(Handle plugin,numParams)
 {
@@ -6158,7 +6158,7 @@ public Native_HasAttributeId(Handle plugin,numParams)
  * @param attrId:   The Id of the attribute returned by CreateAttribute()
  * @return			True on success, false on failure.
  * 
- * native bool:AssignAttributeId(client, attr, Handle data);
+ * native bool AssignAttributeId(client, attr, Handle data);
  */
 public Native_AssignAttributeId(Handle plugin,numParams)
 {

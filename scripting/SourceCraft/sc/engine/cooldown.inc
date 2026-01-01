@@ -556,7 +556,7 @@ ResetAllCooldowns()
         CooldownDisconnect(i);
 }
 
-ResetCooldown(client, race, upgrade, bool:notify)
+ResetCooldown(client, race, upgrade, bool notify)
 {
     TraceInto("Cooldown", "ResetCooldown", "client=%d:%N, race=$d, upgrade=%d, notify=%d", \
               client, ValidClientIndex(client), race, upgrade, notify);

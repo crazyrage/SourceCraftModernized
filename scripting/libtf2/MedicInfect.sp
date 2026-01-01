@@ -651,7 +651,7 @@ stock TransmitInfection(to,from)
     else if(GetConVarInt(Cvar_SpreadAll) )
     {
         Infect(to, from, GetClientTeam(from) == GetClientTeam(to), false,
-               bool:(ClientInfectionFlags[from] & Infection_Irradiation));
+               view_as<bool>(ClientInfectionFlags[from] & Infection_Irradiation));
         return;
     }
 
@@ -685,7 +685,7 @@ stock TransmitInfection(to,from)
         if (GetConVarInt(Cvar_SpreadSameTeam))
         {
             Infect(to, from, true, false,
-                   bool:(ClientInfectionFlags[from] & Infection_Irradiation));
+                   view_as<bool>(ClientInfectionFlags[from] & Infection_Irradiation));
         }
     }
     else // if (!t_same)
@@ -694,14 +694,14 @@ stock TransmitInfection(to,from)
         if (GetConVarInt(Cvar_SpreadOpposingTeam))
         {
             Infect(to, from, false, false,
-                   bool:(ClientInfectionFlags[from] & Infection_Irradiation));
+                   view_as<bool>(ClientInfectionFlags[from] & Infection_Irradiation));
         }
         // Osaka: If a medic infects a friendly, allow the infection to spread across team boundaries
         else if (GetConVarInt(Cvar_InfectSameTeam) &&
                 (ClientInfectionFlags[from] & Infection_Friendly) )
         {
             Infect(to, from, false, false,
-                   bool:(ClientInfectionFlags[from] & Infection_Irradiation));
+                   view_as<bool>(ClientInfectionFlags[from] & Infection_Irradiation));
         }
     }
 }

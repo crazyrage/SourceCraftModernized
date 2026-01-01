@@ -559,7 +559,7 @@ stock Entity_ClearSpawnFlags(entity)
  */
 stock bool Entity_HasSpawnFlags(entity, flags)
 {
-	return bool:(Entity_GetSpawnFlags(entity) & flags);
+	return view_as<bool>(Entity_GetSpawnFlags(entity) & flags);
 }
 
 /*
@@ -680,7 +680,7 @@ stock bool Entity_HasEFlags(entity, Entity_Flags:flags)
 {
 	int Entity_Flags:currentEFlags = Entity_GetEFlags(entity);
 
-	return bool:(currentEFlags & flags);
+	return view_as<bool>(currentEFlags & flags);
 }
 
 /**
@@ -892,7 +892,7 @@ stock Entity_ClearSolidFlags(entity)
  */
 stock bool Entity_SolidFlagsSet(entity, SolidFlags_t:flagMask)
 {
-	return bool:(Entity_GetSolidFlags(entity) & flagMask);
+	return view_as<bool>(Entity_GetSolidFlags(entity) & flagMask);
 }
 
 enum SolidType_t

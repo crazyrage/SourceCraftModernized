@@ -888,8 +888,8 @@ public Native_AssignMedic(Handle plugin,numParams)
     int client = GetNativeCell(1);
     if (client > 0)
     {
-        g_MedicKeepWeapon[client] = bool:GetNativeCell(2);
-        g_MedicPickup[client] = bool:GetNativeCell(3);
+        g_MedicKeepWeapon[client] = view_as<bool>(GetNativeCell(2));
+        g_MedicPickup[client] = view_as<bool>(GetNativeCell(3));
         g_MedicSpeed[client] = float GetNativeCell(4);
         g_MedicWeight[client] = float GetNativeCell(5);
         g_MedicHealth[client] = GetNativeCell(6);

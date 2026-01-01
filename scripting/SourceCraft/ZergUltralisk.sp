@@ -537,7 +537,7 @@ void Cleave(client, level)
                     // Knockback isn't effected by immunities & uber!
                     Push(index, indexLoc, clientLoc, force, vertForce);
 
-                    int bool isUber = IsInvulnerable(index);
+                    bool isUber = IsInvulnerable(index);
                     if ((level >= 2 || !GetImmunity(index,Immunity_HealthTaking)) &&
                         (level >= 3 || !GetImmunity(index,Immunity_Ultimates)) &&
                         (level >= 4 || !isUber))

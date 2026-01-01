@@ -518,7 +518,7 @@ public Action OnPlayerRunCmd(client, &buttons, &impulse, float vel[3], float ang
     return Plugin_Continue;
 }
 
-bool:ShieldTarget(client, ShieldFlags:flags, float duration)
+bool ShieldTarget(client, ShieldFlags:flags, float duration)
 {
     int target = 0;
     float targetLoc[3];
@@ -560,7 +560,7 @@ bool:ShieldTarget(client, ShieldFlags:flags, float duration)
     return (CreateShield(client, target, targetLoc, flags, duration) != 0);
 }
 
-bool:ShieldLocation(client, ShieldFlags:flags, float duration)
+bool ShieldLocation(client, ShieldFlags:flags, float duration)
 {
     if (flags & Shield_Target_Location)
     {
@@ -899,7 +899,7 @@ RemoveShield(client)
 
 public Native_ControlUberShield(Handle plugin,numParams)
 {
-    gNativeControl = (numParams >= 1) ? (bool:GetNativeCell(1)) : true;
+    gNativeControl = (numParams >= 1) ? (view_as<bool>(GetNativeCell(1))) : true;
 }
 
 public Native_GiveUberShield(Handle plugin,numParams)

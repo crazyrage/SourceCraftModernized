@@ -51,11 +51,11 @@ CreateAura(float distance, float int erval=1.0,
     return auraId;
 }
 
-ApplyAura(client, auraID,bool:auraOriginatesFromPlayer=true,level=1);
+ApplyAura(client, auraID,bool auraOriginatesFromPlayer=true,level=1);
 
 IsInAura(client, auraID, &level);
 
-forward OnAura(client, auraID, bool:inAura, level);
+forward OnAura(client, auraID, bool inAura, level);
 
 CreateArea(client, race, upgrade, float distance, float int erval=1.0,
            AreaType:type=Area_Team, priority=0, const char[] name="",
@@ -256,7 +256,7 @@ ResetAllAreas()
         AreaDisconnect(i);
 }
 
-ResetArea(client, race, upgrade, bool:notify)
+ResetArea(client, race, upgrade, bool notify)
 {
     TraceInto("Area", "ResetArea", "client=%d:%N, race=$d, upgrade=%d, notify=%d", \
               client, ValidClientIndex(client), race, upgrade, notify);

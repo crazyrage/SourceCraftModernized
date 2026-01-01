@@ -2241,7 +2241,7 @@ stock bool Client_HasAdminFlags(client, flags=ADMFLAG_GENERIC)
 		return false;
 	}
 
-	return bool:(GetAdminFlags(adminId, Access_Effective) & flags);
+	return view_as<bool>(GetAdminFlags(adminId, Access_Effective) & flags);
 }
 
 /**
@@ -2447,7 +2447,7 @@ stock Client_ClearButtons(client)
  */
 stock bool Client_HasButtons(client, buttons)
 {
-	return bool:(Client_GetButtons(client) & buttons);
+	return view_as<bool>(Client_GetButtons(client) & buttons);
 }
 
 /**
@@ -2564,7 +2564,7 @@ stock Client_UnMute(client)
  */
 stock bool Client_IsMuted(client)
 {
-	return bool:(GetClientListeningFlags(client) & VOICE_MUTED);
+	return view_as<bool>(GetClientListeningFlags(client) & VOICE_MUTED);
 }
 
 /**

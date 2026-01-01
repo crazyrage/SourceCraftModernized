@@ -242,7 +242,7 @@ stock bool makeDamage(attacker, target, damage, damagetype, float damageradius, 
 * 그리고 customdamage가 true라면 autoremove  인수는 무시된다.
 * 포인트허트 엔티티가 자동으로 사라지게 하고 싶지 않다면 autoremove 를 false로 설정하라
 */
-stock makeDamage2(attacker, target, damage, damagetype, float damageradius, float damagedelay, float damageduration, const float attackposition[3], const char[] weaponname[] = "", bool:customdamage = false, bool autoremove = true){
+stock makeDamage2(attacker, target, damage, damagetype, float damageradius, float damagedelay, float damageduration, const float attackposition[3], const char[] weaponname[] = "", bool customdamage = false, bool autoremove = true){
 
 	int pointhurt = CreateEntityByName("point_hurt");
 	
@@ -769,7 +769,7 @@ stock bool EndRound(float time = 5.0, reason = ROUNDEND_ROUND_DRAW){
 	//정적 변수!!!!
 	static Handle conffile = null;
 	static Handle virtualroundend = null;
-	static bool:sdkcalltried = false;
+	static bool sdkcalltried = false;
 	
 	if(!sdkcalltried){
 		
@@ -1029,7 +1029,7 @@ stock bool IsStrBool(const char[] str[], bool onlynumeric = true){
 }
 
 //엔티티가 충돌 가능한 물체인지를 검사한다!
-stock bool IsEntityCollidable(entity, bool:includeplayer = true, bool:includehostage = true, bool includeprojectile = true){
+stock bool IsEntityCollidable(entity, bool includeplayer = true, bool includehostage = true, bool includeprojectile = true){
 	
 	char classname[64];
 	GetEdictClassname(entity, classname, 64);
@@ -1496,7 +1496,7 @@ stock removeDublicatedArrayElement(any array[], arraysize, any alternateValue){
 //u should call TE send function via yourself. not working
 stock bool setupEffectDispatch(const float Origin[3], const float Start[3], const float Angles[3], const float Normal[3], flags, const float magnitude, const float scale, attachmentindex, surfaceprop, const char[] EffectName[], iMaterial, iDamageType, iHitbox, iEntIndex, iColor, float radius){
 
-	static bool:checkedstringtableid = false;
+	static bool checkedstringtableid = false;
 	static stringtableid = INVALID_STRING_TABLE;
 	
 	if(!checkedstringtableid){
