@@ -33,7 +33,7 @@ enum DissolveType
  */
 stock bool Effect_DissolveEntity(entity, DissolveType:dissolveType=DISSOLVE_NORMAL, magnitude=1)
 {
-	new env_entity_dissolver = CreateEntityByName("env_entity_dissolver");
+	int env_entity_dissolver = CreateEntityByName("env_entity_dissolver");
 
 	if (env_entity_dissolver == -1) {
 		return false;
@@ -57,7 +57,7 @@ stock bool Effect_DissolveEntity(entity, DissolveType:dissolveType=DISSOLVE_NORM
  */
 stock bool Effect_DissolvePlayerRagDoll(client, DissolveType:dissolveType=DISSOLVE_NORMAL)
 {
-	new m_hRagdoll = GetEntPropEnt(client, Prop_Send, "m_hRagdoll");
+	int m_hRagdoll = GetEntPropEnt(client, Prop_Send, "m_hRagdoll");
 
 	if (m_hRagdoll == -1) {
 		return false;
@@ -162,14 +162,14 @@ stock Effect_FadeOut(entity, kill=false, fast=true, EffectCallback:callback=INVA
 
 public Action _smlib_Timer_Effect_Fade(Handle Timer, Handle dataPack)
 {
-	new entity = ReadPackCell(dataPack);
-	new kill = ReadPackCell(dataPack);
+	int entity = ReadPackCell(dataPack);
+	int kill = ReadPackCell(dataPack);
 #if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 7
-	new Function:callback = ReadPackFunction(dataPack);
+	int Function:callback = ReadPackFunction(dataPack);
 #else
-	new Function:callback = Function:ReadPackCell(dataPack);
+	int Function:callback = Function:ReadPackCell(dataPack);
 #endif
-	new any data = any ReadPackCell(dataPack);
+	int any data = any ReadPackCell(dataPack);
 
 	if (callback != INVALID_FUNCTION) {
 		Call_StartFunction(null, callback);
@@ -208,21 +208,21 @@ public Action _smlib_Timer_Effect_Fade(Handle Timer, Handle dataPack)
  */
 stock Effect_DrawBeamBoxToClient(
 	client,
-	const Float bottomCorner[3],
-	const Float upperCorner[3],
+	const float bottomCorner[3],
+	const float upperCorner[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float life=5.0,
-	Float width=5.0,
-	Float endWidth=5.0,
+	float life=5.0,
+	float width=5.0,
+	float endWidth=5.0,
 	fadeLength=2,
-	Float amplitude=1.0,
+	float amplitude=1.0,
 	const color[4]={ 255, 0, 0, 255 },
 	speed=0
 ) {
-    new clients[1];
+    int clients[1];
     clients[0] = client;
     Effect_DrawBeamBox(clients, 1, bottomCorner, upperCorner, modelIndex, haloIndex, startFrame, frameRate, life, width, endWidth, fadeLength, amplitude, color, speed);
 }
@@ -248,23 +248,23 @@ stock Effect_DrawBeamBoxToClient(
  * @noreturn
  */
 stock Effect_DrawBeamBoxToAll(
-	const Float bottomCorner[3],
-	const Float upperCorner[3],
+	const float bottomCorner[3],
+	const float upperCorner[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float life=5.0,
-	Float width=5.0,
-	Float endWidth=5.0,
+	float life=5.0,
+	float width=5.0,
+	float endWidth=5.0,
 	fadeLength=2,
-	Float amplitude=1.0,
+	float amplitude=1.0,
 	const color[4]={ 255, 0, 0, 255 },
 	speed=0
 )
 {
-	new clients[MaxClients];
-	new numClients = Client_Get(clients, CLIENTFILTER_INGAME);
+	int clients[MaxClients];
+	int numClients = Client_Get(clients, CLIENTFILTER_INGAME);
 
 	Effect_DrawBeamBox(clients, numClients, bottomCorner, upperCorner, modelIndex, haloIndex, startFrame, frameRate, life, width, endWidth, fadeLength, amplitude, color, speed);
 }
@@ -294,24 +294,24 @@ stock Effect_DrawBeamBoxToAll(
 stock Effect_DrawBeamBox(
 	clients[],
 	numClients,
-	const Float bottomCorner[3],
-	const Float upperCorner[3],
+	const float bottomCorner[3],
+	const float upperCorner[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float life=5.0,
-	Float width=5.0,
-	Float endWidth=5.0,
+	float life=5.0,
+	float width=5.0,
+	float endWidth=5.0,
 	fadeLength=2,
-	Float amplitude=1.0,
+	float amplitude=1.0,
 	const color[4]={ 255, 0, 0, 255 },
 	speed=0
 ) {
 	// Create the additional corners of the box
-	decl Float corners[8][3];
+	float corners[8][3];
 
-	for (new i=0; i < 4; i++) {
+	for (int i=0; i < 4; i++) {
 		Array_Copy(bottomCorner,	corners[i],		3);
 		Array_Copy(upperCorner,		corners[i+4],	3);
 	}
@@ -329,21 +329,21 @@ stock Effect_DrawBeamBox(
 
 	// Horizontal Lines
 	// Bottom
-	for (new i=0; i < 4; i++) {
+	for (int i=0; i < 4; i++) {
 		new j = ( i == 3 ? 0 : i+1 );
 		TE_SetupBeamPoints(corners[i], corners[j], modelIndex, haloIndex, startFrame, frameRate, life, width, endWidth, fadeLength, amplitude, color, speed);
 		TE_Send(clients, numClients);
 	}
 
 	// Top
-	for (new i=4; i < 8; i++) {
+	for (int i=4; i < 8; i++) {
 		new j = ( i == 7 ? 4 : i+1 );
 		TE_SetupBeamPoints(corners[i], corners[j], modelIndex, haloIndex, startFrame, frameRate, life, width, endWidth, fadeLength, amplitude, color, speed);
 		TE_Send(clients, numClients);
 	}
 
 	// All Vertical Lines
-	for (new i=0; i < 4; i++) {
+	for (int i=0; i < 4; i++) {
 		TE_SetupBeamPoints(corners[i], corners[i+4], modelIndex, haloIndex, startFrame, frameRate, life, width, endWidth, fadeLength, amplitude, color, speed);
 		TE_Send(clients, numClients);
 	}
@@ -375,23 +375,23 @@ stock Effect_DrawBeamBox(
  */
 stock Effect_DrawBeamBoxRotatableToClient(
 	client,
-	const Float origin[3],
-	const Float mins[3],
-	const Float maxs[3],
-	const Float angles[3],
+	const float origin[3],
+	const float mins[3],
+	const float maxs[3],
+	const float angles[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float life=5.0,
-	Float width=5.0,
-	Float endWidth=5.0,
+	float life=5.0,
+	float width=5.0,
+	float endWidth=5.0,
 	fadeLength=2,
-	Float amplitude=1.0,
+	float amplitude=1.0,
 	const color[4]={ 255, 0, 0, 255 },
 	speed=0
 ) {
-    new clients[1];
+    int clients[1];
     clients[0] = client;
     Effect_DrawBeamBoxRotatable(clients, 1, origin, mins, maxs, angles, modelIndex, haloIndex, startFrame, frameRate, life, width, endWidth, fadeLength, amplitude, color, speed);
 }
@@ -421,25 +421,25 @@ stock Effect_DrawBeamBoxRotatableToClient(
  * @noreturn
  */
 stock Effect_DrawBeamBoxRotatableToAll(
-	const Float origin[3],
-	const Float mins[3],
-	const Float maxs[3],
-	const Float angles[3],
+	const float origin[3],
+	const float mins[3],
+	const float maxs[3],
+	const float angles[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float life=5.0,
-	Float width=5.0,
-	Float endWidth=5.0,
+	float life=5.0,
+	float width=5.0,
+	float endWidth=5.0,
 	fadeLength=2,
-	Float amplitude=1.0,
+	float amplitude=1.0,
 	const color[4]={ 255, 0, 0, 255 },
 	speed=0
 )
 {
-	new clients[MaxClients];
-	new numClients = Client_Get(clients, CLIENTFILTER_INGAME);
+	int clients[MaxClients];
+	int numClients = Client_Get(clients, CLIENTFILTER_INGAME);
 
 	Effect_DrawBeamBoxRotatable(clients, numClients, origin, mins, maxs, angles, modelIndex, haloIndex, startFrame, frameRate, life, width, endWidth, fadeLength, amplitude, color, speed);
 }
@@ -471,24 +471,24 @@ stock Effect_DrawBeamBoxRotatableToAll(
 stock Effect_DrawBeamBoxRotatable(
 	clients[],
 	numClients,
-	const Float origin[3],
-	const Float mins[3],
-	const Float maxs[3],
-	const Float angles[3],
+	const float origin[3],
+	const float mins[3],
+	const float maxs[3],
+	const float angles[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float life=5.0,
-	Float width=5.0,
-	Float endWidth=5.0,
+	float life=5.0,
+	float width=5.0,
+	float endWidth=5.0,
 	fadeLength=2,
-	Float amplitude=1.0,
+	float amplitude=1.0,
 	const color[4]={ 255, 0, 0, 255 },
 	speed=0
 ) {
 	// Create the additional corners of the box
-	decl Float corners[8][3];
+	float corners[8][3];
 	Array_Copy(mins, corners[0], 3);
 	Math_MakeVector(maxs[0], mins[1], mins[2], corners[1]);
 	Math_MakeVector(maxs[0], maxs[1], mins[2], corners[2]);
@@ -499,33 +499,33 @@ stock Effect_DrawBeamBoxRotatable(
 	Math_MakeVector(mins[0], maxs[1], maxs[2], corners[7]);
 
 	// Rotate all edges
-	for (new i=0; i < sizeof(corners); i++) {
+	for (int i=0; i < sizeof(corners); i++) {
 		Math_RotateVector(corners[i], angles, corners[i]);
 	}
 
 	// Apply world offset (after rotation)
-	for (new i=0; i < sizeof(corners); i++) {
+	for (int i=0; i < sizeof(corners); i++) {
 		AddVectors(origin, corners[i], corners[i]);
 	}
 
     // Draw all the edges
 	// Horizontal Lines
 	// Bottom
-	for (new i=0; i < 4; i++) {
+	for (int i=0; i < 4; i++) {
 		new j = ( i == 3 ? 0 : i+1 );
 		TE_SetupBeamPoints(corners[i], corners[j], modelIndex, haloIndex, startFrame, frameRate, life, width, endWidth, fadeLength, amplitude, color, speed);
 		TE_Send(clients, numClients);
 	}
 
 	// Top
-	for (new i=4; i < 8; i++) {
+	for (int i=4; i < 8; i++) {
 		new j = ( i == 7 ? 4 : i+1 );
 		TE_SetupBeamPoints(corners[i], corners[j], modelIndex, haloIndex, startFrame, frameRate, life, width, endWidth, fadeLength, amplitude, color, speed);
 		TE_Send(clients, numClients);
 	}
 
 	// All Vertical Lines
-	for (new i=0; i < 4; i++) {
+	for (int i=0; i < 4; i++) {
 		TE_SetupBeamPoints(corners[i], corners[i+4], modelIndex, haloIndex, startFrame, frameRate, life, width, endWidth, fadeLength, amplitude, color, speed);
 		TE_Send(clients, numClients);
 	}
@@ -553,21 +553,21 @@ stock Effect_DrawBeamBoxRotatable(
  */
 stock Effect_DrawAxisOfRotationToClient(
 	client,
-	const Float origin[3],
-	const Float angles[3],
-	const Float length[3],
+	const float origin[3],
+	const float angles[3],
+	const float length[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float life=5.0,
-	Float width=5.0,
-	Float endWidth=5.0,
+	float life=5.0,
+	float width=5.0,
+	float endWidth=5.0,
 	fadeLength=2,
-	Float amplitude=1.0,
+	float amplitude=1.0,
 	speed=0
 ) {
-    new clients[1];
+    int clients[1];
     clients[0] = client;
     Effect_DrawAxisOfRotation(clients, 1, origin, angles, length, modelIndex, haloIndex, startFrame, frameRate, life, width, endWidth, fadeLength, amplitude, speed);
 }
@@ -592,23 +592,23 @@ stock Effect_DrawAxisOfRotationToClient(
  * @noreturn
  */
 stock Effect_DrawAxisOfRotationToAll(
-	const Float origin[3],
-	const Float angles[3],
-	const Float length[3],
+	const float origin[3],
+	const float angles[3],
+	const float length[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float life=5.0,
-	Float width=5.0,
-	Float endWidth=5.0,
+	float life=5.0,
+	float width=5.0,
+	float endWidth=5.0,
 	fadeLength=2,
-	Float amplitude=1.0,
+	float amplitude=1.0,
 	speed=0
 )
 {
-	new clients[MaxClients];
-	new numClients = Client_Get(clients, CLIENTFILTER_INGAME);
+	int clients[MaxClients];
+	int numClients = Client_Get(clients, CLIENTFILTER_INGAME);
 
 	Effect_DrawAxisOfRotation(clients, numClients, origin, angles, length, modelIndex, haloIndex, startFrame, frameRate, life, width, endWidth, fadeLength, amplitude, speed);
 }
@@ -637,22 +637,22 @@ stock Effect_DrawAxisOfRotationToAll(
 stock Effect_DrawAxisOfRotation(
 	clients[],
 	numClients,
-	const Float origin[3],
-	const Float angles[3],
-	const Float length[3],
+	const float origin[3],
+	const float angles[3],
+	const float length[3],
 	modelIndex,
 	haloIndex,
 	startFrame=0,
 	frameRate=30,
-	Float life=5.0,
-	Float width=5.0,
-	Float endWidth=5.0,
+	float life=5.0,
+	float width=5.0,
+	float endWidth=5.0,
 	fadeLength=2,
-	Float amplitude=1.0,
+	float amplitude=1.0,
 	speed=0
 ) {
 	// Create the additional corners of the box
-	float xAxis[3], Float yAxis[3], Float zAxis[3];
+	float xAxis[3], float yAxis[3], float zAxis[3];
 	xAxis[0] = length[0];
 	yAxis[1] = length[1];
 	zAxis[2] = length[2];
@@ -692,25 +692,25 @@ stock Effect_DrawAxisOfRotation(
  * @param renderFx			Render fx (use the enum).
  * @param glowProxySize		Radius size of the glow when to be rendered, if inside a geometry. Ex: a block 2x2x2 units big, if the glowProxySize is between 0.0 and 2.0 the sprite will not be rendered, even if the actual size of the sprite is bigger, everything above 2.0 will render the sprite. Using an abnormal high value will render Sprites trough walls.
  * @param frameRate			Sprite frame rate.
- * @param hdrColorScale 	Float value to multiply sprite color by when running with HDR.
+ * @param hdrColorScale 	float value to multiply sprite color by when running with HDR.
  * @param receiveShadows	When false then this prevents the sprite from receiving shadows.
  * @return					Entity Index of the created Sprite.
  */
 stock Effect_EnvSprite(
-	const Float origin[3],
+	const float origin[3],
 	modelIndex,
 	const color[4]={255, 255, 255, 255},
-	Float scale=0.25,
-	const String:targetName[MAX_NAME_LENGTH]="",
+	float scale=0.25,
+	const char targetName[MAX_NAME_LENGTH]="",
 	parent=-1,
 	RenderMode:renderMode=RENDER_WORLDGLOW,
 	RenderFx:renderFx=RENDERFX_NONE,
-	Float glowProxySize=2.0,
-	Float framerate=10.0,
-	Float hdrColorScale=1.0,
+	float glowProxySize=2.0,
+	float framerate=10.0,
+	float hdrColorScale=1.0,
 	bool receiveShadows = true
 ) {
-	new entity = Entity_Create("env_sprite");
+	int entity = Entity_Create("env_sprite");
 
 	if (entity == INVALID_ENT_REFERENCE) {
 		return INVALID_ENT_REFERENCE;

@@ -95,7 +95,7 @@
 #define ITEM_ENERGY10        41 // 10 Energy - Purchase 10 energy
 #define ITEM_ENERGY50        42 // 50 Energy - Purchase 50 energy
 #define ITEM_ENERGY100       43 // 100 Energy - Purchase 100 energy
-#define ITEM_ENERGY          44 // Energy - Convert all +crystals into energy.
+#define ITEM_ENERGY          44 // Energy - Convert all +crystals int o energy.
 #define MAXITEMS             45
 
 static const char[] maskSnd[]   = "sc/mask.mp3";
@@ -508,7 +508,7 @@ public Action OnItemPurchaseEx(int client, int item, bool &use_pcrystals, int &c
 
 public OnItemPurchase(client,item)
 {
-    new Action returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
 
     TraceInto("ShopItems", "OnItemPurchase", "client=%d:%N, item=%d", \
               client, ValidClientIndex(client), item);
@@ -1343,7 +1343,7 @@ public Action OnTraceAttack(int victim, int &attacker, int &inflictor, float &da
 
         if (GameType == tf2 && GetMode() != MvM)
         {
-            decl float pos[3];
+            float pos[3];
             GetClientEyePosition(victim, pos);
             pos[2] += 4.0;
             TE_SetupParticle("miss_text", pos);

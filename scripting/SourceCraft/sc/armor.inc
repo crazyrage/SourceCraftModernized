@@ -22,7 +22,7 @@ stock m_savedArmor[MAXPLAYERS+1];
  * Sets up the amount of armor the client has
  *
  * @param client 	    Client
- * @param level         The upgrade level used to index into the initialArmor[] array
+ * @param level         The upgrade level used to index int o the initialArmor[] array
  * @param initialArmor  Array of initial armor amounts for each level (as percent of health).
  * @param armorPercent  Array that holds a range of percent damage the armor absorbs for each level.
  * @param armorName:    What to call the armor in messages. (max 64) [defaults to either Armor or Shields]

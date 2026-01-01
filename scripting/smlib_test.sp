@@ -50,7 +50,7 @@ public Plugin myinfo = {
 
 *****************************************************************/
 
-// ConVar Handles
+// ConVar Handle s
 
 // Misc
 
@@ -70,7 +70,7 @@ public OnPluginStart()
  	#pragma unused b
 
 	int arr[1], char arr_str[1][1];
-	decl float vec[3];
+	float vec[3];
 	char buf[1], char twoDimStrArr[1][1];
 
 	// File: arrays.inc

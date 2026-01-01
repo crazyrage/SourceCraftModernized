@@ -26,9 +26,9 @@ stock DissolveRagdoll(client, float delay=0.0)
     }
 }
 
-public Action Dissolve(Handle timer, any:userid)
+public Action Dissolve(Handle timer, any userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (client > 0 && IsValidEntity(client))
     {
         if (IsEntLimitReached(.client=client,
@@ -37,7 +37,7 @@ public Action Dissolve(Handle timer, any:userid)
             return;
         }
 
-        new ragdoll = GetEntPropEnt(client, Prop_Send, "m_hRagdoll");
+        int ragdoll = GetEntPropEnt(client, Prop_Send, "m_hRagdoll");
         if (ragdoll < 0)
         {
             PrintToServer("[DISSOLVE] Could not get ragdoll for player!");  
@@ -47,7 +47,7 @@ public Action Dissolve(Handle timer, any:userid)
         char dname[32];
         Format(dname, sizeof(dname), "dis_%d", client);
 
-        new ent = CreateEntityByName("env_entity_dissolver");
+        int ent = CreateEntityByName("env_entity_dissolver");
         if (ent > 0 && IsValidEdict(ent))
         {
             DispatchKeyValue(ragdoll, "targetname", dname);

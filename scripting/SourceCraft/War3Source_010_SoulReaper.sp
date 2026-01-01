@@ -131,7 +131,7 @@ public OnAbilityCommand(client,ability,bool pressed)
 {
     if(War3_GetRace(client)==thisRaceID && ability==0 && pressed && IsPlayerAlive(client))
     {
-        new skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_JUDGE);
+        int skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_JUDGE);
         if(skill_level>0)
         {
             
@@ -176,7 +176,7 @@ public OnUltimateCommand(client,race,bool pressed)
     {
         //if(
         
-        new skill=War3_GetSkillLevel(client,race,ULT_EXECUTE);
+        int skill=War3_GetSkillLevel(client,race,ULT_EXECUTE);
         if(skill>0)
         {
             if(!Silenced(client)&&War3_SkillNotInCooldown(client,thisRaceID,ULT_EXECUTE,true))
@@ -220,15 +220,15 @@ public OnUltimateCommand(client,race,bool pressed)
 
 public PlayerDeathEvent(Handle event,const char[] name[],bool dontBroadcast)
 {
-    new userid=GetEventInt(event,"userid");
-    new victim=GetClientOfUserId(userid);
+    int userid=GetEventInt(event,"userid");
+    int victim=GetClientOfUserId(userid);
     
     if(victim>0)
     {
-        new float deathvec[3];
+        int float deathvec[3];
         GetClientAbsOrigin(victim,deathvec);
         
-        new float gainhpvec[3];
+        int float gainhpvec[3];
         
         for(int client=1;client<=MaxClients;client++)
         {

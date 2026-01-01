@@ -25,7 +25,7 @@ stock bool File_GetBaseName(const char[] path, char[] buffer, size)
 		return;
 	}
 
-	new pos_start = FindCharInString(path, '/', true);
+	int pos_start = FindCharInString(path, '/', true);
 
 	if (pos_start == -1) {
 		pos_start = FindCharInString(path, '\\', true);
@@ -55,7 +55,7 @@ stock bool File_GetDirName(const char[] path, char[] buffer, size)
 		return;
 	}
 
-	new pos_start = FindCharInString(path, '/', true);
+	int pos_start = FindCharInString(path, '/', true);
 
 	if (pos_start == -1) {
 		pos_start = FindCharInString(path, '\\', true);
@@ -89,7 +89,7 @@ stock bool File_GetFileName(const char[] path, char[] buffer, size)
 
 	File_GetBaseName(path, buffer, size);
 
-	new pos_ext = FindCharInString(buffer, '.', true);
+	int pos_ext = FindCharInString(buffer, '.', true);
 
 	if (pos_ext != -1) {
 		buffer[pos_ext] = '\0';
@@ -109,7 +109,7 @@ stock bool File_GetFileName(const char[] path, char[] buffer, size)
  */
 stock File_GetExtension(const char[] path, char[] buffer, size)
 {
-	new extpos = FindCharInString(path, '.', true);
+	int extpos = FindCharInString(path, '.', true);
 
 	if (extpos == -1) {
 		buffer[0] = '\0';
@@ -187,8 +187,8 @@ stock File_AddToDownloadsTable(const char[] path, bool recursive=true, const cha
 		if (StrEqual(fileExtension, "*")) {
 
 			char dirName[PLATFORM_MAX_PATH],
-				String:fileName[PLATFORM_MAX_PATH],
-				String:dirEntry[PLATFORM_MAX_PATH];
+				char fileName[PLATFORM_MAX_PATH],
+				char dirEntry[PLATFORM_MAX_PATH];
 
 			File_GetDirName(path, dirName, sizeof(dirName));
 			File_GetFileName(path, fileName, sizeof(fileName));
@@ -299,12 +299,12 @@ stock File_LoadTranslations(const char[] file, setFailState=true)
 }
 
 /*
- * Reads the contents of a given file into a string buffer in binary mode.
+ * Reads the contents of a given file int o a string buffer in binary mode.
  *
  * @param path		Path to the file
  * @param buffer	String buffer
- * @param size		If -1, reads until a null terminator is encountered in the file.  Otherwise, read_count bytes are read into the buffer provided.  In this case the buffer is not explicitly null terminated, and the buffer will contain any null terminators read from the file.
- * @return			Number of characters written to the buffer, or -1 if an error was encountered.
+ * @param size		If -1, reads until a null terminator is encountered in the file.  Otherwise, read_count bytes are read int o the buffer provided.  In this case the buffer is not explicitly null terminated, and the buffer will contain any null terminators read from the file.
+ * @return			Number of char acters written to the buffer, or -1 if an error was encountered.
  */
 stock File_ToString(const char[] path, char[] buffer, size)
 {
@@ -315,14 +315,14 @@ stock File_ToString(const char[] path, char[] buffer, size)
 		return -1;
 	}
 
-	new num_bytes_written = ReadFileString(file, buffer, size);
+	int num_bytes_written = ReadFileString(file, buffer, size);
 	CloseHandle(file);
 
 	return num_bytes_written;
 }
 
 /*
- * Writes a string into a file in binary mode.
+ * Writes a string int o a file in binary mode.
  *
  * @param file		Path to the file
  * @param str		String to write
@@ -365,8 +365,8 @@ stock bool File_Copy(const char[] source, const char[] destination)
 		return false;
 	}
 
-	new buffer[32];
-	new cache;
+	int buffer[32];
+	int cache;
 
 	while (!IsEndOfFile(file_source)) {
 		cache = ReadFile(file_source, buffer, 32, 1);
@@ -422,7 +422,7 @@ static stock bool Sub_File_CopyRecursive(const char[] path, const char[] destina
 		}
 
 		char source_buffer[PLATFORM_MAX_PATH],
-			String:destination_buffer[PLATFORM_MAX_PATH];
+			char destination_buffer[PLATFORM_MAX_PATH];
 		new FileType:type;
 
 		while (ReadDirEntry(directory, source_buffer, sizeof(source_buffer), type)) {

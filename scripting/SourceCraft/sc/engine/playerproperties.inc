@@ -65,7 +65,7 @@ enum HudBlocks { Block1, Block2 };
 
 //                                                        FourByThree  Widescreen
 //new const float HudPos[HudBlocks][HudAspect][Position]
-new const float HudPos[HudBlocks][HudAspect][2]    = { { {0.20, 0.80}, {0.18, 0.84} },    // Block 1
+static const float HudPos[HudBlocks][HudAspect][2]    = { { {0.20, 0.80}, {0.18, 0.84} },    // Block 1
                                                        { {0.64, 0.80}, {0.68, 0.87} } };  // Block 2
 
 CreateHUDTimer(client)
@@ -79,7 +79,7 @@ CreateHUDTimer(client)
 
 KillHUDTimer(client)
 {
-    new Handle timer=g_HUDTimers[client];
+    int Handle timer=g_HUDTimers[client];
     if (timer != null)
     {
         ResetHUDTimer(client);	
@@ -110,7 +110,7 @@ CreatePropertyTimer(client)
 
 KillPropertyTimer(client)
 {
-    new Handle timer=g_PropertyTimers[client];
+    int Handle timer=g_PropertyTimers[client];
     if (timer != null)
     {
         ResetPropertyTimer(client);	
@@ -134,7 +134,7 @@ InitHud()
 {
     if (GetGameType() != dod)
     {
-        for (new h=0; h < sizeof(m_HudSynch); h++)
+        for (int h=0; h < sizeof(m_HudSynch); h++)
             m_HudSynch[h] = CreateHudSynchronizer();
     }
 }
@@ -143,7 +143,7 @@ CloseHud()
 {
     if (GetGameType() == tf2 || GameType == hl2mp)
     {
-        for (new h=0; h < sizeof(m_HudSynch); h++)
+        for (int h=0; h < sizeof(m_HudSynch); h++)
         {
             CloseHandle(m_HudSynch[h]);
             m_HudSynch[h] = null;
@@ -151,7 +151,7 @@ CloseHud()
     }
 }
 
-public Action PlayerHUD(Handle timer, any:userid)
+public Action PlayerHUD(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
 
@@ -215,7 +215,7 @@ public Action PlayerHUD(Handle timer, any:userid)
                     float regen=m_PartialHealthRegen[client];
                     float shields=m_PartialShieldRegen[client];
                     new numprops=GetArraySize(propData);
-                    for (new x=0;x<numprops;x++)
+                    for (int x=0;x<numprops;x++)
                     {
                         new Handle propInfo=GetArrayCell(propData,x);
                         if (propInfo != null)
@@ -399,7 +399,7 @@ public Action PlayerHUD(Handle timer, any:userid)
     return Plugin_Continue;
 }
 
-public Action PlayerProperties(Handle timer, any:userid)
+public Action PlayerProperties(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
 
@@ -439,7 +439,7 @@ public Action PlayerProperties(Handle timer, any:userid)
                 m_IsMoving[client] = false;
 
                 new size = GetArraySize(propData);
-                for(new k=0;k<size;k++)
+                for (int k=0;k<size;k++)
                 {
                     // check which plugin is the highest/lowest bidder, but first, override?
                     new Handle propInfo             = GetArrayCell(propData,k);
@@ -744,18 +744,18 @@ public Action PlayerProperties(Handle timer, any:userid)
                         if (debugMeters)
                         {
                             float energyDrinkMeter = TF2_GetEnergyDrinkMeter(client);
-                            float chargeMeter = TF2_GetChargeMeter(client);
+                            float char geMeter = TF2_GetChargeMeter(client);
                             float cloakMeter = TF2_GetCloakMeter(client);
                             float rageMeter = TF2_GetRageMeter(client);
                             float hypeMeter = TF2_GetHypeMeter(client);
 
-                            LogMessage("%Ns pcond=[%s]-(0x%08x:%08x) %s stun=0x%08x Speed=%4.2f:%3.0f hype=%4.2f rage=%4.2f drink=%4.2f charge=%4.2f cloak=%4.2f",
+                            LogMessage("%Ns pcond=[%s]-(0x%08x:%08x) %s stun=0x%08x Speed=%4.2f:%3.0f hype=%4.2f rage=%4.2f drink=%4.2f char ge=%4.2f cloak=%4.2f",
                                        client, condFlags, pcond, pcond2, (g_IsInSpawn[client] ? "InSpawn" : ""), stunFlags, speed, maxSpeed, hypeMeter, rageMeter,
-                                       energyDrinkMeter, chargeMeter, cloakMeter);
+                                       energyDrinkMeter, char geMeter, cloakMeter);
 
-                            CPrintToChat(client, "pcond=[%s]-(0x%08x:%08x) %s stun=0x%08x Speed=%4.2f:%3.0f hype=%4.2f rage=%4.2f drink=%4.2f charge=%4.2f cloak=%4.2f",
+                            CPrintToChat(client, "pcond=[%s]-(0x%08x:%08x) %s stun=0x%08x Speed=%4.2f:%3.0f hype=%4.2f rage=%4.2f drink=%4.2f char ge=%4.2f cloak=%4.2f",
                                          condFlags, pcond, pcond2, (g_IsInSpawn[client] ? "InSpawn" : ""), stunFlags, speed, maxSpeed, hypeMeter, rageMeter,
-                                         energyDrinkMeter, chargeMeter, cloakMeter);
+                                         energyDrinkMeter, char geMeter, cloakMeter);
                         }
                         else
                         {
@@ -771,15 +771,15 @@ public Action PlayerProperties(Handle timer, any:userid)
                     else if (debugMeters)
                     {
                         float energyDrinkMeter = TF2_GetEnergyDrinkMeter(client);
-                        float chargeMeter = TF2_GetChargeMeter(client);
+                        float char geMeter = TF2_GetChargeMeter(client);
                         float cloakMeter = TF2_GetCloakMeter(client);
                         float rageMeter = TF2_GetRageMeter(client);
                         float hypeMeter = TF2_GetHypeMeter(client);
-                        LogMessage("%Ns pcond=[%s]-(0x%08x:%08x) hype=%4.2f rage=%4.2f drink=%4.2f charge=%4.2f cloak=%4.2f",
-                                   client, condFlags, pcond, pcond2, hypeMeter, rageMeter, energyDrinkMeter, chargeMeter, cloakMeter);
+                        LogMessage("%Ns pcond=[%s]-(0x%08x:%08x) hype=%4.2f rage=%4.2f drink=%4.2f char ge=%4.2f cloak=%4.2f",
+                                   client, condFlags, pcond, pcond2, hypeMeter, rageMeter, energyDrinkMeter, char geMeter, cloakMeter);
 
-                        CPrintToChat(client, "pcond=[%s]-(0x%08x:%08x) hype=%4.2f rage=%4.2f drink=%4.2f charge=%4.2f cloak=%4.2f",
-                                     condFlags, pcond, pcond2, hypeMeter, rageMeter, energyDrinkMeter, chargeMeter, cloakMeter);
+                        CPrintToChat(client, "pcond=[%s]-(0x%08x:%08x) hype=%4.2f rage=%4.2f drink=%4.2f char ge=%4.2f cloak=%4.2f",
+                                     condFlags, pcond, pcond2, hypeMeter, rageMeter, energyDrinkMeter, char geMeter, cloakMeter);
                     }
                     else
                     {
@@ -795,15 +795,15 @@ public Action PlayerProperties(Handle timer, any:userid)
                     if (debugMeters)
                     {
                         float energyDrinkMeter = TF2_GetEnergyDrinkMeter(client);
-                        float chargeMeter = TF2_GetChargeMeter(client);
+                        float char geMeter = TF2_GetChargeMeter(client);
                         float cloakMeter = TF2_GetCloakMeter(client);
                         float rageMeter = TF2_GetRageMeter(client);
                         float hypeMeter = TF2_GetHypeMeter(client);
 
-                        LogMessage("%Ns stun=0x%08x Speed=%4.2f:%3.0f hype=%4.2f rage=%4.2f drink=%4.2f charge=%4.2f cloak=%4.2f",
-                                   client, stunFlags, speed, maxSpeed, hypeMeter, rageMeter, energyDrinkMeter, chargeMeter, cloakMeter);
-                        CPrintToChat(client, "stun=0x%08x Speed=%4.2f:%3.0f hype=%4.2f rage=%4.2f drink=%4.2f charge=%4.2f cloak=%4.2f",
-                                     stunFlags, speed, maxSpeed, hypeMeter, rageMeter, energyDrinkMeter, chargeMeter, cloakMeter);
+                        LogMessage("%Ns stun=0x%08x Speed=%4.2f:%3.0f hype=%4.2f rage=%4.2f drink=%4.2f char ge=%4.2f cloak=%4.2f",
+                                   client, stunFlags, speed, maxSpeed, hypeMeter, rageMeter, energyDrinkMeter, char geMeter, cloakMeter);
+                        CPrintToChat(client, "stun=0x%08x Speed=%4.2f:%3.0f hype=%4.2f rage=%4.2f drink=%4.2f char ge=%4.2f cloak=%4.2f",
+                                     stunFlags, speed, maxSpeed, hypeMeter, rageMeter, energyDrinkMeter, char geMeter, cloakMeter);
                     }
                     else
                     {
@@ -814,15 +814,15 @@ public Action PlayerProperties(Handle timer, any:userid)
                 else if (debugMeters && !IsFakeClient(client))
                 {
                     float energyDrinkMeter = TF2_GetEnergyDrinkMeter(client);
-                    float chargeMeter = TF2_GetChargeMeter(client);
+                    float char geMeter = TF2_GetChargeMeter(client);
                     float cloakMeter = TF2_GetCloakMeter(client);
                     float rageMeter = TF2_GetRageMeter(client);
                     float hypeMeter = TF2_GetHypeMeter(client);
-                    LogMessage("%Ns hype=%4.2f rage=%4.2f drink=%4.2f charge=%4.2f cloak=%4.2f",
-                               client, hypeMeter, rageMeter, energyDrinkMeter, chargeMeter, cloakMeter);
+                    LogMessage("%Ns hype=%4.2f rage=%4.2f drink=%4.2f char ge=%4.2f cloak=%4.2f",
+                               client, hypeMeter, rageMeter, energyDrinkMeter, char geMeter, cloakMeter);
 
-                    CPrintToChat(client, "hype=%4.2f rage=%4.2f drink=%4.2f charge=%4.2f cloak=%4.2f",
-                                 hypeMeter, rageMeter, energyDrinkMeter, chargeMeter, cloakMeter);
+                    CPrintToChat(client, "hype=%4.2f rage=%4.2f drink=%4.2f char ge=%4.2f cloak=%4.2f",
+                                 hypeMeter, rageMeter, energyDrinkMeter, char geMeter, cloakMeter);
                 }
             }
         }
@@ -835,13 +835,13 @@ public Action PlayerProperties(Handle timer, any:userid)
         // Update Hint Messages
         float time = GetEngineTime();
         char buffer[LONG_STRING_LENGTH];
-        for (new HintSlot:slot = HintSlot_Generic; slot < HintSlot; slot++)
+        for (int HintSlot:slot = HintSlot_Generic; slot < HintSlot; slot++)
         {
             new Handle hintSlot=g_HintStack[client][slot];
             if (hintSlot != null)
             {
                 new size=GetArraySize(hintSlot);
-                for (new index = 0; index < size; index++)
+                for (int index = 0; index < size; index++)
                 {
                     new Handle pack = Handle GetArrayCell(hintSlot,index);
                     ResetPack(pack);
@@ -876,14 +876,14 @@ public Action PlayerProperties(Handle timer, any:userid)
             StopSound(client, SNDCHAN_STATIC, "UI/hint.wav");
 
             // Trim spaces & newlines
-            for (new len = strlen(buffer); len > 0 && (buffer[len-1] == '\n' || buffer[len-1] == ' '); len--)
+            for (int len = strlen(buffer); len > 0 && (buffer[len-1] == '\n' || buffer[len-1] == ' '); len--)
             {
                 buffer[len] = '\0';
             }
 
             if (!StrEqual(g_HintCache[client],buffer))
             {
-                // Prepend a space to prevent interception
+                // Prepend a space to prevent int erception
                 PrintHintText(client," %s",buffer);
             }
         }
@@ -941,7 +941,7 @@ CalculateVisibility(client, const char[] wepName[], bool isStill, &visibility,
     TraceInto("PlayerProperties", "CalculateVisibility", "client=%d:%L,wepName=%s,isStill=%d,visibility=%d,type=%d,factor1=%f,factor2=%f,mode=%d,fx=%d", \
               client, ValidClientIndex(client), wepName, isStill, visibility, type, factor1, factor2, mode, fx);
 
-    new original_visibility = visibility;
+    int original_visibility = visibility;
 
     if (type == TimedInvisibility || type == TimedMeleeInvisibility || type == GraduatedEffects)
     {
@@ -1031,7 +1031,7 @@ CalculateVisibility(client, const char[] wepName[], bool isStill, &visibility,
         }
     }
 
-    new rank;
+    int rank;
     if (mode == RENDER_NONE)
         rank = 0;
     else
@@ -1062,7 +1062,7 @@ SetVisibility(client, visibility, RenderMode:mode, RenderFx:fx,
               "client=%d:%L,visibility=%d,mode=%d,fx=%d,r=%d,g=%d,b=%d,weaponAlpha=%d", \
               client, ValidClientIndex(client), visibility, mode, fx, r, g, b, weaponAlpha);
 
-    // Change RENDER_NONE into RENDER_TRANSCOLOR with 0 alpha
+    // Change RENDER_NONE int o RENDER_TRANSCOLOR with 0 alpha
     if (mode == RENDER_NONE)
     {
         visibility = 0;
@@ -1074,22 +1074,22 @@ SetVisibility(client, visibility, RenderMode:mode, RenderFx:fx,
        mode = RENDER_TRANSCOLOR;
     }
 
-    new bool setMode = (GetEntityRenderMode(client) != mode);
+    int bool setMode = (GetEntityRenderMode(client) != mode);
     if (setMode)
     {
         SetEntityRenderMode(client,mode);
         m_VisibilityAltered[client]=true;
     }
 
-    new bool setFx = (GetEntityRenderFx(client) != fx);
+    int bool setFx = (GetEntityRenderFx(client) != fx);
     if (setFx)
     {
         SetEntityRenderFx(client,fx);
         m_VisibilityAltered[client]=true;
     }
 
-    new bool setAlpha = (GetEntityRenderAlpha(client) != visibility);
-    new bool setColor = (GetEntityRenderRed(client) != r ||
+    int bool setAlpha = (GetEntityRenderAlpha(client) != visibility);
+    int bool setColor = (GetEntityRenderRed(client) != r ||
                          GetEntityRenderGreen(client) != g ||
                          GetEntityRenderBlue(client) != b);
     if (setAlpha || setColor)
@@ -1107,7 +1107,7 @@ SetVisibility(client, visibility, RenderMode:mode, RenderFx:fx,
         m_VisibilityAltered[client] || m_ColorAltered[client] ||
         m_WeaponsAltered[client])
     {
-        new r2, g2, b2;
+        int r2, g2, b2;
         if (colorWeapons || (weaponAlpha >= 0 && weaponAlpha < 255))
         {
             r2 = r;
@@ -1125,7 +1125,7 @@ SetVisibility(client, visibility, RenderMode:mode, RenderFx:fx,
         if (weaponAlpha < 0 || weaponAlpha > 255)
             weaponAlpha = visibility;
 
-        new weapon = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+        int weapon = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
         if (weapon > 0 && IsValidEdict(weapon))
         {
             char classname[CLASS_STRING_LENGTH];
@@ -1165,7 +1165,7 @@ SetVisibility(client, visibility, RenderMode:mode, RenderFx:fx,
         else if (m_hMyWeapons)
         {
             // Set the visibility of ALL the player's weapons
-            for (new i=0;i<47;i += 4)
+            for (int i=0;i<47;i += 4)
             {
                 weapon=GetEntDataEnt2(client,m_hMyWeapons + i);
                 if (weapon > 0 && IsValidEdict(weapon))
@@ -1295,7 +1295,7 @@ SetWearablesVisibility(client,  const char[] class[], visibility,
               "client=%d:%L,class=%s,visibility=%d,mode=%d,fx=%d,r=%d,g=%d,b=%d", \
               client, ValidClientIndex(client), class, visibility, mode, fx, r, g, b);
 
-    new ent = -1;
+    int ent = -1;
     while( (ent = FindEntityByClassname(ent, class)) != -1 )
     {
         if (GetEntPropEnt(ent, Prop_Send, "m_hOwnerEntity") == client)
@@ -1325,7 +1325,7 @@ SetWearablesVisibility(client,  const char[] class[], visibility,
     TraceReturn();
 }
 
-public Action CheckPlayerMotion(Handle timer, any:client)
+public Action CheckPlayerMotion(Handle timer, any client)
 {
     TraceInto("PlayerProperties", "CheckPlayerMotion", "client=%d:%L", \
               client, ValidClientIndex(client));
@@ -1385,7 +1385,7 @@ ResetVisibility(client)
         }
 
         // Reset the visibility of players active weapon
-        new weapon = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+        int weapon = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
         if (weapon > 0 && IsValidEdict(weapon))
         {
             char classname[CLASS_STRING_LENGTH];
@@ -1418,7 +1418,7 @@ ResetVisibility(client)
         if (m_hMyWeapons)
         {
             // Just to be sure, reset the visibility of ALL of the players weapons
-            for (new i=0;i<47;i += 4)
+            for (int i=0;i<47;i += 4)
             {
                 weapon=GetEntDataEnt2(client,m_hMyWeapons + i);
                 if (weapon > 0 && IsValidEdict(weapon))

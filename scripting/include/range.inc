@@ -10,7 +10,7 @@
 #endif
 #define _range_included
 
-stock Float TargetRange(client,index)
+stock float TargetRange(client,index)
 {
     float start[3];
     GetClientAbsOrigin(client,start);
@@ -24,18 +24,18 @@ stock Float TargetRange(client,index)
     return GetVectorDistance(start,end);
 }
 
-stock bool IsInRange(client,index,Float maxdistance)
+stock bool IsInRange(client,index,float maxdistance)
 {
     return (TargetRange(client,index)<maxdistance);
 }
 
-stock bool IsPointInRange(const Float start[3], const Float end[3],Float maxdistance)
+stock bool IsPointInRange(const float start[3], const float end[3],float maxdistance)
 {
     return (GetVectorDistance(start,end)<maxdistance);
 }
 
-stock PowerOfRange(Float location[3],Float radius,Float check_location[3],amount,
-                   Float factor=0.20,bool limit=true,&Float distance=0.0)
+stock int PowerOfRange(float location[3],float radius,float check_location[3],int amount,
+                   float factor=0.20,bool limit=true,float &distance=0.0)
 {
     if (radius <= 0.0)
         return amount;

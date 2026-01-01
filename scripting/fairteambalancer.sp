@@ -22,7 +22,7 @@
  *		* Admins are only immune when they have a certain flag
  *	2.5
  *		* Added defines for the event hooks and chat messages
- *		* Timer interval can be changed via CVar
+ *		* Timer int erval can be changed via CVar
  *	2.4.1
  *		* Specs were counted, causing an "array index out of bounds" error
  *	2.4
@@ -35,7 +35,7 @@
  *	2.1
  *		* Some bugfixes
  *	2.0
- *		* Changed by MistaGee to take team strengths into account
+ *		* Changed by MistaGee to take team strengths int o account
  *	1.0
  *		* Initial Release by dalto:
  *		  http://forums.alliedmods.net/showthread.php?p=519837
@@ -453,7 +453,7 @@ void:PerformTimedSwitch( client )
     switches_pending++;
 }
 
-public Action Timer_TeamSwitch( Handle timer, any:client )
+public Action Timer_TeamSwitch( Handle timer, any client )
 {
     if( !IsClientInGame( client ) )
         return Plugin_Stop;

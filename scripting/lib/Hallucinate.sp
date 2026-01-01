@@ -48,10 +48,10 @@
 #define DRUG_DIZZY      2
 #define DRUG_CRAZY      3
 
-new g_DrugType[MAXPLAYERS+1];
-floatg_flMagnitude[MAXPLAYERS+1];
-Handleg_DrugTimers[MAXPLAYERS+1];
-new const Float:g_DrugAngles[20] = {0.0, 5.0, 10.0, 15.0, 20.0, 25.0,
+int g_DrugType[MAXPLAYERS+1];
+float g_flMagnitude[MAXPLAYERS+1];
+Handle g_DrugTimers[MAXPLAYERS+1];
+static const float g_DrugAngles[20] = {0.0, 5.0, 10.0, 15.0, 20.0, 25.0,
                                     20.0, 15.0, 10.0, 5.0, 0.0, -5.0,
                                     -10.0, -15.0, -20.0, -25.0, -20.0,
                                     -15.0, -10.0, -5.0};
@@ -60,18 +60,18 @@ new const Float:g_DrugAngles[20] = {0.0, 5.0, 10.0, 15.0, 20.0, 25.0,
 new UserMsg:g_FadeUserMsgId;
 
 // Offset for m_vecPunchAngle
-new g_offsPunchAngle;
+int g_offsPunchAngle;
 
 public Plugin myinfo = 
 {
     name = "SourceCraft Upgrade - Hallucinate",
     author = "-=|JFH|=- Naris with code from the SourceMod Team",
-    description = "Native interface to the Hallucinate upgrade for SourceCraft.",
+    description = "Native int erface to the Hallucinate upgrade for SourceCraft.",
     version = "2.0",
     url = "http://sourcemod.net/"
 };
 
-public APLResAskPluginLoad2(Handle myself, bool late, char[] error, err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, err_max)
 {
     CreateNative("PerformDrug",Native_PerformDrug);
     CreateNative("PerformBlind",Native_PerformBlind);
@@ -150,7 +150,7 @@ public OnClientDisconnect(client)
     PerformDrug(client, 0, 0, 0.0);
 }
 
-public ActionEvent_PlayerDeath(Handle event,const char[]name[],bool dontBroadcast)
+public Action Event_PlayerDeath(Handle event,const char name[],bool dontBroadcast)
 {
     if (GameType == tf2)
     {
@@ -166,18 +166,18 @@ public ActionEvent_PlayerDeath(Handle event,const char[]name[],bool dontBroadcas
         }
     }
 
-    new client=GetClientOfUserId(GetEventInt(event,"userid"));
+    int client=GetClientOfUserId(GetEventInt(event,"userid"));
     KillDrug(client);
     return Plugin_Handled;
 }
 
-public ActionEvent_RoundEnd(Handle event,const char[]name[],bool dontBroadcast)
+public Action Event_RoundEnd(Handle event,const char name[],bool dontBroadcast)
 {
     KillAllDrugs();
     return Plugin_Handled;
 }
 
-CreateDrug(client, type, Float:magnitude)
+CreateDrug(client, type, float magnitude)
 {
     g_DrugType[client] = type;
     g_flMagnitude[client] = magnitude;
@@ -188,19 +188,19 @@ KillDrug(client)
 {
     KillDrugTimer(client);
 
-    floatpos[3];
+    float pos[3];
     GetClientAbsOrigin(client, pos);
-    floatangs[3];
+    float angs[3];
     GetClientEyeAngles(client, angs);
 
     angs[2] = 0.0;
 
     TeleportEntity(client, pos, angs, NULL_VECTOR);	
 
-    new clients[2];
+    int clients[2];
     clients[0] = client;	
 
-    Handlemessage = StartMessageEx(g_FadeUserMsgId, clients, 1);
+    Handle message = StartMessageEx(g_FadeUserMsgId, clients, 1);
     BfWriteShort(message, 1536);
     BfWriteShort(message, 1536);
     BfWriteShort(message, (0x0001 | 0x0010));
@@ -233,7 +233,7 @@ KillAllDrugs()
     }
 }
 
-bool:PerformDrug(target, toggle, type, Float:magnitude)
+bool:PerformDrug(target, toggle, type, float magnitude)
 {
     switch (toggle)
     {
@@ -273,10 +273,10 @@ bool:PerformDrug(target, toggle, type, Float:magnitude)
 
 PerformBlind(target, amount)
 {
-	new targets[2];
+	int targets[2];
 	targets[0] = target;
 	
-	Handlemessage = StartMessageEx(g_FadeUserMsgId, targets, 1);
+	Handle message = StartMessageEx(g_FadeUserMsgId, targets, 1);
 	BfWriteShort(message, 1536);
 	BfWriteShort(message, 1536);
 	
@@ -293,7 +293,7 @@ PerformBlind(target, amount)
 	EndMessage();
 }
 
-public ActionTimer_Drug(Handle timer, any:client)
+public Action Timer_Drug(Handle timer, any client)
 {
     if (!IsClientInGame(client))
     {
@@ -306,7 +306,7 @@ public ActionTimer_Drug(Handle timer, any:client)
         return Plugin_Handled;
     }
 
-    new type = g_DrugType[client];
+    int type = g_DrugType[client];
     if (type == DRUG_RANDOM)
         type = GetRandomInt(DRUG_SOURCEMOD,DRUG_CRAZY);
 
@@ -314,10 +314,10 @@ public ActionTimer_Drug(Handle timer, any:client)
     {
         case DRUG_SOURCEMOD:
         {
-            floatpos[3];
+            float pos[3];
             GetClientAbsOrigin(client, pos);
 
-            floatangs[3];
+            float angs[3];
             GetClientEyeAngles(client, angs);
 
             angs[2] = g_DrugAngles[GetRandomInt(0,100) % 20];
@@ -327,7 +327,7 @@ public ActionTimer_Drug(Handle timer, any:client)
             new clients[2];
             clients[0] = client;	
 
-            Handlemessage = StartMessageEx(g_FadeUserMsgId, clients, 1);
+            Handle message = StartMessageEx(g_FadeUserMsgId, clients, 1);
             BfWriteShort(message, 255);
             BfWriteShort(message, 255);
             BfWriteShort(message, (0x0002));
@@ -339,7 +339,7 @@ public ActionTimer_Drug(Handle timer, any:client)
         }
         case DRUG_DIZZY:
         {
-            floatvecPunch[3];
+            float vecPunch[3];
             vecPunch[0] = GetRandomFloat(g_flMagnitude[client] * -1, g_flMagnitude[client]);
             vecPunch[1] = GetRandomFloat(g_flMagnitude[client] * -1, g_flMagnitude[client]);
             vecPunch[2] = GetRandomFloat(g_flMagnitude[client] * -1, g_flMagnitude[client]);
@@ -357,7 +357,7 @@ public ActionTimer_Drug(Handle timer, any:client)
 public Native_PerformDrug(Handle plugin,numParams)
 {
     return PerformDrug(GetNativeCell(1),GetNativeCell(2),
-                       GetNativeCell(3),Float:GetNativeCell(4));
+                       GetNativeCell(3),float GetNativeCell(4));
 }
 
 public Native_PerformBlind(Handle plugin,numParams)
@@ -365,24 +365,24 @@ public Native_PerformBlind(Handle plugin,numParams)
     PerformBlind(GetNativeCell(1),GetNativeCell(2));
 }
 
-public ActionCMD_Blind(client,args)
+public Action CMD_Blind(client,args)
 {
-    charmatch[MAX_TARGET_LENGTH];
+    char match[MAX_TARGET_LENGTH];
     GetCmdArg(1,match,sizeof(match));
 
-    new amt = 0;
+    int amt = 0;
     if (args >= 2)
     {
-        charbuf[32];
+        char buf[32];
         GetCmdArg(2,buf,sizeof(buf));
 
         amt=StringToInt(buf);
     }
 
-    booltn_is_ml;
-    new target_list[MAXPLAYERS];
-    chartarget_name[MAX_TARGET_LENGTH];
-    new count = ProcessTargetString(match, client, target_list, sizeof(target_list),
+    bool tn_is_ml;
+    int target_list[MAXPLAYERS];
+    char target_name[MAX_TARGET_LENGTH];
+    int count = ProcessTargetString(match, client, target_list, sizeof(target_list),
                                     COMMAND_FILTER_NO_BOTS, target_name,
                                     sizeof(target_name), tn_is_ml);
 
@@ -390,7 +390,7 @@ public ActionCMD_Blind(client,args)
         ReplyToTargetError(client, count);
     else
     {
-        for(new x=0;x<count;x++)
+        for (int x=0;x<count;x++)
         {
             new index = target_list[x];
             if (index > 0 && IsClientInGame(index))
@@ -405,17 +405,17 @@ public ActionCMD_Blind(client,args)
     return Plugin_Handled;
 }
 
-public ActionCMD_Drug(client,args)
+public Action CMD_Drug(client,args)
 {
-    charmatch[MAX_TARGET_LENGTH];
+    char match[MAX_TARGET_LENGTH];
     GetCmdArg(1,match,sizeof(match));
 
-    new toggle = 2;
-    new type = DRUG_RANDOM;
-    floatmagnitude = 0.0;
+    int toggle = 2;
+    int type = DRUG_RANDOM;
+    float magnitude = 0.0;
     if (args >= 2)
     {
-        charbuf[32];
+        char buf[32];
         GetCmdArg(2,buf,sizeof(buf));
         toggle=StringToInt(buf);
 
@@ -432,10 +432,10 @@ public ActionCMD_Drug(client,args)
         }
     }
 
-    booltn_is_ml;
-    new target_list[MAXPLAYERS];
-    chartarget_name[MAX_TARGET_LENGTH];
-    new count = ProcessTargetString(match, client, target_list, sizeof(target_list),
+    bool tn_is_ml;
+    int target_list[MAXPLAYERS];
+    char target_name[MAX_TARGET_LENGTH];
+    int count = ProcessTargetString(match, client, target_list, sizeof(target_list),
                                     COMMAND_FILTER_NO_BOTS, target_name,
                                     sizeof(target_name), tn_is_ml);
 
@@ -443,12 +443,12 @@ public ActionCMD_Drug(client,args)
         ReplyToTargetError(client, count);
     else
     {
-        for(new x=0;x<count;x++)
+        for (int x=0;x<count;x++)
         {
             new index = target_list[x];
             if (index > 0 && IsClientInGame(index))
             {
-                PerformDrug(index, toggle, type, Float:magnitude);
+                PerformDrug(index, toggle, type, float magnitude);
                 LogAction(client, index, "[SC] %L Blinded %L'", client, index);
                 ReplyToCommand(client, "[SC] %L Blinded %L'", client, index);
             }

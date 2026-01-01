@@ -147,7 +147,7 @@ public OnAbilityCommand(client,ability,bool pressed)
 {
     if(War3_GetRace(client)==thisRaceID && ability==0 && pressed && IsPlayerAlive(client))
     {
-        new skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_3);
+        int skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_3);
         if(skill_level>0)
         {
             if(War3_SkillNotInCooldown(client,thisRaceID,SKILL_3,true))
@@ -205,7 +205,7 @@ public OnAbilityCommand(client,ability,bool pressed)
     }
 }
 
-public Action RemoveWindWalkBuff(Handle t,any:client)
+public Action RemoveWindWalkBuff(Handle t,any client)
 {
     if(ValidPlayer(client,true) && bWinded[client]==true)
     {
@@ -215,7 +215,7 @@ public Action RemoveWindWalkBuff(Handle t,any:client)
         PrintHintText(client,"WindWalk disappears");
         EmitSoundToAll(ww_off,client);
         War3_SetBuff(client,fMaxSpeed,thisRaceID,1.0);
-        new float this_pos[3];
+        int float this_pos[3];
         GetClientAbsOrigin(client,this_pos);
         TE_SetupBeamRingPoint(this_pos, 90.0, 40.0, HaloSprite, HaloSprite, 0, 5, 0.8, 50.0, 0.0, {155,115,100,200}, 1, 0) ;
 #if defined SOURCECRAFT
@@ -238,8 +238,8 @@ public bool FireArrow(const attacker,const victim,float delay,damage,bool searin
     {
         ToDealArrow[attacker]=damage;
         ArrowTarget[attacker]=victim;
-        new float start_pos[3];
-        new float target_pos[3];
+        int float start_pos[3];
+        int float target_pos[3];
         GetClientAbsOrigin(attacker,start_pos);
         GetClientAbsOrigin(victim,target_pos);
         target_pos[2]+=40.0;
@@ -279,7 +279,7 @@ public bool FireArrow(const attacker,const victim,float delay,damage,bool searin
     return false;
 }
 
-public Action Timer_DealDamage(Handle t,any:attacker)
+public Action Timer_DealDamage(Handle t,any attacker)
 {
     if(ValidPlayer(attacker,true))
     {
@@ -350,8 +350,8 @@ public OnW3TakeDmgBullet(victim,attacker,float damage)//OnWar3EventPostHurt( vic
 
 public void OnWar3EventDeath(victim, attacker, deathrace)
 {
-    new race=War3_GetRace(attacker);
-    new skill=War3_GetSkillLevel(attacker,thisRaceID,ULT);
+    int race=War3_GetRace(attacker);
+    int skill=War3_GetSkillLevel(attacker,thisRaceID,ULT);
     if(race==thisRaceID && skill>0 && ValidPlayer( victim, false ) && ValidPlayer( attacker, true ) && GetClientTeam( victim ) != GetClientTeam( attacker ) )
     {
         int hpadd = GetRandomInt(regain1[skill],regain0[skill]);
@@ -373,7 +373,7 @@ public void OnWar3EventDeath(victim, attacker, deathrace)
 #endif
         SetEntityHealth(attacker,GetClientHealth(attacker)+ hpadd);
         W3FlashScreen(attacker,RGBA_COLOR_RED,1.2,_,FFADE_IN);
-        new float fVec[3] = {0.0,0.0,900.0};
+        int float fVec[3] = {0.0,0.0,900.0};
         TE_SetupGlowSprite(fVec,Skydome,5.0,1.0,255);
 #if defined SOURCECRAFT
         TE_SendEffectToAll();
@@ -382,7 +382,7 @@ public void OnWar3EventDeath(victim, attacker, deathrace)
 #endif
 
         CreateTesla(victim,1.0,3.0,10.0,60.0,3.0,4.0,600.0,"160","200","255 25 25","ambient/atmosphere/city_skypass1.wav","sprites/tp_beam001.vmt",true);
-        new float fAngles[3]={90.0,90.0,90.0};
+        int float fAngles[3]={90.0,90.0,90.0};
 
 #if defined SOURCECRAFT
         if(ultCircleEnable)
@@ -404,7 +404,7 @@ public void OnWar3EventSpawn(client)
 {
     if(War3_GetRace(client)==thisRaceID)
     {
-        new float fVec[3] = {0.0,0.0,900.0};
+        int float fVec[3] = {0.0,0.0,900.0};
         TE_SetupGlowSprite(fVec,Skydome,5.0,1.0,255);
 #if defined SOURCECRAFT
         TE_SendEffectToAll();
@@ -432,7 +432,7 @@ public OnUltimateCommand(client,race,bool pressed)
 {
     if(race==thisRaceID && pressed && ValidPlayer( client, true ))
     {
-        new skill=War3_GetSkillLevel(client,race,ULT);
+        int skill=War3_GetSkillLevel(client,race,ULT);
         if(skill>0)
         //PrintHintText(client,"This is a passive ultimate!");
         W3MsgUltimateNotActivatable(client);

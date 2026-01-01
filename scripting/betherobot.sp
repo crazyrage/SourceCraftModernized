@@ -60,7 +60,7 @@ public OnPluginStart()
 	CreateConVar("sm_betherobot_version",PLUGIN_VERSION,"Plugin version.", FCVAR_REPLICATED|FCVAR_NOTIFY||FCVAR_SPONLY);
 	cvarFootsteps = CreateConVar("sm_betherobot_footsteps","1","If on, players who are robots will make footstep sounds.", FCVAR_NONE, true, 0.0, true, 1.0);
 	cvarDefault = CreateConVar("sm_betherobot_default","0","If on, Be the Robot will be enabled on players when they join the server.", FCVAR_NONE, true, 0.0, true, 1.0);
-	cvarClasses = CreateConVar("sm_betherobot_classes","0","These classes CANNOT be made into robots. Add up the numbers to restrict the classes you want. 1=Scout 2=Soldier 4=Pyro 8=Demo 16=Heavy 64=Medic 128=Sniper 256=Spy", FCVAR_NONE, true, 0.0, true, 511.0);
+	cvarClasses = CreateConVar("sm_betherobot_classes","0","These classes CANNOT be made int o robots. Add up the numbers to restrict the classes you want. 1=Scout 2=Soldier 4=Pyro 8=Demo 16=Heavy 64=Medic 128=Sniper 256=Spy", FCVAR_NONE, true, 0.0, true, 511.0);
 	cvarSounds = CreateConVar("sm_betherobot_sounds","1","If on, robots will emit robotic class sounds instead of their usual sounds.", FCVAR_NONE, true, 0.0, true, 1.0);
 	cvarTaunts = CreateConVar("sm_betherobot_taunts","1","If on, robots can taunt. Most robot taunts are...incorrect. And some taunt kills don't play an animation for the killing part.", FCVAR_NONE, true, 0.0, true, 1.0);
 	cvarFileExists = CreateConVar("sm_betherobot_fileexists","1","If on, any robot sound files must pass a check to see if they actually exist before being played. Recommended to the max. Only disable if robot sounds aren't working.", FCVAR_NONE, true, 0.0, true, 1.0);
@@ -104,7 +104,7 @@ public Action Command_betherobot(client, args)
 	{
 		char arg0[10];
 		GetCmdArg(0, arg0, sizeof(arg0));
-		ReplyToCommand(client, "[SM] Usage: %s <name|#userid> [1/0] - Transforms a player into a robot. Beep boop.", arg0);
+		ReplyToCommand(client, "[SM] Usage: %s <name|#userid> [1/0] - Transforms a player int o a robot. Beep boop.", arg0);
 		return Plugin_Handled;
 	}
 	char arg1[MAX_TARGET_LENGTH], char arg2[10], toggle = 1;
@@ -136,7 +136,7 @@ public Action Command_betherobot(client, args)
 	}
 	if (success > 0 && !StrEqual(arg1, "@me"))
 	{
-		char verb[15]; // Should be a mini-switch statement or whatever those are called (e.g. toggle ? "Disabled" : "Toggled" : "Enabled") but iunno how to do it for integers. (You probably can't. You should be able to. Somehow.)
+		char verb[15]; // Should be a mini-switch statement or whatever those are called (e.g. toggle ? "Disabled" : "Toggled" : "Enabled") but iunno how to do it for int egers. (You probably can't. You should be able to. Somehow.)
 		if (toggle == 0) Format(verb, sizeof(verb), "Disabled");
 		if (toggle == 1) Format(verb, sizeof(verb), "Toggled");
 		if (toggle == 2) Format(verb, sizeof(verb), "Enabled");
@@ -152,7 +152,7 @@ public Action Command_bethebuster(client, args)
 	{
 		char arg0[10];
 		GetCmdArg(0, arg0, sizeof(arg0));
-		ReplyToCommand(client, "[SM] Usage: %s <name|#userid> [1/0] - Transforms a player into a Sentry Buster.", arg0);
+		ReplyToCommand(client, "[SM] Usage: %s <name|#userid> [1/0] - Transforms a player int o a Sentry Buster.", arg0);
 		return Plugin_Handled;
 	}
 	char arg1[MAX_TARGET_LENGTH], char arg2[10], toggle = 1;
@@ -221,7 +221,7 @@ stock GetReadyToExplode(client) // A.K.A. Ka-
 	isAboutToExplode[client] = true;
 }
 
-public Action Bewm(Handle timer, any:userid)
+public Action Bewm(Handle timer, any userid)
 {
 	int client = GetClientOfUserId(userid);
 	if (!IsValidClient(client)) return Plugin_Handled;
@@ -268,7 +268,7 @@ public Action Bewm(Handle timer, any:userid)
 	return Plugin_Handled;
 }
 
-public Action Timer_RemoveRagdoll(Handle timer, any:uid)
+public Action Timer_RemoveRagdoll(Handle timer, any uid)
 {
 	int client = GetClientOfUserId(uid);
 	if (!IsValidClient(client)) return;
@@ -290,7 +290,7 @@ public bool MakeRobot(client, admin, toggle)
 	float cooldowntime = GetConVarFloat(cvarCooldown);
 	if (client == admin && cooldowntime > 0 && (LastTransform[client] + cooldowntime) > GetGameTime())
 		return false;
-	new TFClassType:class = TF2_GetPlayerClass(client);
+	int TFClassType:class = TF2_GetPlayerClass(client);
 	bool allowed = IsAllowedClass(class);
 	if (toggle == 2 || (toggle == 1 && !isRobot[client]))
 	{
@@ -363,7 +363,7 @@ public OnClientConnected(client)
 public Action Event_Inventory(Handle event, const char[] name, bool dontBroadcast)
 {
 	int client = GetClientOfUserId(GetEventInt(event, "userid"));
-	new TFClassType:class = TF2_GetPlayerClass(client);
+	int TFClassType:class = TF2_GetPlayerClass(client);
 	bool allowed = IsAllowedClass(class);
 	if (isRobot[client])
 	{
@@ -391,12 +391,12 @@ public bool IsAllowedClass(TFClassType:class)
 	return true;
 }
 
-public Action SoundHook(clients[64], &numClients, char sound[PLATFORM_MAX_PATH], &client, &channel, &float volume, &level, &pitch, &flags)
+public Action SoundHook(clients[64], &numClients, char sound[PLATFORM_MAX_PATH], &client, &channel, float & volume, &level, &pitch, &flags)
 {
 	if (!GetConVarBool(cvarSounds)) return Plugin_Continue;
 	if (volume == 0.0) return Plugin_Continue;
 	if (!IsValidClient(client)) return Plugin_Continue;
-	new TFClassType:class = TF2_GetPlayerClass(client);
+	int TFClassType:class = TF2_GetPlayerClass(client);
 	if (isRobotModel[client])
 	{
 		if (StrContains(sound, "player/footsteps/", false) != -1 && class != TFClass_Engineer && class != TFClass_Medic && GetConVarBool(cvarFootsteps))
@@ -595,7 +595,7 @@ stock bool AttachParticle(ent, char particleType[], bool cache=false)
 	return true;
 }
 
-public Action DeleteParticle(Handle timer, any:particle)
+public Action DeleteParticle(Handle timer, any particle)
 {
 	if (!IsValidEntity(particle)) return Plugin_Handled;
 	char classname[128];
@@ -633,7 +633,7 @@ stock SpawnWeapon(client, char name[], itemIndex, level, qual, char att[])
 	return entity;
 }
 
-public Action OnTakeDamage(victim, &attacker, &inflictor, &float damage, &damagetype, &weapon, float damageForce[3], float damagePosition[3])
+public Action OnTakeDamage(victim, &attacker, &inflictor, float & damage, &damagetype, &weapon, float damageForce[3], float damagePosition[3])
 {
 	if (!isBuster[victim] || victim == attacker) return Plugin_Continue;
 	if (isAboutToExplode[victim])

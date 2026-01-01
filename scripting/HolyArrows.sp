@@ -205,11 +205,11 @@ stock CreateParticle(iEntity, char strParticle[], bool bAttach = false, char str
 	int iParticle = CreateEntityByName("info_particle_system");
 	if (IsValidEdict(iParticle))
 	{
-		decl float fPosition[3];
-		decl float fAngles[3];
-		decl float fForward[3];
-		decl float fRight[3];
-		decl float fUp[3];
+		float fPosition[3];
+		float fAngles[3];
+		float fForward[3];
+		float fRight[3];
+		float fUp[3];
 		
 		// Retrieve entity's position and angles
 		//GetClientAbsOrigin(iClient, fPosition);

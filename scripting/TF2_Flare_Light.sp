@@ -46,7 +46,7 @@ public OnEntityCreated(iEntity, const char[] sClassName)
 				CreateTimer(0.05, Timer_EntitySpawned, EntIndexToEntRef(iEntity));
 }
 
-public Action Timer_EntitySpawned(Handle hTimer, any:iEntRef)
+public Action Timer_EntitySpawned(Handle hTimer, any iEntRef)
 {
 	int iEntity = EntRefToEntIndex(iEntRef);
 	if(IsValidEntity(iEntity))
@@ -99,7 +99,7 @@ stock _:CreateLightEntity(iEntity)
 		DispatchKeyValue(iLightEntity, "style", "5");
 		DispatchSpawn(iLightEntity);
 
-		decl float fOrigin[3];
+		float fOrigin[3];
 		GetEntPropVector(iEntity, Prop_Send, "m_vecOrigin", fOrigin);
 		TeleportEntity(iLightEntity, fOrigin, NULL_VECTOR, NULL_VECTOR);
 

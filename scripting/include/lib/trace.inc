@@ -55,8 +55,8 @@
 
 /**
  * Trace Into a Function
- * @param class: The name of the class/module tracing into.
- * @param method: The name of the method tracing into.
+ * @param class: The name of the class/module tracing int o.
+ * @param method: The name of the method tracing int o.
  * @param fmt: The format string for the message
  * @param ...: Format arguments (if any)
  * @noreturn
@@ -90,7 +90,7 @@ native TraceDump(const char[] fmt="", any:...);
 
 /**
  * Sets the current category
- * @param category: String to place into the category.
+ * @param category: String to place int o the category.
  * @noreturn
  */
 native SetTraceCategory(const char[] category="");
@@ -103,7 +103,7 @@ native ResetTraceCategory();
 
 /**
  * Retrieves the current category
- * @param category: String to place the category into.
+ * @param category: String to place the category int o.
  * @param maxlength: The size of the category buffer.
  * @noreturn
  */
@@ -111,7 +111,7 @@ native GetTraceCategory(char[] category, maxlength);
 
 /**
  * Retrieves the name of the current trace function
- * @param name: String to place the name into.
+ * @param name: String to place the name int o.
  * @param maxlength: The size of the name buffer.
  * @noreturn
  */         

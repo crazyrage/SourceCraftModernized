@@ -40,9 +40,9 @@ float g_ExplodeRadius[]         = { 300.0, 450.0, 500.0, 650.0, 800.0 };
 	int g_ExplodePlayerDamage[]         = {   800,   900,  1000,  1100, 1200  };
 	int g_ExplodeBuildingDamage[]       = {  1000,  1250,  1500,  1750, 2000  };
 
-new const char[] spawnWav[] = "sc/zzeyes02.wav";  // Spawn sound
-new const char[] deathWav[] = "sc/zbghit00.wav";  // Death sound
-new const char[] g_AdrenalGlandsSound[] = "sc/zulhit00.wav";
+static const char[] spawnWav[] = "sc/zzeyes02.wav";  // Spawn sound
+static const char[] deathWav[] = "sc/zbghit00.wav";  // Death sound
+static const char[] g_AdrenalGlandsSound[] = "sc/zulhit00.wav";
 
 public Plugin myinfo = 
 {
@@ -128,7 +128,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
     if (newrace == raceID)
     {
         //Set Baneling Color
-        new r,g,b;
+        int r,g,b;
         if (TFTeam:GetClientTeam(client) == TFTeam_Red)
         { r = 255; g = 165; b = 0; }
         else
@@ -160,7 +160,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
 public OnItemPurchase(client,item)
 {
-    new race=GetRace(client);
+    int race=GetRace(client);
     if (race == raceID && IsValidClientAlive(client))
     {
         if (g_bootsItem < 0)
@@ -218,7 +218,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         PrepareAndEmitSoundToAll(spawnWav,client);
 
         //Set Baneling Color
-        new r,g,b;
+        int r,g,b;
         if (TFTeam:GetClientTeam(client) == TFTeam_Red)
         { r = 255; g = 165; b = 0; }
         else
@@ -318,7 +318,7 @@ void Roll(client, level)
     }
 }
 
-public Action EndRoll(Handle timer,any:userid)
+public Action EndRoll(Handle timer,any userid)
 {
     int index = GetClientOfUserId(userid);
     if (IsValidClientAlive(index))
@@ -335,9 +335,9 @@ public Action EndRoll(Handle timer,any:userid)
 
 void Explode(client,bool ondeath)
 {
-    new ExplosionType:type = ondeath ? OnDeathExplosion : UltimateExplosion;
-    new explode_level      = GetUpgradeLevel(client,raceID,explodeID);
-    new volatile_level     = GetUpgradeLevel(client,raceID,volatileID);
+    int ExplosionType:type = ondeath ? OnDeathExplosion : UltimateExplosion;
+    int explode_level      = GetUpgradeLevel(client,raceID,explodeID);
+    int volatile_level     = GetUpgradeLevel(client,raceID,volatileID);
     if (volatile_level >= 1)
     {
         type |= FlamingExplosion;

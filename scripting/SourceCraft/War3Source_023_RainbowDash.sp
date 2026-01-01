@@ -122,7 +122,7 @@ public OnAbilityCommand(client,ability,bool pressed)
     }
 }
 
-public Action EndSpeed(Handle t, any:clientRef){
+public Action EndSpeed(Handle t, any clientRef){
     int client = EntRefToEntIndex(clientRef);
     
     if(GAMETF)
@@ -188,7 +188,7 @@ public OnUltimateCommand(client, race, bool pressed)
                     War3_CooldownMGR(client, 20.0, thisRaceID, ULTIMATE, _, _);
 #endif
                     
-                    decl float start_pos[3];
+                    float start_pos[3];
                     GetClientAbsOrigin(client,start_pos);
                     
                     //TE_SetupBeamRingPoint(const float center[3], float Start_Radius, float End_Radius, ModelIndex, HaloIndex, StartFrame, FrameRate, float Life, float Width, float Amplitude, const Color[4], Speed, Flags)
@@ -207,7 +207,7 @@ public OnUltimateCommand(client, race, bool pressed)
                     TE_SetupBeamRingPoint(start_pos,                 20.0,            rainboomradius[skill]*2,             XBeamSprite, HaloSprite,     0,         1,                 0.5,     30.0,         0.0,             {143, 0, 255,255}, 10,     0);
                     TE_SendToAll(0.17);
                 
-                    decl float TargetPos[3];
+                    float TargetPos[3];
                     for (int i = 1; i <= MaxClients; i++) 
                     {
                         if(ValidPlayer(i,true) && GetClientTeam(i) == GetClientTeam(client) && GetClientTeam(client) == GetApparentTeam(i)) 

@@ -231,7 +231,7 @@ public OnRaceChanged(client,oldrace,newrace)
 {
     if( newrace!=thisRaceID)
     {
-        new userid=GetClientUserId(client);
+        int userid=GetClientUserId(client);
         for(int i=1;i<=MaxClients;i++)
         {
             if(ValidPlayer(i) && BurnsRemaining[i]>0)
@@ -248,10 +248,10 @@ public OnRaceChanged(client,oldrace,newrace)
 	int FireEntityEffect[MAXPLAYERSCUSTOM];
 public OnUltimateCommand(client,race,bool pressed)
 {
-    new userid=GetClientUserId(client);
+    int userid=GetClientUserId(client);
     if(race==thisRaceID && pressed && userid>1 && IsPlayerAlive(client) )
     {
-        new ult_level=War3_GetSkillLevel(client,race,ULT_FLAMESTRIKE);
+        int ult_level=War3_GetSkillLevel(client,race,ULT_FLAMESTRIKE);
         if(ult_level>0)
         {
 #if !defined SOURCECRAFT
@@ -259,7 +259,7 @@ public OnUltimateCommand(client,race,bool pressed)
 #endif
             if(max_ult>0 && UltimateUsed[client]>=max_ult)
             {
-                PrintCenterText(client,"You used all %d Flame Strke charges",max_ult);
+                PrintCenterText(client,"You used all %d Flame Strke char ges",max_ult);
                 return;
             }
 
@@ -327,8 +327,8 @@ public bool IsBurningFilter(client)
 }
 public Action BurnLoop(Handle timer,any userid)
 {
-    new victim=GetClientOfUserId(userid);
-    new attacker=GetClientOfUserId(BeingBurnedBy[victim]);
+    int victim=GetClientOfUserId(userid);
+    int attacker=GetClientOfUserId(BeingBurnedBy[victim]);
     if(victim>0 && attacker>0 && BurnsRemaining[victim]>0 && IsClientInGame(victim) && IsClientInGame(attacker) && IsPlayerAlive(victim))
     {
         BurnsRemaining[victim]--;
@@ -531,8 +531,8 @@ stock respawnsfx(target) {
 // Events
 public PlayerSpawnEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    new userid=GetEventInt(event,"userid");
-    new client=GetClientOfUserId(userid);
+    int userid=GetEventInt(event,"userid");
+    int client=GetClientOfUserId(userid);
     if(client>0)
     {
 
@@ -560,7 +560,7 @@ public RoundStartEvent(Handle event,const char[] name,bool dontBroadcast)
     for(int i=1;i<=MaxClients;i++)
     {
         //Reset revival chance
-        new skill_level_revive=War3_GetSkillLevel(i,thisRaceID,SKILL_REVIVE);
+        int skill_level_revive=War3_GetSkillLevel(i,thisRaceID,SKILL_REVIVE);
         if(ValidPlayer(i) && skill_level_revive)
         {
             CurrentRevivalChance[i]=RevivalChancesArr[skill_level_revive];
@@ -572,7 +572,7 @@ public RoundStartEvent(Handle event,const char[] name,bool dontBroadcast)
 
 public Action DoRevival(Handle timer,any userid)
 {
-    new client=GetClientOfUserId(userid);
+    int client=GetClientOfUserId(userid);
     if(Can_Player_Revive[client]==false)
     {
         return Plugin_Handled;
@@ -690,8 +690,8 @@ bool CooldownRevive(client)
 public PlayerTeamEvent(Handle event,const char[] name,bool dontBroadcast)
 {
 // Team Switch checker
-    new userid=GetEventInt(event,"userid");
-    new client=GetClientOfUserId(userid);
+    int userid=GetEventInt(event,"userid");
+    int client=GetClientOfUserId(userid);
     // For testing purposes:
     //char clientname[64];
     //GetClientName(client, clientname, sizeof(clientname));
@@ -703,7 +703,7 @@ public PlayerTeamEvent(Handle event,const char[] name,bool dontBroadcast)
 public Action PlayerCanRevive(Handle timer,any userid)
 {
 // Team Switch checker
-    new client=GetClientOfUserId(userid);
+    int client=GetClientOfUserId(userid);
     // For testing purposes:
     //char clientname[64];
     //GetClientName(client, clientname, sizeof(clientname));
@@ -713,9 +713,9 @@ public Action PlayerCanRevive(Handle timer,any userid)
 
 public PlayerDeathEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    new userid=GetEventInt(event,"userid");
-    new victim=GetClientOfUserId(userid);
-    new attacker=GetClientOfUserId(GetEventInt(event,"attacker"));
+    int userid=GetEventInt(event,"userid");
+    int victim=GetClientOfUserId(userid);
+    int attacker=GetClientOfUserId(GetEventInt(event,"attacker"));
     if(victim>0 && (attacker>0 && attacker!=victim))
     {
         BurnsRemaining[victim]=0;
@@ -793,7 +793,7 @@ public PlayerDeathEvent(Handle event,const char[] name,bool dontBroadcast)
 public Action Unbanish(Handle timer,any userid)
 {
     // never EVER use client in a timer. userid is safe
-    new client=GetClientOfUserId(userid);
+    int client=GetClientOfUserId(userid);
     if(client>0)
     {
         W3FlashScreen(client,{0,0,0,0},0.1,_,(FFADE_IN|FFADE_PURGE));
@@ -811,11 +811,11 @@ public bool testhull(client){
     GetClientMaxs(client,maxs);
 
     //PrintToChatAll("min : %.1f %.1f %.1f MAX %.1f %.1f %.1f",mins[0],mins[1],mins[2],maxs[0],maxs[1],maxs[2]);
-    new absincarraysize=sizeof(absincarray);
+    int absincarraysize=sizeof(absincarray);
     float originalpos[3];
     GetClientAbsOrigin(client,originalpos);
 
-    new limit=5000;
+    int limit=5000;
     for(int x=0;x<absincarraysize;x++){
         if(limit>0){
             for(int y=0;y<=x;y++){

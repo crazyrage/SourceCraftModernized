@@ -78,7 +78,7 @@ public Action Command_ShowText(client, args)
 	return Plugin_Handled;
 }
 
-public Action Kill_ent(Handle timer, any:ent)
+public Action Kill_ent(Handle timer, any ent)
 {
 	if (IsValidEntity(ent))
 	{

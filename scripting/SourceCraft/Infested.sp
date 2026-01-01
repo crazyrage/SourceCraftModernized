@@ -28,10 +28,10 @@
 #include "effect/SendEffects"
 #include "effect/Shake"
 
-new const char[] spawnWav[]      = "sc/zbgrdy00.wav";
-new const char[] deathWav[]      = "sc/zbghit00.wav";
+static const char[] spawnWav[]      = "sc/zbgrdy00.wav";
+static const char[] deathWav[]      = "sc/zbghit00.wav";
 
-new const char[] infestedWav[][] = { "sc/zbgwht00.wav" ,
+static const char[] infestedWav[][] = { "sc/zbgwht00.wav" ,
                                      "sc/zbgwht01.wav" ,
                                      "sc/zbgwht02.wav" ,
                                      "sc/zbgwht03.wav" ,
@@ -147,7 +147,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
         HudMessage(client, "%t", "InfestedHud");
 
         //Set Infested Color
-        new r,g,b;
+        int r,g,b;
         if (TFTeam:GetClientTeam(client) == TFTeam_Red)
         { r = 0; g = 224; b = 208; }
         else
@@ -185,7 +185,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
 public OnItemPurchase(client,item)
 {
-    new race=GetRace(client);
+    int race=GetRace(client);
     if (race == raceID && IsValidClientAlive(client))
     {
         if (g_bootsItem < 0)
@@ -239,7 +239,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         HudMessage(client, "%t", "InfestedHud");
 
         //Set Infested Color
-        new r,g,b;
+        int r,g,b;
         if (TFTeam:GetClientTeam(client) == TFTeam_Red)
         { r = 0; g = 224; b = 208; }
         else
@@ -276,7 +276,7 @@ public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_inde
         PrepareAndEmitSoundToAll(deathWav, victim_index);
         ClearHud(victim_index, "%t", "InfestedHud");
 
-        new level=GetUpgradeLevel(victim_index,raceID,explodeID);
+        int level=GetUpgradeLevel(victim_index,raceID,explodeID);
         ExplodePlayer(victim_index, victim_index, 0, g_ExplodeRadius[level],
                       g_ExplodePlayerDamage[level],
                       g_ExplodeBuildingDamage[level],
@@ -292,7 +292,7 @@ public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_inde
     }
 }
 
-public Action Exclaimation(Handle timer, any:userid)
+public Action Exclaimation(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client))

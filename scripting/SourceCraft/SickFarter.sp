@@ -40,7 +40,7 @@
 #include "effect/SendEffects"
 #include "effect/FlashScreen"
 
-new const char[] fartWav[][]    = { "sc/fart.wav",
+static const char[] fartWav[][]    = { "sc/fart.wav",
                                     "sc/fart3.wav",
                                     "sc/poot.mp3" };
 
@@ -200,7 +200,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
 
         gPickPocketTime[client] = 0.0;
 
-        new revulsion_level=GetUpgradeLevel(client,raceID,revulsionID);
+        int revulsion_level=GetUpgradeLevel(client,raceID,revulsionID);
         if (revulsion_level && IsValidClientAlive(client))
             CreateClientTimer(client, 2.0, Revulsion, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 
@@ -295,7 +295,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         TraceInto("SickFarter", "OnPlayerSpawnEvent", "client=%N(%d), raceID=%d", \
                   client, client, raceID);
 
-        new revulsion_level=GetUpgradeLevel(client,raceID,revulsionID);
+        int revulsion_level=GetUpgradeLevel(client,raceID,revulsionID);
         if (revulsion_level > 0)
         {
             CreateClientTimer(client, 2.0, Revulsion,
@@ -331,7 +331,7 @@ public Action OnEntityAssistEvent(Handle event, victim_index, assister_index, as
 public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
                                 attacker_race, damage, absorbed, bool from_sc)
 {
-    new Action returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
 
     if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index &&
@@ -351,7 +351,7 @@ public Action OnPlayerAssistEvent(Handle event, victim_index, victim_race,
                                   assister_index, assister_race, damage,
                                   absorbed)
 {
-    new Action returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
 
     if (assister_race == raceID)
     {
@@ -496,7 +496,7 @@ bool PickPocket(Handle event,victim_index, index)
     return false;
 }
 
-public Action PersistFart(Handle timer,any:userid)
+public Action PersistFart(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientNotSpec(client) && GetRace(client) == raceID &&
@@ -563,11 +563,11 @@ public Action PersistFart(Handle timer,any:userid)
         int snd = GetRandomInt(0,sizeof(fartWav)-1);
         PrepareAndEmitSoundToAll(fartWav[snd], client);
 
-        new count=0;
-        new num=fart_level*3;
+        int count=0;
+        int num=fart_level*3;
         int team = GetClientTeam(client);
-        new minDmg=fart_level*2;
-        new maxDmg=fart_level*4;
+        int minDmg=fart_level*2;
+        int maxDmg=fart_level*4;
         for (int index=1;index<=MaxClients;index++)
         {
             if (client != index && IsClientInGame(index) &&
@@ -604,7 +604,7 @@ public Action PersistFart(Handle timer,any:userid)
     return Plugin_Stop;
 }
 
-public Action Revulsion(Handle timer, any:userid)
+public Action Revulsion(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client) &&

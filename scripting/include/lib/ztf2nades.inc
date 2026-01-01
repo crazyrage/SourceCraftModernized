@@ -161,7 +161,7 @@ native ThrowSpecialNade(client, bool pressed);
  * @param trace     Set true to check using trace
  * @return			none
  */
-native DamageBuildings(attacker, Float start[3], Float radius, damage, ent, bool trace);
+native DamageBuildings(attacker, float start[3], float radius, damage, ent, bool trace);
 
 /**
  * Always throw specified type of nade, does NOT alter remaining count.
@@ -189,7 +189,7 @@ native IsTargeted(client);
  * @param type      The type of nade
  * @param pos 	    The location of the nade
  */
-forward Action OnNadeExplode(victim, attacker, &damage, NadeType:type, const Float pos[3]);
+forward Action OnNadeExplode(victim, attacker, &damage, NadeType:type, const float pos[3]);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

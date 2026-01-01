@@ -98,7 +98,7 @@ stock TeleportCommand(client, raceId, upgradeId, level, float energy_required, b
                 TF2_RemovePlayerDisguise(client);
         }
 
-        new stuckFlag:stuck = notStuck;
+        int stuckFlag:stuck = notStuck;
         float time_pressed = GetGameTime() - m_UltimatePressed[client];
         float energy = GetEnergy(client);
 
@@ -326,22 +326,22 @@ bool CheckPlayerBox(float bottom[3],float start[3],client)
     //           start[0], start[1], start[2]);
 
     //other buttons
-    for(new i=0;i<4;i++)
+    for (int i=0;i<4;i++)
     {
-        for(new x=0;x<2;x++)
+        for (int x=0;x<2;x++)
         {
             edge[x][i+4]=edge[x][i];
         }
         edge[2][i+4]=edge[2][i]+67.0; // 89.0;
     }
 
-    for(new i=0;i<4;i++)
+    for (int i=0;i<4;i++)
     {
-        decl float point[3];
+        float point[3];
         point[0]=edge[0][i];
         point[1]=edge[1][i];
         point[2]=edge[2][i];
-        decl float endpoint[3];
+        float endpoint[3];
         endpoint[0]=edge[0][i+4];
         endpoint[1]=edge[1][i+4];
         endpoint[2]=edge[2][i+4];
@@ -358,13 +358,13 @@ bool CheckPlayerBox(float bottom[3],float start[3],client)
         }
     }
 
-    for(new i=0;i<7;i++)
+    for (int i=0;i<7;i++)
     {
-        decl float point[3];
+        float point[3];
         point[0]=edge[0][i];
         point[1]=edge[1][i];
         point[2]=edge[2][i];
-        decl float endpoint[3];
+        float endpoint[3];
         endpoint[0]=edge[0][i+1];
         endpoint[1]=edge[1][i+1];
         endpoint[2]=edge[2][i+1];
@@ -439,9 +439,9 @@ stock TeleporterAttacked(index, raceId, upgradeId)
     }
 }
 
-public Action UpdateTeleportBar(Handle timer, any:userid)
+public Action UpdateTeleportBar(Handle timer, any userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (m_UltimatePressed[client] > 0.0 &&
         IsValidClientAlive(client))
     {

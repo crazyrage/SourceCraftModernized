@@ -132,7 +132,7 @@ public OnAbilityCommand(client,ability,bool pressed)
 {
     if(War3_GetRace(client)==thisRaceID && ability==0 && pressed && IsPlayerAlive(client))
     {
-        new skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_FROSTNOVA);
+        int skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_FROSTNOVA);
         if(skill_level>0)
         {
             if(!Silenced(client)&&War3_SkillNotInCooldown(client,thisRaceID,SKILL_FROSTNOVA,true))
@@ -167,7 +167,7 @@ public OnAbilityCommand(client,ability,bool pressed)
     }
 }
 
-public Action BurnLoop(Handle timer,any:attacker)
+public Action BurnLoop(Handle timer,any attacker)
 {
 
     if(ValidPlayer(attacker) && FrostNovaLoopCountdown[attacker]>0)
@@ -213,7 +213,7 @@ public Action BurnLoop(Handle timer,any:attacker)
         }
     }
 }
-public Action RemoveFrostNova(Handle t,any:client){
+public Action RemoveFrostNova(Handle t,any client){
     War3_SetBuff(client,fSlow,thisRaceID,1.0);
     War3_SetBuff(client,fAttackSpeed,thisRaceID,1.0);
 }
@@ -243,7 +243,7 @@ public OnW3TakeDmgBullet(victim,attacker,float damage)
     }
 }
 
-public Action  farmor(Handle timer,any:attacker)
+public Action  farmor(Handle timer,any attacker)
 {
     War3_SetBuff(attacker,fAttackSpeed,thisRaceID,1.0);
 }
@@ -283,10 +283,10 @@ public void OnWar3EventDeath(victim, attacker, deathrace)
 
 public OnUltimateCommand(client,race,bool pressed)
 {
-    new userid=GetClientUserId(client);            
+    int userid=GetClientUserId(client);            
     if(race==thisRaceID && pressed && userid>1 && IsPlayerAlive(client) )
     {
-        new ult_level=War3_GetSkillLevel(client,race,ULT_DEATHDECAY);
+        int ult_level=War3_GetSkillLevel(client,race,ULT_DEATHDECAY);
         if(ult_level>0)
         {
             if(War3_SkillNotInCooldown(client,thisRaceID,ULT_DEATHDECAY,true))

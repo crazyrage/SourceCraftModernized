@@ -51,12 +51,12 @@ Handle g_WaitTime = null;
 Handle g_FakeLimit = null;
 Handle g_Dissolve = null;
 
-new AtacanteID[MAXPLAYERS+1];
+int AtacanteID[MAXPLAYERS+1];
 char WeaponName[MAXPLAYERS+1][32];
 
 bool g_NativeControl = false;
-new g_Limit[MAXPLAYERS+1];    // how many fakes player allowed
-new g_Remaining[MAXPLAYERS+1];  // how many fakes player has this spawn
+int g_Limit[MAXPLAYERS+1];    // how many fakes player allowed
+int g_Remaining[MAXPLAYERS+1];  // how many fakes player has this spawn
 bool g_NativeDissolve[MAXPLAYERS+1];  // which players should dissolve.
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char error[], err_max)
@@ -242,8 +242,8 @@ public ConVarChange_WaitTime(Handle convar, const char[] oldValue, const char[] 
 /////////////////////////////////////////////////////////////////////
 public Action Event_RoundStart(Handle event, const char[] name, bool dontBroadcast)
 {
-	new FakeDeathOn = GetConVarInt(g_IsFakeDeathOn)
-	new StartMessageOn = GetConVarInt(g_IsStartMessageOn)
+	int FakeDeathOn = GetConVarInt(g_IsFakeDeathOn)
+	int StartMessageOn = GetConVarInt(g_IsStartMessageOn)
 	if(FakeDeathOn && StartMessageOn)
 	{
 		PrintToChatAll("\x05[RMF]\x01 %t", "OnCommand Fake Death", GetConVarInt(g_UseCloakMeter) );
@@ -258,13 +258,13 @@ public Action Event_RoundStart(Handle event, const char[] name, bool dontBroadca
 /////////////////////////////////////////////////////////////////////
 public Action Event_PlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 {
-	new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 
 	if (g_NativeControl)
 	    g_Remaining[client] = g_Limit[client];
 	else
 	{
-		new TFClassType:class = TF2_GetPlayerClass(client);
+		TFClassType class = TF2_GetPlayerClass(client);
 		if (class != TFClass_Spy)
 	    		g_Remaining[client] = g_Limit[client] = 0;
 		else
@@ -295,7 +295,7 @@ public Action Event_PlayerSpawn(Handle event, const char[] name, bool dontBroadc
 /////////////////////////////////////////////////////////////////////
 public Action Event_PlayerClass(Handle event, const char[] name, bool dontBroadcast)
 {
-	new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 
 	if(g_PlayerButtonDown[client] != null)
 	{
@@ -308,13 +308,13 @@ public Action Event_PlayerClass(Handle event, const char[] name, bool dontBroadc
 		g_NextBody[client] = null;
 	}
 	
-	new any class = GetEventInt(event, "class");
+	int any class = GetEventInt(event, "class");
 	if (class != TFClass_Spy)
 	{
 		return;
 	}
 
-	new FakeDeathOn = GetConVarInt(g_IsFakeDeathOn)
+	int FakeDeathOn = GetConVarInt(g_IsFakeDeathOn)
 	if(FakeDeathOn)
 	{
 		PrintToChat(client, "\x05[RMF]\x01 %t", "OnCommand Fake Death", GetConVarInt(g_UseCloakMeter) );
@@ -328,7 +328,7 @@ public Action Event_PlayerClass(Handle event, const char[] name, bool dontBroadc
 /////////////////////////////////////////////////////////////////////
 public Action Event_PlayerDeath(Handle event, const char[] name, bool dontBroadcast)
 {
-	new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	
 	if(g_PlayerButtonDown[client] != null)
 	{
@@ -349,7 +349,7 @@ public Action Event_PlayerDeath(Handle event, const char[] name, bool dontBroadc
 /////////////////////////////////////////////////////////////////////
 public Action Event_PlayerTeam(Handle event, const char[] name, bool dontBroadcast)
 {
-	new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 
 	if(g_PlayerButtonDown[client] != null)
 	{
@@ -370,12 +370,12 @@ public Action Event_PlayerTeam(Handle event, const char[] name, bool dontBroadca
 /////////////////////////////////////////////////////////////////////
 public Action Event_PlayerHurt(Handle event, const char[] name, bool dontBroadcast)
 {
-	// new victimId = GetEventInt(event, "userid")
-	new client_victim = GetClientOfUserId(GetEventInt(event, "userid"));
+	// int victimId = GetEventInt(event, "userid")
+	int client_victim = GetClientOfUserId(GetEventInt(event, "userid"));
 
 	if (g_Remaining[client_victim] && GetConVarInt(g_IsDeathMessageOn))
 	{
-		new userid_attacker = GetEventInt(event, "attacker"); 
+		int userid_attacker = GetEventInt(event, "attacker"); 
 		AtacanteID[client_victim] = userid_attacker; 
 		if (userid_attacker>0)
 			GetClientWeapon(GetClientOfUserId(GetEventInt(event, "attacker")), WeaponName[client_victim], sizeof(WeaponName[]));
@@ -393,7 +393,7 @@ public Action Event_PlayerHurt(Handle event, const char[] name, bool dontBroadca
 /////////////////////////////////////////////////////////////////////
 stock TF_GetCurrentWeaponClass(client, char name[], maxlength)
 {
-	new index = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+	int index = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
 	if (index != 0)
 		GetEntityNetClass(index, name, maxlength);
 }
@@ -439,7 +439,7 @@ stock TF_SpawnFakeBody(client)
 	    !IsEntLimitReached(.client=client, .message="Unable to create tf_ragdoll entity"))
 	{
 		// メーター使用量
-		new TFClassType:class = TF2_GetPlayerClass(client);
+		TFClassType class = TF2_GetPlayerClass(client);
 		float UseMeter = (class == TFClass_Spy) ? GetConVarFloat(g_UseCloakMeter) : 0.0;
 		float NowMeter = (UseMeter > 0.0) ? TF2_GetCloakMeter(client) : 1.0;
 		// 次に押せるまでの時間
@@ -451,9 +451,9 @@ stock TF_SpawnFakeBody(client)
 		{
 			if(GetConVarInt(g_IsDeathMessageOn))
 			{
-				new WeaponID;
+				int WeaponID;
 				char WeaponName2[32];
-				new CustomID = 0;
+				int CustomID = 0;
 
 				// || !IsClientInGame(AtacanteID[client])
 				if(!AtacanteID[client])
@@ -640,7 +640,7 @@ stock TF_SpawnFakeBody(client)
 				FireEvent(hPlayerDeath);
 			}
 
-			new FakeBody = CreateEntityByName("tf_ragdoll");
+			int FakeBody = CreateEntityByName("tf_ragdoll");
 
 			if (FakeBody > 0 && IsValidEntity(FakeBody) && DispatchSpawn(FakeBody))
 			{
@@ -649,7 +649,7 @@ stock TF_SpawnFakeBody(client)
 					
 				// 発生位置
 				GetClientAbsOrigin(client, PlayerPosition);
-				new offset; // = FindSendPropOffs("CTFRagdoll", "m_vecRagdollOrigin");
+				int offset; // = FindSendPropOffs("CTFRagdoll", "m_vecRagdollOrigin");
 				FindSendPropInfo("CTFRagdoll", "m_vecRagdollOrigin", .local_offset=offset);
 				SetEntDataVector(FakeBody, offset, PlayerPosition);
 				
@@ -658,8 +658,8 @@ stock TF_SpawnFakeBody(client)
 				SetEntData(FakeBody, offset, class);
 				
 				FindSendPropInfo("CTFRagdoll", "m_iPlayerIndex", .local_offset=offset);
-				//new offset2 = FindSendPropOffs("CTFPlayer", "m_nForceBone");
-				//new aaa = GetEntData(client, offset2); 
+				//int offset2 = FindSendPropOffs("CTFPlayer", "m_nForceBone");
+				//int aaa = GetEntData(client, offset2); 
 				SetEntData(FakeBody, offset, client);
 				
 /*				
@@ -678,7 +678,7 @@ stock TF_SpawnFakeBody(client)
 //				PrintToChatAll("%d", GetEntData(client, offset));
 
 				// 死体のチームカラー
-				new team = GetClientTeam(client);
+				int team = GetClientTeam(client);
 				FindSendPropInfo("CTFRagdoll", "m_iTeam", .local_offset=offset);
 				SetEntData(FakeBody, offset, team);
 
@@ -715,7 +715,7 @@ stock TF_SpawnFakeBody(client)
 
 public Action DissolveRagdoll(Handle timer, any ref)
 {
-    new ragdoll = EntRefToEntIndex(ref);
+    int ragdoll = EntRefToEntIndex(ref);
     if (ragdoll <= 0 || !IsValidEntity(ragdoll))
         return;
 
@@ -724,7 +724,7 @@ public Action DissolveRagdoll(Handle timer, any ref)
 	    char dname[32];
 	    Format(dname, sizeof(dname), "dis_%d", ragdoll);
 
-	    new ent = CreateEntityByName("env_entity_dissolver");
+	    int ent = CreateEntityByName("env_entity_dissolver");
 	    if (ent > 0)
 	    {
 		    DispatchKeyValue(ragdoll, "targetname", dname);
@@ -753,7 +753,7 @@ public Native_GiveDeath(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
-        new client = GetNativeCell(1);
+        int client = GetNativeCell(1);
         g_Remaining[client] = g_Limit[client] = (numParams >= 2) ? GetNativeCell(2) : GetConVarInt(g_FakeLimit);
         g_NativeDissolve[client] = (numParams >= 3) ? GetNativeCell(3) : GetConVarBool(g_Dissolve);
     }
@@ -763,7 +763,7 @@ public Native_TakeDeath(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
-        new client = GetNativeCell(1);
+        int client = GetNativeCell(1);
         g_Remaining[client] = g_Limit[client] = 0;
     }
 }
@@ -772,7 +772,7 @@ public Native_FakeDeath(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
-        new client = GetNativeCell(1);
+        int client = GetNativeCell(1);
 	TF_SpawnFakeBody(client);
     }
 }

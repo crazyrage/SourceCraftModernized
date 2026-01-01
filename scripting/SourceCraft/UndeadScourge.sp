@@ -351,8 +351,8 @@ bool VampiricAura(damage, index, victim_index)
         if (victimIsPlayer || victimIsNPC)
         {
             float lastTime = m_VampiricAuraTime[index];
-            float interval = GetGameTime() - lastTime;
-            if ((lastTime == 0.0 || interval > 0.25) &&
+            float int erval = GetGameTime() - lastTime;
+            if ((lastTime == 0.0 || int erval > 0.25) &&
                 CanInvokeUpgrade(index, raceID, vampiricID, .notify=false))
             {
                 float start[3];
@@ -434,7 +434,7 @@ bool VampiricAura(damage, index, victim_index)
 
 public EventRoundOver(Handle event,const char[] name,bool dontBroadcast)
 {
-    for (new index=1;index<=MaxClients;index++)
+    for (int index=1;index<=MaxClients;index++)
     {
         if (IsClientInGame(index))
         {

@@ -65,22 +65,22 @@ public Plugin myinfo =
 bool g_NativeControl = false;
 bool g_MedicButtonDown[MAXPLAYERS+1];
 float g_MedicPosition[MAXPLAYERS+1][3];
-new g_NativeMedipacks[MAXPLAYERS+1];
-new g_NativeUberCharge[MAXPLAYERS+1];
-new g_MedicUberCharge[MAXPLAYERS+1];
-new g_MedipacksCount = 0;
-new g_FilteredEntity = -1;
-new TFHoliday:g_Holiday;
+int g_NativeMedipacks[MAXPLAYERS+1];
+int g_NativeUberCharge[MAXPLAYERS+1];
+int g_MedicUberCharge[MAXPLAYERS+1];
+int g_MedipacksCount = 0;
+int g_FilteredEntity = -1;
+TFHoliday g_Holiday;
 
-new g_MedkitSmallModel = 0;
-new g_MedkitMediumModel = 0;
-new g_MedkitLargeModel = 0;
-new g_BirthdayMedkitSmallModel = 0;
-new g_BirthdayMedkitMediumModel = 0;
-new g_BirthdayMedkitLargeModel = 0;
-new g_HalloweenMedkitSmallModel = 0;
-new g_HalloweenMedkitMediumModel = 0;
-new g_HalloweenMedkitLargeModel = 0;
+int g_MedkitSmallModel = 0;
+int g_MedkitMediumModel = 0;
+int g_MedkitLargeModel = 0;
+int g_BirthdayMedkitSmallModel = 0;
+int g_BirthdayMedkitMediumModel = 0;
+int g_BirthdayMedkitLargeModel = 0;
+int g_HalloweenMedkitSmallModel = 0;
+int g_HalloweenMedkitMediumModel = 0;
+int g_HalloweenMedkitLargeModel = 0;
 
 Handle g_IsMedipacksOn = null;
 Handle g_Advertise = null;
@@ -121,7 +121,7 @@ public OnPluginStart()
     g_MedipacksTeam = CreateConVar("sm_medipacks_team","3","Team to drop Medipacks for. (0=any team|1=own team|2=opposing team|3=own on command, any on death)", _, true, 0.0, true, 3.0);
     g_MedipacksLimit = CreateConVar("sm_medipacks_limit","100","Maximum number of extra Medipacks on map at a time. (0=unlimited)", _, true, 0.0, true, 512.0);
 
-    new maxents = GetMaxEntities();
+    int maxents = GetMaxEntities();
     g_MedipacksTime = CreateArray(_, maxents);
     g_MedipacksRef = CreateArray(_, maxents);
 
@@ -148,7 +148,7 @@ public OnPluginStart()
     AutoExecConfig(true);
 }
 
-public Action TF2_OnIsHolidayActive(TFHoliday:holiday, &bool result)
+public Action TF2_OnIsHolidayActive(TFHoliday:holiday, bool & result)
 {
     // Stash the holiday flag
     g_Holiday = holiday;
@@ -173,7 +173,7 @@ public OnMapStart()
     SetupSound(SOUND_B, true, DONT_DOWNLOAD, false, false);
     SetupSound(SOUND_C, true, DONT_DOWNLOAD, true,  true);
 
-    new maxents = GetMaxEntities();
+    int maxents = GetMaxEntities();
     ClearArray(g_MedipacksRef);
     ClearArray(g_MedipacksTime);
     ResizeArray(g_MedipacksRef, maxents);
@@ -213,7 +213,7 @@ public Action OnPlayerRunCmd(client, &buttons, &impulse, float vel[3], float ang
                 if (StrEqual(classname, "CWeaponMedigun") &&
                     g_MedicUberCharge[client] < GetConVarInt(g_MedipacksDeploy))
                 {
-                    new weaponent = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+                    int weaponent = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
                     if (weaponent > 0 && GetEntProp(weaponent, Prop_Send, "m_iItemDefinitionIndex") != 35) // Kritzkrieg
                         TF_DropMedipack(client, true, g_Holiday);
                 }
@@ -250,12 +250,12 @@ public ConVarChange_Advertise(Handle convar, const char[] oldValue, const char[]
 
 public Action Command_Medipack(client, args)
 {
-    new MedipacksOn = g_NativeControl ? g_NativeMedipacks[client]
+    int MedipacksOn = g_NativeControl ? g_NativeMedipacks[client]
                                       : GetConVarInt(g_IsMedipacksOn);
     if (MedipacksOn < 2)
         return Plugin_Handled;
 
-    new TFClassType:class = TF2_GetPlayerClass(client);
+    int TFClassType:class = TF2_GetPlayerClass(client);
     if (class != TFClass_Medic)
         return Plugin_Handled;
 
@@ -280,7 +280,7 @@ public Action Command_UberCharge(client, args)
     char arg1[32], char arg2[32];
     GetCmdArg(1, arg1, sizeof(arg1));
 
-    new target = FindTarget(client, arg1);
+    int target = FindTarget(client, arg1);
     if (target == -1)
     {
         return Plugin_Handled;
@@ -296,28 +296,28 @@ public Action Command_UberCharge(client, args)
         return Plugin_Handled;
     }
 
-    new TFClassType:class = TF2_GetPlayerClass(target);
+    int TFClassType:class = TF2_GetPlayerClass(target);
     if (class != TFClass_Medic)
     {
         ReplyToCommand(client, "[SM] %t", "Not a Medic", name);
         return Plugin_Handled;
     }
 
-    new charge = 100;
+    int char ge = 100;
     if (args > 1)
     {
         GetCmdArg(2, arg2, sizeof(arg2));
-        charge = StringToInt(arg2);
-        if (charge < 0 || charge > 100)
+        char ge = StringToInt(arg2);
+        if (char ge < 0 || char ge > 100)
         {
             ReplyToCommand(client, "[SM] %t", "Invalid Amount");
             return Plugin_Handled;
         }
     }
 
-    TF2_ExSetUberLevel(target, charge*0.01);
+    TF2_ExSetUberLevel(target, char ge*0.01);
 
-    ReplyToCommand(client, "[SM] %t", "Changed UberCharge", name, charge);
+    ReplyToCommand(client, "[SM] %t", "Changed UberCharge", name, char ge);
     return Plugin_Handled;
 }
 
@@ -337,7 +337,7 @@ public Action Command_Spawn(client,args)
         return Plugin_Handled;
     }
 
-    new TFHoliday:holiday;
+    int TFHoliday:holiday;
     if (StrEqual(command, "sm_halloweenhealth"))
         holiday = TFHoliday_Halloween;
     else if (StrEqual(command, "sm_birthdayhealth"))        
@@ -382,7 +382,7 @@ public Action Timer_Advert(Handle timer, any client)
     {
         if (GetConVarInt(g_Advertise) == 1)
         {
-            new MedipacksOn = GetConVarInt(g_IsMedipacksOn);
+            int MedipacksOn = GetConVarInt(g_IsMedipacksOn);
             switch (MedipacksOn)
             {
                 case 1:
@@ -407,15 +407,15 @@ public Action Timer_Caching(Handle timer)
         }
     }
 
-    new MedipacksKeep = GetConVarInt(g_MedipacksKeep);
-    new MedipacksLimit = GetConVarInt(g_MedipacksLimit);
+    int MedipacksKeep = GetConVarInt(g_MedipacksKeep);
+    int MedipacksLimit = GetConVarInt(g_MedipacksLimit);
     if (MedipacksKeep > 0 || MedipacksLimit > 0)
     {
-        new maxents = GetMaxEntities();
-        new mintime = GetTime() - MedipacksKeep;
+        int maxents = GetMaxEntities();
+        int mintime = GetTime() - MedipacksKeep;
         for (int c = MaxClients; c < maxents; c++)
         {
-            new time = GetArrayCell(g_MedipacksTime, c);
+            int time = GetArrayCell(g_MedipacksTime, c);
             if (time > 0)
             {
                 bool valid = (EntRefToEntIndex(GetArrayCell(g_MedipacksRef, c)) == c &&
@@ -451,19 +451,19 @@ public Action Timer_PlayerDefDelay(Handle timer, any client)
     if (!IsClientInGame(client))
         return;
 
-    new TFClassType:class = TF2_GetPlayerClass(client);
+    int TFClassType:class = TF2_GetPlayerClass(client);
     if (class != TFClass_Medic)
         return;
 
-    new DefUberCharge = g_NativeControl ? g_NativeUberCharge[client] : GetConVarInt(g_DefUberCharge);
+    int DefUberCharge = g_NativeControl ? g_NativeUberCharge[client] : GetConVarInt(g_DefUberCharge);
     if (DefUberCharge)
         TF2_ExSetUberLevel(client, DefUberCharge*0.01);
 }
 
 public Action Event_PlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 {
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));
-    new TFClassType:class = TF2_GetPlayerClass(client);
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));
+    int TFClassType:class = TF2_GetPlayerClass(client);
     if (class != TFClass_Medic)
         return;
 
@@ -472,8 +472,8 @@ public Action Event_PlayerSpawn(Handle event, const char[] name, bool dontBroadc
 
 public Action Event_PlayerClass(Handle event, const char[] name, bool dontBroadcast)
 {
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));
-    new any class = GetEventInt(event, "class");
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));
+    int any class = GetEventInt(event, "class");
     if (class != TFClass_Medic)
         return;
 
@@ -493,15 +493,15 @@ public Action Event_PlayerDeath(Handle event, const char[] name, bool dontBroadc
         return;
     }
 
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));
     if (!IsClientInGame(client))
         return;
 
-    new MedipacksOn = g_NativeControl ? g_NativeMedipacks[client] : GetConVarInt(g_IsMedipacksOn);
+    int MedipacksOn = g_NativeControl ? g_NativeMedipacks[client] : GetConVarInt(g_IsMedipacksOn);
     if (MedipacksOn < 1 || MedipacksOn == 2)
         return;
 
-    new TFClassType:class = TF2_GetPlayerClass(client);
+    int TFClassType:class = TF2_GetPlayerClass(client);
     if (class != TFClass_Medic)
         return;
 
@@ -510,15 +510,15 @@ public Action Event_PlayerDeath(Handle event, const char[] name, bool dontBroadc
 
 public Action Event_PlayerTeam(Handle event, const char[] name, bool dontBroadcast)
 {
-    new disconnect = GetEventInt(event, "disconnect");
+    int disconnect = GetEventInt(event, "disconnect");
     if (disconnect)
         return;
 
-    new team = GetEventInt(event, "team");
+    int team = GetEventInt(event, "team");
     if (team > 1)
         return;
 
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));
     if (!IsClientInGame(client))
         return;
 
@@ -529,13 +529,13 @@ public Action Event_PlayerTeam(Handle event, const char[] name, bool dontBroadca
 
 public Action Event_TeamplayRoundStart(Handle event, const char[] name, bool dontBroadcast)
 {
-    new full_reset = GetEventInt(event, "full_reset");
+    int full_reset = GetEventInt(event, "full_reset");
     if (full_reset)
     {
-        new maxents = GetMaxEntities();
+        int maxents = GetMaxEntities();
         for (int c = MaxClients; c < maxents; c++)
         {
-            new time = GetArrayCell(g_MedipacksTime, c);
+            int time = GetArrayCell(g_MedipacksTime, c);
             if (time > 0)
             {
                 SetArrayCell(g_MedipacksRef, c, INVALID_ENT_REFERENCE);
@@ -550,7 +550,7 @@ public Action Entity_OnPlayerTouch(const char[] output, caller, activator, float
 {
     if (activator > 0 && caller > 0)
     {
-        new time = GetArrayCell(g_MedipacksTime, caller);
+        int time = GetArrayCell(g_MedipacksTime, caller);
         if (time > 0)
         {
             SetArrayCell(g_MedipacksRef, caller, INVALID_ENT_REFERENCE);
@@ -604,14 +604,14 @@ stock TF_SpawnMedipack(client, char name[], bool cmd, TFHoliday:holiday)
         CloseHandle(Trace);
         MediPos[2] += 4;
 
-        new Medipack = CreateEntityByName(name);
+        int Medipack = CreateEntityByName(name);
         if (Medipack > 0 && IsValidEntity(Medipack))
         {
             DispatchKeyValue(Medipack, "OnPlayerTouch", "!self,Kill,,0,-1");
             if (DispatchSpawn(Medipack))
             {
-                new team = 0;
-                new MedipacksTeam = GetConVarInt(g_MedipacksTeam);
+                int team = 0;
+                int MedipacksTeam = GetConVarInt(g_MedipacksTeam);
                 if (MedipacksTeam == 2)
                     team = ((GetClientTeam(client)-1) % 2) + 2;
                 else if (MedipacksTeam == 1 || (MedipacksTeam == 3 && cmd))
@@ -680,34 +680,34 @@ stock TF_SpawnMedipack(client, char name[], bool cmd, TFHoliday:holiday)
 
 stock bool TF_DropMedipack(client, bool cmd, TFHoliday:holiday)
 {
-    new charge;
+    int char ge;
     if (cmd)
-        charge = RoundFloat(TF2_ExGetUberLevel(client)*100.0);
+        char ge = RoundFloat(TF2_ExGetUberLevel(client)*100.0);
     else
-        charge = g_MedicUberCharge[client];
+        char ge = g_MedicUberCharge[client];
 
-    new MedipacksLimit = GetConVarInt(g_MedipacksLimit);
+    int MedipacksLimit = GetConVarInt(g_MedipacksLimit);
     if (MedipacksLimit > 0 && g_MedipacksCount >= MedipacksLimit)
-        charge = 0;
+        char ge = 0;
 
-    new MedipacksSmall = GetConVarInt(g_MedipacksSmall);
-    new MedipacksMedium = GetConVarInt(g_MedipacksMedium);
-    new MedipacksFull = GetConVarInt(g_MedipacksFull);
-    if (charge >= MedipacksFull && MedipacksFull != 0)
+    int MedipacksSmall = GetConVarInt(g_MedipacksSmall);
+    int MedipacksMedium = GetConVarInt(g_MedipacksMedium);
+    int MedipacksFull = GetConVarInt(g_MedipacksFull);
+    if (char ge >= MedipacksFull && MedipacksFull != 0)
     {
-        if (cmd) TF2_ExSetUberLevel(client, (charge-MedipacksFull)*0.01);
+        if (cmd) TF2_ExSetUberLevel(client, (char ge-MedipacksFull)*0.01);
         TF_SpawnMedipack(client, "item_healthkit_full", cmd, holiday);
         return true;
     }
-    else if (charge >= MedipacksMedium && MedipacksMedium != 0)
+    else if (char ge >= MedipacksMedium && MedipacksMedium != 0)
     {
-        if (cmd) TF2_ExSetUberLevel(client, (charge-MedipacksMedium)*0.01);
+        if (cmd) TF2_ExSetUberLevel(client, (char ge-MedipacksMedium)*0.01);
         TF_SpawnMedipack(client, "item_healthkit_medium", cmd, holiday);
         return true;
     }
-    else if (charge >= MedipacksSmall && MedipacksSmall != 0)
+    else if (char ge >= MedipacksSmall && MedipacksSmall != 0)
     {
-        if (cmd) TF2_ExSetUberLevel(client, (charge-MedipacksSmall)*0.01);
+        if (cmd) TF2_ExSetUberLevel(client, (char ge-MedipacksSmall)*0.01);
         TF_SpawnMedipack(client, "item_healthkit_small", cmd, holiday);
         return true;
     }
@@ -725,20 +725,20 @@ public Native_ControlMedipacks(Handle plugin, numParams)
 
 public Native_SetMedipack(Handle plugin, numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     g_NativeMedipacks[client] = GetNativeCell(2);
     g_NativeUberCharge[client] = GetNativeCell(3);
 }
 
 public Native_DropMedipack(Handle plugin, numParams)
 {
-    new client         = GetNativeCell(1);
-    new charge         = GetNativeCell(2);
-    new TFHoliday:type = TFHoliday:GetNativeCell(3);
+    int client         = GetNativeCell(1);
+    int char ge         = GetNativeCell(2);
+    int TFHoliday:type = TFHoliday:GetNativeCell(3);
 
-    if (charge >= 0)
+    if (char ge >= 0)
     {
-        g_MedicUberCharge[client] = charge;
+        g_MedicUberCharge[client] = char ge;
         return TF_DropMedipack(client, false, type);
     }
     else

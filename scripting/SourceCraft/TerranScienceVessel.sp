@@ -51,8 +51,8 @@ static const char[] buildWav[]         = "sc/tverdy00.wav";  // Spawn sound
 static const char[] g_PlagueSound[]    = "sc/tveirr00.wav"; // Irradiate sound
 static const char[] g_PlagueShort[]    = "sc_irradiate";
 
-intraceID, armorID, liftersID, detectorID, reactorID;
-intchargeID, plagueID, matrixID, empID, ravenID;
+int raceID, armorID, liftersID, detectorID, reactorID;
+int char geID, plagueID, matrixID, empID, ravenID;
 
 static const char[] g_ArmorName[]  = "Plating";
 float g_InitialArmor[]      = { 0.0, 0.10, 0.25, 0.50, 0.75 };
@@ -67,7 +67,7 @@ float g_EmpRadius[]         = { 0.0, 250.0, 500.0, 750.0, 1000.0 };
 float g_DetectorRange[]     = { 0.0, 300.0, 450.0, 650.0, 800.0 };
 float g_LevitationLevels[]  = { 1.0, 0.92, 0.733, 0.5466, 0.36 };
 
-intg_ravenRace = -1;
+int g_ravenRace = -1;
 
 bool m_Detected[MAXPLAYERS+1][MAXPLAYERS+1];
 
@@ -120,11 +120,11 @@ public OnSourceCraftReady()
     detectorID  = AddUpgrade(raceID, "detector", .cost_crystals=0);
     reactorID   = AddUpgrade(raceID, "reactor", 0, 14, .cost_crystals=20);
 
-    chargeID = AddUpgrade(raceID, "ubercharger", .cost_crystals=0);
+    char geID = AddUpgrade(raceID, "ubercharger", .cost_crystals=0);
 
     if (GetGameType() != tf2 || !IsUberChargerAvailable())
     {
-        SetUpgradeDisabled(raceID, chargeID, true);
+        SetUpgradeDisabled(raceID, char geID, true);
         LogMessage("Disabling Terran Science Vessel:Uber Charger due to ubercharger is not available (or gametype != tf2)");
     }
 
@@ -272,21 +272,21 @@ public Action OnRaceSelected(int client, int oldrace, int newrace)
 {
     if (newrace == raceID)
     {
-        intreactor_level = GetUpgradeLevel(client,raceID,reactorID);
+        int reactor_level = GetUpgradeLevel(client,raceID,reactorID);
         SetEnergyRate(client, (reactor_level > 0) ? float(reactor_level) : -1.0);
 
-        intarmor_level = GetUpgradeLevel(client,raceID,armorID);
+        int armor_level = GetUpgradeLevel(client,raceID,armorID);
         SetupArmor(client, armor_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        intlifters_level = GetUpgradeLevel(client,raceID,liftersID);
+        int lifters_level = GetUpgradeLevel(client,raceID,liftersID);
         SetLevitation(client, lifters_level, true, g_LevitationLevels);
 
-        intcharge_level = GetUpgradeLevel(client,raceID,chargeID);
-        if (charge_level > 0)
-            SetupUberCharger(client, charge_level);
+        int char ge_level = GetUpgradeLevel(client,raceID,char geID);
+        if (char ge_level > 0)
+            SetupUberCharger(client, char ge_level);
 
-        intmatrix_level=GetUpgradeLevel(client,raceID,matrixID);
+        int matrix_level=GetUpgradeLevel(client,raceID,matrixID);
         if (matrix_level > 0)
             SetupUberShield(client, matrix_level);
 
@@ -295,7 +295,7 @@ public Action OnRaceSelected(int client, int oldrace, int newrace)
             PrepareAndEmitSoundToAll(buildWav,client);
         }
 
-        intdetecting_level=GetUpgradeLevel(client,raceID,detectorID);
+        int detecting_level=GetUpgradeLevel(client,raceID,detectorID);
         if (detecting_level && IsValidClientAlive(client))
         {
             CreateClientTimer(client, 0.5, Detection,
@@ -314,7 +314,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
     {
         if (upgrade==liftersID)
             SetLevitation(client, new_level, true, g_LevitationLevels);
-        else if (upgrade==chargeID)
+        else if (upgrade==char geID)
             SetupUberCharger(client, new_level);
         else if (upgrade==matrixID)
             SetupUberShield(client, new_level);
@@ -351,7 +351,7 @@ public OnItemPurchase(client,item)
 
         if (item == g_sockItem)
         {
-            intlifters_level = GetUpgradeLevel(client,raceID,liftersID);
+            int lifters_level = GetUpgradeLevel(client,raceID,liftersID);
             SetLevitation(client, lifters_level, true, g_LevitationLevels);
         }
     }
@@ -361,7 +361,7 @@ public Action OnDropPlayer(client, target)
 {
     if (IsValidClient(target) && GetRace(target) == raceID)
     {
-        intlifters_level = GetUpgradeLevel(target,raceID,liftersID);
+        int lifters_level = GetUpgradeLevel(target,raceID,liftersID);
         SetLevitation(target, lifters_level, true, g_LevitationLevels);
     }
     return Plugin_Continue;
@@ -375,13 +375,13 @@ public OnUltimateCommand(client,race,bool pressed,arg)
         {
             case 4: // Raven
             {
-                intraven_level=GetUpgradeLevel(client,race,ravenID);
+                int raven_level=GetUpgradeLevel(client,race,ravenID);
                 if (raven_level > 0)
                     BuildRaven(client);
             }
             case 3: // Irradiate
             {
-                intplague_level=GetUpgradeLevel(client,race,plagueID);
+                int plague_level=GetUpgradeLevel(client,race,plagueID);
                 if (plague_level > 0)
                 {
                     Plague(client, raceID, plagueID, plague_level,
@@ -390,19 +390,19 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                 }
                 else
                 {
-                    intraven_level=GetUpgradeLevel(client,race,ravenID);
+                    int raven_level=GetUpgradeLevel(client,race,ravenID);
                     if (raven_level > 0)
                         BuildRaven(client);
                 }
             }
             case 2: // EMP
             {
-                intemp_level=GetUpgradeLevel(client,race,empID);
+                int emp_level=GetUpgradeLevel(client,race,empID);
                 if (emp_level > 0)
                     EMPShockWave(client, emp_level);
                 else
                 {
-                    intplague_level=GetUpgradeLevel(client,race,plagueID);
+                    int plague_level=GetUpgradeLevel(client,race,plagueID);
                     if (plague_level > 0)
                     {
                         Plague(client, raceID, plagueID, plague_level,
@@ -411,7 +411,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                     }
                     else
                     {
-                        intraven_level=GetUpgradeLevel(client,race,ravenID);
+                        int raven_level=GetUpgradeLevel(client,race,ravenID);
                         if (raven_level > 0)
                             BuildRaven(client);
                     }
@@ -419,12 +419,12 @@ public OnUltimateCommand(client,race,bool pressed,arg)
             }
             default:
             {
-                intmatrix_level=GetUpgradeLevel(client,race,matrixID);
+                int matrix_level=GetUpgradeLevel(client,race,matrixID);
                 if (matrix_level > 0)
                     DefensiveMatrix(client, matrix_level);
                 else
                 {
-                    intplague_level=GetUpgradeLevel(client,race,plagueID);
+                    int plague_level=GetUpgradeLevel(client,race,plagueID);
                     if (plague_level > 0)
                     {
                         Plague(client, raceID, plagueID, plague_level,
@@ -433,12 +433,12 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                     }
                     else
                     {
-                        intemp_level=GetUpgradeLevel(client,race,empID);
+                        int emp_level=GetUpgradeLevel(client,race,empID);
                         if (emp_level > 0)
                             EMPShockWave(client, emp_level);
                         else
                         {
-                            intraven_level=GetUpgradeLevel(client,race,ravenID);
+                            int raven_level=GetUpgradeLevel(client,race,ravenID);
                             if (raven_level > 0)
                                 BuildRaven(client);
                         }
@@ -572,8 +572,8 @@ void EMPShockWave(client, emp_level)
 
         PrepareAndEmitSoundToAll(empWav,client, .origin=targetLoc);
 
-        intteam = GetClientTeam(client);
-        intbeamColor[4];
+        int team = GetClientTeam(client);
+        int beamColor[4];
         if (team==2)
         {
             beamColor[0]=255;beamColor[1]=0;beamColor[2]=0;beamColor[3]=255;
@@ -583,10 +583,10 @@ void EMPShockWave(client, emp_level)
             beamColor[0]=0;beamColor[1]=0;beamColor[2]=255;beamColor[3]=255;
         }
 
-        intb_count=0;
-        intalt_count=0;
-        intlist[MaxClients+1];
-        intalt_list[MaxClients+1];
+        int b_count=0;
+        int alt_count=0;
+        int list[MaxClients+1];
+        int alt_list[MaxClients+1];
         SetupOBeaconLists(list, alt_list, b_count, alt_count, client);
 
         if (b_count > 0)
@@ -619,7 +619,7 @@ void EMPShockWave(client, emp_level)
             TE_Send(alt_list, alt_count, 0.0);
         }
 
-        intcount=0;
+        int count=0;
         for(int index=1;index<=MaxClients;index++)
         {
             if (index != client && IsClientInGame(index) &&
@@ -671,11 +671,11 @@ void EMPShockWave(client, emp_level)
             }
         }
 
-        intobj_count=0;
+        int obj_count=0;
         if (GameType == tf2)
         {
             float pos[3];
-            intmaxents = GetMaxEntities();
+            int maxents = GetMaxEntities();
             for (int ent = MaxClients; ent < maxents; ent++)
             {
                 if (IsValidEdict(ent) && IsValidEntity(ent))
@@ -754,7 +754,7 @@ void BuildRaven(client)
 
 public Action EnableObject(Handle timer, any ref)
 {
-    intent = EntRefToEntIndex(ref);
+    int ent = EntRefToEntIndex(ref);
     if (ent > 0 && IsValidEntity(ent) && IsValidEdict(ent))
     {
         if (!GetEntProp(ent, Prop_Send, "m_bHasSapper"))
@@ -772,25 +772,25 @@ public OnPlayerSpawnEvent(Handle event, client, race)
     {
         PrepareAndEmitSoundToAll(buildWav,client);
 
-        intreactor_level = GetUpgradeLevel(client,raceID,reactorID);
+        int reactor_level = GetUpgradeLevel(client,raceID,reactorID);
         SetEnergyRate(client, (reactor_level > 0) ? float(reactor_level) : -1.0);
 
-        intarmor_level = GetUpgradeLevel(client,raceID,armorID);
+        int armor_level = GetUpgradeLevel(client,raceID,armorID);
         SetupArmor(client, armor_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        intlifters_level = GetUpgradeLevel(client,raceID,liftersID);
+        int lifters_level = GetUpgradeLevel(client,raceID,liftersID);
         SetLevitation(client, lifters_level, true, g_LevitationLevels);
 
-        intcharge_level = GetUpgradeLevel(client,raceID,chargeID);
-        if (charge_level > 0)
-            SetupUberCharger(client, charge_level);
+        int char ge_level = GetUpgradeLevel(client,raceID,char geID);
+        if (char ge_level > 0)
+            SetupUberCharger(client, char ge_level);
 
-        intmatrix_level=GetUpgradeLevel(client,raceID,matrixID);
+        int matrix_level=GetUpgradeLevel(client,raceID,matrixID);
         if (matrix_level > 0)
             SetupUberShield(client, matrix_level);
 
-        intdetecting_level=GetUpgradeLevel(client,raceID,detectorID);
+        int detecting_level=GetUpgradeLevel(client,raceID,detectorID);
         if (detecting_level > 0)
         {
             CreateClientTimer(client, 0.5, Detection,
@@ -858,7 +858,7 @@ void SetupUberShield(client, level)
     {
         if (level > 0)
         {
-            intnum = level * 3;
+            int num = level * 3;
             GiveUberShield(client, num, num,
                            GetShieldFlags(level));
         }
@@ -869,7 +869,7 @@ void SetupUberShield(client, level)
 
 ShieldFlags GetShieldFlags(level)
 {
-    intShieldFlags flags = Shield_Target_Self  | Shield_Reload_Self |
+    int ShieldFlags flags = Shield_Target_Self  | Shield_Reload_Self |
                             Shield_With_Medigun | Shield_UseAlternateSounds;
     switch (level)
     {
@@ -890,12 +890,12 @@ ShieldFlags GetShieldFlags(level)
 
 public Action Detection(Handle timer, any userid)
 {
-    intclient = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client))
     {
         if (GetRace(client) == raceID)
         {
-            intdetecting_level=GetUpgradeLevel(client,raceID,detectorID);
+            int detecting_level=GetUpgradeLevel(client,raceID,detectorID);
             if (detecting_level > 0 &&
                 !GetRestriction(client, Restriction_NoUpgrades) ||
                 !GetRestriction(client, Restriction_Stunned))
@@ -909,11 +909,11 @@ public Action Detection(Handle timer, any userid)
                 char upgradeName[64];
                 GetUpgradeName(raceID, detectorID, upgradeName, sizeof(upgradeName), client);
 
-                intcount=0;
-                intalt_count=0;
-                intlist[MaxClients+1];
-                intalt_list[MaxClients+1];
-                intteam = GetClientTeam(client);
+                int count=0;
+                int alt_count=0;
+                int list[MaxClients+1];
+                int alt_list[MaxClients+1];
+                int team = GetClientTeam(client);
                 float detecting_range = g_DetectorRange[detecting_level];
                 for (int index=1;index<=MaxClients;index++)
                 {

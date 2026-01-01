@@ -18,9 +18,9 @@ stock bool IsEntLimitReached(warn=20,critical=16,client=0,const char[] message="
 
 stock EntitiesAvailable(warn=20,critical=16,client=0,const char[] message="")
 {
-    new max = GetMaxEntities();
-    new count = GetEntityCount();
-    new remaining = max - count;
+    int max = GetMaxEntities();
+    int count = GetEntityCount();
+    int remaining = max - count;
     if (remaining <= critical)
     {
         PrintToServer("Warning: Entity limit is nearly reached! Please switch or reload the map!");

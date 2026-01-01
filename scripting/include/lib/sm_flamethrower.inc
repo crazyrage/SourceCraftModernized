@@ -26,7 +26,7 @@ native ControlFlamethrower(bool plugin_only=true);
  * @param range  	The range of the flamethrower (-1.0 = use convar)
  * @return			none
  */
-native GiveFlamethrower(client,amount=-1,Float range=-1.0);
+native GiveFlamethrower(client,amount=-1,float range=-1.0);
 
 /**
  * Take the Flamethrower from a player.

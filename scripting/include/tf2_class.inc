@@ -10,7 +10,7 @@
 #endif
 #define _tf2_class_included
 
-stock Float GetClassSpeed(client)
+stock float GetClassSpeed(client)
 {
     switch (TF2_GetPlayerClass(client))
     {

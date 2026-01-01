@@ -177,7 +177,7 @@ stock bool activeFirstPerson(client){
 
 stock bool makeDamage(attacker, target, damage, damagetype, float damageradius, const float attackposition[3], const char[] weaponname[] = ""){
 
-	new pointhurt = CreateEntityByName("point_hurt");
+	int pointhurt = CreateEntityByName("point_hurt");
 	
 	if(pointhurt != -1){
 		
@@ -244,7 +244,7 @@ stock bool makeDamage(attacker, target, damage, damagetype, float damageradius, 
 */
 stock makeDamage2(attacker, target, damage, damagetype, float damageradius, float damagedelay, float damageduration, const float attackposition[3], const char[] weaponname[] = "", bool:customdamage = false, bool autoremove = true){
 
-	new pointhurt = CreateEntityByName("point_hurt");
+	int pointhurt = CreateEntityByName("point_hurt");
 	
 	if(pointhurt != -1){
 		
@@ -364,19 +364,19 @@ stock makeDamage2(attacker, target, damage, damagetype, float damageradius, floa
 #define SF_ENVEXPLOSION_SURFACEONLY	0x00002000 // don't damage the player if he's underwater.
 stock makeExplosion(attacker = 0, inflictor = -1, const float attackposition[3], const char[] weaponname[] = "", magnitude = 100, radiusoverride = 0, float damageforce = 0.0, flags = 0){
 	
-	new explosion = CreateEntityByName("env_explosion");
+	int explosion = CreateEntityByName("env_explosion");
 	
 	if(explosion != -1){
 		
 		DispatchKeyValueVector(explosion, "Origin", attackposition);
 		
-		char intbuffer[64];
-		IntToString(magnitude, intbuffer, 64);
-		DispatchKeyValue(explosion,"iMagnitude", intbuffer);
+		char int buffer[64];
+		IntToString(magnitude, int buffer, 64);
+		DispatchKeyValue(explosion,"iMagnitude", int buffer);
 		if(radiusoverride > 0){
 			
-			IntToString(radiusoverride, intbuffer, 64);
-			DispatchKeyValue(explosion,"iRadiusOverride", intbuffer);
+			IntToString(radiusoverride, int buffer, 64);
+			DispatchKeyValue(explosion,"iRadiusOverride", int buffer);
 			
 		}
 		if(damageforce > 0.0){
@@ -386,8 +386,8 @@ stock makeExplosion(attacker = 0, inflictor = -1, const float attackposition[3],
 		}
 		if(flags != 0){
 			
-			IntToString(flags, intbuffer, 64);
-			DispatchKeyValue(explosion,"spawnflags", intbuffer);
+			IntToString(flags, int buffer, 64);
+			DispatchKeyValue(explosion,"spawnflags", int buffer);
 			
 		}
 		//웨폰네임 오버라이드
@@ -434,7 +434,7 @@ stock makeExplosion(attacker = 0, inflictor = -1, const float attackposition[3],
 }
 
 //페이드 유저메시지 함수의 상수
-#define FFADE_IN 	0x0001        // Just here so we don't pass 0 into the function
+#define FFADE_IN 	0x0001        // Just here so we don't pass 0 int o the function
 #define FFADE_OUT	0x0002        // Fade out (not in)
 #define FFADE_MODULATE	0x0004        // Modulate (don't blend)
 #define FFADE_STAYOUT	0x0008        // ignores the duration, stays faded out until new ScreenFade message received
@@ -442,7 +442,7 @@ stock makeExplosion(attacker = 0, inflictor = -1, const float attackposition[3],
 
 stock sendFadeMsg(client, duration, holdtime, fadeflag, r, g, b, a){
 	
-	new Handle fademsg;
+	int Handle fademsg;
 	
 	if (client == 0){
 		
@@ -479,7 +479,7 @@ enum ShakeCommand_t{
 
 stock sendShakeMsg(client, all:shakeflag, float amplitude, float frequency, float duration){
 
-	new Handle shakemsg;
+	int Handle shakemsg;
 	
 	if (client == 0){
 		
@@ -502,7 +502,7 @@ stock sendShakeMsg(client, all:shakeflag, float amplitude, float frequency, floa
 //호출 예제 sendHudMsg(client, 6, 0.04, 0.82, 255, 120, 0, 255, 255, 120, 0, 225, 1, 0.1, 1000.0, 10.0, 4.0, totalhud);
 stock sendHudMsg(client, channel, float x, float y, r1, g1, b1, a1, r2, g2, b2, a2, effect, float fadein, float fadeout, float holdtime, float fxtime, const char[] msg[]){
 	
-	new Handle hudhandle = null;
+	int Handle hudhandle = null;
 	
 	if (client == 0){
 		
@@ -530,7 +530,7 @@ stock sendHudMsg(client, channel, float x, float y, r1, g1, b1, a1, r2, g2, b2, 
 		BfWriteByte(hudhandle, b2); //b2
 		BfWriteByte(hudhandle, a2); //a2
 		BfWriteByte(hudhandle, effect); //effect (0 is fade in/fade out; 1 is flickery credits; 2 is write out)
-		BfWriteFloat(hudhandle, fadein); //fadeinTime (message fade in time - per character in effect 2)
+		BfWriteFloat(hudhandle, fadein); //fadeinTime (message fade in time - per char acter in effect 2)
 		BfWriteFloat(hudhandle, fadeout); //fadeoutTime
 		BfWriteFloat(hudhandle, holdtime); //holdtime
 		BfWriteFloat(hudhandle, fxtime); //fxtime (effect type(2) used)
@@ -544,7 +544,7 @@ stock sendHudMsg(client, channel, float x, float y, r1, g1, b1, a1, r2, g2, b2, 
 //this made effect on css, but no effect at hl2mp
 stock sendKeyHintTextMsg(client, char[] msg[], any:...){
 	
-	new Handle hudhandle = null;
+	int Handle hudhandle = null;
 	
 	if (client == 0){
 		
@@ -572,7 +572,7 @@ stock sendKeyHintTextMsg(client, char[] msg[], any:...){
 //it was same as PrintHintText, but it made differant effect at hl2mp, it can print short single line msg
 stock sendHintTextMsg(client, char[] msg[], any:...){
 	
-	new Handle hudhandle = null;
+	int Handle hudhandle = null;
 	
 	if (client == 0){
 		
@@ -600,7 +600,7 @@ stock sendHintTextMsg(client, char[] msg[], any:...){
 //this has no effect
 stock sendHudText(client, char[] msg[], any:...){
 	
-	new Handle hudhandle = null;
+	int Handle hudhandle = null;
 	
 	if (client == 0){
 		
@@ -631,7 +631,7 @@ stock sendHudText(client, char[] msg[], any:...){
 #define HUD_PRINTCENTER	4
 stock sendTextMsg(client, msgtype, const char[] msgname[], const char[] msg1[] = "", const char[] msg2[] = "", const char[] msg3[] = "", const char[] msg4[] = ""){
 	
-	new Handle hudhandle = null;
+	int Handle hudhandle = null;
 	
 	if (client == 0){
 		
@@ -668,14 +668,14 @@ stock SendTopLeftText(client, r, g, b, a, level, time, const char[] text[], any:
 	SetGlobalTransTarget(client);
 	VFormat(message, sizeof(message), text, 9);	
 	
-	new Handle kv = CreateKeyValues("Stuff", "title", message);
+	int Handle kv = CreateKeyValues("Stuff", "title", message);
 	KvSetColor(kv, "color", r, g, b, a);
 	KvSetNum(kv, "level", level);
 	KvSetNum(kv, "time", time);
 	
 	if(client == 0){
 		
-		for(new i = 1; i <= MaxClients; i++){
+		for (int i = 1; i <= MaxClients; i++){
 			
 			if(isClientConnectedIngame(i)){
 				
@@ -698,11 +698,11 @@ stock SendTopLeftText(client, r, g, b, a, level, time, const char[] text[], any:
 //세이텍스트올
 stock SayText2ToAll(client, const char[] message[], any:...){ 
 	
-	new Handle buffer = null;
+	int Handle buffer = null;
 	
 	char txt[255];
 	
-	for(new i = 1; i <= MaxClients; i++){
+	for (int i = 1; i <= MaxClients; i++){
 		
 		if(IsClientInGame(i)){
 			
@@ -730,7 +730,7 @@ stock SayText2ToAll(client, const char[] message[], any:...){
 //세이텍스트투
 stock SayText2To(client, target, const char[] message[], any:...){ 
 	
-	new Handle buffer = StartMessageOne("SayText2", target);
+	int Handle buffer = StartMessageOne("SayText2", target);
 	
 	char txt[255];
 	SetGlobalTransTarget(target);
@@ -815,17 +815,17 @@ stock SetClientButtons(client, buttons){
 //살아있는 클라이언트의 에임방향으로부터 일정 거리 떨어진 곳을 구해서 돌려준다
 stock bool getClientAimPosition(client, float maxtracedistance, float resultvecpos[3], float resultvecnormal[3], TraceEntityFilter:function, filter){
 	
-	decl float cleyepos[3], float cleyeangle[3], float eyeanglevector[3];
+	float cleyepos[3], float cleyeangle[3], float eyeanglevector[3];
 	GetClientEyePosition(client, cleyepos); 
 	GetClientEyeAngles(client, cleyeangle);
 	
-	new Handle traceresulthandle = null;
+	int Handle traceresulthandle = null;
 	
 	traceresulthandle = TR_TraceRayFilterEx(cleyepos, cleyeangle, MASK_SOLID, RayType_Infinite, function, filter);
 	
 	if(TR_DidHit(traceresulthandle) == true){
 		
-		decl float endpos[3];
+		float endpos[3];
 		TR_GetEndPosition(endpos, traceresulthandle);
 		TR_GetPlaneNormal(traceresulthandle, resultvecnormal);
 		
@@ -859,19 +859,19 @@ stock bool getClientAimPosition(client, float maxtracedistance, float resultvecp
 	
 }
 
-stock GetClientAimEntity(client, &float distancetoentity){
+stock GetClientAimEntity(client, float & distancetoentity){
 
-	decl float cleyepos[3], float cleyeangle[3];
+	float cleyepos[3], float cleyeangle[3];
 	GetClientEyePosition(client, cleyepos); 
 	GetClientEyeAngles(client, cleyeangle);
 	
-	new Handle traceresulthandle = null;
+	int Handle traceresulthandle = null;
 	
 	traceresulthandle = TR_TraceRayFilterEx(cleyepos, cleyeangle, MASK_SOLID, RayType_Infinite, tracerayfilterdefault, client);
 	
 	if(TR_DidHit(traceresulthandle) == true){
 		
-		decl float endpos[3];
+		float endpos[3];
 		TR_GetEndPosition(endpos, traceresulthandle);
 		
 		distancetoentity = GetVectorDistance(cleyepos, endpos);
@@ -891,19 +891,19 @@ stock GetClientAimEntity(client, &float distancetoentity){
 
 stock GetClientAimEntity2(client){
 
-	decl float temp;
+	float temp;
 	
 	return GetClientAimEntity(client, temp);
 
 }
 
-stock GetClientAimEntity3(client, &float distancetoentity, float endpos[3]){
+stock GetClientAimEntity3(client, float & distancetoentity, float endpos[3]){
 
-	decl float cleyepos[3], float cleyeangle[3];
+	float cleyepos[3], float cleyeangle[3];
 	GetClientEyePosition(client, cleyepos); 
 	GetClientEyeAngles(client, cleyeangle);
 	
-	new Handle traceresulthandle = null;
+	int Handle traceresulthandle = null;
 	
 	traceresulthandle = TR_TraceRayFilterEx(cleyepos, cleyeangle, MASK_SOLID, RayType_Infinite, tracerayfilterdefault, client);
 	
@@ -939,7 +939,7 @@ stock setTakeDamage(entity, type){
 }
 
 //트레이스레이필터
-public bool:tracerayfilterdefault(entity, mask, any:data){
+public bool:tracerayfilterdefault(entity, mask, any data){
 	
 	if(entity != data){
 		
@@ -953,7 +953,7 @@ public bool:tracerayfilterdefault(entity, mask, any:data){
 	
 }
 
-public bool:tracerayfilteronlyone(entity, mask, any:data){
+public bool:tracerayfilteronlyone(entity, mask, any data){
 	
 	if(entity == data && mask & CONTENTS_HITBOX){
 		
@@ -968,10 +968,10 @@ public bool:tracerayfilteronlyone(entity, mask, any:data){
 }
 
 //트레이스레이필터로켓
-public bool:tracerayfilterrocket(entity, mask, any:data){
+public bool:tracerayfilterrocket(entity, mask, any data){
 	
 	//로켓을 쏜 사람이 아니고, 그 사람의 물건도 아닐때만 필터에 감지한다
-	new owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");//닿은 물건의 주인을 구한다
+	int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");//닿은 물건의 주인을 구한다
 	if(entity != data && owner != data){
 		
 		return true;
@@ -985,7 +985,7 @@ public bool:tracerayfilterrocket(entity, mask, any:data){
 }
 
 //트레이스레이필터, 플레이어는 감지하지 않는다
-public bool:tracerayfilternoplayer(entity, mask, any:data){
+public bool:tracerayfilternoplayer(entity, mask, any data){
 	
 	if(!isClientConnectedIngameAlive(entity)){
 		
@@ -1000,7 +1000,7 @@ public bool:tracerayfilternoplayer(entity, mask, any:data){
 }
 
 //0번 엔티티만 감지한다
-public bool:tracerayfilteronlyworld(entity, mask, any:data){
+public bool:tracerayfilteronlyworld(entity, mask, any data){
 	
 	if(entity == 0){
 		
@@ -1060,7 +1060,7 @@ stock bool IsEntityCollidable(entity, bool:includeplayer = true, bool:includehos
 
 stock makeviewpunch(client, float angle[3]){
 	
-	decl float oldangle[3];
+	float oldangle[3];
 	
 	GetEntPropVector(client, Prop_Send, "m_vecPunchAngle", oldangle);
 	
@@ -1075,7 +1075,7 @@ stock makeviewpunch(client, float angle[3]){
 
 stock resetviewpunch(client){
 	
-	new float angle[3] = {0.0, 0.0, 0.0};
+	int float angle[3] = {0.0, 0.0, 0.0};
 	
 	SetEntPropVector(client, Prop_Send, "m_vecPunchAngle", angle);
 	SetEntPropVector(client, Prop_Send, "m_vecPunchAngleVel", angle);
@@ -1092,7 +1092,7 @@ stock bool sendRawAudioTo(client, target, const char[] sSound[255], iVoicePitch 
 	
 	//Peace-Maker has found how to use this usermsg, well, i helped him lol
 	
-	new Handle buffer = StartMessageOne("RawAudio", target);
+	int Handle buffer = StartMessageOne("RawAudio", target);
 	
 	if (buffer != null){ 
 		
@@ -1118,7 +1118,7 @@ stock bool sendRawAudioToTeam(client, team, const char[] sSound[255], iVoicePitc
 		
 	}
 	
-	for(new i = 1; i <= MaxClients; i++){
+	for (int i = 1; i <= MaxClients; i++){
 		
 		if(IsClientInGame(i) && GetClientTeam(i) == team){
 			
@@ -1150,7 +1150,7 @@ stock bool sendRawAudioToTeamAndSpectator(client, team, const char[] sSound[255]
 		
 	}
 	
-	for(new i = 1; i <= MaxClients; i++){
+	for (int i = 1; i <= MaxClients; i++){
 		
 		if(IsClientInGame(i)){
 			
@@ -1188,7 +1188,7 @@ stock bool sendRawAudioToAll(client, const char[] sSound[255], iVoicePitch = 100
 		
 	}
 	
-	new Handle buffer = StartMessageAll("RawAudio");
+	int Handle buffer = StartMessageAll("RawAudio");
 	
 	if (buffer != null) { 
 		
@@ -1217,7 +1217,7 @@ stock bool sendRadioTextTo(client, target, const char[] sText[255], any:...){
 		
 	}
 	
-	new Handle buffer = StartMessageOne("RadioText", target);
+	int Handle buffer = StartMessageOne("RadioText", target);
 	
 	if (buffer != null) { 
 		
@@ -1267,7 +1267,7 @@ stock bool sendRadioTextToAll(client, const char[] sText[255], any:...){
 		
 	}
 	
-	for(new i = 1; i <= MaxClients; i++){
+	for (int i = 1; i <= MaxClients; i++){
 		
 		if(IsClientInGame(i)){
 			
@@ -1329,7 +1329,7 @@ stock bool sendRadioTextToTeam(client, team, const char[] sText[], any:...){
 	GetClientName(client, sClientName, 255);
 	GetEntPropString(client, Prop_Data, "m_szLastPlaceName", sPlaceName, 255);
 	
-	for(new i = 1; i <= MaxClients; i++){
+	for (int i = 1; i <= MaxClients; i++){
 		
 		if(IsClientInGame(i) && GetClientTeam(i) == team){
 			
@@ -1373,9 +1373,9 @@ stock bool sendRadioTextToTeam(client, team, const char[] sText[], any:...){
 
 stock getAliveClientOnTeam(iTeam){
 	
-	new iCount = 0;
+	int iCount = 0;
 	
-	for(new i = 1; i <= MaxClients; i++){
+	for (int i = 1; i <= MaxClients; i++){
 		
 		if(isClientConnectedIngameAlive(i) && GetClientTeam(i) == iTeam){
 			
@@ -1391,10 +1391,10 @@ stock getAliveClientOnTeam(iTeam){
 
 stock stripClientAllWeapon(client, const char[] sServerClassName[]){
 
-	new Weapon_Offset = FindSendPropOffs(sServerClassName, "m_hMyWeapons");
-	new Max_Guns = 48;
+	int Weapon_Offset = FindSendPropOffs(sServerClassName, "m_hMyWeapons");
+	int Max_Guns = 48;
 
-	for(new n = 0; n < Max_Guns; n++){
+	for (int n = 0; n < Max_Guns; n++){
 
 		new iWeaponEntity = GetEntDataEnt2(client, Weapon_Offset + n * 4);
 		
@@ -1431,12 +1431,12 @@ stock bool isStringColor(const char[] text[], &resultbuffer){
 
 stock bool isStringInt(const char[] text[], &resultbuffer){
 
-	new intbuffer = StringToInt(text);
+	int buffer = StringToInt(text);
 	
-	if(intbuffer != 0 || StrEqual(text, "0", false) || StrEqual(text, "+0", false) || StrEqual(text, "-0", false)){
+	if(int buffer != 0 || StrEqual(text, "0", false) || StrEqual(text, "+0", false) || StrEqual(text, "-0", false)){
 		
 		//일단 숫자다
-		resultbuffer = intbuffer;
+		resultbuffer = int buffer;
 		return true;
 		
 	}
@@ -1457,7 +1457,7 @@ stock bool isStringIntRange(const char[] text[], min, max, &resultbuffer){
 
 }
 
-stock bool StripQuotesOnce(String:targetstring[], maxlength){
+stock bool StripQuotesOnce(char[] targetstring, maxlength){
 
 	if(targetstring[0] == '"' && targetstring[strlen(targetstring) - 1] == '"'){
 		
@@ -1471,13 +1471,13 @@ stock bool StripQuotesOnce(String:targetstring[], maxlength){
 }
 
 //this function will change any dublicated value on array to alternateValue.
-stock removeDublicatedArrayElement(any:array[], arraysize, any:alternateValue){
+stock removeDublicatedArrayElement(any array[], arraysize, any alternateValue){
 	
-	for(new i = 0; i < arraysize - 1; i++){
+	for (int i = 0; i < arraysize - 1; i++){
 		
 		if(array[i] != alternateValue){
 			
-			for(new searchtarget = i + 1; searchtarget < arraysize; searchtarget++){
+			for (int searchtarget = i + 1; searchtarget < arraysize; searchtarget++){
 				
 				if(array[i] == array[searchtarget]){
 					

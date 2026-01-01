@@ -189,12 +189,12 @@ public void OnWar3EventDeath(victim, attacker, deathrace)
     }
 }
 
-public Action RuptureCheckLoop(Handle h, any:data)
+public Action RuptureCheckLoop(Handle h, any data)
 {
-    new float origin[3];
+    int float origin[3];
     int attacker;
     int skilllevel;
-    new float dist;
+    int float dist;
     for(int i=1;i<=MaxClients;i++)
     {
         if(!ValidPlayer(i, true) || !bRuptured[i])
@@ -246,7 +246,7 @@ public Action RuptureCheckLoop(Handle h, any:data)
         }
     }
 }
-public Action BloodCrazyDOTLoop(Handle h,any:data)
+public Action BloodCrazyDOTLoop(Handle h,any data)
 {
     int attacker;
     for(int i=1; i <= MaxClients; i++)
@@ -331,7 +331,7 @@ public Gore(client)
 
 void WriteParticle(client, char ParticleName[])
 {
-    decl float fPos[3], float fAngles[3];
+    float fPos[3], float fAngles[3];
 
     fAngles[0] = GetRandomFloat(0.0, 360.0);
     fAngles[1] = GetRandomFloat(0.0, 15.0);

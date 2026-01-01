@@ -17,7 +17,7 @@ public Plugin myinfo =
 // Colors
 #define COLOR_DEFAULT 0x01
 #define COLOR_LIGHTGREEN 0x03
-#define COLOR_GREEN 0x04 // DOD = Red //kinda already defiend in war3 interface
+#define COLOR_GREEN 0x04 // DOD = Red //kinda already defiend in war3 int erface
 
 //Skills Settings
  
@@ -167,7 +167,7 @@ public Action OnPlayerRunCmd(client, &buttons, &impulse, float vel[3], float ang
 //float teleportTo[66][3];
 public void OnWar3EventDeath(victim, attacker, deathrace){
     if(ValidPlayer(victim)&&ValidPlayer(attacker)&&IsOurRace(attacker)){
-        new iSkillLevel=War3_GetSkillLevel(attacker,thisRaceID,SKILL_INFEST);
+        int iSkillLevel=War3_GetSkillLevel(attacker,thisRaceID,SKILL_INFEST);
         if (iSkillLevel>0)
         {
             
@@ -191,7 +191,7 @@ public void OnWar3EventDeath(victim, attacker, deathrace){
                 
                 
                 if(bDucking[attacker]){
-                    decl float location[3];
+                    float location[3];
                     GetClientAbsOrigin(victim,location);
                     //.PrintToChatAll("%f %f %f",teleportTo[attacker][0],teleportTo[attacker][1],teleportTo[attacker][2]);
                     War3_CachedPosition(victim,location);
@@ -221,7 +221,7 @@ public void OnWar3EventDeath(victim, attacker, deathrace){
     }
 }
 /*
-public Action setlocation(Handle t,any:attacker){
+public Action setlocation(Handle t,any attacker){
     TeleportEntity(attacker, teleportTo[attacker], NULL_VECTOR, NULL_VECTOR);
 }*/
 
@@ -229,7 +229,7 @@ public OnUltimateCommand(client,race,bool pressed)
 {
     if(race==thisRaceID && pressed && ValidPlayer(client,true))
     {
-        new ultLevel=War3_GetSkillLevel(client,thisRaceID,ULT_RAGE);
+        int ultLevel=War3_GetSkillLevel(client,thisRaceID,ULT_RAGE);
         if(ultLevel>0)
         {    
             //PrintToChatAll("level %d %f %f",ultLevel,RageDuration[ultLevel],RageAttackSpeed[ultLevel]);
@@ -266,7 +266,7 @@ public OnUltimateCommand(client,race,bool pressed)
 
     }
 }
-public Action stopRage(Handle t,any:client){
+public Action stopRage(Handle t,any client){
     War3_SetBuff(client,fAttackSpeed,thisRaceID,1.0);
     if(ValidPlayer(client,true)){
         PrintHintText(client,"%T","You are no longer in rage mode",client);

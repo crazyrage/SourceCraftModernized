@@ -213,17 +213,17 @@ stock bool PrepareSound(const char[] sound, bool force=false, bool preload=true)
  * @noreturn
  */
 stock PrepareAndEmitAmbientSound(const char[] name,
-                                 const Float pos[3],
+                                 const float pos[3],
                                  entity = SOUND_FROM_WORLD,
                                  level = SNDLEVEL_NORMAL,
                                  flags = SND_NOFLAGS,
-                                 Float vol = SNDVOL_NORMAL,
+                                 float vol = SNDVOL_NORMAL,
                                  pitch = SNDPITCH_NORMAL,
-                                 Float delay = 0.0)
+                                 float delay = 0.0)
 {
     if (GetGameType() == csgo)
     {
-        for (new i=1; i<=MaxClients; i++)
+        for (int i=1; i<=MaxClients; i++)
         {
             if (IsClientInGame(i))
                 ClientCommand(i, "playgamesound \"*%s\"", name);
@@ -270,17 +270,17 @@ stock PrepareAndEmitSound(const clients[],
                           channel = SNDCHAN_AUTO,
                           level = SNDLEVEL_NORMAL,
                           flags = SND_NOFLAGS,
-                          Float volume = SNDVOL_NORMAL,
+                          float volume = SNDVOL_NORMAL,
                           pitch = SNDPITCH_NORMAL,
                           speakerentity = -1,
-                          const Float origin[3] = NULL_VECTOR,
-                          const Float dir[3] = NULL_VECTOR,
+                          const float origin[3] = NULL_VECTOR,
+                          const float dir[3] = NULL_VECTOR,
                           bool updatePos = true,
-                          Float soundtime = 0.0)
+                          float soundtime = 0.0)
 {
     if (GetGameType() == csgo)
     {
-        for (new i=0; i<numClients; i++)
+        for (int i=0; i<numClients; i++)
             ClientCommand(clients[i], "playgamesound \"*%s\"", sample);
     }
     else
@@ -323,13 +323,13 @@ stock PrepareAndEmitSoundToClient(client,
                                   channel = SNDCHAN_AUTO,
                                   level = SNDLEVEL_NORMAL,
                                   flags = SND_NOFLAGS,
-                                  Float volume = SNDVOL_NORMAL,
+                                  float volume = SNDVOL_NORMAL,
                                   pitch = SNDPITCH_NORMAL,
                                   speakerentity = -1,
-                                  const Float origin[3] = NULL_VECTOR,
-                                  const Float dir[3] = NULL_VECTOR,
+                                  const float origin[3] = NULL_VECTOR,
+                                  const float dir[3] = NULL_VECTOR,
                                   bool updatePos = true,
-                                  Float soundtime = 0.0)
+                                  float soundtime = 0.0)
 {
     if (GetGameType() == csgo)
     {
@@ -373,17 +373,17 @@ stock PrepareAndEmitSoundToAll(const char[] sample,
                                channel = SNDCHAN_AUTO,
                                level = SNDLEVEL_NORMAL,
                                flags = SND_NOFLAGS,
-                               Float volume = SNDVOL_NORMAL,
+                               float volume = SNDVOL_NORMAL,
                                pitch = SNDPITCH_NORMAL,
                                speakerentity = -1,
-                               const Float origin[3] = NULL_VECTOR,
-                               const Float dir[3] = NULL_VECTOR,
+                               const float origin[3] = NULL_VECTOR,
+                               const float dir[3] = NULL_VECTOR,
                                bool updatePos = true,
-                               Float soundtime = 0.0)
+                               float soundtime = 0.0)
 {
     if (GetGameType() == csgo)
     {
-        for (new i=1; i<=MaxClients; i++)
+        for (int i=1; i<=MaxClients; i++)
         {
             if (IsClientInGame(i))
                 ClientCommand(i, "playgamesound \"*%s\"", sample);

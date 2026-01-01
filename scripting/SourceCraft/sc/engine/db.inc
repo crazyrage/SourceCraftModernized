@@ -157,7 +157,7 @@ Handle ConnectToDatabase(connection, bool threaded)
     }
 }
 
-public SQL_Connected(Handle owner, Handle hndl, const char[] error[], any:connection)
+public SQL_Connected(Handle owner, Handle hndl, const char[] error[], any connection)
 {
     g_DbHandle[connection] = hndl;
     if (hndl == null || error[0] != '\0')
@@ -399,7 +399,7 @@ CheckPlayerTable(Handle dbHandle)
     SQL_TQuery(dbHandle,SQL_PlayersChecked,"show tables like 'sc_players'", dbHandle);
 }
 
-public SQL_PlayersChecked(Handle owner, Handle hndl, const char[] error[], any:dbHandle)
+public SQL_PlayersChecked(Handle owner, Handle hndl, const char[] error[], any dbHandle)
 {
     if (hndl == null || error[0] != '\0')
         LogError("Error checking the sc_players SQL table:%s", error);
@@ -447,7 +447,7 @@ CreatePlayerTables(Handle dbHandle)
     SQL_TQuery(dbHandle, SQL_PlayersCreated, SQLString, dbHandle);
 }
 
-public SQL_PlayersCreated(Handle owner, Handle hndl, const char[] error[], any:dbHandle)
+public SQL_PlayersCreated(Handle owner, Handle hndl, const char[] error[], any dbHandle)
 {
     if (hndl == null || error[0] != '\0')
         LogError("Error in the creation of the sc_players SQL table:%s", error);
@@ -474,7 +474,7 @@ public SQL_PlayersCreated(Handle owner, Handle hndl, const char[] error[], any:d
     }
 }
 
-public SQL_PlayerAliasCreated(Handle owner, Handle hndl, const char[] error[], any:dbHandle)
+public SQL_PlayerAliasCreated(Handle owner, Handle hndl, const char[] error[], any dbHandle)
 {
     if (hndl == null || error[0] != '\0')
         LogError("Error in the creation of the sc_player_alias SQL table:%s", error);
@@ -504,7 +504,7 @@ public SQL_PlayerAliasCreated(Handle owner, Handle hndl, const char[] error[], a
     }
 }
 
-public SQL_PlayerRacesCreated(Handle owner, Handle hndl, const char[] error[], any:dbHandle)
+public SQL_PlayerRacesCreated(Handle owner, Handle hndl, const char[] error[], any dbHandle)
 {
     if (hndl == null || error[0] != '\0')
         LogError("Error in the creation of the sc_player_races SQL table:%s", error);
@@ -540,7 +540,7 @@ public SQL_PlayerRacesCreated(Handle owner, Handle hndl, const char[] error[], a
     }
 }
 
-public SQL_PlayerUpgradesCreated(Handle owner, Handle hndl, const char[] error[], any:dbHandle)
+public SQL_PlayerUpgradesCreated(Handle owner, Handle hndl, const char[] error[], any dbHandle)
 {
     if (hndl == null || error[0] != '\0')
         LogError("Error in the creation of the sc_player_upgrades SQL table:%s", error);
@@ -574,7 +574,7 @@ public SQL_PlayerUpgradesCreated(Handle owner, Handle hndl, const char[] error[]
     }
 }
 
-public SQL_PlayerTechCreated(Handle owner, Handle hndl, const char[] error[], any:dbHandle)
+public SQL_PlayerTechCreated(Handle owner, Handle hndl, const char[] error[], any dbHandle)
 {
     if (hndl == null || error[0] != '\0')
         LogError("Error in the creation of the sc_player_tech SQL table:%s", error);
@@ -632,7 +632,7 @@ InsertFaction(Handle dbHandle, Faction:faction, const char[] longName[],
     TraceReturn();
 }
 
-public SQL_FactionInserted(Handle owner, Handle hndl, const char[] error[], any:dbHandle)
+public SQL_FactionInserted(Handle owner, Handle hndl, const char[] error[], any dbHandle)
 {
     if (hndl == null || error[0] != '\0')
         LogError("Error inserting/updating faction:%s", error);
@@ -982,7 +982,7 @@ bool InsertUpgrade(race_ident, upgrade, upgrade_category, const char[] short[],
     return status;
 }
 
-QueryRaceDescription(race_ident, String:description[], maxlength)
+QueryRaceDescription(race_ident, char[] description, maxlength)
 {
     TraceInto("DB", "QueryRaceDescription", "race_ident=%s", race_ident);
 
@@ -1023,7 +1023,7 @@ QueryRaceDescription(race_ident, String:description[], maxlength)
     TraceReturn("description=%s", description);
 }
 
-QueryRaceImage(race_ident, String:image[], maxlength)
+QueryRaceImage(race_ident, char[] image, maxlength)
 {
     TraceInto("DB", "QueryRaceImage", "race_ident=%s", race_ident);
 
@@ -1064,7 +1064,7 @@ QueryRaceImage(race_ident, String:image[], maxlength)
     TraceReturn("image=%s", image);
 }
 
-QueryUpgradeImage(race_ident, upgrade, String:image[], maxlength)
+QueryUpgradeImage(race_ident, upgrade, char[] image, maxlength)
 {
     TraceInto("DB", "QueryUpgradeImage", "race_ident=%s", race_ident);
 
@@ -1158,7 +1158,7 @@ LoadPlayerData(client)
     TraceReturn();
 }
 
-public SQL_LoadPlayerData(Handle owner, Handle query, const char[] error[], any:userid)
+public SQL_LoadPlayerData(Handle owner, Handle query, const char[] error[], any userid)
 {
     TraceInto("DB", "SQL_LoadPlayerData");
 
@@ -1324,7 +1324,7 @@ public SQL_LoadPlayerData(Handle owner, Handle query, const char[] error[], any:
     TraceReturn();
 }
 
-public Action Retry_LoadPlayerData(Handle timer,any:userid)
+public Action Retry_LoadPlayerData(Handle timer,any userid)
 {
     // Retry to load the player's data
     int client = GetClientOfUserId(userid);
@@ -1406,7 +1406,7 @@ LoadPlayerRaceData(client, raceId)
     TraceReturn();
 }
 
-public SQL_LoadPlayerRaceData(Handle owner, Handle query, const char[] error[], any:data)
+public SQL_LoadPlayerRaceData(Handle owner, Handle query, const char[] error[], any data)
 {
     ResetPack(data);
     int userid = ReadPackCell(data); 
@@ -1544,7 +1544,7 @@ public Action Retry_LoadPlayerRaceData(Handle timer,Handle data)
         LoadPlayerRaceData(client, raceId);
 }
 
-public SQL_LoadPlayerUpgradeData(Handle owner, Handle query, const char[] error[], any:data)
+public SQL_LoadPlayerUpgradeData(Handle owner, Handle query, const char[] error[], any data)
 {
     ResetPack(data);
     int userid = ReadPackCell(data); 
@@ -1658,7 +1658,7 @@ LoadPlayerTechData(client, Faction:techId)
     TraceReturn();
 }
 
-public SQL_LoadPlayerTechData(Handle owner, Handle query, const char[] error[], any:data)
+public SQL_LoadPlayerTechData(Handle owner, Handle query, const char[] error[], any data)
 {
     TraceInto("DB", "SQL_LoadPlayerTechData");
 
@@ -2000,7 +2000,7 @@ SavePlayerData(client)
     TraceReturn();
 }
 
-public SQL_UpdatePlayer(Handle owner, Handle hndl, const char[] error[], any:data)
+public SQL_UpdatePlayer(Handle owner, Handle hndl, const char[] error[], any data)
 {
     TraceInto("DB", "SQL_UpdatePlayer");
 
@@ -2062,7 +2062,7 @@ public SQL_UpdatePlayer(Handle owner, Handle hndl, const char[] error[], any:dat
     TraceReturn();
 }
 
-public Action Retry_SavePlayerData(Handle timer,any:userid)
+public Action Retry_SavePlayerData(Handle timer,any userid)
 {
     // Retry to save the player's data
     int client = GetClientOfUserId(userid);
@@ -2070,7 +2070,7 @@ public Action Retry_SavePlayerData(Handle timer,any:userid)
         SavePlayerData(client);
 }
 
-public SQL_UpdateAlias(Handle owner, Handle hndl, const char[] error[], any:data)
+public SQL_UpdateAlias(Handle owner, Handle hndl, const char[] error[], any data)
 {
     TraceInto("DB", "SQL_UpdateAlias");
 
@@ -2437,7 +2437,7 @@ bool SavePlayerRaceData(client, player_ident, race, bool threaded, const char[] 
     return success;
 }
 
-public SQL_SavePlayerRaceData(Handle owner, Handle hndl, const char[] error[], any:data)
+public SQL_SavePlayerRaceData(Handle owner, Handle hndl, const char[] error[], any data)
 {
     TraceInto("DB", "SQL_SavePlayerRaceData");
 
@@ -2656,7 +2656,7 @@ bool SavePlayerTechData(client, player_ident, Faction:techId, bool threaded, con
     return success;
 }
 
-public SQL_SavePlayerTechData(Handle owner, Handle hndl, const char[] error[], any:data)
+public SQL_SavePlayerTechData(Handle owner, Handle hndl, const char[] error[], any data)
 {
     TraceInto("DB", "SQL_SavePlayerTechData");
 
@@ -2883,7 +2883,7 @@ ThreadedSavePlayerUpgrades(client, player_ident, race_ident, raceId,
     TraceReturn("cleared 0x%08x", raceInfo);
 }
 
-public SQL_SavePlayerUpgrades(Handle owner, Handle hndl, const char[] error[], any:data)
+public SQL_SavePlayerUpgrades(Handle owner, Handle hndl, const char[] error[], any data)
 {
     TraceInto("DB", "SQL_SavePlayerUpgrades");
 
@@ -3071,7 +3071,7 @@ DisablePlayer(admin, target)
     TraceReturn();
 }
 
-public SQL_DisablePlayer(Handle owner, Handle hndl, const char[] error[], any:data)
+public SQL_DisablePlayer(Handle owner, Handle hndl, const char[] error[], any data)
 {
     TraceInto("DB", "SQL_DisablePlayer");
 
@@ -3171,7 +3171,7 @@ EnablePlayer(admin, target)
     TraceReturn();
 }
 
-public SQL_EnablePlayer(Handle owner, Handle hndl, const char[] error[], any:data)
+public SQL_EnablePlayer(Handle owner, Handle hndl, const char[] error[], any data)
 {
     TraceInto("DB", "SQL_EnablePlayer");
 
@@ -3273,7 +3273,7 @@ DeletePlayer(admin, target)
     TraceReturn();
 }
 
-public SQL_DeletePlayer(Handle owner, Handle hndl, const char[] error[], any:data)
+public SQL_DeletePlayer(Handle owner, Handle hndl, const char[] error[], any data)
 {
     TraceInto("DB", "SQL_DeletePlayer");
 
@@ -3335,7 +3335,7 @@ FixLevels(client)
     }
 }
 
-public SQL_FixLevels(Handle owner, Handle hndl, const char[] error[], any:userid)
+public SQL_FixLevels(Handle owner, Handle hndl, const char[] error[], any userid)
 {
     if (hndl == null || error[0] != '\0')
     {

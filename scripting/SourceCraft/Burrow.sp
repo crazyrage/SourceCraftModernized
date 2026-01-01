@@ -49,12 +49,12 @@
 
 #define MAXENTITIES 2048
 
-new const char[] lurkerWav[] = "sc/zluburrw.wav";
-new const char[] burrowUpWav[] = "sc/burrowup.wav";
-new const char[] burrowDownWav[] = "sc/burrowdn.wav";
-new const char[] enterBunkerWav[] = "sc/tdrtra00.wav";
-new const char[] leaveBunkerWav[] = "sc/tdrtra01.wav";
-new const char[] burrowDeniedWav[] = "sc/zdrerr00.wav"; // "sc/zpwrdown.wav";
+static const char[] lurkerWav[] = "sc/zluburrw.wav";
+static const char[] burrowUpWav[] = "sc/burrowup.wav";
+static const char[] burrowDownWav[] = "sc/burrowdn.wav";
+static const char[] enterBunkerWav[] = "sc/tdrtra00.wav";
+static const char[] leaveBunkerWav[] = "sc/tdrtra01.wav";
+static const char[] burrowDeniedWav[] = "sc/zdrerr00.wav"; // "sc/zpwrdown.wav";
 
 	int m_SavedArmor[MAXPLAYERS+1];
 	int m_BurrowArmor[MAXPLAYERS+1];
@@ -298,9 +298,9 @@ public OnPlayerSpawnEvent(Handle event, client, race)
 
 public Action BurrowPlayerHurtPreEvent(Handle event,const char[] name[],bool dontBroadcast)
 {
-    new victim_index=GetClientOfUserId(GetEventInt(event,"userid"));
-    new attacker_index=GetClientOfUserId(GetEventInt(event,"attacker"));
-    new assister_index=GetClientOfUserId(GetEventInt(event,"assister"));
+    int victim_index=GetClientOfUserId(GetEventInt(event,"userid"));
+    int attacker_index=GetClientOfUserId(GetEventInt(event,"attacker"));
+    int assister_index=GetClientOfUserId(GetEventInt(event,"assister"));
 
     TraceInto("Burrow", "BurrowPlayerHurtPreEvent", "attacker=%d:%N, assister=%d:%N, victim=%d:%N", \
               attacker_index, ValidClientIndex(attacker_index), \
@@ -373,7 +373,7 @@ public Action BurrowPlayerHurtPreEvent(Handle event,const char[] name[],bool don
 
 public BurrowPlayerDeathPreEvent(Handle event,const char[] name[],bool dontBroadcast)
 {
-    new victim_index=GetClientOfUserId(GetEventInt(event,"userid"));
+    int victim_index=GetClientOfUserId(GetEventInt(event,"userid"));
 
     TraceInto("Burrow", "BurrowPlayerDeathPreEvent", "victim=%d:%N", \
               victim_index, ValidClientIndex(victim_index));
@@ -404,7 +404,7 @@ public BurrowPlayerDeathPreEvent(Handle event,const char[] name[],bool dontBroad
 
     ResetBurrow(victim_index, false, true, false);
 
-    new attacker_index=GetClientOfUserId(GetEventInt(event,"attacker"));
+    int attacker_index=GetClientOfUserId(GetEventInt(event,"attacker"));
     if (attacker_index > 0 && attacker_index != victim_index)
     {
         int level = m_BurrowLevel[attacker_index];
@@ -428,12 +428,12 @@ public BurrowPlayerDeathPreEvent(Handle event,const char[] name[],bool dontBroad
     TraceReturn();
 }
 
-public Action BurrowTimer(Handle timer,any:client)
+public Action BurrowTimer(Handle timer,any client)
 {
     TraceInto("Burrow", "BurrowTimer", "client=%d:%N, m_BurrowLevel=%d, m_BurrowDepth=%d, m_Burrowed=%d", \
               client, ValidClientIndex(client), m_BurrowLevel[client], m_BurrowDepth[client], m_Burrowed[client]);
 
-    new RoundStates:roundState = GetRoundState();
+    int RoundStates:roundState = GetRoundState();
     if (roundState >= RoundActive && roundState < RoundOver &&
         IsValidClientAlive(client))
     {
@@ -627,13 +627,13 @@ public Action BurrowTimer(Handle timer,any:client)
     return Plugin_Stop;
 }
 
-public Action BurrowedTimer(Handle timer,any:client)
+public Action BurrowedTimer(Handle timer,any client)
 {
     TraceInto("Burrow", "BurrowedTimer", "client=%d:%N", \
               client, ValidClientIndex(client));
 
     int burrowed = m_Burrowed[client];
-    new RoundStates:roundState = GetRoundState();
+    int RoundStates:roundState = GetRoundState();
     if (burrowed > 0 && roundState >= RoundActive && roundState < RoundOver &&
         IsValidClientAlive(client))
     {
@@ -695,14 +695,14 @@ public Action BurrowedTimer(Handle timer,any:client)
     return Plugin_Stop;
 }
 
-public Action UnBurrowTimer(Handle timer,any:client)
+public Action UnBurrowTimer(Handle timer,any client)
 {
     TraceInto("Burrow", "UnBurrowTimer", "client=%d:%N", \
               client, ValidClientIndex(client));
 
     SetAttribute(client,Attribute_IsBurrowed,false);
 
-    new RoundStates:roundState = GetRoundState();
+    int RoundStates:roundState = GetRoundState();
     if (roundState >= RoundActive && roundState < RoundOver &&
         IsValidClientAlive(client))
     {
@@ -1015,7 +1015,7 @@ public int Native_Burrow(Handle plugin,numParams)
     }
     else if (m_Burrowed[client] <= 0)
     {
-        new RoundStates:roundState = GetRoundState();
+        int RoundStates:roundState = GetRoundState();
         if (roundState < RoundActive || roundState >= RoundOver ||
             !IsValidClientAlive(client) || IsMole(client) ||
             GetRestriction(client,Restriction_NoUltimates) ||
@@ -1205,17 +1205,17 @@ public int Native_ResetClientStructures(Handle plugin,numParams)
 
 public int Native_BurrowStructure(Handle plugin,numParams)
 {
-    new client       = GetNativeCell(1);
+    int client       = GetNativeCell(1);
     float amount = GetNativeCell(2);
-    new flags        = GetNativeCell(3);
-    new target       = GetClientAimTarget(client, false);
+    int flags        = GetNativeCell(3);
+    int target       = GetClientAimTarget(client, false);
 
     TraceInto("Burrow", "Native_BurrowStructure", "client=%d:%N, target=%d", \
               client, ValidClientIndex(client), target);
 
     if (target > 0)
     {
-        new TFExtObjectType:type = TF2_GetExtObjectType(target);
+        int TFExtObjectType:type = TF2_GetExtObjectType(target);
         if (type == TFExtObject_Unknown && type != TFExtObject_Sapper)
             target = 0;
         else if (flags != BURROW_ANY_STRUCTURE)
@@ -1586,19 +1586,19 @@ Handle UnBurrowStructure(client, target)
     return null;
 }
 
-public Action BurrowStructureTimer(Handle timer,any:pack)
+public Action BurrowStructureTimer(Handle timer,any pack)
 {
     if (pack != null)
     {
         ResetPack(pack);
-        new client=ReadPackCell(pack);
-        new target=ReadPackCell(pack);
-        new ref=ReadPackCell(pack);
+        int client=ReadPackCell(pack);
+        int target=ReadPackCell(pack);
+        int ref=ReadPackCell(pack);
 
         TraceInto("Burrow", "BurrowStructureTimer", "client=%d:%N, target=%d, ref=%s, m_Burrowed=%d", \
                   client, ValidClientIndex(client), target, ref, m_Burrowed[target]);
 
-        new RoundStates:roundState = GetRoundState();
+        int RoundStates:roundState = GetRoundState();
         if (roundState >= RoundActive && roundState < RoundOver &&
             IsValidClient(client) && EntRefToEntIndex(ref) == target)
         {
@@ -1663,19 +1663,19 @@ public Action BurrowStructureTimer(Handle timer,any:pack)
     return Plugin_Stop;
 }
 
-public Action BurrowedStructureTimer(Handle timer,any:pack)
+public Action BurrowedStructureTimer(Handle timer,any pack)
 {
     if (pack != null)
     {
         ResetPack(pack);
-        new client=ReadPackCell(pack);
-        new target=ReadPackCell(pack);
-        new ref=ReadPackCell(pack);
+        int client=ReadPackCell(pack);
+        int target=ReadPackCell(pack);
+        int ref=ReadPackCell(pack);
 
         TraceInto("Burrow", "BurrowedStructureTimer", "client=%d:%N, target=%d, ref=%x", \
                   client, ValidClientIndex(client), target, ref);
 
-        new RoundStates:roundState = GetRoundState();
+        int RoundStates:roundState = GetRoundState();
         if (roundState >= RoundActive && roundState < RoundOver &&
             m_Burrowed[target] > 0 && EntRefToEntIndex(ref) == target &&
             IsValidClient(client))
@@ -1695,16 +1695,16 @@ public Action BurrowedStructureTimer(Handle timer,any:pack)
     return Plugin_Stop;
 }
 
-public Action UnBurrowStructureTimer(Handle timer,any:pack)
+public Action UnBurrowStructureTimer(Handle timer,any pack)
 {
     if (pack != null)
     {
         ResetPack(pack);
-        new client=ReadPackCell(pack);
-        new target=ReadPackCell(pack);
-        new ref=ReadPackCell(pack);
+        int client=ReadPackCell(pack);
+        int target=ReadPackCell(pack);
+        int ref=ReadPackCell(pack);
 
-        new RoundStates:roundState = GetRoundState();
+        int RoundStates:roundState = GetRoundState();
         if (roundState >= RoundActive && roundState < RoundOver &&
             m_Burrowed[target] > 0 && IsValidClient(client) &&
             EntRefToEntIndex(ref) == target)

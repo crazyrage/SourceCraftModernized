@@ -15,8 +15,8 @@
  */
 stock Edict_FindByName(const char[] name)
 {
-	new maxEntities = GetMaxEntities();
-	for (new edict=0; edict < maxEntities; edict++) {
+	int maxEntities = GetMaxEntities();
+	for (int edict=0; edict < maxEntities; edict++) {
 
 		if (!IsValidEdict(edict)) {
 			continue;
@@ -41,8 +41,8 @@ stock Edict_FindByName(const char[] name)
  */
 stock Edict_FindByHammerId(hammerId)
 {
-	new maxEntities = GetMaxEntities();
-	for (new edict=0; edict < maxEntities; edict++) {
+	int maxEntities = GetMaxEntities();
+	for (int edict=0; edict < maxEntities; edict++) {
 
 		if (!IsValidEdict(edict)) {
 			continue;
@@ -64,13 +64,13 @@ stock Edict_FindByHammerId(hammerId)
  * @param ignoreEntity		Ignore this entity
  * @return					Edict Index or INVALID_ENT_REFERENCE if no entity was found.
  */
-stock Edict_GetClosest(Float vecOrigin_center[3], bool clientsOnly=false, ignoreEntity=-1)
+stock Edict_GetClosest(float vecOrigin_center[3], bool clientsOnly=false, ignoreEntity=-1)
 {
-	decl Float vecOrigin_edict[3];
+	float vecOrigin_edict[3];
 	float smallestDistance = 0.0;
-	new closestEdict = INVALID_ENT_REFERENCE;
+	int closestEdict = INVALID_ENT_REFERENCE;
 
-	new maxEntities;
+	int maxEntities;
 
 	if (clientsOnly) {
 		maxEntities = MaxClients;
@@ -79,7 +79,7 @@ stock Edict_GetClosest(Float vecOrigin_center[3], bool clientsOnly=false, ignore
 		maxEntities = GetMaxEntities();
 	}
 
-	for (new edict=1; edict <= maxEntities; edict++) {
+	for (int edict=1; edict <= maxEntities; edict++) {
 
 		if (!IsValidEdict(edict)) {
 			continue;
@@ -115,7 +115,7 @@ stock Edict_GetClosest(Float vecOrigin_center[3], bool clientsOnly=false, ignore
  */
 stock Edict_GetClosestToEdict(edict, bool clientsOnly=false)
 {
-	decl Float vecOrigin[3];
+	float vecOrigin[3];
 
 	if (GetEntSendPropOffs(edict, "m_vecOrigin") == -1) {
 		return INVALID_ENT_REFERENCE;

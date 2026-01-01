@@ -10,7 +10,7 @@
 #endif
 #define _trace_included
 
-new g_TraceFilterIndex;
+int g_TraceFilterIndex;
 
 stock bool TraceTarget(client, target, float clientLoc[3], float targetLoc[3])
 {
@@ -66,7 +66,7 @@ public bool TraceRayTryToHit(entity,mask)
   return (entity <= 0 || entity > GetMaxClients());
 }
 
-public bool TraceRayDontHitSelf(entity, mask, any:data)
+public bool TraceRayDontHitSelf(entity, mask, any data)
 {
     return (entity != data); // Check if the TraceRay hit the owning entity.
 }

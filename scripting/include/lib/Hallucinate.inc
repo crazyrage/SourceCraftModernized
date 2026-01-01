@@ -15,7 +15,7 @@
 #define DRUG_DIZZY      2
 #define DRUG_CRAZY      3
 
-native bool PerformDrug(target, toggle, type=DRUG_RANDOM, Float magnitude=300.0);
+native bool PerformDrug(target, toggle, type=DRUG_RANDOM, float magnitude=300.0);
 native PerformBlind(target, amount);
 
 /**

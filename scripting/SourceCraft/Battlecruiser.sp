@@ -37,12 +37,12 @@
 #include "effect/SendEffects"
 #include "effect/FlashScreen"
 
-new const char[] buildWav[]         = "sc/tbardy00.wav";
-new const char[] deathWav[]         = "sc/tbadth00.wav";
-new const char[] barrageWav[]       = "sc/hkmissle.wav";
-new const char[] yamatoFireWav[]    = "sc/tbayam00.wav";
-new const char[] yamatoRepeatWav[]  = "sc/tbayam02.wav";
-new const char[] explosionsWav[][]  = { "sc/explo1.wav",
+static const char[] buildWav[]         = "sc/tbardy00.wav";
+static const char[] deathWav[]         = "sc/tbadth00.wav";
+static const char[] barrageWav[]       = "sc/hkmissle.wav";
+static const char[] yamatoFireWav[]    = "sc/tbayam00.wav";
+static const char[] yamatoRepeatWav[]  = "sc/tbayam02.wav";
+static const char[] explosionsWav[][]  = { "sc/explo1.wav",
                                         "sc/explo2.wav",
                                         "sc/explo3.wav",
                                         "sc/explo4.wav",
@@ -51,7 +51,7 @@ new const char[] explosionsWav[][]  = { "sc/explo1.wav",
                                         "sc/explomed.wav",
                                         "sc/explolrg.wav" };
 
-new const char[] g_ArmorName[]      = "Plating";
+static const char[] g_ArmorName[]      = "Plating";
 float g_InitialArmor[]          = { 0.05, 0.10, 0.25, 0.50, 0.75 };
 float g_ArmorPercent[][2]       = { {0.00, 0.10},
                                         {0.05, 0.20},
@@ -253,7 +253,7 @@ public Action OnRaceDeselected(client,oldrace,newrace)
         ResetArmor(client);
 
         // Turn off Immunities
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, false);
 
         if (m_JetpackAvailable)
@@ -270,17 +270,17 @@ public Action OnRaceSelected(client,oldrace,newrace)
     if (newrace == raceID)
     {
         // Turn on Immunities
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level,true);
 
         int armor_level = GetUpgradeLevel(client,raceID,armorID);
         SetupArmor(client, armor_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        new gravaccel_level=GetUpgradeLevel(client,raceID,gravAccelID);
+        int gravaccel_level=GetUpgradeLevel(client,raceID,gravAccelID);
         SetupGravgun(client, gravaccel_level);
 
-        new jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
+        int jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
         SetupJetpack(client, jetpack_level);
 
         if (IsValidClientAlive(client))
@@ -407,7 +407,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                                 DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
                                 PrepareAndEmitSoundToClient(client,deniedWav);
                             }
-                            else if (CanInvokeUpgrade(client, raceID, gravAccelID, .charge=false))
+                            else if (CanInvokeUpgrade(client, raceID, gravAccelID, .char ge=false))
                                 StartThrowObject(client);
                         }
                         else // if (!pressed)
@@ -429,14 +429,14 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         int immunity_level = GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
-        new gravaccel_level=GetUpgradeLevel(client,raceID,gravAccelID);
+        int gravaccel_level=GetUpgradeLevel(client,raceID,gravAccelID);
         SetupGravgun(client, gravaccel_level);
 
         int armor_level = GetUpgradeLevel(client,raceID,armorID);
         SetupArmor(client, armor_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        new jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
+        int jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
         SetupJetpack(client, jetpack_level);
 
         PrepareAndEmitSoundToAll(buildWav,client);
@@ -735,7 +735,7 @@ public MissileBarrage(client,ultlevel)
     }
 }
 
-public Action PersistMissileBarrage(Handle timer,any:userid)
+public Action PersistMissileBarrage(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client) &&
@@ -752,13 +752,13 @@ public Action PersistMissileBarrage(Handle timer,any:userid)
 
         PrepareAndEmitSoundToAll(barrageWav,client);
 
-        new count=0;
-        new alt_count=0;
+        int count=0;
+        int alt_count=0;
         int list[MaxClients+1];
         int alt_list[MaxClients+1];
         SetupOBeaconLists(list, alt_list, count, alt_count, client);
 
-        new lightning  = Lightning();
+        int lightning  = Lightning();
         int haloSprite = HaloSprite();
         static const barrageColor[4] = { 200, 200, 100, 255 };
 
@@ -778,9 +778,9 @@ public Action PersistMissileBarrage(Handle timer,any:userid)
             TE_Send(alt_list, alt_count, 0.0);
         }
 
-        new minDmg=level*5;
-        new maxDmg=level*10;
-        new team=GetClientTeam(client);
+        int minDmg=level*5;
+        int maxDmg=level*10;
+        int team=GetClientTeam(client);
         for(int index=1;index<=MaxClients;index++)
         {
             if (client != index && IsClientInGame(index) &&
@@ -843,14 +843,14 @@ void YamatoCannon(client,level)
         GetClientAbsOrigin(client, clientLoc);
         clientLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
-        new lightning  = Lightning();
+        int lightning  = Lightning();
         int haloSprite = HaloSprite();
         int beamSprite = BeamSprite();
         static const yamatoColor[4] = {139, 200, 255, 255};
         static const yamatoFlash[4] = {139, 200, 255, 3};
 
-        new count  = 0;
-        new team   = GetClientTeam(client);
+        int count  = 0;
+        int team   = GetClientTeam(client);
         int target = GetClientAimTarget(client);
         if (target > 0) 
         {
@@ -891,8 +891,8 @@ void YamatoCannon(client,level)
             targetLoc = clientLoc;
         }
 
-        new b_count=0;
-        new alt_count=0;
+        int b_count=0;
+        int alt_count=0;
         int list[MaxClients+1];
         int alt_list[MaxClients+1];
         SetupOBeaconLists(list, alt_list, b_count, alt_count, client);

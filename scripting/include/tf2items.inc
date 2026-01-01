@@ -119,7 +119,7 @@ native TF2Items_SetNumAttributes(Handle hItem, iNumAttributes);
  * @param flValue				The value assigned to the attribute (how much health, damage, etc.).
  * @noreturn
  */
-native TF2Items_SetAttribute(Handle hItem, iSlotIndex, iAttribDefIndex, Float flValue);
+native TF2Items_SetAttribute(Handle hItem, iSlotIndex, iAttribDefIndex, float flValue);
 
 /**
  * Retrieves the flags used to determine what the item will override on the
@@ -189,13 +189,13 @@ native TF2Items_GetAttributeId(Handle hItem, iSlotIndex);
  * @param hItem		Handle to the TF2Items object that we'll be operating with.
  * @return			The attribute value to use.
  */
-native Float TF2Items_GetAttributeValue(Handle hItem, iSlotIndex); 
+native float TF2Items_GetAttributeValue(Handle hItem, iSlotIndex); 
 
 // ====[ FORWARDS ]============================================================
 /**
  * Called when an item is about to be given to a client.
  * Return Plugin_Changed to override the item to use the configuration of the hItem object.
- * Return Plugin_Continue to keep them intact.
+ * Return Plugin_Continue to keep them int act.
  * Return Plugin_Handled to stop the item being given to the player.
  * Make sure the client gets atleast one weapon.
  *

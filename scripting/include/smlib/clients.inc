@@ -52,7 +52,7 @@
  * @param 1		Name of the client index variable (will be only valid in the loop).
  * @param 2		CLIENTFILTER_ flags to check.
  */
-#define LOOP_CLIENTS(%1,%2) for (new %1=Client_GetNext(%2); %1 >= 1 && %1 <= MaxClients; %1=Client_GetNext(%2, ++%1))
+#define LOOP_CLIENTS(%1,%2) for (int %1=Client_GetNext(%2); %1 >= 1 && %1 <= MaxClients; %1=Client_GetNext(%2, ++%1))
 
 /**
  * Macro for iterating trough all observers of a player.
@@ -61,7 +61,7 @@
  * @param 2		Name of the observer client index variable (will be only valid in the loop).
  * @param 3		CLIENTFILTER_ flags to check.
  */
-#define LOOP_OBSERVERS(%1,%2,%3) for (new %2=Client_GetNextObserver(%1, 1, %3); %2 >= 1 && %2 <= MaxClients; %2=Client_GetNextObserver(%1, ++%2, %3))
+#define LOOP_OBSERVERS(%1,%2,%3) for (int %2=Client_GetNextObserver(%1, 1, %3); %2 >= 1 && %2 <= MaxClients; %2=Client_GetNextObserver(%1, ++%2, %3))
 
 /**
  * Very useful macro to iterate all weapons of a client.
@@ -70,7 +70,7 @@
  * @param 2		Name of the weapon index variable (will be only valid in the loop).
  * @param 3		Name of the client's weapon index variable (will be only valid in the loop).
  */
-#define LOOP_CLIENTWEAPONS(%1,%2,%3) for (new %3, %2=Client_GetNextWeapon(%1, %3); %2 != -1; %2=Client_GetNextWeapon(%1, %3))
+#define LOOP_CLIENTWEAPONS(%1,%2,%3) for (int %3, %2=Client_GetNextWeapon(%1, %3); %2 != -1; %2=Client_GetNextWeapon(%1, %3))
 
 // Hud Element hiding flags (possibly outdated)
 #define	HIDEHUD_WEAPONSELECTION		( 1<<0 )	// Hide ammo count & weapon selection
@@ -163,7 +163,7 @@ stock bool Client_IsIngameAuthorized(client)
 stock Client_FindBySteamId(const char[] auth)
 {
 	char clientAuth[MAX_STEAMAUTH_LENGTH];
-	for (new client=1; client <= MaxClients; client++) {
+	for (int client=1; client <= MaxClients; client++) {
 		if (!IsClientAuthorized(client)) {
 			continue;
 		}
@@ -190,7 +190,7 @@ stock Client_FindBySteamId(const char[] auth)
 stock Client_FindByName(const char[] name, bool partOfName=true, bool caseSensitive=false)
 {
 	char clientName[MAX_NAME_LENGTH];
-	for (new client=1; client <= MaxClients; client++) {
+	for (int client=1; client <= MaxClients; client++) {
 		if (!IsClientAuthorized(client)) {
 			continue;
 		}
@@ -280,7 +280,7 @@ stock bool Client_SetObserverMode(client, Obs_Mode:mode, bool updateMoveType=tru
 		}
 	}
 
-	new Obs_Mode:observerMode = Client_GetObserverMode(client);
+	int Obs_Mode:observerMode = Client_GetObserverMode(client);
 	if (observerMode > OBS_MODE_DEATHCAM) {
 		// remember mode if we were really spectating before
 		Client_SetObserverLastMode(client, observerMode);
@@ -348,7 +348,7 @@ stock Client_SetObserverLastMode(client, Obs_Mode:mode)
  * @param vec			Vector Buffer.
  * @noreturn
  */
-stock Client_GetViewOffset(client, Float vec[3])
+stock Client_GetViewOffset(client, float vec[3])
 {
 	GetEntPropVector(client, Prop_Data, "m_vecViewOffset", vec);
 }
@@ -361,7 +361,7 @@ stock Client_GetViewOffset(client, Float vec[3])
  * @param vec			Vector buffer.
  * @noreturn
  */
-stock Client_SetViewOffset(client, Float vec[3])
+stock Client_SetViewOffset(client, float vec[3])
 {
 	SetEntPropVector(client, Prop_Data, "m_vecViewOffset", vec);
 }
@@ -441,12 +441,12 @@ stock Client_SetDrawViewModel(client, bool drawViewModel)
 }
 
 /**
- * Puts the specified client into thirdperson or back to firstperson when false
+ * Puts the specified client int o thirdperson or back to firstperson when false
  * This doesn't work correctly in all games, it works in CS:S and DOD:S and some other games.
  * Todo: Enhance this
  *
  * @param client 		Client Index.
- * @param enable		If set to true, the client will be put into thirdperson mode,
+ * @param enable		If set to true, the client will be put int o thirdperson mode,
  * 						if false the client will be put in firstperson mode.
  * @noreturn
  */
@@ -477,7 +477,7 @@ stock Client_IsInThirdPersonMode(client)
 	return GetEntProp(client, Prop_Data, "m_iObserverMode");
 }
 
-#define FFADE_IN			0x0001		// Just here so we don't pass 0 into the function
+#define FFADE_IN			0x0001		// Just here so we don't pass 0 int o the function
 #define FFADE_OUT			0x0002		// Fade out (not in)
 #define FFADE_MODULATE		0x0004		// Modulate (don't blend)
 #define FFADE_STAYOUT		0x0008		// ignores the duration, stays faded out until new ScreenFade message received
@@ -543,12 +543,12 @@ stock bool Client_ScreenFade(client, duration, mode, holdtime=-1, r=0, g=0, b=0,
  */
 stock Client_GetClones(client, cloneList[])
 {
-	new x=0;
-	char ip_client[16], String:ip_player[16];
+	int x=0;
+	char ip_client[16], char ip_player[16];
 
 	GetClientIP(client, ip_client, sizeof(client));
 
-	for (new player=1; player <= MaxClients; player++) {
+	for (int player=1; player <= MaxClients; player++) {
 
 		if (IsClientInGame(player)) {
 			GetClientIP(player, ip_player, sizeof(ip_player));
@@ -570,7 +570,7 @@ stock Client_GetClones(client, cloneList[])
  */
 stock bool Client_IsOnLadder(client)
 {
-	new MoveType:movetype = GetEntityMoveType(client);
+	int MoveType:movetype = GetEntityMoveType(client);
 
 	if (movetype == MOVETYPE_LADDER) {
 		return true;
@@ -605,7 +605,7 @@ stock Water_Level Client_GetWaterLevel(client)
  * @param client		Client index.
  * @return				returns the actual power left in percent.
  */
-stock Float Client_GetSuitSprintPower(client)
+stock float Client_GetSuitSprintPower(client)
 {
 	return GetEntPropFloat(client, Prop_Send, "m_flSuitPower");
 }
@@ -617,7 +617,7 @@ stock Float Client_GetSuitSprintPower(client)
  * @param power			power (0.0 to 100.0)
  * @noreturn
  */
-stock Client_SetSuitSprintPower(client, Float power)
+stock Client_SetSuitSprintPower(client, float power)
 {
 	SetEntPropFloat(client, Prop_Send, "m_flSuitPower", power);
 }
@@ -631,9 +631,9 @@ stock Client_SetSuitSprintPower(client, Float power)
  */
 stock Client_GetCount(bool countInGameOnly=true, bool countFakeClients=true)
 {
-	new numClients = 0;
+	int numClients = 0;
 
-	for (new client=1; client <= MaxClients; client++) {
+	for (int client=1; client <= MaxClients; client++) {
 
 		if (!IsClientConnected(client)) {
 			continue;
@@ -670,7 +670,7 @@ stock Client_GetFakePing(client, bool goldSource=true)
 		return 0;
 	}
 
-	new ping;
+	int ping;
 	float latency = GetClientLatency(client, NetFlow_Outgoing); // in seconds
 
 	// that should be the correct latency, we assume that cmdrate is higher
@@ -792,9 +792,9 @@ stock Client_SetArmor(client, value)
  * @param client			Client's index.
  * @return					Suitpower
  */
-stock Float Client_GetSuitPower(client)
+stock float Client_GetSuitPower(client)
 {
-	return Float GetEntPropFloat(client, Prop_Data, "m_flSuitPower");
+	return float GetEntPropFloat(client, Prop_Data, "m_flSuitPower");
 }
 
 /**
@@ -804,7 +804,7 @@ stock Float Client_GetSuitPower(client)
  * @param value				Suitpower
  * @noreturn
  */
-stock Client_SetSuitPower(client, Float value)
+stock Client_SetSuitPower(client, float value)
 {
 	SetEntPropFloat(client, Prop_Data, "m_flSuitPower", value);
 }
@@ -835,7 +835,7 @@ stock Client_GetActiveDevices(client)
  * @param client			Client's index.
  * @return					Next decal time
  */
-stock Float Client_GetNextDecalTime(client)
+stock float Client_GetNextDecalTime(client)
 {
 	return GetEntPropFloat(client, Prop_Data, "m_flNextDecalTime");
 }
@@ -860,7 +860,7 @@ stock bool Client_CanSprayDecal(client)
  */
 stock Client_GetVehicle(client)
 {
-	new m_hVehicle = GetEntPropEnt(client, Prop_Send, "m_hVehicle");
+	int m_hVehicle = GetEntPropEnt(client, Prop_Send, "m_hVehicle");
 
 	return m_hVehicle;
 }
@@ -895,7 +895,7 @@ stock Client_RemoveAllDecals(client)
  */
 stock bool Client_ExitVehicle(client)
 {
-	new vehicle = Client_GetVehicle(client);
+	int vehicle = Client_GetVehicle(client);
 
 	if (vehicle == -1) {
 		return false;
@@ -916,7 +916,7 @@ stock bool Client_ExitVehicle(client)
  * @param pitch			The pitch of the audiofile.
  * @return				True on success, false on failure.
  */
-stock bool Client_RawAudio(client, const emitter, const char[] soundfile, Float length = 0.0, pitch = 100)
+stock bool Client_RawAudio(client, const emitter, const char[] soundfile, float length = 0.0, pitch = 100)
 {
 	Handle message = StartMessageOne("RawAudio", client);
 
@@ -954,7 +954,7 @@ stock bool Client_RawAudio(client, const emitter, const char[] soundfile, Float 
  * @param pitch			The pitch of the audiofile.
  * @return				True on success, false on failure.
  */
-stock bool Client_RawAudioToAll(const emitter, const char[] soundfile, Float length = 0.0, pitch = 100)
+stock bool Client_RawAudioToAll(const emitter, const char[] soundfile, float length = 0.0, pitch = 100)
 {
 	Handle message = StartMessageAll("RawAudio");
 
@@ -1020,7 +1020,7 @@ stock Client_GetWeaponsOffset(client)
  */
 stock Client_GetActiveWeapon(client)
 {
-	new weapon =  GetEntPropEnt(client, Prop_Data, "m_hActiveWeapon");
+	int weapon =  GetEntPropEnt(client, Prop_Data, "m_hActiveWeapon");
 
 	if (!Entity_IsValid(weapon)) {
 		return INVALID_ENT_REFERENCE;
@@ -1039,7 +1039,7 @@ stock Client_GetActiveWeapon(client)
  */
 stock Client_GetActiveWeaponName(client, char[] buffer, size)
 {
-	new weapon = Client_GetActiveWeapon(client);
+	int weapon = Client_GetActiveWeapon(client);
 
 	if (weapon == INVALID_ENT_REFERENCE) {
 		buffer[0] = '\0';
@@ -1075,7 +1075,7 @@ stock Client_SetActiveWeapon(client, weapon)
  */
 stock bool Client_ChangeWeapon(client, const char[] className)
 {
-	new weapon = Client_GetWeapon(client, className);
+	int weapon = Client_GetWeapon(client, className);
 
 	if (weapon == INVALID_ENT_REFERENCE) {
 		return false;
@@ -1097,7 +1097,7 @@ stock bool Client_ChangeWeapon(client, const char[] className)
  */
 stock Client_ChangeToLastWeapon(client)
 {
-	new weapon = Client_GetLastActiveWeapon(client);
+	int weapon = Client_GetLastActiveWeapon(client);
 
 	if (weapon == INVALID_ENT_REFERENCE) {
 		weapon = Client_GetDefaultWeapon(client);
@@ -1124,7 +1124,7 @@ stock Client_ChangeToLastWeapon(client)
  */
 stock Client_GetLastActiveWeapon(client)
 {
-	new weapon = GetEntPropEnt(client, Prop_Data, "m_hLastWeapon");
+	int weapon = GetEntPropEnt(client, Prop_Data, "m_hLastWeapon");
 
 	if (!Entity_IsValid(weapon)) {
 		return INVALID_ENT_REFERENCE;
@@ -1143,7 +1143,7 @@ stock Client_GetLastActiveWeapon(client)
  */
 stock bool Client_GetLastActiveWeaponName(client, char[] buffer, size)
 {
-	new weapon = Client_GetLastActiveWeapon(client);
+	int weapon = Client_GetLastActiveWeapon(client);
 
 	if (weapon == INVALID_ENT_REFERENCE) {
 		buffer[0] = '\0';
@@ -1216,7 +1216,7 @@ stock bool Client_DetachWeapon(client, weapon)
  */
 stock Client_GiveWeapon(client, const char[] className, bool switchTo=true)
 {
-	new weapon = Client_GetWeapon(client, className);
+	int weapon = Client_GetWeapon(client, className);
 
 	if (weapon == INVALID_ENT_REFERENCE) {
 		weapon = Weapon_CreateForOwner(client, className);
@@ -1245,7 +1245,7 @@ stock Client_GiveWeapon(client, const char[] className, bool switchTo=true)
  */
 stock Client_GiveWeaponAndAmmo(client, const char[] className, bool switchTo=true, primaryAmmo=-1, secondaryAmmo=-1, primaryClip=-1, secondaryClip=-1)
 {
-	new weapon = Client_GiveWeapon(client, className, switchTo);
+	int weapon = Client_GiveWeapon(client, className, switchTo);
 
 	if (weapon == INVALID_ENT_REFERENCE) {
 		return INVALID_ENT_REFERENCE;
@@ -1275,9 +1275,9 @@ stock Client_GiveWeaponAndAmmo(client, const char[] className, bool switchTo=tru
  */
 stock bool Client_RemoveWeapon(client, const char[] className, bool firstOnly=true, bool clearAmmo=false)
 {
-	new offset = Client_GetWeaponsOffset(client) - 4;
+	int offset = Client_GetWeaponsOffset(client) - 4;
 
-	for (new i=0; i < MAX_WEAPONS; i++) {
+	for (int i=0; i < MAX_WEAPONS; i++) {
 		offset += 4;
 
 		new weapon = GetEntDataEnt2(client, offset);
@@ -1322,10 +1322,10 @@ stock bool Client_RemoveWeapon(client, const char[] className, bool firstOnly=tr
  */
 stock Client_RemoveAllWeapons(client, const char[] exclude="", bool clearAmmo=false)
 {
-	new offset = Client_GetWeaponsOffset(client) - 4;
+	int offset = Client_GetWeaponsOffset(client) - 4;
 
-	new numWeaponsRemoved = 0;
-	for (new i=0; i < MAX_WEAPONS; i++) {
+	int numWeaponsRemoved = 0;
+	for (int i=0; i < MAX_WEAPONS; i++) {
 		offset += 4;
 
 		new weapon = GetEntDataEnt2(client, offset);
@@ -1362,7 +1362,7 @@ stock Client_RemoveAllWeapons(client, const char[] exclude="", bool clearAmmo=fa
  */
 stock bool Client_HasWeapon(client, const char[] className)
 {
-	new weapon = Client_GetWeapon(client, className);
+	int weapon = Client_GetWeapon(client, className);
 
 	return (weapon != INVALID_ENT_REFERENCE);
 }
@@ -1376,9 +1376,9 @@ stock bool Client_HasWeapon(client, const char[] className)
  */
 stock Client_GetWeapon(client, const char[] className)
 {
-	new offset = Client_GetWeaponsOffset(client) - 4;
-	new weapon = INVALID_ENT_REFERENCE;
-	for (new i=0; i < MAX_WEAPONS; i++) {
+	int offset = Client_GetWeaponsOffset(client) - 4;
+	int weapon = INVALID_ENT_REFERENCE;
+	for (int i=0; i < MAX_WEAPONS; i++) {
 		offset += 4;
 
 		weapon = GetEntDataEnt2(client, offset);
@@ -1454,9 +1454,9 @@ stock bool Client_GetDefaultWeaponName(client, char[] buffer, size)
  */
 stock Client_GetFirstWeapon(client)
 {
-	new offset = Client_GetWeaponsOffset(client) - 4;
+	int offset = Client_GetWeaponsOffset(client) - 4;
 
-	for (new i=0; i < MAX_WEAPONS; i++) {
+	for (int i=0; i < MAX_WEAPONS; i++) {
 		offset += 4;
 
 		new weapon = GetEntDataEnt2(client, offset);
@@ -1479,11 +1479,11 @@ stock Client_GetFirstWeapon(client)
  */
 stock Client_GetWeaponCount(client)
 {
-	new numWeapons = 0;
+	int numWeapons = 0;
 
-	new offset = Client_GetWeaponsOffset(client) - 4;
+	int offset = Client_GetWeaponsOffset(client) - 4;
 
-	for (new i=0; i < MAX_WEAPONS; i++) {
+	for (int i=0; i < MAX_WEAPONS; i++) {
 		offset += 4;
 
 		new weapon = GetEntDataEnt2(client, offset);
@@ -1506,7 +1506,7 @@ stock Client_GetWeaponCount(client)
  */
 stock bool Client_IsReloading(client)
 {
-	new weapon = Client_GetActiveWeapon(client);
+	int weapon = Client_GetActiveWeapon(client);
 
 	if (weapon == INVALID_ENT_REFERENCE) {
 		return false;
@@ -1526,7 +1526,7 @@ stock bool Client_IsReloading(client)
  */
 stock bool Client_SetWeaponClipAmmo(client, const char[] className, primaryClip=-1, secondoaryClip=-1)
 {
-	new weapon = Client_GetWeapon(client, className);
+	int weapon = Client_GetWeapon(client, className);
 
 	if (weapon == INVALID_ENT_REFERENCE) {
 		return false;
@@ -1554,13 +1554,13 @@ stock bool Client_SetWeaponClipAmmo(client, const char[] className, primaryClip=
  */
 stock bool Client_GetWeaponPlayerAmmo(client, const char[] className, &primaryAmmo=-1, &secondaryAmmo=-1)
 {
-	new weapon = Client_GetWeapon(client, className);
+	int weapon = Client_GetWeapon(client, className);
 
 	if (weapon == INVALID_ENT_REFERENCE) {
 		return false;
 	}
 
-	new offset_ammo = FindDataMapInfo(client, "m_iAmmo");
+	int offset_ammo = FindDataMapInfo(client, "m_iAmmo");
 
 	if (primaryAmmo != -1) {
 		new offset = offset_ammo + (Weapon_GetPrimaryAmmoType(weapon) * 4);
@@ -1586,7 +1586,7 @@ stock bool Client_GetWeaponPlayerAmmo(client, const char[] className, &primaryAm
  */
 stock Client_GetWeaponPlayerAmmoEx(client, weapon, &primaryAmmo=-1, &secondaryAmmo=-1)
 {
-	new offset_ammo = FindDataMapInfo(client, "m_iAmmo");
+	int offset_ammo = FindDataMapInfo(client, "m_iAmmo");
 
 	if (primaryAmmo != -1) {
 		new offset = offset_ammo + (Weapon_GetPrimaryAmmoType(weapon) * 4);
@@ -1610,7 +1610,7 @@ stock Client_GetWeaponPlayerAmmoEx(client, weapon, &primaryAmmo=-1, &secondaryAm
  */
 stock bool Client_SetWeaponPlayerAmmo(client, const char[] className, primaryAmmo=-1, secondaryAmmo=-1)
 {
-	new weapon = Client_GetWeapon(client, className);
+	int weapon = Client_GetWeapon(client, className);
 
 	if (weapon == INVALID_ENT_REFERENCE) {
 		return false;
@@ -1632,7 +1632,7 @@ stock bool Client_SetWeaponPlayerAmmo(client, const char[] className, primaryAmm
  */
 stock Client_SetWeaponPlayerAmmoEx(client, weapon, primaryAmmo=-1, secondaryAmmo=-1)
 {
-	new offset_ammo = FindDataMapInfo(client, "m_iAmmo");
+	int offset_ammo = FindDataMapInfo(client, "m_iAmmo");
 
 	if (primaryAmmo != -1) {
 		new offset = offset_ammo + (Weapon_GetPrimaryAmmoType(weapon) * 4);
@@ -1658,7 +1658,7 @@ stock Client_SetWeaponPlayerAmmoEx(client, weapon, primaryAmmo=-1, secondaryAmmo
  */
 stock Client_SetWeaponAmmo(client, const char[] className, primaryAmmo=-1, secondaryAmmo=-1, primaryClip=-1, secondaryClip=-1)
 {
-	new weapon = Client_GetWeapon(client, className);
+	int weapon = Client_GetWeapon(client, className);
 
 	if (weapon == INVALID_ENT_REFERENCE) {
 		return false;
@@ -1684,9 +1684,9 @@ stock Client_SetWeaponAmmo(client, const char[] className, primaryAmmo=-1, secon
  */
 stock Client_GetNextWeapon(client, &index = 0)
 {
-	new offset = Client_GetWeaponsOffset(client) + (index * 4);
+	int offset = Client_GetWeaponsOffset(client) + (index * 4);
 
-	new weapon;
+	int weapon;
 	while (index < MAX_WEAPONS) {
 		index++;
 
@@ -1754,7 +1754,7 @@ stock Client_PrintHintTextToAll(const char[] format, any:...)
 {
 	char buffer[254];
 
-	for (new client=1; client <= MaxClients; client++) {
+	for (int client=1; client <= MaxClients; client++) {
 
 		if (!IsClientInGame(client)) {
 			continue;
@@ -1817,7 +1817,7 @@ stock Client_PrintKeyHintTextToAll(const char[] format, any:...)
 {
 	char buffer[254];
 
-	for (new client=1; client <= MaxClients; client++) {
+	for (int client=1; client <= MaxClients; client++) {
 
 		if (!IsClientInGame(client)) {
 			continue;
@@ -1921,11 +1921,11 @@ stock Client_PrintToChatRaw(client, const char[] message, subject=0, bool isChat
 stock Client_PrintToChat(client, bool isChat, const char[] format, any:...)
 {
 	char buffer[512],
-		String:buffer2[253];
+		char buffer2[253];
 
 	SetGlobalTransTarget(client);
 	VFormat(buffer, sizeof(buffer), format, 4);
-	new subject = Color_ParseChatText(buffer, buffer2, sizeof(buffer2));
+	int subject = Color_ParseChatText(buffer, buffer2, sizeof(buffer2));
 
 	Client_PrintToChatRaw(client, buffer2, subject, isChat);
 
@@ -1958,13 +1958,13 @@ stock Client_PrintToChatExclude(client)
 stock Client_PrintToChatAll(bool isChat, const char[] format, any:...)
 {
 	char buffer[512],
-		String:buffer2[253];
+		char buffer2[253];
 	new
 		subject,
 		language,
 		lastLanguage = -1;
 
-	for (new client=1; client <= MaxClients; client++) {
+	for (int client=1; client <= MaxClients; client++) {
 
 		if (!IsClientInGame(client)) {
 			continue;
@@ -2006,14 +2006,14 @@ stock Client_PrintToChatAll(bool isChat, const char[] format, any:...)
 stock Client_PrintToChatEx(clients[], numClients, bool isChat, const char[] format, any:...)
 {
 	char buffer[512],
-		String:buffer2[253];
+		char buffer2[253];
 	new
 		client,
 		subject,
 		language,
 		lastLanguage = -1;
 
-	for (new i=0; i < numClients; i++) {
+	for (int i=0; i < numClients; i++) {
 
 		client = clients[i];
 
@@ -2084,19 +2084,19 @@ stock Client_PrintToConsole(client, const char[] format, any:...)
  */
 stock Client_Print(client, ClientHudPrint:destination, const char[] format, any:...)
 {
-	char buffer[512], String:buffer2[254];
+	char buffer[512], char buffer2[254];
 
 	SetGlobalTransTarget(client);
 	VFormat(buffer, sizeof(buffer), format, 4);
 
-	new subject = Color_ParseChatText(buffer, buffer2, sizeof(buffer2));
+	int subject = Color_ParseChatText(buffer, buffer2, sizeof(buffer2));
 
 	if (destination == ClientHudPrint_Talk) {
 		Client_PrintToChatRaw(client, buffer2, subject, false);
 		return;
 	}
 
-	new EngineVersion:engineVersion = GetEngineVersion();
+	int EngineVersion:engineVersion = GetEngineVersion();
 	if (client == 0 ||
 		destination != ClientHudPrint_Console ||
 		(destination == ClientHudPrint_Console
@@ -2175,7 +2175,7 @@ stock Client_Reply(client, const char[] format, any:...)
  * @param duration		Shake lasts this long.
  * @return				True on success, false otherwise.
  */
-stock bool Client_Shake(client, command=SHAKE_START, Float amplitude=50.0, Float frequency=150.0, Float duration=3.0)
+stock bool Client_Shake(client, command=SHAKE_START, float amplitude=50.0, float frequency=150.0, float duration=3.0)
 {
 	if (command == SHAKE_STOP) {
 		amplitude = 0.0;
@@ -2218,7 +2218,7 @@ stock bool Client_Shake(client, command=SHAKE_START, Float amplitude=50.0, Float
  */
 stock bool Client_IsAdmin(client)
 {
-	new AdminId:adminId = GetUserAdmin(client);
+	int AdminId:adminId = GetUserAdmin(client);
 
 	if (adminId == INVALID_ADMIN_ID) {
 		return false;
@@ -2235,7 +2235,7 @@ stock bool Client_IsAdmin(client)
  */
 stock bool Client_HasAdminFlags(client, flags=ADMFLAG_GENERIC)
 {
-	new AdminId:adminId = GetUserAdmin(client);
+	int AdminId:adminId = GetUserAdmin(client);
 
 	if (adminId == INVALID_ADMIN_ID) {
 		return false;
@@ -2254,7 +2254,7 @@ stock bool Client_HasAdminFlags(client, flags=ADMFLAG_GENERIC)
  */
 stock bool Client_IsInAdminGroup(client, const char[] groupName, bool caseSensitive=true)
 {
-	new AdminId:adminId = GetUserAdmin(client);
+	int AdminId:adminId = GetUserAdmin(client);
 
 	// Validate id.
 	if (adminId == INVALID_ADMIN_ID) {
@@ -2262,7 +2262,7 @@ stock bool Client_IsInAdminGroup(client, const char[] groupName, bool caseSensit
 	}
 
 	// Get number of groups.
-	new count = GetAdminGroupCount(adminId);
+	int count = GetAdminGroupCount(adminId);
 
 	// Validate number of groups.
 	if (count == 0) {
@@ -2272,7 +2272,7 @@ stock bool Client_IsInAdminGroup(client, const char[] groupName, bool caseSensit
 	char groupname[64];
 
 	// Loop through each group.
-	for (new i = 0; i < count; i++) {
+	for (int i = 0; i < count; i++) {
 		// Get group name.
 		GetAdminGroup(adminId, i, groupname, sizeof(groupname));
 
@@ -2291,12 +2291,12 @@ stock bool Client_IsInAdminGroup(client, const char[] groupName, bool caseSensit
  * of him with the given distance as max value.
  *
  * @param client		Client Index.
- * @param distance		Max Distance as Float value.
+ * @param distance		Max Distance as float value.
  * @return				True if he is looking at a wall, false otherwise.
  */
-stock bool Client_IsLookingAtWall(client, Float distance=40.0) {
+stock bool Client_IsLookingAtWall(client, float distance=40.0) {
 
-	decl Float posEye[3], Float posEyeAngles[3];
+	float posEye[3], float posEyeAngles[3];
 	bool isClientLookingAtWall = false;
 
 	GetClientEyePosition(client,	posEye);
@@ -2313,7 +2313,7 @@ stock bool Client_IsLookingAtWall(client, Float distance=40.0) {
 			return false;
 		}
 
-		decl Float posEnd[3];
+		float posEnd[3];
 
 		TR_GetEndPosition(posEnd, trace);
 
@@ -2406,7 +2406,7 @@ stock Client_SetButtons(client, buttons)
  */
 stock Client_AddButtons(client, buttons)
 {
-	new newButtons = Client_GetButtons(client);
+	int newButtons = Client_GetButtons(client);
 	newButtons |= buttons;
 	Client_SetButtons(client, newButtons);
 }
@@ -2421,7 +2421,7 @@ stock Client_AddButtons(client, buttons)
  */
 stock Client_RemoveButtons(client, buttons)
 {
-	new newButtons = Client_GetButtons(client);
+	int newButtons = Client_GetButtons(client);
 	newButtons &= ~buttons;
 	Client_SetButtons(client, newButtons);
 }
@@ -2462,8 +2462,8 @@ stock Client_GetChangedButtons(client)
 {
 	static oldButtons[MAXPLAYERS+1] = {0,...};
 
-	new buttons = Client_GetButtons(client);
-	new changedButtons = buttons ^ oldButtons[client];
+	int buttons = Client_GetButtons(client);
+	int changedButtons = buttons ^ oldButtons[client];
 
 	oldButtons[client] = buttons;
 
@@ -2477,7 +2477,7 @@ stock Client_GetChangedButtons(client)
  * @param maxspeed	the maximum speed the client can move
  * @noreturn
  */
-stock Client_SetMaxSpeed(client, Float value)
+stock Client_SetMaxSpeed(client, float value)
 {
 	Entity_SetMaxSpeed(client, value);
 }
@@ -2677,8 +2677,8 @@ stock bool Client_MatchesFilter(client, flags)
  */
 stock Client_Get(clients[], flags=CLIENTFILTER_ALL)
 {
-	new x=0;
-	for (new client = 1; client <= MaxClients; client++) {
+	int x=0;
+	for (int client = 1; client <= MaxClients; client++) {
 
 		if (!Client_MatchesFilter(client, flags)) {
 			continue;
@@ -2698,8 +2698,8 @@ stock Client_Get(clients[], flags=CLIENTFILTER_ALL)
  */
 stock Client_GetRandom(flags=CLIENTFILTER_ALL)
 {
-	decl clients[MaxClients];
-	new num = Client_Get(clients, flags);
+	int clients[MaxClients];
+	int num = Client_Get(clients, flags);
 
 	if (num == 0) {
 		return -1;
@@ -2708,7 +2708,7 @@ stock Client_GetRandom(flags=CLIENTFILTER_ALL)
 		return clients[0];
 	}
 
-	new random = Math_GetRandomInt(0, num-1);
+	int random = Math_GetRandomInt(0, num-1);
 
 	return clients[random];
 }
@@ -2722,7 +2722,7 @@ stock Client_GetRandom(flags=CLIENTFILTER_ALL)
  */
 stock Client_GetNext(flags, start=1)
 {
-	for (new client=start; client <= MaxClients; client++) {
+	for (int client=start; client <= MaxClients; client++) {
 
 		if (Client_MatchesFilter(client, flags)) {
 			return client;
@@ -2738,7 +2738,7 @@ stock Client_GetNext(flags, start=1)
  * @param client		Client Index.
  * @return				Time in seconds as Float
  */
-stock Float Client_GetMapTime(client)
+stock float Client_GetMapTime(client)
 {
 	float fClientTime = GetClientTime(client);
 	float fGameTime = GetGameTime();
@@ -2779,7 +2779,7 @@ stock Client_SetMoney(client, value)
  */
 stock Client_GetObservers(client, observers[], flags=CLIENTFILTER_ALL)
 {
-	new count = 0;
+	int count = 0;
 
 	LOOP_CLIENTS(player, CLIENTFILTER_OBSERVERS | flags) {
 
@@ -2791,7 +2791,7 @@ stock Client_GetObservers(client, observers[], flags=CLIENTFILTER_ALL)
 	return count;
 }
 
-static Float getPlayersInRadius_distances[MAXPLAYERS+1];
+static float getPlayersInRadius_distances[MAXPLAYERS+1];
 
 /**
  * Gets all players near a player in a certain radius and
@@ -2803,9 +2803,9 @@ static Float getPlayersInRadius_distances[MAXPLAYERS+1];
  * @param orderByDistance	Set to true to order the clients by distance, false otherwise.
  * @return					Number of clients found.
  */
-stock Client_GetPlayersInRadius(client, clients[], Float radius, bool orderByDistance=true)
+stock Client_GetPlayersInRadius(client, clients[], float radius, bool orderByDistance=true)
 {
-	decl Float origin_client[3];
+	float origin_client[3];
 	float distance,
 		count=0;
 
@@ -2850,7 +2850,7 @@ public __smlib_GetPlayersInRadius_Sort(player1, player2, const clients[], Handle
  */
 stock Client_GetNextObserver(client, start=1, flags=CLIENTFILTER_ALL)
 {
-	for (new player=start; player <= MaxClients; player++) {
+	for (int player=start; player <= MaxClients; player++) {
 
 		if (Client_MatchesFilter(player, CLIENTFILTER_OBSERVERS | flags)) {
 
@@ -2883,9 +2883,9 @@ stock Client_GetPlayerManager()
 		}
 	}
 
-	new maxEntities = GetMaxEntities();
+	int maxEntities = GetMaxEntities();
 
-	for (new entity=0; entity < maxEntities; entity++) {
+	for (int entity=0; entity < maxEntities; entity++) {
 
 		if (!Entity_IsValid(entity)) {
 			continue;
@@ -2911,7 +2911,7 @@ stock Client_GetPlayerManager()
  */
 stock Client_SetPing(client, value)
 {
-	new player_manager = Client_GetPlayerManager();
+	int player_manager = Client_GetPlayerManager();
 
 	static offset = -1;
 
@@ -2955,7 +2955,7 @@ stock Client_PrintToTopExclude(client)
  * @param text			Text to print to.
  * @return				True on success, false if the key value for the dialog couldn't be created or closed.
  */
-stock bool Client_PrintToTopRaw(client, r=255, g=255, b=255, a=255, Float duration=10.0, const char[] text)
+stock bool Client_PrintToTopRaw(client, r=255, g=255, b=255, a=255, float duration=10.0, const char[] text)
 {
 	//message line max 50
 	//overline: 	39*_
@@ -2993,7 +2993,7 @@ stock bool Client_PrintToTopRaw(client, r=255, g=255, b=255, a=255, Float durati
  * @param ...			Variable number of format parameters.
  * @return				True on success, false if the key value for the dialog couldn't be created or closed.
  */
-stock bool Client_PrintToTop(client, r=255, g=255, b=255, a=255, Float duration=10.0, const char[] format, any:...)
+stock bool Client_PrintToTop(client, r=255, g=255, b=255, a=255, float duration=10.0, const char[] format, any:...)
 {
 	char buffer[150];
 	SetGlobalTransTarget(client);
@@ -3016,14 +3016,14 @@ stock bool Client_PrintToTop(client, r=255, g=255, b=255, a=255, Float duration=
  * @param ...			Variable number of format parameters.
  * @noreturn
  */
-stock Client_PrintToTopAll(r=255, g=255, b=255, a=255, Float duration=10.0, const char[] format, any:...)
+stock Client_PrintToTopAll(r=255, g=255, b=255, a=255, float duration=10.0, const char[] format, any:...)
 {
 	char buffer[150];
 	new
 		language,
 		lastLanguage = -1;
 
-	for (new client=1; client <= MaxClients; client++) {
+	for (int client=1; client <= MaxClients; client++) {
 
 		if (!IsClientInGame(client)) {
 			continue;
@@ -3063,7 +3063,7 @@ stock Client_PrintToTopAll(r=255, g=255, b=255, a=255, Float duration=10.0, cons
  * @param ...			Variable number of format parameters.
  * @noreturn
  */
-stock Client_PrintToTopEx(clients[], numClients, r=255, g=255, b=255, a=255, Float duration=10.0, const char[] format, any:...)
+stock Client_PrintToTopEx(clients[], numClients, r=255, g=255, b=255, a=255, float duration=10.0, const char[] format, any:...)
 {
 	char buffer[150];
 	new
@@ -3071,7 +3071,7 @@ stock Client_PrintToTopEx(clients[], numClients, r=255, g=255, b=255, a=255, Flo
 		language,
 		lastLanguage = -1;
 
-	for (new i=0; i < numClients; i++) {
+	for (int i=0; i < numClients; i++) {
 
 		client = clients[i];
 

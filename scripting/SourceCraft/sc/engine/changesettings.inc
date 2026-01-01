@@ -63,7 +63,7 @@ enum Settings_Cookies
     Debug_Other_Cookie
 };
 
-stock const String:g_strDisplayCookieName[Display_Cookies][] =
+stock const char g_strDisplayCookieName[Display_Cookies][] =
 {
     "sc_display_defense",
     "sc_display_defense_hints",
@@ -98,7 +98,7 @@ stock const String:g_strDisplayCookieName[Display_Cookies][] =
     "sc_display_all_hints"
 };
 
-stock const String:g_strCookieName[Settings_Cookies][] =
+stock const char g_strCookieName[Settings_Cookies][] =
 {
     "sc_reduce_queasiness",
     "sc_remove_queasiness",
@@ -118,7 +118,7 @@ stock const String:g_strCookieName[Settings_Cookies][] =
     "sc_debug_other"
 };
 
-stock const String:g_strDisplayCookiePrompt[Display_Cookies][] =
+stock const char g_strDisplayCookiePrompt[Display_Cookies][] =
 {
     "DisplayDefense",
     "DisplayDefenseHints",
@@ -153,7 +153,7 @@ stock const String:g_strDisplayCookiePrompt[Display_Cookies][] =
     "DisplayAllHints"
 };
 
-stock const String:g_strCookiePrompt[Settings_Cookies][] =
+stock const char g_strCookiePrompt[Settings_Cookies][] =
 {
     "ReduceQueasiness",
     "RemoveQueasiness",
@@ -230,7 +230,7 @@ stock const bool:g_bCookieFlip[Settings_Cookies] =
 
 Handle g_hDisplayCookie[Display_Cookies];
 Handle g_hCookie[Settings_Cookies];
-new g_bCookieSelected[MAXPLAYERS];
+int g_bCookieSelected[MAXPLAYERS];
 
 void InitCookies()
 {

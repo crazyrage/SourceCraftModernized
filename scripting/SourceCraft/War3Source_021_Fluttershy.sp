@@ -95,7 +95,7 @@ public OnUltimateCommand(client,race,bool pressed)
 {
     if(race==thisRaceID && pressed && ValidPlayer(client,true) )
     {
-        new ult_level=War3_GetSkillLevel(client,race,ULTIMATE_YOUBEGENTLE);
+        int ult_level=War3_GetSkillLevel(client,race,ULTIMATE_YOUBEGENTLE);
         if(ult_level>0)
         {
             if(!Silenced(client)&&War3_SkillNotInCooldown(client,thisRaceID,ULTIMATE_YOUBEGENTLE,true))
@@ -124,7 +124,7 @@ public OnUltimateCommand(client,race,bool pressed)
         }    
     }            
 }
-public Action EndNotBad(Handle t,any:client){
+public Action EndNotBad(Handle t,any client){
     bNoDamage[client]=false;
 }
 public OnW3TakeDmgBulletPre(victim,attacker,float damage){
@@ -172,7 +172,7 @@ public OnAbilityCommand(client,ability,bool pressed)
         }
     }
 }
-public Action EndStare(Handle t,any:client){
+public Action EndStare(Handle t,any client){
     War3_SetBuff(client,bBashed,thisRaceID,false);
     War3_SetBuff(client,bDisarm,thisRaceID,false);
     War3_SetBuff(StareVictim[client],bBashed,thisRaceID,false);
@@ -223,7 +223,7 @@ RecalculateHealing(){
     int playerlist[66];
     int auralevel[66];
     int auraactivated[66];
-    new playercount=0;
+    int playercount=0;
 
     for(int client=1;client<=MaxClients;client++)
     {

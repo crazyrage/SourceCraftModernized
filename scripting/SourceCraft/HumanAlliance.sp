@@ -127,7 +127,7 @@ public Action OnRaceDeselected(client,oldrace,newrace)
         #endif
 
         // Turn off Immunities
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, false);
 
         return Plugin_Handled;
@@ -143,10 +143,10 @@ public Action OnRaceSelected(client,oldrace,newrace)
         gBashTime[client] = 0.0;
 
         // Turn on Immunities
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
-        new devotion_level=GetUpgradeLevel(client,raceID,devotionID);
+        int devotion_level=GetUpgradeLevel(client,raceID,devotionID);
         DevotionAura(client, devotion_level);
 
         return Plugin_Handled;
@@ -170,7 +170,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (race==raceID && IsValidClientAlive(client))
     {
-        new level=GetUpgradeLevel(client,race,teleportID);
+        int level=GetUpgradeLevel(client,race,teleportID);
         if (level && cfgAllowTeleport)
         {
             float energy=GetUpgradeEnergy(raceID,teleportID) * (5.0-float(level));
@@ -189,10 +189,10 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         gBashTime[client] = 0.0;
         ResetTeleport(client);
 
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
-        new devotion_level=GetUpgradeLevel(client,raceID,devotionID);
+        int devotion_level=GetUpgradeLevel(client,raceID,devotionID);
         if (devotion_level > 0)
         {
             CreateTimer(0.1,DoDevotionAura,GetClientUserId(client),
@@ -201,7 +201,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
     }
 }
 
-public Action DoDevotionAura(Handle timer,any:userid)
+public Action DoDevotionAura(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (client > 0)
@@ -301,7 +301,7 @@ DevotionAura(client, level)
         if (maxhp > classmax)
             maxhp = classmax;
 
-        new hpadd=RoundFloat(float(maxhp)*g_DevotionHealthPercent[level]);
+        int hpadd=RoundFloat(float(maxhp)*g_DevotionHealthPercent[level]);
         if (GetClientHealth(client) < classmax + hpadd)
         {
             char upgradeName[64];
@@ -357,7 +357,7 @@ bool Bash(victim_index, index)
         !GetImmunity(victim_index, Immunity_Restore) &&
         !IsBurrowed(victim_index))
     {
-        new bash_level=GetUpgradeLevel(index, raceID, bashID);
+        int bash_level=GetUpgradeLevel(index, raceID, bashID);
         if (bash_level > 0)
         {
             if (GetRandomInt(1,100) <= g_BashChance[bash_level] &&
@@ -395,7 +395,7 @@ bool Bash(victim_index, index)
 }
 
 
-public Action RestoreSpeed(Handle timer,any:userid)
+public Action RestoreSpeed(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (client > 0)

@@ -19,14 +19,14 @@
 native ControlUberCharger(bool plugin_only=true);
 
 /**
- * Give an uber charger to the player
+ * Give an uber char ger to the player
  *
  * @param index 	Client index
  * @param arm       Set to true to enable Uber Charger for Client when a Medic.
  * @param amount    Set to amount of uber per heartbeat, 0.0 = default amount from convar.
  * @return			none
  */
-native SetUberCharger(client,bool arm=true,Float amount=0.0);
+native SetUberCharger(client,bool arm=true,float amount=0.0);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

@@ -7,17 +7,17 @@
 
 #include "sc/area"
 
-// Handles
+// Handle s
 Handle g_OnAreaExpiredHandle = null;
 Handle m_PlayerAreaTrie[MAXPLAYERS+1];
 Handle m_PlayerAreaArray[MAXPLAYERS+1];
 
 Handle m_AuraList = null;
-CreateAura(Float:distance, Float:interval=1.0,
-           AreaType:type=Area_Team, priority=0, const String:name[]="",
-           Float:beaconColor[4] = { 0, 0, 0, 0 },
-           const String:beamModel[]="",
-           const String:haloModel[]="")
+CreateAura(float distance, float int erval=1.0,
+           AreaType:type=Area_Team, priority=0, const char[] name="",
+           float beaconColor[4] = { 0, 0, 0, 0 },
+           const char[] beamModel="",
+           const char[] haloModel="")
 {
     TraceInto("Area", "CreateArea", "distance=%f", \
               distance);
@@ -30,7 +30,7 @@ CreateAura(Float:distance, Float:interval=1.0,
         if (pack != null)
         {
             WritePackFloat(pack, distance);
-            WritePackFloat(pack, interval);
+            WritePackFloat(pack, int erval);
             WritePackCell(pack, _:type);
             WritePackCell(pack, priority);
             WritePackString(pack, name);
@@ -57,9 +57,9 @@ IsInAura(client, auraID, &level);
 
 forward OnAura(client, auraID, bool:inAura, level);
 
-CreateArea(client, race, upgrade, Float:distance, Float:interval=1.0,
-           AreaType:type=Area_Team, priority=0, const String:name[]="",
-           Float:beaconColor[4] = { 0, 0, 0, 0 })
+CreateArea(client, race, upgrade, float distance, float int erval=1.0,
+           AreaType:type=Area_Team, priority=0, const char[] name="",
+           float beaconColor[4] = { 0, 0, 0, 0 })
 {
     TraceInto("Area", "CreateArea", "client=%d:%N, race=%d, upgrade=%d, distance=%f", \
               client, ValidClientIndex(client), race, upgrade, distance);
@@ -76,7 +76,7 @@ CreateArea(client, race, upgrade, Float:distance, Float:interval=1.0,
             WritePackCell(pack, race);
             WritePackCell(pack, upgrade);
             WritePackFloat(pack, distance);
-            WritePackFloat(pack, interval);
+            WritePackFloat(pack, int erval);
             WritePackCell(pack, _:type);
             WritePackCell(pack, priority);
             WritePackString(pack, name);

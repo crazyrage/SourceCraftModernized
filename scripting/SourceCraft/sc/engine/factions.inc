@@ -47,7 +47,7 @@ GetFactionDescription(Faction:faction, char desc[], maxlength, lang=LANG_SERVER)
     if (faction > Generic)
     {
         // Translate the short name to get the description
-        charkey[NAME_STRING_LENGTH];
+        char key[NAME_STRING_LENGTH];
         Format(key,sizeof(key),"%s_desc",g_FactionShortNames[faction]);
         Format(desc,maxlength,"%T",key,lang);
     }
@@ -60,7 +60,7 @@ GetFactionImage(Faction:faction, char image[], maxlength, lang=LANG_SERVER)
     if (faction > Generic)
     {
         // Translate the short name + _image to get the image 
-        charkey[NAME_STRING_LENGTH];
+        char key[NAME_STRING_LENGTH];
         Format(key,sizeof(key),"%s_image",g_FactionShortNames[faction]);
         Format(image,maxlength,"%T",key,lang);
     }
@@ -73,7 +73,7 @@ GetFactionCrystalSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVE
     if (faction > Generic)
     {
         // Translate the short name + _crystal_sound to get the sound
-        charkey[NAME_STRING_LENGTH];
+        char key[NAME_STRING_LENGTH];
         Format(key,sizeof(key),"%s_crystal_sound",g_FactionShortNames[faction]);
         Format(sound,maxlength,"%T",key,lang);
     }
@@ -83,7 +83,7 @@ GetFactionCrystalSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVE
 
 EmitCrystalSoundToClient(client, Faction:faction)
 {
-    charsound[PLATFORM_MAX_PATH];
+    char sound[PLATFORM_MAX_PATH];
     GetFactionCrystalSound(faction, sound, sizeof(sound), client);
     PrepareAndEmitSoundToClient(client,sound);
 }
@@ -93,7 +93,7 @@ GetFactionVespeneSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVE
     if (faction > Generic)
     {
         // Translate the short name + _vespene_sound to get the sound
-        charkey[NAME_STRING_LENGTH];
+        char key[NAME_STRING_LENGTH];
         Format(key,sizeof(key),"%s_vespene_sound",g_FactionShortNames[faction]);
         Format(sound,maxlength,"%T",key,lang);
     }
@@ -103,7 +103,7 @@ GetFactionVespeneSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVE
 
 EmitVespeneSoundToClient(client, Faction:faction)
 {
-    charsound[PLATFORM_MAX_PATH];
+    char sound[PLATFORM_MAX_PATH];
     GetFactionVespeneSound(faction, sound, sizeof(sound), client);
     PrepareAndEmitSoundToClient(client,sound);
 }
@@ -113,7 +113,7 @@ GetFactionEnergySound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER
     if (faction > Generic)
     {
         // Translate the short name + _energy_sound to get the sound 
-        charkey[NAME_STRING_LENGTH];
+        char key[NAME_STRING_LENGTH];
         Format(key,sizeof(key),"%s_energy_sound",g_FactionShortNames[faction]);
         Format(sound,maxlength,"%T",key,lang);
     }
@@ -123,7 +123,7 @@ GetFactionEnergySound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER
 
 EmitEnergySoundToClient(client, Faction:faction)
 {
-    charsound[PLATFORM_MAX_PATH];
+    char sound[PLATFORM_MAX_PATH];
     GetFactionEnergySound(faction, sound, sizeof(sound), client);
     PrepareAndEmitSoundToClient(client,sound);
 }
@@ -133,7 +133,7 @@ GetFactionXPSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER)
     if (faction > Generic)
     {
         // Translate the short name + _xp_sound to get the sound
-        charkey[NAME_STRING_LENGTH];
+        char key[NAME_STRING_LENGTH];
         Format(key,sizeof(key),"%s_xp_sound",g_FactionShortNames[faction]);
         Format(sound,maxlength,"%T",key,lang);
         if (sound[0] == '\0')
@@ -145,7 +145,7 @@ GetFactionXPSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER)
 
 EmitXPSoundToClient(client, Faction:faction)
 {
-    charsound[PLATFORM_MAX_PATH];
+    char sound[PLATFORM_MAX_PATH];
     GetFactionXPSound(faction, sound, sizeof(sound), client);
     PrepareAndEmitSoundToClient(client,sound);
 }
@@ -155,7 +155,7 @@ GetFactionLevelSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER)
     if (faction > Generic)
     {
         // Translate the short name + _level_sound to get the sound
-        charkey[NAME_STRING_LENGTH];
+        char key[NAME_STRING_LENGTH];
         Format(key,sizeof(key),"%s_level_sound",g_FactionShortNames[faction]);
         Format(sound,maxlength,"%T",key,lang);
     }
@@ -165,7 +165,7 @@ GetFactionLevelSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER)
 
 EmitLevelSoundToClient(client, Faction:faction)
 {
-    charsound[PLATFORM_MAX_PATH];
+    char sound[PLATFORM_MAX_PATH];
     GetFactionLevelSound(faction, sound, sizeof(sound), client);
     PrepareAndEmitSoundToClient(client,sound);
 }

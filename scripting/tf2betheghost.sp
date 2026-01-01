@@ -398,7 +398,7 @@ public Action OnPlayerDeath( Handle hEvent, const char[] strEventName, bool bDon
 	return Plugin_Continue;
 }
 
-public Action NormalSoundHook( iClients[64], &iNumClients, char strSample[PLATFORM_MAX_PATH], &iEntity, &iChannel, &float flVolume, &iLevel, &iPitch, &iFlags )
+public Action NormalSoundHook( iClients[64], &iNumClients, char strSample[PLATFORM_MAX_PATH], &iEntity, &iChannel, float & flVolume, &iLevel, &iPitch, &iFlags )
 {
 	if( !IsValidClient( iEntity ) || !bGhostStatus[iEntity] && !bGhostInvisible[iEntity] )
 		return Plugin_Continue;
@@ -485,9 +485,9 @@ public Action Command_ToggleEffect( iClient, nArgs )
 			return Plugin_Continue;
 		
 		char target_name[MAX_TARGET_LENGTH];
-		decl iTargets[MAXPLAYERS];
+		int iTargets[MAXPLAYERS];
 		int nTargets;
-		decl bool tn_is_ml;
+		bool tn_is_ml;
 		if((nTargets = ProcessTargetString(strTargets, iClient, iTargets, MAXPLAYERS, 0, target_name, sizeof(target_name), tn_is_ml)) <= 0)
 		{
 			ReplyToTargetError( iClient, nTargets );
@@ -517,9 +517,9 @@ public Action Command_ToggleEffect( iClient, nArgs )
 		bool bState = StringToInt( strState ) != 0;
 		
 		char target_name[MAX_TARGET_LENGTH];
-		decl iTargets[MAXPLAYERS];
+		int iTargets[MAXPLAYERS];
 		int nTargets;
-		decl bool tn_is_ml;
+		bool tn_is_ml;
 		char strTargets[64];
 		GetCmdArg( 1, strTargets, sizeof(strTargets) );
 		if((nTargets = ProcessTargetString(strTargets, iClient, iTargets, MAXPLAYERS, 0, target_name, sizeof(target_name), tn_is_ml)) <= 0)
@@ -633,7 +633,7 @@ public Action OnPlayerRunCmd( iClient, &iButtons, &iImpulse, float vecVelocity[3
 	iLastButtons[iClient] = iButtons;
 	return Plugin_Changed;
 }
-public Action Timer_FixParticles( Handle hTimer, any:iClient )
+public Action Timer_FixParticles( Handle hTimer, any iClient )
 {
 	if( !IsValidClient(iClient) )
 		return Plugin_Stop;
@@ -762,7 +762,7 @@ ScarePlayer( iGhost, iClient )
 	if( !bGhostEnabled[iGhost] || !IsValidClient(iGhost) || !IsValidClient(iClient)/* || TF2_IsPlayerInCondition( iClient, TFCond_Dazed )*/ )
 		return;
 	
-	new Action:result;
+	int Action:result;
 	Call_StartForward( fwdCanBeScared );
 	Call_PushCell( iGhost );
 	Call_PushCell( iClient );
@@ -785,7 +785,7 @@ ScarePlayer( iGhost, iClient )
 	WritePackCell( hData, iGhost );
 	WritePackCell( hData, iClient );
 }
-public Action Timer_StunPlayer( Handle hTimer, any:hData )
+public Action Timer_StunPlayer( Handle hTimer, any hData )
 {
 	ResetPack( hData );
 	int iGhost = ReadPackCell( hData );
@@ -830,7 +830,7 @@ DisableObjects( iGhost, float vecGhostOrigin[3], const char[] strClassname )
 			}
 		}
 }
-public Action Timer_ObjectWakeUp( Handle hTimer, any:iEntRef )
+public Action Timer_ObjectWakeUp( Handle hTimer, any iEntRef )
 {
 	int iEntity = EntRefToEntIndex( iEntRef );
 	if( IsValidEntity(iEntity) && GameRules_GetRoundState() != RoundState_TeamWin )
@@ -892,7 +892,7 @@ AttachParticle(iEntity, const char[] strParticleEffect, const char[] strAttachPo
 	
 	return 0;
 }
-public Action Timer_DeleteParticle(Handle hTimer, any:iRefEnt)
+public Action Timer_DeleteParticle(Handle hTimer, any iRefEnt)
 {
 	int iEntity = EntRefToEntIndex(iRefEnt);
 	if(iEntity > MaxClients)

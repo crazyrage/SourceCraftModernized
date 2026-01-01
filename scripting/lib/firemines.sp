@@ -85,7 +85,7 @@ char gMineColor[6][16] = { "",            // 0:Unassigned / Default
 #define SF_PHYSPROP_NO_ROTORWASH_PUSH           0x000080        // The rotorwash doesn't push these
 #define SF_PHYSPROP_ENABLE_PICKUP_OUTPUT        0x000100        // If set, allow the player to +USE this for the purposes of generating an output
 #define SF_PHYSPROP_PREVENT_PICKUP              0x000200        // If set, prevent +USE/Physcannon pickup of this prop
-#define SF_PHYSPROP_PREVENT_PLAYER_TOUCH_ENABLE 0x000400        // If set, the player will not cause the object to enable its motion when bumped into
+#define SF_PHYSPROP_PREVENT_PLAYER_TOUCH_ENABLE 0x000400        // If set, the player will not cause the object to enable its motion when bumped int o
 #define SF_PHYSPROP_HAS_ATTACHED_RAGDOLLS       0x000800        // Need to remove attached ragdolls on enable motion/etc
 #define SF_PHYSPROP_FORCE_TOUCH_TRIGGERS        0x001000        // Override normal debris behavior and respond to triggers anyway
 #define SF_PHYSPROP_FORCE_SERVER_SIDE           0x002000        // Force multiplayer physics object to be serverside

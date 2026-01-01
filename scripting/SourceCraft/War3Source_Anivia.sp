@@ -70,7 +70,7 @@ enum{
     EF_BONEMERGE            = 0x001,    // Performs bone merge on client side
     EF_BRIGHTLIGHT          = 0x002,    // DLIGHT centered at entity origin
     EF_DIMLIGHT             = 0x004,    // player flashlight
-    EF_NOINTERP             = 0x008,    // don't interpolate the next frame
+    EF_NOINTERP             = 0x008,    // don't int erpolate the next frame
     EF_NOSHADOW             = 0x010,    // Don't cast no shadow
     EF_NODRAW               = 0x020,    // don't draw entity
     EF_NORECEIVESHADOW      = 0x040,    // Don't receive no shadow
@@ -157,10 +157,10 @@ public void OnWar3PluginReady(){
     
     ==================================================C R Y S T A L L I Z E=======================================================================
     --Original--
-    Anivia condenses the moisture in the air into an impenetrable wall of ice to block the movement of all units.
+    Anivia condenses the moisture in the air int o an impenetrable wall of ice to block the movement of all units.
     The wall lasts 5 seconds before it melts.  
     --War3Source-- (ability1)
-    Condense moisture in the air into a solid wall of ice(wall will remain for up to 8 seconds).
+    Condense moisture in the air int o a solid wall of ice(wall will remain for up to 8 seconds).
     ==============================================================================================================================================
     
     ==================================================F R O S T B I T E===========================================================================
@@ -247,7 +247,7 @@ public void OnWar3PluginReady(){
 }
 
 #if !defined SOURCECRAFT
-public Action UpdateMana(Handle h,any:data){
+public Action UpdateMana(Handle h,any data){
     if(bExtension==false) {
         for(int i=1;i<=MaxClients;i++){
             if(ValidPlayer(i,true)){
@@ -340,7 +340,7 @@ public OnW3TakeDmgBulletPre(victim,attacker,float damage)
                     int dmg = BiteDamageArray[skill_level];                 
                     new float fClientPos[3];
                     GetClientAbsOrigin(victim,fClientPos);
-                    decl float fClientEyePos[3];
+                    float fClientEyePos[3];
                     GetClientEyePosition(attacker, fClientEyePos);
                     fClientPos[2]+=20.0;
                     ThrowAwayParticle("water_splash_01_refract", fClientPos, 1.5); //"slime_splash_01"
@@ -416,7 +416,7 @@ public ShardTouchHook(entity, other)
 {
     int client = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
 #if defined SOURCECRAFT
-    new float cooldown= GetUpgradeCooldown(thisRaceID,SKILL_1);
+    int float cooldown= GetUpgradeCooldown(thisRaceID,SKILL_1);
     War3_CooldownMGR(client,cooldown,thisRaceID,SKILL_1,true,true);
 #else
     War3_CooldownMGR(client,8.0,thisRaceID,SKILL_1,true,true);
@@ -424,7 +424,7 @@ public ShardTouchHook(entity, other)
     RemoveShard(entity);//remove the shard on hit   
 }
 
-public Action ShardThink( Handle timer, any:entity )
+public Action ShardThink( Handle timer, any entity )
 {
     if (IsValidEntity(entity)) {
         int client = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
@@ -435,7 +435,7 @@ public Action ShardThink( Handle timer, any:entity )
                 {
                     new skill=War3_GetSkillLevel(client,thisRaceID,ULT);
                     if(skill>0) {
-                        decl float fEntityPos[3];
+                        float fEntityPos[3];
                         GetEntPropVector(entity, Prop_Send, "m_vecOrigin", fEntityPos);
                         new float fTargetPos[3];
                         GetClientAbsOrigin(i, fTargetPos);
@@ -443,7 +443,7 @@ public Action ShardThink( Handle timer, any:entity )
                         if(distance <= PROJECTILE_RADIUS)
                         {
                             War3_DealDamage(i,FlashFrostDmg[skill],client,DMG_DISSOLVE,PROJECTILE_NAME,W3DMGORIGIN_SKILL,W3DMGTYPE_MAGIC);
-                            decl float fClientEyePos[3];
+                            float fClientEyePos[3];
                             GetClientEyePosition(i, fClientEyePos);
                             fClientEyePos[2]-=50;
                             TE_SetupBeamRingPoint(fEntityPos,45.0,295.0,BeamSprite,HaloSprite,0,10,1.2,12.0,0.0,{100,100,255,255},0,0);
@@ -480,7 +480,7 @@ public Action ShardThink( Handle timer, any:entity )
     }
 }
 
-public Action Timer_RemoveChill(Handle timer,any:client)
+public Action Timer_RemoveChill(Handle timer,any client)
 {
     if(ValidPlayer(client,true))
     {
@@ -491,11 +491,11 @@ public Action Timer_RemoveChill(Handle timer,any:client)
     }
 }
 
-public Action ShardDamageHook(entity, &attacker, &inflictor, &float damage, &damagetype){
+public Action ShardDamageHook(entity, &attacker, &inflictor, float & damage, &damagetype){
     //PrintToChatAll("shard got damaged (damage: %f ?)",damage);
-    decl float fEntityPos[3];
+    float fEntityPos[3];
     GetEntPropVector(entity, Prop_Send, "m_vecOrigin", fEntityPos);
-    new float fAngles[3]={0.0,0.0,0.0};
+    int float fAngles[3]={0.0,0.0,0.0};
     TE_SetupSparks(fEntityPos, fAngles, 28, 20);
 #if defined SOURCECRAFT
     TE_SendEffectToAll();
@@ -505,11 +505,11 @@ public Action ShardDamageHook(entity, &attacker, &inflictor, &float damage, &dam
     return Plugin_Handled;
 }
 
-public Action Timer_ShardOvertime( Handle timer, any:ref )
+public Action Timer_ShardOvertime( Handle timer, any ref )
 {
     int ent = EntRefToEntIndex(ref);
     if (ent > 0 && IsValidEntity(ent)) {
-        //decl char classname[64];
+        //char classname[64];
         //GetEdictClassname(ent, classname, sizeof(classname));
         //if(StrEqual(classname, PROJECTILE_NAME, false))
         //{
@@ -546,10 +546,10 @@ stock DealAreaDamage(owner,float fPos[3],float fRadius)
 }
 
 stock RemoveShard(ent) {
-    decl float fEntityPos[3];
+    float fEntityPos[3];
     GetEntPropVector(ent, Prop_Send, "m_vecOrigin", fEntityPos);
     int client = GetEntPropEnt(ent, Prop_Send, "m_hOwnerEntity");
-    decl char buffer[64];
+    char buffer[64];
     int dice = GetRandomInt(0,2);
     if(dice==0) {
         buffer = flash1;
@@ -575,7 +575,7 @@ stock RemoveShard(ent) {
     DealAreaDamage(client,fEntityPos,180.0);
 }
 
-public Action Timer_RemoveEntity(Handle timer,any:ref)
+public Action Timer_RemoveEntity(Handle timer,any ref)
 {
     int ent = EntRefToEntIndex(ref);
     if (ent > 0 && IsValidEdict(ent))
@@ -587,7 +587,7 @@ stock W3_SpearLaunch(client,skill){
     if (ref>0) {
         int shard = EntRefToEntIndex(ref);
         if (shard > 0 && IsValidEntity(shard)) {
-            //decl char classname[64];
+            //char classname[64];
             //GetEdictClassname(shard, classname, sizeof(classname));
             //if(StrEqual(classname, PROJECTILE_NAME, false))
             //{
@@ -617,8 +617,8 @@ stock W3_SpearLaunch(client,skill){
         if(old_mana>=10) {
             SetManaWrapper(client,old_mana-10);
 #endif
-            decl float fClientEyeAngle[3], float fClientEyePos[3], float fAngleVec[3], float fResultPos[3];
-            decl entity, float fClientSpeed[3];
+            float fClientEyeAngle[3], float fClientEyePos[3], float fAngleVec[3], float fResultPos[3];
+            int entity, float fClientSpeed[3];
             GetClientEyeAngles(client, fClientEyeAngle);
             GetClientEyePosition(client, fClientEyePos);
             GetAngleVectors(fClientEyeAngle, fAngleVec, NULL_VECTOR, NULL_VECTOR);
@@ -702,9 +702,9 @@ stock W3_SpearLaunch(client,skill){
 }
 
 stock W3_Condense(client,skill,team){
-    new float fClientAimPos1[3];
-    new float fClientAimPos2[3];
-    decl float fAngles[3];
+    int float fClientAimPos1[3];
+    int float fClientAimPos2[3];
+    float fAngles[3];
     GetClientEyeAngles(client, fAngles);
     int ax = 1;
     fAngles[0]=0.0,fAngles[2]=0.0;//we only need the 'theoretical' yaw value...
@@ -718,7 +718,7 @@ stock W3_Condense(client,skill,team){
     }
     War3_GetAimEndPoint(client, fClientAimPos1);
     fClientAimPos2[0]=fClientAimPos1[0],fClientAimPos2[1]=fClientAimPos1[1],fClientAimPos2[2]=fClientAimPos1[2];
-    new float duration = CondenseDuration[skill]; //max duration!
+    int float duration = CondenseDuration[skill]; //max duration!
     int ent = SpawnFrozenProp(fClientAimPos1,fAngles,CONDENSE_MDL1,CONDENSE_STRENGTH,team,duration,true);
     EmitSoundToAll(crystallize, ent, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, fClientAimPos1, NULL_VECTOR, true, 0.0);
     //0=pitch/1=yaw/2=roll
@@ -740,7 +740,7 @@ stock W3_Condense(client,skill,team){
     int beam_ent = CreateEntityByName("env_beam");
     if (beam_ent > 0 && IsValidEdict(beam_ent))
     {
-        decl char beamname[16];
+        char beamname[16];
         Format(beamname, sizeof(beamname), "w3s_beam_%d", client);
         DispatchKeyValueVector(beam_ent, "origin", fClientAimPos1);
         SetEntPropVector(beam_ent, Prop_Send, "m_vecEndPos", fClientAimPos2);
@@ -770,7 +770,7 @@ stock W3_Condense(client,skill,team){
 }
 
 stock W3SimulateRecoil(client, const float angle[3]){
-    decl float oldangle[3];
+    float oldangle[3];
     GetEntPropVector(client, Prop_Send, "m_vecPunchAngle", oldangle);
     oldangle[0] = oldangle[0] + angle[0];
     oldangle[1] = oldangle[1] + angle[1];
@@ -867,7 +867,7 @@ public OnUltimateCommand(client,race,bool pressed)
             if(War3_SkillNotInCooldown(client,thisRaceID,ULT,true))
             {
                 new float max_distance = GlacialMaxDistance[skill_level];
-                decl float aimVec[3], float clientVec[3];
+                float aimVec[3], float clientVec[3];
                 War3_GetAimEndPoint(client, aimVec);
                 GetClientAbsOrigin( client, clientVec );
                 if(GetVectorDistance(clientVec,aimVec) <= max_distance)
@@ -890,7 +890,7 @@ public OnUltimateCommand(client,race,bool pressed)
                             - targetpos y
                             - targetpos z
                         */
-                        decl Handle pack;
+                        Handle pack;
                         CreateDataTimer(0.4, Timer_GlacialStorm, pack);
                         WritePackCell(pack, client);        
                         WritePackCell(pack, GlacialDamagePerTick[skill_level]); 
@@ -908,7 +908,7 @@ public OnUltimateCommand(client,race,bool pressed)
                             - client index
                             - target position[3]
                         */
-                        decl Handle packfx;
+                        Handle packfx;
                         CreateDataTimer(0.5, Timer_GlacialStormFX, packfx);
                         WritePackCell(packfx, client);
                         WritePackFloat(packfx, radius);
@@ -922,7 +922,7 @@ public OnUltimateCommand(client,race,bool pressed)
                             - client index
                             - entity index (optional/-1 if not used)
                         */
-                        decl Handle pack2;
+                        Handle pack2;
                         hUltimateEndTimer[client] = CreateDataTimer(GlacialMaxTime[skill_level], Timer_UltimateOvertimed, pack2);
                         WritePackCell(pack2, client);
                         WritePackCell(pack2, entity);
@@ -932,7 +932,7 @@ public OnUltimateCommand(client,race,bool pressed)
                     }
                     else {
                         bUltActive[client]=false;
-                        decl Handle pack;
+                        Handle pack;
                         CreateDataTimer(0.1, Timer_UltimateOvertimed, pack);
                         WritePackCell(pack, client);
                         WritePackCell(pack, iGlacialEntity[client]);
@@ -964,9 +964,9 @@ public Action Timer_GlacialStormFX(Handle timer, Handle pack) //some point of la
     ResetPack(pack);
     int client = ReadPackCell(pack);
     if(bUltActive[client]==true&&ValidPlayer(client,false)) {
-        new owner_team=GetClientTeam(client);
+        int owner_team=GetClientTeam(client);
 
-        decl float aimVec[3],float radius;
+        float aimVec[3],float radius;
         radius=ReadPackFloat(pack);
         aimVec[0]=ReadPackFloat(pack);
         aimVec[1]=ReadPackFloat(pack);
@@ -978,8 +978,8 @@ public Action Timer_GlacialStormFX(Handle timer, Handle pack) //some point of la
         TE_SendToAll();
 #endif
         
-        new float fx_old_dist = 1.0;
-        new float fx_dist = radius;
+        int float fx_old_dist = 1.0;
+        int float fx_dist = radius;
         fx_dist /= 4;           
         for(int splitter = 1; splitter <= 4; splitter++) 
         {
@@ -1001,7 +1001,7 @@ public Action Timer_GlacialStormFX(Handle timer, Handle pack) //some point of la
         TE_SendToTeam(owner_team);
         TE_SetupBeamRingPoint(aimVec,18.0,20.0,LaserSprite,HaloSprite,0,10,0.8,40.0,0.0,{255,255,255,255},8,FBEAM_HALOBEAM);
         TE_SendToAllButTeam(owner_team);
-        decl Handle packfx;
+        Handle packfx;
         CreateDataTimer(0.5, Timer_GlacialStormFX, packfx);
         WritePackCell(packfx, client);
         WritePackFloat(packfx, radius);
@@ -1023,7 +1023,7 @@ public Action Timer_GlacialStorm(Handle timer, Handle pack)
         if(old_mana>=manacost) {
             SetManaWrapper(client,old_mana-manacost);
             new float max_distance = ReadPackFloat(pack);
-            decl float aimVec[3],float clientVec[3],float distance,float slowdown;
+            float aimVec[3],float clientVec[3],float distance,float slowdown;
             distance = ReadPackFloat(pack);
             slowdown = ReadPackFloat(pack);         
             aimVec[0]=ReadPackFloat(pack);
@@ -1033,7 +1033,7 @@ public Action Timer_GlacialStorm(Handle timer, Handle pack)
             if(GetVectorDistance(clientVec,aimVec) <= max_distance)
             {
                 int team = GetClientTeam(client);               
-                decl float enemyVec[3];
+                float enemyVec[3];
                 for(int i=1; i<= MaxClients; i++)
                 {
                     if(ValidPlayer(i,true) && team != GetClientTeam(i) && !W3HasImmunity(i,Immunity_Ultimates))
@@ -1047,14 +1047,14 @@ public Action Timer_GlacialStorm(Handle timer, Handle pack)
                 }   
             }
             else {              
-                decl Handle packstop;
+                Handle packstop;
                 CreateDataTimer(0.1, Timer_UltimateOvertimed, packstop);
                 WritePackCell(packstop, client);
                 WritePackCell(packstop, iGlacialEntity[client]);
                 PrintHintText(client,"Glacial Storm is too far away!"); 
             }
             //Re-Start the timer (loop will automatic cancel if bUltActive is false!)
-            decl Handle datapack;
+            Handle datapack;
             CreateDataTimer(0.4, Timer_GlacialStorm, datapack);
             WritePackCell(datapack, client);        
             WritePackCell(datapack, damage);    
@@ -1066,7 +1066,7 @@ public Action Timer_GlacialStorm(Handle timer, Handle pack)
             WritePackFloat(datapack, aimVec[2]);
         }
         else {
-            decl Handle packstop;
+            Handle packstop;
             CreateDataTimer(0.1, Timer_UltimateOvertimed, packstop);
             WritePackCell(packstop, client);
             WritePackCell(packstop, iGlacialEntity[client]);
@@ -1079,7 +1079,7 @@ stock GlacialStorm(attacker,target,damage,float slowdown,float pos[3],float pos2
     if(War3_DealDamage(target,damage,attacker,DMG_DISSOLVE,"glacialstorm",W3DMGORIGIN_ULTIMATE,W3DMGTYPE_MAGIC,true,false)) {
         pos2[2]+=40;
         pos[2]+=40;
-        new float direction[3]={0.0,0.0,0.0};
+        int float direction[3]={0.0,0.0,0.0};
         bFrosted[target]=true;
         War3_SetBuff(target,fSlow,thisRaceID,slowdown);
         War3_SetBuff(target,fAttackSpeed,thisRaceID,slowdown);
@@ -1110,7 +1110,7 @@ stock GlacialStorm(attacker,target,damage,float slowdown,float pos[3],float pos2
         - attacker(ultimate caster)
         - target(ultimate victim)
         */
-        decl Handle pack;
+        Handle pack;
         CreateDataTimer(0.5, Timer_UnfrostAttempt, pack);
         WritePackCell(pack, attacker);
         WritePackCell(pack, target);
@@ -1158,7 +1158,7 @@ public Action Timer_UltimateOvertimed(Handle timer, Handle pack)
 //W3GlacialOverlay similar as W3Screenoverlay but glacial only removes the screen if target is not frosted anymore
 stock W3GlacialOverlay(target,float delay,char material[])
 {
-    decl Handle pack;
+    Handle pack;
     CreateDataTimer(delay, Timer_DoGlacialOverlay, pack);
     WritePackCell(pack, target);
     WritePackString(pack, material);
@@ -1169,7 +1169,7 @@ public Action Timer_DoGlacialOverlay(Handle timer, Handle pack)
     ResetPack(pack);
     int target = ReadPackCell(pack);
     if(ValidPlayer(target,false)) {
-        new char buffer[64];
+        int char buffer[64];
         ReadPackString(pack, buffer, sizeof(buffer));
         if (StrEqual(buffer, "0", false)) {
             bOverlayed[target]=true;
@@ -1188,7 +1188,7 @@ stock CreateSmokestack(float fPos[3],float fAng[3],float BaseSpread,float StartS
     int particle = CreateEntityByName("env_smokestack");
     if(IsValidEdict(particle))
     {
-        decl char Name[32];
+        char Name[32];
         Format(Name, sizeof(Name), "w3s_particles");
         // Set Key Values
         DispatchKeyValueVector(particle, "Origin", fPos);
@@ -1265,7 +1265,7 @@ stock TE_SendToAllButTeam(team,float delay=0.0)
 #endif
 
 GetManaWrapper(client) {
-    decl mana;
+    int mana;
 #if !defined SOURCECRAFT
     if(bExtension) {
 #endif
@@ -1294,7 +1294,7 @@ SetManaWrapper(client,value) {
 
 //dirty dealdamage workaround.. tell me if you got another idea :o
 stock DealDamageWorkaround(victim,attacker,damage,char classname[32],float delay=0.1) {
-    new Handle pack;
+    int Handle pack;
     CreateDataTimer(delay, Timer_DealDamage, pack);
     WritePackCell(pack, victim);
     WritePackCell(pack, attacker);
@@ -1307,7 +1307,7 @@ public Action Timer_DealDamage(Handle timer, Handle pack)
     int victim = ReadPackCell(pack);
     int attacker = ReadPackCell(pack);
     int damage = ReadPackCell(pack);
-    decl char classname[32];
+    char classname[32];
     ReadPackString(pack,classname,sizeof(classname));
     War3_DealDamage(victim,damage,attacker,DMG_BULLET,classname);
 }

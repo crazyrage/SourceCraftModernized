@@ -192,7 +192,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
         int augments_level = GetUpgradeLevel(client,raceID,augmentsID);
         SetSpeedBoost(client, augments_level, true, g_SpeedLevels);
 
-        new regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
+        int regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
         SetHealthRegen(client, float(regeneration_level));
 
         int carapace_level = GetUpgradeLevel(client,raceID,carapaceID);
@@ -229,7 +229,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
 public OnItemPurchase(client,item)
 {
-    new race=GetRace(client);
+    int race=GetRace(client);
     if (race == raceID && IsValidClientAlive(client))
     {
         if (g_bootsItem < 0)
@@ -333,7 +333,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         int augments_level = GetUpgradeLevel(client,raceID,augmentsID);
         SetSpeedBoost(client, augments_level, true, g_SpeedLevels);
 
-        new regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
+        int regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
         SetHealthRegen(client, float(regeneration_level));
 
         int carapace_level = GetUpgradeLevel(client,raceID,carapaceID);

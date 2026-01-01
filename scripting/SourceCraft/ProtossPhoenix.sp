@@ -220,7 +220,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
         int thrusters_level = GetUpgradeLevel(client,raceID,thrusterID);
         SetSpeedBoost(client, thrusters_level, true, g_SpeedLevels);
 
-        new jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
+        int jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
         SetupJetpack(client, jetpack_level);
 
         int shields_level = GetUpgradeLevel(client,raceID,shieldsID);
@@ -366,7 +366,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         int thrusters_level = GetUpgradeLevel(client,raceID,thrusterID);
         SetSpeedBoost(client, thrusters_level, true, g_SpeedLevels);
 
-        new jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
+        int jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
         SetupJetpack(client, jetpack_level);
 
         int shields_level = GetUpgradeLevel(client,raceID,shieldsID);

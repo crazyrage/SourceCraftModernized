@@ -25,7 +25,7 @@ enum TFAmmoTypes
 
 stock TF2_GetAmmoAmount(client,TFAmmoTypes:type=Primary, weapon=0)
 {
-    new ammoType = _:type;
+    int ammoType = _:type;
     if (weapon > 0 && IsValidEntity(weapon))
     {
         switch (type)
@@ -41,7 +41,7 @@ stock TF2_GetAmmoAmount(client,TFAmmoTypes:type=Primary, weapon=0)
 
 stock TF2_SetAmmoAmount(client, ammo = 999,TFAmmoTypes:type=Primary, weapon=0)
 {
-    new ammoType = _:type;
+    int ammoType = _:type;
     if (weapon > 0 && IsValidEntity(weapon))
     {
         switch (type)
@@ -58,10 +58,10 @@ stock TF2_SetAmmoAmount(client, ammo = 999,TFAmmoTypes:type=Primary, weapon=0)
 
 // TF2 Weapon properties
 
-//stock Float GetEnergyAmmo(weapon)
+//stock float GetEnergyAmmo(weapon)
 #define TF2_GetEnergyAmmo(%1)     GetEntPropFloat(%1, Prop_Send, "m_flEnergy")
 
-//stock SetEnergyAmmo(weapon, Float flEnergyAmmo)
+//stock SetEnergyAmmo(weapon, float flEnergyAmmo)
 #define TF2_SetEnergyAmmo(%1,%2)  SetEntPropFloat(%1, Prop_Send, "m_flEnergy", %2);
 
 stock TF2_ResetCaber(weapon)

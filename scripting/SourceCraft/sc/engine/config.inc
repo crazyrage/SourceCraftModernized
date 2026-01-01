@@ -462,7 +462,7 @@ float GetConfigFloat(const char[] key, float defvalue=0.0, int fileId=MAIN,
         }
 
         #if !defined _TRACE
-            charshort[SHORT_STRING_LENGTH];
+            char short[SHORT_STRING_LENGTH];
             GetRaceShortName(raceHandle,short,sizeof(short));
             Trace("file=%d:%s, node=%s, section=%s, key=%s, value=%f, def=%f, raceHandle=0x%08x, IsLoaded=%d", \
                   fileId, short, nodeName, section, key, value, defvalue, raceHandle, \
@@ -703,7 +703,7 @@ void GetConfigString(const char[] key, char[] value, int maxlength,
         }
 
         #if !defined _TRACE
-            charshort[SHORT_STRING_LENGTH];
+            char short[SHORT_STRING_LENGTH];
             GetRaceShortName(raceHandle,short,sizeof(short));
             Trace("file=%d:%s, node=%s, section=%s, key=%s, value=%s, def=%s, raceHandle=0x%08x, IsLoaded=%d", \
                   fileId, short, nodeName, section, key, value, defvalue, raceHandle, \
@@ -951,7 +951,7 @@ int GetConfigArray(const char[] key, any[] value, int size, const any[] defvalue
         }
 
         #if !defined _TRACE
-            charshort[SHORT_STRING_LENGTH];
+            char short[SHORT_STRING_LENGTH];
             GetRaceShortName(raceHandle,short,sizeof(short));
             Trace("file=%d:%s, node=%s, section=%s, key=%s, value=%s, def=%s, raceHandle=0x%08x, IsLoaded=%d", \
                   fileId, short, nodeName, section, key, buffer, defstring, raceHandle, \
@@ -1202,7 +1202,7 @@ int GetConfigFloatArray(const char[] key, float[] value, int size,
         }
 
         #if !defined _TRACE
-            charshort[SHORT_STRING_LENGTH];
+            char short[SHORT_STRING_LENGTH];
             GetRaceShortName(raceHandle,short,sizeof(short));
             Trace("file=%d:%s, node=%s, section=%s, key=%s, value=%s, def=%s, raceHandle=0x%08x, IsLoaded=%d", \
                   fileId, short, nodeName, section, key, buffer, defstring, raceHandle, \
@@ -1266,7 +1266,7 @@ bool ParseSettings()
         // Set options
         KvSetNum(g_SourceCraftConfigHandle, "update", g_bUpdate);
         KvSetNum(g_SourceCraftConfigHandle, "save_xp", g_bSaveXP);
-        KvSetNum(g_SourceCraftConfigHandle, "charge_for_upgrades", g_bChargeForUpgrades);
+        KvSetNum(g_SourceCraftConfigHandle, "char ge_for_upgrades", g_bChargeForUpgrades);
         KvSetNum(g_SourceCraftConfigHandle, "save_upgrades", g_bSaveUpgrades);
 
         KvSetNum(g_SourceCraftConfigHandle, "show_upgrade_info", g_bShowUpgradeInfo);
@@ -1323,7 +1323,7 @@ bool ParseSettings()
         g_bUpdate=view_as<bool>(KvGetNum(g_SourceCraftConfigHandle, "update", g_bUpdate));
         g_bSaveXP=view_as<bool>(KvGetNum(g_SourceCraftConfigHandle, "save_xp", g_bSaveXP));
 
-        g_bChargeForUpgrades=view_as<bool>(KvGetNum(g_SourceCraftConfigHandle, "charge_for_upgrades", g_bChargeForUpgrades));
+        g_bChargeForUpgrades=view_as<bool>(KvGetNum(g_SourceCraftConfigHandle, "char ge_for_upgrades", g_bChargeForUpgrades));
         g_bSaveUpgrades=view_as<bool>(KvGetNum(g_SourceCraftConfigHandle, "save_upgrades", g_bSaveUpgrades));
 
         g_bShowUpgradeInfo=view_as<bool>(KvGetNum(g_SourceCraftConfigHandle, "show_upgrade_info", g_bShowUpgradeInfo));

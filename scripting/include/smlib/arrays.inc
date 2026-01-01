@@ -21,7 +21,7 @@ stock Array_FindValue(any array[], size, any value, start=0)
 		start = 0;
 	}
 
-	for (new i=start; i < size; i++) {
+	for (int i=start; i < size; i++) {
 
 		if (array[i] == value) {
 			return i;
@@ -47,7 +47,7 @@ stock Array_FindString(const char[] array[], size, const char[] str, bool caseSe
 		start = 0;
 	}
 
-	for (new i=start; i < size; i++) {
+	for (int i=start; i < size; i++) {
 
 		if (StrEqual(array[i], str, caseSensitive)) {
 			return i;
@@ -71,11 +71,11 @@ stock Array_FindLowestValue(any array[], size, start=0)
 		start = 0;
 	}
 
-	new any value = array[start];
-	new any tempValue;
-	new x = start;
+	int any value = array[start];
+	int any tempValue;
+	int x = start;
 
-	for (new i=start; i < size; i++) {
+	for (int i=start; i < size; i++) {
 
 		tempValue = array[i];
 
@@ -103,11 +103,11 @@ stock Array_FindHighestValue(any array[], size, start=0)
 		start = 0;
 	}
 
-	new any value = array[start];
-	new any tempValue;
-	new x = start;
+	int any value = array[start];
+	int any tempValue;
+	int x = start;
 
-	for (new i=start; i < size; i++) {
+	for (int i=start; i < size; i++) {
 
 		tempValue = array[i];
 
@@ -137,7 +137,7 @@ stock Array_Fill(any array[], size, any value, start=0)
 		start = 0;
 	}
 
-	for (new i=start; i < size; i++) {
+	for (int i=start; i < size; i++) {
 		array[i] = value;
 	}
 }
@@ -152,7 +152,7 @@ stock Array_Fill(any array[], size, any value, start=0)
  */
 stock Array_Copy(const any array[], any newArray[], size)
 {
-	for (new i=0; i < size; i++) {
+	for (int i=0; i < size; i++) {
 		newArray[i] = array[i];
 	}
 }

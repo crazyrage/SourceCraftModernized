@@ -49,7 +49,7 @@ static const char[] deathWav[][]        = { "sc/tfbdth00.wav",    // Death sound
                                          "sc/tfbdth01.wav",
                                          "sc/tfbdth02.wav" };
 
-intraceID, weaponsID, armorID, plasmaID, flamethrowerID, bunkerID;
+int raceID, weaponsID, armorID, plasmaID, flamethrowerID, bunkerID;
 
 static const char[] g_ArmorName[]       = "Armor";
 float g_InitialArmor[]           = { 0.0, 0.10, 0.25, 0.50, 0.75 };
@@ -216,15 +216,15 @@ public Action OnRaceSelected(int client, int oldrace, int newrace)
     {
         m_StimpacksActive[client] = false;
 
-        intarmor_level = GetUpgradeLevel(client,raceID,armorID);
+        int armor_level = GetUpgradeLevel(client,raceID,armorID);
         SetImmunity(client,Immunity_Burning,(armor_level > 0));
         SetupArmor(client, armor_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        intstimpacks_level = GetUpgradeLevel(client,raceID,stimpacksID);
+        int stimpacks_level = GetUpgradeLevel(client,raceID,stimpacksID);
         SetSpeedBoost(client, stimpacks_level, true, g_SpeedLevels);
 
-        intflamethrower_level=GetUpgradeLevel(client,raceID,flamethrowerID);
+        int flamethrower_level=GetUpgradeLevel(client,raceID,flamethrowerID);
         if (flamethrower_level > 0)
         {
             GiveFlamethrower(client, flamethrower_level*3,
@@ -272,7 +272,7 @@ public OnItemPurchase(client,item)
 
         if (item == g_bootsItem)
         {
-            intlevel = GetUpgradeLevel(client,raceID,stimpacksID);
+            int level = GetUpgradeLevel(client,raceID,stimpacksID);
             if (level > 0)
                 SetSpeedBoost(client, level, true, g_SpeedLevels);
         }
@@ -287,15 +287,15 @@ public OnUltimateCommand(client,race,bool pressed,arg)
         {
             case 4,3: // Ultimate Stimpack
             {
-                intstimpacks_level=GetUpgradeLevel(client,race,stimpacksID);
+                int stimpacks_level=GetUpgradeLevel(client,race,stimpacksID);
                 if (stimpacks_level > 0)
                     Stimpacks(client, stimpacks_level,race,stimpacksID);
                 else
                 {
-                    intbunker_level = GetUpgradeLevel(client,race,bunkerID);
+                    int bunker_level = GetUpgradeLevel(client,race,bunkerID);
                     if (bunker_level > 0)
                     {
-                        intarmor = RoundToNearest(float(GetPlayerMaxHealth(client))
+                        int armor = RoundToNearest(float(GetPlayerMaxHealth(client))
                                                    * g_BunkerPercent[bunker_level]);
 
                         EnterBunker(client, armor, raceID, bunkerID);
@@ -313,7 +313,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                         }
                         else
                         {
-                            intnum = GetRandomInt(0,sizeof(flameWav)-1);
+                            int num = GetRandomInt(0,sizeof(flameWav)-1);
                             SetFlamethrowerSound(flameWav[num]);
                             UseFlamethrower(client);
                         }
@@ -322,10 +322,10 @@ public OnUltimateCommand(client,race,bool pressed,arg)
             }
             case 2: // Enter Bunker
             {
-                intbunker_level = GetUpgradeLevel(client,race,bunkerID);
+                int bunker_level = GetUpgradeLevel(client,race,bunkerID);
                 if (bunker_level > 0)
                 {
-                    intarmor = RoundToNearest(float(GetPlayerMaxHealth(client))
+                    int armor = RoundToNearest(float(GetPlayerMaxHealth(client))
                                                * g_BunkerPercent[bunker_level]);
 
                     EnterBunker(client, armor, raceID, bunkerID);
@@ -343,7 +343,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                     }
                     else
                     {
-                        intnum = GetRandomInt(0,sizeof(flameWav)-1);
+                        int num = GetRandomInt(0,sizeof(flameWav)-1);
                         SetFlamethrowerSound(flameWav[num]);
                         UseFlamethrower(client);
                     }
@@ -364,24 +364,24 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                     }
                     else
                     {
-                        intnum = GetRandomInt(0,sizeof(flameWav)-1);
+                        int num = GetRandomInt(0,sizeof(flameWav)-1);
                         SetFlamethrowerSound(flameWav[num]);
                         UseFlamethrower(client);
                     }
                 }
                 else
                 {
-                    intbunker_level = GetUpgradeLevel(client,race,bunkerID);
+                    int bunker_level = GetUpgradeLevel(client,race,bunkerID);
                     if (bunker_level > 0)
                     {
-                        intarmor = RoundToNearest(float(GetPlayerMaxHealth(client))
+                        int armor = RoundToNearest(float(GetPlayerMaxHealth(client))
                                                    * g_BunkerPercent[bunker_level]);
 
                         EnterBunker(client, armor, raceID, bunkerID);
                     }
                     else
                     {
-                        intstimpacks_level=GetUpgradeLevel(client,race,stimpacksID);
+                        int stimpacks_level=GetUpgradeLevel(client,race,stimpacksID);
                         if (stimpacks_level > 0)
                             Stimpacks(client, stimpacks_level,race,stimpacksID);
                     }
@@ -400,15 +400,15 @@ public OnPlayerSpawnEvent(Handle event, client, race)
 
         PrepareAndEmitSoundToAll(spawnWav,client);
 
-        intarmor_level = GetUpgradeLevel(client,raceID,armorID);
+        int armor_level = GetUpgradeLevel(client,raceID,armorID);
         SetImmunity(client,Immunity_Burning,(armor_level > 0));
         SetupArmor(client, armor_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        intstimpacks_level = GetUpgradeLevel(client,raceID,stimpacksID);
+        int stimpacks_level = GetUpgradeLevel(client,raceID,stimpacksID);
         SetSpeedBoost(client, stimpacks_level, true, g_SpeedLevels);
 
-        intflamethrower_level=GetUpgradeLevel(client,raceID,flamethrowerID);
+        int flamethrower_level=GetUpgradeLevel(client,raceID,flamethrowerID);
         if (flamethrower_level > 0)
         {
             GiveFlamethrower(client, flamethrower_level*3,
@@ -443,7 +443,7 @@ public Action OnEntityAssistEvent(Handle event, victim_index, assister_index, as
 public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
                                 attacker_race, damage, absorbed, bool from_sc)
 {
-    intAction returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
 
     if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index &&
@@ -463,7 +463,7 @@ public Action OnPlayerAssistEvent(Handle event, victim_index, victim_race,
                                   assister_index, assister_race, damage,
                                   absorbed)
 {
-    intAction returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
 
     if (assister_race == raceID)
     {
@@ -489,16 +489,16 @@ public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_inde
         else if (m_ROFAvailable)
             SetROF(victim_index, 0.0, 0.0);
 
-        intnum = GetRandomInt(0,sizeof(deathWav)-1);
+        int num = GetRandomInt(0,sizeof(deathWav)-1);
         PrepareAndEmitSoundToAll(deathWav[num],victim_index);
 
-        intlevel = GetUpgradeLevel(victim_index,raceID,flamethrowerID);
+        int level = GetUpgradeLevel(victim_index,raceID,flamethrowerID);
         if (level > 0 &&
             !GetRestriction(victim_index, Restriction_NoUpgrades) &&
             !GetRestriction(victim_index, Restriction_Stunned))
         {
-            intfuel = (m_FlamethrowerAvailable) ? GetFlamethrowerFuel(victim_index) : level*3;
-            intexplode_damage  = (fuel * 125) * GetRandomInt(level,10);
+            int fuel = (m_FlamethrowerAvailable) ? GetFlamethrowerFuel(victim_index) : level*3;
+            int explode_damage  = (fuel * 125) * GetRandomInt(level,10);
             ExplodePlayer(victim_index, victim_index, GetClientTeam(victim_index),
                           g_ExplodeRadius[level], explode_damage, explode_damage,
                           FlamingExplosion | OnDeathExplosion, level+5);
@@ -527,7 +527,7 @@ public OnEntityCreated(entity, const char[] classname)
 
 public FlameArrow(entity)
 {
-    intowner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
+    int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
     if (owner > 0 && GetRace(owner) == raceID)
     {
         SetEntProp(entity, Prop_Send, "m_bArrowAlight", 1);
@@ -554,7 +554,7 @@ public Action OnPlayerFlamed(attacker,victim)
 
 bool InfantryWeapons(Handle event, damage, victim_index, index)
 {
-    intweapons_level = GetUpgradeLevel(index, raceID, weaponsID);
+    int weapons_level = GetUpgradeLevel(index, raceID, weaponsID);
     if (weapons_level > 0)
     {
         if (!GetRestriction(index, Restriction_NoUpgrades) &&
@@ -569,7 +569,7 @@ bool InfantryWeapons(Handle event, damage, victim_index, index)
                 bool is_equipment=GetWeapon(event,index,weapon,sizeof(weapon));
                 if (!IsMelee(weapon, is_equipment,index,victim_index))
                 {
-                    inthealth_take = RoundFloat(float(damage)*g_InfantryWeaponsPercent[weapons_level]);
+                    int health_take = RoundFloat(float(damage)*g_InfantryWeaponsPercent[weapons_level]);
                     if (health_take > 0 && CanInvokeUpgrade(index, raceID, weaponsID, .notify=false))
                     {
                         float indexLoc[3];
@@ -600,7 +600,7 @@ bool InfantryWeapons(Handle event, damage, victim_index, index)
 
 bool ViralPlasma(victim_index, index)
 {
-    intplasma_level = GetUpgradeLevel(index, raceID, plasmaID);
+    int plasma_level = GetUpgradeLevel(index, raceID, plasmaID);
     if (plasma_level > 0 && GetRandomInt(1,100) <= plasma_level*20)
     {
         if (!GetRestriction(index, Restriction_NoUpgrades) &&

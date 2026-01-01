@@ -321,7 +321,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
-        new regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
+        int regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
         SetHealthRegen(client, float(regeneration_level));
 
         int carapace_level = GetUpgradeLevel(client,raceID,carapaceID);
@@ -476,7 +476,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         
         SetOverrideSpeed(client, -1.0);
 
-        new regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
+        int regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
         SetHealthRegen(client, float(regeneration_level));
 
         int carapace_level = GetUpgradeLevel(client,raceID,carapaceID);

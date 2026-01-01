@@ -11,7 +11,7 @@
 public Plugin myinfo = {
 	name = "Just another damn Grenade plugin-mod",
 	author = "Assyrian/Nergal, thanks to CrancK and ^Pb | chicken aka solly :P",
-	description = "Brings back Original TF Grenades into TF2.",
+	description = "Brings back Original TF Grenades int o TF2.",
 	version = PLUGIN_VERSION,
 	url = "www.PwndorasBox.net"
 };
@@ -52,7 +52,7 @@ char GrenadeSoundTimers[][] = { //PROPS TO FLAMIN' SARGE
 	"grenade/tf2_default.mp3"
 };
 
-//ints
+//int s
 int GrenadePrimary[MAXPLAYERS+1][2]; //(2 = Current amount, Max amount)
 int LaserRingModel;
 int g_NadeId;
@@ -64,7 +64,7 @@ Handle HudTimer[MAXPLAYERS+1];
 Handle DispenserTimer[MAXPLAYERS+1];
 Handle SoundCookie;
 
-//floats
+//float s
 float gHoldingArea[3]; //Holding area Origin in client/player
 float GrenadeSpeed = 900.0;
 
@@ -148,13 +148,13 @@ public OnClientDisconnect(client)
 	if (DispenserTimer[client] != null) ClearTimer(DispenserTimer[client]);
 	GrenFlags[client] = 0;
 }
-public Action Timer_GrenadeHud(Handle timer, any:userid)
+public Action Timer_GrenadeHud(Handle timer, any userid)
 {
 	int client = GetClientOfUserId(userid);
 	if (client && IsClientInGame(client) && GetConVarBool(PluginEnabled)) UpdateGrenHUD(client);
 	return Plugin_Continue;
 }
-public Action Timer_DispenserRefillNades(Handle timer, any:userid)
+public Action Timer_DispenserRefillNades(Handle timer, any userid)
 {
 	int client = GetClientOfUserId(userid);
 	if (client && IsClientInGame(client) && GetConVarBool(PluginEnabled) && GetConVarBool(GrenadeFromSpencer))
@@ -269,7 +269,7 @@ public Action OnPlayerRunCmd(client, &buttons, &impulse, float vel[3], float ang
 	}
 	return Plugin_Continue;
 }
-public PrimeGrenade(any:userid/*, */)
+public PrimeGrenade(any userid/*, */)
 {
 	int client = GetClientOfUserId(userid);
 	if (!IsPlayerAlive(client) || !IsValidClient(client)) return;
@@ -367,7 +367,7 @@ public ThrowNade(userid, NadeId)
 }
 public ShowTrail(nade, color[4])
 {
-	TE_SetupBeamFollow(nade, LaserRingModel, 0, Float:2.0, Float:30.0, Float:30.0, 5, color);
+	TE_SetupBeamFollow(nade, LaserRingModel, 0, 2.0, 30.0, 30.0, 5, color);
 	TE_SendToAll();
 }
 public Action NadeExplode(Handle timer, Handle pack)
@@ -402,7 +402,7 @@ public ExplodeNade(userid, NadeId)
 		CreateTimer(0.0, RemoveEnt, NadeId); //safely remove nade
 	}
 }
-public Action RemoveEnt(Handle timer, any:entid)
+public Action RemoveEnt(Handle timer, any entid)
 {
 	int ent = EntRefToEntIndex(entid);
 	if (ent > 0 && IsValidEdict(ent)) AcceptEntityInput(ent, "Kill");
@@ -627,7 +627,7 @@ stock AttachParticle(ent, char particleType[], float offset = 0.0, float killtim
 {
 	int particle = CreateEntityByName("info_particle_system");
 	char tName[128];
-	decl float pos[3];
+	float pos[3];
 	GetEntPropVector(ent, Prop_Send, "m_vecOrigin", pos);
 	pos[2] += offset;
 	TeleportEntity(particle, pos, NULL_VECTOR, NULL_VECTOR);

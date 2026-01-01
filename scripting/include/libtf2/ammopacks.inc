@@ -32,10 +32,10 @@ native SetAmmopack(client,enable=3);
  * Drop a Ammopack.
  *
  * @param index 	Client index
- * @param charge    Set to amount of metal to use for ammopack (-1=use actual metal level).
+ * @param char ge    Set to amount of metal to use for ammopack (-1=use actual metal level).
  * @return			true if a ammopack was successfully dropped
  */
-native bool DropAmmopack(client,charge=-1);
+native bool DropAmmopack(client,char ge=-1);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

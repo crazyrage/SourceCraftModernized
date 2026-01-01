@@ -116,7 +116,7 @@ public void OnMapStart()
     SetupSound(entangleSound);
 }
 
-public Action OnPlayerTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype)
+public Action OnPlayerTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetype)
 {
     if (GetRace(victim) == raceID)
     {
@@ -144,7 +144,7 @@ public Action OnPlayerTakeDamage(victim,&attacker,&inflictor,&float damage,&dama
                     int entities = EntitiesAvailable(200, .message="Reducing Effects");
                     if (entities > 50)
                     {
-                        decl float pos[3];
+                        float pos[3];
                         GetClientEyePosition(victim, pos);
                         pos[2] += 4.0;
                         TE_SetupParticle("miss_text", pos);
@@ -161,7 +161,7 @@ public Action OnPlayerTakeDamage(victim,&attacker,&inflictor,&float damage,&dama
 public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
                                 attacker_race, damage, absorbed, bool from_sc)
 {
-    new Action returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
 
     if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index)
@@ -216,7 +216,7 @@ public bool ThornsAura(Handle event, damage, victim_index, index)
             if (dmgamt > 0 && GetRandomInt(1,100) <= g_ThornsChance[thorns_level] &&
                 CanInvokeUpgrade(index, raceID, thornsID, .notify=false))
             {
-                decl float indexPos[3];
+                float indexPos[3];
                 GetClientAbsOrigin(index, indexPos); 
                 indexPos[2]+=35.0;
 
@@ -285,7 +285,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
 {
     if (pressed && race==raceID && IsValidClientAlive(client))
     {
-        new ult_level=GetUpgradeLevel(client,race,rootsID);
+        int ult_level=GetUpgradeLevel(client,race,rootsID);
         if (ult_level > 0)
         {
             if (GetRestriction(client,Restriction_NoUltimates) ||
@@ -348,7 +348,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
 
                 int count = 0;
                 new team  = GetClientTeam(client);
-                for (new index=1;index<=MaxClients;index++)
+                for (int index=1;index<=MaxClients;index++)
                 {
                     if (client != index && IsValidClient(index) &&
                         IsPlayerAlive(index) && GetClientTeam(index) != team)

@@ -24,7 +24,7 @@ stock SetupAirWeapons()
 bool AirWeapons(race, upgrade, Handle event, damage, victim_index, index,
                 const float weaponsPercent[], const weaponsChance[])
 {
-    new weapons_level = GetUpgradeLevel(index, race, upgrade);
+    int weapons_level = GetUpgradeLevel(index, race, upgrade);
     if (weapons_level > 0)
     {
         if (!GetRestriction(index, Restriction_NoUpgrades) &&

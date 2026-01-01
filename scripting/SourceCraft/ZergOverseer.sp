@@ -463,7 +463,7 @@ public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_inde
     }
 }
 
-public Action TransfusionTimer(Handle timer, any:userid)
+public Action TransfusionTimer(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client))
@@ -807,7 +807,7 @@ void ExcreteCreep(client, level)
     }
 }
 
-public Action RecloakPlayer(Handle timer,any:userid)
+public Action RecloakPlayer(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (client > 0)

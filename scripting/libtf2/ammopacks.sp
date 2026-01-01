@@ -58,10 +58,10 @@ public Plugin myinfo =
 bool g_NativeControl = false;
 bool g_EngiButtonDown[MAXPLAYERS+1];
 float g_EngiPosition[MAXPLAYERS+1][3];
-new g_NativeAmmopacks[MAXPLAYERS+1];
-new g_EngiMetal[MAXPLAYERS+1];
-new g_AmmopacksCount = 0;
-new g_FilteredEntity = -1;
+int g_NativeAmmopacks[MAXPLAYERS+1];
+int g_EngiMetal[MAXPLAYERS+1];
+int g_AmmopacksCount = 0;
+int g_FilteredEntity = -1;
 Handle g_IsAmmopacksOn = null;
 Handle g_AmmopacksSmall = null;
 Handle g_AmmopacksMedium = null;
@@ -72,9 +72,9 @@ Handle g_AmmopacksLimit = null;
 Handle g_AmmopacksTime = null;
 Handle g_AmmopacksRef = null;
 
-new g_LargeModel = 0;
-new g_SmallModel = 0;
-new g_MediumModel = 0;
+int g_LargeModel = 0;
+int g_SmallModel = 0;
+int g_MediumModel = 0;
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char error[], err_max)
 {
@@ -99,7 +99,7 @@ public OnPluginStart()
     g_AmmopacksTeam = CreateConVar("sm_ammopacks_team","3","Team to drop Ammopacks for. (0=any team|1=own team|2=opposing team|3=own on command, any on death)", _, true, 0.0, true, 3.0);
     g_AmmopacksLimit = CreateConVar("sm_ammopacks_limit","100","Maximum number of extra Ammopacks on map at a time. (0=unlimited)", _, true, 0.0, true, 512.0);
 
-    new maxents = GetMaxEntities();
+    int maxents = GetMaxEntities();
     g_AmmopacksTime = CreateArray(_, maxents);
     g_AmmopacksRef = CreateArray(_, maxents);
 
@@ -128,7 +128,7 @@ public OnMapStart()
     SetupSound(SOUND_B, true, DONT_DOWNLOAD, false, false);
     SetupSound(SOUND_C, true, DONT_DOWNLOAD, true,  true);
 
-    new maxents = GetMaxEntities();
+    int maxents = GetMaxEntities();
     ClearArray(g_AmmopacksRef);
     ClearArray(g_AmmopacksTime);
     ResizeArray(g_AmmopacksRef, maxents);
@@ -188,12 +188,12 @@ public ConVarChange_IsAmmopacksOn(Handle convar, const char[] oldValue, const ch
 
 public Action Command_Ammopack(client, args)
 {
-    new AmmopacksOn = g_NativeControl ? g_NativeAmmopacks[client]
+    int AmmopacksOn = g_NativeControl ? g_NativeAmmopacks[client]
                                       : GetConVarInt(g_IsAmmopacksOn);
     if (AmmopacksOn < 2)
         return Plugin_Handled;
 
-    new TFClassType:class = TF2_GetPlayerClass(client);
+    int TFClassType:class = TF2_GetPlayerClass(client);
     if (class != TFClass_Engineer)
         return Plugin_Handled;
 
@@ -218,7 +218,7 @@ public Action Command_MetalAmount(client, args)
     char arg1[32], char arg2[32];
     GetCmdArg(1, arg1, sizeof(arg1));
 
-    new target = FindTarget(client, arg1);
+    int target = FindTarget(client, arg1);
     if (target == -1)
     {
         return Plugin_Handled;
@@ -234,28 +234,28 @@ public Action Command_MetalAmount(client, args)
         return Plugin_Handled;
     }
 
-    new TFClassType:class = TF2_GetPlayerClass(target);
+    int TFClassType:class = TF2_GetPlayerClass(target);
     if (class != TFClass_Engineer)
     {
         ReplyToCommand(client, "[SM] %t", "Not a Engineer", name);
         return Plugin_Handled;
     }
 
-    new charge = 100;
+    int char ge = 100;
     if (args > 1)
     {
         GetCmdArg(2, arg2, sizeof(arg2));
-        charge = StringToInt(arg2);
-        if (charge < 0 || charge > 200)
+        char ge = StringToInt(arg2);
+        if (char ge < 0 || char ge > 200)
         {
             ReplyToCommand(client, "[SM] %t", "Invalid Amount");
             return Plugin_Handled;
         }
     }
 
-    TF2_SetMetalAmount(target, charge);
+    TF2_SetMetalAmount(target, char ge);
 
-    ReplyToCommand(client, "[SM] %t", "Changed Metal", name, charge);
+    ReplyToCommand(client, "[SM] %t", "Changed Metal", name, char ge);
     return Plugin_Handled;
 }
 
@@ -263,7 +263,7 @@ public Action Timer_Advert(Handle timer, any client)
 {
     if (IsClientConnected(client) && IsClientInGame(client))
     {
-        new AmmopacksOn = GetConVarInt(g_IsAmmopacksOn);
+        int AmmopacksOn = GetConVarInt(g_IsAmmopacksOn);
         switch (AmmopacksOn)
         {
             case 1:
@@ -287,15 +287,15 @@ public Action Timer_Caching(Handle timer)
         }
     }
 
-    new AmmopacksKeep = GetConVarInt(g_AmmopacksKeep);
-    new AmmopacksLimit = GetConVarInt(g_AmmopacksLimit);
+    int AmmopacksKeep = GetConVarInt(g_AmmopacksKeep);
+    int AmmopacksLimit = GetConVarInt(g_AmmopacksLimit);
     if (AmmopacksKeep > 0 || AmmopacksLimit > 0)
     {
-        new maxents = GetMaxEntities();
-        new mintime = GetTime() - AmmopacksKeep;
+        int maxents = GetMaxEntities();
+        int mintime = GetTime() - AmmopacksKeep;
         for (int c = MaxClients; c < maxents; c++)
         {
-            new time = GetArrayCell(g_AmmopacksTime, c);
+            int time = GetArrayCell(g_AmmopacksTime, c);
             if (time > 0)
             {
                 bool valid = (EntRefToEntIndex(GetArrayCell(g_AmmopacksRef, c)) == c &&
@@ -339,15 +339,15 @@ public Action Event_PlayerDeath(Handle event, const char[] name, bool dontBroadc
         return;
     }
 
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));
     if (!IsClientInGame(client))
         return;
 
-    new AmmopacksOn = g_NativeControl ? g_NativeAmmopacks[client] : GetConVarInt(g_IsAmmopacksOn);
+    int AmmopacksOn = g_NativeControl ? g_NativeAmmopacks[client] : GetConVarInt(g_IsAmmopacksOn);
     if (AmmopacksOn < 1 || AmmopacksOn == 2)
         return;
 
-    new TFClassType:class = TF2_GetPlayerClass(client);	
+    int TFClassType:class = TF2_GetPlayerClass(client);	
     if (class != TFClass_Engineer)
         return;
 
@@ -356,15 +356,15 @@ public Action Event_PlayerDeath(Handle event, const char[] name, bool dontBroadc
 
 public Action Event_PlayerTeam(Handle event, const char[] name, bool dontBroadcast)
 {
-    new disconnect = GetEventInt(event, "disconnect");
+    int disconnect = GetEventInt(event, "disconnect");
     if (disconnect)
         return;
 
-    new team = GetEventInt(event, "team");
+    int team = GetEventInt(event, "team");
     if (team > 1)
         return;
 
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));
     if (!IsClientInGame(client))
         return;
 
@@ -375,13 +375,13 @@ public Action Event_PlayerTeam(Handle event, const char[] name, bool dontBroadca
 
 public Action Event_TeamplayRoundStart(Handle event, const char[] name, bool dontBroadcast)
 {
-    new full_reset = GetEventInt(event, "full_reset");
+    int full_reset = GetEventInt(event, "full_reset");
     if (full_reset)
     {
-        new maxents = GetMaxEntities();
+        int maxents = GetMaxEntities();
         for (int c = MaxClients; c < maxents; c++)
         {
-            new time = GetArrayCell(g_AmmopacksTime, c);
+            int time = GetArrayCell(g_AmmopacksTime, c);
             if (time > 0)
             {
                 SetArrayCell(g_AmmopacksRef, c, INVALID_ENT_REFERENCE);
@@ -396,7 +396,7 @@ public Action Entity_OnPlayerTouch(const char[] output, caller, activator, float
 {
     if (activator > 0 && caller > 0)
     {
-        new time = GetArrayCell(g_AmmopacksTime, caller);
+        int time = GetArrayCell(g_AmmopacksTime, caller);
         if (time > 0)
         {
             SetArrayCell(g_AmmopacksRef, caller, INVALID_ENT_REFERENCE);
@@ -450,14 +450,14 @@ stock TF_SpawnAmmopack(client, char name[], bool cmd)
         CloseHandle(Trace);
         AmmoPos[2] += 4;
 
-        new Ammopack = CreateEntityByName(name);
+        int Ammopack = CreateEntityByName(name);
         if (Ammopack > 0 && IsValidEntity(Ammopack))
         {
             DispatchKeyValue(Ammopack, "OnPlayerTouch", "!self,Kill,,0,-1");
             if (DispatchSpawn(Ammopack))
             {
-                new team = 0;
-                new AmmopacksTeam = GetConVarInt(g_AmmopacksTeam);
+                int team = 0;
+                int AmmopacksTeam = GetConVarInt(g_AmmopacksTeam);
                 if (AmmopacksTeam == 2)
                     team = ((GetClientTeam(client)-1) % 2) + 2;
                 else if (AmmopacksTeam == 1 || (AmmopacksTeam == 3 && cmd))
@@ -478,19 +478,19 @@ stock TF_SpawnAmmopack(client, char name[], bool cmd)
 
 stock bool TF_DropAmmopack(client, bool cmd)
 {
-    new metal;
+    int metal;
     if (cmd)
         metal = TF2_GetMetalAmount(client);
     else
         metal = g_EngiMetal[client];
 
-    new AmmopacksLimit = GetConVarInt(g_AmmopacksLimit);
+    int AmmopacksLimit = GetConVarInt(g_AmmopacksLimit);
     if (AmmopacksLimit > 0 && g_AmmopacksCount >= AmmopacksLimit)
         metal = 0;
 
-    new AmmopacksSmall = GetConVarInt(g_AmmopacksSmall);
-    new AmmopacksMedium = GetConVarInt(g_AmmopacksMedium);
-    new AmmopacksFull = GetConVarInt(g_AmmopacksFull);
+    int AmmopacksSmall = GetConVarInt(g_AmmopacksSmall);
+    int AmmopacksMedium = GetConVarInt(g_AmmopacksMedium);
+    int AmmopacksFull = GetConVarInt(g_AmmopacksFull);
     if (metal >= AmmopacksFull && AmmopacksFull != 0)
     {
         if (cmd) TF2_SetMetalAmount(client, (metal-AmmopacksFull));
@@ -526,14 +526,14 @@ public Native_ControlAmmopacks(Handle plugin, numParams)
 
 public Native_SetAmmopack(Handle plugin, numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     g_NativeAmmopacks[client] = GetNativeCell(2);
 }
 
 public Native_DropAmmopack(Handle plugin, numParams)
 {
-    new client = GetNativeCell(1);
-    new metal = GetNativeCell(2);
+    int client = GetNativeCell(1);
+    int metal = GetNativeCell(2);
 
     if (metal >= 0)
     {

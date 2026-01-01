@@ -48,7 +48,7 @@ public Plugin myinfo =
 {
     name = "drug",
     author = "SourceMod Team / -=|JFH|=- Naris",
-    description = "Native interface to drug.",
+    description = "Native int erface to drug.",
     version = "1.0.0.0",
     url = "http://sourcemod.net/"
 };

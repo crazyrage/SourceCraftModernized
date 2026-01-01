@@ -12,7 +12,7 @@
 
 stock tf2_game_text(const char[] message, const char[] icon="")
 {
-	new Text_Ent = CreateEntityByName("game_text_tf");
+	int Text_Ent = CreateEntityByName("game_text_tf");
     if (Text_Ent > 0 && IsValidEdict(Text_Ent))
     {
         DispatchKeyValue(Text_Ent,"message",message);

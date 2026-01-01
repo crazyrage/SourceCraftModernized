@@ -37,7 +37,7 @@
 #include "effect/PurpleGlow"
 #include "effect/SendEffects"
 
-new const char[] explodeWav[] = "weapons/explode5.wav";
+static const char[] explodeWav[] = "weapons/explode5.wav";
 
 	int g_BuyoutChance[]        = { 0, 9, 22, 50, 63 };
 	int g_JobsBankChance[]      = { 0, 7, 15, 30, 50 };
@@ -205,10 +205,10 @@ public Action OnRaceSelected(client,oldrace,newrace)
         int rules_level = GetUpgradeLevel(client,raceID,rulesID);
         SetEnergyRate(client, (rules_level > 0) ? float(rules_level) : -1.0);
 
-        new hook_level=GetUpgradeLevel(client,raceID,hookID);
+        int hook_level=GetUpgradeLevel(client,raceID,hookID);
         SetupHook(client, hook_level);
 
-        new rope_level=GetUpgradeLevel(client,raceID,ropeID);
+        int rope_level=GetUpgradeLevel(client,raceID,ropeID);
         SetupRope(client, rope_level);
 
         if (IsValidClientAlive(client))
@@ -332,10 +332,10 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         int rules_level = GetUpgradeLevel(client,raceID,rulesID);
         SetEnergyRate(client, (rules_level > 0) ? float(rules_level) : -1.0);
 
-        new hook_level=GetUpgradeLevel(client,raceID,hookID);
+        int hook_level=GetUpgradeLevel(client,raceID,hookID);
         SetupHook(client, hook_level);
 
-        new rope_level=GetUpgradeLevel(client,raceID,ropeID);
+        int rope_level=GetUpgradeLevel(client,raceID,ropeID);
         SetupRope(client, rope_level);
 
         if (m_TeleportOnSpawn[client])
@@ -378,7 +378,7 @@ public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_inde
 
     if (victim_race == raceID)
     {
-        new seniority_level=GetUpgradeLevel(victim_index,raceID,seniorityID);
+        int seniority_level=GetUpgradeLevel(victim_index,raceID,seniorityID);
         if (seniority_level > 0 && !GetRestriction(victim_index, Restriction_NoUpgrades) &&
             !GetRestriction(victim_index, Restriction_Stunned))
         {
@@ -428,7 +428,7 @@ public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_inde
     }
 }
 
-public Action TeleportOnSpawn(Handle timer,any:userid)
+public Action TeleportOnSpawn(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client))
@@ -446,7 +446,7 @@ public Action OnXPGiven(client,&amount,bool taken)
         !GetRestriction(client, Restriction_NoUpgrades) &&
         !GetRestriction(client, Restriction_Stunned))
     {
-        new inflated_wages_level=GetUpgradeLevel(client,raceID,wageID);
+        int inflated_wages_level=GetUpgradeLevel(client,raceID,wageID);
         if (inflated_wages_level > 0)
         {
             amount=RoundToNearest(float(amount)*(1.0 + (float(inflated_wages_level)*0.5)));
@@ -468,7 +468,7 @@ public Action OnCrystalsGiven(client,&amount,bool taken)
         !GetRestriction(client, Restriction_NoUpgrades) &&
         !GetRestriction(client, Restriction_Stunned))
     {
-        new inflated_wages_level=GetUpgradeLevel(client,raceID,wageID);
+        int inflated_wages_level=GetUpgradeLevel(client,raceID,wageID);
         if (inflated_wages_level > 0)
         {
             amount *= (inflated_wages_level+1);
@@ -536,7 +536,7 @@ public Action OnRope(client)
         return Plugin_Continue;
 }
 
-public Action Negotiations(Handle timer, any:userid)
+public Action Negotiations(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client) &&

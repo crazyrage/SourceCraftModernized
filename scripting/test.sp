@@ -218,7 +218,7 @@ public PlayerBuiltObject(Handle event,const char[] name,bool dontBroadcast)
 
 public OnObjectKilled(attacker, builder,const char[] obj)
 {
-    new objects:type = unknown;
+    int objects:type = unknown;
     if (StrEqual(obj, "OBJ_SENTRYGUN", false))
         type = sentrygun;
     else if (StrEqual(obj, "OBJ_DISPENSER", false))
@@ -232,7 +232,7 @@ public OnObjectKilled(attacker, builder,const char[] obj)
                builder, type, obj);
 }
 
-public Action TF2_CalcIsAttackCritical(client, weapon, char weaponname[], &bool result)
+public Action TF2_CalcIsAttackCritical(client, weapon, char weaponname[], bool & result)
 {
     PrintToChat(client, "weaponname=%s", weaponname);
     LogMessage("TF2_CalcIsAttackCritical: client=%d, weapon=%d, weaponname=%s",

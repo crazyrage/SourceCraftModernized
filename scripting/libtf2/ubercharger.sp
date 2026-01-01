@@ -41,14 +41,14 @@ static const char Charged[][] = { "vo/medic_autochargeready01.wav",
                                  "vo/medic_autochargeready03.wav"};
 
 // Basic color arrays for temp entities
-new const redColor[4] = {255, 75, 75, 255};
-new const greenColor[4] = {75, 255, 75, 255};
-new const blueColor[4] = {75, 75, 255, 255};
-new const greyColor[4] = {128, 128, 128, 255};
+static const redColor[4] = {255, 75, 75, 255};
+static const greenColor[4] = {75, 255, 75, 255};
+static const blueColor[4] = {75, 75, 255, 255};
+static const greyColor[4] = {128, 128, 128, 255};
 
 // Following are model indexes for temp entities
-new g_BeamSprite;
-new g_HaloSprite;
+int g_BeamSprite;
+int g_HaloSprite;
 
 float g_ChargeDelay = 5.0;
 float g_BeaconDelay = 3.0;
@@ -84,18 +84,18 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char error[], err_max)
 public OnPluginStart()
 {
     g_IsUberchargerOn = CreateConVar("sm_ubercharger","1","Enable/Disable ubercharger",FCVAR_NONE);
-    g_ChargeAmount = CreateConVar("sm_ubercharger_charge_amount", "0.03", "Sets the amount of uber charge to add time for ubercharger.",
+    g_ChargeAmount = CreateConVar("sm_ubercharger_charge_amount", "0.03", "Sets the amount of uber char ge to add time for ubercharger.",
                                   FCVAR_NONE, true, 0.0, true, 1.0);
 
-    g_ChargeTimer = CreateConVar("sm_ubercharger_charge_timer", "3.0", "Sets the time interval for ubercharger.",FCVAR_NONE);
+    g_ChargeTimer = CreateConVar("sm_ubercharger_charge_timer", "3.0", "Sets the time int erval for ubercharger.",FCVAR_NONE);
 
     g_EnableBeacon = CreateConVar("sm_ubercharger_beacon","1","Enable/Disable ubercharger beacon",FCVAR_NONE);
-    g_BeaconTimer = CreateConVar("sm_ubercharger_beacon_timer","3.0","Sets the time interval of beacons for ubercharger",FCVAR_NONE);
+    g_BeaconTimer = CreateConVar("sm_ubercharger_beacon_timer","3.0","Sets the time int erval of beacons for ubercharger",FCVAR_NONE);
     g_BeaconRadius = CreateConVar("sm_ubercharger_beacon_radius", "375", "Sets the radius for medic enhancer beacon's light rings.",
                                   FCVAR_NONE, true, 50.0, true, 1500.0);
 
     g_EnablePing = CreateConVar("sm_ubercharger_ping","1","Enable/Disable ubercharger ping",FCVAR_NONE);
-    g_PingTimer = CreateConVar("sm_ubercharger_ping_timer", "12.0", "Sets the time interval of pings for ubercharger.",FCVAR_NONE);
+    g_PingTimer = CreateConVar("sm_ubercharger_ping_timer", "12.0", "Sets the time int erval of pings for ubercharger.",FCVAR_NONE);
 
     // Execute the config file
     AutoExecConfig(true, "sm_ubercharger");
@@ -153,7 +153,7 @@ public Action Timer_Advert(Handle timer, any client)
         GetConVarBool(g_IsUberchargerOn) &&
         IsClientInGame(client))
     {
-        PrintToChat(client, "\x01\x04[SM]\x01 Medics will auto-charge uber (and will beacon while charging)");
+        PrintToChat(client, "\x01\x04[SM]\x01 Medics will auto-char ge uber (and will beacon while char ging)");
     }
 }
 
@@ -163,11 +163,11 @@ public Action Medic_Timer(Handle timer, any value)
         return;
 
     float gameTime = GetGameTime();
-    bool charge    = (gameTime - g_lastChargeTime >= g_ChargeDelay);
+    bool char ge    = (gameTime - g_lastChargeTime >= g_ChargeDelay);
     bool beacon    = (gameTime - g_lastBeaconTime >= g_BeaconDelay);
     bool ping      = (gameTime - g_lastPingTime >= g_PingDelay);
 
-    if (charge)
+    if (char ge)
         g_lastChargeTime = gameTime;
 
     if (beacon)
@@ -182,7 +182,7 @@ public Action Medic_Timer(Handle timer, any value)
         {
             if (IsClientInGame(client) && IsPlayerAlive(client))
             {
-                new team = GetClientTeam(client);
+                int team = GetClientTeam(client);
                 if (team >= 2 && team <= 3)
                 {
                     if (TF2_GetPlayerClass(client) == TFClass_Medic)
@@ -194,7 +194,7 @@ public Action Medic_Timer(Handle timer, any value)
                             float UberCharge = TF2_GetUberLevel(client);
                             if (UberCharge < 1.0)
                             {
-                                if (charge)
+                                if (char ge)
                                 {
                                     float amt = NativeAmount[client];
                                     UberCharge += (amt > 0.0) ? amt : GetConVarFloat(g_ChargeAmount);
@@ -227,7 +227,7 @@ public Action Medic_Timer(Handle timer, any value)
 
 BeaconPing(client,bool ping)
 {
-    new team = GetClientTeam(client);
+    int team = GetClientTeam(client);
 
     float vec[3];
     GetClientAbsOrigin(client, vec);
@@ -286,7 +286,7 @@ public Native_ControlUberCharger(Handle plugin,numParams)
 
 public Native_SetUberCharger(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     NativeMedicEnabled[client] = GetNativeCell(2);
     NativeAmount[client] = float GetNativeCell(3);
 }

@@ -83,7 +83,7 @@ public Plugin myinfo = {
 
    041026		0.5			Now uses fakemeta again. Long time no see! :-)
 
-   Sentry doesn't lose its target if another enemy runs into the line of fire; the other enemy will now be the current target of the sentry.
+   Sentry doesn't lose its target if another enemy runs int o the line of fire; the other enemy will now be the current target of the sentry.
 
    Should now not be able to run onto a sentry base while building to mess things up.
 
@@ -95,7 +95,7 @@ Fatter explosions.
 
 Can now only upgrade sentries your team has built. :-)
 
-You can now just run into a sentry and it will be upgraded if you have the money for it.
+You can now just run int o a sentry and it will be upgraded if you have the money for it.
 
 Look at a sentry your team has built and you will see its health and level printed in center of screen.
 
@@ -147,7 +147,7 @@ Added info to player when they log on so they know how they can build sentries (
 	Point at a sentry and press sentry_build to upgrade it, if you are near enough and have the money.
 	You can also upgrade using the menu, just point at the sentry first beforing running sentry_menu cmd.
 
-	Sentries and upgrades now cost money! I do make these plugins for free, but I will charge you for each sentry you build. ;-)
+	Sentries and upgrades now cost money! I do make these plugins for free, but I will char ge you for each sentry you build. ;-)
 
 	Colors: Sentries have different colors, based on team and if you want also a random color. You can specify how you want this with the defines...
 
@@ -219,11 +219,11 @@ int sentry_max, sentry_cost1, sentry_cost2, sentry_cost3, sentry_team;
 #define BOT_NEXT_MIN			0.0				// next = after building a sentry, this specifies the time a bot will wait until considering about waittime again (seconds)
 #define BOT_NEXT_MAX			120.0
 // These are per sentry level, 1-3
-new const g_SENTRYFRAGREWARDS[3] = {300, 150, 150}		// how many $ you get if your sentry frags someone. If you built and upgraded to level 3 you would get $300 + $150 = $450. If built and upgraded all you would get $600.
-new const g_DMG[3] = {5, 10, 15}						// how much damage a bullet from a sentry does per hit
-new const float g_THINKFREQUENCIES[3] = {2.0, 1.0, 0.5}	// how often, in seconds, a sentry searches for targets when not locked at a target, a lower value means a sentry will lock on targets faster
-new const float g_HITRATIOS[3] = {0.6, 0.75, 0.85}		// how good a sentry is at hitting its target. 1.0 = always hit, 0.0 = never hit
-new const float g_HEALTHS[3] = {400.0, 800.0, 1600.0}	// how many HP a sentry has. Increase to make sentry sturdier
+static const int g_SENTRYFRAGREWARDS[3] = {300, 150, 150}		// how many $ you get if your sentry frags someone. If you built and upgraded to level 3 you would get $300 + $150 = $450. If built and upgraded all you would get $600.
+static const int g_DMG[3] = {5, 10, 15}						// how much damage a bullet from a sentry does per hit
+static const float g_THINKFREQUENCIES[3] = {2.0, 1.0, 0.5}	// how often, in seconds, a sentry searches for targets when not locked at a target, a lower value means a sentry will lock on targets faster
+static const float g_HITRATIOS[3] = {0.6, 0.75, 0.85}		// how good a sentry is at hitting its target. 1.0 = always hit, 0.0 = never hit
+static const float g_HEALTHS[3] = {400.0, 800.0, 1600.0}	// how many HP a sentry has. Increase to make sentry sturdier
 //new const g_COST[3] = {1000, 500, 250};					// fun has a price, first is build cost, the next two upgrade costs
 #define COST_INIT get_pcvar_num(sentry_cost1)
 #define COST_UP get_pcvar_num(sentry_cost2)
@@ -269,7 +269,7 @@ new const float g_HEALTHS[3] = {400.0, 800.0, 1600.0}	// how many HP a sentry ha
 GetSentryPeople(sentry, who) {
 	float people[3];
 	entity_get_vector(sentry, SENTRY_VEC_PEOPLE, people);
-	return floatround(people[who]);
+	return float round(people[who]);
 }
 SetSentryPeople(sentry, who, is) {
 	float people[3];
@@ -568,11 +568,11 @@ IncreaseSentryCount(id, sentryEntity) {
 
 	int name[32];
 	get_user_name(id, name, 31);
-	new CsTeams:builderTeam = cs_get_user_team(id);
+	int CsTeams:builderTeam = cs_get_user_team(id);
 	for(int i= 1; i <= g_MAXPLAYERS; i++) {
 		if (!is_user_connected(i) || !is_user_alive(i) || cs_get_user_team(i) != builderTeam || id == i)
 			continue;
-		client_print(i, print_center, "%s has built a sentry gun %d units away from you", name, floatround(entity_range(i, sentryEntity)));
+		client_print(i, print_center, "%s has built a sentry gun %d units away from you", name, float round(entity_range(i, sentryEntity)));
 
 		//client_print(parm[0], print_chat, "Plotting closest sentry %d on radar: %f %f %f", parm[1], sentryOrigin[0], sentryOrigin[1], sentryOrigin[2]);
 		message_begin(MSG_ONE, g_msgHostagePos, {0,0,0}, i);
@@ -614,7 +614,7 @@ SetHasSentry(id, bool trueOrFalse) {
 		g_hasSentries |= (1<<(id - 1));
 		int name[32];
 		get_user_name(id, name, 31);
-		new CsTeams:builderTeam = cs_get_user_team(id);
+		CsTeams builderTeam = cs_get_user_team(id);
 		for(int i= 0; i < g_MAXPLAYERS; i++) {
 			if (!is_user_connected(i) || !is_user_alive(i) || cs_get_user_team(i) != builderTeam || id == i)
 				continue;
@@ -654,7 +654,7 @@ stock bool CreateSentryBase(float origin[3], creator) {
 
 	// Set sentrybase health
 	int healthstring[16];
-	num_to_str(floatround(g_HEALTHS[0]), healthstring, 15);
+	num_to_str(float round(g_HEALTHS[0]), healthstring, 15);
 	DispatchKeyValue(entbase, "health", healthstring);
 	DispatchKeyValue(entbase, "material", "6");
 
@@ -744,7 +744,7 @@ public createsentryhead(parms[2]) {
 	g_sentries[g_sentriesNum] = ent;
 
 	int healthstring[16];
-	num_to_str(floatround(g_HEALTHS[0]), healthstring, 15);
+	num_to_str(float round(g_HEALTHS[0]), healthstring, 15);
 	DispatchKeyValue(ent, "health", healthstring);
 	DispatchKeyValue(ent, "material", "6");
 
@@ -916,7 +916,7 @@ sentry_pendulum(sentry, float deltaTime) {
 					 }
 				 }
 				 entity_set_float(sentry, SENTRY_FL_RADARANGLE, radarAngle);
-				 set_pev(sentry, PEV_SENTRY_TILT_RADAR, floatround(radarAngle)); //entity_set_byte(sentry, SENTRY_TILT_RADAR, floatround(radarAngle));
+				 set_pev(sentry, PEV_SENTRY_TILT_RADAR, float round(radarAngle)); //entity_set_byte(sentry, SENTRY_TILT_RADAR, float round(radarAngle));
 			 }
 
 			 return;
@@ -1082,7 +1082,7 @@ stock create_explosion(float origin_[3]) {
 		if (distance <= SENTRYEXPLODERADIUS) {
 			flDmgToDo = dmgbase - (dmgbase * (distance / SENTRYEXPLODERADIUS));
 			//client_print(i, print_chat, "flDmgToDo = %f, dmgbase = %f, distance = %f, SENTRYEXPLODERADIUS = %f", flDmgToDo, dmgbase, distance, SENTRYEXPLODERADIUS)
-			newHealth = get_user_health(i) - floatround(flDmgToDo);
+			newHealth = get_user_health(i) - float round(flDmgToDo);
 			if (newHealth <= 0) {
 				// Somehow if player is killed here server crashes out saying some message (Damage or Death) has not been sent yet when trying to send another message.
 				// By delaying death with 0.0 (huuh?) seconds this seems to be fixed.
@@ -1093,8 +1093,8 @@ stock create_explosion(float origin_[3]) {
 			set_user_health(i, newHealth);
 
 			message_begin(MSG_ONE_UNRELIABLE, g_msgDamage, {0,0,0}, i);
-			write_byte(floatround(flDmgToDo));
-			write_byte(floatround(flDmgToDo));
+			write_byte(float round(flDmgToDo));
+			write_byte(float round(flDmgToDo));
 			write_long(DMG_BLAST);
 			write_coord(origin[0]);
 			write_coord(origin[1]);
@@ -1371,13 +1371,13 @@ public sentry_think(parm[1]) {
 
 		hitent = trace_line(ent, sentryOrigin, targetOrigin, hitOrigin);
 		if (hitent == entity_get_edict(ent, SENTRY_ENT_BASE)) {
-			// We traced into our base, do another trace from there
+			// We traced int o our base, do another trace from there
 			hitent = trace_line(hitent, hitOrigin, targetOrigin, hitOrigin);
 			//client_print(0, print_chat, "%d: I first hit my own base, and after doing another trace I hit %d, target: %d", ent, hitent, target)
 		}
 
 		if (hitent != target && is_user_alive(hitent) && entity_get_int(ent, SENTRY_INT_TEAM) != get_user_team(hitent)) {
-			// Another new enemy target got into scope, pick this new enemy as a new target...
+			// Another new enemy target got int o scope, pick this new enemy as a new target...
 			target = hitent;
 			entity_set_edict(ent, SENTRY_ENT_TARGET, hitent);
 		}
@@ -1409,14 +1409,14 @@ public sentry_think(parm[1]) {
 
 				float x = hitOrigin[0] - sentryOrigin[0];
 				float z = hitOrigin[1] - sentryOrigin[1];
-				float radians = floatatan(z/x, radian);
+				float radians = float atan(z/x, radian);
 				sentryAngle[1] = radians * g_ONEEIGHTYTHROUGHPI;
 				if (hitOrigin[0] < sentryOrigin[0])
 					sentryAngle[1] -= 180.0;
 
 				float h = hitOrigin[2] - sentryOrigin[2];
 				float b = vector_distance(sentryOrigin, hitOrigin);
-				radians = floatatan(h/b, radian);
+				radians = float atan(h/b, radian);
 				sentryAngle[0] = radians * g_ONEEIGHTYTHROUGHPI;
 
 				sentryAngle[0] += random_float(-10.0 * hitRatio, 10.0 * hitRatio); // aim is a little off here :-)
@@ -1505,7 +1505,7 @@ public sentry_think(parm[1]) {
 
 		hitent = trace_line(ent, sentryOrigin, playerOrigin, hitOrigin);
 		if (hitent == entity_get_edict(ent, SENTRY_ENT_BASE)) {
-			// We traced into our base, do another trace from there
+			// We traced int o our base, do another trace from there
 			hitent = trace_line(hitent, hitOrigin, playerOrigin, hitOrigin);
 			//client_print(0, print_chat, "%d (scanning): I first hit my own base, and after doing another trace I hit %d, target: %d", ent, hitent, i);
 		}
@@ -1584,9 +1584,9 @@ stock sentry_damagetoplayer(sentry, sentryLevel, float sentryOrigin[3], target) 
 	write_byte(g_DMG[sentryLevel]); // write_byte(DMG_SAVE);
 	write_byte(g_DMG[sentryLevel]);
 	write_long(DMG_BULLET);
-	write_coord(floatround(sentryOrigin[0]));
-	write_coord(floatround(sentryOrigin[1]));
-	write_coord(floatround(sentryOrigin[2]));
+	write_coord(float round(sentryOrigin[0]));
+	write_coord(float round(sentryOrigin[1]));
+	write_coord(float round(sentryOrigin[2]));
 	message_end();
 }
 
@@ -1623,11 +1623,11 @@ sentry_turntotarget(ent, float sentryOrigin[3], target, float closestOrigin[3]) 
 		float z = closestOrigin[1] - sentryOrigin[1];
 		//float y = closestOrigin[2] - sentryOrigin[2];
 		/*
-		//newAngle[0] = floatasin(x/floatsqroot(x*x+y*y), degrees);
-		newAngle[1] = floatasin(z/floatsqroot(x*x+z*z), degrees);
+		//newAngle[0] = float asin(x/float sqroot(x*x+y*y), degrees);
+		newAngle[1] = float asin(z/float sqroot(x*x+z*z), degrees);
 		*/
 
-		float radians = floatatan(z/x, radian);
+		float radians = float atan(z/x, radian);
 		newAngle[1] = radians * g_ONEEIGHTYTHROUGHPI;
 		if (closestOrigin[0] < sentryOrigin[0]);
 
@@ -1640,15 +1640,15 @@ sentry_turntotarget(ent, float sentryOrigin[3], target, float closestOrigin[3]) 
 		// Set tilt
 		float h = closestOrigin[2] - sentryOrigin[2];
 		float b = vector_distance(sentryOrigin, closestOrigin);
-		radians = floatatan(h/b, radian);
+		radians = float atan(h/b, radian);
 		float degs = radians * g_ONEEIGHTYTHROUGHPI;
 		// Now adjust EV_BYTE_controller1
 		// Each degree corresponds to about 100/256 "bytes", = ~0,39 byte / degree (ok this is not entirely true, just tweaked for now with SENTRYTILTRADIUS)
 		float RADIUS = SENTRYTILTRADIUS; // get_cvar_float("sentry_tiltradius");
 		float degreeByte = RADIUS/256.0; // tweak radius later
 		float tilt = 127.0 - degreeByte * degs; // 127 is center of 256... well, almost
-		//client_print(GetSentryPeople(ent, OWNER), print_chat, "%d: Setting tilt to %d", ent, floatround(tilt));
-		set_pev(ent, PEV_SENTRY_TILT_TURRET, floatround(tilt)); //entity_set_byte(ent, SENTRY_TILT_TURRET, floatround(tilt));
+		//client_print(GetSentryPeople(ent, OWNER), print_chat, "%d: Setting tilt to %d", ent, float round(tilt));
+		set_pev(ent, PEV_SENTRY_TILT_TURRET, float round(tilt)); //entity_set_byte(ent, SENTRY_TILT_TURRET, float round(tilt));
 		entity_set_vector(ent, EV_VEC_angles, newAngle);
 	}
 	else {
@@ -1798,9 +1798,9 @@ public SentryRadarBlink(parm[2]) {
 	message_begin(MSG_ONE, g_msgHostagePos, {0,0,0}, parm[0]);
 	write_byte(parm[0]);
 	write_byte(SENTRY_RADAR);
-	write_coord(floatround(sentryOrigin[0]));
-	write_coord(floatround(sentryOrigin[1]));
-	write_coord(floatround(sentryOrigin[2]));
+	write_coord(float round(sentryOrigin[0]));
+	write_coord(float round(sentryOrigin[1]));
+	write_coord(float round(sentryOrigin[2]));
 	message_end();
 
 	message_begin(MSG_ONE, g_msgHostageK, {0,0,0}, parm[0]);
@@ -2298,7 +2298,7 @@ public forward_traceline_post(float start[3], float end[3], noMonsters, player) 
 	int level = entity_get_int(sentry, SENTRY_INT_LEVEL);
 	int upgradeInfo[128];
 	if (PlayerCanUpgradeSentry(player, sentry))
-		format(upgradeInfo, 127, "^n(Run into me to upgrade me to level %d for $%d)", level + 2, g_COST(level + 1));
+		format(upgradeInfo, 127, "^n(Run int o me to upgrade me to level %d for $%d)", level + 2, g_COST(level + 1));
 	else if (level < SENTRY_LEVEL_3)
 		format(upgradeInfo, 127, "^n(Upgrade cost: $%d)", g_COST(level + 1));
 	else
@@ -2306,7 +2306,7 @@ public forward_traceline_post(float start[3], float end[3], noMonsters, player) 
 
 	int tempStatusBuffer[256];
 
-	format(tempStatusBuffer, 255, "Health: %d/%d^nBase health: %d/%d^nLevel: %d%s", floatround(health), floatround(g_HEALTHS[level]), floatround(basehealth), floatround(g_HEALTHS[0]), level + 1, upgradeInfo);
+	format(tempStatusBuffer, 255, "Health: %d/%d^nBase health: %d/%d^nLevel: %d%s", float round(health), float round(g_HEALTHS[level]), float round(basehealth), float round(g_HEALTHS[0]), level + 1, upgradeInfo);
 	SetStatusTrigger(player, true);
 	if (!task_exists(TASKID_SENTRYSTATUS + player) || !equal(tempStatusBuffer, g_sentryStatusBuffer[player - 1])) {
 		// may still exist if !equal was true, so we remove previous task. This happens when sentry is being fired upon, player gets enough money to upgrade or sentry
@@ -2518,19 +2518,19 @@ stock getsingledigit(digit[], numbers[], length, bool getzero = false) {
 	return true;
 }
 
-stock jghg_trim(stringtotrim[], len, charstotrim, bool fromleft = true) {
-	if (charstotrim <= 0)
+stock jghg_trim(stringtotrim[], len, char stotrim, bool fromleft = true) {
+	if (char stotrim <= 0)
 		return;
 
 	if (fromleft) {
 		int maxlen = strlen(stringtotrim);
-		if (charstotrim > maxlen)
-			charstotrim = maxlen;
+		if (char stotrim > maxlen)
+			char stotrim = maxlen;
 
-		format(stringtotrim, len, "%s", stringtotrim[charstotrim]);
+		format(stringtotrim, len, "%s", stringtotrim[char stotrim]);
 	}
 	else {
-		int maxlen = strlen(stringtotrim) - charstotrim;
+		int maxlen = strlen(stringtotrim) - char stotrim;
 		if (maxlen < 0)
 			maxlen = 0;
 

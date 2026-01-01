@@ -39,7 +39,7 @@ native ControlPiggyback(bool plugin_only=true);
  * @param distance  The distance from which someone can be picked up. (-1 to use convar)
  * @return			none
  */
-native GivePiggyback(client,PiggyMethod:method=PiggyMethod_Default,Float distance=-1.0);
+native GivePiggyback(client,PiggyMethod:method=PiggyMethod_Default,float distance=-1.0);
 
 /**
  * Takes the player's "piggyback" away
@@ -66,7 +66,7 @@ native Piggyback(client,target=0);
  * @param distance 	The distance between client and target
  * @param pickedup 	Tre if the target was picked up or false if he jumped off
  */
-forward Action OnPlayerPiggyback(rider, carrier, bool pickedup, Float distance);
+forward Action OnPlayerPiggyback(rider, carrier, bool pickedup, float distance);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

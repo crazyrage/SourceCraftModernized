@@ -167,7 +167,7 @@ public Action OnRaceDeselected(client,oldrace,newrace)
         SetSpeed(client,-1.0, true);
 
         // Turn off Immunities
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, false);
     }
     else
@@ -228,7 +228,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
 public OnItemPurchase(client,item)
 {
-    new race=GetRace(client);
+    int race=GetRace(client);
     if (race == raceID && IsValidClientAlive(client))
     {
         if (g_bootsItem < 0)
@@ -295,7 +295,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
 
         ResetTeleport(client);
 
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
         int speed_level = GetUpgradeLevel(client,raceID,speedID);
@@ -317,7 +317,7 @@ public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacke
         if (blink_level && cfgAllowTeleport)
             TeleporterAttacked(attacker_index,raceID,teleportID);
 
-        new weapons_level=GetUpgradeLevel(attacker_index,raceID,missileID);
+        int weapons_level=GetUpgradeLevel(attacker_index,raceID,missileID);
         if (weapons_level > 0)
         {
             if (MissileAttack(raceID, missileID, weapons_level, event, damage+absorbed, victim_index,

@@ -98,7 +98,7 @@ public Action Command_Rof(client, args)
 	
 	if (HasTarget)
 	{
-		decl target_list[MAXPLAYERS], target_count, bool tn_is_ml;
+		int target_list[MAXPLAYERS], target_count, bool tn_is_ml;
 		
 		if ((target_count = ProcessTargetString(
 				arg,
@@ -177,12 +177,12 @@ public Action OnPlayerRunCmd(client, &buttons, &impulse, float vel[3], float ang
 				
 				if (strcmp(weap, "tf_weapon_particle_cannon") == 0)
 				{
-					float charge = GetEntPropFloat(ent, Prop_Send, "m_flChargeBeginTime");
-					float chargemod = charge-4.0;
-					if (charge != 0 && LastCharge[client] != chargemod)
+					float char ge = GetEntPropFloat(ent, Prop_Send, "m_flChargeBeginTime");
+					float char gemod = char ge-4.0;
+					if (char ge != 0 && LastCharge[client] != char gemod)
 					{
-						LastCharge[client] = chargemod;
-						SetEntPropFloat(ent, Prop_Send, "m_flChargeBeginTime", chargemod);
+						LastCharge[client] = char gemod;
+						SetEntPropFloat(ent, Prop_Send, "m_flChargeBeginTime", char gemod);
 					}
 				}
 			}

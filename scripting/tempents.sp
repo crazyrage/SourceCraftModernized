@@ -7,7 +7,7 @@
 
 #define TE_VERSION "$Revision$"
 
-// SDK Handles
+// SDK Handle s
 Handle hGameConf;
 Handle hEyePosition;
 Handle hEyeAngles;

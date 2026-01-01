@@ -1,6 +1,6 @@
 /**
  * File: War3Source_Events.inc
- * Description: Forwards to hook into
+ * Description: Forwards to hook int o
  * Author(s): War3Source Team  
  */
 

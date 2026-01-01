@@ -24,7 +24,7 @@ Have a nice day now
  * @param iFlags		beam flags (read sdktools_tempents.inc)
  * @noreturn
  */
-stock TE_SetupBeamEnts(StartEntity,EndEntity,ModelIndex,HaloIndex,StartFrame,FrameRate,Float fLife,Float fWidth,Float fEndWidth,FadeLength,Float fAmplitude,iSpeed,color[4],iFlags)
+stock TE_SetupBeamEnts(StartEntity,EndEntity,ModelIndex,HaloIndex,StartFrame,FrameRate,float fLife,float fWidth,float fEndWidth,FadeLength,float fAmplitude,iSpeed,color[4],iFlags)
 {
 	TE_Start("BeamEnts");
 	TE_WriteNum("m_nModelIndex",ModelIndex);
@@ -56,7 +56,7 @@ stock TE_SetupBeamEnts(StartEntity,EndEntity,ModelIndex,HaloIndex,StartFrame,Fra
  * @param amount		amount
  * @noreturn
  */
-stock TE_SetupBloodStream(const Float vecOrigin[3],const Float vecDirection[3], color[4], amount)
+stock TE_SetupBloodStream(const float vecOrigin[3],const float vecDirection[3], color[4], amount)
 {
 	TE_Start("Blood Stream");
 	TE_WriteVector("m_vecOrigin[0]",vecOrigin);
@@ -80,7 +80,7 @@ stock TE_SetupBloodStream(const Float vecOrigin[3],const Float vecDirection[3], 
  * @param fSpeed		Speed of bubbles
  * @noreturn
  */
-stock TE_SetupBubbles(const Float vecMins[3], const Float vecMaxs[3], ModelIndex, Float fHeight,nCount,Float fSpeed)
+stock TE_SetupBubbles(const float vecMins[3], const float vecMaxs[3], ModelIndex, float fHeight,nCount,float fSpeed)
 {
 	TE_Start("Bubbles");
 	TE_WriteVector("m_vecMins",vecMins);
@@ -103,7 +103,7 @@ stock TE_SetupBubbles(const Float vecMins[3], const Float vecMaxs[3], ModelIndex
  * @param fSpeed		Speed of bubbles
  * @noreturn
  */
-stock TE_SetupBubbleTrail(const Float vecMins[3], const Float vecMaxs[3],ModelIndex,Float fWaterZ,count,Float fSpeed)
+stock TE_SetupBubbleTrail(const float vecMins[3], const float vecMaxs[3],ModelIndex,float fWaterZ,count,float fSpeed)
 {
 	TE_Start("Bubble Trail");
 	TE_WriteVector("m_vecMins",vecMins);
@@ -127,7 +127,7 @@ stock TE_SetupBubbleTrail(const Float vecMins[3], const Float vecMaxs[3],ModelIn
  * @param fDecay		Decay of dynamic light
  * @noreturn
  */
-stock TE_SetupDynamicLight(const Float vecOrigin[3], r,g,b,iExponent,Float fRadius,Float fTime,Float fDecay)
+stock TE_SetupDynamicLight(const float vecOrigin[3], r,g,b,iExponent,float fRadius,float fTime,float fDecay)
 {
 	TE_Start("Dynamic Light");
 	TE_WriteVector("m_vecOrigin",vecOrigin);
@@ -154,7 +154,7 @@ stock TE_SetupDynamicLight(const Float vecOrigin[3], r,g,b,iExponent,Float fRadi
  * @param flSpread		Accuracy of the Fire Bullets.
  * @noreturn
  */
-stock TE_SetupFireBullets(const Float vecOrigin[3],const Float vecAngles[3], iWeaponID, iMode,iSeed,iPlayer,Float flSpread)
+stock TE_SetupFireBullets(const float vecOrigin[3],const float vecAngles[3], iWeaponID, iMode,iSeed,iPlayer,float flSpread)
 {
 	TE_Start("Fire Bullets");
 	TE_WriteVector("m_vecOrigin",vecOrigin);
@@ -178,7 +178,7 @@ stock TE_SetupFireBullets(const Float vecOrigin[3],const Float vecAngles[3], iWe
  * @param materialType		Foot Print decal material type
  * @noreturn
  */
-stock TE_SetupFootPrintDecal(const Float vecOrigin[3],const Float vecDirection[3], ent,index,materialType = 'C')
+stock TE_SetupFootPrintDecal(const float vecOrigin[3],const float vecDirection[3], ent,index,materialType = 'C')
 {
 	TE_Start("Footprint Decall");
 	TE_WriteVector("m_vecOrigin",vecOrigin);
@@ -197,7 +197,7 @@ stock TE_SetupFootPrintDecal(const Float vecOrigin[3],const Float vecDirection[3
  * @param Type			Gauss Explosion type (mod specific)
  * @noreturn
  */
-stock TE_SetupGaussExplosion(const Float vecOrigin[3],const Float vecDirection[3], Type)
+stock TE_SetupGaussExplosion(const float vecOrigin[3],const float vecDirection[3], Type)
 {
 	TE_Start("GaussExplosion");
 	TE_WriteVector("m_vecOrigin[0]",vecOrigin);
@@ -228,7 +228,7 @@ stock TE_SetupKillPlayerAttachments(player)
  * @param reversed		?
  * @noreturn
  */   
-stock TE_SetupLargeFunnel(const Float vecOrigin[3], modelIndex, reversed)
+stock TE_SetupLargeFunnel(const float vecOrigin[3], modelIndex, reversed)
 {
 	TE_Start("Large Funnel");
 	TE_WriteVector("m_vecOrigin[0]",vecOrigin);
@@ -261,7 +261,7 @@ stock TE_SetupPlayerAnimEvent(player,event)
  * @param index			? 
  * @noreturn
  */
-stock TE_SetupBSPDecal(const Float vecOrigin[3], entity, index)
+stock TE_SetupBSPDecal(const float vecOrigin[3], entity, index)
 {
 	TE_Start("BSP Decal");
 	TE_WriteVector("m_vecOrigin",vecOrigin);
@@ -278,7 +278,7 @@ stock TE_SetupBSPDecal(const Float vecOrigin[3], entity, index)
  * @param player		Bomb owner (guess)
  * @noreturn
  */   
-stock TE_SetupPlantBomb(const Float vecOrigin[3], player)
+stock TE_SetupPlantBomb(const float vecOrigin[3], player)
 {
 	TE_Start("Bomb Plant");
 	TE_WriteVector("m_vecOrigin",vecOrigin);
@@ -295,7 +295,7 @@ stock TE_SetupPlantBomb(const Float vecOrigin[3], player)
  * @param player		Specific player
  * @noreturn
  */ 
-stock TE_SetupPlayerDecal(const Float vecOrigin[3], entity, player)
+stock TE_SetupPlayerDecal(const float vecOrigin[3], entity, player)
 {
 	TE_Start("Player Decal");
 	TE_WriteVector("m_vecOrigin",vecOrigin);
@@ -314,7 +314,7 @@ stock TE_SetupPlayerDecal(const Float vecOrigin[3], entity, player)
  * @param index			?
  * @noreturn
  */ 
-stock TE_SetupProjectedDecal(const Float vecOrigin[3], const Float angRotation[3], Float flDistance, index)
+stock TE_SetupProjectedDecal(const float vecOrigin[3], const float angRotation[3], float flDistance, index)
 {
 	TE_Start("Projected Decal");
 	TE_WriteVector("m_vecOrigin",vecOrigin);
@@ -344,7 +344,7 @@ stock TE_SetupRadioIcon(AttachToClient)
  * @param vecEnd		End position of show line
  * @noreturn
  */ 
-stock TE_SetupShowLine(const Float vecOrigin[3], const Float vecEnd[3])
+stock TE_SetupShowLine(const float vecOrigin[3], const float vecEnd[3])
 {
 	TE_Start("Show Line");
 	TE_WriteVector("m_vecOrigin[0]",vecOrigin);

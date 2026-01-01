@@ -28,7 +28,7 @@ native bool IsMole(int client);
 native SetMole(int client, bool value=true);
 
 /**
- * Transform a player into a mole by teleporting him to the enemies spawn.
+ * Transform a player int o a mole by teleporting him to the enemies spawn.
  *
  * @param client 	Client to query
  * @return			true if the player is a mole.

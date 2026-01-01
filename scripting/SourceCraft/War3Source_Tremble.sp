@@ -90,9 +90,9 @@ new float BuffInvis[5]={1.0,0.9,0.8,0.72,0.66};
 
 //-> ANIMATION SET :
 #define shudder_idle "idle"
-#define shudder_attack "charge_hit"
+#define shudder_attack "char ge_hit"
 #define shudder_hurt "pain"
-#define shudder_move "charge_loop"
+#define shudder_move "char ge_loop"
 
 //-> INFORMATION SETTINGS:
 #define shudder_classname "shudder" //used for dmg classname too
@@ -396,11 +396,11 @@ public OnW3TakeDmgBullet( victim, attacker, float damage )
 
 
 ImpalerFX(attacker,victim) {
-	new float apos[3];
+	int float apos[3];
 	GetClientAbsOrigin(attacker,apos);
-	new float vpos[3];
+	int float vpos[3];
 	GetClientAbsOrigin(victim,vpos);
-	new float vpos2[3];
+	int float vpos2[3];
 	GetClientAbsOrigin(victim,vpos2);
 	apos[2]+=80;
 	vpos[2]+=35;
@@ -419,8 +419,8 @@ ImpalerFX(attacker,victim) {
         TE_SendToAll();
     #endif
 
-	new float fx_delay = 0.1;
-	new float fx_showtime = 0.1;	
+	int float fx_delay = 0.1;
+	int float fx_showtime = 0.1;	
 	int axis = GetRandomInt(0,1);
 	vpos[axis] += 150;
 	vpos2[axis] += 150;
@@ -596,7 +596,7 @@ public RemoveMount(client,bool showexplosion)
 	nTrembleCount[client]--;
 }
 
-public Action CalcTremble(Handle timer, any:uid)
+public Action CalcTremble(Handle timer, any uid)
 {
 	int client;
 	for(int i=0;i<TREMBLEMAX;i++)
@@ -623,17 +623,17 @@ public Action CalcTremble(Handle timer, any:uid)
 public MountAoE(owner,tremble,level)
 {
 	int team=GetClientTeam(owner);
-	new float start_pos[3];
-	new float end_pos[3];
+	int float start_pos[3];
+	int float end_pos[3];
 	
-	new float tempVec1[]={0.0,0.0,-2.0};
-	new float tempVec2[]={0.0,0.0,150.0};
+	int float tempVec1[]={0.0,0.0,-2.0};
+	int float tempVec2[]={0.0,0.0,150.0};
 	AddVectors(SavedPos[tremble],tempVec1,start_pos);
 	AddVectors(SavedPos[tremble],tempVec2,end_pos);
 	
-	new float BeamXY[3];
+	int float BeamXY[3];
 	for(int x=0;x<3;x++) BeamXY[x]=start_pos[x]; //only compare xy
-	new float BeamZ= BeamXY[2];
+	int float BeamZ= BeamXY[2];
 	BeamXY[2]=0.0;
 	
 	int dice = GetRandomInt(0,3);
@@ -657,7 +657,7 @@ public MountAoE(owner,tremble,level)
                 new float TrembleDist = GetConVarFloat(TrembleDistCvar);
     #endif
 
-	new float dist_tr=TrembleDist-30.0;
+	int float dist_tr=TrembleDist-30.0;
 	if(dist_tr<1)
 		dist_tr=170.0;
 	TE_SetupDynamicLight(start_pos, 140,74,0,2,dist_tr,1.5,2.0);
@@ -667,8 +667,8 @@ public MountAoE(owner,tremble,level)
 	TE_SendToAll();
 #endif
 
-	new float VictimPos[3];
-	new float tempZ;
+	int float VictimPos[3];
+	int float tempZ;
 	for(int i=1;i<=MaxClients;i++)
 	{
 		if(ValidPlayer(i,true)&& GetClientTeam(i)==team )
@@ -741,7 +741,7 @@ stock TE_SetupDynamicLight(const float vecOrigin[3], r,g,b,iExponent,float fRadi
 
 public Action DoSwarm(client)
 {
-    new level=War3_GetSkillLevel(client,thisRaceID,SKILL_1);
+    int level=War3_GetSkillLevel(client,thisRaceID,SKILL_1);
     if(level>0)
     {
 #if defined SOURCECRAFT
@@ -807,7 +807,7 @@ public OnUltimateCommand(client,race,bool pressed)
 {
     if(race==thisRaceID && pressed && ValidPlayer(client,true))
     {
-        new ult_level=War3_GetSkillLevel(client,race,ULT);
+        int ult_level=War3_GetSkillLevel(client,race,ULT);
         if(ult_level>0)
         {
             if(!Silenced(client) && War3_SkillNotInCooldown(client,thisRaceID,ULT,true))
@@ -830,7 +830,7 @@ public OnUltimateCommand(client,race,bool pressed)
                         {
                             ShudderEntity[client]=npc_ent;
                             int npcteam = GetClientTeam(client);
-                            decl char entname[16];
+                            char entname[16];
                             Format(entname, sizeof(entname), "shudder%i_team%i",client,npcteam);
                             SetEntityModel(npc_ent, "models/antlion_guard.mdl");
                             DispatchKeyValue(npc_ent, "StartDisabled", "false");
@@ -922,7 +922,7 @@ public OnUltimateCommand(client,race,bool pressed)
 /// Set View Angles
 public SetEntityAimToClient( edict, target)
 {
-	new float spos[3],  float epos[3], float vecles[3], float angles[3];
+	int float spos[3],  float epos[3], float vecles[3], float angles[3];
 	GetEntPropVector(edict, Prop_Send, "m_vecOrigin", spos);
 	GetClientAbsOrigin( target, epos );
 	SubtractVectors( epos, spos, vecles );
@@ -947,7 +947,7 @@ void Shudder_Animate(entity,const char[] animation[],float duration)
     }
 }
 
-public Action Shudder_Idle( Handle timer, any:ref )//same as Timer_IdleAnim except the bool check
+public Action Shudder_Idle( Handle timer, any ref )//same as Timer_IdleAnim except the bool check
 {
     int caller = EntRefToEntIndex(ref);
     if (IsValidEntity(caller) && IsNPC[caller])
@@ -1027,9 +1027,9 @@ void Shudder_Attack(entity,owner,target,mindamage,maxdamage,bool flashscreen,boo
 	{
 		if(LastHit[target]<GetGameTime()-0.50)
 		{
-			decl float AttackerPos[3];
+			float AttackerPos[3];
 			GetEntPropVector(target, Prop_Send, "m_vecOrigin", AttackerPos);
-			decl char classname[32]; 
+			char classname[32]; 
 			GetEdictClassname(entity, classname, sizeof(classname));		
 
 			if(push)
@@ -1064,7 +1064,7 @@ void Shudder_Move(entity,float StartPos[3],float EndPos[3],float MoveSpeed)
 	{
 		/*
 		What I'm doing here?...
-		new float float TargetPos[3];
+		new float TargetPos[3];
 		new float bp0, float bp1, float bp2;
 
 		bp0 = SquareRoot( StartPos[0] -= StartPos[0] *= 2);
@@ -1113,7 +1113,7 @@ void Shudder_Move(entity,float StartPos[3],float EndPos[3],float MoveSpeed)
 }
 
 /// Core
-public Action Shudder_Think( Handle timer, any:ref )
+public Action Shudder_Think( Handle timer, any ref )
 {
     int caller = EntRefToEntIndex(ref);
     if (caller > 0)
@@ -1128,14 +1128,14 @@ public Action Shudder_Think( Handle timer, any:ref )
                 int ClosestTarget = 0;
                 new float Distance;
                 new float ClosestDistance = ShudderRange[SkillLevel]; //maxrange
-                decl float StartPos[3];
-                //decl float EndPos[3];
+                float StartPos[3];
+                //float EndPos[3];
                 GetEntPropVector(caller, Prop_Send, "m_vecOrigin", StartPos);
                 for (int i = 1; i <= MaxClients; i++)
                 {
                     if(ValidPlayer(i,true) && GetClientTeam(i) != GetClientTeam(owner))
                     {
-                        decl float TargetPos[3];
+                        float TargetPos[3];
                         GetClientAbsOrigin(i, TargetPos);
                         Distance = GetVectorDistance(StartPos, TargetPos);
                         if (Distance < ClosestDistance)
@@ -1158,7 +1158,7 @@ public Action Shudder_Think( Handle timer, any:ref )
                 }
                 if(ValidPlayer(ClosestTarget,true))
                 {
-                    decl float EnemyPos[3];
+                    float EnemyPos[3];
                     GetClientAbsOrigin(ClosestTarget, EnemyPos );
                     new float AffectDistance = GetVectorDistance(StartPos, EnemyPos);
                     SetEntityAimToClient( caller, ClosestTarget);
@@ -1170,7 +1170,7 @@ public Action Shudder_Think( Handle timer, any:ref )
                     {
                         SetEntityAimToClient( caller, ClosestTarget);
 
-                        decl float Pos[3];
+                        float Pos[3];
                         GetEntPropVector(caller, Prop_Send, "m_vecOrigin", Pos);
                         Shudder_Move(caller,Pos,EnemyPos,15.0);
                     }
@@ -1190,7 +1190,7 @@ public OnShudderDamage(const char[] output[], caller, activator, float delay)
     {
         if(IsValidEntity(caller))
         {
-            decl char classname[32]; 
+            char classname[32]; 
             if (GetEdictClassname(caller, classname, sizeof(classname) && StrEqual(classname, shudder_classname)))
             {
                 int owner = GetEntPropEnt(caller, Prop_Send, "m_hOwnerEntity");
@@ -1238,7 +1238,7 @@ public OnShudderKilled(const char[] output[], caller, activator, float delay)
     if(IsNPC[caller])
     {
         EmitSoundToAll(NPCDeath,caller);
-        new float pos[3],float angles[3];
+        int float pos[3],float angles[3];
         GetEntPropVector(caller, Prop_Send, "m_vecOrigin", pos);
         GetVectorAngles( pos, angles );
         int owner = GetEntPropEnt(caller, Prop_Send, "m_hOwnerEntity");
@@ -1285,12 +1285,12 @@ SpawnRagdoll(float Position[3],float Angles[3])
     }
 }
 
-public Action Dissolve(Handle timer, any:entref)
+public Action Dissolve(Handle timer, any entref)
 {
     int ragdoll = EntRefToEntIndex(entref);
     if (ragdoll > 0 && IsValidEntity(ragdoll))
     {
-        new char dname[32];
+        int char dname[32];
         Format(dname, sizeof(dname), "dis_%d", ragdoll);
 
         int ent = CreateEntityByName("env_entity_dissolver");
@@ -1308,12 +1308,12 @@ public Action Dissolve(Handle timer, any:entref)
     }
 }
 
-public Action RemoveRagdoll(Handle timer, any:entref)
+public Action RemoveRagdoll(Handle timer, any entref)
 {
     int ragdoll = EntRefToEntIndex(entref);
     if (ragdoll > 0 && IsValidEntity(ragdoll))
     {
-        decl char classname[32]; 
+        char classname[32]; 
         if (GetEdictClassname(ragdoll, classname, sizeof(classname) && StrEqual(classname, "prop_ragdoll")))
         {
             AcceptEntityInput(ragdoll, "kill");
@@ -1332,7 +1332,7 @@ public OnShudderTouch(caller, activator)
     {
         if(IsValidEntity(caller))
         {
-            decl char classname[32]; 
+            char classname[32]; 
             if (GetEdictClassname(caller, classname, sizeof(classname) && StrEqual(classname, shudder_classname)))
             {
                 int owner = GetEntPropEnt(caller, Prop_Send, "m_hOwnerEntity");
@@ -1362,16 +1362,16 @@ public OnShudderTouch(caller, activator)
 public bool IsClientInLOSofEntity(entity,client)
 {
     //Pos1 = entity position | Pos2 = client position
-    decl float Pos1[3];
+    float Pos1[3];
     GetEntPropVector(entity, Prop_Send, "m_vecOrigin", Pos1);
     Pos1[2]+=45;
-    decl float Pos2[3];
+    float Pos2[3];
     GetClientAbsOrigin(client, Pos2);
     whitelist = entity;
     TR_TraceRayFilter(Pos1,Pos2,MASK_SOLID,RayType_EndPoint,AimTargetFilter);
     if(TR_DidHit())
     {
-        new collide=TR_GetEntityIndex();
+        int collide=TR_GetEntityIndex();
         if(collide==client)
         {
             return true;
@@ -1385,14 +1385,14 @@ public bool AimTargetFilter(entity,mask)
 	return !(entity==whitelist);
 }
 
-public bool NpcTraceHitFilter(entity, mask, any:data)
+public bool NpcTraceHitFilter(entity, mask, any data)
 {
 	return false;
 }
 
 // ---- Shudder
 
-public Action Timer_IdleAnim(Handle timer, any:i)
+public Action Timer_IdleAnim(Handle timer, any i)
 {
 	if (i > 0 && IsValidEdict(i)) {
 		SetVariantString("idle");
@@ -1400,7 +1400,7 @@ public Action Timer_IdleAnim(Handle timer, any:i)
 	}
 }
 
-public Action Timer_RemoveTrembleBuff(Handle timer, any:i)
+public Action Timer_RemoveTrembleBuff(Handle timer, any i)
 {
 	if(ValidPlayer(i,false))
 	{
@@ -1409,7 +1409,7 @@ public Action Timer_RemoveTrembleBuff(Handle timer, any:i)
 	}
 }
 
-public Action Timer_LoopSwarm(Handle timer, any:i)
+public Action Timer_LoopSwarm(Handle timer, any i)
 {
 	if(ValidPlayer(i,true))
 	{
@@ -1422,7 +1422,7 @@ public Action Timer_LoopSwarm(Handle timer, any:i)
 			CreateTimer(GetRandomFloat(1.0,1.3), Timer_ReallowEffects, i);
 			new float effectVector1[3];
 			GetClientAbsOrigin(i,effectVector1);
-			decl float effectVector2[3];
+			float effectVector2[3];
 			GetClientEyePosition(i,effectVector2);
 			effectVector2[2] -= 22.0;
 
@@ -1477,7 +1477,7 @@ public Action Timer_LoopSwarm(Handle timer, any:i)
 	}
 }
 
-public Action Timer_DeCastImpale(Handle timer, any:i)
+public Action Timer_DeCastImpale(Handle timer, any i)
 {
 	if(ValidPlayer(i,false)) {
 		W3ResetPlayerColor(i , thisRaceID);
@@ -1486,13 +1486,13 @@ public Action Timer_DeCastImpale(Handle timer, any:i)
 	}
 }
 
-public Action Timer_DeCastSwarm(Handle timer, any:i)
+public Action Timer_DeCastSwarm(Handle timer, any i)
 {
 	if(ValidPlayer(i,false))
 		bSwarmed[i]=false;
 }
 
-public Action Timer_ReallowEffects(Handle timer, any:i)
+public Action Timer_ReallowEffects(Handle timer, any i)
 {
 	if(ValidPlayer(i,false))
 		bSwarmEffect[i]=false;
@@ -1501,7 +1501,7 @@ public Action Timer_ReallowEffects(Handle timer, any:i)
 
 public Action PushClientToVector( victim, float pos1[3], float power )
 {
-	new float pos2[3], float main_origin[3], float velo1[3], float velo2[3];
+	int float pos2[3], float main_origin[3], float velo1[3], float velo2[3];
 	GetClientAbsOrigin( victim, pos2 );
 
 	main_origin[0] = pos1[0] - pos2[0], main_origin[1] = pos1[1] - pos2[1], main_origin[2] = pos1[2] - pos2[2];
@@ -1515,12 +1515,12 @@ public Action PushClientToVector( victim, float pos1[3], float power )
 	TeleportEntity(victim, NULL_VECTOR, NULL_VECTOR, velo2);
 }
 
-public CreateTesla(const client,float flifetime_min,float flifetime_max,float thick_min,float thick_max,float interval_min,float interval_max,float radiustesla,char beamcount_min[],char beamcount_max[],char ColorTesla[],char sound[],char beammodel[],bool spark)
+public CreateTesla(const client,float flifetime_min,float flifetime_max,float thick_min,float thick_max,float int erval_min,float int erval_max,float radiustesla,char beamcount_min[],char beamcount_max[],char ColorTesla[],char sound[],char beammodel[],bool spark)
 {
 	int point_tesla = CreateEntityByName("point_tesla");
 	if(IsValidEdict(point_tesla) && IsClientInGame(client))
 	{
-		decl char Name[32], float fPos[3];
+		char Name[32], float fPos[3];
 		Format(Name, sizeof(Name), "tesla_%i", client);
 		GetEntPropVector(client, Prop_Send, "m_vecOrigin", fPos);
 		fPos[2]+=42.0;
@@ -1528,8 +1528,8 @@ public CreateTesla(const client,float flifetime_min,float flifetime_max,float th
 		DispatchKeyValueFloat(point_tesla, "lifetime_min", flifetime_max);
 		DispatchKeyValueFloat(point_tesla, "thick_min", thick_min);
 		DispatchKeyValueFloat(point_tesla, "thick_max", thick_max);
-		DispatchKeyValueFloat(point_tesla, "interval_min", interval_min);
-		DispatchKeyValueFloat(point_tesla, "interval_max", interval_max);
+		DispatchKeyValueFloat(point_tesla, "int erval_min", int erval_min);
+		DispatchKeyValueFloat(point_tesla, "int erval_max", int erval_max);
 		DispatchKeyValueFloat(point_tesla, "m_flRadius", radiustesla);
 		DispatchKeyValue(point_tesla, "m_Color", ColorTesla);
 
@@ -1555,7 +1555,7 @@ public CreateTesla(const client,float flifetime_min,float flifetime_max,float th
 	return -1;
 }
 
-public Action INCTimer_RemoveEntity(Handle timer, any:edict)
+public Action INCTimer_RemoveEntity(Handle timer, any edict)
 {
 	if(IsValidEdict(edict))
 	{

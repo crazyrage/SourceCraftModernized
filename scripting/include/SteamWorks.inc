@@ -232,8 +232,8 @@ native bool SteamWorks_RequestStatsAuthID(authid, appid);
 native bool SteamWorks_RequestStats(client, appid);
 native bool SteamWorks_GetStatCell(client, const char[] sKey, &value);
 native bool SteamWorks_GetStatAuthIDCell(authid, const char[] sKey, &value);
-native bool SteamWorks_GetStatFloat(client, const char[] sKey, &float value);
-native bool SteamWorks_GetStatAuthIDFloat(authid, const char[] sKey, &float value);
+native bool SteamWorks_GetStatFloat(client, const char[] sKey, float & value);
+native bool SteamWorks_GetStatAuthIDFloat(authid, const char[] sKey, float & value);
 
 native Handle SteamWorks_CreateHTTPRequest(EHTTPMethod method, const char[] sURL);
 native bool SteamWorks_SetHTTPRequestContextValue(Handle hHandle, any data1, any data2=0);
@@ -272,7 +272,7 @@ native bool SteamWorks_GetHTTPResponseHeaderValue(Handle hRequest, const char[] 
 native bool SteamWorks_GetHTTPResponseBodySize(Handle hRequest, &size);
 native bool SteamWorks_GetHTTPResponseBodyData(Handle hRequest, char[] sBody, length);
 native bool SteamWorks_GetHTTPStreamingResponseBodyData(Handle hRequest, cOffset, char[] sBody, length);
-native bool SteamWorks_GetHTTPDownloadProgressPct(Handle hRequest, &float percent);
+native bool SteamWorks_GetHTTPDownloadProgressPct(Handle hRequest, float & percent);
 native bool SteamWorks_SetHTTPRequestRawPostBody(Handle hRequest, const char[] sContentType, const char[] sBody, bodylen);
 
 funcenum SteamWorksHTTPBodyCallback

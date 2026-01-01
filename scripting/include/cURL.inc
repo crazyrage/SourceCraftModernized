@@ -235,14 +235,14 @@ native bool curl_easy_setopt_string(Handle hndl, CURLoption opt, const any[] buf
  * @ param Handle		hndl	The handle of the curl to be used. May be null if not essential.
  * @ param CURLoption	opt		The option to add (see enum CURLoption for details).
  * @ param cell_t		value	The value to set the option to.
- * @ return bool				1 on success. 0 = The option not accept integer or unsupport.
+ * @ return bool				1 on success. 0 = The option not accept int eger or unsupport.
  */
 native bool curl_easy_setopt_int(Handle hndl, CURLoption opt, value);
 
 /**
  * Set a curl option for CURLOPTTYPE_LONG type
  * @ example"
-	new opt[][2] = {
+	int opt[][2] = {
 		{_:CURLOPT_NOPROGRESS,1},
 		{_:CURLOPT_VERBOSE,0}
 	};
@@ -250,7 +250,7 @@ native bool curl_easy_setopt_int(Handle hndl, CURLoption opt, value);
  * @ param Handle		hndl		The handle of the curl to be used. May be null if not essential.
  * @ param cell_t		array		The option array to add (see enum CURLoption for details).
  * @ param cell_t		array_size	The array size.
- * @ return bool					1 on success. 0 = The option not accept integer or unsupport.
+ * @ return bool					1 on success. 0 = The option not accept int eger or unsupport.
  */
 native bool curl_easy_setopt_int_array(Handle hndl, array[][2], array_size);
 

@@ -57,7 +57,7 @@ native GetJetpackRate(client);
  * @param index 	Client index
  * @return			Refueling time for the jetpack
  */
-native Float GetJetpackRefuelingTime(client);
+native float GetJetpackRefuelingTime(client);
 
 /**
  * Set fuel for the jetpack of the player
@@ -85,7 +85,7 @@ native SetJetpackRate(client, rate=-1);
  * @param time	 	Refueling time for the jetpack
  * @return			none
  */
-native SetJetpackRefuelingTime(client, Float fuel);
+native SetJetpackRefuelingTime(client, float fuel);
 
 /**
  * Give a jetpack to the player
@@ -99,7 +99,7 @@ native SetJetpackRefuelingTime(client, Float fuel);
  * @param burn              jetpack burns enemies if true
  * @return			        amount of fuel the jetpack has
  */
-native GiveJetpack(client, fuel=-1, Float refueling_time=0.0, max_refuels=-1,
+native GiveJetpack(client, fuel=-1, float refueling_time=0.0, max_refuels=-1,
                    rate=-1, bool explode=false, bool burn=false);
 
 /**

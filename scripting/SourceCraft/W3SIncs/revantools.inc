@@ -102,7 +102,7 @@ stock CreateFire(const client,char[] firesize,char[] health,char[] fireattack,ch
 }
 
 
-stock CreateTesla(const client,float flifetime_min,float flifetime_max,float thick_min,float thick_max,float interval_min,float interval_max,float radiustesla,char[] beamcount_min,char[] beamcount_max,char[] ColorTesla,char[] sound,char[] beammodel,bool spark){
+stock CreateTesla(const client,float flifetime_min,float flifetime_max,float thick_min,float thick_max,float int erval_min,float int erval_max,float radiustesla,char[] beamcount_min,char[] beamcount_max,char[] ColorTesla,char[] sound,char[] beammodel,bool spark){
 	int point_tesla = CreateEntityByName("point_tesla");
 	if(IsValidEdict(point_tesla) && IsClientInGame(client))
 	{
@@ -114,8 +114,8 @@ stock CreateTesla(const client,float flifetime_min,float flifetime_max,float thi
 		DispatchKeyValueFloat(point_tesla, "lifetime_min", flifetime_max);
 		DispatchKeyValueFloat(point_tesla, "thick_min", thick_min);
 		DispatchKeyValueFloat(point_tesla, "thick_max", thick_max);
-		DispatchKeyValueFloat(point_tesla, "interval_min", interval_min);
-		DispatchKeyValueFloat(point_tesla, "interval_max", interval_max);
+		DispatchKeyValueFloat(point_tesla, "int erval_min", int erval_min);
+		DispatchKeyValueFloat(point_tesla, "int erval_max", int erval_max);
 		DispatchKeyValueFloat(point_tesla, "m_flRadius", radiustesla);
 		DispatchKeyValue(point_tesla, "m_Color", ColorTesla);
 
@@ -153,7 +153,7 @@ stock CreateExplosion(float VectorPos[3], owner, char[] classname, char[] magnit
 	RemoveEdict(g_ent);
 }
 
-public Action INCTimer_RemoveEntity(Handle timer, any:edict)
+public Action INCTimer_RemoveEntity(Handle timer, any edict)
 {
 	if(IsValidEdict(edict))
 	{

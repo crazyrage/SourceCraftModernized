@@ -88,7 +88,7 @@ public Action Event_player_builtobject(Handle event, const char[] name, bool don
     return Plugin_Continue;
 }
 
-public bool TraceRayDontHitSelf(entity, mask, any:data)
+public bool TraceRayDontHitSelf(entity, mask, any data)
 {
     return (entity != data); // Check if the TraceRay hit the owning entity.
 }

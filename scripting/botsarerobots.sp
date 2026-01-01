@@ -71,14 +71,14 @@ public Action Event_PostInventory(Handle event, const char[] name, bool dontBroa
 		CreateTimer(0.1, tSetRobot, GetEventInt(event, "userid"));
 }
 
-public Action tSetRobot(Handle hTimer, any:userid)
+public Action tSetRobot(Handle hTimer, any userid)
 {
 	int iClient = GetClientOfUserId(userid);
 	if (IsValidClient(iClient))
 		MakeRobot(iClient, IsFakeClient(iClient));
 }
 
-public Action SoundHook(clients[64], &numClients, char sound[PLATFORM_MAX_PATH], &client, &channel, &float volume, &level, &pitch, &flags)
+public Action SoundHook(clients[64], &numClients, char sound[PLATFORM_MAX_PATH], &client, &channel, float & volume, &level, &pitch, &flags)
 {
 	if (isMvM || !IsValidClient(client)) return Plugin_Continue;
 	if (!isRobot[client]) return Plugin_Continue;

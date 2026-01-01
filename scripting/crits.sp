@@ -24,7 +24,7 @@ public OnPluginStart()
 }
 
 
-public Action TF2_CalcIsAttackCritical(client, weapon, char weaponname[], &bool result)
+public Action TF2_CalcIsAttackCritical(client, weapon, char weaponname[], bool & result)
 {
 	if (!GetConVarBool(crits))
 	{

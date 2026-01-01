@@ -6,8 +6,8 @@
  */
 
 //Osaka: This plugin IS CPU INTENSIVE.
-//  I will note the various optimizations, great and small, used to bring the intensiveness down as far as possible.
-//  One optimization not used, but that is implimentable, is to cache ConVar's directly into variables.
+//  I will note the various optimizations, great and small, used to bring the int ensiveness down as far as possible.
+//  One optimization not used, but that is implimentable, is to cache ConVar's directly int o variables.
 
 #pragma semicolon 1
 
@@ -46,9 +46,9 @@ static const char HurtSound[][]  = { "player/pl_pain5.wav",  "player/pl_pain6.wa
 
 static const char DeathSound[][]  = { "player/death.wav" };
 
-new ClientInfected[MAXPLAYERS + 1];
-new ClientInfectionSource[MAXPLAYERS + 1];
-new InfectionFlags:ClientInfectionFlags[MAXPLAYERS + 1];
+int ClientInfected[MAXPLAYERS + 1];
+int ClientInfectionSource[MAXPLAYERS + 1];
+InfectionFlags ClientInfectionFlags[MAXPLAYERS + 1];
 float ClientInfectionTime[MAXPLAYERS + 1];
 
 float MedicInfectDelay[MAXPLAYERS + 1];
@@ -57,8 +57,8 @@ bool NativeControl = false;
 bool NativeHooked = false;
 bool NativeDamageHooked = false;
 bool NativeMedicArmed[MAXPLAYERS + 1] = { false, ...};
-new NativeAmount[MAXPLAYERS + 1];
-new NativeChance[MAXPLAYERS + 1];
+int NativeAmount[MAXPLAYERS + 1];
+int NativeChance[MAXPLAYERS + 1];
 
 Handle CvarEnable = null;
 Handle CvarAnnounce = null; //
@@ -205,7 +205,7 @@ public OnMapStart()
 // Osaka: Start up the infection timer
 public OnConfigsExecuted()
 {
-    InfectionTimer = CreateTimer(GetConVarFloat(Cvar_DmgTime), HandleInfection, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+    InfectionTimer = CreateTimer(GetConVarFloat(Cvar_DmgTime), Handle Infection, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 
     float timeval = GetConVarFloat(Cvar_SpreadCheckTime);
     if (timeval > 0.0)
@@ -222,25 +222,25 @@ public OnConfigsExecuted()
             MediTimer = null;
     }
 
-    HookConVarChange(Cvar_DmgTime, HandleInfectionChange);
-    HookConVarChange(Cvar_SpreadCheckTime, HandleSpreadChange);
+    HookConVarChange(Cvar_DmgTime, Handle InfectionChange);
+    HookConVarChange(Cvar_SpreadCheckTime, Handle SpreadChange);
 
     if (Cvar_InfectMediCheckTime)
-        HookConVarChange(Cvar_InfectMediCheckTime, HandleMediChange);
+        HookConVarChange(Cvar_InfectMediCheckTime, Handle MediChange);
 }
 
 // Osaka: catching CVAR's is cheap; reallocating a timer is slower.
 //  So catch the ConVar changes and change the timer only in those situations
-public HandleInfectionChange(Handle convar, const char[] oldValue, const char[] newValue)
+public Handle InfectionChange(Handle convar, const char[] oldValue, const char[] newValue)
 {
     if (InfectionTimer != null)
         CloseHandle(InfectionTimer);
 
-    InfectionTimer = CreateTimer(StringToFloat(newValue), HandleInfection, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+    InfectionTimer = CreateTimer(StringToFloat(newValue), Handle Infection, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 }
 
 // Osaka: The timer which damages infected players
-public Action HandleInfection(Handle timer)
+public Action Handle Infection(Handle timer)
 {
     if(!NativeControl && !GetConVarBool(CvarEnable)) return;
 
@@ -269,16 +269,16 @@ public Action HandleInfection(Handle timer)
             ClientInfectionFlags[client] &= ~Infection_Contagious;
 
         // Osaka: This is relatively expensive, but we need to keep them updated.
-        new r, b, g, a;
+        int r, b, g, a;
         GetInfectColors(client, r, b, g, a);
         SetInfectColors(client, r, b, g, a);
 
-        new hp = GetClientHealth(client);
-        new amt = (NativeControl) ? NativeAmount[ClientInfectionSource[client]] : GetConVarInt(Cvar_DmgAmount);
+        int hp = GetClientHealth(client);
+        int amt = (NativeControl) ? NativeAmount[ClientInfectionSource[client]] : GetConVarInt(Cvar_DmgAmount);
 
         if (NativeDamageHooked)
         {
-            new Action:result = Plugin_Continue;
+            Action result = Plugin_Continue;
             Call_StartForward(OnInfectionHurtHandle);
             Call_PushCell(client);
             Call_PushCell(ClientInfectionSource[client]);
@@ -292,7 +292,7 @@ public Action HandleInfection(Handle timer)
 
         if(hp <= 0)
         {
-            new num = GetRandomInt(0,sizeof(DeathSound)-1);
+            int num = GetRandomInt(0,sizeof(DeathSound)-1);
             PrepareSound(DeathSound[num]);
             EmitSoundToAll(DeathSound[num], client);
             ForcePlayerSuicide(client);
@@ -301,7 +301,7 @@ public Action HandleInfection(Handle timer)
         {
             SetEntityHealth(client,hp);
 
-            new num = GetRandomInt(0,sizeof(HurtSound)-1);
+            int num = GetRandomInt(0,sizeof(HurtSound)-1);
             PrepareSound(HurtSound[num]);
             EmitSoundToAll(HurtSound[num], client);
 
@@ -356,12 +356,12 @@ public Action MedicModify(Handle event, const char[] name, bool dontBroadcast)
         return Plugin_Continue;
     }
 
-    new id = GetClientOfUserId(GetEventInt(event,"userid"));
+    int id = GetClientOfUserId(GetEventInt(event,"userid"));
     if (!ClientInfected[id])
         return Plugin_Continue;
 
-    new infector = ClientInfected[id];
-    new source = ClientInfectionSource[id];
+    int infector = ClientInfected[id];
+    int source = ClientInfectionSource[id];
 
     ClientInfected[id] = 0;
     ClientInfectionSource[id] = 0;
@@ -373,13 +373,13 @@ public Action MedicModify(Handle event, const char[] name, bool dontBroadcast)
 
     if (source > 0 && IsClientInGame(source))
     {
-        new attacker = GetClientOfUserId(GetEventInt(event,"attacker"));
+        int attacker = GetClientOfUserId(GetEventInt(event,"attacker"));
         if (!attacker || attacker == id)
         {
             SetEventInt(event,"attacker",GetClientUserId(source));
             if (GetGameType() == tf2)
             {
-                new assister = GetEventInt(event,"assister");
+                int assister = GetEventInt(event,"assister");
                 if (assister <= 0)
                 {
                     if (infector && infector != source && IsClientInGame(infector))
@@ -392,7 +392,7 @@ public Action MedicModify(Handle event, const char[] name, bool dontBroadcast)
         }
         else if (GetGameType() == tf2) // && attacker != infector)
         {
-            new assister = GetEventInt(event,"assister");
+            int assister = GetEventInt(event,"assister");
             if (assister <= 0)
             {
                 if (source && assister != source && attacker != source)
@@ -407,7 +407,7 @@ public Action MedicModify(Handle event, const char[] name, bool dontBroadcast)
 }
 
 // Osaka: For Syringes, we use the critical attack function, and hope it works well enough. Time will tell.
-public Action TF2_CalcIsAttackCritical(client, weapon, char weaponname[], &bool result)
+public Action TF2_CalcIsAttackCritical(client, weapon, char weaponname[], bool & result)
 {
     if(!NativeControl && !GetConVarBool(CvarEnable))
         return Plugin_Continue;
@@ -441,7 +441,7 @@ public OnGameFrame()
 }
 */
 
-public HandleMediChange(Handle convar, const char[] oldValue, const char[] newValue)
+public Handle MediChange(Handle convar, const char[] oldValue, const char[] newValue)
 {
     if (MediTimer != null)
         CloseHandle(MediTimer);
@@ -468,7 +468,7 @@ public Action MediInfection(Handle timer)
         {
             if (TF2_GetPlayerClass(client) == TFClass_Medic) 
             {
-                new weaponent = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+                int weaponent = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
                 if (weaponent > 0 && GetEdictClassname(weaponent, classname , sizeof(classname)) )
                 {
                     if(StrEqual(classname, "tf_weapon_medigun") )
@@ -481,10 +481,10 @@ public Action MediInfection(Handle timer)
 
 stock MedicInject(client)
 {
-    new buttons = GetClientButtons(client);
+    int buttons = GetClientButtons(client);
     if (buttons & (IN_ATTACK|IN_RELOAD) )
     {
-        new target = GetClientAimTarget(client);
+        int target = GetClientAimTarget(client);
         if (target > 0) 
         {
             MedicInfect(target, client, (buttons & IN_RELOAD) != 0, false);
@@ -506,7 +506,7 @@ public MedicInfect(to, from, bool friendlyInfect, bool irradiate)
         return;
     }
 
-    new same = GetClientTeam(to) == GetClientTeam(from);
+    int same = GetClientTeam(to) == GetClientTeam(from);
 
     if (ClientInfected[to] && !friendlyInfect && same && GetConVarInt(Cvar_InfectHeal)) 
     {
@@ -533,7 +533,7 @@ public MedicInfect(to, from, bool friendlyInfect, bool irradiate)
             return;
         }
 
-        decl float ori1[3], float ori2[3], float distance;
+        float ori1[3], float ori2[3], float distance;
         distance = GetConVarFloat(Cvar_InfectDistance);
 
         if (distance > 0.1)
@@ -564,7 +564,7 @@ public MedicInfect(to, from, bool friendlyInfect, bool irradiate)
 //  This leads me to believe the n * m algorithm to perform, on average, logarithmically.
 //  I cannot prove it, however, for our bounded example of 32 players, it is obvious that 16 * 16 for a worst case is better than 32 * 32.
 
-public HandleSpreadChange(Handle convar, const char[] oldValue, const char[] newValue)
+public Handle SpreadChange(Handle convar, const char[] oldValue, const char[] newValue)
 {
     if (SpreadTimer != null)
         CloseHandle(SpreadTimer);
@@ -586,9 +586,9 @@ public Action SpreadInfection(Handle timer)
     static InfectedPlayerVec[MAXPLAYERS + 1];
     static NotInfectedPlayerVec[MAXPLAYERS + 1];
 
-    new InfectedCount = 0, NotInfectedCount = 0;
+    int InfectedCount = 0, NotInfectedCount = 0;
 
-    new client;
+    int client;
     for (client = 1; client <= MaxClients; client++)
     {
         if (!IsClientInGame(client) || !IsPlayerAlive(client))
@@ -615,7 +615,7 @@ public Action SpreadInfection(Handle timer)
         return;
 
     // Osaka: Check the infected against the uninfected
-    new check;
+    int check;
     float distance = GetConVarFloat(Cvar_SpreadDistance);
     for(client = 0; client < InfectedCount; client++)
     {
@@ -665,7 +665,7 @@ stock TransmitInfection(to,from)
     else if(!GetConVarInt(Cvar_SpreadInfector))
     {
         /*
-           new a = from;
+           int a = from;
            while(ClientInfected[a])
            {
            if(ClientInfected[a] == to) return;
@@ -677,7 +677,7 @@ stock TransmitInfection(to,from)
     }
 
     // Osaka: are the teams identical?
-    new t_same = (GetClientTeam(from) == GetClientTeam(to));
+    int t_same = (GetClientTeam(from) == GetClientTeam(to));
 
     // Osaka: Spread to same team
     if (t_same)
@@ -718,13 +718,13 @@ stock Infect(to, from, bool friendly, bool infect, bool irradiate)
         return;
     }
 
-    new r, b, g, a;
+    int r, b, g, a;
     GetInfectColors(to, r, b, g, a);
 
     if (NativeHooked)
     {
-        new Action:result = Plugin_Continue;
-        new color[4];
+        int Action:result = Plugin_Continue;
+        int color[4];
         color[0] = r;
         color[1] = b;
         color[2] = g;
@@ -795,7 +795,7 @@ stock UnInfect(to, from=0)
 
     if (NativeHooked)
     {
-        new Action:result = Plugin_Continue;
+        int Action:result = Plugin_Continue;
         static const color[4] = {255, 255, 255, 255};
         Call_StartForward(OnInfectedHandle);
         Call_PushCell(to);
@@ -842,8 +842,8 @@ stock UnInfect(to, from=0)
 // Naris: Retrieve the colors to use for infected players from ConVars.
 stock GetInfectColors(client, &r=0, &b=0, &g=0, &a=0)
 {
-    new TFTeam:team = TFTeam:GetClientTeam(client);
-    new SameColors = GetConVarInt( Cvar_SameColors );
+    int TFTeam:team = TFTeam:GetClientTeam(client);
+    int SameColors = GetConVarInt( Cvar_SameColors );
 
     // Osaka: This branch saves us two comparisons, and eliminates the need to check SameColors twice.
     if(SameColors > 1) team = TFTeam:SameColors;
@@ -877,13 +877,13 @@ stock SetInfectColors(client, r, b, g, a)
     SetEntityRenderColor(client, r, b, g, a);
 
     // Osaka: Set their gun to their team color. Don't change alpha.
-    new SameColors = GetConVarInt( Cvar_SameColors );
+    int SameColors = GetConVarInt( Cvar_SameColors );
     if( GetConVarInt(Cvar_GunColors) || SameColors)
     {
-        new TFTeam:team = TFTeam:GetClientTeam(client);
-        new r2 = (team == TFTeam_Red) ? 255 : 0;
-        new b2 = (team == TFTeam_Blue) ? 255: 0;
-        new gun = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+        int TFTeam:team = TFTeam:GetClientTeam(client);
+        int r2 = (team == TFTeam_Red) ? 255 : 0;
+        int b2 = (team == TFTeam_Blue) ? 255: 0;
+        int gun = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
         if (gun > 0 && IsValidEntity(gun))
             SetEntityRenderColor(gun, r2, 0, b2, a);
     }
@@ -943,7 +943,7 @@ public Action RoundStartEvent(Handle event, const char[] name, bool dontBroadcas
 
 public PlayerSpawnEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    new index=GetClientOfUserId(GetEventInt(event,"userid")); // Get clients index
+    int index=GetClientOfUserId(GetEventInt(event,"userid")); // Get clients index
     ClientInfected[index]=0;
     ClientInfectionSource[index] = 0;
     ClientInfectionTime[index] = 0.0;
@@ -952,7 +952,7 @@ public PlayerSpawnEvent(Handle event,const char[] name,bool dontBroadcast)
 
 public PlayerTeamEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    new index=GetClientOfUserId(GetEventInt(event,"userid")); // Get clients index
+    int index=GetClientOfUserId(GetEventInt(event,"userid")); // Get clients index
     ClientInfected[index]=0;
     ClientInfectionSource[index] = 0;
     ClientInfectionTime[index] = 0.0;
@@ -968,10 +968,10 @@ public PlayerTeamEvent(Handle event,const char[] name,bool dontBroadcast)
 public PlayerHurtEvent(Handle event,const char[] name,bool dontBroadcast)
 {
     bool infected = false;
-    new victim=GetClientOfUserId(GetEventInt(event,"userid"));
+    int victim=GetClientOfUserId(GetEventInt(event,"userid"));
     if (victim > 0)
     {
-        new attacker=GetClientOfUserId(GetEventInt(event,"attacker"));
+        int attacker=GetClientOfUserId(GetEventInt(event,"attacker"));
         if (attacker > 0 && attacker != victim &&
             MedicInfectDelay[attacker] <= GetGameTime() &&
             IsClientInGame(attacker) && IsPlayerAlive(attacker)) 
@@ -989,7 +989,7 @@ public PlayerHurtEvent(Handle event,const char[] name,bool dontBroadcast)
             else if (GetGameType() == tf2 && TF2_GetPlayerClass(attacker) == TFClass_Medic) 
             {
                 char weaponname[32];
-                new weaponent = GetEntPropEnt(attacker, Prop_Send, "m_hActiveWeapon");
+                int weaponent = GetEntPropEnt(attacker, Prop_Send, "m_hActiveWeapon");
                 if (weaponent > 0 && GetEdictClassname(weaponent, weaponname, sizeof(weaponname)) )
                 {
                     if (StrEqual(weaponname, "tf_weapon_syringegun_medic") )
@@ -1004,7 +1004,7 @@ public PlayerHurtEvent(Handle event,const char[] name,bool dontBroadcast)
 
         if (NativeControl && GetGameType() == tf2 && !infected)
         {
-            new assister=GetClientOfUserId(GetEventInt(event,"assister"));
+            int assister=GetClientOfUserId(GetEventInt(event,"assister"));
             if (assister > 0 && NativeMedicArmed[assister] &&
                 MedicInfectDelay[assister] <= GetGameTime() &&
                 IsClientInGame(assister) && IsPlayerAlive(assister)) 
@@ -1048,7 +1048,7 @@ public Native_SetMedicInfect(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
-        new client = GetNativeCell(1);
+        int client = GetNativeCell(1);
         NativeMedicArmed[client] = (numParams >= 2) ? GetNativeCell(2) : true;
         NativeAmount[client] = (numParams >= 3) ? GetNativeCell(3) : 0;
         NativeChance[client] = (numParams >= 4) ? GetNativeCell(4) : 100;
@@ -1059,8 +1059,8 @@ public Native_MedicInfect(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
-        new target = GetNativeCell(1);
-        new client = (numParams >= 2) ? GetNativeCell(2) : 0;
+        int target = GetNativeCell(1);
+        int client = (numParams >= 2) ? GetNativeCell(2) : 0;
         bool allow = (numParams >= 3) ? (bool GetNativeCell(3)) : false;
         bool irradiate = (numParams >= 4) ? (bool GetNativeCell(4)) : false;
 
@@ -1078,8 +1078,8 @@ public Native_Infect(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
-        new target = GetNativeCell(1);
-        new client = (numParams >= 2) ? GetNativeCell(2) : 0;
+        int target = GetNativeCell(1);
+        int client = (numParams >= 2) ? GetNativeCell(2) : 0;
 
         bool irradiate = (numParams >= 4) ? (bool GetNativeCell(4)) : false;
         bool allow = (numParams >= 3) ? (bool GetNativeCell(3)) : false;
@@ -1096,8 +1096,8 @@ public Native_HealInfect(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
-        new target = GetNativeCell(1);
-        new client = (numParams >= 2) ? GetNativeCell(2) : 0;
+        int target = GetNativeCell(1);
+        int client = (numParams >= 2) ? GetNativeCell(2) : 0;
         if (ClientInfected[target] || (ClientInfectionFlags[client] & Infection_Friendly))
             UnInfect(target, client);
     }
@@ -1107,7 +1107,7 @@ public Native_IsInfected(Handle plugin,numParams)
 {
     if (numParams >= 1)
     {
-        new target = GetNativeCell(1);
+        int target = GetNativeCell(1);
         return (ClientInfected[target] || (ClientInfectionFlags[target] & Infection_Friendly));
     }
     return false;

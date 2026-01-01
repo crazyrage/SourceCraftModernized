@@ -71,7 +71,7 @@
 //
 // - 06 December 2009 - Version 2.0 by Naris
 //   * Allow players to have more than 1 healthkit
-//   * Added native interface
+//   * Added native int erface
 //
 // - 06 May 2010 - Version 2.1 by Naris
 //   * converted to use sdkhooks instead of dukehacks
@@ -96,31 +96,31 @@ public Plugin myinfo =
 
 #define MAXENTITIES 2048
 
-new const char[]g_HealthKit_Model[] = "models/props_misc/ration_box01.mdl";
-new const char[]g_HealthKit_Sound[] = "object/object_taken.wav";
+static const char g_HealthKit_Model[] = "models/props_misc/ration_box01.mdl";
+static const char g_HealthKit_Sound[] = "object/object_taken.wav";
 
-new const g_HealthKit_Skin[4] = { 0, 0, 2, 1 };
+static const int g_HealthKit_Skin[4] = { 0, 0, 2, 1 };
 
-new g_HasHealthKit[MAXPLAYERS+1];
+int g_HasHealthKit[MAXPLAYERS+1];
 
-new g_HealthKitRef[MAXENTITIES+1]            = { INVALID_ENT_REFERENCE, ... };
-new g_HealthKitOwner[MAXENTITIES+1];
-HandleHealthKitDropTimer[MAXENTITIES+1] = null;
+int g_HealthKitRef[MAXENTITIES+1]            = { INVALID_ENT_REFERENCE, ... };
+int g_HealthKitOwner[MAXENTITIES+1];
+Handle HealthKitDropTimer[MAXENTITIES+1] = null;
 
-Handlehealthkitdeaddrop = null;
-Handlehealthkitrule = null;
-Handlehealthkitdropcmd = null;
-Handlehealthkitmaxhealth = null;
-Handlehealthkithealth = null;
-Handlehealthkitliefetime = null;
-Handlehealthkitteamcolor = null;
+Handle healthkitdeaddrop = null;
+Handle healthkitrule = null;
+Handle healthkitdropcmd = null;
+Handle healthkitmaxhealth = null;
+Handle healthkithealth = null;
+Handle healthkitliefetime = null;
+Handle healthkitteamcolor = null;
 
-boolg_NativeControl = false;
-new g_NativeHealthkit[MAXPLAYERS+1];
-new g_NativeHealthkitRule[MAXPLAYERS+1];
-new g_NativeHealthkitCount[MAXPLAYERS+1];
+bool g_NativeControl = false;
+int g_NativeHealthkit[MAXPLAYERS+1];
+int g_NativeHealthkitRule[MAXPLAYERS+1];
+int g_NativeHealthkitCount[MAXPLAYERS+1];
 
-public APLResAskPluginLoad2(Handle myself, bool late, char[] error, err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, err_max)
 {
     CreateNative("ControlHealthkits", Native_ControlHealthkits);
     CreateNative("SetHealthkit", Native_SetHealthkit);
@@ -145,7 +145,7 @@ public OnPluginStart()
     AutoExecConfig(true, "dod_drophealthkit_source", "dod_drophealthkit_source");
 }
 
-public ActioncmdDropHealthKit(client, args) 
+public Action cmdDropHealthKit(client, args) 
 {
     if (!IsClientInGame(client) || !IsPlayerAlive(client) ||
         g_HasHealthKit[client] <= 0)
@@ -166,14 +166,14 @@ public ActioncmdDropHealthKit(client, args)
         return Plugin_Continue;
     }
 
-    floatorigin[3];
+    float origin[3];
     GetClientAbsOrigin(client, origin);
     origin[2] += 55.0;
 
-    floatangles[3];
+    float angles[3];
     GetClientEyeAngles(client, angles);
 
-    floatvelocity[3];
+    float velocity[3];
     GetAngleVectors(angles, velocity, NULL_VECTOR, NULL_VECTOR);
     NormalizeVector(velocity,velocity);
     ScaleVector(velocity,350.0);
@@ -188,9 +188,9 @@ public OnMapStart()
     PrecacheSound(g_HealthKit_Sound, true);
 }
 
-public ActionOnPlayerSpawn(Handle event, const char[]name[], bool dontBroadcast)
+public Action OnPlayerSpawn(Handle event, const char name[], bool dontBroadcast)
 {
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));
     if (IsClientInGame(client) && IsPlayerAlive(client) && GetClientTeam(client) > 1)
     {
         g_HasHealthKit[client] = g_NativeControl
@@ -201,9 +201,9 @@ public ActionOnPlayerSpawn(Handle event, const char[]name[], bool dontBroadcast)
     return Plugin_Continue;
 }
 
-public ActionOnPlayerDeath(Handle event, const char[]name[], bool dontBroadcast)
+public Action OnPlayerDeath(Handle event, const char name[], bool dontBroadcast)
 {
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));
     if (GetClientHealth(client) > 0 || !IsClientInGame(client) ||
         g_HasHealthKit[client] <= 0)
     {
@@ -223,7 +223,7 @@ public ActionOnPlayerDeath(Handle event, const char[]name[], bool dontBroadcast)
         return Plugin_Continue;
     }
 
-    floatdeathorigin[3];
+    float deathorigin[3];
     GetClientAbsOrigin(client, deathorigin);
     deathorigin[2] += 5.0;
 
@@ -231,14 +231,14 @@ public ActionOnPlayerDeath(Handle event, const char[]name[], bool dontBroadcast)
     return Plugin_Continue;
 }
 
-CreateHealthkit(client, const Float:origin[3],
-                const Float:angles[3]=NULL_VECTOR,
-                const Float:velocity[3]=NULL_VECTOR)
+CreateHealthkit(client, const float origin[3],
+                const float angles[3]=NULL_VECTOR,
+                const float velocity[3]=NULL_VECTOR)
 {
-    new healthkit = CreateEntityByName("prop_physics_override");
+    int healthkit = CreateEntityByName("prop_physics_override");
     if (healthkit > 0 && IsValidEntity(healthkit))
     {
-        new team = GetClientTeam(client);
+        int team = GetClientTeam(client);
         SetEntityModel(healthkit,g_HealthKit_Model);
         SetEntProp(healthkit, Prop_Send, "m_nSkin", g_HealthKit_Skin[team]);
         DispatchSpawn(healthkit);
@@ -258,7 +258,7 @@ CreateHealthkit(client, const Float:origin[3],
     }
 }
 
-public ActionOnHealthKitTouched(healthkit, client)
+public Action OnHealthKitTouched(healthkit, client)
 {
     if (client > 0 && client <= MaxClients && healthkit > 0 &&
         EntRefToEntIndex(g_HealthKitRef[healthkit]) == healthkit &&
@@ -280,23 +280,23 @@ public ActionOnHealthKitTouched(healthkit, client)
             return Plugin_Handled;
         }
 
-        new health = GetClientHealth(client);
-        new maxhealth = GetConVarInt(healthkitmaxhealth);
+        int health = GetClientHealth(client);
+        int maxhealth = GetConVarInt(healthkitmaxhealth);
         if (health >= maxhealth)
         {
             return Plugin_Handled;
         }
 
-        new pickuprule = g_NativeControl ? (g_NativeHealthkitRule[client]) : GetConVarInt(healthkitrule);
-        new clteam = GetClientTeam(client);
-        new kitteam = GetEntProp(healthkit, Prop_Send, "m_nSkin");
+        int pickuprule = g_NativeControl ? (g_NativeHealthkitRule[client]) : GetConVarInt(healthkitrule);
+        int clteam = GetClientTeam(client);
+        int kitteam = GetEntProp(healthkit, Prop_Send, "m_nSkin");
         if ((pickuprule == 1 && kitteam != g_HealthKit_Skin[clteam]) ||
             (pickuprule == 2 && kitteam == g_HealthKit_Skin[clteam]))
         {
             return Plugin_Handled;
         }
 
-        new healthkitadd = GetConVarInt(healthkithealth);
+        int healthkitadd = GetConVarInt(healthkithealth);
         if (health + healthkitadd >= maxhealth)
         {
             SetEntityHealth(client, maxhealth);
@@ -316,7 +316,7 @@ public ActionOnHealthKitTouched(healthkit, client)
     return Plugin_Handled;
 }
 
-public ActionRemoveDroppedHealthKit(Handle timer, any:healthkit)
+public Action RemoveDroppedHealthKit(Handle timer, any healthkit)
 {
     HealthKitDropTimer[healthkit] = null;
     if (EntRefToEntIndex(g_HealthKitRef[healthkit]) == healthkit &&
@@ -331,7 +331,7 @@ public ActionRemoveDroppedHealthKit(Handle timer, any:healthkit)
 
 KillHealthKitTimer(healthkit)
 {
-    Handletimer = HealthKitDropTimer[healthkit];
+    Handle timer = HealthKitDropTimer[healthkit];
     if (timer != null)
     {
         CloseHandle(HealthKitDropTimer[healthkit]);
@@ -346,9 +346,9 @@ public Native_ControlHealthkits(Handle plugin, numParams)
 
 public Native_SetHealthkit(Handle plugin, numParams)
 {
-    new client = GetNativeCell(1);
-    new enable = GetNativeCell(2);
-    new count = GetNativeCell(4);
+    int client = GetNativeCell(1);
+    int enable = GetNativeCell(2);
+    int count = GetNativeCell(4);
 
     g_NativeHealthkit[client] = enable;
     g_NativeHealthkitRule[client] = GetNativeCell(3);
@@ -363,11 +363,11 @@ public Native_SetHealthkit(Handle plugin, numParams)
  */
 #tryinclude <entlimit>
 #if !defined _entlimit_included
-    stock IsEntLimitReached(warn=20,critical=16,client=0,const char[]message[]="")
+    stock IsEntLimitReached(warn=20,critical=16,client=0,const char message[]="")
     {
-        new max = GetMaxEntities();
-        new count = GetEntityCount();
-        new remaining = max - count;
+        int max = GetMaxEntities();
+        int count = GetEntityCount();
+        int remaining = max - count;
         if (remaining <= warn)
         {
             if (count <= critical)

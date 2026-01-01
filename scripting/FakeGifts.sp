@@ -176,7 +176,7 @@ public Colorize(client, color[4])
 	int m_hMyWeapons = FindSendPropOffs("CBasePlayer", "m_hMyWeapons");	
 	char classname[256];
 	int type;
-	new TFClassType:class = TF2_GetPlayerClass(client);
+	int TFClassType:class = TF2_GetPlayerClass(client);
 	
 	for(int i= 0, weapon; i < 47; i += 4)
 	{

@@ -61,7 +61,7 @@ public Action CMD_SetXP(client,args)
         char buf[32];
         GetCmdArg(2,buf,sizeof(buf));
 
-        new xp=StringToInt(buf);
+        int xp=StringToInt(buf);
         if (xp<0)
             xp=0;
 
@@ -109,7 +109,7 @@ public Action CMD_GiveXP(client,args)
         char buf[32];
         GetCmdArg(2,buf,sizeof(buf));
 
-        new xp=StringToInt(buf);
+        int xp=StringToInt(buf);
         if (xp<0)
             xp=0;
 
@@ -157,7 +157,7 @@ public Action CMD_RemoveXP(client,args)
         char buf[32];
         GetCmdArg(2,buf,sizeof(buf));
 
-        new xp=StringToInt(buf);
+        int xp=StringToInt(buf);
         if (xp<0)
             xp=0;
 

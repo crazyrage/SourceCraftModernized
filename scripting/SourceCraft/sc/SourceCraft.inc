@@ -85,7 +85,7 @@ native bool IsSourceCraftLoaded();
  *                          If left empty, a default message will be translated or generated. (max 256)
  * @param desc:             The description of the race. (defaults to translation). If the description starts with a %,
  *                          the portion after the % will be used as a translation phrase.
- * @param image:            The image of the race, to be placed into the database for the webapp. (defaults to translation)
+ * @param image:            The image of the race, to be placed int o the database for the webapp. (defaults to translation)
  * @return                  The return value will be the race index or -1 if there was a problem.
  */         
 native CreateRace(const char short[], required_level=0, tech_level=0, max_level=16,
@@ -201,7 +201,7 @@ native SetRaceEnergyFlags(race,EnergyFlags:newflags);
 /**
  * Retrieves the name of the race
  * @param race:      The race ID returned from CreateRace()
- * @param name:      String to place the name into.
+ * @param name:      String to place the name int o.
  * @param maxlength: The size of the name buffer.
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
@@ -211,7 +211,7 @@ native GetRaceName(race, char name[], maxlength, lang=LANG_SERVER);
 /**
  * Retrieves the description of the race.
  * @param race:         The race ID returned from CreateRace()
- * @param description:  String to place the description into.
+ * @param description:  String to place the description int o.
  * @param maxlength:    The size of the description buffer.
  * @param lang:         Client to translate the description for, if any.
  * @noreturn
@@ -221,7 +221,7 @@ native GetRaceDescription(race, char description[], maxlength, lang=LANG_SERVER)
 /**
  * Retrieves the short name of the race
  * @param race:      The race ID returned from CreateRace()
- * @param short:     String to place the short name into.
+ * @param short:     String to place the short name int o.
  * @param maxlength: The size of the short buffer.
  * @noreturn
  */
@@ -230,7 +230,7 @@ native GetRaceShortName(race, char short[], maxlength);
 /**
  * Retrieves the name of the race's parent
  * @param race:      The race ID returned from CreateRace()
- * @param name:      String to place the name into.
+ * @param name:      String to place the name int o.
  * @param maxlength: The size of the name buffer.
  * @noreturn
  */
@@ -267,7 +267,7 @@ native GetRaceCount();
 /**
  * Retrieves the name of the unit type
  * @param type:      The UnitType
- * @param name:      String to place the name into.
+ * @param name:      String to place the name int o.
  * @param maxlength: The size of the name buffer.
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
@@ -277,7 +277,7 @@ native GetUnitTypeName(UnitType:type, char name[], maxlength, lang=LANG_SERVER);
 /**
  * Retrieves the name of the faction
  * @param faction:   The Faction
- * @param name:      String to place the name into.
+ * @param name:      String to place the name int o.
  * @param maxlength: The size of the name buffer.
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
@@ -287,7 +287,7 @@ native GetFactionName(Faction:faction, char name[], maxlength, lang=LANG_SERVER)
 /**
  * Retrieves the description of the faction
  * @param faction:   The Faction
- * @param name:      String to place the name into.
+ * @param name:      String to place the name int o.
  * @param maxlength: The size of the name buffer.
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
@@ -297,7 +297,7 @@ native GetFactionDescription(Faction:faction, char desc[], maxlength, lang=LANG_
 /**
  * Retrieves the "Not Enough Crystals" sound for the faction
  * @param faction:   The Faction
- * @param sound:     String to place the sound into.
+ * @param sound:     String to place the sound int o.
  * @param maxlength: The size of the name buffer.
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
@@ -315,7 +315,7 @@ native EmitCrystalSoundToClient(client, Faction:faction=Unassigned);
 /**
  * Retrieves the "Not Enough Vespene" sound for the faction
  * @param faction:   The Faction
- * @param sound:     String to place the sound into.
+ * @param sound:     String to place the sound int o.
  * @param maxlength: The size of the name buffer.
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
@@ -333,7 +333,7 @@ native EmitVespeneSoundToClient(client, Faction:faction=Unassigned);
 /**
  * Retrieves the "Not Enough Energy" sound for the faction
  * @param faction:   The Faction
- * @param sound:     String to place the sound into.
+ * @param sound:     String to place the sound int o.
  * @param maxlength: The size of the name buffer.
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
@@ -351,7 +351,7 @@ native EmitEnergySoundToClient(client, Faction:faction=Unassigned);
 /**
  * Retrieves the "Not Enough XP" sound for the faction
  * @param faction:   The Faction
- * @param sound:     String to place the sound into.
+ * @param sound:     String to place the sound int o.
  * @param maxlength: The size of the name buffer.
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
@@ -370,7 +370,7 @@ native EmitXPSoundToClient(client, Faction:faction=Unassigned);
 /**
  * Retrieves the "Leveled Up" sound for the faction
  * @param faction:   The Faction
- * @param sound:     String to place the sound into.
+ * @param sound:     String to place the sound int o.
  * @param maxlength: The size of the name buffer.
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
@@ -480,7 +480,7 @@ native float GetUpgradeCooldown(race, upgrade, &CooldownType:cooldown_type=Coold
  * Retrieves the name of an upgrade
  * @param race:      The race ID returned from CreateRace()
  * @param upgrade:   The upgrade ID returned from AddUpgrade()
- * @param name:      String to place the name into.
+ * @param name:      String to place the name int o.
  * @param maxlength: The size of the name buffer.
  * @param lang:      Client to translate the description for, if any.
  * @noreturn
@@ -491,7 +491,7 @@ native GetUpgradeName(race, upgrade, char name[], maxlength, lang=LANG_SERVER);
  * Retrieves the short name of an upgrade
  * @param race:      The race ID returned from CreateRace()
  * @param upgrade:   The upgrade ID returned from AddUpgrade()
- * @param short:     String to place the short name into.
+ * @param short:     String to place the short name int o.
  * @param maxlength: The size of the short name buffer.
  * @param lang:      Client to translate the description for, if any.
  * @noreturn
@@ -502,7 +502,7 @@ native GetUpgradeShortName(race, upgrade, char short[], maxlength);
  * Retrieves the description of an upgrade
  * @param race:         The race ID returned from CreateRace()
  * @param upgrade:      The upgrade ID returned from AddUpgrade()
- * @param description:  String to place the description into.
+ * @param description:  String to place the description int o.
  * @param maxlength:    The size of the description buffer.
  * @param lang:         Client to translate the description for, if any.
  * @return              The return value will be category gleaned from the description
@@ -677,7 +677,7 @@ native SetUpgradeDisabled(race,upgrade,flag=true);
  * @param category:         The category of the item. (max 64, defaults to translation)
  * @param name:             The name of the item. (max 64, defaults to translation)
  * @param desc:             The description of the item. (max 256, defaults to translation)
- * @param image:            The image of the item, to be placed into the database for the webapp. (defaults to translation)
+ * @param image:            The image of the item, to be placed int o the database for the webapp. (defaults to translation)
  * @return                  The return value will be the item index or -1 if there was a problem.
  */         
 native CreateShopItem(const char short[], crystals=0, vespene=0, money=0, bool use_pcrystals=false, xp=0, max=1,
@@ -687,7 +687,7 @@ native CreateShopItem(const char short[], crystals=0, vespene=0, money=0, bool u
 /**
  * Retrieves the short name of the shop item
  * @param item:         The item ID returned from CreateShopItem
- * @param name:         String to place the name into.
+ * @param name:         String to place the name int o.
  * @param maxlength:    The size of the name buffer.
  * @noreturn
  */
@@ -704,7 +704,7 @@ native SetItemShortName(const char short[]);
 /**
  * Retrieves the name of the shop item
  * @param item:         The item ID returned from CreateShopItem
- * @param name:         String to place the name into.
+ * @param name:         String to place the name int o.
  * @param maxlength:    The size of the name buffer.
  * @param lang:         Client to translate the name for, if any.
  * @noreturn
@@ -714,7 +714,7 @@ native GetItemName(item, char name[], maxlength, lang=LANG_SERVER);
 /**
  * Retrieves the category of the shop item
  * @param item:         The item ID returned from CreateShopItem
- * @param category:     String to place the category into.
+ * @param category:     String to place the category int o.
  * @param maxlength:    The size of the category buffer.
  * @param lang:         Client to translate the category for, if any.
  * @noreturn
@@ -724,7 +724,7 @@ native GetItemCategory(item, char category[], maxlength, lang=LANG_SERVER);
 /**
  * Retrieves the description of the shop item
  * @param item:         The item ID returned from CreateShopItem
- * @param description:  String to place the description into.
+ * @param description:  String to place the description int o.
  * @param maxlength:    The size of the description buffer.
  * @param lang:         Client to translate the description for, if any.
  * @noreturn
@@ -925,7 +925,7 @@ native ClearHud(client, const char contains[]="", any:...);
 /**
  * Retrieves the players HUD Message
  * @param client:       The index of the player
- * @param message:      String to place the message into.
+ * @param message:      String to place the message int o.
  * @param maxlength:    The size of the message buffer.
  * @noreturn
  */
@@ -1050,7 +1050,7 @@ native SetArmorName(client, const char name[]);
 /**
  * Retrieves the name of the given client's armor
  * @param client 	    Client
- * @param name:         String to place the name into.
+ * @param name:         String to place the name int o.
  * @param maxlength:    The size of the name buffer.
  * @noreturn
  */
@@ -1144,7 +1144,7 @@ native GetRace(client);
  * @param race:         The race ID returned from CreateRace.
  * @param force:        Set true to force the race to change now or false to change on death.
  * @param check:        Set true to check race requirements before changing.
- * @param saveEnergy:   Save the client's remaining energy into accumulated energy (for summons).
+ * @param saveEnergy:   Save the client's remaining energy int o accumulated energy (for summons).
  * @noreturn
  */
 native ChangeRace(client, race, bool force=false, bool check=true, bool saveEnergy=false);
@@ -1996,7 +1996,7 @@ native bool AssignAttributeId(client, attr, Handle data);
 native RemoveAttributeId(client, attr);
 
 /**
- * Retrieves an integer value from a config file
+ * Retrieves an int eger value from a config file
  * @param key		Name of the key
  * @param defvalue	Optional default value to use if the key is not found.
  * @param fileId:   Optional fileId for the config value (race ID, SHOPITEM or MAIN)
@@ -2035,7 +2035,7 @@ native GetConfigString(const char key[], char value[], maxlength,
                        node=NONE, const char section[]="");
 
 /**
- * Retrieves an array of integer values from a config file
+ * Retrieves an array of int eger values from a config file
  * @param key		Name of the key
  * @param value	    Array to store values in.
  * @param size      Size of the value array.
@@ -2045,7 +2045,7 @@ native GetConfigString(const char key[], char value[], maxlength,
  * @param section   Optional section for the config value
  * @return          The return value will be the number of elements set.
  */
-native GetConfigArray(const char key[], any:value[], size, const any:defvalue[],
+native GetConfigArray(const char key[], any value[], size, const any defvalue[],
                       fileId=MAIN, node=NONE, const char section[]="");
 
 /**
@@ -2164,7 +2164,7 @@ forward OnItemPurchase(client,item);
  *                       Plugin_Continue to continue with call to OnItemPurchase()
  *                       (even if the cost was altered),
  */
-forward Action:OnItemPurchaseEx(client,item,&bool use_pcrystals,&cost,&cost_vespene,&cost_xp);
+forward Action:OnItemPurchaseEx(client,item,bool & use_pcrystals,&cost,&cost_vespene,&cost_xp);
 
 /**
  * Gets called when a player no longer has an item.
@@ -2227,7 +2227,7 @@ forward Action:OnPlayerRestored(client);
  * @param damagetype: Type of damage.
  * @return            Plugin_Changed will change the damage and Plugin_Handled will block it.
  */      
-forward Action:OnPlayerTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype);  
+forward Action:OnPlayerTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetype);  
 
 /**
  * Gets called for player_hurt
@@ -2298,7 +2298,7 @@ forward OnPlayerDeathEvent(Handle event, victim_index, victim_race,
  * @param damagetype: Type of damage.
  * @return            Plugin_Changed will change the damage and Plugin_Handled will block it.
  */      
-forward Action:OnObjectTakeDamage(victim,builder,&attacker,&inflictor,&float damage,&damagetype);  
+forward Action:OnObjectTakeDamage(victim,builder,&attacker,&inflictor,float & damage,&damagetype);  
 
 /**
  * Called when an entity, that is not a player, takes damage, requires SDK Hooks.
@@ -2309,7 +2309,7 @@ forward Action:OnObjectTakeDamage(victim,builder,&attacker,&inflictor,&float dam
  * @param damagetype: Type of damage.
  * @return            Plugin_Changed will change the damage and Plugin_Handled will block it.
  */      
-forward Action:OnEntityTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype);  
+forward Action:OnEntityTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetype);  
 
 /**
  * Gets called when an entity, that is not a player, is hurt

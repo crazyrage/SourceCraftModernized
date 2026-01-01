@@ -199,7 +199,7 @@ stock void MC_SkipNextClient(int client) {
 }
 
 /**
- * Checks if the colors trie is initialized and initializes it if it's not (used internally)
+ * Checks if the colors trie is initialized and initializes it if it's not (used int ernally)
  * 
  * @return			No return
  */
@@ -210,11 +210,11 @@ stock void MC_CheckTrie() {
 }
 
 /**
- * Replaces color tags in a string with color codes (used internally by MC_PrintToChat, MC_PrintToChatAll, MC_PrintToChatEx, and MC_PrintToChatAllEx
+ * Replaces color tags in a string with color codes (used int ernally by MC_PrintToChat, MC_PrintToChatAll, MC_PrintToChatEx, and MC_PrintToChatAllEx
  *
  * @param buffer		String.
  * @param author		Optional client index to use for {teamcolor} tags, or 0 for none
- * @param removeTags	Optional boolean value to determine whether we're replacing tags with colors, or just removing tags, used by MC_RemoveTags
+ * @param removeTags	Optional bool ean value to determine whether we're replacing tags with colors, or just removing tags, used by MC_RemoveTags
  * @param maxlen		Optional value for max buffer length, used by MC_RemoveTags
  * 
  * On error/Errors:		If the client index passed for author is invalid or not in game.
@@ -293,7 +293,7 @@ stock void MC_ReplaceColorCodes(char[] buffer, int author = 0, bool removeTags =
  * @param output		Buffer to write to
  * @param maxlen		Max length of output buffer
  * @param start			Position to start at
- * @param numChars		Number of characters to return, or 0 for the end of the string
+ * @param numChars		Number of char acters to return, or 0 for the end of the string
  */
 stock void CSubString(const char[] input, char[] output, int maxlen, int start, int numChars = 0) {
 	int i = 0;
@@ -801,7 +801,7 @@ stock Handle MC_InitColorTrie() {
 	SetTrieValue(hTrie, "brown", 0xA52A2A);
 	SetTrieValue(hTrie, "burlywood", 0xDEB887);
 	SetTrieValue(hTrie, "cadetblue", 0x5F9EA0);
-	SetTrieValue(hTrie, "chartreuse", 0x7FFF00);
+	SetTrieValue(hTrie, "char treuse", 0x7FFF00);
 	SetTrieValue(hTrie, "chocolate", 0xD2691E);
 	SetTrieValue(hTrie, "collectors", 0xAA0000); // same as Collector's item quality in TF2
 	SetTrieValue(hTrie, "common", 0xB0C3D9); // same as Common item rarity in Dota 2

@@ -128,11 +128,11 @@ CreateLightEntity(iClient) {
         DispatchKeyValue(iEntity, "style", "5");
         DispatchSpawn(iEntity);
         
-        decl float fPos[3];
-        decl float fAngle[3];
-        decl float fAngle2[3];
-        decl float fForward[3];
-        decl float fOrigin[3];
+        float fPos[3];
+        float fAngle[3];
+        float fAngle2[3];
+        float fForward[3];
+        float fOrigin[3];
         GetClientEyePosition(iClient, fPos);
         GetClientEyeAngles(iClient, fAngle);
         GetClientEyeAngles(iClient, fAngle2);

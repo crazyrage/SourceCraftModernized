@@ -16,7 +16,7 @@
 
 #define ADMFLAG_EYEBOSS	ADMFLAG_SLAY	
 
-new iCurrentWrangler = 0;
+int iCurrentWrangler = 0;
 
 bool gNativeOverride = false;
 
@@ -40,7 +40,7 @@ public Action player_death(Handle event, const char[] name, bool dontBroadcast)
 {
     if (!IsValidClient(iCurrentWrangler)) return Plugin_Continue;
 
-    new client = GetClientOfUserId(GetEventInt(event, "attacker"));
+    int client = GetClientOfUserId(GetEventInt(event, "attacker"));
     if (iCurrentWrangler == client)
         iCurrentWrangler = 0;
     else
@@ -114,10 +114,10 @@ public OnGameFrame()
 {
     if (!IsValidClient(iCurrentWrangler)) return;
 
-    decl float pos[3];
+    float pos[3];
     GetPlayerEye(iCurrentWrangler, pos);
 
-    new eye = -1;
+    int eye = -1;
     while ((eye = FindEntityByClassname(eye, "eyeball_boss")) != -1)
     {
         SetEntPropVector(eye, Prop_Send, "m_lookAtSpot", pos);
@@ -171,7 +171,7 @@ public OnEntityCreated(entity, const char[] classname)
 
 public OnRocketSpawned(entity)
 {
-    new owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
+    int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
     if (IsValidEntity(owner))
     {
         char classname[32];
@@ -186,13 +186,13 @@ public OnRocketSpawned(entity)
 public Action Timer_SetRocket(Handle timer, any ref)
 {
     if (!IsValidClient(iCurrentWrangler)) return;
-    decl float pos[3];
+    float pos[3];
     GetPlayerEye(iCurrentWrangler, pos);
-    new ent = EntRefToEntIndex(ref);
+    int ent = EntRefToEntIndex(ref);
     if (ent > 0 && IsValidEntity(ent))
     {
-        new owner = GetEntPropEnt(ent, Prop_Send, "m_hOwnerEntity");
-        decl float orig[3], float ang[3], float vel[3];
+        int owner = GetEntPropEnt(ent, Prop_Send, "m_hOwnerEntity");
+        float orig[3], float ang[3], float vel[3];
         GetEntPropVector(owner, Prop_Send, "m_vecOrigin", orig);
         MakeVectorFromPoints(orig, pos, orig);
         GetVectorAngles(orig, ang);
@@ -228,7 +228,7 @@ public Native_Wrangleeyeboss(Handle plugin,numParams)
     }
     else
     {
-        new client = GetNativeCell(1);
+        int client = GetNativeCell(1);
         if (IsValidClient(client) &&
             IsPlayerAlive(client))
         {

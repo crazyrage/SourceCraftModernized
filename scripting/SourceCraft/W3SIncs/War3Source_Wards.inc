@@ -27,8 +27,8 @@
  * Creates a simple ward. 
  * 
  * This is the function you'd use if you want to implement wards with custom logic in your race.
- * This function only creates the ward data structure and keeps track of it internally, allowing you
- * to interact with it via the events and getters. 
+ * This function only creates the ward data structure and keeps track of it int ernally, allowing you
+ * to int eract with it via the events and getters. 
  * 
  * @param client: The id of the client that places this wards
  * @param location: The location where the ward should go
@@ -91,13 +91,13 @@ forward OnWardExpire(wardindex, owner, behaviorID);
  * @param customColor3: Custom color to use on team 3 (counter-terrorists in CS:S)
  * @return ID for the ward created or -1 if the ward was not created
  */
-native War3_CreateWardMod(client, float location[], radius, float duration, float pulseInterval, char[] behavior, skillNum, any:data[], 
+native War3_CreateWardMod(client, float location[], radius, float duration, float pulseInterval, char[] behavior, skillNum, any data[], 
                           wardTarget=WARD_TARGET_ENEMYS, bool disableOnDeath=true, 
                           bool useDefaultColors = true, customColor2[] = {0,0,0,0}, customColor3[] = {0,0,0,0});
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Getters for the basic internal ward data structure
+// Getters for the basic int ernal ward data structure
 
 native War3_GetWardLocation(wardindex, float location[]);
 native War3_GetWardRadius(wardindex);
@@ -141,5 +141,5 @@ native War3_GetWardBehavior(wardindex);
 native War3_GetWardColor2(wardindex, color[]);
 native War3_GetWardColor3(wardindex, color[]);
 native War3_GetWardSkill(wardindex);
-native any:War3_GetWardData(wardindex, any:data[]);
+native any War3_GetWardData(wardindex, any data[]);
 native bool War3_GetWardUseDefaultColor(wardindex);

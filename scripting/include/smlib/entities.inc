@@ -15,7 +15,7 @@
  * @param 1		Entity Index of the parent.
  * @param 2		Name of the children entity index variable (will be only valid in the loop).
  */
-#define LOOP_CHILDREN(%1,%2) for (new %2=Entity_GetNextChild(%1); %2 != INVALID_ENT_REFERENCE; %2=Entity_GetNextChild(%1, ++%2))
+#define LOOP_CHILDREN(%1,%2) for (int %2=Entity_GetNextChild(%1); %2 != INVALID_ENT_REFERENCE; %2=Entity_GetNextChild(%1, ++%2))
 
 /*
  * Checks if an entity is valid and exists.
@@ -45,7 +45,7 @@ stock Entity_FindByName(const char[] name, const char[] className="")
 	if (className[0] == '\0') {
 		// Hack: Double the limit to gets none-networked entities too.
 		new realMaxEntities = GetMaxEntities() * 2;
-		for (new entity=0; entity < realMaxEntities; entity++) {
+		for (int entity=0; entity < realMaxEntities; entity++) {
 
 			if (!IsValidEntity(entity)) {
 				continue;
@@ -88,7 +88,7 @@ stock Entity_FindByHammerId(hammerId, const char[] className="")
 	if (className[0] == '\0') {
 		// Hack: Double the limit to gets none-networked entities too.
 		new realMaxEntities = GetMaxEntities() * 2;
-		for (new entity=0; entity < realMaxEntities; entity++) {
+		for (int entity=0; entity < realMaxEntities; entity++) {
 
 			if (!IsValidEntity(entity)) {
 				continue;
@@ -320,7 +320,7 @@ stock Entity_GetHammerId(entity)
  * @param entity			Entity index.
  * @return					Radius
  */
-stock Float Entity_GetRadius(entity)
+stock float Entity_GetRadius(entity)
 {
 	return GetEntPropFloat(entity, Prop_Data, "m_flRadius");
 }
@@ -332,7 +332,7 @@ stock Float Entity_GetRadius(entity)
  * @param radius			Radius value
  * @noreturn
  */
-stock Entity_SetRadius(entity, Float radius)
+stock Entity_SetRadius(entity, float radius)
 {
 	SetEntPropFloat(entity, Prop_Data, "m_flRadius", radius);
 }
@@ -344,7 +344,7 @@ stock Entity_SetRadius(entity, Float radius)
  * @param vec				Vector.
  * @noreturn
  */
-stock Entity_GetMinSize(entity, Float vec[3])
+stock Entity_GetMinSize(entity, float vec[3])
 {
 	GetEntPropVector(entity, Prop_Send, "m_vecMins", vec);
 }
@@ -356,7 +356,7 @@ stock Entity_GetMinSize(entity, Float vec[3])
  * @param vec				Vector.
  * @noreturn
  */
-stock Entity_SetMinSize(entity, const Float vecMins[3])
+stock Entity_SetMinSize(entity, const float vecMins[3])
 {
 	SetEntPropVector(entity, Prop_Send, "m_vecMins", vecMins);
 }
@@ -369,7 +369,7 @@ stock Entity_SetMinSize(entity, const Float vecMins[3])
  * @param vec				return vector.
  * @noreturn
  */
-stock Entity_GetMaxSize(entity, Float vec[3])
+stock Entity_GetMaxSize(entity, float vec[3])
 {
 	GetEntPropVector(entity, Prop_Send, "m_vecMaxs", vec);
 }
@@ -382,7 +382,7 @@ stock Entity_GetMaxSize(entity, Float vec[3])
  * @param vec				Vector.
  * @noreturn
  */
-stock Entity_SetMaxSize(entity, const Float vecMaxs[3])
+stock Entity_SetMaxSize(entity, const float vecMaxs[3])
 {
 	SetEntPropVector(entity, Prop_Send, "m_vecMaxs", vecMaxs);
 }
@@ -396,18 +396,18 @@ stock Entity_SetMaxSize(entity, const Float vecMaxs[3])
  * @param vecMaxs			Max size Vector
  * @noreturn
  */
-stock Entity_SetMinMaxSize(entity, Float vecMins[3], Float vecMaxs[3])
+stock Entity_SetMinMaxSize(entity, float vecMins[3], float vecMaxs[3])
 {
 	// Taken from hl2sdk-ob-valve\game\server\util.cpp SetMinMaxSize()
 	// Todo: Replace this by a SDK call
-	for (new i=0; i<3; i++) {
+	for (int i=0; i<3; i++) {
 
 		if (vecMins[i] > vecMaxs[i]) {
 			ThrowError("Error: mins[%d] > maxs[%d] of entity %d", i, i, EntRefToEntIndex(entity));
 		}
 	}
 
-	decl Float m_vecMins[3], Float m_vecMaxs[3];
+	float m_vecMins[3], float m_vecMaxs[3];
 	Entity_GetMinSize(entity, m_vecMins);
 	Entity_GetMaxSize(entity, m_vecMaxs);
 
@@ -418,7 +418,7 @@ stock Entity_SetMinMaxSize(entity, Float vecMins[3], Float vecMaxs[3])
 	Entity_SetMinSize(entity, vecMins);
 	Entity_SetMaxSize(entity, vecMaxs);
 
-	decl Float vecSize[3];
+	float vecSize[3];
 	SubtractVectors(vecMaxs, vecMins, vecSize);
 	Entity_SetRadius(entity, GetVectorLength(vecSize) * 0.5);
 
@@ -444,7 +444,7 @@ stock Entity_SetMinMaxSize(entity, Float vecMins[3], Float vecMaxs[3])
 #define SF_PHYSPROP_NO_ROTORWASH_PUSH			0x000080		// The rotorwash doesn't push these
 #define SF_PHYSPROP_ENABLE_PICKUP_OUTPUT		0x000100		// If set, allow the player to +USE this for the purposes of generating an output
 #define SF_PHYSPROP_PREVENT_PICKUP				0x000200		// If set, prevent +USE/Physcannon pickup of this prop
-#define SF_PHYSPROP_PREVENT_PLAYER_TOUCH_ENABLE	0x000400		// If set, the player will not cause the object to enable its motion when bumped into
+#define SF_PHYSPROP_PREVENT_PLAYER_TOUCH_ENABLE	0x000400		// If set, the player will not cause the object to enable its motion when bumped int o
 #define SF_PHYSPROP_HAS_ATTACHED_RAGDOLLS		0x000800		// Need to remove attached ragdolls on enable motion/etc
 #define SF_PHYSPROP_FORCE_TOUCH_TRIGGERS		0x001000		// Override normal debris behavior and respond to triggers anyway
 #define SF_PHYSPROP_FORCE_SERVER_SIDE			0x002000		// Force multiplayer physics object to be serverside
@@ -468,7 +468,7 @@ stock Entity_SetMinMaxSize(entity, Float vecMins[3], Float vecMaxs[3])
 #define SF_PHYSBOX_ALWAYS_PICK_UP		  		0x100000		// Physcannon can always pick this up, no matter what mass or constraints may apply.
 #define SF_PHYSBOX_NEVER_PICK_UP				0x200000		// Physcannon will never be able to pick this up.
 #define SF_PHYSBOX_NEVER_PUNT					0x400000		// Physcannon will never be able to punt this object.
-#define SF_PHYSBOX_PREVENT_PLAYER_TOUCH_ENABLE	0x800000		// If set, the player will not cause the object to enable its motion when bumped into
+#define SF_PHYSBOX_PREVENT_PLAYER_TOUCH_ENABLE	0x800000		// If set, the player will not cause the object to enable its motion when bumped int o
 
 /*
  * Spawnflags for func breakable
@@ -520,7 +520,7 @@ stock Entity_SetSpawnFlags(entity, flags)
  */
 stock Entity_AddSpawnFlags(entity, flags)
 {
-	new spawnFlags = Entity_GetSpawnFlags(entity);
+	int spawnFlags = Entity_GetSpawnFlags(entity);
 	spawnFlags |= flags;
 	Entity_SetSpawnFlags(entity, spawnFlags);
 }
@@ -534,7 +534,7 @@ stock Entity_AddSpawnFlags(entity, flags)
  */
 stock Entity_RemoveSpawnFlags(entity, flags)
 {
-	new spawnFlags = Entity_GetSpawnFlags(entity);
+	int spawnFlags = Entity_GetSpawnFlags(entity);
 	spawnFlags &= ~flags;
 	Entity_SetSpawnFlags(entity, spawnFlags);
 }
@@ -600,7 +600,7 @@ enum Entity_Flags
 	EFL_IN_SKYBOX =							(1<<17), // This is set if the entity detects that it's in the skybox.
 													 // This forces it to pass the "in PVS" for transmission.
 	EFL_USE_PARTITION_WHEN_NOT_SOL = 		(1<<18), // Entities with this flag set show up in the partition even when not solid
-	EFL_TOUCHING_FLUID =					(1<<19), // Used to determine if an entity is floating
+	EFL_TOUCHING_FLUID =					(1<<19), // Used to determine if an entity is float ing
 
 	// FIXME: Not really sure where I should add this...
 	EFL_IS_BEING_LIFTED_BY_BARNACLE =		(1<<20),
@@ -613,7 +613,7 @@ enum Entity_Flags
 	EFL_DONTWALKON =						(1<<26), // NPC;s should not walk on this entity
 	EFL_NO_DISSOLVE =						(1<<27), // These guys shouldn't dissolve
 	EFL_NO_MEGAPHYSCANNON_RAGDOLL =			(1<<28), // Mega physcannon can't ragdoll these guys.
-	EFL_NO_WATER_VELOCITY_CHANGE =			(1<<29), // Don't adjust this entity's velocity when transitioning into water
+	EFL_NO_WATER_VELOCITY_CHANGE =			(1<<29), // Don't adjust this entity's velocity when transitioning int o water
 	EFL_NO_PHYSCANNON_INTERACTION =			(1<<30), // Physcannon can't pick these up or punt them
 	EFL_NO_DAMAGE_FORCES =					(1<<31), // Doesn't accept forces from physics damage
 };
@@ -650,7 +650,7 @@ stock Entity_SetEFlags(entity, Entity_Flags:flags)
  */
 stock Entity_AddEFlags(entity, Entity_Flags:flags)
 {
-	new Entity_Flags:setFlags = Entity_GetEFlags(entity);
+	int Entity_Flags:setFlags = Entity_GetEFlags(entity);
 	setFlags |= flags;
 	Entity_SetEFlags(entity, setFlags);
 }
@@ -664,7 +664,7 @@ stock Entity_AddEFlags(entity, Entity_Flags:flags)
  */
 stock Entity_RemoveEFlags(entity, Entity_Flags:flags)
 {
-	new Entity_Flags:setFlags = Entity_GetEFlags(entity);
+	int Entity_Flags:setFlags = Entity_GetEFlags(entity);
 	setFlags &= ~flags;
 	Entity_SetEFlags(entity, setFlags);
 }
@@ -678,7 +678,7 @@ stock Entity_RemoveEFlags(entity, Entity_Flags:flags)
  */
 stock bool Entity_HasEFlags(entity, Entity_Flags:flags)
 {
-	new Entity_Flags:currentEFlags = Entity_GetEFlags(entity);
+	int Entity_Flags:currentEFlags = Entity_GetEFlags(entity);
 
 	return bool:(currentEFlags & flags);
 }
@@ -735,7 +735,7 @@ stock Entity_SetFlags(entity, flags)
  */
 stock Entity_AddFlags(entity, flags)
 {
-	new setFlags = Entity_GetFlags(entity);
+	int setFlags = Entity_GetFlags(entity);
 	setFlags |= flags;
 	Entity_SetFlags(entity, flags);
 }
@@ -749,7 +749,7 @@ stock Entity_AddFlags(entity, flags)
  */
 stock Entity_RemoveFlags(entity, flags)
 {
-	new setFlags = Entity_GetFlags(entity);
+	int setFlags = Entity_GetFlags(entity);
 	setFlags &= ~flags;
 	Entity_SetFlags(entity, setFlags);
 }
@@ -765,7 +765,7 @@ stock Entity_RemoveFlags(entity, flags)
  */
 stock Entity_ToggleFlag(entity, flag)
 {
-	new setFlag = Entity_GetFlags(entity);
+	int setFlag = Entity_GetFlags(entity);
 	setFlag ^= flag;
 	Entity_SetFlags(entity, setFlag);
 }
@@ -792,8 +792,8 @@ stock Entity_ClearFlags(entity)
 
 enum SolidFlags_t
 {
-	FSOLID_CUSTOMRAYTEST		= 0x0001,	// Ignore solid type + always call into the entity for ray tests
-	FSOLID_CUSTOMBOXTEST		= 0x0002,	// Ignore solid type + always call into the entity for swept box tests
+	FSOLID_CUSTOMRAYTEST		= 0x0001,	// Ignore solid type + always call int o the entity for ray tests
+	FSOLID_CUSTOMBOXTEST		= 0x0002,	// Ignore solid type + always call int o the entity for swept box tests
 	FSOLID_NOT_SOLID			= 0x0004,	// Are we currently not solid?
 	FSOLID_TRIGGER				= 0x0008,	// This is something may be collideable but fires touch functions
 											// even when it's not collideable (when the FSOLID_NOT_SOLID flag is set)
@@ -827,7 +827,7 @@ stock SolidFlags_t Entity_GetSolidFlags(entity)
  */
 stock Entity_SetSolidFlags(entity, SolidFlags_t:flags)
 {
-	new SolidFlags_t:oldFlags = Entity_GetSolidFlags(entity);
+	int SolidFlags_t:oldFlags = Entity_GetSolidFlags(entity);
 	flags = flags & SolidFlags_t:0xFFFF;
 
 	if (oldFlags == flags) {
@@ -853,7 +853,7 @@ stock Entity_SetSolidFlags(entity, SolidFlags_t:flags)
  */
 stock Entity_AddSolidFlags(entity, SolidFlags_t:flags)
 {
-	new SolidFlags_t:newFlags = Entity_GetSolidFlags(entity);
+	int SolidFlags_t:newFlags = Entity_GetSolidFlags(entity);
 	newFlags |= flags;
 	Entity_SetSolidFlags(entity, newFlags);
 }
@@ -867,7 +867,7 @@ stock Entity_AddSolidFlags(entity, SolidFlags_t:flags)
  */
 stock Entity_RemoveSolidFlags(entity, SolidFlags_t:flags)
 {
-	new SolidFlags_t:newFlags = Entity_GetSolidFlags(entity);
+	int SolidFlags_t:newFlags = Entity_GetSolidFlags(entity);
 	newFlags &= ~flags;
 	Entity_SetSolidFlags(entity, newFlags);
 }
@@ -902,7 +902,7 @@ enum SolidType_t
 	SOLID_BBOX			= 2,	// an AABB
 	SOLID_OBB			= 3,	// an OBB (not implemented yet)
 	SOLID_OBB_YAW		= 4,	// an OBB, constrained so that it can only yaw
-	SOLID_CUSTOM		= 5,	// Always call into the entity for tests
+	SOLID_CUSTOM		= 5,	// Always call int o the entity for tests
 	SOLID_VPHYSICS		= 6,	// solid vphysics object, get vcollide from the model and collide with that
 	SOLID_LAST,
 };
@@ -1001,7 +1001,7 @@ stock Entity_SetModelIndex(entity, index)
 * @param maxspeed	the maximum speed the entity can move
 * @noreturn
 */
-stock Entity_SetMaxSpeed(entity, Float value)
+stock Entity_SetMaxSpeed(entity, float value)
 {
 	SetEntPropFloat(entity, Prop_Data, "m_flMaxspeed", value);
 }
@@ -1015,8 +1015,8 @@ enum Collision_Group_t
 	COLLISION_GROUP_NONE  = 0,
 	COLLISION_GROUP_DEBRIS,				// Collides with nothing but world and static stuff
 	COLLISION_GROUP_DEBRIS_TRIGGER,		// Same as debris, but hits triggers
-	COLLISION_GROUP_INTERACTIVE_DEB,	// Collides with everything except other interactive debris or debris
-	COLLISION_GROUP_INTERACTIVE,		// Collides with everything except interactive debris or debris
+	COLLISION_GROUP_INTERACTIVE_DEB,	// Collides with everything except other int eractive debris or debris
+	COLLISION_GROUP_INTERACTIVE,		// Collides with everything except int eractive debris or debris
 	COLLISION_GROUP_PLAYER,
 	COLLISION_GROUP_BREAKABLE_GLASS,
 	COLLISION_GROUP_VEHICLE,
@@ -1072,7 +1072,7 @@ stock Entity_SetCollisionGroup(entity, Collision_Group_t:value)
  * @param vec				3 dimensional vector array.
  * @noreturn
  */
-stock Entity_GetAbsOrigin(entity, Float vec[3])
+stock Entity_GetAbsOrigin(entity, float vec[3])
 {
 	GetEntPropVector(entity, Prop_Send, "m_vecOrigin", vec);
 }
@@ -1084,7 +1084,7 @@ stock Entity_GetAbsOrigin(entity, Float vec[3])
  * @param vec				3 dimensional vector array.
  * @noreturn
  */
-stock Entity_SetAbsOrigin(entity, const Float vec[3])
+stock Entity_SetAbsOrigin(entity, const float vec[3])
 {
 	// We use TeleportEntity to set the origin more safely
 	// Todo: Replace this with a call to UTIL_SetOrigin() or CBaseEntity::SetLocalOrigin()
@@ -1104,7 +1104,7 @@ stock Entity_SetAbsOrigin(entity, const Float vec[3])
  * @param vec				3 dimensional vector array.
  * @noreturn
  */
-stock Entity_GetAbsAngles(entity, Float vec[3])
+stock Entity_GetAbsAngles(entity, float vec[3])
 {
 	GetEntPropVector(entity, Prop_Data, "m_angAbsRotation", vec);
 }
@@ -1116,7 +1116,7 @@ stock Entity_GetAbsAngles(entity, Float vec[3])
  * @param vec				3 dimensional vector array.
  * @noreturn
  */
-stock Entity_SetAbsAngles(entity, const Float vec[3])
+stock Entity_SetAbsAngles(entity, const float vec[3])
 {
 	// We use TeleportEntity to set the angles more safely
 	// Todo: Replace this with a call to CBaseEntity::SetLocalAngles()
@@ -1137,7 +1137,7 @@ stock Entity_SetAbsAngles(entity, const Float vec[3])
  * @param vel			An 3 dim array
  * @noreturn
  */
-stock Entity_GetLocalVelocity(entity, Float vec[3])
+stock Entity_GetLocalVelocity(entity, float vec[3])
 {
 	GetEntPropVector(entity, Prop_Data, "m_vecVelocity", vec);
 }
@@ -1152,7 +1152,7 @@ stock Entity_GetLocalVelocity(entity, Float vec[3])
  * @param vel			An 3 dim array
  * @noreturn
  */
-stock Entity_SetLocalVelocity(entity, const Float vec[3])
+stock Entity_SetLocalVelocity(entity, const float vec[3])
 {
 	SetEntPropVector(entity, Prop_Data, "m_vecVelocity", vec);
 }
@@ -1166,7 +1166,7 @@ stock Entity_SetLocalVelocity(entity, const Float vec[3])
  * @param vel			An 3 dim array
  * @noreturn
  */
-stock Entity_GetBaseVelocity(entity, Float vec[3])
+stock Entity_GetBaseVelocity(entity, float vec[3])
 {
 	GetEntPropVector(entity, Prop_Data, "m_vecBaseVelocity", vec);
 }
@@ -1180,7 +1180,7 @@ stock Entity_GetBaseVelocity(entity, Float vec[3])
  * @param vel			An 3 dim array
  * @noreturn
  */
-stock Entity_SetBaseVelocity(entity, const Float vec[3])
+stock Entity_SetBaseVelocity(entity, const float vec[3])
 {
 	SetEntPropVector(entity, Prop_Data, "m_vecBaseVelocity", vec);
 }
@@ -1194,7 +1194,7 @@ stock Entity_SetBaseVelocity(entity, const Float vec[3])
  * @param vel			An 3 dim array
  * @noreturn
  */
-stock Entity_GetAbsVelocity(entity, Float vec[3])
+stock Entity_GetAbsVelocity(entity, float vec[3])
 {
 	GetEntPropVector(entity, Prop_Data, "m_vecAbsVelocity", vec);
 }
@@ -1208,7 +1208,7 @@ stock Entity_GetAbsVelocity(entity, Float vec[3])
  * @param vel			An 3 dim array
  * @noreturn
  */
-stock Entity_SetAbsVelocity(entity, const Float vec[3])
+stock Entity_SetAbsVelocity(entity, const float vec[3])
 {
 	// We use TeleportEntity to set the velocity more safely
 	// Todo: Replace this with a call to CBaseEntity::SetAbsVelocity()
@@ -1267,7 +1267,7 @@ stock Entity_GetHealth(entity)
  */
 stock Entity_SetHealth(entity, value, ignoreMax=false, kill=true)
 {
-	new health = value;
+	int health = value;
 
 	if (!ignoreMax) {
 		new maxHealth = Entity_GetMaxHealth(entity);
@@ -1299,7 +1299,7 @@ stock Entity_SetHealth(entity, value, ignoreMax=false, kill=true)
  */
 stock Entity_AddHealth(entity, value, ignoreMax=false, kill=true)
 {
-	new health = Entity_GetHealth(entity);
+	int health = Entity_GetHealth(entity);
 
 	health += value;
 
@@ -1315,7 +1315,7 @@ stock Entity_AddHealth(entity, value, ignoreMax=false, kill=true)
  */
 stock Entity_TakeHealth(entity, value, ignoreMax=false, kill=true)
 {
-	new health = Entity_GetHealth(entity);
+	int health = Entity_GetHealth(entity);
 
 	health -= value;
 
@@ -1348,14 +1348,14 @@ stock Entity_SetMaxHealth(entity, value)
 }
 
 /**
- * Returns the Float distance between an entity
+ * Returns the float distance between an entity
  * and a vector origin.
  *
  * @param entity		Entity Index.
  * @param target		Vector Origin.
- * @return				Distance Float value.
+ * @return				Distance float value.
  */
-stock Float Entity_GetDistanceOrigin(entity, const Float vec[3])
+stock float Entity_GetDistanceOrigin(entity, const float vec[3])
 {
 	float entityVec[3];
 	Entity_GetAbsOrigin(entity, entityVec);
@@ -1364,14 +1364,14 @@ stock Float Entity_GetDistanceOrigin(entity, const Float vec[3])
 }
 
 /**
- * Returns the Float distance between two entities.
+ * Returns the float distance between two entities.
  * Both entities must be valid.
  *
  * @param entity		Entity Index.
  * @param target		Target Entity Index.
- * @return				Distance Float value.
+ * @return				Distance float value.
  */
-stock Float Entity_GetDistance(entity, target)
+stock float Entity_GetDistance(entity, target)
 {
 	float targetVec[3];
 	Entity_GetAbsOrigin(target, targetVec);
@@ -1384,10 +1384,10 @@ stock Float Entity_GetDistance(entity, target)
  *
  * @param entity		Entity Index.
  * @param target		Target Entity Index.
- * @param distance		Max Float distance.
+ * @param distance		Max float distance.
  * @return				True if the given entities are closer than the given distance value, false otherwise.
  */
-stock bool Entity_InRange(entity, target, Float distance)
+stock bool Entity_InRange(entity, target, float distance)
 {
 	if (Entity_GetDistance(entity, target) > distance) {
 		return false;
@@ -1579,9 +1579,9 @@ stock bool Entity_Kill(kenny, killChildren=false)
  */
 stock Entity_KillAllByClassName(const char[] className)
 {
-	new x = 0;
+	int x = 0;
 
-	new entity = INVALID_ENT_REFERENCE;
+	int entity = INVALID_ENT_REFERENCE;
 	while ((entity = FindEntityByClassname(entity, className)) != INVALID_ENT_REFERENCE) {
 		AcceptEntityInput(entity, "kill");
 		x++;
@@ -1768,25 +1768,25 @@ stock Entity_SetParent(entity, parent)
  * You can get the elapsed time since start by multiply tick with currentCall.
  *
  * @param entity		Entity Index.
- * @param interval		The current interval from the current game time to execute the next call of this function.
+ * @param int erval		The current int erval from the current game time to execute the next call of this function.
  * @param currentCall	The current call number (0 is the 1st call at 0.0 seconds, 1 the 2nd call at tick*1 seconds, ...).
  * @return				When true this callback will be called again at the next defined tick, otherwise it won't.
  */
-//functag Entity_ChangeOverTimeCallback bool public(&entity, &Float interval, &currentCall);
-typedef Entity_ChangeOverTimeCallback = function bool (int &entity, float &interval, int &currentCall);
+//functag Entity_ChangeOverTimeCallback bool public(&entity, &float int erval, &currentCall);
+typedef Entity_ChangeOverTimeCallback = function bool (int &entity, float int & erval, int &currentCall);
 
 /*
  * Creates a timer and provides a callback to change various things about an entity over time.
  *
  * @param entity			Entity Index.
- * @param interval			Interval from the current game time to execute the given function.
+ * @param int erval			Interval from the current game time to execute the given function.
  * @noreturn
  */
-stock Entity_ChangeOverTime(entity, Float interval=0.1, Entity_ChangeOverTimeCallback:valueCallback)
+stock Entity_ChangeOverTime(entity, float int erval=0.1, Entity_ChangeOverTimeCallback:valueCallback)
 {
 	Handle dataPack = CreateDataPack();
 	WritePackCell(dataPack, EntIndexToEntRef(entity));
-	WritePackFloat(dataPack, interval);
+	WritePackFloat(dataPack, int erval);
 	WritePackCell(dataPack, 0);
 #if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 7
 	WritePackFunction(dataPack, valueCallback);
@@ -1799,23 +1799,23 @@ stock Entity_ChangeOverTime(entity, Float interval=0.1, Entity_ChangeOverTimeCal
 
 public Action __smlib_Timer_ChangeOverTime(Handle Timer, Handle dataPack)
 {
-	new entity = EntRefToEntIndex(ReadPackCell(dataPack));
+	int entity = EntRefToEntIndex(ReadPackCell(dataPack));
 	if(!Entity_IsValid(entity)){
 		return Plugin_Stop;
 	}
 
-	float interval = ReadPackFloat(dataPack);
-	new currentCall = ReadPackCell(dataPack);
+	float int erval = ReadPackFloat(dataPack);
+	int currentCall = ReadPackCell(dataPack);
 #if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 7
-	new Function:callback = ReadPackFunction(dataPack);
+	int Function:callback = ReadPackFunction(dataPack);
 #else
-	new Function:callback = Function:ReadPackCell(dataPack);
+	int Function:callback = Function:ReadPackCell(dataPack);
 #endif
 
-	new any result;
+	int any result;
 	Call_StartFunction(null, callback);
 	Call_PushCellRef(entity);
-	Call_PushFloatRef(interval);
+	Call_PushFloatRef(int erval);
 	Call_PushCellRef(currentCall);
 	Call_Finish(result);
 
@@ -1825,7 +1825,7 @@ public Action __smlib_Timer_ChangeOverTime(Handle Timer, Handle dataPack)
 
 	ResetPack(dataPack,true);
 	WritePackCell(dataPack, EntIndexToEntRef(entity));
-	WritePackFloat(dataPack, interval);
+	WritePackFloat(dataPack, int erval);
 	WritePackCell(dataPack, currentCall+1);
 #if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 7
 	WritePackFunction(dataPack, callback);
@@ -1833,7 +1833,7 @@ public Action __smlib_Timer_ChangeOverTime(Handle Timer, Handle dataPack)
 	WritePackCell(dataPack, _:callback);
 #endif
 	ResetPack(dataPack);
-	CreateTimer(interval,__smlib_Timer_ChangeOverTime,dataPack);
+	CreateTimer(int erval,__smlib_Timer_ChangeOverTime,dataPack);
 	return Plugin_Stop;
 }
 
@@ -1847,7 +1847,7 @@ public Action __smlib_Timer_ChangeOverTime(Handle Timer, Handle dataPack)
  */
 stock Entity_GetNextChild(parent, start=0)
 {
-	for (new entity=start; entity <= 2048; entity++) {
+	for (int entity=start; entity <= 2048; entity++) {
 
 		if (!Entity_IsValid(entity)) {
 			continue;
@@ -1872,7 +1872,7 @@ stock Entity_GetNextChild(parent, start=0)
  * @param vec				Vector.
  * @noreturn
  */
-stock Entity_GetMoveDirection(entity, Float vec[3])
+stock Entity_GetMoveDirection(entity, float vec[3])
 {
 	GetEntPropVector(entity, Prop_Data, "m_vecMoveDir", vec);
 }
@@ -1884,7 +1884,7 @@ stock Entity_GetMoveDirection(entity, Float vec[3])
  * @param vec				Vector.
  * @noreturn
  */
-stock Entity_SetMoveDirection(entity, const Float vec[3])
+stock Entity_SetMoveDirection(entity, const float vec[3])
 {
 	SetEntPropVector(entity, Prop_Data, "m_vecMoveDir", vec);
 }
@@ -1918,7 +1918,7 @@ stock Entity_SetForceClose(entity, bool forceClose)
  * @param entity			Entity index.
  * @return					Speed of the entity.
  */
-stock Float Entity_GetSpeed(entity)
+stock float Entity_GetSpeed(entity)
 {
 	return GetEntPropFloat(entity, Prop_Data, "m_flSpeed");
 }
@@ -1930,7 +1930,7 @@ stock Float Entity_GetSpeed(entity)
  * @param speed				The new speed of the entity.
  * @noreturn
  */
-stock Entity_SetSpeed(entity, Float speed)
+stock Entity_SetSpeed(entity, float speed)
 {
 	SetEntPropFloat(entity, Prop_Data, "m_flSpeed", speed);
 }
@@ -1942,7 +1942,7 @@ stock Entity_SetSpeed(entity, Float speed)
  * @param entity			Entity index.
  * @return					Damage.
  */
-stock Float Entity_GetBlockDamage(entity)
+stock float Entity_GetBlockDamage(entity)
 {
 	return GetEntPropFloat(entity, Prop_Data, "m_flBlockDamage");
 }
@@ -1955,7 +1955,7 @@ stock Float Entity_GetBlockDamage(entity)
  * @param damage			Damage.
  * @noreturn
  */
-stock Entity_SetBlockDamage(entity, Float damage)
+stock Entity_SetBlockDamage(entity, float damage)
 {
 	SetEntPropFloat(entity, Prop_Data, "m_flBlockDamage", damage);
 }
@@ -2061,7 +2061,7 @@ stock Entity_GetMinHealthDamage(entity)
 stock Entity_GetRenderColor(entity, color[4])
 {
 	static bool gotconfig = false;
-	static String:prop[32];
+	static char prop[32];
 
 	if (!gotconfig) {
 		Handle gc = LoadGameConfigFile("core.games");
@@ -2075,13 +2075,13 @@ stock Entity_GetRenderColor(entity, color[4])
 		gotconfig = true;
 	}
 
-	new offset = GetEntSendPropOffs(entity, prop);
+	int offset = GetEntSendPropOffs(entity, prop);
 
 	if (offset <= 0) {
 		ThrowError("SetEntityRenderColor not supported by this mod");
 	}
 
-	for (new i=0; i < 4; i++) {
+	for (int i=0; i < 4; i++) {
 		color[i] = GetEntData(entity, offset + i + 1, 1);
 	}
 }
@@ -2101,7 +2101,7 @@ stock Entity_GetRenderColor(entity, color[4])
 stock Entity_SetRenderColor(entity, r=-1, g=-1, b=-1, a=-1)
 {
 	static bool gotconfig = false;
-	static String:prop[32];
+	static char prop[32];
 
 	if (!gotconfig) {
 		Handle gc = LoadGameConfigFile("core.games");
@@ -2115,7 +2115,7 @@ stock Entity_SetRenderColor(entity, r=-1, g=-1, b=-1, a=-1)
 		gotconfig = true;
 	}
 
-	new offset = GetEntSendPropOffs(entity, prop);
+	int offset = GetEntSendPropOffs(entity, prop);
 
 	if (offset <= 0) {
 		ThrowError("SetEntityRenderColor not supported by this mod");

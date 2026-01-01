@@ -25,7 +25,7 @@
  * Sets up the amount of shields the client has, an alias for SetupArmor()
  *
  * @param client 	    Client
- * @param level         The upgrade level used to index into the initialArmor[] array
+ * @param level         The upgrade level used to index int o the initialArmor[] array
  * @param initialArmor  Array of initial armor amounts for each level (as percent of health).
  * @param armorPercent  Array that holds a range of percent damage the armor absorbs for each level.
  * @param regenRate:    The rate to regenerate shields per 1.0 second tick (-1.0 = same as level)
@@ -49,8 +49,8 @@ stock SetupShields(int client, int level, const float[] initialArmor,
  * Sets up the amount of armor the client has when they also have shields
  *
  * @param client 	    Client
- * @param armor_level   The armor level used to index into the initialArmor[] array
- * @param shields_level The shields level used to index into the maxShields[] array
+ * @param armor_level   The armor level used to index int o the initialArmor[] array
+ * @param shields_level The shields level used to index int o the maxShields[] array
  * @param initialArmor  Array of initial armor amounts for each level (as percent of health).
  * @param maxShields    Array of maximum shield amounts for each level (as percent of health).
  * @param armorPercent  Array that holds a range of percent damage the armor absorbs for each level.

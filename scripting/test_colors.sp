@@ -36,7 +36,7 @@ public Plugin myinfo = {
 
 *****************************************************************/
 
-// ConVar Handles
+// ConVar Handle s
 
 // Misc
 

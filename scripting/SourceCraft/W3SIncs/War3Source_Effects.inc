@@ -165,7 +165,7 @@ stock War3_PrecacheHaloSprite()
 /**
  * CreateW3SParticle
  * 
- * @param String:effectName Name of the particle effect you want to spawn.
+ * @param char effectName Name of the particle effect you want to spawn.
  *                             Don't forget to precache this OnMapStart!
  * @param float fPos[3] Position to spawn the particle at
  * 
@@ -199,8 +199,8 @@ stock CreateW3SParticle(const char effectName[], const float fPos[3], const floa
  * Spawns a light_dynamic at a fixed position.
  * 
  * @param float fPos[3] Position to spawn the light at
- * @param String:color RGBA value of the color like "255 255 255 255"
- * @param String:style See http://developer.valvesoftware.com/wiki/Light under "Appearances"
+ * @param char color RGBA value of the color like "255 255 255 255"
+ * @param char style See http://developer.valvesoftware.com/wiki/Light under "Appearances"
  * @param distance how far the light stretches
  * 
  * @returns the entinty index of the light or -1 if there was none created
@@ -262,7 +262,7 @@ stock ModifyEntityAddDeathTimer(const entityIndex, const float lifetime)
  * 
  * @param entityIndex Entity index of the entity you want to modify
  * @param otherEntityIndex Entity index to attach the particle to
- * @param String:attachTo Attachment point of the otherEntityIndex.
+ * @param char attachTo Attachment point of the otherEntityIndex.
  *                           Leave this out or set it to "" when you don't want
  *                           to attach to any specific point.
  */

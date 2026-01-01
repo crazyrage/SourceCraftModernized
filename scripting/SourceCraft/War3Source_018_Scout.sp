@@ -123,7 +123,7 @@ public OnRaceChanged(client,oldrace,newrace)
 {
     if(newrace==thisRaceID)
     {
-        new level=War3_GetSkillLevel(client,thisRaceID,SKILL_TRUESIGHT);
+        int level=War3_GetSkillLevel(client,thisRaceID,SKILL_TRUESIGHT);
         if(level>0){
             W3SetAuraFromPlayer(auras[level],client,true,level);
         }
@@ -199,7 +199,7 @@ public OnAbilityCommand(client,ability,bool pressed)
         }
     }
 }
-public Action EndInvis(Handle timer,any:client)
+public Action EndInvis(Handle timer,any client)
 {
     InInvis[client]=false;
     War3_SetBuff(client,fInvisibilitySkill,thisRaceID,1.0);
@@ -208,7 +208,7 @@ public Action EndInvis(Handle timer,any:client)
     PrintHintText(client,"%T","No Longer Invis! Cannot shoot for 1 sec!",client);
     
 }
-public Action EndInvis2(Handle timer,any:client){
+public Action EndInvis2(Handle timer,any client){
     War3_SetBuff(client,bDisarm,thisRaceID,false);
     bDisarmed[client]=false;
 }
@@ -217,8 +217,8 @@ public OnW3TakeDmgBulletPre(victim,attacker,float damage)
 {
     if(ValidPlayer(victim)&&ValidPlayer(attacker))
     {
-        new vteam=GetClientTeam(victim);
-        new ateam=GetClientTeam(attacker);
+        int vteam=GetClientTeam(victim);
+        int ateam=GetClientTeam(attacker);
         if(vteam!=ateam)
         {
             if(War3_GetRace(attacker)==thisRaceID && !W3HasImmunity(victim,Immunity_Skills)){
@@ -277,7 +277,7 @@ public void OnWar3EventPostHurt(victim, attacker, float damage, const char[] wea
         }
     }           
 }
-public Action Undisarm(Handle t,any:client){
+public Action Undisarm(Handle t,any client){
     War3_SetBuff(client,bDisarm,thisRaceID,false);
 }
 
@@ -304,7 +304,7 @@ public OnUltimateCommand(client,race,bool pressed)
 {
     if(race==thisRaceID && IsPlayerAlive(client) && pressed)
     {
-        new skill_level=War3_GetSkillLevel(client,race,SKILL_TRUESIGHT);
+        int skill_level=War3_GetSkillLevel(client,race,SKILL_TRUESIGHT);
         if(skill_level>0)
         {
             if(!Silenced(client)&&War3_SkillNotInCooldown(client,thisRaceID,SKILL_TRUESIGHT,true)){

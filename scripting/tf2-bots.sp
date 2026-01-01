@@ -11,7 +11,7 @@
 	bot_changeclass_dc - Death amount. Default: 4.
 	bot_count_humans - Count humans as bots. So humans replace bots. Default: 1.
 	bot_class_limit - Do not allow bots class spam. Automatic. Default: 1.
-	bot_class_adv - More advanced class limit. Keeps atleast 1 character for each class. Default: 1.
+	bot_class_adv - More advanced class limit. Keeps atleast 1 char acter for each class. Default: 1.
 	bot_fall_speed - Bot's fall speed multiplier. Default: 0.05.
 	bot_gravity - Bot's gravity multiplier. Default: 0.7.
 	bot_ping - Change bot's ping. Default: 1.
@@ -26,7 +26,7 @@
 	I will keep this updated... Also you should find "tf2.bots.cfg" in "cfg/sourcemod" folder. Have a nice time.
 	Do not forget to create botnames.txt file in "sourcemod/configs" folder, with names of bots.
 
-	Notes: This is sourcemod's plugin, extract sourcemod folder into addons folder, overwrite: yes. Enjoy.  
+	Notes: This is sourcemod's plugin, extract sourcemod folder int o addons folder, overwrite: yes. Enjoy.  
 */
 
 #include <sourcemod>
@@ -357,7 +357,7 @@ public Action EachSecond(Handle timer)
 			}
 		}
 	}
-	decl iTargets[MAXPLAYERS], bool tn_is_ml, char sName[MAX_NAME_LENGTH], char sTarget[MAX_TARGET_LENGTH];
+	int iTargets[MAXPLAYERS], bool tn_is_ml, char sName[MAX_NAME_LENGTH], char sTarget[MAX_TARGET_LENGTH];
 	GetArrayString(botnames,   GetRandomInt(0, GetArraySize(botnames) - 1), sName, sizeof(sName));
 	while (ProcessTargetString(sName,
 	0,
@@ -426,7 +426,7 @@ public Action EachSecond(Handle timer)
 			}
 		} while (sloop<100);				
 	}	
-	//[1.0.6] Just there, making sure that it's possible to add new bot into game. :D
+	//[1.0.6] Just there, making sure that it's possible to add new bot int o game. :D
 	else if (iClients < iMaxClients && iBlue < GetConVarInt(cvar1) && iRed >= iBlue)
 	{
 		if (rcbotver == null)
@@ -489,7 +489,7 @@ public Action PlayerDeath(Handle event, const char[] name, bool dontBroadcast)
 	}
 }
 
-public Action ChangeClass(Handle timer, any:client)
+public Action ChangeClass(Handle timer, any client)
 {
 	if (IsClientInGame(client))
 	{
@@ -517,7 +517,7 @@ public Action ChangeClass(Handle timer, any:client)
 				RecountClasses();
 				if (GetConVarBool(cvar6b))
 				{
-					for (new TFClassType:c=TFClass_Scout; c<=TFClass_Engineer; c++)
+					for (int TFClassType:c=TFClass_Scout; c<=TFClass_Engineer; c++)
 					{
 						if (CurrentCount[Teamc][c] == 0)
 							searchforfreeclass = true;
@@ -579,7 +579,7 @@ public Action ChangeClass(Handle timer, any:client)
 	}
 }
 
-public Action RespawnPlayer(Handle timer, any:client)
+public Action RespawnPlayer(Handle timer, any client)
 {
 	if (Playing && IsClientInGame(client) && !IsPlayerAlive(client))
 	{
@@ -589,7 +589,7 @@ public Action RespawnPlayer(Handle timer, any:client)
 
 RecountClasses()
 {
-	for (new TFClassType:c=TFClass_Unknown; c<=TFClass_Engineer; c++)
+	for (int TFClassType:c=TFClass_Unknown; c<=TFClass_Engineer; c++)
 	{
 		CurrentCount[TFTeam_Red][c] = 0;
 		CurrentCount[TFTeam_Blue][c] = 0;
@@ -627,7 +627,7 @@ public Action PlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 	}
 }
 
-public Action ChangePing(Handle timer, any:client)
+public Action ChangePing(Handle timer, any client)
 {
 	if (IsClientInGame(client))
 	{
@@ -701,7 +701,7 @@ public Action TestingWhoIsServer(Handle timer)
 	CreateTimer(2.0, Wait, value);
 }
 
-public Action Wait(Handle timer, any:value)
+public Action Wait(Handle timer, any value)
 {
 	if (value == GetConVarInt(testsubject))
 	{

@@ -7,12 +7,12 @@
  */
 
 // Stocks
-stock StrToken(const String:inputstr[],tokennum,String:outputstr[],maxlen)
+stock StrToken(const char[] inputstr,tokennum,char[] outputstr,maxlen)
 {
     char buf[maxlen+1];
-    new cur_idx;
-    new idx;
-    new curind;
+    int cur_idx;
+    int idx;
+    int curind;
     idx=BreakString(inputstr,buf,maxlen);
     if(tokennum==1)
     {
@@ -33,12 +33,12 @@ stock StrToken(const String:inputstr[],tokennum,String:outputstr[],maxlen)
     }
 }
 
-stock StrTokenCount(const String:input[])
+stock StrTokenCount(const char[] input)
 {
     char buf[32];
-    new cur_idx;
-    new idx;
-    new curind;
+    int cur_idx;
+    int idx;
+    int curind;
     while(idx!=-1)
     {
         cur_idx+=idx;

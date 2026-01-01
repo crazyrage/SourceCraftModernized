@@ -223,7 +223,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
 public OnItemPurchase(client,item)
 {
-    new race=GetRace(client);
+    int race=GetRace(client);
     if (race == raceID && IsValidClientAlive(client))
     {
         if (g_bootsItem < 0)
@@ -290,7 +290,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
 public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
                                 attacker_race, damage, absorbed, bool from_sc)
 {
-    new Action returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
 
     if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index &&
@@ -342,7 +342,7 @@ public Action OnPlayerAssistEvent(Handle event, victim_index, victim_race,
                                   assister_index, assister_race, damage,
                                   absorbed)
 {
-    new Action returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
     if (assister_race == raceID)
     {
         int poison_level=GetUpgradeLevel(assister_index, raceID, poisonID);
@@ -399,7 +399,7 @@ public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_inde
     }
 }
 
-public Action Regeneration(Handle timer, any:userid)
+public Action Regeneration(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client))
@@ -590,7 +590,7 @@ void SpineAttack(client, level)
     }
 }
 
-public Action ReCloak(Handle timer,any:userid)
+public Action ReCloak(Handle timer,any userid)
 {
     int index = GetClientOfUserId(userid);
     if (IsValidClient(index))

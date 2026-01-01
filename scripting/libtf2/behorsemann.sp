@@ -3,7 +3,7 @@
  * [TF2] Be the Horsemann
  * Author(s): FlaminSarge
  * File: behorsemann.sp
- * Description: Allows admins to turn players into Horseless Headless Horsemenn
+ * Description: Allows admins to turn players int o Horseless Headless Horsemenn
  *
  */
 #pragma semicolon 1
@@ -87,7 +87,7 @@ public void OnPluginStart()
     hCvarBoo = CreateConVar("behhh_boo", "2", "2-Boo stuns nearby enemies; 1-Boo is sound only; 0-no Boo", FCVAR_NONE, true, 0.0, true, 2.0);
     hCvarThirdPerson = CreateConVar("behhh_thirdperson", "1", "Whether or not Horsemenn ought to be in third-person", FCVAR_NONE, true, 0.0, true, 1.0);
 
-    RegAdminCmd("sm_behhh", Command_Horsemann, ADMFLAG_ROOT, "It's a good time to run - turns <target> into a Horsemann");
+    RegAdminCmd("sm_behhh", Command_Horsemann, ADMFLAG_ROOT, "It's a good time to run - turns <target> int o a Horsemann");
 
     AddNormalSoundHook(HorsemannSH);
 
@@ -803,13 +803,13 @@ void TE_ParticleToAll(char[] Name, float origin[3]=NULL_VECTOR, float start[3]=N
     TE_SendToAll();
 }
 
-stock void ScreenShake(int target, float intensity=30.0, float duration=10.0, float frequency=3.0)
+stock void ScreenShake(int target, float int ensity=30.0, float duration=10.0, float frequency=3.0)
 {
     Handle bf; 
     if ((bf = StartMessageOne("Shake", target)) != null)
     {
         BfWriteByte(bf, 0);
-        BfWriteFloat(bf, intensity);
+        BfWriteFloat(bf, int ensity);
         BfWriteFloat(bf, duration);
         BfWriteFloat(bf, frequency);
         EndMessage();

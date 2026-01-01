@@ -30,7 +30,7 @@ stock SetupStimpacks()
     SetupErrorSound();
     SetupDeniedSound();
 
-    for (new i = 0; i < sizeof(stimpacksWav); i++)
+    for (int i = 0; i < sizeof(stimpacksWav); i++)
         SetupSound(stimpacksWav[i]);
 }
 
@@ -83,9 +83,9 @@ stock Stimpacks(client, level, raceId, upgradeId)
     }
 }
 
-public Action EndStimpack(Handle timer,any:userid)
+public Action EndStimpack(Handle timer,any userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (client > 0)
     {
         m_StimpacksActive[client]=false;

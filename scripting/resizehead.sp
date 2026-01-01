@@ -7,7 +7,7 @@
 
 #define PLUGIN_VERSION "1.0.0"
 
-/* Global Handles */
+/* Global Handle s */
 
 Handle Version;
 Handle cvarEnabled;
@@ -124,7 +124,7 @@ public Action ResizeHead(client, args)
 	GetCmdArg(2, arg2, sizeof(arg2));
 	scale = StringToFloat(arg2);
 	char target_name[MAX_TARGET_LENGTH];
-	decl target_list[MAXPLAYERS], target_count, bool tn_is_ml;
+	int target_list[MAXPLAYERS], target_count, bool tn_is_ml;
 	if((target_count = ProcessTargetString(
 			arg1,
 			client,

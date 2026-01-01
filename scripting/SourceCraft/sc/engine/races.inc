@@ -379,8 +379,8 @@ CreateRace(const char[] short[], required_level=0, tech_level=0, max_level=16,
            const char[] pending_message[]="", const char[] desc[]="", const char[] image[]="",
            Handle plugin=null)
 {
-    new Handle raceConfig;
-    new Handle raceHandle;
+    int Handle raceConfig;
+    int Handle raceHandle;
     ConfigLoadedStatus raceLoaded;
 
     TraceInto("Race", "CreateRace", "short=%s, required_level=%d, tech_level=%d, max_level=%d, initial_energy=%f, energy_limit=%f, energy_rate=%f, faction=%d, type=%d, parent=%s, translation=%d, file=%s, name=%s, switch_message=%s, pending_message=%s, desc=%s, image=%s", short, required_level, tech_level, max_level, initial_energy, energy_limit, energy_rate, faction, type, parent, translation, translation_file, name, switch_message, pending_message, desc, image);
@@ -595,7 +595,7 @@ CreateRace(const char[] short[], required_level=0, tech_level=0, max_level=16,
         PushArrayCell(raceHandle,raceIdent);
         PushArrayCell(raceHandle,plugin);
 
-        // Add new Race Data into Race Array.
+        // Add new Race Data int o Race Array.
         raceId = PushArrayCell(raceArray,raceHandle); // return index.
         PushArrayCell(raceHandle,raceId);
 
@@ -665,12 +665,12 @@ CreateRace(const char[] short[], required_level=0, tech_level=0, max_level=16,
 
 RaceComplete(race, const char[] desc[]="", const char[] image[]="")
 {
-    new Handle raceHandle = GetRaceHandle(race);
+    int Handle raceHandle = GetRaceHandle(race);
     if (raceHandle != null)
     {
         SetRaceHasBeenCompleted(raceHandle,true);
 
-        // Add new Race Data into Race Index.
+        // Add new Race Data int o Race Index.
         char raceName[NAME_STRING_LENGTH];
         GetRaceName(raceHandle, raceName, sizeof(raceName));
 
@@ -829,7 +829,7 @@ AddUpgrade(race, Handle raceHandle, const char[] short[], upgrade_category=0, re
     #endif
 
     ConfigLoadedStatus raceLoaded;
-    new Handle raceConfig = GetRaceConfig(raceHandle, raceLoaded);
+    int Handle raceConfig = GetRaceConfig(raceHandle, raceLoaded);
     if (raceConfig != null)
     {
         int bool upgradeFound;
@@ -907,9 +907,9 @@ AddUpgrade(race, Handle raceHandle, const char[] short[], upgrade_category=0, re
     if (cost_vespene < 0)
         cost_vespene = g_iUpgradeVespeneCost;
 
-    new Handle upgradeHandle;
-    new Handle upgradeStringHandle;
-    new upgrade = FindUpgrade(raceHandle, short);
+    int Handle upgradeHandle;
+    int Handle upgradeStringHandle;
+    int upgrade = FindUpgrade(raceHandle, short);
     if (upgrade >= 0)
     {
         int Handle upgradeListHandle=GetUpgradeListHandle(raceHandle);
@@ -1081,7 +1081,7 @@ SetUpgradeCooldown(race, Handle raceHandle, upgrade, float cooldown, CooldownTyp
         #pragma unused race
     #endif
 
-    new Handle upgradeHandle=GetUpgradeHandle(raceHandle,   upgrade);
+    int Handle upgradeHandle=GetUpgradeHandle(raceHandle,   upgrade);
     SetArrayCell(upgradeHandle, _:UpgradeData_Cooldown,     cooldown);
     SetArrayCell(upgradeHandle, _:UpgradeData_CooldownType, cooldown_type);
     SetArrayCell(upgradeHandle, _:UpgradeData_Completed,    false);
@@ -1100,11 +1100,11 @@ float GetUpgradeCooldown(race, Handle raceHandle, upgrade, &CooldownType:cooldow
         #pragma unused race
     #endif
 
-    new Handle upgradeListHandle=GetArrayCell(raceHandle,    _:RaceData_Upgrades);
-    new Handle upgradeHandle=GetArrayCell(upgradeListHandle, upgrade);
+    int Handle upgradeListHandle=GetArrayCell(raceHandle,    _:RaceData_Upgrades);
+    int Handle upgradeHandle=GetArrayCell(upgradeListHandle, upgrade);
 
     cooldown_type = CooldownType:GetArrayCell(upgradeHandle, _:UpgradeData_CooldownType);
-    new float cooldown = float GetArrayCell(upgradeHandle,   _:UpgradeData_Cooldown);
+    int float cooldown = float GetArrayCell(upgradeHandle,   _:UpgradeData_Cooldown);
 
     #if defined _TRACE
         TraceReturn("cooldown=%f,cooldown_type=%d", cooldown, cooldown_type);
@@ -1115,7 +1115,7 @@ float GetUpgradeCooldown(race, Handle raceHandle, upgrade, &CooldownType:cooldow
 
 Faction:GetRaceFactionId(Handle raceHandle)
 {
-    new Faction:factionId=GetRaceFaction(raceHandle);
+    int Faction:factionId=GetRaceFaction(raceHandle);
     return (factionId < Generic) ? Generic : factionId;
 }
 
@@ -1139,7 +1139,7 @@ GetRaceParentId(Handle raceHandle)
     }
 }
 
-GetRaceName(Handle raceHandle, String:name[], maxlength, lang=LANG_SERVER)
+GetRaceName(Handle raceHandle, char[] name, maxlength, lang=LANG_SERVER)
 {
     GetRaceNameString(raceHandle,name,maxlength);
     if (name[0] == '%')
@@ -1169,7 +1169,7 @@ GetRaceName(Handle raceHandle, String:name[], maxlength, lang=LANG_SERVER)
     }
 }
 
-GetRaceDescription(Handle raceHandle, String:desc[], maxlength,
+GetRaceDescription(Handle raceHandle, char[] desc, maxlength,
                    const char[] descString[]="", lang=LANG_SERVER,
                    bool query=false)
 {
@@ -1177,7 +1177,7 @@ GetRaceDescription(Handle raceHandle, String:desc[], maxlength,
     char short[SHORT_STRING_LENGTH];
     GetRaceShortName(raceHandle, short, sizeof(short));
 
-    new Translation:translation = GetRaceTranslation(raceHandle);
+    int Translation:translation = GetRaceTranslation(raceHandle);
     if (translation == Translation_SC)
     {
         char key[ITEM_STRING_LENGTH];
@@ -1212,7 +1212,7 @@ GetRaceDescription(Handle raceHandle, String:desc[], maxlength,
     }
 }
 
-GetRaceImage(Handle raceHandle, String:image[], maxlength,
+GetRaceImage(Handle raceHandle, char[] image, maxlength,
              const char[] imageString[]="", lang=LANG_SERVER,
              bool query=false)
 {
@@ -1220,7 +1220,7 @@ GetRaceImage(Handle raceHandle, String:image[], maxlength,
     char short[SHORT_STRING_LENGTH];
     GetRaceShortName(raceHandle, short, sizeof(short));
 
-    new Translation:translation = GetRaceTranslation(raceHandle);
+    int Translation:translation = GetRaceTranslation(raceHandle);
     if (translation == Translation_SC)
     {
         char key[ITEM_STRING_LENGTH];
@@ -1247,7 +1247,7 @@ GetRaceImage(Handle raceHandle, String:image[], maxlength,
     }
 }
 
-GetRaceSwitchMessage(Handle raceHandle, String:message[], maxlength, lang)
+GetRaceSwitchMessage(Handle raceHandle, char[] message, maxlength, lang)
 {
     GetRaceSwitchString(raceHandle, message, maxlength);
     if (message[0] == '%')
@@ -1291,7 +1291,7 @@ GetRaceSwitchMessage(Handle raceHandle, String:message[], maxlength, lang)
     }
 }
 
-GetRaceSwitchMessageDead(Handle raceHandle, String:message[], maxlength, lang)
+GetRaceSwitchMessageDead(Handle raceHandle, char[] message, maxlength, lang)
 {
     GetRaceSwitchStringDead(raceHandle, message, maxlength);
     if (message[0] == '%')
@@ -1333,7 +1333,7 @@ GetRaceSwitchMessageDead(Handle raceHandle, String:message[], maxlength, lang)
     }
 }
 
-GetUpgradeName(Handle raceHandle, upgrade, String:name[], maxlength, lang=LANG_SERVER)
+GetUpgradeName(Handle raceHandle, upgrade, char[] name, maxlength, lang=LANG_SERVER)
 {
     GetUpgradeNameString(raceHandle,upgrade,name,maxlength);
     if (name[0] == '%')
@@ -1369,9 +1369,9 @@ GetUpgradeName(Handle raceHandle, upgrade, String:name[], maxlength, lang=LANG_S
     }
 }
 
-GetUpgradeDescription(Handle raceHandle, upgrade, String:desc[], maxlength, lang=LANG_SERVER)
+GetUpgradeDescription(Handle raceHandle, upgrade, char[] desc, maxlength, lang=LANG_SERVER)
 {
-    new category = 0;
+    int category = 0;
 
     TraceInto("Race", "GetUpgradeDescription", "raceHandle=0x%08x", raceHandle);
 
@@ -1413,7 +1413,7 @@ GetUpgradeDescription(Handle raceHandle, upgrade, String:desc[], maxlength, lang
     return category;
 }
 
-GetUpgradeImage(Handle raceHandle, upgrade, String:image[], maxlength,
+GetUpgradeImage(Handle raceHandle, upgrade, char[] image, maxlength,
                 const char[] imageString[]="", lang=LANG_SERVER,
                 bool query=false)
 {
@@ -1490,7 +1490,7 @@ GetUpgradeImage(Handle raceHandle, upgrade, String:image[], maxlength,
     TraceReturn("image=%s", image);
 }
 
-GetUpgradeInvoke(Handle raceHandle, upgrade, String:invoke[], maxlength,
+GetUpgradeInvoke(Handle raceHandle, upgrade, char[] invoke, maxlength,
                  const char[] invokeString[]="", lang=LANG_SERVER)
 {
     TraceInto("Race", "GetUpgradeInvoke", "raceHandle=0x%08x", raceHandle);
@@ -1563,7 +1563,7 @@ GetUpgradeInvoke(Handle raceHandle, upgrade, String:invoke[], maxlength,
     TraceReturn("invoke=%s", invoke);
 }
 
-GetUpgradeBind(Handle raceHandle, upgrade, String:bind[], maxlength,
+GetUpgradeBind(Handle raceHandle, upgrade, char[] bind, maxlength,
                 const char[] bindString[]="", lang=LANG_SERVER)
 {
     TraceInto("Race", "GetUpgradeBind", "raceHandle=0x%08x", raceHandle);
@@ -1636,21 +1636,21 @@ GetUpgradeBind(Handle raceHandle, upgrade, String:bind[], maxlength,
     TraceReturn("bind=%s", bind);
 }
 
-GetUpgradeStrings(Handle raceHandle, upgrade, String:name[], maxName,
-                  String:desc[], maxDesc, String:invoke[], maxInvoke,
-                  String:bind[], maxBind, lang=LANG_SERVER)
+GetUpgradeStrings(Handle raceHandle, upgrade, char[] name, maxName,
+                  char[] desc, maxDesc, char[] invoke, maxInvoke,
+                  char[] bind, maxBind, lang=LANG_SERVER)
 {
     TraceInto("Race", "GetUpgradeStrings", "raceHandle=0x%08x, upgrade=%d", raceHandle, upgrade);
 
-    new Handle upgradeStringHandle=GetUpgradeStringHandle(raceHandle,upgrade);
+    int Handle upgradeStringHandle=GetUpgradeStringHandle(raceHandle,upgrade);
     GetArrayString(upgradeStringHandle, _:UpgradeString_Name, name, maxName);
     GetArrayString(upgradeStringHandle, _:UpgradeString_Desc, desc, maxDesc);
     GetArrayString(upgradeStringHandle, _:UpgradeString_Bind, bind, maxBind);
     GetArrayString(upgradeStringHandle, _:UpgradeString_Invoke, invoke, maxInvoke);
     Trace("name=%s, desc=%s, invoke=%s, bind=%s", name, desc, invoke, bind);
 
-    new category = GetUpgradeCategory(raceHandle,upgrade);
-    new Translation:translation = GetRaceTranslation(raceHandle);
+    int category = GetUpgradeCategory(raceHandle,upgrade);
+    int Translation:translation = GetRaceTranslation(raceHandle);
     if (translation > Translation_Auto)
     {
         char race[NAME_STRING_LENGTH];
@@ -1784,11 +1784,11 @@ GetUpgradeStrings(Handle raceHandle, upgrade, String:name[], maxName,
 }
 
 FormatUpgradeDescription(Handle raceHandle, upgrade, Translation:translation,
-                         const char[] key[], String:desc[], maxlength, lang=LANG_SERVER)
+                         const char[] key[], char[] desc, maxlength, lang=LANG_SERVER)
 {
     TraceInto("Race", "FormatUpgradeDescription", "raceHandle=0x%08x, key=%s", raceHandle, key);
 
-    new category = 0;
+    int category = 0;
     if (translation == Translation_W3S)
     {
         Trace("Translate W3S key %s", key);
@@ -1970,13 +1970,13 @@ FormatUpgradeDescription(Handle raceHandle, upgrade, Translation:translation,
 
 GetUpgradeCount(Handle raceHandle)
 {
-    new Handle upgradeListHandle=GetArrayCell(raceHandle,_:RaceData_Upgrades);
+    int Handle upgradeListHandle=GetArrayCell(raceHandle,_:RaceData_Upgrades);
     return (upgradeListHandle != null) ? GetArraySize(upgradeListHandle) : 0;
 }
 
 FindUpgrade(Handle raceHandle, const char[] short[])
 {
-    new Handle upgradeListHandle=GetArrayCell(raceHandle,_:RaceData_Upgrades);
+    int Handle upgradeListHandle=GetArrayCell(raceHandle,_:RaceData_Upgrades);
     if (upgradeListHandle != null)
     {
         char curName[NAME_STRING_LENGTH];
@@ -2002,7 +2002,7 @@ FindUpgrade(Handle raceHandle, const char[] short[])
 FindRace(const char[] name[])
 {
     char curName[NAME_STRING_LENGTH];
-    new size = GetRaceCount();
+    int size = GetRaceCount();
     for(int race=1;race<size;race++)
     {
         GetRaceShortName(GetRaceHandle(race),curName,sizeof(curName));
@@ -2014,7 +2014,7 @@ FindRace(const char[] name[])
 
 FindRaceForIdent(ident)
 {
-    new size = GetRaceCount();
+    int size = GetRaceCount();
     for(int race=1;race<size;race++)
     {
         //if (GetRaceIdent(GetRaceHandle(race)) == ident)
@@ -2033,7 +2033,7 @@ PendingCheck(client)
         ResetUpgradesNow(client, -1, true);
     }
 
-    new pendingRace = GetPendingRace(client);
+    int pendingRace = GetPendingRace(client);
     if (pendingRace > 0)
     {
         char buf[LONG_STRING_LENGTH];
@@ -2133,7 +2133,7 @@ ChangeRace(client, race, Handle raceHandle, bool forceNow=false, bool check=true
     }
 
     // Save the old race's data
-    new oldrace = GetRace(client);
+    int oldrace = GetRace(client);
     if (oldrace > 0 && !GetDatabaseSaved(client) &&
         GetDatabaseLoaded(client) >= DataOK &&
         GetRaceLoaded(client, oldrace) >= DataOK)
@@ -2273,8 +2273,8 @@ ResetUpgradesNow(client, race, bool show=true)
 
 bool FileContains(const char[] fileName[], const char[] string[])
 {
-    new bool found = false;
-    new Handle file = OpenFile(fileName, "r");
+    int bool found = false;
+    int Handle file = OpenFile(fileName, "r");
     if (file != null)
     {
         char buffer[DESCRIPTION_LENGTH];

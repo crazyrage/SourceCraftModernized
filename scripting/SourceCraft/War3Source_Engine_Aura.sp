@@ -73,15 +73,15 @@ public int NW3RegisterAura(Handle plugin, int numParams)
 }
 public int NW3SetAuraFromPlayer(Handle plugin, int numParams)
 {
-    new aura=GetNativeCell(1);
-    new client=GetNativeCell(2);
+    int aura=GetNativeCell(1);
+    int client=GetNativeCell(2);
     AuraOrigin[client][aura]=bool GetNativeCell(3);
     AuraOriginLevel[client][aura]=GetNativeCell(4);
 }
 public int NW3HasAura(Handle plugin, int numParams)
 {
-    new aura=GetNativeCell(1);
-    new client=GetNativeCell(2);
+    int aura=GetNativeCell(1);
+    int client=GetNativeCell(2);
     
     //new data=GetNativeCellRef(3); //we dont have to get
     SetNativeCellRef(3, HasAuraLevel[client][aura]); 
@@ -124,10 +124,10 @@ public Action CalcAura(Handle t)
     
     
 //    float Distances[MAXPLAYERSCUSTOM][MAXPLAYERSCUSTOM];
-    decl float vec1[3];
-    decl float vec2[3];
-    decl teamtarget;
-    decl teamclient;
+    float vec1[3];
+    float vec2[3];
+    int teamtarget;
+    int teamclient;
     for(int client=1;client<=MaxClients;client++)
     {
         if(ValidPlayer(client,true))
@@ -147,7 +147,7 @@ public Action CalcAura(Handle t)
                     for(int aura=1;aura<=AuraCount;aura++){
                         if(dis<AuraDistance[aura]){
                             
-                            //boolean magic!!!!!!!! De Morgan wuz here
+                            //bool ean magic!!!!!!!! De Morgan wuz here
                             //client originating an aura
                             if(AuraOrigin[client][aura] ){ 
                                 //DP("aura origin %d",client);

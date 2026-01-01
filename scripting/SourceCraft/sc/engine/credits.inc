@@ -43,7 +43,7 @@ ShowCrystals(client, Display:displayFlags=Display_Crystals)
 {
     if (GetShopItemCount() >= 1 && !IsFakeClient(client))
     {
-        new pcrystals = GetPCrystals(client);
+        int pcrystals = GetPCrystals(client);
         if (pcrystals > 0)
         {
             DisplayMessage(client, displayFlags, "%t", "ShowPCrystals",
@@ -104,20 +104,20 @@ ShowEnergy(client, Display:displayFlags=Display_Energy)
 
 GiveKillCrystals(client)
 {
-    new addcrystals= (SAVE_ENABLED) ? KILL_CRYSTALS_LONGTERM : KILL_CRYSTALS_SHORTTERM;
+    int addcrystals= (SAVE_ENABLED) ? KILL_CRYSTALS_LONGTERM : KILL_CRYSTALS_SHORTTERM;
     GiveCrystals(client,addcrystals,"Kill");
 }
 
 GiveBossStunCrystalsAndGas(client, level)
 {
-    new amount = STUN_BOSS_AMOUNT + (BOSS_LEVEL_AMOUNT * (level+1));
+    int amount = STUN_BOSS_AMOUNT + (BOSS_LEVEL_AMOUNT * (level+1));
     GiveCrystals(client, amount, "BossStun");
     GiveVespene(client, amount, "BossStun");
 }
 
 GiveBossKillCrystalsAndGas(client, level)
 {
-    new amount = KILL_BOSS_AMOUNT + (BOSS_LEVEL_AMOUNT * (level+1));
+    int amount = KILL_BOSS_AMOUNT + (BOSS_LEVEL_AMOUNT * (level+1));
     GiveCrystals(client, amount, "BossKill");
     GiveVespene(client, amount, "BossKill");
 }
@@ -239,12 +239,12 @@ GiveMvpEnergy(client,place,points)
                "BeingMVP", place, points);
 }
 
-GiveCrystals(client, amount, const String:phrase[],
+GiveCrystals(client, amount, const char[] phrase,
              place=-1, points=-1)
 {
     if (GetShopItemCount() >= 1 && GetClientCount() >= g_iMinPlayers)
     {
-        new Action:result = Plugin_Continue;
+        int Action:result = Plugin_Continue;
         Call_StartForward(g_OnCrystalsGivenHandle);
         Call_PushCell(client);
         Call_PushCellRef(amount);
@@ -346,21 +346,21 @@ GiveCrystals(client, amount, const String:phrase[],
     }
 }
 
-GivePCrystals(client, amount, const String:phrase[])
+GivePCrystals(client, amount, const char[] phrase)
 {
-    charreason[NAME_STRING_LENGTH];
+    char reason[NAME_STRING_LENGTH];
     Format(reason, sizeof(reason), "%T", phrase, client);
     LogToGame("%N gained %d +crystals for %s", client, amount, reason);
     DisplayMessage(client, Display_Crystals, "%t", "GainedPCrystals",
                    amount, reason);
 }
 
-GiveVespene(client, amount, const String:phrase[],
+GiveVespene(client, amount, const char[] phrase,
             place=-1, points=-1)
 {
     if (GetShopItemCount() >= 1 && GetClientCount() >= g_iMinPlayers)
     {
-        new Action:result = Plugin_Continue;
+        int Action:result = Plugin_Continue;
         Call_StartForward(g_OnVespeneGivenHandle);
         Call_PushCell(client);
         Call_PushCellRef(amount);
@@ -414,7 +414,7 @@ GiveVespene(client, amount, const String:phrase[],
     }
 }
 
-GiveEnergy(client, Float:amount, const String:phrase[],
+GiveEnergy(client, float amount, const char[] phrase,
            place=-1, points=-1)
 {
     if (GetShopItemCount() >= 1 && GetClientCount() >= g_iMinPlayers)

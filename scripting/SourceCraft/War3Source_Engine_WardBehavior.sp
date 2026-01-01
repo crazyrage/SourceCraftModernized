@@ -128,15 +128,15 @@ void CreateWardBehavior(char shortname[], char name[], char desc[])
 
     if (strlen(name) > WARDNAMELEN)
     {
-        War3_LogError("[War3] Ward Behavior (%s) name exceeds max length; truncated to %d characters",name,WARDNAMELEN);
+        War3_LogError("[War3] Ward Behavior (%s) name exceeds max length; truncated to %d char acters",name,WARDNAMELEN);
     }
     if (strlen(shortname) > WARDSNAMELEN)
     {
-        War3_LogError("[War3] Ward Behavior (%s) shortname exceeds max length; truncated to %d characters",shortname,WARDSNAMELEN);
+        War3_LogError("[War3] Ward Behavior (%s) shortname exceeds max length; truncated to %d char acters",shortname,WARDSNAMELEN);
     }
     if (strlen(desc) > WARDDESCLEN)
     {
-        War3_LogError("[War3] Ward Behavior (%s) description exceeds max length; truncated to %d characters",desc,WARDDESCLEN);
+        War3_LogError("[War3] Ward Behavior (%s) description exceeds max length; truncated to %d char acters",desc,WARDDESCLEN);
     }
     PushArrayString(g_hBehaviorName, name);
     PushArrayString(g_hBehaviorShortname, shortname);

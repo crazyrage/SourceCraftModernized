@@ -4,7 +4,7 @@
  * Description: Remote Controlled Sentries
  * Author(s): twistedeuphoria,CnB|Omega,Tsunami,-=|JFH|=-Naris
  * Modified by: -=|JFH|=-Naris (Murray Wilson)
- *              -- Added Native interface
+ *              -- Added Native int erface
  *              -- Added build support
  *              -- Merged Tsunami's build limit
  */
@@ -58,11 +58,11 @@ enum HasBuiltFlags (<<= 1)
 #define REMOTE_CAN_BUILD_UPGRADED   (REMOTE_CAN_BUILD_LEVEL_2|REMOTE_CAN_BUILD_LEVEL_3)
 #define CAN_BUILD_ACTIVATED         REMOTE_CAN_BUILD_INSTANTLY
 
-new g_RemoteObjectRef[MAXPLAYERS+1] = { INVALID_ENT_REFERENCE, ... };
-new g_WatcherEntRef[MAXPLAYERS+1]   = { INVALID_ENT_REFERENCE, ... };
+int g_RemoteObjectRef[MAXPLAYERS+1] = { INVALID_ENT_REFERENCE, ... };
+int g_WatcherEntRef[MAXPLAYERS+1]   = { INVALID_ENT_REFERENCE, ... };
 bool g_RemoteBuild[MAXPLAYERS+1];
-new TFExtObjectType:g_RemoteType[MAXPLAYERS+1];
-new clientPermissions[MAXPLAYERS+1] = { -1, ... };
+TFExtObjectType g_RemoteType[MAXPLAYERS+1];
+int clientPermissions[MAXPLAYERS+1] = { -1, ... };
 float clientSpeed[MAXPLAYERS+1];
 float clientFallSpeed[MAXPLAYERS+1];
 float clientJumpSpeed[MAXPLAYERS+1];
@@ -117,13 +117,13 @@ public Plugin myinfo = {
 
 // build limits
 Handle gTimer;       
-new g_iMaxEntities = MAXENTITIES;
+int g_iMaxEntities = MAXENTITIES;
 bool g_bNativeControl = false;
 bool g_WasBuilt[MAXENTITIES];
-new HasBuiltFlags:g_HasBuilt[MAXPLAYERS+1];
+HasBuiltFlags g_HasBuilt[MAXPLAYERS+1];
 
 Handle cvarLimits[4][TFExtObjectType];
-new g_isAllowed[MAXPLAYERS+1][TFExtObjectType]; // how many buildings each player is allowed
+int g_isAllowed[MAXPLAYERS+1][TFExtObjectType]; // how many buildings each player is allowed
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char error[], err_max)
 {
@@ -298,8 +298,8 @@ public RemoteCvarChange(Handle convar, const char[] oldValue, const char[] newVa
 {
     if (convar == cvarRemote)
     {
-        new oldval = StringToInt(oldValue);
-        new newval = StringToInt(newValue);
+        int oldval = StringToInt(oldValue);
+        int newval = StringToInt(newValue);
         if (newval != 0 && newval != 1)
         {
             PrintToServer("Value for sm_remote_enable is invalid %s, switching back to %s.", newValue, oldValue);
@@ -314,8 +314,8 @@ public RemoteCvarChange(Handle convar, const char[] oldValue, const char[] newVa
     }
     else if (convar == cvarSteal)
     {
-        new oldval = StringToInt(oldValue);
-        new newval = StringToInt(newValue);
+        int oldval = StringToInt(oldValue);
+        int newval = StringToInt(newValue);
         if (newval != 0 && newval != 1)
         {
             PrintToServer("Value for sm_remote_steal is invalid %s, switching back to %s.", newValue, oldValue);
@@ -325,8 +325,8 @@ public RemoteCvarChange(Handle convar, const char[] oldValue, const char[] newVa
     }
     else if (convar == cvarZombie)
     {
-        new oldval = StringToInt(oldValue);
-        new newval = StringToInt(newValue);
+        int oldval = StringToInt(oldValue);
+        int newval = StringToInt(newValue);
         if (newval != 0 && newval != 1)
         {
             PrintToServer("Value for sm_remote_zombie is invalid %s, switching back to %s.", newValue, oldValue);
@@ -338,8 +338,8 @@ public RemoteCvarChange(Handle convar, const char[] oldValue, const char[] newVa
     }
     else if (convar == cvarBuild)
     {
-        new oldval = StringToInt(oldValue);
-        new newval = StringToInt(newValue);
+        int oldval = StringToInt(oldValue);
+        int newval = StringToInt(newValue);
         if (newval != 0 && newval != 1)
         {
             PrintToServer("Value for sm_remote_build is invalid %s, switching back to %s.", newValue, oldValue);
@@ -350,8 +350,8 @@ public RemoteCvarChange(Handle convar, const char[] oldValue, const char[] newVa
 
     else if (convar == cvarMini)
     {
-        new oldval = StringToInt(oldValue);
-        new newval = StringToInt(newValue);
+        int oldval = StringToInt(oldValue);
+        int newval = StringToInt(newValue);
         if (newval != 0 && newval != 1)
         {
             PrintToServer("Value for sm_remote_mini is invalid %s, switching back to %s.", newValue, oldValue);
@@ -361,8 +361,8 @@ public RemoteCvarChange(Handle convar, const char[] oldValue, const char[] newVa
     }
     else if (convar == cvarInstant)
     {
-        new oldval = StringToInt(oldValue);
-        new newval = StringToInt(newValue);
+        int oldval = StringToInt(oldValue);
+        int newval = StringToInt(newValue);
         if (newval != 0 && newval != 1)
         {
             PrintToServer("Value for sm_remote_instant is invalid %s, switching back to %s.", newValue, oldValue);
@@ -372,8 +372,8 @@ public RemoteCvarChange(Handle convar, const char[] oldValue, const char[] newVa
     }
     else if (convar == cvarAlways)
     {
-        new oldval = StringToInt(oldValue);
-        new newval = StringToInt(newValue);
+        int oldval = StringToInt(oldValue);
+        int newval = StringToInt(newValue);
         if (newval != 0 && newval != 1)
         {
             PrintToServer("Value for sm_remote_always_builds is invalid %s, switching back to %s.", newValue, oldValue);
@@ -383,8 +383,8 @@ public RemoteCvarChange(Handle convar, const char[] oldValue, const char[] newVa
     }
     else if (convar == cvarLevel)
     {
-        new oldval = StringToInt(oldValue);
-        new newval = StringToInt(newValue);
+        int oldval = StringToInt(oldValue);
+        int newval = StringToInt(newValue);
         if (newval < 0 || newval > 3)
         {
             PrintToServer("Value for sm_remote_build_level is invalid %s, switching back to %s.", newValue, oldValue);
@@ -408,8 +408,8 @@ public RemoteCvarChange(Handle convar, const char[] oldValue, const char[] newVa
     #if defined _amp_node_included
         else if (convar == cvarAmp)
         {
-            new oldval = StringToInt(oldValue);
-            new newval = StringToInt(newValue);
+            int oldval = StringToInt(oldValue);
+            int newval = StringToInt(newValue);
             if (newval != 0 && newval != 1)
             {
                 PrintToServer("Value for sm_remote_amp is invalid %s, switching back to %s.", newValue, oldValue);
@@ -419,8 +419,8 @@ public RemoteCvarChange(Handle convar, const char[] oldValue, const char[] newVa
         }
         else if (convar == cvarRepair)
         {
-            new oldval = StringToInt(oldValue);
-            new newval = StringToInt(newValue);
+            int oldval = StringToInt(oldValue);
+            int newval = StringToInt(newValue);
             if (newval != 0 && newval != 1)
             {
                 PrintToServer("Value for sm_remote_repair is invalid %s, switching back to %s.", newValue, oldValue);
@@ -438,11 +438,11 @@ ParseFactorVar()
     GetConVarString(cvarFactor, factorValue , sizeof(factorValue));
     if (factorValue[0])
     {
-        new count = ExplodeString(factorValue," ",values, sizeof(values), sizeof(values[]));
+        int count = ExplodeString(factorValue," ",values, sizeof(values), sizeof(values[]));
         if (count > sizeof(levelFactor))
             count = sizeof(levelFactor);
 
-        new level=0;
+        int level=0;
         for (;level < count; level++)
             levelFactor[level] = StringToFloat(values[level]);
 
@@ -455,13 +455,13 @@ public Action UpdateObjects(Handle timer)
 {
     for (int i =1;i<MaxClients;i++)
     {
-        new ref = g_RemoteObjectRef[i];
+        int ref = g_RemoteObjectRef[i];
         if (ref != INVALID_ENT_REFERENCE && IsClientInGame(i))
         {
-            new obj = EntRefToEntIndex(ref);
+            int obj = EntRefToEntIndex(ref);
             if (obj > 0)
             {
-                new permissions = clientPermissions[i];
+                int permissions = clientPermissions[i];
                 bool zombie = (permissions < 0) ? ((permissions & REMOTE_CAN_ZOMBIE) != 0) : defaultZombie;
                 if (!zombie && !IsPlayerAlive(i))
                     RemoteOff(i, 0);
@@ -493,7 +493,7 @@ public Action UpdateObjects(Handle timer)
                     }
 
                     float speed = (clientSpeed[i] > 0.0) ? clientSpeed[i] : defaultSpeed;
-                    new level = GetEntProp(obj, Prop_Send, "m_iUpgradeLevel");
+                    int level = GetEntProp(obj, Prop_Send, "m_iUpgradeLevel");
                     if (level > sizeof(levelFactor))
                         speed *= levelFactor[0];
                     else if (level > 0)
@@ -515,7 +515,7 @@ public Action UpdateObjects(Handle timer)
                     float vel[3];
                     vel[2] = (clientFallSpeed[i] < 0.0) ? clientFallSpeed[i] : defaultFallSpeed;
 
-                    new buttons = GetClientButtons(i);
+                    int buttons = GetClientButtons(i);
                     if (buttons & IN_FORWARD)
                     {
                         vel[0] += fwdvec[0] * speed;
@@ -539,7 +539,7 @@ public Action UpdateObjects(Handle timer)
 
                     if (buttons & IN_JUMP)
                     {
-                        new flags = GetEntityFlags(obj);
+                        int flags = GetEntityFlags(obj);
                         if (flags & FL_ONGROUND)
                             vel[2] += (clientJumpSpeed[i] > 0.0) ? clientJumpSpeed[i] : defaultJumpSpeed;
                     }
@@ -554,7 +554,7 @@ public Action UpdateObjects(Handle timer)
                     objectpos[1] += fwdvec[1] * -150.0;
                     objectpos[2] += upvec[2] * 75.0;
 
-                    new watcher = EntRefToEntIndex(g_WatcherEntRef[client]);
+                    int watcher = EntRefToEntIndex(g_WatcherEntRef[client]);
                     if (watcher > 0)
                         TeleportEntity(watcher, objectpos, angles, NULL_VECTOR);
                     */
@@ -569,7 +569,7 @@ public Action UpdateObjects(Handle timer)
 
 public Action Remote(client, args)
 {
-    new objectRef = g_RemoteObjectRef[client];
+    int objectRef = g_RemoteObjectRef[client];
     if (objectRef != INVALID_ENT_REFERENCE && EntRefToEntIndex(objectRef) > 0)
         RemoteOff(client, args);
     else
@@ -577,7 +577,7 @@ public Action Remote(client, args)
         char arg[64];
         GetCmdArg(0, arg, sizeof(arg));
 
-        new TFExtObjectType:type = TFExtObject_Unknown;
+        int TFExtObjectType:type = TFExtObject_Unknown;
         if (StrContains(arg, "sentry", false) >= 0)
             type = TFExtObject_Sentry;
         else if (StrContains(arg, "disp", false) >= 0)
@@ -589,7 +589,7 @@ public Action Remote(client, args)
         else if (GetCmdArgs() >= 1)
         {
             GetCmdArg(1, arg, sizeof(arg));
-            new value = StringToInt(arg);
+            int value = StringToInt(arg);
             if (value >= 1)
                 type = TFExtObjectType:(value-1);
             else
@@ -622,7 +622,7 @@ public Action Build(client, args)
     char arg[64];
     GetCmdArg(0, arg, sizeof(arg));
 
-    new TFExtObjectType:type = TFExtObject_Unknown;
+    int TFExtObjectType:type = TFExtObject_Unknown;
     if (StrContains(arg, "sentry", false) >= 0)
         type = TFExtObject_Sentry;
     else if (StrContains(arg, "disp", false) >= 0)
@@ -634,7 +634,7 @@ public Action Build(client, args)
     else if (GetCmdArgs() >= 1)
     {
         GetCmdArg(1, arg, sizeof(arg));
-        new value = StringToInt(arg);
+        int value = StringToInt(arg);
         if (value >= 1)
             type = TFExtObjectType:(value-1);
         else
@@ -655,7 +655,7 @@ public Action Build(client, args)
 
 RemoteControl(client, TFExtObjectType:type)
 {
-    new permissions = GetPermissions(client);
+    int permissions = GetPermissions(client);
     if (permissions == 0)
     {
         PrintToChat(client, "You are not authorized to use remote controls.");
@@ -665,7 +665,7 @@ RemoteControl(client, TFExtObjectType:type)
     // Save the client's position so we can restore it later
     GetClientAbsOrigin(client, clientPosition[client]);
 
-    new target = GetClientAimTarget(client, false);
+    int target = GetClientAimTarget(client, false);
     if (target > 0) 
     {
         type = TF2_GetExtObjectType(target, true);
@@ -689,8 +689,8 @@ RemoteControl(client, TFExtObjectType:type)
         Handle menu=CreateMenu(ObjectSelected);
         SetMenuTitle(menu,"Remote Control which Building:");
 
-        new sum = -1;
-        new counts[TFExtObjectType];
+        int sum = -1;
+        int counts[TFExtObjectType];
         bool okToBuild = false;
         if ((permissions & REMOTE_CAN_BUILD) != 0)
         {
@@ -700,7 +700,7 @@ RemoteControl(client, TFExtObjectType:type)
             sum = CountBuildings(client, counts);
             for (int i =0; i < sizeof(g_isAllowed[]); i++)
             {
-                new num = g_isAllowed[client][i];
+                int num = g_isAllowed[client][i];
                 if (num < 0 || counts[i] < num)
                 {
                     okToBuild = true;
@@ -746,7 +746,7 @@ RemoteControl(client, TFExtObjectType:type)
                         (counts[TFExtObject_TeleporterExit] >= g_isAllowed[client][TFExtObject_TeleporterExit])
                         ? ITEMDRAW_DISABLED : ITEMDRAW_DEFAULT);
 
-            new flag = (counts[TFExtObject_Sentry] >= g_isAllowed[client][TFExtObject_Sentry])
+            int flag = (counts[TFExtObject_Sentry] >= g_isAllowed[client][TFExtObject_Sentry])
                        ? ITEMDRAW_DISABLED : ITEMDRAW_DEFAULT;
 
             if ((permissions & REMOTE_CAN_BUILD_MINI))
@@ -789,7 +789,7 @@ RemoteControl(client, TFExtObjectType:type)
     }
     else
     {
-        new objectid = -1;
+        int objectid = -1;
         while ((objectid = FindEntityByClassname(objectid, TF2_ObjectClassNames[type])) != -1)
         {
             if (GetEntPropEnt(objectid, Prop_Send, "m_hBuilder") == client)
@@ -807,7 +807,7 @@ RemoteControl(client, TFExtObjectType:type)
                 g_RemoteBuild[client] = true;
                 g_RemoteObjectRef[client] = INVALID_ENT_REFERENCE;
 
-                new obj, mode;
+                int obj, mode;
                 if (type == TFExtObject_TeleporterEntry ||
                     type == TFExtObject_TeleporterExit)
                 {
@@ -842,7 +842,7 @@ RemoteControl(client, TFExtObjectType:type)
 
 BuildObject(client, TFExtObjectType:type)
 {
-    new permissions = GetPermissions(client);
+    int permissions = GetPermissions(client);
     if ((permissions & REMOTE_CAN_BUILD) == 0)
     {
         PrintToChat(client, "You are not authorized to build objects.");
@@ -855,7 +855,7 @@ BuildObject(client, TFExtObjectType:type)
 
 GetPermissions(client)
 {
-    new permissions = clientPermissions[client];
+    int permissions = clientPermissions[client];
     if (permissions < 0)
     {
         if (!GetConVarBool(cvarRemote))
@@ -894,7 +894,7 @@ GetPermissions(client)
                     }
                 #endif
 
-                new level = GetConVarInt(cvarLevel);
+                int level = GetConVarInt(cvarLevel);
                 if (level >= 1)
                 {
                     permissions |= REMOTE_CAN_BUILD_LEVEL_1;
@@ -913,7 +913,7 @@ GetPermissions(client)
 
 GetAllowances(client)
 {
-    new team = GetClientTeam(client);
+    int team = GetClientTeam(client);
 
     g_isAllowed[client][TFExtObject_Dispenser]  = GetConVarInt(cvarLimits[team][0]); //[TFExtObject_Dispenser]
 
@@ -921,7 +921,7 @@ GetAllowances(client)
     //g_isAllowed[client][TFExtObject_MiniSentry] = GetConVarInt(cvarLimits[team][6]); //[TFExtObject_MiniSentry]
     g_isAllowed[client][TFExtObject_MiniSentry] = g_isAllowed[client][TFExtObject_Sentry];
 
-    new teleporterLimit = GetConVarInt(cvarLimits[team][1]); //[TFExtObject_Teleporter]
+    int teleporterLimit = GetConVarInt(cvarLimits[team][1]); //[TFExtObject_Teleporter]
     g_isAllowed[client][TFExtObject_Teleporter] =  teleporterLimit * 2;
     g_isAllowed[client][TFExtObject_TeleporterExit] = teleporterLimit;
     g_isAllowed[client][TFExtObject_TeleporterEntry] = teleporterLimit;
@@ -937,8 +937,8 @@ BuildMenu(client, permissions, bool control)
     Handle menu=CreateMenu(BuildSelected);
     SetMenuTitle(menu,"Build & Remote Control:");
 
-    new counts[TFExtObjectType];
-    new sum = CountBuildings(client, counts);
+    int counts[TFExtObjectType];
+    int sum = CountBuildings(client, counts);
 
     AddMenuItem(menu,"0","Dispenser",
                 (counts[TFExtObject_Dispenser] >= g_isAllowed[client][TFExtObject_Dispenser])
@@ -978,7 +978,7 @@ BuildMenu(client, permissions, bool control)
                 (counts[TFExtObject_TeleporterExit] >= g_isAllowed[client][TFExtObject_TeleporterExit])
                 ? ITEMDRAW_DISABLED : ITEMDRAW_DEFAULT);
 
-    new flag = (counts[TFExtObject_Sentry] >= g_isAllowed[client][TFExtObject_Sentry])
+    int flag = (counts[TFExtObject_Sentry] >= g_isAllowed[client][TFExtObject_Sentry])
                ? ITEMDRAW_DISABLED : ITEMDRAW_DEFAULT;
 
     if ((permissions & REMOTE_CAN_BUILD_MINI) != 0)
@@ -1008,15 +1008,15 @@ public BuildSelected(Handle menu,MenuAction:action,client,selection)
         char SelectionInfo[12];
         GetMenuItem(menu,selection,SelectionInfo,sizeof(SelectionInfo));
 
-        new permissions = GetPermissions(client);
-        new item = StringToInt(SelectionInfo);
+        int permissions = GetPermissions(client);
+        int item = StringToInt(SelectionInfo);
         if (item == 13)
             DestroyBuildingMenu(client);
         else
         {
-            new level;
+            int level;
             bool mini = false;
-            new TFExtObjectType:type;
+            TFExtObjectType type;
             if (item == 4)
             {
                 type = TFExtObject_TeleporterEntry;
@@ -1056,7 +1056,7 @@ public BuildSelected(Handle menu,MenuAction:action,client,selection)
             {
                 g_RemoteType[client] = type;
 
-                new obj, mode;
+                int obj, mode;
                 if (type == TFExtObject_TeleporterEntry ||
                     type == TFExtObject_TeleporterExit)
                 {
@@ -1092,7 +1092,7 @@ BuildSelectedObject(client, TFExtObjectType:type, iLevel=1, bool mini=false,
                     iMaxHealth=-1, float flPercentage=1.0, bool remote=false,
                     bool drop=true, bool check=true, float objectPosition[3]={0.0})
 {
-    new objectid = -1;
+    int objectid = -1;
 
     if (TF2_GetPlayerClass(client) == TFClass_Spy)
     {
@@ -1108,7 +1108,7 @@ BuildSelectedObject(client, TFExtObjectType:type, iLevel=1, bool mini=false,
     else if (IsEntLimitReached(.client=client, .message="unable to create tf2 building"))
         return objectid;
 
-    new Action:res = Plugin_Continue;
+    int Action:res = Plugin_Continue;
     Call_StartForward(fwdOnBuildObject);
     Call_PushCell(client);
     Call_PushCell(type);
@@ -1238,8 +1238,8 @@ BuildSelectedObject(client, TFExtObjectType:type, iLevel=1, bool mini=false,
 
 CountBuildings(client, counts[TFExtObjectType])
 {
-    new sum;
-    for (new TFExtObjectType:t = TFExtObject_Dispenser;t <= TFExtObject_TeleporterExit; t++)
+    int sum;
+    for (int TFExtObjectType:t = TFExtObject_Dispenser;t <= TFExtObject_TeleporterExit; t++)
     {
         if (t != TFExtObject_Teleporter)
         {
@@ -1258,8 +1258,8 @@ CountBuildings(client, counts[TFExtObjectType])
 
 CountObjects(client, const char[] ClassName, mode=-1)
 {
-    new ent = -1;
-    new count = 0;
+    int ent = -1;
+    int count = 0;
     while ((ent = FindEntityByClassname(ent, ClassName)) != -1)
     {
         if (GetEntPropEnt(ent, Prop_Send, "m_hBuilder") == client &&
@@ -1275,8 +1275,8 @@ AddObjectsToMenu(Handle menu, client, const char[] ClassName, mode=-1,
                  const char[] ObjectName, bool all=false, &target=0)
 {
     char buf[12], char item[64];
-    new ent = -1;
-    new count = 0;
+    int ent = -1;
+    int count = 0;
     while ((ent = FindEntityByClassname(ent, ClassName)) != -1)
     {
         if (GetEntPropEnt(ent, Prop_Send, "m_hBuilder") == client &&
@@ -1298,8 +1298,8 @@ AddObjectsToMenu(Handle menu, client, const char[] ClassName, mode=-1,
 
 AddBuildingsToMenu(Handle menu, client, bool all=false, counts[TFExtObjectType]=0, &target=0)
 {
-    new sum;
-    for (new TFExtObjectType:t = TFExtObject_Dispenser;t <= TFExtObject_TeleporterExit; t++)
+    int sum;
+    for (int TFExtObjectType:t = TFExtObject_Dispenser;t <= TFExtObject_TeleporterExit; t++)
     {
         if (t != TFExtObject_Teleporter)
         {
@@ -1320,9 +1320,9 @@ AddBuildingsToMenu(Handle menu, client, bool all=false, counts[TFExtObjectType]=
 
 DestroyObjects(const char[] ClassName, client=-1, bool all=true)
 {
-    new ent = -1;
-    new count = 0;
-    new kill_ent = -1;
+    int ent = -1;
+    int count = 0;
+    int kill_ent = -1;
     while ((ent = FindEntityByClassname(ent, ClassName)) != -1)
     {
         if (kill_ent > 0)
@@ -1359,8 +1359,8 @@ bool DestroyBuildingMenu(client)
     Handle menu=CreateMenu(Destroy_Selected);
     SetMenuTitle(menu,"Destroy which Structure:");
 
-    new counts[TFExtObjectType];
-    new count = AddBuildingsToMenu(menu, client, true, counts);
+    int counts[TFExtObjectType];
+    int count = AddBuildingsToMenu(menu, client, true, counts);
     if (count > 0)
     {
         DisplayMenu(menu,client,MENU_TIME_FOREVER);
@@ -1380,10 +1380,10 @@ public Destroy_Selected(Handle menu,MenuAction:action,client,selection)
         char SelectionInfo[12];
         GetMenuItem(menu,selection,SelectionInfo,sizeof(SelectionInfo));
 
-        new ref = StringToInt(SelectionInfo);
+        int ref = StringToInt(SelectionInfo);
         if (ref != 0)
         {
-            new ent = EntRefToEntIndex(ref);
+            int ent = EntRefToEntIndex(ref);
             if (ent > 0)
                 DestroyBuilding(ent);
         }
@@ -1403,7 +1403,7 @@ DestroyBuilding(obj)
 
 public PlayerSpawnEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    new client=GetClientOfUserId(GetEventInt(event,"userid")); // Get clients index
+    int client=GetClientOfUserId(GetEventInt(event,"userid")); // Get clients index
 
     // Save the client's position so we won't teleport a newly spawned player elsewhere.
     GetClientAbsOrigin(client, clientPosition[client]);
@@ -1411,12 +1411,12 @@ public PlayerSpawnEvent(Handle event,const char[] name,bool dontBroadcast)
 
 public PlayerDeathEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    new client=GetClientOfUserId(GetEventInt(event,"userid")); // Get clients index
+    int client=GetClientOfUserId(GetEventInt(event,"userid")); // Get clients index
 
-    new objectRef = g_RemoteObjectRef[client];
+    int objectRef = g_RemoteObjectRef[client];
     if (objectRef != INVALID_ENT_REFERENCE && EntRefToEntIndex(objectRef) > 0)
     {
-        new permissions = clientPermissions[client];
+        int permissions = clientPermissions[client];
         bool zombie = (permissions < 0) ? ((permissions & REMOTE_CAN_ZOMBIE) != 0) : defaultZombie;
         if (!zombie)
             RemoteOff(client, 0);
@@ -1425,14 +1425,14 @@ public PlayerDeathEvent(Handle event,const char[] name,bool dontBroadcast)
 
 public PlayerBuiltObject(Handle event,const char[] name,bool dontBroadcast)
 {
-    new objectid = GetEventInt(event,"index");
+    int objectid = GetEventInt(event,"index");
     if (GetEventInt(event,"sourcemod") <= 0)
         g_WasBuilt[objectid] = false;
 
-    new index = GetClientOfUserId(GetEventInt(event,"userid"));
+    int index = GetClientOfUserId(GetEventInt(event,"userid"));
     if (g_RemoteBuild[index])
     {
-        new TFExtObjectType:type = TFExtObjectType:GetEventInt(event,"object");
+        int TFExtObjectType:type = TFExtObjectType:GetEventInt(event,"object");
         if (g_RemoteType[index] == type)
         {
             if (objectid <= 0)
@@ -1462,10 +1462,10 @@ public PlayerBuiltObject(Handle event,const char[] name,bool dontBroadcast)
 
 public ObjectDestroyed(Handle event,const char[] name,bool dontBroadcast)
 {
-    new index = GetClientOfUserId(GetEventInt(event,"userid"));
+    int index = GetClientOfUserId(GetEventInt(event,"userid"));
     if (index > 0)
     {
-        new obj = GetEventInt(event,"index");
+        int obj = GetEventInt(event,"index");
         if (obj >= 0)
             g_WasBuilt[obj] = false;
     }
@@ -1473,8 +1473,8 @@ public ObjectDestroyed(Handle event,const char[] name,bool dontBroadcast)
 
 public Action PlayerChangeTeamEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    new client = GetClientOfUserId(GetEventInt(event,"userid"));
-    new HasBuiltFlags:flags = g_HasBuilt[client];
+    int client = GetClientOfUserId(GetEventInt(event,"userid"));
+    int HasBuiltFlags:flags = g_HasBuilt[client];
     if (client > 0 && flags != HasBuiltNothing)
     {
         if ((flags & HasBuiltDispenser) != HasBuiltNothing)
@@ -1510,7 +1510,7 @@ public EventRoundOver(Handle event,const char[] name,bool dontBroadcast)
 
 public Action Activate(Handle timer,any ref)
 {
-    new obj = EntRefToEntIndex(ref);
+    int obj = EntRefToEntIndex(ref);
     if (obj > 0 && IsValidEdict(obj) && IsValidEntity(obj))
     {
         SetEntProp(obj, Prop_Send, "m_bDisabled", 0);
@@ -1519,16 +1519,16 @@ public Action Activate(Handle timer,any ref)
         if (TF2_GetObjectType(obj) != TFObject_Teleporter &&
             GetEntProp(obj, Prop_Send, "m_CollisionGroup") != 0)
         {
-            new builder = GetEntPropEnt(obj, Prop_Send, "m_hBuilder");
+            int builder = GetEntPropEnt(obj, Prop_Send, "m_hBuilder");
             if (builder > 0 && IsClientInGame(builder) && IsPlayerAlive(builder))
             {
-                decl float playerPos[3];
+                float playerPos[3];
                 GetClientAbsOrigin(builder, playerPos);
 
-                decl float objectPos[3];
+                float objectPos[3];
                 GetEntPropVector(obj, Prop_Send, "m_vecOrigin", objectPos);
 
-                decl float size[3];
+                float size[3];
                 GetEntPropVector(obj, Prop_Send, "m_vecBuildMaxs", size);
 
                 float distance = GetVectorDistance(objectPos, playerPos);
@@ -1550,7 +1550,7 @@ public ObjectSelected(Handle menu,MenuAction:action,client,selection)
     {
         char SelectionInfo[12];
         GetMenuItem(menu,selection,SelectionInfo,sizeof(SelectionInfo));
-        new objectRef = StringToInt(SelectionInfo);
+        int objectRef = StringToInt(SelectionInfo);
         if (objectRef >= 0 && objectRef <= 13) // 0-13 are build options
         {
             g_RemoteBuild[client] = true;
@@ -1558,7 +1558,7 @@ public ObjectSelected(Handle menu,MenuAction:action,client,selection)
         }
         else
         {
-            new objectid = EntRefToEntIndex(objectRef);
+            int objectid = EntRefToEntIndex(objectRef);
             if (objectid > 0 && IsValidEdict(objectid) && IsValidEntity(objectid))
                 control(client, objectid, TF2_GetExtObjectType(objectid));
         }
@@ -1569,7 +1569,7 @@ public ObjectSelected(Handle menu,MenuAction:action,client,selection)
 
 bool control(client, objectid, TFExtObjectType:type)
 {
-    new Action:res = Plugin_Continue;
+    int Action:res = Plugin_Continue;
     Call_StartForward(fwdOnControlObject);
     Call_PushCell(client);
     Call_PushCell(client); // builder);
@@ -1579,7 +1579,7 @@ bool control(client, objectid, TFExtObjectType:type)
     if (res == Plugin_Continue &&
         !IsEntLimitReached(.client=client,.message="unable to create info_observer_point"))
     {
-        new watcher = CreateEntityByName("info_observer_point");
+        int watcher = CreateEntityByName("info_observer_point");
         if (watcher > 0 && IsValidEdict(watcher) && DispatchSpawn(watcher))
         {
             float angles[3];
@@ -1624,10 +1624,10 @@ bool control(client, objectid, TFExtObjectType:type)
 
 public Action RemoteOff(client, args)
 {
-    new objectRef = g_RemoteObjectRef[client];
+    int objectRef = g_RemoteObjectRef[client];
     if (objectRef != INVALID_ENT_REFERENCE)
     {
-        new obj = EntRefToEntIndex(objectRef);
+        int obj = EntRefToEntIndex(objectRef);
         if (obj > 0 && IsValidEdict(obj) && IsValidEntity(obj))
         {
             float angles[3];
@@ -1636,7 +1636,7 @@ public Action RemoteOff(client, args)
 
             TeleportEntity(obj, NULL_VECTOR, angles, NULL_VECTOR);
 
-            new TFExtObjectType:type = g_RemoteType[client];
+            TFExtObjectType type = g_RemoteType[client];
             if ((type != TFExtObject_Teleporter &&
                  type != TFExtObject_TeleporterEntry &&
                  type != TFExtObject_TeleporterExit) &&
@@ -1645,7 +1645,7 @@ public Action RemoteOff(client, args)
                 float objectPos[3];
                 GetEntPropVector(obj, Prop_Send, "m_vecOrigin", objectPos);
 
-                decl float size[3];
+                float size[3];
                 GetEntPropVector(obj, Prop_Send, "m_vecBuildMaxs", size);
 
                 float distance = GetVectorDistance(objectPos, clientPosition[client]);
@@ -1667,7 +1667,7 @@ public Action RemoteOff(client, args)
         }
     }
 
-    new watcher = EntRefToEntIndex(g_WatcherEntRef[client]);
+    int watcher = EntRefToEntIndex(g_WatcherEntRef[client]);
     if (watcher > 0)
         AcceptEntityInput(watcher, "kill");
 
@@ -1680,12 +1680,12 @@ public Action RemoteOff(client, args)
 
 public Action RemoteGod(client, args)
 {
-    new objectRef = g_RemoteObjectRef[client];
+    int objectRef = g_RemoteObjectRef[client];
     if (objectRef == INVALID_ENT_REFERENCE)
         PrintToChat(client, "Not controlling a building!");
     else
     {
-        new obj = EntRefToEntIndex(objectRef);
+        int obj = EntRefToEntIndex(objectRef);
         if (obj > 0 && IsValidEdict(obj) && IsValidEntity(obj))
         {
             if (GetEntProp(obj, Prop_Send, "m_takedamage", 1)) // mortal
@@ -1728,7 +1728,7 @@ public OnClientPutInServer(client)
 
 public OnClientDisconnect(client)
 {
-    new HasBuiltFlags:flags = g_HasBuilt[client];
+    int HasBuiltFlags:flags = g_HasBuilt[client];
 
     if ((flags & HasBuiltDispenser) != HasBuiltNothing)
         DestroyObjects(TF2_ObjectClassNames[TFExtObject_Dispenser], client, false);
@@ -1751,7 +1751,7 @@ public OnClientDisconnect(client)
 
 public Action Command_Build(client, args)
 {
-    new Action:iResult = Plugin_Continue;
+    int Action:iResult = Plugin_Continue;
 
     if (g_bNativeControl || !client || 
         (GetConVarBool(cvarBuildEnabled) &&
@@ -1764,14 +1764,14 @@ public Action Command_Build(client, args)
         char sMode[16];
         GetCmdArg(2, sMode, sizeof(sMode));
 
-        new TFExtObjectType:obj = TFExtObjectType:StringToInt(sObject);
-        new mode = StringToInt(sMode);
+        int TFExtObjectType:obj = TFExtObjectType:StringToInt(sObject);
+        int mode = StringToInt(sMode);
 
-        new TFTeam:team = TFTeam:GetClientTeam(client);
+        int TFTeam:team = TFTeam:GetClientTeam(client);
         if (obj < TFExtObject_Dispenser || obj > TFExtObject_TeleporterExit || team < TFTeam_Red)
             return Plugin_Continue;
 
-        new iCount = 0;
+        int iCount = 0;
         if (!CheckBuild(client, obj, mode, iCount))
             return Plugin_Handled;
 
@@ -1808,7 +1808,7 @@ bool CheckBuild(client, TFExtObjectType:type, mode=-1, &iCount=0)
         else if (type == TFExtObject_MiniSentry)
             type = TFExtObject_Sentry;
 
-        new iLimit = g_bNativeControl ? g_isAllowed[client][type]
+        int iLimit = g_bNativeControl ? g_isAllowed[client][type]
                    : GetConVarInt(cvarLimits[GetClientTeam(client)][type]);
 
         if (iLimit == 0)
@@ -1841,7 +1841,7 @@ public Native_ControlRemote(Handle plugin,numParams)
 
 public Native_SetRemoteControl(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     clientPermissions[client] = GetNativeCell(2);
     clientSpeed[client] = float GetNativeCell(3);
     clientFallSpeed[client] = float GetNativeCell(4);
@@ -1850,7 +1850,7 @@ public Native_SetRemoteControl(Handle plugin,numParams)
 
 public Native_RemoteControlObject(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (g_RemoteObjectRef[client] != INVALID_ENT_REFERENCE)
         RemoteOff(client, 0);
     else
@@ -1868,8 +1868,8 @@ public Native_StopControllingObject(Handle plugin,numParams)
 
 public Native_BuildObject(Handle plugin,numParams)
 {
-    decl float pos[3];
-    new ent = BuildSelectedObject(GetNativeCell(1), TFExtObjectType:GetNativeCell(2), GetNativeCell(3),
+    float pos[3];
+    int ent = BuildSelectedObject(GetNativeCell(1), TFExtObjectType:GetNativeCell(2), GetNativeCell(3),
                                   bool GetNativeCell(4), bool GetNativeCell(5), bool GetNativeCell(6),
                                   GetNativeCell(7), GetNativeCell(8), float GetNativeCell(9),
                                   bool GetNativeCell(10), bool GetNativeCell(11),
@@ -1880,7 +1880,7 @@ public Native_BuildObject(Handle plugin,numParams)
 
 public Native_BuildSentry(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (!IsEntLimitReached(.client=client, .message="unable to create obj_sentrygun"))
     {
         float fOrigin[3], float fAngle[3];
@@ -1897,7 +1897,7 @@ public Native_BuildSentry(Handle plugin,numParams)
 
 public Native_BuildDispenser(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (!IsEntLimitReached(.client=client, .message="unable to create obj_dispenser"))
     {
         float fOrigin[3], float fAngle[3];
@@ -1913,7 +1913,7 @@ public Native_BuildDispenser(Handle plugin,numParams)
 
 public Native_BuildTeleporterEntry(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (!IsEntLimitReached(.client=client, .message="unable to create obj_teleporter entrance"))
     {
         float fOrigin[3], float fAngle[3];
@@ -1929,7 +1929,7 @@ public Native_BuildTeleporterEntry(Handle plugin,numParams)
 
 public Native_BuildTeleporterExit(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (!IsEntLimitReached(.client=client, .message="unable to create obj_teleporter exit"))
     {
         float fOrigin[3], float fAngle[3];
@@ -1945,11 +1945,11 @@ public Native_BuildTeleporterExit(Handle plugin,numParams)
 
 public Native_CountBuildings(Handle plugin,numParams)
 {
-    new counts[TFExtObjectType];
-    new retval = CountBuildings(GetNativeCell(1), counts);
+    int counts[TFExtObjectType];
+    int retval = CountBuildings(GetNativeCell(1), counts);
 
     // Get rid of index tag to make compiler happy :(
-    new nativeCounts[sizeof(counts)];
+    int nativeCounts[sizeof(counts)];
     for (int i = 0; i < sizeof(nativeCounts); i++)
         nativeCounts[i] = counts[i];
 
@@ -1966,13 +1966,13 @@ public Native_CountObjects(Handle plugin,numParams)
 
 public Native_AddBuildingsToMenu(Handle plugin,numParams)
 {
-    new target;
-    new counts[TFExtObjectType];
-    new retval = AddBuildingsToMenu(Handle GetNativeCell(1), GetNativeCell(2),
+    int target;
+    int counts[TFExtObjectType];
+    int retval = AddBuildingsToMenu(Handle GetNativeCell(1), GetNativeCell(2),
                                     bool GetNativeCell(3), counts, target);
 
     // Get rid of index tag to make compiler happy :(
-    new nativeCounts[sizeof(counts)];
+    int nativeCounts[sizeof(counts)];
     for (int i = 0; i < sizeof(nativeCounts); i++)
         nativeCounts[i] = counts[i];
 
@@ -1983,10 +1983,10 @@ public Native_AddBuildingsToMenu(Handle plugin,numParams)
 
 public Native_DestroyBuildings(Handle plugin,numParams)
 {
-    new count = 0;
-    new client = GetNativeCell(1);
+    int count = 0;
+    int client = GetNativeCell(1);
     bool all = bool GetNativeCell(2);
-    new HasBuiltFlags:flags = (client > 0) ? g_HasBuilt[client]
+    int HasBuiltFlags:flags = (client > 0) ? g_HasBuilt[client]
                                            : HasBuiltFlags:-1; // all 1s
 
     if (all || (flags & HasBuiltDispenser) != HasBuiltNothing)
@@ -2025,7 +2025,7 @@ public Native_ControlBuild(Handle plugin,numParams)
 
 public Native_GiveBuild(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     g_isAllowed[client][TFExtObject_Dispenser] = GetNativeCell(3);
     g_isAllowed[client][TFExtObject_Sentry] = GetNativeCell(2);
     g_isAllowed[client][TFExtObject_TeleporterEntry] = GetNativeCell(4);
@@ -2038,8 +2038,8 @@ public Native_GiveBuild(Handle plugin,numParams)
 
 public Native_ResetBuild(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
-    for (new TFExtObjectType:t = TFExtObject_Dispenser;t < TFExtObjectType; t++)
+    int client = GetNativeCell(1);
+    for (int TFExtObjectType:t = TFExtObject_Dispenser;t < TFExtObjectType; t++)
         g_isAllowed[client][t] = 1;
 
     g_isAllowed[client][TFExtObject_Teleporter]++; // 1 entry + 1 exit
@@ -2047,7 +2047,7 @@ public Native_ResetBuild(Handle plugin,numParams)
 
 public Native_CheckBuild(Handle plugin,numParams)
 {
-    new iCount;
+    int iCount;
     bool result = CheckBuild(GetNativeCell(1), TFExtObjectType:GetNativeCell(2),
                                  GetNativeCell(3), iCount);
     SetNativeCellRef(4, iCount);
@@ -2067,11 +2067,11 @@ stock BuildSentry(hBuilder, const float fOrigin[3], const float fAngle[3], iLeve
     static const float fBuildMaxs[3] = { 24.0, 24.0, 66.0 };
     //static const float fMdlWidth[3] = { 1.0, 0.5, 0.0 };
 
-    new iTeam = GetClientTeam(hBuilder);
+    int iTeam = GetClientTeam(hBuilder);
 
-    new iSentryHealth;
-    new iMaxSentryShells;
-    new iMaxSentryRockets;
+    int iSentryHealth;
+    int iMaxSentryShells;
+    int iMaxSentryRockets;
     if (iLevel < 1 || bMini)
     {
         iLevel = 1;
@@ -2112,7 +2112,7 @@ stock BuildSentry(hBuilder, const float fOrigin[3], const float fAngle[3], iLeve
     if (iHealth < 0 || iHealth > iMaxHealth)
         iHealth = iMaxHealth;
 
-    new iSentry = CreateEntityByName(TF2_ObjectClassNames[TFExtObject_Sentry]);
+    int iSentry = CreateEntityByName(TF2_ObjectClassNames[TFExtObject_Sentry]);
     if (iSentry > 0 && IsValidEdict(iSentry))
     {
         DispatchSpawn(iSentry);
@@ -2207,7 +2207,7 @@ stock BuildDispenser(hBuilder, const float fOrigin[3], const float fAngle[3], iL
 {
     static const float fBuildMaxs[3] = { 24.0, 24.0, 66.0 };
 
-    new iTeam = GetClientTeam(hBuilder);
+    int iTeam = GetClientTeam(hBuilder);
 
     if (iMaxHealth < 0)
         iMaxHealth = 150;
@@ -2223,7 +2223,7 @@ stock BuildDispenser(hBuilder, const float fOrigin[3], const float fAngle[3], iL
     else if (iLevel > 3)
         iLevel = 3;
 
-    new iDispenser = CreateEntityByName(TF2_ObjectClassNames[TFExtObject_Dispenser]);
+    int iDispenser = CreateEntityByName(TF2_ObjectClassNames[TFExtObject_Dispenser]);
     if (iDispenser > 0 && IsValidEdict(iDispenser))
     {
         DispatchSpawn(iDispenser);
@@ -2338,7 +2338,7 @@ stock BuildTeleporterEntry(hBuilder, const float fOrigin[3], const float fAngle[
     static const float fBuildMaxs[3] = { 28.0, 28.0, 66.0 };
     //static const float fMdlWidth[3] = { 1.0, 0.5, 0.0 };
 
-    new iTeam = GetClientTeam(hBuilder);
+    int iTeam = GetClientTeam(hBuilder);
 
     if (iMaxHealth < 0)
         iMaxHealth = 150;
@@ -2351,7 +2351,7 @@ stock BuildTeleporterEntry(hBuilder, const float fOrigin[3], const float fAngle[
     else if (iLevel > 3)
         iLevel = 3;
 
-    new iTeleporter = CreateEntityByName(TF2_ObjectClassNames[TFExtObject_Teleporter]);
+    int iTeleporter = CreateEntityByName(TF2_ObjectClassNames[TFExtObject_Teleporter]);
     if (iTeleporter > 0 && IsValidEdict(iTeleporter))
     {
         DispatchSpawn(iTeleporter);
@@ -2421,7 +2421,7 @@ stock BuildTeleporterExit(hBuilder, const float fOrigin[3], const float fAngle[3
 {
     static const float fBuildMaxs[3] = { 28.0, 28.0, 66.0 };
 
-    new iTeam = GetClientTeam(hBuilder);
+    int iTeam = GetClientTeam(hBuilder);
 
     if (iMaxHealth < 0)
         iMaxHealth = 150;
@@ -2434,7 +2434,7 @@ stock BuildTeleporterExit(hBuilder, const float fOrigin[3], const float fAngle[3
     else if (iLevel > 3)
         iLevel = 3;
 
-    new iTeleporter = CreateEntityByName(TF2_ObjectClassNames[TFExtObject_Teleporter]);
+    int iTeleporter = CreateEntityByName(TF2_ObjectClassNames[TFExtObject_Teleporter]);
     if (iTeleporter > 0 && IsValidEdict(iTeleporter))
     {
         DispatchSpawn(iTeleporter);

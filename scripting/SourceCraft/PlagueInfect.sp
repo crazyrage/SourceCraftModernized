@@ -37,9 +37,9 @@
 #include "effect/FlashScreen"
 #include "effect/Shake"
 
-new const char[] explodeWav[] = "weapons/explode5.wav";
+static const char[] explodeWav[] = "weapons/explode5.wav";
 
-new const char[] HurtSound[][] = { "player/pain.wav",     "player/pl_pain5.wav",
+static const char[] HurtSound[][] = { "player/pain.wav",     "player/pl_pain5.wav",
                                    "player/pl_pain6.wav", "player/pl_pain7.wav" };
 
 	int m_PlagueDuration[MAXPLAYERS+1];
@@ -156,7 +156,7 @@ void ResetPlagueVictim(client)
     SetVisibility(client, NormalVisibility);
 }
 
-public Action PlagueVictimTimer(Handle timer, any:client)
+public Action PlagueVictimTimer(Handle timer, any client)
 {
     SetTraceCategory("Damage,Immunity");
     TraceInto("PlagueInfect", "PlagueVictimTimer", "client=%d:%N", \
@@ -366,7 +366,7 @@ ExplodePlayer(client, inflicter=0, team=0, float radius=500.0, damage=800, build
 
         PrepareAndEmitSoundToAll(explodeWav,client);
 
-        new Immunity:immunity_flag;
+        int Immunity:immunity_flag;
         if ((type & UltimateExplosion) == UltimateExplosion)
             immunity_flag = Immunity_Ultimates;
         else if ((type & UpgradeExplosion) == UpgradeExplosion)
@@ -564,7 +564,7 @@ stock TransmitInfection(to,from)
         strcopy(m_PlagueShort[to], sizeof(m_PlagueShort[]), m_PlagueShort[from]);
         strcopy(m_PlagueName[to], sizeof(m_PlagueName[]), m_PlagueName[from]);
 
-        new r,g,b;
+        int r,g,b;
         if (TFTeam:team == TFTeam_Red)
         {
             r = 255;
@@ -615,7 +615,7 @@ public int Native_PlagueInfect(Handle plugin,numParams)
         bool immune = GetImmunity(index,Immunity_Restore) ||
                           IsInvulnerable(index);
 
-        new PlagueType:plagueType = PlagueType:GetNativeCell(5);
+        int PlagueType:plagueType = PlagueType:GetNativeCell(5);
         if ((plagueType & IrradiatePlague) &&
             (GetImmunity(index,Immunity_Radiation) ||
              !GetAttribute(index,Attribute_IsBiological)))

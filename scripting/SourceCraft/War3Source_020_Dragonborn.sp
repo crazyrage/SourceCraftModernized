@@ -136,10 +136,10 @@ public void OnMapStart()
 
 public OnUltimateCommand(client,race,bool pressed)
 {
-    new userid=GetClientUserId(client);
+    int userid=GetClientUserId(client);
     if(race==thisRaceID && pressed && userid>1 && IsPlayerAlive(client) )
     {
-        new ult_level=War3_GetSkillLevel(client,race,ULTIMATE_DRAGONBREATH);
+        int ult_level=War3_GetSkillLevel(client,race,ULTIMATE_DRAGONBREATH);
         if(ult_level>0)
         {
             if(!Silenced(client)&&War3_SkillNotInCooldown(client,thisRaceID,ULTIMATE_DRAGONBREATH,true))
@@ -176,7 +176,7 @@ public bool DragonFilter(client)
     return (!W3HasImmunity(client,Immunity_Ultimates));
 }
 
-public Action HalfSecondTimer(Handle timer,any:clientz) //footsy flame/water effects only on ground yay!
+public Action HalfSecondTimer(Handle timer,any clientz) //footsy flame/water effects only on ground yay!
 {
     for(int client=1; client <= MaxClients; client++)
     {
@@ -193,7 +193,7 @@ public Action HalfSecondTimer(Handle timer,any:clientz) //footsy flame/water eff
     }
 }
 
-public Action stopspeed(Handle t,any:client){
+public Action stopspeed(Handle t,any client){
 //W3ResetBuffRace(client,fMaxSpeed,thisRaceID);
 //TF2_StunPlayer(client,0.0, 0.0,TF_STUNFLAGS_LOSERSTATE,0);
 }

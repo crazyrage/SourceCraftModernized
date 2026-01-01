@@ -430,7 +430,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
         int teleporter_level = GetUpgradeLevel(client,raceID,warpGateID);
         SetupTeleporter(client, teleporter_level);
 
-        new jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
+        int jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
         SetupJetpack(client, jetpack_level);
 
         if (GetGameType() == tf2 && m_BuildAvailable)
@@ -486,7 +486,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
 public OnItemPurchase(client,item)
 {
-    new race=GetRace(client);
+    int race=GetRace(client);
     if (race == raceID && IsValidClientAlive(client))
     {
         if (g_bootsItem < 0)
@@ -628,7 +628,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         int enhancement_level = GetUpgradeLevel(client,raceID,enhancementID);
         SetSpeedBoost(client, enhancement_level, true, g_SpeedLevels);
 
-        new jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
+        int jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
         SetupJetpack(client, jetpack_level);
 
         int shields_level = GetUpgradeLevel(client,raceID,shieldsID);
@@ -703,7 +703,7 @@ public OnPlayerBuiltObject(Handle event, client, obj, TFObjectType:type)
     }
 }
 
-public Action ForgeTimer(Handle timer,any:ref)
+public Action ForgeTimer(Handle timer,any ref)
 {
     int obj = EntRefToEntIndex(ref);
     if (obj > 0 && IsValidEntity(obj) && IsValidEdict(obj))
@@ -758,7 +758,7 @@ public Action ForgeTimer(Handle timer,any:ref)
     return Plugin_Stop;
 }
 
-public Action BatteryTimer(Handle timer, any:userid)
+public Action BatteryTimer(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientNotSpec(client) && GetRace(client) == raceID &&
@@ -773,12 +773,12 @@ public Action BatteryTimer(Handle timer, any:userid)
             return Plugin_Continue;
 
         int battery_level = GetUpgradeLevel(client,raceID,batteriesID);
-        new float battery_range=g_BatteryRange[battery_level];
+        int float battery_range=g_BatteryRange[battery_level];
 
         int cannon_level = GetUpgradeLevel(client,raceID,cannonID);
-        new float cannon_range=g_CannonRange[cannon_level];
+        int float cannon_range=g_CannonRange[cannon_level];
 
-        new float energy_amount = m_BatteryEnergy[battery_level];
+        int float energy_amount = m_BatteryEnergy[battery_level];
         int upgrade_amount = m_BatteryUpgradeMetal[battery_level];
         int rocket_amount = m_BatteryAmmoRockets[battery_level];
         int shells_amount = m_BatteryAmmoShells[battery_level];
@@ -889,7 +889,7 @@ public Action BatteryTimer(Handle timer, any:userid)
                                             list[count++] = index;
                                     }
 
-                                    decl float indexLoc[3];
+                                    float indexLoc[3];
                                     GetClientAbsOrigin(index, indexLoc);
                                     if (TraceTargetIndex(ent, index, pos, indexLoc))
                                     {
@@ -1005,8 +1005,8 @@ bool PhaseCannon(damage, victim_index, index)
             !IsInvulnerable(victim_index))
         {
             new float lastTime = m_CannonTime[index];
-            new float interval = GetGameTime() - lastTime;
-            if (lastTime == 0.0 || interval > 0.25)
+            new float int erval = GetGameTime() - lastTime;
+            if (lastTime == 0.0 || int erval > 0.25)
             {
                 if (GetRandomInt(1,100) <= g_CannonChance[cannon_level])
                 {
@@ -1015,7 +1015,7 @@ bool PhaseCannon(damage, victim_index, index)
                     {
                         if (CanInvokeUpgrade(index, raceID, cannonID, .notify=false))
                         {
-                            if (interval == 0.0 || interval >= 2.0)
+                            if (int erval == 0.0 || int erval >= 2.0)
                             {
                                 float Origin[3];
                                 GetEntityAbsOrigin(victim_index, Origin);

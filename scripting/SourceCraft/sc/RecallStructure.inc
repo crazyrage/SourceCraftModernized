@@ -93,7 +93,7 @@ stock RecallStructure(client, raceId, upgradeId, bool disable, bool engineersOnl
             }
         }
 
-        new target = GetClientAimTarget(client);
+        int target = GetClientAimTarget(client);
         if (target > 0) 
             RecallIt(client, raceId, upgradeId, target, disable);
         else
@@ -290,9 +290,9 @@ stock RecallIt(client, raceId, upgradeId, target, bool disable)
     }
 }
 
-public Action Activate(Handle timer,any:ref)
+public Action Activate(Handle timer,any ref)
 {
-    new obj = EntRefToEntIndex(ref);
+    int obj = EntRefToEntIndex(ref);
     if (obj > 0 && IsValidEdict(obj) && IsValidEntity(obj))
     {
         if (!GetEntProp(obj, Prop_Send, "m_bHasSapper"))
@@ -303,7 +303,7 @@ public Action Activate(Handle timer,any:ref)
     return Plugin_Stop;
 }
 
-public Action ResetCollisionGroup(Handle timer,any:obj)
+public Action ResetCollisionGroup(Handle timer,any obj)
 {
     if (IsValidEdict(obj) && IsValidEntity(obj))
     {
@@ -314,13 +314,13 @@ public Action ResetCollisionGroup(Handle timer,any:obj)
                 new builder = GetEntPropEnt(obj, Prop_Send, "m_hBuilder");
                 if (IsValidClientAlive(builder))
                 {
-                    decl float playerPos[3];
+                    float playerPos[3];
                     GetClientAbsOrigin(builder, playerPos);
 
-                    decl float objectPos[3];
+                    float objectPos[3];
                     GetEntPropVector(obj, Prop_Send, "m_vecOrigin", objectPos);
 
-                    decl float size[3];
+                    float size[3];
                     GetEntPropVector(obj, Prop_Send, "m_vecBuildMaxs", size);
 
                     float distance = GetVectorDistance(objectPos, playerPos);

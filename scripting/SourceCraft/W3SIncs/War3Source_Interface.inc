@@ -41,10 +41,10 @@
 #include "W3SIncs/War3Source_Gamecheck"
 
 //Interface version, change this when the API requirement changes to force a recompile
-//There will be a system check to make sure all plugins are compiled to the same interface.
-char interfaceVersion[]="1.2.4.1";
+//There will be a system check to make sure all plugins are compiled to the same int erface.
+char int erfaceVersion[]="1.2.4.1";
 #if defined SOURCECRAFT // Not for SourceCraft!
-#pragma unused interfaceVersion
+#pragma unused int erfaceVersion
 #endif
 
 stock int dummy; //variable for dummies! Use this where ever u want for a dummy return
@@ -57,7 +57,7 @@ stock char dummystr[32]; //just a dummy string!
  * Mark Natives optional
  * Calls your own functions (hackish way) if you have them:
  * InitNativesForwards()   
- * AskPluginLoad2Custom(Handle:myself,bool:late,String:error[],err_max);
+ * AskPluginLoad2Custom(Handle myself,bool:late,char[] error,err_max);
  * So if you want to do something in AskPluginLoad2, implement public AskPluginLoad2Custom(...) instead. 
  */
 public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max)
@@ -189,13 +189,13 @@ stock bool War3_InFreezeTime()
 /* BEGIN GLOBAL VARS */
 //retrieves specified values from the main war3 plugin, see W3Var enum in constants.inc, only those values are allowed
 //this mostly used for accessing a variable without creating a special native just for it
-//this returns any:, you should tag it if return value is not suppose to be normal integer. like Float:W3GetVar( or Handle:W3GetVar(
+//this returns any:, you should tag it if return value is not suppose to be normal int eger. like float W3GetVar( or Handle W3GetVar(
 //most are temporary variables and this function should be called immidiately in the right functions
 //examples W3GetVar(OldRace)   W3GetVar(DeathRace)
 //See W3Var enum in constants to get a list
 //Do not get/set vars arbitrarily unless you know what you are doing
-native any:W3GetVar(W3Var:variabletoretrieve);
-native any:W3SetVar(W3Var:variabletoretrieve,any:value);
+native any W3GetVar(W3Var:variabletoretrieve);
+native any W3SetVar(W3Var:variabletoretrieve,any value);
 /* END GLOBAL VARS */
 
 /**
@@ -438,7 +438,7 @@ native War3_CachedDeadAmmo(int client, int game_weapon_id);
 native War3_CachedDeadWeaponName(int client, int weapon_iterator, char[] output_buffer, int output_size);
 
 //LO AND BEHOLD THE COOLDOWN MANAGER, YOUR LIFE SIMPLIFIED!!!
-//we essentially move the cooldown system out of our races into our main plugin
+//we essentially move the cooldown system out of our races int o our main plugin
 /**
  * cooldown manager
  * basically self explainatory parameters, creates a cooldown for a skill (term skill used here is generic for skill/ability/ultimate)
@@ -556,7 +556,7 @@ stock War3_PrintSkillIsNotReady(int client, int raceid, int skillNum)
 native War3_RegisterDelayTracker();
 
 //create a delay
-native War3_TrackDelay(trackerIndex,Float:delay);
+native War3_TrackDelay(trackerIndex,float delay);
 
 //did the delay expire?
 native War3_TrackDelayExpired(trackerIndex);
@@ -598,7 +598,7 @@ native W3GetCurrentWeaponEnt(client); //get the entity of the current (active) w
 #if !defined SOURCECRAFT // Not Implemented!
 native W3GetMinUltLevel();
 
-//force all supported war3 plugins into failed mode (pause plugin)
+//force all supported war3 plugins int o failed mode (pause plugin)
 native War3Failed(char[] reason);
 #endif
 
@@ -609,7 +609,7 @@ native War3Failed(char[] reason);
  * @param attacker: Attacker's client index.
  * @param inflictor: Inflictor entity index. (ie sentry gun)
  * @param damagetype: Type of damage.
- * @return Float modifier, 1.0 for 100% chance otherwise percentage between 0.0 and 1.0
+ * @return float modifier, 1.0 for 100% chance otherwise percentage between 0.0 and 1.0
  */
 
 //helper, directly uses last inflictor and damagetype
@@ -693,32 +693,32 @@ customerSkillID returns 3
 native W3_GenericSkillLevel(int client, int g_skill_id, Handle &genericSkillData, int &customerRaceID=0, int &customerSkillID=0);
 
 #if !defined SOURCECRAFT // Not Implemented, since it's not needed!
-native W3SetPlayerProp(client,W3PlayerProp:property,any:value);
-native any:W3GetPlayerProp(client,W3PlayerProp:property);
+native W3SetPlayerProp(client,W3PlayerProp:property,any value);
+native any W3GetPlayerProp(client,W3PlayerProp:property);
 #endif
 
 //TKV = trie key value , a abstract data storage, emulates cvars for war3
-///Creates internal war3 cvars. returns a id to your cvar, store it!
+///Creates int ernal war3 cvars. returns a id to your cvar, store it!
 #if !defined SOURCECRAFT // Not Implemented, since it's not needed!
 //cvarid of 0 is null null (filled auto)
 //make sure native have binded (on plugin start is fine)
-native W3CreateCvar(String:cvarstr[],String:cvarvalue[],String:cvardesc[]);
-native W3GetCvar(cvarid,String:returnstr[],maxlen);
-native W3SetCvar(cvarid,String:cvarvalue[]);
+native W3CreateCvar(char[] cvarstr,char[] cvarvalue,char[] cvardesc);
+native W3GetCvar(cvarid,char[] returnstr,maxlen);
+native W3SetCvar(cvarid,char[] cvarvalue);
 
 //returns -1 if not found, otherwise returns cvar id
-native W3FindCvar(String:cvar[]);
-native Handle:W3CvarList(); //returns a handle arraylist of cvar list (no values, names only. CLOSE THIS!!!
+native W3FindCvar(char[] cvar);
+native Handle W3CvarList(); //returns a handle arraylist of cvar list (no values, names only. CLOSE THIS!!!
 
 //get cvar value when you have the key
-native W3GetCvarByString(String:cvarstr[],String:returnstr[],maxlen);
+native W3GetCvarByString(char[] cvarstr,char[] returnstr,maxlen);
 
 //get actual cvar name: undead_blah (the KEY)
-native W3GetCvarActualString(cvarid,String:returnstr[],maxlen);
+native W3GetCvarActualString(cvarid,char[] returnstr,maxlen);
 
-stock W3CreateCvarInt(String:cvarstr[],intval,String:cvardesc[]) {
+stock W3CreateCvarInt(char[] cvarstr,int val,char[] cvardesc) {
   char str[1024];
-  Format(str,sizeof(str),"%d",intval);
+  Format(str,sizeof(str),"%d",int val);
   return W3CreateCvar(cvarstr,str,cvardesc);
 }
 stock W3GetCvarInt(cvarid) {
@@ -727,14 +727,14 @@ stock W3GetCvarInt(cvarid) {
   //PrintToChatAll("%s %d",ret,StringToInt(ret));
   return StringToInt(ret);
 }
-stock W3SetCvarInt(cvarid, intval) {
+stock W3SetCvarInt(cvarid, int val) {
   char str[1024];
-  Format(str, sizeof(str), "%d", intval);
+  Format(str, sizeof(str), "%d", int val);
   return W3SetCvar(cvarid, str);
 }
-stock W3CreateCvarFloat(String:cvarstr[],intval,String:cvardesc[]) {
+stock W3CreateCvarFloat(char[] cvarstr,int val,char[] cvardesc) {
   char str[1024];
-  Format(str,sizeof(str),"%f",intval);
+  Format(str,sizeof(str),"%f",int val);
   W3CreateCvar(cvarstr,str,cvardesc);
 }
 stock W3GetCvarFloat(cvarid) {
@@ -742,9 +742,9 @@ stock W3GetCvarFloat(cvarid) {
   W3GetCvar(cvarid, ret, sizeof(ret));
   return StringToFloat(ret);
 }
-stock W3SetCvarFloat(cvarid, intval) {
+stock W3SetCvarFloat(cvarid, int val) {
   char str[1024];
-  Format(str, sizeof(str), "%f", intval);
+  Format(str, sizeof(str), "%f", int val);
   W3SetCvar(cvarid, str);
 }
 #endif
@@ -797,14 +797,14 @@ native W3SaveXP(int client, int race);
 
 //Skills
 #if !defined SOURCECRAFT // Not Implemented!
-native War3_SuicideBomber(client, Float:location[], Float:damage, race_skillid, Float:radius, bool:effect=true);
+native War3_SuicideBomber(client, float location[], float damage, race_skillid, float radius, bool:effect=true);
 
 //disabled due to human race requirements..for now
-//native bool:War3_Teleport(client, Float:distance);
+//native bool:War3_Teleport(client, float distance);
 #endif
 
 #if !defined SOURCECRAFT // Not Implemented!
-native War3_StringMath(String:equation[]);
+native War3_StringMath(char[] equation);
 
 native W3HasDiedThisFrame(client);
 #endif
@@ -899,7 +899,7 @@ forward OnWar3GlobalError(char[] str);
 
 forward War3FailedSignal(char[] str);
 
-/* interface side implementation, do not use */
+/* int erface side implementation, do not use */
 public War3FailedSignal(char[] str) {
   LogError(str); //must be a non dependent native log error
   SetFailState(str);
@@ -907,11 +907,11 @@ public War3FailedSignal(char[] str) {
 
 forward CheckWar3Compatability(char[] w3mainInterfVersion);
 
-/* interface side implementation, do not use */
+/* int erface side implementation, do not use */
 public CheckWar3Compatability(char[] w3mainInterfVersion) {
-  if(!StrEqual(interfaceVersion,w3mainInterfVersion)) {
-    //War3_LogCritical("FATAL ERROR, PLUGIN COMPILED INTERFACE VERSION (%s) IS DIFFERENT FROM WAR3SOURCE BASE VERSION (%s). Please Compile With Latest Version!!!",interfaceVersion,w3mainInterfVersion);
-    SetFailState("FATAL ERROR, PLUGIN COMPILED INTERFACE VERSION (%s) IS DIFFERENT FROM WAR3SOURCE BASE VERSION (%s). Please Compile With Latest Version!!!",interfaceVersion,w3mainInterfVersion);
+  if(!StrEqual(int erfaceVersion,w3mainInterfVersion)) {
+    //War3_LogCritical("FATAL ERROR, PLUGIN COMPILED INTERFACE VERSION (%s) IS DIFFERENT FROM WAR3SOURCE BASE VERSION (%s). Please Compile With Latest Version!!!",int erfaceVersion,w3mainInterfVersion);
+    SetFailState("FATAL ERROR, PLUGIN COMPILED INTERFACE VERSION (%s) IS DIFFERENT FROM WAR3SOURCE BASE VERSION (%s). Please Compile With Latest Version!!!",int erfaceVersion,w3mainInterfVersion);
   }
 }
 #endif
@@ -1282,7 +1282,7 @@ stock W3ShowSkillsInfo(int client) {
   }
 }
 
-//get numver of players on the specified team (integer team)
+//get numver of players on the specified team (int eger team)
 stock PlayersOnTeam(int team) {
   int num;
   for (int x = 1; x <= MaxClients; x++) {
@@ -1367,13 +1367,13 @@ stock TE_SetupKillPlayerAttachments(int client) {
 
 
 #if !defined SOURCECRAFT // Not Implemented!
-/// General callback for threaded queries.  No Actions
+/// General callback for threaded queries.  No Action s
 public SQLWar3GeneralCallback(Handle owner, Handle hndl, const char[] error, any data)
 {
   SQLCheckForErrors(hndl,error,"SQLWar3GeneralCallback");
 }
 
-//pass me a trie with key "query" = your query into originalqueryTrie
+//pass me a trie with key "query" = your query int o originalqueryTrie
 stock SQLCheckForErrors(Handle hndl, const char[] originalerror, const char[] prependstr="", Handle originalqueryTrie=null) {
   char orignalquerystr[512];
   if(originalqueryTrie) {
@@ -1563,10 +1563,10 @@ stock W3PrintSkillDmgHintConsole(int victim = 0, int attacker, int damage, int S
 //colored
 //prints [war3 tag] You did %d damage to %name with SKILLNAME
 //prints [war3 tag] %name did %d damage to you with SKILLNAME
-///automatically goes into console
+///automatically goes int o console
 //removed in favor of console and hint
 /*
- stock W3PrintSkillDmgChat(victim,attacker,damage,String:skillname[]){
+ stock W3PrintSkillDmgChat(victim,attacker,damage,char[] skillname){
  GetClientName(victim,zzname,sizeof(zzname));
  War3_ChatMessage(attacker,"%T","You did +{amount} damage to {player} with {skill}",attacker,damage,zzname,skillname);
  
@@ -1847,25 +1847,25 @@ stock W3EmitSoundToAll(const char[] sample,
 }
 
 /**
- * Returns UNIX time (integer)
+ * Returns UNIX time (int eger)
  */
 stock NOW() {
   return GetTime();
 }
 /**
- * returns the larger integer of the two
+ * returns the larger int eger of the two
  */
 stock IntMax(int one, int two) {
   return one > two ? one : two;
 }
 
 //what we want is something that always increments even past map changes
-//not intended to matter of game pauses or not (tick)
+//not int ended to matter of game pauses or not (tick)
 stock float AbsoluteTime() {
   return GetEngineTime();
 }
 
-stock CreateTimer_DEBUG(any:f=0,any:ff=0,any:fff=0,any:ffff=0) {}
+stock CreateTimer_DEBUG(any f=0,any ff=0,any fff=0,any ffff=0) {}
 
 
 // PUT THIS WHERE IT MAKES SENSE SOMETIME

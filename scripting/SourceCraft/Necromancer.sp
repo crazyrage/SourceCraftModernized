@@ -48,11 +48,11 @@
 #include "effect/SendEffects"
 #include "effect/FlashScreen"
 
-new const char[] deathWav[]      = "sc/Necromancer_Boss_WoundCritical_01.mp3";
-new const char[] summonWav[]     = "sc/Necromancer2_Greetings_02.mp3";
-new const char[] frenzyWav[]     = "sc/FX_Spirit_Channel05.mp3";
+static const char[] deathWav[]      = "sc/Necromancer_Boss_WoundCritical_01.mp3";
+static const char[] summonWav[]     = "sc/Necromancer2_Greetings_02.mp3";
+static const char[] frenzyWav[]     = "sc/FX_Spirit_Channel05.mp3";
 
-new const char[] necroWav[][]   = { "sc/NecromancerReady1.mp3" ,
+static const char[] necroWav[][]   = { "sc/NecromancerReady1.mp3" ,
                                     "sc/NecromancerWarcry1.mp3" ,
                                     "sc/NecromancerWhat1.mp3" };
 
@@ -287,7 +287,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
     {
         m_FrenzyActive[client] = false;
 
-        new training_level  = GetUpgradeLevel(client,raceID,trainingID);
+        int training_level  = GetUpgradeLevel(client,raceID,trainingID);
         float training_energy = 80.0 + (float(training_level)*15.0);
         float initial_energy  = GetInitialEnergy(client);
         SetInitialEnergy(client, training_energy);
@@ -571,7 +571,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         m_FrenzyActive[client] = false;
         m_VampiricAuraTime[client] = 0.0;
 
-        new training_level  = GetUpgradeLevel(client,raceID,trainingID);
+        int training_level  = GetUpgradeLevel(client,raceID,trainingID);
         float training_energy = 80.0 + (float(training_level)*15.0);
         float initial_energy  = GetInitialEnergy(client);
         SetInitialEnergy(client, training_energy);
@@ -640,7 +640,7 @@ public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_inde
     }
 }
 
-public Action OnPlayerTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype)
+public Action OnPlayerTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetype)
 {
     if (GetRace(attacker) == raceID && attacker != victim && IsClient(victim))
     {
@@ -677,7 +677,7 @@ public Action OnPlayerTakeDamage(victim,&attacker,&inflictor,&float damage,&dama
     return Plugin_Continue;
 }
 
-public Action RemoveCripple(Handle timer,any:userid)
+public Action RemoveCripple(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (client > 0)
@@ -754,8 +754,8 @@ bool VampiricAura(damage, index, victim_index)
         if (victimIsPlayer || victimIsNPC)
         {
             float lastTime = m_VampiricAuraTime[index];
-            float interval = GetGameTime() - lastTime;
-            if ((lastTime == 0.0 || interval > 0.25) &&
+            float int erval = GetGameTime() - lastTime;
+            if ((lastTime == 0.0 || int erval > 0.25) &&
                 CanInvokeUpgrade(index, raceID, vampiricID, .notify=false))
             {
                 float start[3];
@@ -835,7 +835,7 @@ bool VampiricAura(damage, index, victim_index)
     return false;
 }
 
-public Action EndFrenzy(Handle timer,any:userid)
+public Action EndFrenzy(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (client > 0)
@@ -876,8 +876,8 @@ public EventRoundOver(Handle event,const char[] name[],bool dontBroadcast)
 
 bool RaiseDead(client)
 {
-    new team=GetClientTeam(client);
-    new targetCount=0;
+    int team=GetClientTeam(client);
+    int targetCount=0;
     int targetList[MAXPLAYERS+1];
     for(int x=1;x<=MaxClients;x++)
     {
@@ -898,7 +898,7 @@ bool RaiseDead(client)
         pos[1]+=45.0;
         pos[2]+=5.0;
 
-        new target=targetList[GetRandomInt(0, targetCount-1)];
+        int target=targetList[GetRandomInt(0, targetCount-1)];
         if (target > 0)
         {
             RespawnPlayer(target);
@@ -919,7 +919,7 @@ bool RaiseDead(client)
     return false;
 }
 
-public Action ResetCollisionGroup(Handle timer,any:userid)
+public Action ResetCollisionGroup(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (client > 0)

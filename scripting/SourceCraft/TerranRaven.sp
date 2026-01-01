@@ -57,17 +57,17 @@
 #define SND_NADE_NAIL_SHOOT2 "npc/turret_floor/shoot2.wav"
 #define SND_NADE_NAIL_SHOOT3 "npc/turret_floor/shoot3.wav"
 
-static const charspawnWav[] = "sc/tbldgplc.wav";
-static const charbuildWav[] = "sc/tveyes00.wav";  // Spawn sound
-static const chardeathWav[] = "sc/tvedth00.wav"; // Death sound
-static const charempWav[] = "sc/tveemp00.wav"; // EMP sound
+static const char spawnWav[] = "sc/tbldgplc.wav";
+static const char buildWav[] = "sc/tveyes00.wav";  // Spawn sound
+static const char deathWav[] = "sc/tvedth00.wav"; // Death sound
+static const char empWav[] = "sc/tveemp00.wav"; // EMP sound
 
 new raceID, armorID, liftersID, reactorID, hunterID, seekerID;
 new mineID, droneID, thumperID, matrixID, spawnID;
 
-static const charg_ArmorName[]  = "Plating";
-floatg_InitialArmor[]      = { 0.0, 0.10, 0.25, 0.50, 0.75 };
-floatg_ArmorPercent[][2]   = { {0.00, 0.00},
+static const char g_ArmorName[]  = "Plating";
+float g_InitialArmor[]      = { 0.0, 0.10, 0.25, 0.50, 0.75 };
+float g_ArmorPercent[][2]   = { {0.00, 0.00},
                                     {0.00, 0.10},
                                     {0.00, 0.30},
                                     {0.10, 0.40},
@@ -75,14 +75,14 @@ floatg_ArmorPercent[][2]   = { {0.00, 0.00},
 
 	int g_HunterCritChance[]        = { 0,  5, 10, 25, 50 };
 	int g_SeekerTrackChance[]       = { 0, 10, 25, 35, 50 };
-floatg_ThumperRange[]      = { 350.0, 400.0, 650.0, 750.0, 900.0 };
-floatg_LevitationLevels[]  = { 1.0, 0.92, 0.733, 0.5466, 0.36 };
+float g_ThumperRange[]      = { 350.0, 400.0, 650.0, 750.0, 900.0 };
+float g_LevitationLevels[]  = { 1.0, 0.92, 0.733, 0.5466, 0.36 };
 
 	int cfgMaxObjects;
 	int cfgAllowSentries;
 
-boolm_IsSeeker[MAXPLAYERS+1];
-boolm_Thumped[MAXPLAYERS+1];
+bool m_IsSeeker[MAXPLAYERS+1];
+bool m_Thumped[MAXPLAYERS+1];
 
 public Plugin myinfo = 
 {
@@ -192,9 +192,9 @@ public OnSourceCraftReady()
     GetConfigFloatArray("armor_amount", g_InitialArmor, sizeof(g_InitialArmor),
                         g_InitialArmor, raceID, armorID);
 
-    for (intlevel=0; level < sizeof(g_ArmorPercent); level++)
+    for (int level=0; level < sizeof(g_ArmorPercent); level++)
     {
-        charkey[32];
+        char key[32];
         Format(key, sizeof(key), "armor_percent_level_%d", level);
         GetConfigFloatArray(key, g_ArmorPercent[level], sizeof(g_ArmorPercent[]),
                             g_ArmorPercent[level], raceID, armorID);
@@ -214,33 +214,33 @@ public OnSourceCraftReady()
         GetConfigArray("track_chance", g_SeekerTrackChance, sizeof(g_SeekerTrackChance),
                        g_SeekerTrackChance, raceID, seekerID);
 
-        for (intlevel=0; level < sizeof(m_SpawnAmpRange); level++)
+        for (int level=0; level < sizeof(m_SpawnAmpRange); level++)
         {
-            charkey[32];
+            char key[32];
             Format(key, sizeof(key), "amp_range_level_%d", level);
             GetConfigFloatArray(key, m_SpawnAmpRange[level], sizeof(m_SpawnAmpRange[]),
                                 m_SpawnAmpRange[level], raceID, spawnID);
         }
 
-        for (intlevel=0; level < sizeof(m_SpawnNodeRange); level++)
+        for (int level=0; level < sizeof(m_SpawnNodeRange); level++)
         {
-            charkey[32];
+            char key[32];
             Format(key, sizeof(key), "node_range_level_%d", level);
             GetConfigFloatArray(key, m_SpawnNodeRange[level], sizeof(m_SpawnNodeRange[]),
                                 m_SpawnNodeRange[level], raceID, spawnID);
         }
 
-        for (intlevel=0; level < sizeof(m_SpawnNodeRegen); level++)
+        for (int level=0; level < sizeof(m_SpawnNodeRegen); level++)
         {
-            charkey[32];
+            char key[32];
             Format(key, sizeof(key), "node_regen_level_%d", level);
             GetConfigArray(key, m_SpawnNodeRegen[level], sizeof(m_SpawnNodeRegen[]),
                            m_SpawnNodeRegen[level], raceID, spawnID);
         }
 
-        for (intlevel=0; level < sizeof(m_SpawnNodeShells); level++)
+        for (int level=0; level < sizeof(m_SpawnNodeShells); level++)
         {
-            charkey[32];
+            char key[32];
             Format(key, sizeof(key), "node_shells_level_%d", level);
             GetConfigArray(key, m_SpawnNodeShells[level], sizeof(m_SpawnNodeShells[]),
                            m_SpawnNodeShells[level], raceID, spawnID);
@@ -251,7 +251,7 @@ public OnSourceCraftReady()
     }
 }
 
-public OnLibraryAdded(const char[]name[])
+public OnLibraryAdded(const char name[])
 {
     if (StrEqual(name, "firemines"))
         IsFireminesAvailable(true);
@@ -267,7 +267,7 @@ public OnLibraryAdded(const char[]name[])
         IsHGRSourceAvailable(true);
 }
 
-public OnLibraryRemoved(const char[]name[])
+public OnLibraryRemoved(const char name[])
 {
     if (StrEqual(name, "firemines"))
         m_FireminesAvailable = false;
@@ -313,7 +313,7 @@ public void OnClientDisconnect(client)
     SetupSidewinder(client, 0, 0);
 }
 
-public ActionOnRaceDeselected(client,oldrace,newrace)
+public Action OnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
@@ -337,36 +337,36 @@ public ActionOnRaceDeselected(client,oldrace,newrace)
     return Plugin_Continue;
 }
 
-public ActionOnRaceSelected(client,oldrace,newrace)
+public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
         m_IsSeeker[client] = false;
 
-        inthunter_level=GetUpgradeLevel(client,raceID,hunterID);
+        int hunter_level=GetUpgradeLevel(client,raceID,hunterID);
         SetupSidewinder(client, hunter_level, 0);
 
-        intreactor_level = GetUpgradeLevel(client,raceID,reactorID);
+        int reactor_level = GetUpgradeLevel(client,raceID,reactorID);
         SetEnergyRate(client, (reactor_level > 0) ? float(reactor_level) : -1.0);
 
-        intarmor_level = GetUpgradeLevel(client,raceID,armorID);
+        int armor_level = GetUpgradeLevel(client,raceID,armorID);
         SetupArmor(client, armor_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        intlifters_level = GetUpgradeLevel(client,raceID,liftersID);
+        int lifters_level = GetUpgradeLevel(client,raceID,liftersID);
         SetLevitation(client, lifters_level, true, g_LevitationLevels);
 
-        intmine_level=GetUpgradeLevel(client,raceID,mineID);
+        int mine_level=GetUpgradeLevel(client,raceID,mineID);
         if (mine_level && m_FireminesAvailable)
             GiveMines(client, mine_level*3, mine_level*3, mine_level*2);
 
-        intmatrix_level=GetUpgradeLevel(client,raceID,matrixID);
+        int matrix_level=GetUpgradeLevel(client,raceID,matrixID);
         if (matrix_level > 0)
             SetupUberShield(client, matrix_level);
 
         if (m_BuildAvailable)
         {
-            intspawn_num = RoundToCeil((float(GetUpgradeLevel(client,raceID,spawnID)) / 2.0) + 0.5);
+            int spawn_num = RoundToCeil((float(GetUpgradeLevel(client,raceID,spawnID)) / 2.0) + 0.5);
             if (spawn_num > cfgMaxObjects)
                 spawn_num = cfgMaxObjects;
             GiveBuild(client, spawn_num, spawn_num, spawn_num, spawn_num);
@@ -401,7 +401,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
         }
         else if (upgrade==hunterID)
         {
-            intseeker_level=GetUpgradeLevel(client,raceID,seekerID);
+            int seeker_level=GetUpgradeLevel(client,raceID,seekerID);
             SetupSidewinder(client, new_level, seeker_level);
         }
         else if (upgrade==mineID)
@@ -413,7 +413,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
         {
             if (m_BuildAvailable)
             {
-                intspawn_num = RoundToCeil((float(new_level) / 2.0) + 0.5);
+                int spawn_num = RoundToCeil((float(new_level) / 2.0) + 0.5);
                 if (spawn_num > cfgMaxObjects)
                     spawn_num = cfgMaxObjects;
                 GiveBuild(client, spawn_num, spawn_num, spawn_num, spawn_num);
@@ -431,17 +431,17 @@ public OnItemPurchase(client,item)
 
         if (item == g_sockItem)
         {
-            intlifters_level = GetUpgradeLevel(client,raceID,liftersID);
+            int lifters_level = GetUpgradeLevel(client,raceID,liftersID);
             SetLevitation(client, lifters_level, true, g_LevitationLevels);
         }
     }
 }
 
-public ActionOnDropPlayer(client, target)
+public Action OnDropPlayer(client, target)
 {
     if (IsValidClient(target) && GetRace(target) == raceID)
     {
-        intlifters_level = GetUpgradeLevel(target,raceID,liftersID);
+        int lifters_level = GetUpgradeLevel(target,raceID,liftersID);
         SetLevitation(target, lifters_level, true, g_LevitationLevels);
     }
     return Plugin_Continue;
@@ -455,17 +455,17 @@ public OnUltimateCommand(client,race,bool pressed,arg)
         {
             case 4: // Targeting Drone
             {
-                intdrone_level = GetUpgradeLevel(client,race,droneID);
+                int drone_level = GetUpgradeLevel(client,race,droneID);
                 if (drone_level > 0 && GameType == tf2)
                     ThrowTargetingDrone(client, pressed);
                 else if (pressed)
                 {
-                    intthumper_level = GetUpgradeLevel(client,race,thumperID);
+                    int thumper_level = GetUpgradeLevel(client,race,thumperID);
                     if (thumper_level > 0)
                         SeismicThumper(client, thumper_level);
                     else
                     {
-                        intspawn_level = GetUpgradeLevel(client,race,spawnID);
+                        int spawn_level = GetUpgradeLevel(client,race,spawnID);
                         if (spawn_level > 0)
                             AutoTurret(client, spawn_level);
                     }
@@ -473,7 +473,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
             }
             case 3: // Seismic Thumper
             {
-                intthumper_level = GetUpgradeLevel(client,race,thumperID);
+                int thumper_level = GetUpgradeLevel(client,race,thumperID);
                 if (thumper_level > 0)
                 {
                     if (pressed)
@@ -481,12 +481,12 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                 }
                 else
                 {
-                    intdrone_level = GetUpgradeLevel(client,race,droneID);
+                    int drone_level = GetUpgradeLevel(client,race,droneID);
                     if (drone_level > 0)
                         ThrowTargetingDrone(client, pressed);
                     else
                     {
-                        intspawn_level = GetUpgradeLevel(client,race,spawnID);
+                        int spawn_level = GetUpgradeLevel(client,race,spawnID);
                         if (spawn_level > 0)
                         {
                             if (pressed)
@@ -497,7 +497,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
             }
             case 2: // Spider Mine or Auto-Turret
             {
-                intmine_level = GetUpgradeLevel(client,race,mineID);
+                int mine_level = GetUpgradeLevel(client,race,mineID);
                 if (mine_level > 0)
                 {
                     if (pressed)
@@ -505,7 +505,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                 }
                 else
                 {
-                    intspawn_level = GetUpgradeLevel(client,race,spawnID);
+                    int spawn_level = GetUpgradeLevel(client,race,spawnID);
                     if (spawn_level > 0)
                     {
                         if (pressed)
@@ -513,7 +513,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                     }
                     else
                     {
-                        intthumper_level = GetUpgradeLevel(client,race,thumperID);
+                        int thumper_level = GetUpgradeLevel(client,race,thumperID);
                         if (thumper_level > 0)
                         {
                             if (pressed)
@@ -521,7 +521,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                         }
                         else
                         {
-                            intdrone_level = GetUpgradeLevel(client,race,droneID);
+                            int drone_level = GetUpgradeLevel(client,race,droneID);
                             if (drone_level > 0)
                                 ThrowTargetingDrone(client, pressed);
                         }
@@ -532,17 +532,17 @@ public OnUltimateCommand(client,race,bool pressed,arg)
             {
                 if (pressed)
                 {
-                    intseeker_level = GetUpgradeLevel(client,race,seekerID);
+                    int seeker_level = GetUpgradeLevel(client,race,seekerID);
                     if (seeker_level > 0)
                         Seeker(client, seeker_level);
                     else
                     {
-                        intmatrix_level = GetUpgradeLevel(client,race,matrixID);
+                        int matrix_level = GetUpgradeLevel(client,race,matrixID);
                         if (matrix_level > 0)
                             DefensiveMatrix(client, matrix_level);
                         else
                         {
-                            intmine_level = GetUpgradeLevel(client,race,mineID);
+                            int mine_level = GetUpgradeLevel(client,race,mineID);
                             if (mine_level > 0)
                             {
                                 if (pressed)
@@ -550,7 +550,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                             }
                             else
                             {
-                                intthumper_level = GetUpgradeLevel(client,race,thumperID);
+                                int thumper_level = GetUpgradeLevel(client,race,thumperID);
                                 if (thumper_level > 0)
                                 {
                                     if (pressed)
@@ -558,12 +558,12 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                                 }
                                 else
                                 {
-                                    intdrone_level = GetUpgradeLevel(client,race,droneID);
+                                    int drone_level = GetUpgradeLevel(client,race,droneID);
                                     if (drone_level > 0)
                                         ThrowTargetingDrone(client, pressed);
                                     else
                                     {
-                                        intspawn_level = GetUpgradeLevel(client,race,spawnID);
+                                        int spawn_level = GetUpgradeLevel(client,race,spawnID);
                                         if (spawn_level > 0)
                                         {
                                             if (pressed)
@@ -591,7 +591,7 @@ void AutoTurret(client, spawn_level)
         {
             PrepareAndEmitSoundToClient(client,deniedWav);
 
-            charupgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, spawnID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
         }
@@ -600,13 +600,13 @@ void AutoTurret(client, spawn_level)
         {
             PrepareAndEmitSoundToClient(client,deniedWav);
 
-            charupgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, spawnID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
         }
         else
         {
-            intcounts[TFOBJECT_COUNT];
+            int counts[TFOBJECT_COUNT];
             if (cfgMaxObjects > 0)
                 CountBuildings(client, counts);
 
@@ -627,7 +627,7 @@ void AutoTurret(client, spawn_level)
     }
     else
     {
-        charupgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceID, spawnID, upgradeName, sizeof(upgradeName), client);
         PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
     }
@@ -641,7 +641,7 @@ void SpiderMine(client)
         {
             PrepareAndEmitSoundToClient(client,deniedWav);
 
-            charupgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, mineID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
         }
@@ -657,7 +657,7 @@ void SpiderMine(client)
     }
     else
     {
-        charupgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceID, mineID, upgradeName, sizeof(upgradeName), client);
         PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
     }
@@ -665,7 +665,7 @@ void SpiderMine(client)
 
 void DefensiveMatrix(client, matrix_level)
 {
-    charupgradeName[64];
+    char upgradeName[64];
     GetUpgradeName(raceID, matrixID, upgradeName, sizeof(upgradeName), client);
 
     if (!m_UberShieldAvailable)
@@ -696,21 +696,21 @@ void DefensiveMatrix(client, matrix_level)
     }
     else if (CanInvokeUpgrade(client, raceID, matrixID, false))
     {
-        floatduration = float(matrix_level) * 3.0;
+        float duration = float(matrix_level) * 3.0;
         UberShieldTarget(client, duration, GetShieldFlags(matrix_level));
         DisplayMessage(client,Display_Ultimate,"%t", "Invoked", upgradeName);
         CreateCooldown(client, raceID, matrixID);
     }
 }
 
-public ActionOnDeployUberShield(client, target)
+public Action OnDeployUberShield(client, target)
 {
     if (GetRace(client) == raceID)
     {
         if (GetRestriction(client,Restriction_NoUltimates) ||
             GetRestriction(client,Restriction_Stunned))
         {
-            charupgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, matrixID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -718,7 +718,7 @@ public ActionOnDeployUberShield(client, target)
         }
         else if (IsMole(client))
         {
-            charupgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, matrixID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "CantUseAsMole", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -726,7 +726,7 @@ public ActionOnDeployUberShield(client, target)
         }
         else if (GameType == tf2 && TF2_HasTheFlag(client))
         {
-            charupgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, matrixID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "CantUseWithFlag", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -734,7 +734,7 @@ public ActionOnDeployUberShield(client, target)
         }
         else if (target > 0 && GameType == tf2 && TF2_HasTheFlag(target))
         {
-            charupgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, matrixID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "CantUseOnFlagCarrier", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -742,7 +742,7 @@ public ActionOnDeployUberShield(client, target)
         }
         else if (m_HGRSourceAvailable && IsGrabbed(client))
         {
-            charupgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, matrixID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "CantUseWhileHeld", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -750,7 +750,7 @@ public ActionOnDeployUberShield(client, target)
         }
         else if (target > 0 && m_HGRSourceAvailable && IsGrabbed(target))
         {
-            charupgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, matrixID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "CantUseOnSomeoneBeingHeld", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -769,26 +769,26 @@ public OnPlayerSpawnEvent(Handle event, client, race)
     {
         m_IsSeeker[client] = false;
 
-        inthunter_level=GetUpgradeLevel(client,raceID,hunterID);
+        int hunter_level=GetUpgradeLevel(client,raceID,hunterID);
         SetupSidewinder(client, hunter_level, 0);
 
-        intreactor_level = GetUpgradeLevel(client,raceID,reactorID);
+        int reactor_level = GetUpgradeLevel(client,raceID,reactorID);
         SetEnergyRate(client, (reactor_level > 0) ? float(reactor_level) : -1.0);
 
-        intarmor_level = GetUpgradeLevel(client,raceID,armorID);
+        int armor_level = GetUpgradeLevel(client,raceID,armorID);
         SetupArmor(client, armor_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        intlifters_level = GetUpgradeLevel(client,raceID,liftersID);
+        int lifters_level = GetUpgradeLevel(client,raceID,liftersID);
         SetLevitation(client, lifters_level, true, g_LevitationLevels);
 
-        intmatrix_level=GetUpgradeLevel(client,raceID,matrixID);
+        int matrix_level=GetUpgradeLevel(client,raceID,matrixID);
         if (matrix_level > 0)
             SetupUberShield(client, matrix_level);
 
         if (m_BuildAvailable)
         {
-            intspawn_num = RoundToCeil((float(GetUpgradeLevel(client,raceID,spawnID)) / 2.0) + 0.5);
+            int spawn_num = RoundToCeil((float(GetUpgradeLevel(client,raceID,spawnID)) / 2.0) + 0.5);
             if (spawn_num > cfgMaxObjects)
                 spawn_num = cfgMaxObjects;
             GiveBuild(client, spawn_num, spawn_num, spawn_num, spawn_num);
@@ -798,7 +798,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
     }
 }
 
-public ActionOnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
+public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
                                 attacker_race, damage, absorbed, bool from_sc)
 {
     if (m_NadesAvailable && IsTargeted(victim_index))
@@ -824,7 +824,7 @@ public ActionOnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker
 
 public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_index,
                           attacker_race, assister_index, assister_race, damage,
-                          const char[]weapon[], bool is_equipment, customkill,
+                          const char weapon[], bool is_equipment, customkill,
                           bool headshot, bool backstab, bool melee)
 {
     if (victim_race == raceID)
@@ -842,7 +842,7 @@ void SetupUberShield(client, level)
     {
         if (level > 0)
         {
-            intnum = level * 3;
+            int num = level * 3;
             GiveUberShield(client, num, num,
                            GetShieldFlags(level));
         }
@@ -853,7 +853,7 @@ void SetupUberShield(client, level)
 
 ShieldFlags:GetShieldFlags(level)
 {
-    intShieldFlags:flags = Shield_Target_Self  | Shield_Reload_Location |
+    int ShieldFlags:flags = Shield_Target_Self  | Shield_Reload_Location |
                             Shield_With_Medigun | Shield_UseAlternateSounds;
     switch (level)
     {
@@ -870,7 +870,7 @@ void SetupSidewinder(client, hunter_level, seeker_level)
 {
     if (m_SidewinderAvailable)
     {
-        intSidewinderClientFlags:flags = (hunter_level > 0) ? CritSentryRockets : NoTracking;
+        int SidewinderClientFlags:flags = (hunter_level > 0) ? CritSentryRockets : NoTracking;
 
         if (m_IsSeeker[client] && seeker_level > 0)
             flags |= TrackingAll;
@@ -900,14 +900,14 @@ void SetupSidewinder(client, hunter_level, seeker_level)
     }
 }
 
-public ActionOnSidewinderSeek(client, target, projectile, bool critical)
+public Action OnSidewinderSeek(client, target, projectile, bool critical)
 {
     if (GetRace(client) == raceID)
     {
         if (GetRestriction(client,Restriction_NoUltimates) ||
             GetRestriction(client,Restriction_Stunned))
         {
-            charseekerName[64];
+            char seekerName[64];
             Format(seekerName, sizeof(seekerName), "%T", "HunterSeeker", client);
             DisplayMessage(client, Display_Ultimate, "%t", "Prevented", seekerName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -915,11 +915,11 @@ public ActionOnSidewinderSeek(client, target, projectile, bool critical)
         }
         else if (!m_IsSeeker[client])
         {
-            floatenergy = GetEnergy(client);
-            floatamount = GetUpgradeEnergy(raceID,hunterID);
+            float energy = GetEnergy(client);
+            float amount = GetUpgradeEnergy(raceID,hunterID);
             if (energy < amount)
             {
-                charseekerName[64];
+                char seekerName[64];
                 Format(seekerName, sizeof(seekerName), "%T", "HunterSeeker", client);
                 DisplayMessage(client, Display_Energy, "%t", "InsufficientEnergyFor", seekerName, amount);
                 EmitEnergySoundToClient(client,Terran);
@@ -927,11 +927,11 @@ public ActionOnSidewinderSeek(client, target, projectile, bool critical)
             }
             else
             {
-                intvespene = GetVespene(client);
-                intvespene_cost = GetUpgradeVespene(raceID,hunterID);
+                int vespene = GetVespene(client);
+                int vespene_cost = GetUpgradeVespene(raceID,hunterID);
                 if (vespene < vespene_cost)
                 {
-                    charseekerName[64];
+                    char seekerName[64];
                     Format(seekerName, sizeof(seekerName), "%T", "HunterSeeker", client);
                     DisplayMessage(client, Display_Energy, "%t", "InsufficientVespeneFor", seekerName, vespene_cost);
                     EmitVespeneSoundToClient(client,Terran);
@@ -955,27 +955,27 @@ void SeismicThumper(client, level)
     if (GetRestriction(client,Restriction_NoUltimates) ||
         GetRestriction(client,Restriction_Stunned))
     {
-        charupgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceID, thumperID, upgradeName, sizeof(upgradeName), client);
         DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
         PrepareAndEmitSoundToClient(client,deniedWav);
     }
     else if (CanInvokeUpgrade(client, raceID, thumperID))
     {
-        floatrange = g_ThumperRange[level];
+        float range = g_ThumperRange[level];
 
-        intlightning  = Lightning();
-        inthaloSprite = HaloSprite();
+        int lightning  = Lightning();
+        int haloSprite = HaloSprite();
         static const thumpColor[4] = {139, 69, 19, 255};
 
-        decl float indexLoc[3];
-        decl float clientLoc[3];
+        float indexLoc[3];
+        float clientLoc[3];
         GetClientEyePosition(client, clientLoc);
 
-        intb_count=0;
-        intalt_count=0;
-        intlist[MaxClients+1];
-        intalt_list[MaxClients+1];
+        int b_count=0;
+        int alt_count=0;
+        int list[MaxClients+1];
+        int alt_list[MaxClients+1];
         SetupOBeaconLists(list, alt_list, b_count, alt_count, client);
 
         if (b_count > 0)
@@ -994,9 +994,9 @@ void SeismicThumper(client, level)
             TE_Send(alt_list, alt_count, 0.0);
         }
 
-        intcount=0;
-        intteam=GetClientTeam(client);
-        for (intindex=1;index<=MaxClients;index++)
+        int count=0;
+        int team=GetClientTeam(client);
+        for (int index=1;index<=MaxClients;index++)
         {
             if (index != client && IsClientInGame(index) &&
                 IsPlayerAlive(index) && GetClientTeam(index) != team)
@@ -1031,7 +1031,7 @@ void SeismicThumper(client, level)
             }
         }
 
-        charupgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceID, thumperID, upgradeName, sizeof(upgradeName), client);
 
         if (count)
@@ -1050,9 +1050,9 @@ void SeismicThumper(client, level)
     }
 }
 
-public ActionUnslowPlayer(Handle timer,any:userid)
+public Action UnslowPlayer(Handle timer,any userid)
 {
-    intclient = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (client > 0)
     {
         SetRestriction(client,Restriction_NoBurrow, false);
@@ -1067,7 +1067,7 @@ void ThrowTargetingDrone(client, bool pressed)
     {
         if (pressed)
         {
-            charupgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, droneID, upgradeName, sizeof(upgradeName), client);
             PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
         }
@@ -1077,7 +1077,7 @@ void ThrowTargetingDrone(client, bool pressed)
     {
         if (pressed)
         {
-            charupgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, droneID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -1114,7 +1114,7 @@ void Seeker(client, level)
         else if (GetRestriction(client,Restriction_NoUltimates) ||
                 GetRestriction(client,Restriction_Stunned))
         {
-            charupgradeName[64];
+            char upgradeName[64];
             GetUpgradeName(raceID, seekerID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "Prevented", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
@@ -1123,13 +1123,13 @@ void Seeker(client, level)
         {
             m_IsSeeker[client] = true;
 
-            inthunter_level=GetUpgradeLevel(client,raceID,hunterID);
-            intseeker_level=GetUpgradeLevel(client,raceID,seekerID);
+            int hunter_level=GetUpgradeLevel(client,raceID,hunterID);
+            int seeker_level=GetUpgradeLevel(client,raceID,seekerID);
             SetupSidewinder(client, hunter_level, seeker_level);
 
             //PrepareAndEmitSoundToAll(seekerReadyWav,client);
 
-            floattime = 5.0 * float(level);
+            float time = 5.0 * float(level);
             CreateTimer(time, EndSeeker, GetClientUserId(client),TIMER_FLAG_NO_MAPCHANGE);
             PrintHintText(client, "%t", "SeekerActive", time);
             HudMessage(client, "%t", "SeekerHud");
@@ -1137,14 +1137,14 @@ void Seeker(client, level)
     }
 }
 
-public ActionEndSeeker(Handle timer,any:userid)
+public Action EndSeeker(Handle timer,any userid)
 {
-    intclient = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (client > 0)
     {
         m_IsSeeker[client] = false;
 
-        boolisRaven = (GetRace(client) == raceID);
+        bool isRaven = (GetRace(client) == raceID);
         if (isRaven && IsClientInGame(client) && IsPlayerAlive(client))
         {
             //PrepareAndEmitSoundToAll(seekerExpireWav,client);
@@ -1152,7 +1152,7 @@ public ActionEndSeeker(Handle timer,any:userid)
             ClearHud(client, "%t", "SeekerHud");
         }
 
-        inthunter_level=isRaven ? GetUpgradeLevel(client,raceID,hunterID) : 0;
+        int hunter_level=isRaven ? GetUpgradeLevel(client,raceID,hunterID) : 0;
         SetupSidewinder(client, hunter_level, 0);
         CreateCooldown(client, raceID, seekerID);
     }

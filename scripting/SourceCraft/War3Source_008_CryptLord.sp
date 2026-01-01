@@ -127,7 +127,7 @@ public OnUltimateCommand(client,race,bool pressed)
 
     if(race==thisRaceID && pressed && ValidPlayer(client,true) )
     {
-        new ult_level=War3_GetSkillLevel(client,race,ULT_LOCUST);
+        int ult_level=War3_GetSkillLevel(client,race,ULT_LOCUST);
         if(ult_level>0)
         {
 #if !defined SOURCECRAFT

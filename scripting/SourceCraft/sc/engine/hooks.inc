@@ -1,7 +1,7 @@
 /*
  * vim: set ai et ts=4 sw=4 syntax=sourcepawn :
  * File: hooks.inc
- * Description: Handles hooking functions, will be used to get chat commands.
+ * Description: Handle s hooking functions, will be used to get chat commands.
  * Author(s): Naris (Murray Wilson)
  * Credits: Anthony Iacono
  */
@@ -324,14 +324,14 @@ public Action UltimateCommand(client, int args)
             }
         }
 
-        new result;
-        new race=GetRace(client);
+        int result;
+        int race=GetRace(client);
 
         char command[CLASS_STRING_LENGTH];
         GetCmdArg(0,command,sizeof(command));
         bool pressed=(command[0] == '+');
 
-        new arg;
+        int arg;
         if (IsCharNumeric(command[9]))
         {
             arg = command[9]-'0';

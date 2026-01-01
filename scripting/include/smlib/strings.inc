@@ -15,9 +15,9 @@
  */
 stock bool String_IsNumeric(const char[] str)
 {
-	new x=0;
-	new dotsFound=0;
-	new numbersFound=0;
+	int x=0;
+	int dotsFound=0;
+	int numbersFound=0;
 
 	if (str[x] == '+' || str[x] == '-') {
 		x++;
@@ -50,19 +50,19 @@ stock bool String_IsNumeric(const char[] str)
 }
 
 /**
- * Trims a string by removing the specified chars from beginning and ending.
- * Removes all ' ', '\t', '\r', '\n' characters by default.
+ * Trims a string by removing the specified char s from beginning and ending.
+ * Removes all ' ', '\t', '\r', '\n' char acters by default.
  * The Output String can be the same as the Input String.
  *
  * @param str				Input String.
  * @param output			Output String (Can be the as the input).
  * @param size				Size of the output String.
- * @param chars				Characters to remove.
+ * @param char s				Characters to remove.
  * @noreturn
  */
 stock String_Trim(const char[] str, char[] output, size, const char[] chrs=" \t\r\n")
 {
-	new x=0;
+	int x=0;
 	while (str[x] != '\0' && FindCharInString(chrs, str[x]) != -1) {
 		x++;
 	}
@@ -88,14 +88,14 @@ stock String_Trim(const char[] str, char[] output, size, const char[] chrs=" \t\
  */
 stock String_RemoveList(char[] buffer, char[] removeList[], size, bool caseSensitive=false)
 {
-	for (new i=0; i < size; i++) {
+	for (int i=0; i < size; i++) {
 		ReplaceString(buffer, SIZE_OF_INT, removeList[i], "", caseSensitive);
 	}
 }
 
 /**
  * Converts the whole String to lower case.
- * Only works with alphabetical characters (not ÖÄÜ) because Sourcemod suxx !
+ * Only works with alphabetical char acters (not ÖÄÜ) because Sourcemod suxx !
  * The Output String can be the same as the Input String.
  *
  * @param input				Input String.
@@ -107,7 +107,7 @@ stock String_ToLower(const char[] input, char[] output, size)
 {
 	size--;
 
-	new x=0;
+	int x=0;
 	while (input[x] != '\0' && x < size) {
 
 		output[x] = CharToLower(input[x]);
@@ -120,7 +120,7 @@ stock String_ToLower(const char[] input, char[] output, size)
 
 /**
  * Converts the whole String to upper case.
- * Only works with alphabetical characters (not öäü) because Sourcemod suxx !
+ * Only works with alphabetical char acters (not öäü) because Sourcemod suxx !
  * The Output String can be the same as the Input String.
  *
  * @param input				Input String.
@@ -132,7 +132,7 @@ stock String_ToUpper(const char[] input, char[] output, size)
 {
 	size--;
 
-	new x=0;
+	int x=0;
 	while (input[x] != '\0' && x < size) {
 
 		output[x] = CharToUpper(input[x]);
@@ -149,22 +149,22 @@ stock String_ToUpper(const char[] input, char[] output, size)
  *
  * @param buffer			String Buffer.
  * @param size				String Buffer size (must be length+1)
- * @param length			Number of characters being generated.
- * @param chrs				String for specifying the characters used for random character generation.
+ * @param length			Number of char acters being generated.
+ * @param chrs				String for specifying the char acters used for random char acter generation.
  * 							By default it will use all letters of the alphabet (upper and lower) and all numbers.
- * 							If you pass an empty String, it will use all readable ASCII characters (33 - 126)
+ * 							If you pass an empty String, it will use all readable ASCII char acters (33 - 126)
  * @noreturn
  */
 stock String_GetRandom(char[] buffer, size, length=32, const char[] chrs="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234556789")
 {
-	new random, len;
+	int random, len;
 	size--;
 
 	if (chrs[0] != '\0') {
 		len = strlen(chrs) - 1;
 	}
 
-	new n = 0;
+	int n = 0;
 	while (n < length && n < size) {
 
 		if (chrs[0] == '\0') {
@@ -192,7 +192,7 @@ stock String_GetRandom(char[] buffer, size, length=32, const char[] chrs="abcdef
  */
 stock bool String_StartsWith(const char[] str, const char[] subString)
 {
-	new n = 0;
+	int n = 0;
 	while (subString[n] != '\0') {
 
 		if (str[n] == '\0' || str[n] != subString[n]) {
@@ -215,8 +215,8 @@ stock bool String_StartsWith(const char[] str, const char[] subString)
  */
 stock bool String_EndsWith(const char[] str, const char[] subString)
 {
-	new n_str = strlen(str) - 1;
-	new n_subString = strlen(subString) - 1;
+	int n_str = strlen(str) - 1;
+	int n_subString = strlen(subString) - 1;
 
 	if(n_str < n_subString) {
 		return false;

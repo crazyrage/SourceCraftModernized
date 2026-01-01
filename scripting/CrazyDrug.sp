@@ -126,7 +126,7 @@ public Action Command_CrazyDrug(client, args)
 	}
 	
 	char target_name[MAX_TARGET_LENGTH];
-	decl target_list[MAXPLAYERS], target_count, bool tn_is_ml;
+	int target_list[MAXPLAYERS], target_count, bool tn_is_ml;
 	
 	if ((target_count = ProcessTargetString(
 	arg,
@@ -247,7 +247,7 @@ public OnAdminMenuReady(Handle topmenu)
 	}
 	hTopMenu = topmenu;
 	
-	new TopMenuObject player_commands = FindTopMenuCategory(hTopMenu, ADMINMENU_PLAYERCOMMANDS);
+	int TopMenuObject player_commands = FindTopMenuCategory(hTopMenu, ADMINMENU_PLAYERCOMMANDS);
 	
 	if (player_commands != INVALID_TOPMENUOBJECT)
 	{

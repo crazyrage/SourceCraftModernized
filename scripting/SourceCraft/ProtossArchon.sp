@@ -242,7 +242,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
         m_RageActive[client] = false;
 
         //Set Archon Color
-        new r,g,b;
+        int r,g,b;
         if (TFTeam:GetClientTeam(client) == TFTeam_Red)
         { r = 255; g = 0; b = 0; }
         else
@@ -330,14 +330,14 @@ public OnPlayerSpawnEvent(Handle event, client, race)
                                          Armor_IsShield|Armor_NoLimit);
 
         // Adjust Health to offset shields
-        new health=GetClientHealth(client)-shield_amount;
+        int health=GetClientHealth(client)-shield_amount;
         if (health <= 0)
             health = GetMaxHealth(client) / 2;
 
         SetEntityHealth(client, health);
 
         //Set Archon Color
-        new r,g,b;
+        int r,g,b;
         if (TFTeam:GetClientTeam(client) == TFTeam_Red)
         { r = 255; g = 0; b = 0; }
         else
@@ -361,7 +361,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
 public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
                                 attacker_race, damage, absorbed, bool from_sc)
 {
-    new Action returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
 
     if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index)
@@ -401,12 +401,12 @@ public Action OnPlayerAssistEvent(Handle event, victim_index, victim_race,
                                   assister_index, assister_race, damage,
                                   absorbed)
 {
-    new Action returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
 
     if (assister_race == raceID)
     {
         int hallucination_level = GetUpgradeLevel(assister_index,raceID,hallucinationID);
-        new float hallucination_amount = GetUpgradeEnergy(raceID,hallucinationID);
+        int float hallucination_amount = GetUpgradeEnergy(raceID,hallucinationID);
         if (Hallucinate(victim_index, assister_index, hallucination_level,
                         hallucination_amount, g_HallucinateChance))
 
@@ -442,7 +442,7 @@ public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_inde
 
 public bool PsionicShockwave(damage, victim_index, index)
 {
-    new shockwave_level=GetUpgradeLevel(index,raceID,shockwaveID);
+    int shockwave_level=GetUpgradeLevel(index,raceID,shockwaveID);
     if (!GetRestriction(index, Restriction_NoUpgrades) &&
         !GetRestriction(index, Restriction_Stunned) &&
         !GetImmunity(victim_index,Immunity_HealthTaking) &&
@@ -555,7 +555,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
     }
 }
 
-public Action Exclaimation(Handle timer, any:userid) // Every 3.0 seconds
+public Action Exclaimation(Handle timer, any userid) // Every 3.0 seconds
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client))
@@ -592,7 +592,7 @@ void PsionicBolt(client, level)
 
         static const lightningColor[4] = { 10, 200, 255, 255 };
 
-        new float range = g_BoltRange[level];
+        int float range = g_BoltRange[level];
         int dmg = GetRandomInt(g_BoltDamage[level][0],
                                g_BoltDamage[level][1]);
 
@@ -602,9 +602,9 @@ void PsionicBolt(client, level)
         GetClientAbsOrigin(client, lastLoc);
         lastLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
-        new count  = 0;
-        new last   = client;
-        new team   = GetClientTeam(client);
+        int count  = 0;
+        int last   = client;
+        int team   = GetClientTeam(client);
         int target = GetClientAimTarget(client);
         if (target > 0) 
         {
@@ -651,12 +651,12 @@ void PsionicBolt(client, level)
 
         PrepareAndEmitSoundToAll(psionicBoltWav,client);
         
-        new lightning  = Lightning();
+        int lightning  = Lightning();
         int beamSprite = BeamSprite();
         int haloSprite = PlasmaHaloSprite();
 
-        new b_count=0;
-        new alt_count=0;
+        int b_count=0;
+        int alt_count=0;
         int list[MaxClients+1];
         int alt_list[MaxClients+1];
         SetupOBeaconLists(list, alt_list, b_count, alt_count, client);

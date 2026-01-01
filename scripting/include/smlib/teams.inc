@@ -29,8 +29,8 @@
  */
 stock bool Team_HaveAllPlayers(bool countFakeClients=true) {
 
-	new teamCount = GetTeamCount();
-	for (new i=2; i < teamCount; i++) {
+	int teamCount = GetTeamCount();
+	for (int i=2; i < teamCount; i++) {
 
 		if (Team_GetClientCount(i, ((countFakeClients) ? CLIENTFILTER_ALL : CLIENTFILTER_NOBOTS)) == 0) {
 			return false;
@@ -51,8 +51,8 @@ stock Team_GetClientCount(team, flags=0)
 {
 	flags |= CLIENTFILTER_INGAME;
 
-	new numClients = 0;
-	for (new client=1; client <= MaxClients; client++) {
+	int numClients = 0;
+	for (int client=1; client <= MaxClients; client++) {
 
 		if (!Client_MatchesFilter(client, flags)) {
 			continue;
@@ -71,8 +71,8 @@ stock Team_GetClientCount(team, flags=0)
  * Use this function for optimization if you have to get the counts of both teams,
  * otherwise use Team_GetClientCount().
  *
- * @param team1					Pass an integer variable by reference
- * @param team2					Pass an integer variable by reference
+ * @param team1					Pass an int eger variable by reference
+ * @param team2					Pass an int eger variable by reference
  * @param flags					Client Filter Flags (Use the CLIENTFILTER_ constants).
  * @noreturn
  */
@@ -80,7 +80,7 @@ stock Team_GetClientCounts(&team1=0, &team2=0, flags=0)
 {
 	flags |= CLIENTFILTER_INGAME;
 
-	for (new client=1; client <= MaxClients; client++) {
+	for (int client=1; client <= MaxClients; client++) {
 
 		if (!Client_MatchesFilter(client, flags)) {
 			continue;
@@ -106,7 +106,7 @@ stock Team_GetClientCounts(&team1=0, &team2=0, flags=0)
  */
 stock bool Team_GetName(index, char[] str, size)
 {
-	new edict = Team_GetEdict(index);
+	int edict = Team_GetEdict(index);
 
 	if (edict == -1) {
 		str[0] = '\0';
@@ -130,7 +130,7 @@ stock bool Team_GetName(index, char[] str, size)
  */
 stock bool Team_SetName(index, const char[] name)
 {
-	new edict = Team_GetEdict(index);
+	int edict = Team_GetEdict(index);
 
 	if (edict == -1) {
 		return false;
@@ -151,7 +151,7 @@ stock bool Team_SetName(index, const char[] name)
  */
 stock Team_GetScore(index)
 {
-	new edict = Team_GetEdict(index);
+	int edict = Team_GetEdict(index);
 
 	if (edict == -1) {
 		return -1;
@@ -170,7 +170,7 @@ stock Team_GetScore(index)
  */
 stock bool Team_SetScore(index, score)
 {
-	new edict = Team_GetEdict(index);
+	int edict = Team_GetEdict(index);
 
 	if (edict == -1) {
 		return false;
@@ -235,15 +235,15 @@ stock Team_GetEdict(index)
 		return -1;
 	}
 
-	new edict = teams[index];
+	int edict = teams[index];
 	if (Entity_IsValid(edict)) {
 		return edict;
 	}
 
 	bool foundTeamManager = false;
 
-	new maxEntities = GetMaxEntities();
-	for (new entity=MaxClients+1; entity < maxEntities; entity++) {
+	int maxEntities = GetMaxEntities();
+	for (int entity=MaxClients+1; entity < maxEntities; entity++) {
 
 		if (!IsValidEntity(entity)) {
 			continue;
@@ -285,7 +285,7 @@ stock Team_GetEdict(index)
 stock Team_GetAnyClient(index)
 {
 	static client_cache[MAX_TEAMS] = -1;
-	new client;
+	int client;
 
 	if (index > 0) {
 		client = client_cache[index];

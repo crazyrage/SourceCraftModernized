@@ -142,7 +142,7 @@ public OnW3TakeDmgBulletPre(victim,attacker,float damage)
     ///need to do sleep transfer, beware of sleep trie which you  need to close
 }
 
-public Action UnSmitten(Handle timer,any:client)
+public Action UnSmitten(Handle timer,any client)
 {
     bSmittened[client]=false;
 }
@@ -243,7 +243,7 @@ Sleep(client){
     }
 }
 
-public Action EndSleep(Handle t,any:client){
+public Action EndSleep(Handle t,any client){
 
     SleepTimer[client]=null;
     CloseHandle(SleepHandle[client]);
@@ -274,7 +274,7 @@ public OnUltimateCommand(client,race,bool pressed)
     
     if(race==thisRaceID && pressed && ValidPlayer(client,true) )
     {
-        new level=War3_GetSkillLevel(client,race,ULTIMATE);
+        int level=War3_GetSkillLevel(client,race,ULTIMATE);
         if(level>0)
         {
             if(!Silenced(client)&&War3_SkillNotInCooldown(client,thisRaceID,ULTIMATE,true))
@@ -314,8 +314,8 @@ public bool UltimateFilter(client)
 {
     return (!IsUltImmune(client));
 }
-public Action EndHold(Handle t,any:client){
-    new victim=holdingvictim[client];
+public Action EndHold(Handle t,any client){
+    int victim=holdingvictim[client];
     War3_SetBuff(victim,bStunned,thisRaceID,false);
     War3_SetBuff(client,bStunned,thisRaceID,false);
     holdingvictim[client]=0;

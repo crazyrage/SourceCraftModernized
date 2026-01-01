@@ -94,9 +94,9 @@ bool:HookDodEvents()
     return true;
 }
 
-public KillPlanterEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public KillPlanterEvent(Handle event,const char[] name,bool:dontBroadcast)
 {
-    new index = GetClientOfUserId(GetEventInt(event,"userid"));
+    int index = GetClientOfUserId(GetEventInt(event,"userid"));
     if (index > 0)
     {
         GiveKillPlanterXP(index);
@@ -104,9 +104,9 @@ public KillPlanterEvent(Handle:event,const String:name[],bool:dontBroadcast)
     }
 }
 
-public KillDefuserEvent(Handle:event,const String:name[],bool:dontBroadcast)
+public KillDefuserEvent(Handle event,const char[] name,bool:dontBroadcast)
 {
-    new index = GetClientOfUserId(GetEventInt(event,"userid"));
+    int index = GetClientOfUserId(GetEventInt(event,"userid"));
     if (index > 0)
     {
         GiveKillDefuserXP(index);

@@ -12,11 +12,11 @@ public Plugin myinfo =
 };
 
 //for debuff index, see constants, its in an enum
-new any:buffdebuff[MAXPLAYERSCUSTOM][W3Buff][MAXITEMS+MAXRACES+MAXITEMS2+CUSTOMMODIFIERS]; ///a race may only modify a property once
+new any buffdebuff[MAXPLAYERSCUSTOM][W3Buff][MAXITEMS+MAXRACES+MAXITEMS2+CUSTOMMODIFIERS]; ///a race may only modify a property once
 
 	int BuffProperties[W3Buff][W3BuffProperties];
 
-new any:BuffCached[MAXPLAYERSCUSTOM][W3Buff];// instead of looping, we cache everything in the last dimension, see enum W3BuffCache
+new any BuffCached[MAXPLAYERSCUSTOM][W3Buff];// instead of looping, we cache everything in the last dimension, see enum W3BuffCache
 
 public void OnPluginStart()
 {
@@ -68,10 +68,10 @@ public int Native_War3_SetBuff(Handle plugin,numParams)
 {
   if(numParams==4) //client,race,buffindex,value
   {
-    new client=GetNativeCell(1);
-    new W3Buff buffindex=GetNativeCell(2);
-    new raceid=GetNativeCell(3);
-    new any:value=GetNativeCell(4);
+    int client=GetNativeCell(1);
+    int W3Buff buffindex=GetNativeCell(2);
+    int raceid=GetNativeCell(3);
+    int any value=GetNativeCell(4);
 
 #if defined SOURCECRAFT
     if (SCSetBuff(client,buffindex,0,value, .pluginid=GetRacePlugin(raceid)))
@@ -90,10 +90,10 @@ public int Native_War3_SetBuffItem(Handle plugin,numParams) //buff is from an it
 {
   if(numParams==4) //client,race,buffindex,value
   {
-    new client=GetNativeCell(1);
-    new W3Buff buffindex=GetNativeCell(2);
-    new itemid=GetNativeCell(3);
-    new any:value=GetNativeCell(4);
+    int client=GetNativeCell(1);
+    int W3Buff buffindex=GetNativeCell(2);
+    int itemid=GetNativeCell(3);
+    int any value=GetNativeCell(4);
 
 #if defined SOURCECRAFT
     if (SCSetBuff(client,buffindex,itemid,value, .pluginid=GetItemPlugin(itemid)))
@@ -113,10 +113,10 @@ public int Native_War3_SetBuffItem2(Handle plugin,numParams) //buff is from an i
 {
   if(numParams==4) //client,race,buffindex,value
   {
-    new client=GetNativeCell(1);
-    new W3Buff buffindex=GetNativeCell(2);
-    new itemid=GetNativeCell(3);
-    new any:value=GetNativeCell(4);
+    int client=GetNativeCell(1);
+    int W3Buff buffindex=GetNativeCell(2);
+    int itemid=GetNativeCell(3);
+    int any value=GetNativeCell(4);
 
 #if defined SOURCECRAFT
     if (SCSetBuff(client,buffindex,itemid,value, .pluginid=GetItemPlugin(itemid)))
@@ -173,8 +173,8 @@ public NW3GetBuffLastValue(Handle plugins,numParams) {
 public int NW3GetBuffHasTrue(Handle plugin, int numParams)
 {
 #if defined SOURCECRAFT
-    new client=GetNativeCell(1);
-    new W3Buff buffindex=GetNativeCell(2);
+    int client=GetNativeCell(1);
+    int W3Buff buffindex=GetNativeCell(2);
     switch (buffindex)
     {
         case bImmunitySkills:
@@ -209,7 +209,7 @@ public int NW3GetBuffHasTrue(Handle plugin, int numParams)
     }
     return _:GetBuffHasOneTrue(client,buffindex);
 #else
-    //all one true bools are cached
+    //all one true bool s are cached
     return _:GetBuffHasOneTrue(GetNativeCell(1),GetNativeCell(2)); //returns bool
 #endif
 }
@@ -286,7 +286,7 @@ public Action cmdbufflist(client, args){
   if(args==1){
     char arg[32];
     GetCmdArg(1,arg,sizeof(arg));
-    new num=StringToInt(arg);
+    int num=StringToInt(arg);
 #pragma unused num // prevent warning when compiled for SOURCECRAFT w/o _TRACE
     int ItemsLoaded = W3GetItemsLoaded();
     int RacesPlusItems = ItemsLoaded+War3_GetRacesLoaded();
@@ -371,7 +371,7 @@ ResetBuffParticularRaceOrItem(client,W3Buff buffindex,particularraceitemindex){
 }
 
 DoCalculateBuffCache(client,W3Buff buffindex,particularraceitemindex){
-  ///after we set it, we do an entire calculation to cache its value ( on selected buffs , mainly bools we test for HasTrue )
+  ///after we set it, we do an entire calculation to cache its value ( on selected buffs , mainly bool s we test for HasTrue )
   switch(BuffCacheType(buffindex)){
     case DoNotCache: {}
     case bHasOneTrue: BuffCached[client][buffindex]=CalcBuffHasOneTrue(client,buffindex);
@@ -386,7 +386,7 @@ DoCalculateBuffCache(client,W3Buff buffindex,particularraceitemindex){
 }
 
 
-any:BuffDefault(W3Buff buffindex){
+any BuffDefault(W3Buff buffindex){
   return BuffProperties[buffindex][DefaultValue];
 }
 BuffStackCacheType:BuffCacheType(W3Buff buffindex){
@@ -397,15 +397,15 @@ BuffStackCacheType:BuffCacheType(W3Buff buffindex){
 
 
 ////loop through the value of all items and races contributing values
-stock any:CalcBuffMax(client,W3Buff buffindex)
+stock any CalcBuffMax(client,W3Buff buffindex)
 {
   if(ValidBuff(buffindex))
   {
-    new any:value=buffdebuff[client][buffindex][0];
+    int any value=buffdebuff[client][buffindex][0];
     int loop = ItemsPlusRacesLoaded();
     for(int i=1;i<=loop;i++)
     {
-      new any:value2=buffdebuff[client][buffindex][i];
+      new any value2=buffdebuff[client][buffindex][i];
       //PrintToChatAll("%f",value2);
       if(value2>value){
         value=value2;
@@ -416,15 +416,15 @@ stock any:CalcBuffMax(client,W3Buff buffindex)
   LogError("invalid buff index");
   return -1;
 }
-stock any:CalcBuffMin(client,W3Buff buffindex)
+stock any CalcBuffMin(client,W3Buff buffindex)
 {
   if(ValidBuff(buffindex))
   {
-    new any:value=buffdebuff[client][buffindex][0];
+    int any value=buffdebuff[client][buffindex][0];
     int loop = ItemsPlusRacesLoaded();
     for(int i=1;i<=loop;i++)
     {
-      new any:value2=buffdebuff[client][buffindex][i];
+      new any value2=buffdebuff[client][buffindex][i];
       if(value2<value){
         value=value2;
       }
@@ -438,7 +438,7 @@ void CalcBuffMinInt(client,W3Buff buffindex)
 {  
   if(ValidBuff(buffindex))
   {
-    new value=buffdebuff[client][buffindex][0];
+    int value=buffdebuff[client][buffindex][0];
     int loop = ItemsPlusRacesLoaded();
     for(int i=1;i<=loop;i++)
     {
@@ -473,7 +473,7 @@ stock bool CalcBuffHasOneTrue(client,W3Buff buffindex)
 }
 
 
-//multiplied all the values together , only for floats
+//multiplied all the values together , only for float s
 stock float CalcBuffStackedFloat(client,W3Buff buffindex)
 {
   if(ValidBuff(buffindex))
@@ -496,7 +496,7 @@ stock CalcBuffSumInt(client,W3Buff buffindex)
 {
   if(ValidBuff(buffindex))
   {
-    new any:value=0;
+    int any value=0;
     //this one starts from zero
     int loop = ItemsPlusRacesLoaded();
     for(int i=1;i<=loop;i++)
@@ -517,7 +517,7 @@ stock CalcBuffSumFloat(client,W3Buff buffindex)
 {
   if(ValidBuff(buffindex))
   {
-    new any:value=0;
+    int any value=0;
     //this one starts from zero
     int loop = ItemsPlusRacesLoaded();
     for(int i=1;i<=loop;i++)
@@ -782,7 +782,7 @@ stock BuffLoopLimit(){
 //=======================================================================
 
 #if defined SOURCECRAFT
-stock bool SCSetBuff(client, W3Buff buffindex, itemid, any:value,
+stock bool SCSetBuff(client, W3Buff buffindex, itemid, any value,
                      bool item2=false, Handle pluginid=null)
 {
     switch (buffindex)

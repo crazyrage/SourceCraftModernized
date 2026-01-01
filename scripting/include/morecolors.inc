@@ -36,7 +36,7 @@ stock CPrintToChat(client, const char[] message, any:...) {
 	if(!IsClientInGame(client)) {
 		ThrowError("Client %i is not in game", client);
 	}
-	char buffer[MAX_MESSAGE_LENGTH], String:buffer2[MAX_MESSAGE_LENGTH];
+	char buffer[MAX_MESSAGE_LENGTH], char buffer2[MAX_MESSAGE_LENGTH];
 	SetGlobalTransTarget(client);
 	Format(buffer, sizeof(buffer), "\x01%s", message);
 	VFormat(buffer2, sizeof(buffer2), buffer, 3);
@@ -54,8 +54,8 @@ stock CPrintToChat(client, const char[] message, any:...) {
  */
 stock CPrintToChatAll(const char[] message, any:...) {
 	CCheckTrie();
-	char buffer[MAX_MESSAGE_LENGTH], String:buffer2[MAX_MESSAGE_LENGTH];
-	for(new i = 1; i <= MaxClients; i++) {
+	char buffer[MAX_MESSAGE_LENGTH], char buffer2[MAX_MESSAGE_LENGTH];
+	for (int i = 1; i <= MaxClients; i++) {
 		if(!IsClientInGame(i) || IsFakeClient(i) || CSkipList[i]) {
 			CSkipList[i] = false;
 			continue;
@@ -93,7 +93,7 @@ stock CPrintToChatEx(client, author, const char[] message, any:...) {
 	if(!IsClientInGame(author)) {
 		ThrowError("Client %i is not in game", author);
 	}
-	char buffer[MAX_MESSAGE_LENGTH], String:buffer2[MAX_MESSAGE_LENGTH];
+	char buffer[MAX_MESSAGE_LENGTH], char buffer2[MAX_MESSAGE_LENGTH];
 	SetGlobalTransTarget(client);
 	Format(buffer, sizeof(buffer), "\x01%s", message);
 	VFormat(buffer2, sizeof(buffer2), buffer, 4);
@@ -119,8 +119,8 @@ stock CPrintToChatAllEx(author, const char[] message, any:...) {
 	if(!IsClientInGame(author)) {
 		ThrowError("Client %i is not in game", author);
 	}
-	char buffer[MAX_MESSAGE_LENGTH], String:buffer2[MAX_MESSAGE_LENGTH];
-	for(new i = 1; i <= MaxClients; i++) {
+	char buffer[MAX_MESSAGE_LENGTH], char buffer2[MAX_MESSAGE_LENGTH];
+	for (int i = 1; i <= MaxClients; i++) {
 		if(!IsClientInGame(i) || IsFakeClient(i) || CSkipList[i]) {
 			CSkipList[i] = false;
 			continue;
@@ -151,7 +151,7 @@ stock CSkipNextClient(client) {
 }
 
 /**
- * Checks if the colors trie is initialized and initializes it if it's not (used internally)
+ * Checks if the colors trie is initialized and initializes it if it's not (used int ernally)
  * 
  * @return			No return
  */
@@ -162,11 +162,11 @@ stock CCheckTrie() {
 }
 
 /**
- * Replaces color tags in a string with color codes (used internally by CPrintToChat, CPrintToChatAll, CPrintToChatEx, and CPrintToChatAllEx
+ * Replaces color tags in a string with color codes (used int ernally by CPrintToChat, CPrintToChatAll, CPrintToChatEx, and CPrintToChatAllEx
  *
  * @param buffer		String.
  * @param author		Optional client index to use for {teamcolor} tags, or 0 for none
- * @param removeTags	Optional boolean value to determine whether we're replacing tags with colors, or just removing tags, used by CRemoveTags
+ * @param removeTags	Optional bool ean value to determine whether we're replacing tags with colors, or just removing tags, used by CRemoveTags
  * @param maxlen		Optional value for max buffer length, used by CRemoveTags
  * @noreturn
  * 
@@ -191,10 +191,10 @@ stock CReplaceColorCodes(char[] buffer, author=0, bool removeTags=false, maxlen=
 		Format(team, sizeof(team), "\x07%06X", CGetTeamColor(author));
 		ReplaceString(buffer, maxlen, "{teamcolor}", team, false);
 	}
-	char part[maxlen], String:find[32], String:replace[16];
-	new value, first, last;
-	new index = 0;
-	for(new i = 0; i < 100; i++) { // conditions are failsafe, we'll return in the loop
+	char part[maxlen], char find[32], char replace[16];
+	int value, first, last;
+	int index = 0;
+	for (int i = 0; i < 100; i++) { // conditions are failsafe, we'll return in the loop
 		first = FindCharInString(buffer[index], '{');
 		last = FindCharInString(buffer[index], '}');
 		if(first == -1 || last == -1) {
@@ -202,7 +202,7 @@ stock CReplaceColorCodes(char[] buffer, author=0, bool removeTags=false, maxlen=
 		}
 		first++;
 		last--;
-		for(new j = 0; j <= last - first + 1; j++) { // everything from this point on is really confusing
+		for (int j = 0; j <= last - first + 1; j++) { // everything from this point on is really confusing
 			if(j == last - first + 1) {
 				part[j] = 0;
 				break;
@@ -230,8 +230,8 @@ stock CReplaceColorCodes(char[] buffer, author=0, bool removeTags=false, maxlen=
  * @noreturn
  */
 stock StrToLower(char[] buffer) {
-	new len = strlen(buffer);
-	for(new i = 0; i < len; i++) {
+	int len = strlen(buffer);
+	for (int i = 0; i < len; i++) {
 		buffer[i] = CharToLower(buffer[i]);
 	}
 }
@@ -245,7 +245,7 @@ stock StrToLower(char[] buffer) {
  */
 stock bool CAddColor(const char[] name, color) {
 	CCheckTrie();
-	new value;
+	int value;
 	if(GetTrieValue(CTrie, name, value)) {
 		return false;
 	}
@@ -281,7 +281,7 @@ stock CGetTeamColor(client) {
 	if(!IsClientInGame(client)) {
 		ThrowError("Client %i is not in game", client);
 	}
-	new value;
+	int value;
 	switch(GetClientTeam(client)) {
 		case 1: {
 			value = COLOR_GRAY;
@@ -315,7 +315,7 @@ stock Handle InitColorTrie() {
 	SetTrieValue(hTrie, "brown", 0xA52A2A);
 	SetTrieValue(hTrie, "burlywood", 0xDEB887);
 	SetTrieValue(hTrie, "cadetblue", 0x5F9EA0);
-	SetTrieValue(hTrie, "chartreuse", 0x7FFF00);
+	SetTrieValue(hTrie, "char treuse", 0x7FFF00);
 	SetTrieValue(hTrie, "chocolate", 0xD2691E);
 	SetTrieValue(hTrie, "coral", 0xFF7F50);
 	SetTrieValue(hTrie, "cornflowerblue", 0x6495ED);

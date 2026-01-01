@@ -21,7 +21,7 @@ forward OnCurrencyChanged(client, oldCurrency, newCurrency);
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// These are most interesting to a plugin author ;)
+// These are most int eresting to a plugin author ;)
 
 /**
  * Retrieve the amount of currency this player has
@@ -62,7 +62,7 @@ stock bool War3_SubstractCurrency(client, currencyToSubstract)
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// These cater more towards internal usage
+// These cater more towards int ernal usage
 
 #if !defined SOURCECRAFT // Not Implemented!
 /**
@@ -74,7 +74,7 @@ native bool War3_SetCurrency(client, newCurrency);
 #endif
 
 /** 
- * Gets/Sets the War3Source internal gold currency value for this player
+ * Gets/Sets the War3Source int ernal gold currency value for this player
  */
 #if !defined SOURCECRAFT
 native War3_GetGold(client);

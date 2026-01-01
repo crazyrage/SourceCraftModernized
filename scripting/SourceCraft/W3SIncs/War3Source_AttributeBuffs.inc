@@ -35,14 +35,14 @@ enum W3BuffType {
 #if !defined SOURCECRAFT // Not Implemented yet!
 // Returns the buff index
 
-native War3_ApplyTimedBuff(client, attributeId, any:value, float fDuration, 
+native War3_ApplyTimedBuff(client, attributeId, any value, float fDuration, 
                            W3BuffSource:sourceType, source, expireFlag, bool bCanStack);
 
-native War3_ApplyTimedDebuff(client, attributeId, any:value, float fDuration, 
+native War3_ApplyTimedDebuff(client, attributeId, any value, float fDuration, 
                              W3BuffSource:sourceType, source, expireFlag, bool bCanStack);
 
-native War3_ApplyRaceBuff(client, attributeId, any:value, raceID, W3BuffSource:sourceType, source);
-native War3_ApplyRaceDebuff(client, attributeId, any:value, raceID, W3BuffSource:sourceType, source);
+native War3_ApplyRaceBuff(client, attributeId, any value, raceID, W3BuffSource:sourceType, source);
+native War3_ApplyRaceDebuff(client, attributeId, any value, raceID, W3BuffSource:sourceType, source);
 
 native War3_RemoveBuff(buffIndex);
 #endif

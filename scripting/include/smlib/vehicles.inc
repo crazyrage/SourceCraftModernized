@@ -17,7 +17,7 @@
  */
 stock Vehicle_GetDriver(vehicle)
 {
-	new m_hVehicle = GetEntPropEnt(vehicle, Prop_Send, "m_hPlayer");
+	int m_hVehicle = GetEntPropEnt(vehicle, Prop_Send, "m_hPlayer");
 
 	return m_hVehicle;
 }

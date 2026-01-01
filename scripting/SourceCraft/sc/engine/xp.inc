@@ -61,15 +61,15 @@ KillXP(level)
     else
         temp=GetArrayCell(vecLevelConfiguration,3);
 
-    new maxLevels = GetArraySize(temp);
+    int maxLevels = GetArraySize(temp);
     if (level < maxLevels)
         return GetArrayCell(temp,level);
     else
     {
         // Calculate XP given for levels
         // beyond the configuration table.
-        new maxAmt = GetArrayCell(temp,maxLevels-1);
-        new delta  = maxAmt - GetArrayCell(temp,maxLevels-2);
+        int maxAmt = GetArrayCell(temp,maxLevels-1);
+        int delta  = maxAmt - GetArrayCell(temp,maxLevels-2);
         return maxAmt + ((level-maxLevels) * delta);
     }
 }
@@ -82,7 +82,7 @@ ReqLevelXP(level)
     else
         temp=GetArrayCell(vecLevelConfiguration,2);
 
-    new maxLevels = GetArraySize(temp);
+    int maxLevels = GetArraySize(temp);
     if (level < 0)
         return GetArrayCell(temp,0);
     else if (level < maxLevels)
@@ -91,8 +91,8 @@ ReqLevelXP(level)
     {
         // Calculate XP required for levels
         // beyond the configuration table.
-        new maxReq = GetArrayCell(temp,maxLevels-1);
-        new delta  = maxReq - GetArrayCell(temp,maxLevels-2);
+        int maxReq = GetArrayCell(temp,maxLevels-1);
+        int delta  = maxReq - GetArrayCell(temp,maxLevels-2);
         return maxReq + ((level-maxLevels) * delta);
     }
 }
@@ -203,7 +203,7 @@ ShowXP(client, Display:displayFlags=Display_XP)
 {
     if (GetRaceCount() > 1 && !IsFakeClient(client))
     {
-        new race=GetRace(client);
+        int race=GetRace(client);
         if (race >= 0)
         {
             Handle raceHandle=GetRaceHandle(race);
@@ -235,7 +235,7 @@ GiveKillXP(index, victim, bool:headshot, bool:backstab, bool:melee,
 {
     if (GetRaceCount() > 1 && CheckClientCount(g_iMinPlayers, COUNT_ACTIVE, true))
     {
-        new amount;
+        int amount;
         if (victim > 0 && !IsFakeClient(victim))
         {
             amount=KillXP(GetLevel(victim,GetRace(victim)));
@@ -292,7 +292,7 @@ GiveKillXP(index, victim, bool:headshot, bool:backstab, bool:melee,
 
 GiveBossStunXP(index, level, bool:assist)
 {
-    new amount = STUN_BOSS_XP + (BOSS_LEVEL_XP * level);
+    int amount = STUN_BOSS_XP + (BOSS_LEVEL_XP * level);
 
     if (assist)
     {
@@ -305,7 +305,7 @@ GiveBossStunXP(index, level, bool:assist)
 
 GiveBossKillXP(index, level, bool:assist)
 {
-    new amount = KILL_BOSS_XP + (BOSS_LEVEL_XP * level);
+    int amount = KILL_BOSS_XP + (BOSS_LEVEL_XP * level);
 
     if (assist)
     {
@@ -354,7 +354,7 @@ GiveHostageRescuedXP(client)
 
 GiveChargeDeployedXP(client)
 {
-    // Called when a player deploys their charge (medic goes uber)
+    // Called when a player deploys their char ge (medic goes uber)
     GiveXP(client,CHARGE_XP, "DeployUber");
 }
 
@@ -389,14 +389,14 @@ GiveObjectDestroyedXP(client,TFObjectType:obj)
 GiveFlagCapturedXP(client)
 {
     // Called when a player captures a flag
-    new amount=KillXP(GetLevel(client,GetRace(client))) * CAPTURE_FLAG_XP;
+    int amount=KillXP(GetLevel(client,GetRace(client))) * CAPTURE_FLAG_XP;
     GiveXP(client,amount, "CapIntel");
 }
 
 GivePointCapturedXP(client)
 {
     // Called when a player captures a point
-    new amount=KillXP(GetLevel(client,GetRace(client))) * CAPTURE_POINT_XP;
+    int amount=KillXP(GetLevel(client,GetRace(client))) * CAPTURE_POINT_XP;
     GiveXP(client,amount, "CapPoint");
 }
 
@@ -436,13 +436,13 @@ GiveMvpXP(client, place, points)
            "BeingMVP", place, points);
 }
 
-GiveXP(client, amount, const String:phrase[], place=-1,
+GiveXP(client, amount, const char[] phrase, place=-1,
        points=-1, TFObjectType:obj=TFObject_Unknown)
 {
     if (GetRaceCount() > 1 && GetClientCount() >= g_iMinPlayers)
     {
         // Called when a player is given XP
-        new Action:result = Plugin_Continue;
+        int Action:result = Plugin_Continue;
         Call_StartForward(g_OnXPGivenHandle);
         Call_PushCell(client);
         Call_PushCellRef(amount);
@@ -490,12 +490,12 @@ GiveXP(client, amount, const String:phrase[], place=-1,
     }
 }
 
-TakeXP(client, amount, const String:phrase[], place=-1,
+TakeXP(client, amount, const char[] phrase, place=-1,
        points=-1, TFObjectType:obj=TFObject_Unknown)
 {
     if (GetRaceCount() > 1 && GetClientCount() >= g_iMinPlayers)
     {
-        new Action:result = Plugin_Continue;
+        int Action:result = Plugin_Continue;
         Call_StartForward(g_OnXPGivenHandle);
         Call_PushCell(client);
         Call_PushCellRef(amount);

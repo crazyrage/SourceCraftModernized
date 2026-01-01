@@ -175,14 +175,14 @@ stock SetUpgrading(client, bool upgrading)
 
 stock bool NearDispenser(client)
 {
-	new TFTeam:tClientTeam = TFTeam:GetClientTeam(client);
-	decl float fClientPos[3]; GetClientAbsOrigin(client, fClientPos);
+	int TFTeam:tClientTeam = TFTeam:GetClientTeam(client);
+	float fClientPos[3]; GetClientAbsOrigin(client, fClientPos);
 	int entity = -1;
 	while ((entity = FindEntityByClassname(entity, "obj_dispenser")) != -1)
 	{
 		
 		if(tClientTeam != TFTeam:GetEntProp(entity, Prop_Send, "m_iTeamNum")) continue;
-		decl float fObjPos[3]; GetEntPropVector(entity, Prop_Data, "m_vecOrigin", fObjPos);
+		float fObjPos[3]; GetEntPropVector(entity, Prop_Data, "m_vecOrigin", fObjPos);
 		if(GetVectorDistance(fClientPos, fObjPos) <= 100.0)
 			return true;
 	}

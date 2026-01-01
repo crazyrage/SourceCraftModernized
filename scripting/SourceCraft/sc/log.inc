@@ -30,25 +30,25 @@ stock Fail(const char message[])
 
 stock LogEventDamage(Handle event,damage,const char source[], race_id)
 {
-    new userid=GetEventInt(event,"userid");
-    new victim=GetClientOfUserId(userid);
-    new victim_player=GetPlayerHandle(victim);
-    new victim_race=(victim_player != null) ? GetRace(victim_player) : -1;
+    int userid=GetEventInt(event,"userid");
+    int victim=GetClientOfUserId(userid);
+    int victim_player=GetPlayerHandle(victim);
+    int victim_race=(victim_player != null) ? GetRace(victim_player) : -1;
 
-    new attacker_uid=GetEventInt(event,"attacker");
-    new attacker=GetClientOfUserId(attacker_uid);
-    new attacker_player=GetPlayerHandle(attacker);
-    new attacker_race=(attacker_player != null) ? GetRace(attacker_player) : -1;
+    int attacker_uid=GetEventInt(event,"attacker");
+    int attacker=GetClientOfUserId(attacker_uid);
+    int attacker_player=GetPlayerHandle(attacker);
+    int attacker_race=(attacker_player != null) ? GetRace(attacker_player) : -1;
 
-    new assister_uid = GetEventInt(event,"assister");
-    new assister=GetClientOfUserId(assister_uid);
-    new assister_player=GetPlayerHandle(assister);
-    new assister_race=(assister_player != null) ? GetRace(assister_player) : -1;
+    int assister_uid = GetEventInt(event,"assister");
+    int assister=GetClientOfUserId(assister_uid);
+    int assister_player=GetPlayerHandle(assister);
+    int assister_race=(assister_player != null) ? GetRace(assister_player) : -1;
 
     if (race_id == victim_race   || race_id == attacker_race ||
         race_id == assister_race || race_id < 0)
     {
-        new health=0;
+        int health=0;
         char team[64];
         char steamID[64];
         char attacker_weapon[64];
@@ -72,12 +72,12 @@ stock LogEventDamage(Handle event,damage,const char source[], race_id)
         char victimTeam[64];
         GetTeamName(GetClientTeam(victim), victimTeam, sizeof(victimTeam));
 
-        new victimHealth=GetClientHealth(victim);
+        int victimHealth=GetClientHealth(victim);
 
         char event_weapon[64];
         GetEventString(event,"weapon",event_weapon,sizeof(event_weapon));
 
-        new event_damage = GetEventInt(event, "damage");
+        int event_damage = GetEventInt(event, "damage");
 
         if (assister)
         {

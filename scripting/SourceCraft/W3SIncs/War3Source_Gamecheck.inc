@@ -6,7 +6,7 @@
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Use these like a boolean
+// Use these like a bool ean
 
 #define GAMECS GameCS()
 #define GAMETF GameTF()
@@ -26,7 +26,7 @@ stock ValveGameEnum:War3_GetGame()
     return ValveGameEnum:tValveGame;
 }
 
-//Do not manually call this, this determines the game mode and is called internally in the API
+//Do not manually call this, this determines the game mode and is called int ernally in the API
 stock DetermineGameMode() 
 {
     //DETERMINE GAME TYPE: CS TF ETC

@@ -16,7 +16,7 @@
 #if !defined SOURCECRAFT // Not Implemented yet!
 // Create int attributes
 
-native War3_RegisterAttribute(char[] sAttributeName, String: sAttributeShortName[], any:DefaultVal);
+native War3_RegisterAttribute(char[] sAttributeName, char[] sAttributeShortName, any DefaultVal);
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -25,8 +25,8 @@ native War3_RegisterAttribute(char[] sAttributeName, String: sAttributeShortName
 native War3_GetAttributeName(attributeId, char[] sName, iBufferSize);
 native War3_GetAttributeShortname(attributeId, char[] sShortname, iBufferSize);
 native War3_GetAttributeIDByShortname(char[] sAttributeShortName);
-native War3_GetAttributeDescription(client, attributeId, any:value, char[] sDescription, iBufferSize);
-native any:War3_GetAttributeValue(client, attributeId);
+native War3_GetAttributeDescription(client, attributeId, any value, char[] sDescription, iBufferSize);
+native any War3_GetAttributeValue(client, attributeId);
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -36,16 +36,16 @@ native any:War3_GetAttributeValue(client, attributeId);
 // This adds the given value to the current value of the attribute
 // So passing -5 to the function would reduce the current value by 5, etc.
 // this is permanent, so handle with care!
-native War3_ModifyAttribute(client, attributeId, any:value);
+native War3_ModifyAttribute(client, attributeId, any value);
 
-// This sets attribute directly. Designed for internal usage, be careful with this one!
-native War3_SetAttribute(client, attributeId, any:value);
+// This sets attribute directly. Designed for int ernal usage, be careful with this one!
+native War3_SetAttribute(client, attributeId, any value);
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Events
 
-forward War3_OnAttributeChanged(client, attributeId, any:oldValue, any:newValue);
-forward War3_OnAttributeDescriptionRequested(client, attributeId, any:value, char[] sDescription, iBufferSize);
+forward War3_OnAttributeChanged(client, attributeId, any oldValue, any newValue);
+forward War3_OnAttributeDescriptionRequested(client, attributeId, any value, char[] sDescription, iBufferSize);
 
 #endif

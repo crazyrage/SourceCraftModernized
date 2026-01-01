@@ -37,16 +37,16 @@ Handle g_cvarTrack = null;
 // forwards
 Handle g_fwdOnSeek = null;
 
-new g_iTarget[2048];
+int g_iTarget[2048];
 bool g_bToHead[2048];
 bool g_bValidated[2048];
 
-new SidewinderClientFlags:g_SidewinderFlags[MAXPLAYERS+1];
-new g_iTrackChance[MAXPLAYERS+1];
-new g_iTrackCritChance[MAXPLAYERS+1];
-new g_iSentryCritChance[MAXPLAYERS+1];
+SidewinderClientFlags g_SidewinderFlags[MAXPLAYERS+1];
+int g_iTrackChance[MAXPLAYERS+1];
+int g_iTrackCritChance[MAXPLAYERS+1];
+int g_iSentryCritChance[MAXPLAYERS+1];
 
-new SidewinderEnableFlags:g_EnableFlags = SidewinderEnable;
+SidewinderEnableFlags g_EnableFlags = SidewinderEnable;
 bool g_bNativeControl = false;
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char error[], err_max)
@@ -103,7 +103,7 @@ public PlayerSpawnEvent(Handle event,const char[] name,bool dontBroadcast)
 {
     if (!g_bNativeControl)
     {
-        new client=GetClientOfUserId(GetEventInt(event,"userid")); // Get clients index
+        int client=GetClientOfUserId(GetEventInt(event,"userid")); // Get clients index
 
         char cvarstring[2048];
         GetConVarString(g_cvarWeaponList, cvarstring, sizeof(cvarstring));
@@ -201,7 +201,7 @@ public SidewinderThinkHook(entity)
         if (GetEdictClassname(entity, classname , sizeof(classname)) &&
             strncmp(classname, "tf_projectile_", 14) == 0)
         {
-            new owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
+            int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
 
             // Compare classname starting at pos 14 since we already know it starts with tf_projectile_
             bool isSentry = StrEqual(classname[14], "sentryrocket");
@@ -212,7 +212,7 @@ public SidewinderThinkHook(entity)
 
             if (owner > 0 && owner < MaxClients)
             {
-                new SidewinderClientFlags:flags = g_SidewinderFlags[owner];
+                SidewinderClientFlags flags = g_SidewinderFlags[owner];
 
                 if (isSentry) // StrEqual(classname[14], "sentryrocket"))
                 {
@@ -445,7 +445,7 @@ public SidewinderThinkHook(entity)
 
 stock bool isCrit(entity, owner, const char[] classname)
 {
-    new offset = GetEntSendPropOffs(entity, "m_bCritical");
+    int offset = GetEntSendPropOffs(entity, "m_bCritical");
     if (offset < 0)
     {
         char netclass[32];
@@ -470,10 +470,10 @@ TrackProjectile(entity, bool toHead)
 public SidewinderTrackHook(entity)
 {
     //does the rocket have a target?
-    new target = EntRefToEntIndex(g_iTarget[entity]);
+    int target = EntRefToEntIndex(g_iTarget[entity]);
     if (target != INVALID_ENT_REFERENCE && isValidTarget(entity, target) && isTargetTraceable(entity, target))
     {
-        decl float rocketposition[3], float targetpos[3], float vecangle[3], float angle[3];
+        float rocketposition[3], float targetpos[3], float vecangle[3], float angle[3];
         GetEntPropVector(entity, Prop_Send, "m_vecOrigin", rocketposition);
 
         //로켓포지션에서 추적 위치로 가는 벡터를 구한다
@@ -486,7 +486,7 @@ public SidewinderTrackHook(entity)
         MakeVectorFromPoints(rocketposition, targetpos, vecangle);
         NormalizeVector(vecangle, vecangle);
         GetVectorAngles(vecangle, angle);
-        decl float speed[3];
+        float speed[3];
         GetEntPropVector(entity, Prop_Data, "m_vecVelocity", speed);
         ScaleVector(vecangle, GetVectorLength(speed));
         TeleportEntity(entity, NULL_VECTOR, angle, vecangle);
@@ -499,10 +499,10 @@ public SidewinderTrackHook(entity)
 
 findNewTarget(entity)
 {
-    new designatedList[MaxClients];
-    new targetList[MaxClients];
-    new designatedCount = 0;
-    new targetCount = 0;
+    int designatedList[MaxClients];
+    int targetList[MaxClients];
+    int designatedCount = 0;
+    int targetCount = 0;
 
     //make list of valid and designated clients
     for (int i = 0; i < MaxClients; i++)
@@ -517,18 +517,18 @@ findNewTarget(entity)
         }
     }
 
-    new targetRef = (designatedCount > 0) ? getClosestTarget(entity, designatedList, designatedCount)
+    int targetRef = (designatedCount > 0) ? getClosestTarget(entity, designatedList, designatedCount)
                      : (targetCount > 0)  ? getClosestTarget(entity, targetList, targetCount)
                                           : INVALID_ENT_REFERENCE;
 
     if (targetRef != INVALID_ENT_REFERENCE)
     {
         //bool crit = bool GetEntProp(entity, Prop_Send, "m_bCritical");
-        new offset = GetEntSendPropOffs(entity, "m_bCritical");
+        int offset = GetEntSendPropOffs(entity, "m_bCritical");
         bool crit = (offset >= 0) ? (bool GetEntDataEnt2(entity, offset)) : false;
 
-        new owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
-        new target = EntRefToEntIndex(targetRef);
+        int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
+        int target = EntRefToEntIndex(targetRef);
 
         char classname[32];
         if (GetEdictClassname(entity, classname , sizeof(classname)) &&
@@ -538,7 +538,7 @@ findNewTarget(entity)
         }
 
         // Check with other plugins/forward (if any)
-        new Action:res = Plugin_Continue;
+        int Action:res = Plugin_Continue;
         Call_StartForward(g_fwdOnSeek);
         Call_PushCell(owner);
         Call_PushCell(target);
@@ -575,8 +575,8 @@ getClosestTarget(entity, targetList[], targetCount)
 
     //make a list of clients where thier distance is same as closest
     //most of time, there will be only 1 client in this list
-    new count = 0;
-    new list[MaxClients];
+    int count = 0;
+    int list[MaxClients];
 
     for (int i = 0; i < targetCount; i++)
     {
@@ -632,10 +632,10 @@ bool isTargetTraceable(entity, target)
     if (targetvalid)
     {
         //타겟까지 트레이스가 가능한가
-        decl float entityposition[3];
+        float entityposition[3];
         GetEntPropVector(entity, Prop_Send, "m_vecOrigin", entityposition);
 
-        decl float clientpos[3];
+        float clientpos[3];
         GetClientEyePosition(target, clientpos);
 
         if (!g_bToHead[entity])
@@ -678,10 +678,10 @@ public Native_SetFlags(Handle plugin,numParams)
 
 public Native_TrackChance(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     g_iTrackChance[client] = GetNativeCell(2);
 
-    new critChance = GetNativeCell(3);
+    int critChance = GetNativeCell(3);
     g_iTrackCritChance[client] = (critChance < 0) ? g_iTrackChance[client] : critChance;
 }
 

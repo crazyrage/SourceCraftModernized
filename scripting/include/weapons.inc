@@ -64,10 +64,10 @@ stock GetCurrentWeaponEdictClass(client, char[] name, maxlength)
 stock SetNextAttack(client, float duration=0.0)
 {
     float nextAttack = GetGameTime()+duration;
-    new offset=FindSendPropInfo("CBasePlayer", "m_hMyWeapons");
-    for(new i=0;i<MAX_SLOTS;i++)
+    int offset=FindSendPropInfo("CBasePlayer", "m_hMyWeapons");
+    for (int i=0;i<MAX_SLOTS;i++)
     {
-        new weapon=GetEntDataEnt2(client,offset);
+        int weapon=GetEntDataEnt2(client,offset);
         if (weapon > 0 && IsValidEdict(weapon))
         {
             SetEntPropFloat(weapon, Prop_Send, "m_flNextSecondaryAttack", nextAttack);

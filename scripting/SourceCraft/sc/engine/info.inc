@@ -487,9 +487,9 @@ ShowUpgradeInfo(client, race, Handle raceHandle, upgrade, MenuMode mode)
         if (energy > 0.0)
         {
             float recurring_interval = GetUpgradeRecurringInterval(raceHandle, upgrade);
-            float interval = (recurring_interval == 0.0) ? recurring_energy : recurring_interval;
+            float int erval = (recurring_interval == 0.0) ? recurring_energy : recurring_interval;
             Format(item, sizeof(item), "%T", "UsesEnergyPerSecond", client, energy, recurring_energy,
-                   interval, (interval > 1.0) ? "s" : "");
+                   int erval, (int erval > 1.0) ? "s" : "");
 
             AddMenuItem(menu, "", item, ITEMDRAW_DISABLED);
         }

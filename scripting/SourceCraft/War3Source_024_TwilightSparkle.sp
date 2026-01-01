@@ -22,7 +22,7 @@ stock ULT_TELEPORT;
 new float emptypos[3];
 new float oldpos[MAXPLAYERSCUSTOM][3];
 new float teleportpos[MAXPLAYERSCUSTOM][3];
-new bool inteleportcheck[MAXPLAYERSCUSTOM];
+new bool int eleportcheck[MAXPLAYERSCUSTOM];
 
 //new char teleportSound[]="war3source/blinkarrival.wav";
 new char teleportSound[256];
@@ -70,7 +70,7 @@ public void OnWar3LoadRaceOrItemOrdered(num)
 #endif
         
         
-        new Handle genericSkillOptions=CreateArray(5,2); //block size, 5 can store an array of 5 cells
+        int Handle genericSkillOptions=CreateArray(5,2); //block size, 5 can store an array of 5 cells
         SetArrayArray(genericSkillOptions,0,TeleportDistance,sizeof(TeleportDistance));
         SetArrayCell(genericSkillOptions,1,ultCooldownCvar);
         //ULT_TELEPORT=
@@ -113,7 +113,7 @@ public void OnWar3EventPostHurt(victim, attacker, float damage, const char[] wea
     if(!isWarcraft && ValidPlayer( victim, true ) && ValidPlayer( attacker, true ) && GetClientTeam( victim ) != GetClientTeam( attacker ) )
     {
     if(War3_GetRace(attacker)==thisRaceID){
-        new level=War3_GetSkillLevel(attacker,thisRaceID,SKILL_MAGIC_OBEDIENCE);
+        int level=War3_GetSkillLevel(attacker,thisRaceID,SKILL_MAGIC_OBEDIENCE);
         if(level){
             if(W3Chance(obediencechance[level]*W3ChanceModifier(attacker))  && !Hexed(attacker) &&!W3HasImmunity(victim,Immunity_Skills) ){
                 W3ApplyBuffSimple(victim,bSilenced,thisRaceID,true,2.0); 
@@ -137,11 +137,11 @@ public OnUltimateCommand(client,race,bool pressed)
     //DP("ult pressed");
     if( pressed  && ValidPlayer(client,true) && !Silenced(client))
     {
-        new Handle genericSkillOptions;
-        new float distances[5];
-        new customerrace,customerskill;
+        int Handle genericSkillOptions;
+        int float distances[5];
+        int customerrace,customerskill;
     
-        new level=W3_GenericSkillLevel(client,GENERIC_SKILL_TELEPORT,genericSkillOptions,customerrace,customerskill);
+        int level=W3_GenericSkillLevel(client,GENERIC_SKILL_TELEPORT,genericSkillOptions,customerrace,customerskill);
         //DP("level CUSrace CUSskill %d %d %d",level,customerrace,customerskill);
         if(level)
         {
@@ -173,15 +173,15 @@ public OnUltimateCommand(client,race,bool pressed)
 
 bool Teleport(client,float distance)
 {
-    if(!inteleportcheck[client])
+    if(!int eleportcheck[client])
     {
         
-        new float angle[3];
+        int float angle[3];
         GetClientEyeAngles(client,angle);
-        new float endpos[3];
-        new float startpos[3];
+        int float endpos[3];
+        int float startpos[3];
         GetClientEyePosition(client,startpos);
-        new float dir[3];
+        int float dir[3];
         GetAngleVectors(angle, dir, NULL_VECTOR, NULL_VECTOR);
         
         ScaleVector(dir, distance);
@@ -200,7 +200,7 @@ bool Teleport(client,float distance)
             return false;
         }
         
-        new float distanceteleport=GetVectorDistance(startpos,endpos);
+        int float distanceteleport=GetVectorDistance(startpos,endpos);
         if(distanceteleport<200.0){
             new char buffer[100];
             Format(buffer, sizeof(buffer), "%T", "Distance too short.", client);
@@ -236,7 +236,7 @@ bool Teleport(client,float distance)
         teleportpos[client][1]=emptypos[1];
         teleportpos[client][2]=emptypos[2];
         
-        inteleportcheck[client]=true;
+        int eleportcheck[client]=true;
         CreateTimer(0.14,checkTeleport,client);
         
         
@@ -249,9 +249,9 @@ bool Teleport(client,float distance)
 
     return false;
 }
-public Action checkTeleport(Handle h,any:client){
-    inteleportcheck[client]=false;
-    new float pos[3];
+public Action checkTeleport(Handle h,any client){
+    int eleportcheck[client]=false;
+    int float pos[3];
     
     GetClientAbsOrigin(client,pos);
     
@@ -281,14 +281,14 @@ public bool AimTargetFilter(entity,mask)
 public bool getEmptyLocationHull(client,float originalpos[3]){
     
     
-    new float mins[3];
-    new float maxs[3];
+    int float mins[3];
+    int float maxs[3];
     GetClientMins(client,mins);
     GetClientMaxs(client,maxs);
     
-    new absincarraysize=sizeof(absincarray);
+    int absincarraysize=sizeof(absincarray);
     
-    new limit=5000;
+    int limit=5000;
     for(int x=0;x<absincarraysize;x++){
         if(limit>0){
             for(int y=0;y<=x;y++){
@@ -330,7 +330,7 @@ public bool getEmptyLocationHull(client,float originalpos[3]){
     
 } 
 
-public bool CanHitThis(entityhit, mask, any:data)
+public bool CanHitThis(entityhit, mask, any data)
 {
     if(entityhit == data )
     {// Check if the TraceRay hit the itself.
@@ -346,7 +346,7 @@ public bool CanHitThis(entityhit, mask, any:data)
 public bool enemyImmunityInRange(client,float playerVec[3])
 {
     //ELIMINATE ULTIMATE IF THERE IS IMMUNITY AROUND
-    new float otherVec[3];
+    int float otherVec[3];
     int team = GetClientTeam(client);
     
     for(int i=1;i<=MaxClients;i++)

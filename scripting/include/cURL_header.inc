@@ -25,7 +25,7 @@
 #define CURL_VERSION_LARGEFILE (1<<9)  /* supports files bigger than 2GB */
 #define CURL_VERSION_IDN       (1<<10) /* International Domain Names support */
 #define CURL_VERSION_SSPI      (1<<11) /* SSPI is supported */
-#define CURL_VERSION_CONV      (1<<12) /* character conversions supported */
+#define CURL_VERSION_CONV      (1<<12) /* char acter conversions supported */
 #define CURL_VERSION_CURLDEBUG (1<<13) /* debug memory tracking supported */
 #define CURL_VERSION_TLSAUTH_SRP (1<<14) /* TLS-SRP auth is supported */
 #define CURL_VERSION_NTLM_WB   (1<<15) /* NTLM delegating to winbind helper */
@@ -117,7 +117,7 @@ enum CURLoption {
   /* Set the referrer page (needed by some CGIs) */
   CINIT(REFERER, OBJECTPOINT, 16),
 
-  /* Set the FTP PORT string (interface name, named or numerical IP address)
+  /* Set the FTP PORT string (int erface name, named or numerical IP address)
      Use i.e '-' to use default address. */
   CINIT(FTPPORT, OBJECTPOINT, 17),
 
@@ -226,7 +226,7 @@ enum CURLoption {
 
   /* 55 = OBSOLETE */
 
-  /* Function that will be called instead of the internal progress display
+  /* Function that will be called instead of the int ernal progress display
    * function. This function should be defined as the curl_progress_callback
    * prototype defines. */
   CINIT(PROGRESSFUNCTION, FUNCTIONPOINT, 56),
@@ -247,7 +247,7 @@ enum CURLoption {
   /* tunnel non-http operations through a HTTP proxy */
   CINIT(HTTPPROXYTUNNEL, LONG, 61),
 
-  /* Set the interface string to use as outgoing network interface */
+  /* Set the int erface string to use as outgoing network int erface */
   CINIT(INTERFACE, OBJECTPOINT, 62),
 
   /* Set the krb4/5 security level, this also enables krb4/5 awareness.  This
@@ -424,7 +424,7 @@ enum CURLoption {
   CINIT(SSL_CTX_DATA, OBJECTPOINT, 109),
 
   /* FTP Option that causes missing dirs to be created on the remote server.
-     In 7.19.4 we introduced the convenience enums for this option using the
+     In 7.19.4 we int roduced the convenience enums for this option using the
      CURLFTP_CREATE_DIR prefix.
   */
   CINIT(FTP_CREATE_MISSING_DIRS, LONG, 110),
@@ -517,7 +517,7 @@ enum CURLoption {
      "account" info */
   CINIT(FTP_ACCOUNT, OBJECTPOINT, 134),
 
-  /* feed cookies into cookie engine */
+  /* feed cookies int o cookie engine */
   CINIT(COOKIELIST, OBJECTPOINT, 135),
 
   /* ignore Content-Length */
@@ -871,7 +871,7 @@ enum CURLcode {
   CURLE_REMOTE_FILE_NOT_FOUND,   /* 78 - remote file not found */
   CURLE_SSH,                     /* 79 - error from the SSH layer, somewhat
                                     generic so the error message will be of
-                                    interest when this has happened */
+                                    int erest when this has happened */
 
   CURLE_SSL_SHUTDOWN_FAILED,     /* 80 - Failed to shut down the SSL
                                     connection */
@@ -1018,7 +1018,7 @@ enum curl_ftpfile {
 #define CURLSSH_AUTH_PUBLICKEY (1<<0) /* public/private key files */
 #define CURLSSH_AUTH_PASSWORD  (1<<1) /* password */
 #define CURLSSH_AUTH_HOST      (1<<2) /* host key files */
-#define CURLSSH_AUTH_KEYBOARD  (1<<3) /* keyboard interactive */
+#define CURLSSH_AUTH_KEYBOARD  (1<<3) /* keyboard int eractive */
 #define CURLSSH_AUTH_DEFAULT CURLSSH_AUTH_ANY
 
 #define CURLGSSAPI_DELEGATION_NONE        0      /* no delegation (default) */

@@ -214,7 +214,7 @@ public OnUltimateCommand(client,race,bool pressed)
     // TODO: Increment UltimateUsed[client]
     if(race==thisRaceID && pressed && IsPlayerAlive(client))
     {
-        new ult_level=War3_GetSkillLevel(client,race,ULT_VENGENCE);
+        int ult_level=War3_GetSkillLevel(client,race,ULT_VENGENCE);
         if(ult_level>0)
         {
             if(GAMECSANY){
@@ -430,15 +430,15 @@ public Action DoMole(Handle timer,any client)
 {
     if(ValidPlayer(client,true))
     {
-        new team=GetClientTeam(client);
-        new searchteam=(team==2)?3:2;
+        int team=GetClientTeam(client);
+        int searchteam=(team==2)?3:2;
 
         float emptyspawnlist[100][3];
-        new availablelocs=0;
+        int availablelocs=0;
 
         float playerloc[3];
         float spawnloc[3];
-        new ent=-1;
+        int ent=-1;
         while((ent = FindEntityByClassname(ent,(searchteam==2)?"info_player_terrorist":"info_player_counterterrorist"))!=-1)
         {
             if(!IsValidEdict(ent)) continue;
@@ -519,8 +519,8 @@ public Action CalcBlink(Handle timer,any userid)
 
 public PlayerDeathEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    new victim=GetClientOfUserId(GetEventInt(event,"userid"));
-    new attacker=GetClientOfUserId(GetEventInt(event,"attacker"));
+    int victim=GetClientOfUserId(GetEventInt(event,"userid"));
+    int attacker=GetClientOfUserId(GetEventInt(event,"attacker"));
     bool should_vengence=false;
 
     if(victim>0 && attacker>0 && attacker!=victim)
@@ -571,7 +571,7 @@ public PlayerDeathEvent(Handle event,const char[] name,bool dontBroadcast)
     }
     if(should_vengence)
     {
-        new victimTeam=GetClientTeam(victim);
+        int victimTeam=GetClientTeam(victim);
         int playersAliveSameTeam;
         for(int i=1;i<=MaxClients;i++)
         {
@@ -637,7 +637,7 @@ public GiveDeathWeapons(client)
 
 public Action VengenceRespawn(Handle t,any userid)
 {
-    new client=GetClientOfUserId(userid);
+    int client=GetClientOfUserId(userid);
     if(client>0 && War3_GetRace(client)==thisRaceID) //did he become alive?
     {
         if(IsPlayerAlive(client)){

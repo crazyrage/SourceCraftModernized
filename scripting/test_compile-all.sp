@@ -47,7 +47,7 @@ public Plugin myinfo = {
 
 *****************************************************************/
 
-// ConVar Handles
+// ConVar Handle s
 
 // Misc
 
@@ -64,7 +64,7 @@ public Plugin myinfo = {
 public OnPluginStart() {
 
 	int arr[1], char arr_str[1][1], arr_4[4];
-	decl float vec[3];
+	float vec[3];
 	char buf[1], char buf_10[10], char twoDimStrArr[1][1];
 	int variable;
 	Handle handle;

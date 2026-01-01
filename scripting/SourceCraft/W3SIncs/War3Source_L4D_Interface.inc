@@ -27,7 +27,7 @@ enum L4D2UseAction
 	L4D2UseAction_Healing           = 1, // Includes healing yourself or a teammate.
 	L4D2UseAction_Defibing          = 4, // When defib'ing a dead body.
 	L4D2UseAction_GettingDefibed    = 5, // When comming back to life from a dead body.
-	L4D2UseAction_PouringGas        = 8, // Pouring gas into a generator
+	L4D2UseAction_PouringGas        = 8, // Pouring gas int o a generator
 	L4D2UseAction_Cola              = 9, // For Dead Center map 2 cola event, when handing over the cola to whitalker.
 	L4D2UseAction_Button            = 10 // Such as buttons, timed buttons, generators, etc.
 	/* List is not fully done, these are just the ones I have found so far */
@@ -464,7 +464,7 @@ stock L4D2_SetWeaponUpgrades(weapon, upgrades)
  * Returns infected attacker of survivor victim.
  *
  * Note: Infected attacker means the infected player that is currently
- * pinning down the survivor. Such as hunter, smoker, charger and jockey.
+ * pinning down the survivor. Such as hunter, smoker, char ger and jockey.
  *
  * @param client		Survivor client index.
  * @return				Infected attacker index, -1 if not found.
@@ -500,7 +500,7 @@ stock L4D2_GetInfectedAttacker(client)
  * Returns survivor victim of infected attacker.
  *
  * Note: Survivor victim means the survivor player that is currently pinned
- * down by an attacker. Such as hunter, smoker, charger and jockey.
+ * down by an attacker. Such as hunter, smoker, char ger and jockey.
  *
  * @param client		Infected client index.
  * @return				Survivor victim index, -1 if not found.
@@ -631,7 +631,7 @@ stock L4D_SetPlayerReviveCount(client, zzcount)
 }
 
 /**
- * Return player intensity.
+ * Return player int ensity.
  *
  * Note: Its percentage. 0.0 - Player is calm, 1.0 - Player is stressed.
  *
@@ -647,17 +647,17 @@ stock float L4D_GetPlayerIntensity(client)
 }
 
 /**
- * Returns average survivor intensity.
+ * Returns average survivor int ensity.
  *
  * Note: Its percentage. 0.0 - All survivors is calm, 1.0 - All survivors is
  * stressed.
  *
- * @return				Average intensity level for survivors.
+ * @return				Average int ensity level for survivors.
  */
 stock float L4D_GetAvgSurvivorIntensity()
 {
-	int intensityTotal = 0;
-	int intensityMaxTotal = 0;
+	int ensityTotal = 0;
+	int ensityMaxTotal = 0;
 	for (int i = 1; i <= MaxClients; i++)
 	{
 		if (!IsClientInGame(i) ||
@@ -668,28 +668,28 @@ stock float L4D_GetAvgSurvivorIntensity()
 			continue;
 		}
 
-		intensityMaxTotal += 100;
-		intensityTotal += GetEntProp(i, Prop_Send, "m_clientIntensity");
+		int ensityMaxTotal += 100;
+		int ensityTotal += GetEntProp(i, Prop_Send, "m_clientIntensity");
 	}
 
 	/* This format is used to keep consistency with the Director which also
 	 * uses 0.0 for calm and 1.0 for stressed */
-	return float(intensityTotal) / float(intensityMaxTotal);
+	return float(int ensityTotal) / float(int ensityMaxTotal);
 }
 
 /**
- * Set player intensity.
+ * Set player int ensity.
  *
  * Note: Its percentage. 0.0 - Player is calm, 1.0 - Player is stressed.
  *
  * @param client		Client index.
- * @param intensity		Intensity.
+ * @param int ensity		Intensity.
  * @noreturn
  * @error				Invalid client index.
  */
-stock L4D_SetPlayerIntensity(client, float intensity)
+stock L4D_SetPlayerIntensity(client, float int ensity)
 {
-	SetEntProp(client, Prop_Send, "m_clientIntensity", RoundToNearest(intensity * 100.0);
+	SetEntProp(client, Prop_Send, "m_clientIntensity", RoundToNearest(int ensity * 100.0);
 }
 
 /**
@@ -754,7 +754,7 @@ stock L4D_SetPlayerThirdStrikeState(client, bool onThirdStrike)
  * Note: This is not the same as is player on third strike. While on third
  * strike defines whether player should die next time they get incapacitated,
  * this defines whether the survivor should limp when they hit 1hp and make
- * the character vocalize their "I dont think I'm gonna make it" lines.
+ * the char acter vocalize their "I dont think I'm gonna make it" lines.
  *
  * @param client		Client index.
  * @return				True if player is going to die, false otherwise.

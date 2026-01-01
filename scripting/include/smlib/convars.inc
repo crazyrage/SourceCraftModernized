@@ -26,7 +26,7 @@ stock bool Convar_HasFlags(Handle convar, flags)
  */
 stock Convar_AddFlags(Handle convar, flags)
 {
-	new newFlags = GetConVarFlags(convar);
+	int newFlags = GetConVarFlags(convar);
 	newFlags |= flags;
 	SetConVarFlags(convar, newFlags);
 }
@@ -40,7 +40,7 @@ stock Convar_AddFlags(Handle convar, flags)
  */
 stock Convar_RemoveFlags(Handle convar, flags)
 {
-	new newFlags = GetConVarFlags(convar);
+	int newFlags = GetConVarFlags(convar);
 	newFlags &= ~flags;
 	SetConVarFlags(convar, newFlags);
 }
@@ -58,7 +58,7 @@ stock bool Convar_IsValidName(const char[] name)
 		return false;
 	}
 
-	new n=0;
+	int n=0;
 	while (name[n] != '\0') {
 
 		if (!IsValidConVarChar(name[n])) {

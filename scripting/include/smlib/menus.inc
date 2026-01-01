@@ -7,7 +7,7 @@
 #include <smlib/math>
 
 /**
- * Adds an option to a menu with a String display but an integer
+ * Adds an option to a menu with a String display but an int eger
  * identifying the option.
  *
  * @param   menu        Handle to the menu
@@ -23,12 +23,12 @@ stock Menu_AddIntItem(Handle menu, any value, char[] display)
 }
 
 /**
- * Retrieves an integer-value choice from a menu, where the
- * menu's information strings were created as integers.
+ * Retrieves an int eger-value choice from a menu, where the
+ * menu's information strings were created as int egers.
  *
  * @param   menu         Handle to the menu
  * @param   param2       The item position selected from the menu.
- * @return               Integer choice from the menu, or 0 if the integer could not be parsed.
+ * @return               Integer choice from the menu, or 0 if the int eger could not be parsed.
  */
 stock any Menu_GetIntItem(Handle menu, any param2)
 {

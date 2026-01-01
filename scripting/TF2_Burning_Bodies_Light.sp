@@ -86,7 +86,7 @@ stock _:CreateLightEntity(iEntity, bool bRagdoll=false)
 		DispatchKeyValue(iLightEntity, "style", "5");
 		DispatchSpawn(iLightEntity);
 		
-		decl float fOrigin[3];
+		float fOrigin[3];
 		GetEntPropVector(iEntity, Prop_Send, "m_vecOrigin", fOrigin);
         
 		fOrigin[2] += 40.0;

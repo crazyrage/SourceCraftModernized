@@ -29,7 +29,7 @@ stock SupplyAmmo(client, amount, const char source[],
                  SupplyTypes:types=SupplyDefault,
                  heavyFactor=10, bool full=false)
 {
-    new ammoSupplied = 0;
+    int ammoSupplied = 0;
     if (amount > 0)
     {
         if (GameType == tf2)
@@ -476,7 +476,7 @@ stock SupplyAmmo(client, amount, const char source[],
 
             new m_iAmmo; // = FindSendPropOffs("CDODPlayer", "m_iAmmo");
             FindSendPropInfo("CDODPlayer", "m_iAmmo", .local_offset=m_iAmmo);
-            for (new i=0; i < sizeof(Slot); i++)
+            for (int i=0; i < sizeof(Slot); i++)
             {
                 if (i == 0 && !(!types || (types & SupplyDefault) || (types & SupplyPrimary)))
                     continue;

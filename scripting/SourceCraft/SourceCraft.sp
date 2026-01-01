@@ -89,15 +89,15 @@ float g_fMaxPackageEnergy           = 100.0;
 float g_fMinPackageEnergy           = 20.0;
 float g_fReqPackageEnergy           = 40.0;
 float g_fEnergyPackageAmt           = 60.0;
-new g_iRaceMenuThreshold                = 16;
+int g_iRaceMenuThreshold                = 16;
 
-new g_iMaxCrystals                      = 100;
-new g_iMaxVespene                       = 5000;
-new g_iMinPlayers                       = 4;
-new g_iMinUltimate                      = 8;
+int g_iMaxCrystals                      = 100;
+int g_iMaxVespene                       = 5000;
+int g_iMinPlayers                       = 4;
+int g_iMinUltimate                      = 8;
 
-new g_iUpgradeCrystalsCost              = 25;
-new g_iUpgradeVespeneCost               = 0;
+int g_iUpgradeCrystalsCost              = 25;
+int g_iUpgradeVespeneCost               = 0;
 
 float g_fEnergyFactor               = 0.1;
 float g_fEnergyRate                 = 1.0;
@@ -110,15 +110,15 @@ float g_fCrystalBuyRate             = 1.0;
 
 float g_fXPMultiplier               = 1.0;
 
-new g_iMaxDropXP                        = 500;
-new g_iDropXPBias                       = -50;
-new g_iMaxDropMoney                     = 500;
-new g_iDropMoneyBias                    = -50;
-new g_iMaxDropCrystals                  = 50;
-new g_iDropCrystalBias                  = -5;
-new g_iMaxDropPCrystals                 = 500;
-new g_iDropPCrystalsBias                = -10;
-new g_iMaxPackages                      = 50;
+int g_iMaxDropXP                        = 500;
+int g_iDropXPBias                       = -50;
+int g_iMaxDropMoney                     = 500;
+int g_iDropMoneyBias                    = -50;
+int g_iMaxDropCrystals                  = 50;
+int g_iDropCrystalBias                  = -5;
+int g_iMaxDropPCrystals                 = 500;
+int g_iDropPCrystalsBias                = -10;
+int g_iMaxPackages                      = 50;
 float g_fPackageDuration            = 30.0;
 
 Handle g_cvXPMultiplier                 = null;

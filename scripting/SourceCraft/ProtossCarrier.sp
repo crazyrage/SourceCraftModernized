@@ -53,7 +53,7 @@ float g_ShieldsPercent[][2] = { {0.00, 0.10},
                                     {0.20, 0.40},
                                     {0.25, 0.50} };
 
-new raceID, weaponsID, shieldsID, thrusterID, jetpackID, interceptorID, capacityID;
+new raceID, weaponsID, shieldsID, thrusterID, jetpackID, int erceptorID, capacityID;
 
 	int cfgMaxObjects;
 	int cfgAllowSentries;
@@ -123,17 +123,17 @@ public OnSourceCraftReady()
     }
 
     // Ultimate 2
-    interceptorID  = AddUpgrade(raceID, "interceptor", 2, .energy=30.0, .vespene=5, .cooldown=10.0,
+    int erceptorID  = AddUpgrade(raceID, "int erceptor", 2, .energy=30.0, .vespene=5, .cooldown=10.0,
                                 .cooldown_type=Cooldown_SpecifiesBaseValue, .cost_crystals=50);
 
     if (GameType != tf2 || !IsRemoteAvailable())
     {
-        SetUpgradeDisabled(raceID, interceptorID, true);
+        SetUpgradeDisabled(raceID, int erceptorID, true);
         LogMessage("Disabling Protoss Carrier:Launch Interceptor due remote is not available (or gametype != tf2)");
     }
     else if (cfgAllowSentries < 1 || cfgMaxObjects < 1)
     {
-        SetUpgradeDisabled(raceID, interceptorID, true);
+        SetUpgradeDisabled(raceID, int erceptorID, true);
         LogMessage("Disabling Protoss Carrier:Launch Interceptor due to configuration: sc_allow_sentries=%d, sc_maxobjects=%d",
                     cfgAllowSentries, cfgMaxObjects);
     }
@@ -176,7 +176,7 @@ void ParseInterceptorSpeed()
     char values[sizeof(m_InterceptorSpeed)][8];
     GetConfigString("speed", speedValue, sizeof(speedValue),
                     "150.0 225.0 325.0 400.0",
-                    raceID, interceptorID);
+                    raceID, int erceptorID);
 
     if (speedValue[0])
     {
@@ -184,7 +184,7 @@ void ParseInterceptorSpeed()
         if (count > sizeof(m_InterceptorSpeed))
             count = sizeof(m_InterceptorSpeed);
 
-        new level=0;
+        int level=0;
         for (;level < count; level++)
             m_InterceptorSpeed[level] = StringToFloat(values[level]);
 
@@ -249,12 +249,12 @@ public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
-        Interceptor(client, GetUpgradeLevel(client,raceID,interceptorID));
+        Interceptor(client, GetUpgradeLevel(client,raceID,int erceptorID));
 
         int thrusters_level = GetUpgradeLevel(client,raceID,thrusterID);
         SetSpeedBoost(client, thrusters_level, true, g_SpeedLevels);
 
-        new jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
+        int jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
         SetupJetpack(client, jetpack_level);
 
         if (m_RemoteAvailable)
@@ -284,7 +284,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
             SetupJetpack(client, new_level);
         else if (upgrade==thrusterID)
             SetSpeedBoost(client, new_level, true, g_SpeedLevels);
-        else if (upgrade==interceptorID)
+        else if (upgrade==int erceptorID)
             Interceptor(client, new_level);
         else if (upgrade==shieldsID)
         {
@@ -377,12 +377,12 @@ public OnPlayerSpawnEvent(Handle event, client, race)
     {
         PrepareAndEmitSoundToAll(spawnWav,client);
 
-        Interceptor(client, GetUpgradeLevel(client,raceID,interceptorID));
+        Interceptor(client, GetUpgradeLevel(client,raceID,int erceptorID));
 
         int thrusters_level = GetUpgradeLevel(client,raceID,thrusterID);
         SetSpeedBoost(client, thrusters_level, true, g_SpeedLevels);
 
-        new jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
+        int jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
         SetupJetpack(client, jetpack_level);
 
         if (m_RemoteAvailable)
@@ -451,7 +451,7 @@ public Action OnBuildObject(client, TFExtObjectType:type)
         if (IsMole(client))
         {
             char upgradeName[64];
-            GetUpgradeName(raceID, interceptorID, upgradeName, sizeof(upgradeName), client);
+            GetUpgradeName(raceID, int erceptorID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
             return Plugin_Stop;
@@ -460,12 +460,12 @@ public Action OnBuildObject(client, TFExtObjectType:type)
                  GetRestriction(client,Restriction_Stunned))
         {
             char upgradeName[64];
-            GetUpgradeName(raceID, interceptorID, upgradeName, sizeof(upgradeName), client);
+            GetUpgradeName(raceID, int erceptorID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "PreventedFromLaunchingInterceptors");
             PrepareAndEmitSoundToClient(client,deniedWav);
             return Plugin_Stop;
         }
-        else if (CanInvokeUpgrade(client, raceID, interceptorID, false))
+        else if (CanInvokeUpgrade(client, raceID, int erceptorID, false))
         {
             if (GameType == tf2)
             {
@@ -493,15 +493,15 @@ public Action OnBuildObject(client, TFExtObjectType:type)
             }
 
             PrepareAndEmitSoundToAll(launchWav,client);
-            ChargeForUpgrade(client, raceID, interceptorID);
+            ChargeForUpgrade(client, raceID, int erceptorID);
             DisplayMessage(client,Display_Ultimate, "%t", "LaunchedInterceptor");
 
             int counts[TFOBJECT_COUNT];
             CountBuildings(client, counts);
 
             int count = counts[type];
-            new float cooldown = GetUpgradeCooldown(raceID, interceptorID) * float((count > 1) ? count * 2 : 1);
-            CreateCooldown(client, raceID, interceptorID, cooldown);
+            new float cooldown = GetUpgradeCooldown(raceID, int erceptorID) * float((count > 1) ? count * 2 : 1);
+            CreateCooldown(client, raceID, int erceptorID, cooldown);
         }
     }
     return Plugin_Continue;
@@ -524,7 +524,7 @@ public Action OnControlObject(client, builder, ent)
         if (IsMole(client))
         {
             char upgradeName[64];
-            GetUpgradeName(raceID, interceptorID, upgradeName, sizeof(upgradeName), client);
+            GetUpgradeName(raceID, int erceptorID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
             PrepareAndEmitSoundToClient(client,deniedWav);
             return Plugin_Stop;
@@ -533,7 +533,7 @@ public Action OnControlObject(client, builder, ent)
                  GetRestriction(client,Restriction_Stunned))
         {
             char upgradeName[64];
-            GetUpgradeName(raceID, interceptorID, upgradeName, sizeof(upgradeName), client);
+            GetUpgradeName(raceID, int erceptorID, upgradeName, sizeof(upgradeName), client);
             DisplayMessage(client, Display_Ultimate, "%t", "PreventedFromLaunchingInterceptors");
             PrepareAndEmitSoundToClient(client,deniedWav);
         }
@@ -565,7 +565,7 @@ public Action OnControlObject(client, builder, ent)
             }
 
             PrepareAndEmitSoundToAll(launchWav,client);
-            ChargeForUpgrade(client, raceID, interceptorID);
+            ChargeForUpgrade(client, raceID, int erceptorID);
         }
     }
 

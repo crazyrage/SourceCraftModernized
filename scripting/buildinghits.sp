@@ -17,7 +17,7 @@ public OnEntityCreated(Ent, const char[] cls)
 		SDKHook(Ent, SDKHook_OnTakeDamage, OnTakeDamage);
 }
 
-public Action OnTakeDamage(Ent, &attacker, &inflictor, &float damage, &damagetype, &weapon, float damageForce[3], float damagePosition[3])
+public Action OnTakeDamage(Ent, &attacker, &inflictor, float & damage, &damagetype, &weapon, float damageForce[3], float damagePosition[3])
 {
 	if (!IsValidClient(attacker)) return Plugin_Continue;
 	if (IsFakeClient(attacker)) return Plugin_Continue;

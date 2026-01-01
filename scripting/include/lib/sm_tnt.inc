@@ -29,7 +29,7 @@ native ControlTNT(bool plugin_only=true);
  * @param primeTime How long it takes TNT to be primed after planting (-1.0 = use convar)
  * @return			none
  */
-native SetTNT(client,count=-1,mode=-1, bool death=false, Float detTime=-1.0, Float primeTime=-1.0);
+native SetTNT(client,count=-1,mode=-1, bool death=false, float detTime=-1.0, float primeTime=-1.0);
 
 /**
  * Plant a TNT pack

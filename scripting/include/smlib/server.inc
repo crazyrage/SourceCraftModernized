@@ -19,7 +19,7 @@
  */
 stock Server_GetIP(bool public_=true)
 {
-	new ip = 0;
+	int ip = 0;
 
 	static Handle cvHostip = null;
 
@@ -39,7 +39,7 @@ stock Server_GetIP(bool public_=true)
 #if defined _steamtools_included
 	if (ip == 0) {
 		if (CanTestFeatures() && GetFeatureStatus(FeatureType_Native, "Steam_GetPublicIP") == FeatureStatus_Available) {
-			decl octets[4];
+			int octets[4];
 			Steam_GetPublicIP(octets);
 
 			ip =
@@ -74,7 +74,7 @@ stock Server_GetIP(bool public_=true)
  */
 stock bool Server_GetIPString(char[] buffer, size, bool public_=true)
 {
-	new ip;
+	int ip;
 
 	if ((ip = Server_GetIP(public_)) == 0) {
 		buffer[0] = '\0';
@@ -104,7 +104,7 @@ stock Server_GetPort()
 		return 0;
 	}
 
-	new port = GetConVarInt(cvHostport);
+	int port = GetConVarInt(cvHostport);
 
 	return port;
 }

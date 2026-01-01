@@ -45,7 +45,7 @@ public OnEntityCreated(iEntity, const char[] sClassName)
 				CreateTimer(0.05, Timer_EntitySpawned, EntIndexToEntRef(iEntity));
 }
 
-public Action Timer_EntitySpawned(Handle hTimer, any:iEntRef)
+public Action Timer_EntitySpawned(Handle hTimer, any iEntRef)
 {
 	int iEntity = EntRefToEntIndex(iEntRef);
 	if(IsValidEntity(iEntity))
@@ -94,11 +94,11 @@ stock _:CreateLightEntity(iEntity)
 		DispatchKeyValue(iLightEntity, "style", "5");
 		DispatchSpawn(iLightEntity);
 		
-		decl float fPos[3];
-		decl float fAngle[3];
-		decl float fAngle2[3];
-		decl float fForward[3];
-		decl float fOrigin[3];
+		float fPos[3];
+		float fAngle[3];
+		float fAngle2[3];
+		float fForward[3];
+		float fOrigin[3];
 		GetEntPropVector(iEntity, Prop_Send, "m_vecOrigin", fPos);
 		GetEntPropVector(iEntity, Prop_Send, "m_angRotation", fAngle);
 		GetEntPropVector(iEntity, Prop_Send, "m_angRotation", fAngle2);

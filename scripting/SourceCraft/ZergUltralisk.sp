@@ -37,7 +37,7 @@ static const char[] deathWav[] = "sc/zuldth00.wav";
 static const char[] evolveWav[] = "sc/zulrdy00.wav";
 static const char[] cleaveWav[] = "sc/zulror00.wav";
 
-int raceID, armorID, speedID, regenerationID, meleeID, cleaveID, chargeID;
+int raceID, armorID, speedID, regenerationID, meleeID, cleaveID, char geID;
 
 static const char[] g_UberKaiserBladesSound[] = "sc/zulhit01.wav";
 float g_UberKaiserBladesPercent[] = { 0.30, 0.40, 0.50, 0.60, 0.80 };
@@ -100,7 +100,7 @@ public Plugin myinfo =
 public void OnPluginStart()
 {
     LoadTranslations("sc.common.phrases.txt");
-    LoadTranslations("sc.charge.phrases.txt");
+    LoadTranslations("sc.char ge.phrases.txt");
     LoadTranslations("sc.ultralisk.phrases.txt");
 
     GetGameType();
@@ -129,7 +129,7 @@ public OnSourceCraftReady()
     AddBurrowUpgrade(raceID, 2, 0, 3, 3);
 
     // Ultimate 3
-    chargeID        = AddUpgrade(raceID, "charge", 3, 4,
+    char geID        = AddUpgrade(raceID, "char ge", 3, 4,
                                  .energy=200.0, .cooldown=20.0,
                                  .accumulated=true, .cost_crystals=30);
 
@@ -163,7 +163,7 @@ public OnSourceCraftReady()
                         g_UberKaiserBladesPercent, raceID, meleeID);
 
     GetConfigFloatArray("damage_percent", g_ChargePercent, sizeof(g_ChargePercent),
-                        g_ChargePercent, raceID, chargeID);
+                        g_ChargePercent, raceID, char geID);
 }
 
 public void OnMapStart()
@@ -277,8 +277,8 @@ public OnUltimateCommand(client,race,bool pressed,arg)
             {
                 TraceInto("ZergUltralisk", "OnUltimateCommand", "%N Charging", client);
 
-                int charge_level=GetUpgradeLevel(client,race,chargeID);
-                Charge(client, race, chargeID, charge_level, charge_level, 40, 150.0, 100.0);
+                int char ge_level=GetUpgradeLevel(client,race,char geID);
+                Charge(client, race, char geID, char ge_level, char ge_level, 40, 150.0, 100.0);
 
                 TraceReturn();
             }
@@ -377,7 +377,7 @@ public Action OnPlayerRunCmd(client, &buttons, &impulse, float vel[3], float ang
     return Plugin_Continue;
 }
 
-public Action Regeneration(Handle timer, any:userid)
+public Action Regeneration(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client) && GetRace(client) == raceID &&
@@ -401,7 +401,7 @@ void SetupSpeedAndGravity(client, armor_level, speed_level, bool apply=false)
 {
     TraceInto("ZergUltralisk", "SetupSpeedAndGravity");
 
-    new float speed=g_Speed[armor_level][speed_level];
+    int float speed=g_Speed[armor_level][speed_level];
     if (speed >= 0.0 && speed != 1.0)
     {
         /* If the Player also has the Boots of Speed,
@@ -437,7 +437,7 @@ void SetupSpeedAndGravity(client, armor_level, speed_level, bool apply=false)
               client, ValidClientIndex(client), -1.0);
     }
 
-    new float gravity = g_Gravity[armor_level];
+    int float gravity = g_Gravity[armor_level];
     if (gravity >= 0.0 && gravity != 1.0)
     {
         /* If the Player also has the Sock of the Feather,

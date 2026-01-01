@@ -28,7 +28,7 @@ stock PrecacheMaterial(const char[] material)
 		}
 	}
 
-	new index = FindStringIndex2(materialNames, material);
+	int index = FindStringIndex2(materialNames, material);
 	if (index == INVALID_STRING_INDEX) {
 		new numStrings = GetStringTableNumStrings(materialNames);
 		if (numStrings >= GetStringTableMaxStrings(materialNames)) {
@@ -79,7 +79,7 @@ stock PrecacheParticleSystem(const char[] particleSystem)
 		}
 	}
 
-	new index = FindStringIndex2(particleEffectNames, particleSystem);
+	int index = FindStringIndex2(particleEffectNames, particleSystem);
 	if (index == INVALID_STRING_INDEX) {
 		new numStrings = GetStringTableNumStrings(particleEffectNames);
 		if (numStrings >= GetStringTableMaxStrings(particleEffectNames)) {
@@ -121,7 +121,7 @@ stock bool IsParticleSystemPrecached(const char[] particleSystem)
  */
 stock FindStringIndexByTableName(const char[] table, const char[] str)
 {
-	new tableIndex = INVALID_STRING_TABLE;
+	int tableIndex = INVALID_STRING_TABLE;
 	if ((tableIndex = FindStringTable("ParticleEffectNames")) == INVALID_STRING_TABLE) {
 		return INVALID_STRING_INDEX;
 	}
@@ -142,8 +142,8 @@ stock FindStringIndex2(tableidx, const char[] str)
 {
 	char buf[1024];
 
-	new numStrings = GetStringTableNumStrings(tableidx);
-	for (new i=0; i < numStrings; i++) {
+	int numStrings = GetStringTableNumStrings(tableidx);
+	for (int i=0; i < numStrings; i++) {
 		ReadStringTable(tableidx, i, buf, sizeof(buf));
 
 		if (StrEqual(buf, str)) {
@@ -205,21 +205,21 @@ static localIPRanges[] =
 };
 
 /*
- * Checks whether an IP is a private/internal IP
+ * Checks whether an IP is a private/int ernal IP
  *
  * @param ip			IP Long
  * @return				True if the IP is local, false otherwise.
  */
 stock bool IsIPLocal(ip)
 {
-	new range, bits, move, bool matches;
+	int range, bits, move, bool matches;
 
-	for (new i=0; i < sizeof(localIPRanges); i++) {
+	for (int i=0; i < sizeof(localIPRanges); i++) {
 
 		range = localIPRanges[i];
 		matches = true;
 
-		for (new j=0; j < 4; j++) {
+		for (int j=0; j < 4; j++) {
 			move = j * 8;
 			bits = (range >> move) & 0xFF;
 

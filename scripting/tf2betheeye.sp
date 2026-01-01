@@ -323,7 +323,7 @@ public Action OnPlayerDeath( Handle hEvent, const char[] strEventName, bool bDon
 	return Plugin_Continue;
 }
 
-public Action NormalSoundHook( iClients[64], &iNumClients, char strSample[PLATFORM_MAX_PATH], &iEntity, &iChannel, &float flVolume, &iLevel, &iPitch, &iFlags )
+public Action NormalSoundHook( iClients[64], &iNumClients, char strSample[PLATFORM_MAX_PATH], &iEntity, &iChannel, float & flVolume, &iLevel, &iPitch, &iFlags )
 {
 	if( !IsValidClient(iEntity) || !bEyeStatus[iEntity] )
 		return Plugin_Continue;
@@ -340,7 +340,7 @@ public Action NormalSoundHook( iClients[64], &iNumClients, char strSample[PLATFO
 	return Plugin_Continue;
 }
 
-public Action OnTakeDamage( iVictim, &iAttacker, &iInflictor, &float flDamage, &iDamageType, &iWeapon, float flDamageForce[3], float flDamagePos[3], iDamageCustom )
+public Action OnTakeDamage( iVictim, &iAttacker, &iInflictor, float & flDamage, &iDamageType, &iWeapon, float flDamageForce[3], float flDamagePos[3], iDamageCustom )
 {
 	if( !IsValidClient( iVictim ) || !bEyeStatus[iVictim] )
 		return Plugin_Continue;
@@ -460,9 +460,9 @@ public Action Command_ToggleEffect( iClient, nArgs )
 		}
 		
 		char target_name[MAX_TARGET_LENGTH];
-		decl iTargets[MAXPLAYERS];
+		int iTargets[MAXPLAYERS];
 		int nTargets;
-		decl bool tn_is_ml;
+		bool tn_is_ml;
 		if((nTargets = ProcessTargetString(strTargets, iClient, iTargets, MAXPLAYERS, 0, target_name, sizeof(target_name), tn_is_ml)) <= 0)
 		{
 			ReplyToTargetError( iClient, nTargets );
@@ -489,9 +489,9 @@ public Action Command_ToggleEffect( iClient, nArgs )
 		bool bState = StringToInt( strState ) != 0;
 		
 		char target_name[MAX_TARGET_LENGTH];
-		decl iTargets[MAXPLAYERS];
+		int iTargets[MAXPLAYERS];
 		int nTargets;
-		decl bool tn_is_ml;
+		bool tn_is_ml;
 		char strTargets[64];
 		GetCmdArg( 1, strTargets, sizeof(strTargets) );
 		if((nTargets = ProcessTargetString(strTargets, iClient, iTargets, MAXPLAYERS, 0, target_name, sizeof(target_name), tn_is_ml)) <= 0)
@@ -646,7 +646,7 @@ ResetData( iClient )
 	bSkipUpdateCheck[iClient] = false;
 }
 
-public Action Timer_HUD( Handle hTimer, any:iUnusedVariable )
+public Action Timer_HUD( Handle hTimer, any iUnusedVariable )
 {
 	if( hHUD_Health == null || hHUD_Rage == null )
 		return Plugin_Stop;
@@ -668,7 +668,7 @@ public Action Timer_HUD( Handle hTimer, any:iUnusedVariable )
 	return Plugin_Continue;
 }
 
-public Action Timer_CalmDown( Handle hTimer, any:iClient )
+public Action Timer_CalmDown( Handle hTimer, any iClient )
 {
 	if( !IsValidClient(iClient) || !bEyeStatus[iClient] || !bEyeRage[iClient] )
 		return Plugin_Stop;
@@ -692,7 +692,7 @@ BeTheMonoculus( iClient )
 		return;
 	}
 	
-	new Action:result;
+	int Action:result;
 	Call_StartForward( fwdCanPlayAsEye );
 	Call_PushCell( iClient );
 	Call_Finish( result );
@@ -706,7 +706,7 @@ BeTheMonoculus( iClient )
 	CreateTimer( 0.0, Timer_BeTheMonoculus, iClient );
 }
 
-public Action Timer_BeTheMonoculus( Handle hTimer, any:iClient )
+public Action Timer_BeTheMonoculus( Handle hTimer, any iClient )
 {
 	if( !IsValidClient(iClient) )
 		return Plugin_Stop;
@@ -737,7 +737,7 @@ public Action Timer_BeTheMonoculus( Handle hTimer, any:iClient )
 	CreateTimer( 0.0, Timer_SetBossHealth, iClient );
 	return Plugin_Stop;
 }
-public Action Timer_SetBossHealth( Handle hTimer, any:iClient )
+public Action Timer_SetBossHealth( Handle hTimer, any iClient )
 {
 	if( !IsValidClient(iClient) || !bEyeStatus[iClient] )
 		return Plugin_Stop;
@@ -877,7 +877,7 @@ StunMonoculus( iClient, iAttacker )
 	
 	CreateTimer( flStunDuration, Timer_UnstunMonoculus, iClient );
 }
-public Action Timer_UnstunMonoculus( Handle hTimer, any:iClient )
+public Action Timer_UnstunMonoculus( Handle hTimer, any iClient )
 {
 	if( !IsValidClient(iClient) || !bEyeStatus[iClient] )
 		return Plugin_Stop;
@@ -940,7 +940,7 @@ AttachParticle(iEntity, const char[] strParticleEffect, const char[] strAttachPo
 	
 	return 0;
 }
-public Action Timer_DeleteParticle(Handle hTimer, any:iRefEnt)
+public Action Timer_DeleteParticle(Handle hTimer, any iRefEnt)
 {
 	int iEntity = EntRefToEntIndex(iRefEnt);
 	if(iEntity > MaxClients)

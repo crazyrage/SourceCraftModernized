@@ -25,7 +25,7 @@ native ControlTeleporter(bool plugin_only=true);
  * @param recharge  Recharge time for teleporters built by client.
  * @return			none
  */
-native SetTeleporter(client,Float recharge);
+native SetTeleporter(client,float recharge);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

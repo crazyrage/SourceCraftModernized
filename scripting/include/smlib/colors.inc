@@ -148,8 +148,8 @@ stock Color_ParseChatText(const char[] str, char[] buffer, size)
 		subject = CHATCOLOR_NOSUBJECT;
 
 	char sTag[10]         = "",     // This should be able to hold "\x08RRGGBBAA"\0
-		String:colorCode[10]    = "",     // This should be able to hold "\x08RRGGBBAA"\0
-		String:currentColor[10] = "\x01"; // Initialize with normal color
+		char colorCode[10]    = "",     // This should be able to hold "\x08RRGGBBAA"\0
+		char currentColor[10] = "\x01"; // Initialize with normal color
 
 	size--;
 
@@ -163,16 +163,16 @@ stock Color_ParseChatText(const char[] str, char[] buffer, size)
 			break;
 		}
 
-		new character = str[x++];
+		new char acter = str[x++];
 
 		if (inBracket) {
-			// We allow up to 9 characters in the tag (#RRGGBBAA)
-			if (character == '}' || x_tag > 9) {
+			// We allow up to 9 char acters in the tag (#RRGGBBAA)
+			if (char acter == '}' || x_tag > 9) {
 				inBracket   = false;
 				sTag[x_tag] = '\0';
 				x_tag       = 0;
 
-				if (character == '}') {
+				if (char acter == '}') {
 					Color_TagToCode(sTag, subject, colorCode);
 
 					if (colorCode[0] == '\0') {
@@ -199,27 +199,27 @@ stock Color_ParseChatText(const char[] str, char[] buffer, size)
 					}
 				}
 				else {
-					// If the tag character limit exceeds 9,
+					// If the tag char acter limit exceeds 9,
 					// we have to do something.
 
 					// Terminate buffer with \0 so Format can handle it.
 					buffer[x_buf] = '\0';
-					x_buf = Format(buffer, size, "%s{%s%c", buffer, sTag, character);
+					x_buf = Format(buffer, size, "%s{%s%c", buffer, sTag, char acter);
 				}
 			}
-			else if (character == '{' && !x_tag) {
+			else if (char acter == '{' && !x_tag) {
 				buffer[x_buf++] = '{';
 				inBracket = false;
 			}
 			else {
-				sTag[x_tag++] = character;
+				sTag[x_tag++] = char acter;
 			}
 		}
-		else if (character == '{') {
+		else if (char acter == '{') {
 			inBracket = true;
 		}
 		else {
-			buffer[x_buf++] = character;
+			buffer[x_buf++] = char acter;
 		}
 	}
 
@@ -236,14 +236,14 @@ stock Color_ParseChatText(const char[] str, char[] buffer, size)
 }
 
 /**
- * Converts a chat color tag to its code character.
+ * Converts a chat color tag to its code char acter.
  *
  * @param tag				Color Tag String.
  * @param subject			Subject variable to pass
- * @param result            The result as character sequence (string). This will be \0 if the tag is unkown.
+ * @param result            The result as char acter sequence (string). This will be \0 if the tag is unkown.
  * @noreturn
  */
-stock Color_TagToCode(const char[] tag, &subject=-1, String:result[10])
+stock Color_TagToCode(const char[] tag, &subject=-1, char result[10])
 {
 	// Check if the tag starts with a '#'.
 	// We will handle it has RGB(A)-color code then.
@@ -300,7 +300,7 @@ stock Color_TagToCode(const char[] tag, &subject=-1, String:result[10])
 }
 
 /**
- * Strips all color control characters in a string.
+ * Strips all color control char acters in a string.
  * The Output buffer can be the same as the input buffer.
  * Original code by Psychonic, thanks.
  *
@@ -311,17 +311,17 @@ stock Color_TagToCode(const char[] tag, &subject=-1, String:result[10])
  */
 stock Color_StripFromChatText(const char[] input, char[] output, size)
 {
-	new x = 0;
-	for (new i=0; input[i] != '\0'; i++) {
+	int x = 0;
+	for (int i=0; input[i] != '\0'; i++) {
 
 		if (x+1 == size) {
 			break;
 		}
 
-		new character = input[i];
+		new char acter = input[i];
 
-		if (character > 0x08) {
-			output[x++] = character;
+		if (char acter > 0x08) {
+			output[x++] = char acter;
 		}
 	}
 
@@ -404,9 +404,9 @@ static stock Color_ChatInitialize()
 
 		if ((gamedata = LoadGameConfigFile(SMLIB_COLORS_GAMEDATAFILE)) != null) {
 
-			char keyName[32], String:buffer[6];
+			char keyName[32], char buffer[6];
 
-			for (new i=0; i < sizeof(chatColorNames); i++) {
+			for (int i=0; i < sizeof(chatColorNames); i++) {
 
 				Format(keyName, sizeof(keyName), "%s_code",			chatColorNames[i]);
 				if (GameConfGetKeyValue(gamedata, keyName, buffer, sizeof(buffer))) {
@@ -473,8 +473,8 @@ static stock Color_GetChatColorInfo(&index, &subject=CHATCOLOR_NOSUBJECT)
 		index = 0;
 	}
 
-	new newSubject = CHATCOLOR_NOSUBJECT;
-	new ChatColorSubjectType:type = chatColorInfo[index][ChatColorInfo_SubjectType];
+	int newSubject = CHATCOLOR_NOSUBJECT;
+	int ChatColorSubjectType:type = chatColorInfo[index][ChatColorInfo_SubjectType];
 
 	switch (type) {
 

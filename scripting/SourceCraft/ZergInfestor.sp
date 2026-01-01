@@ -366,8 +366,8 @@ bool ConsumeEnemy(damage, index, victim_index)
         if (victimIsPlayer || victimIsNPC)
         {
             int float lastTime = m_ConsumeEnemyTime[index];
-            int float interval = GetGameTime() - lastTime;
-            if ((lastTime == 0.0 || interval > 0.25) &&
+            int float int erval = GetGameTime() - lastTime;
+            if ((lastTime == 0.0 || int erval > 0.25) &&
                 CanInvokeUpgrade(index, raceID, consumeID, .notify=false))
             {
                 int float start[3];
@@ -529,7 +529,7 @@ void SwarmInfestation(client)
     }
 }
 
-public Action AllowSwarmInfestation(Handle timer,any:userid)
+public Action AllowSwarmInfestation(Handle timer,any userid)
 {
     int index = GetClientOfUserId(userid);
     if (index > 0 && m_GasAvailable)

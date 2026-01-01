@@ -115,7 +115,7 @@ public void OnWar3EventSpawn(client)
     CheckSkills(client);
 }
 
-public Action Heal_BurningSpearTimer(Handle h,any:data) //1 sec
+public Action Heal_BurningSpearTimer(Handle h,any data) //1 sec
 {
     int attacker;
     int damage;
@@ -171,7 +171,7 @@ public Action Heal_BurningSpearTimer(Handle h,any:data) //1 sec
 }
 
 
-public Action BerserkerCalculateTimer(Handle timer,any:userid) // Check each 0.5 second if the conditions for Berserkers Blood have changed
+public Action BerserkerCalculateTimer(Handle timer,any userid) // Check each 0.5 second if the conditions for Berserkers Blood have changed
 {
     if(thisRaceID>0)
     {
@@ -252,7 +252,7 @@ CheckSkills(client){
     int skill = War3_GetSkillLevel(client,thisRaceID,SKILL_VITALITY);
     int VictimCurHP = GetClientHealth(client);
     int VictimMaxHP = War3_GetMaxHP(client);
-    new float DoubleTrigger = VictimMaxHP * 0.4;
+    int float DoubleTrigger = VictimMaxHP * 0.4;
     
     if(bSpearActivated[client]){
         War3_SetBuff(client,fHPRegen,thisRaceID,0.0);
@@ -299,7 +299,7 @@ public OnUltimateCommand(client,race,bool pressed)
     
     if(race==thisRaceID && pressed && ValidPlayer(client,true) &&!Silenced(client) )
     {
-        new ult_level=War3_GetSkillLevel(client,race,ULT_BREAK);
+        int ult_level=War3_GetSkillLevel(client,race,ULT_BREAK);
         if(ult_level>0)
         {
             new float AttackerMaxHP = float(War3_GetMaxHP(client));

@@ -49,79 +49,79 @@ enum grabType { dispenser, teleporter, sentrygun, teleporter_entry, teleporter_e
 
 // globals
 new gObj[MAXPLAYERS+1]                  = { INVALID_ENT_REFERENCE, ... };   // what object the player is holding
-HandlegTrackTimers[MAXENTITIES+1]; // entity track timers
-boolgDisabled[MAXENTITIES+1];      // entity disabled flags
+Handle gTrackTimers[MAXENTITIES+1]; // entity track timers
+bool gDisabled[MAXENTITIES+1];      // entity disabled flags
 new grabType:gType[MAXPLAYERS+1];       // type of grabbed object
 new MoveType:gMove[MAXPLAYERS+1];       // movetype of grabbed object
-floatgGrabTime[MAXPLAYERS+1];      // when the object was grabbed
-floatgMaxDuration[MAXPLAYERS+1];   // max time allow to hold onto buildings
-boolgJustGrabbed[MAXPLAYERS+1];    // object was grabbed when button was pushed
-floatgGravity[MAXPLAYERS+1];       // gravity of grabbed object
-floatgThrow[MAXPLAYERS+1];         // throw charge state 
+float gGrabTime[MAXPLAYERS+1];      // when the object was grabbed
+float gMaxDuration[MAXPLAYERS+1];   // max time allow to hold onto buildings
+bool gJustGrabbed[MAXPLAYERS+1];    // object was grabbed when button was pushed
+float gGravity[MAXPLAYERS+1];       // gravity of grabbed object
+float gThrow[MAXPLAYERS+1];         // throw char ge state 
 new gHealth[MAXPLAYERS+1];              // health of grabbed object
 
 new gPermissions[MAXPLAYERS+1];         // Permissions for each player
-floatgThrowSpeed[MAXPLAYERS+1];    // speed of objects thrown by player
-floatgThrowGravity[MAXPLAYERS+1];  // gravity of objects thrown by player
-floatgRotation[MAXPLAYERS+1];      // rotation of object held by player
-boolg_EngiButtonDown[MAXPLAYERS+1];// Engineer is pressing alt-attack with the shotgun
-boolg_ReloadButtonDown[MAXPLAYERS+1];// Engineer is pressing reload with the shotgun
+float gThrowSpeed[MAXPLAYERS+1];    // speed of objects thrown by player
+float gThrowGravity[MAXPLAYERS+1];  // gravity of objects thrown by player
+float gRotation[MAXPLAYERS+1];      // rotation of object held by player
+bool g_EngiButtonDown[MAXPLAYERS+1];// Engineer is pressing alt-attack with the shotgun
+bool g_ReloadButtonDown[MAXPLAYERS+1];// Engineer is pressing reload with the shotgun
 
-HandlegTimer;       
-chargSound[256];
-chargMissSound[256];
-chargInvalidSound[256];
-chargBuildingSound[256];
-chargPickupSound[256];
-chargThrowSound[256];
-chargDropSound[256];
+Handle gTimer;       
+char gSound[256];
+char gMissSound[256];
+char gInvalidSound[256];
+char gBuildingSound[256];
+char gPickupSound[256];
+char gThrowSound[256];
+char gDropSound[256];
 
-boolgNativeOverride = false;
+bool gNativeOverride = false;
 
 // forwards
-HandlefwdOnPickupObject = null;
-HandlefwdOnCarryObject = null;
-HandlefwdOnThrowObject = null;
-HandlefwdOnDropObject = null;
-HandlefwdOnObjectStop = null;
+Handle fwdOnPickupObject = null;
+Handle fwdOnCarryObject = null;
+Handle fwdOnThrowObject = null;
+Handle fwdOnDropObject = null;
+Handle fwdOnObjectStop = null;
 
 // convars
-HandlecvSpeed = null;
-HandlecvDistance = null; 
-HandlecvTeamRestrict = null;
-HandlecvSound = null;
-HandlecvBuildingSound = null;
-HandlecvInvalidSound = null;
-HandlecvMissSound = null;
-HandlecvPickupSound = null;
-HandlecvThrowSound = null;
-HandlecvDropSound = null;
-HandlecvGround = null;
-HandlecvThrowTime = null;
-HandlecvThrowMinTime = null;
-HandlecvThrowSpeed = null;
-HandlecvMaxDistance = null;
-HandlecvMaxDuration = null;
-HandlecvSteal = null;
-HandlecvDropOnJump = null;
-HandlecvThrowGravity = null;
-HandlecvDropGravity = null;
-HandlecvStopSpeed = null;
-HandlecvMovetype = null;
-HandlecvDebug = null;
+Handle cvSpeed = null;
+Handle cvDistance = null; 
+Handle cvTeamRestrict = null;
+Handle cvSound = null;
+Handle cvBuildingSound = null;
+Handle cvInvalidSound = null;
+Handle cvMissSound = null;
+Handle cvPickupSound = null;
+Handle cvThrowSound = null;
+Handle cvDropSound = null;
+Handle cvGround = null;
+Handle cvThrowTime = null;
+Handle cvThrowMinTime = null;
+Handle cvThrowSpeed = null;
+Handle cvMaxDistance = null;
+Handle cvMaxDuration = null;
+Handle cvSteal = null;
+Handle cvDropOnJump = null;
+Handle cvThrowGravity = null;
+Handle cvDropGravity = null;
+Handle cvStopSpeed = null;
+Handle cvMovetype = null;
+Handle cvDebug = null;
 
-HandlecvProps = null;
-HandlecvBuildings = null;
-HandlecvDispenserEnabled = null;
-HandlecvOtherBuildings = null;
-HandlecvThrowBuildings = null;
-HandlecvThrowSetDisabled = null;
-HandlecvGrabSetDisabled = null;
-HandlecvDropOnSapped = null;
-HandlecvAllowRepair = null;
-HandlecvEnableBits = null;
+Handle cvProps = null;
+Handle cvBuildings = null;
+Handle cvDispenserEnabled = null;
+Handle cvOtherBuildings = null;
+Handle cvThrowBuildings = null;
+Handle cvThrowSetDisabled = null;
+Handle cvGrabSetDisabled = null;
+Handle cvDropOnSapped = null;
+Handle cvAllowRepair = null;
+Handle cvEnableBits = null;
 
-new g_EnableBits = 0; 
+int g_EnableBits = 0; 
 
 public Plugin myinfo = {
     name = "Grab:TF2",
@@ -131,7 +131,7 @@ public Plugin myinfo = {
     url = "http://www.lduke.com/"
 };
 
-public APLResAskPluginLoad2(Handle myself, bool late, char[] error, err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, err_max)
 {
     // Register Natives
     CreateNative("ControlZtf2grab",Native_ControlZtf2grab);
@@ -176,8 +176,8 @@ public OnPluginStart()
     cvThrowSound = CreateConVar("sm_grab_throwsound", "weapons/physcannon/superphys_launch1.wav", "sound to play for throw, change takes effect on map change", FCVAR_NONE);
     cvDropSound = CreateConVar("sm_grab_dropsound", "weapons/physcannon/physcannon_drop.wav", "sound to play for drop, change takes effect on map change", FCVAR_NONE);
     cvGround = CreateConVar("sm_grab_soccer", "0", "soccer (ground mode) (1/0 = on/off)", FCVAR_NONE);
-    cvThrowTime = CreateConVar("sm_grab_throwcharge", "2.0", "Time to charge throw to full (default 2.0)", FCVAR_NONE);
-    cvThrowMinTime = CreateConVar("sm_grab_mincharge", "0.2", "minimum charge time, anything less drops (default 0.2)", FCVAR_NONE);
+    cvThrowTime = CreateConVar("sm_grab_throwcharge", "2.0", "Time to char ge throw to full (default 2.0)", FCVAR_NONE);
+    cvThrowMinTime = CreateConVar("sm_grab_mincharge", "0.2", "minimum char ge time, anything less drops (default 0.2)", FCVAR_NONE);
     cvThrowSpeed = CreateConVar("sm_grab_throwspeed", "1000.0", "speed at which an object is thrown. (default 1000)", FCVAR_NONE);
     cvMaxDistance = CreateConVar("sm_grab_reach", "512.0", "maximum distance from which you can grab an object (default 512)", FCVAR_NONE);
     cvMaxDuration = CreateConVar("sm_grab_fatiguetime", "0.0", "maximum time objects can be held before being dropped in seconds (default 0.0 is infinite)", FCVAR_NONE);
@@ -244,7 +244,7 @@ public OnConfigsExecuted()
     }
 } 
 
-public Cvar_enabled(Handle:convar, const char[]oldValue[], const char[]newValue[])
+public Cvar_enabled(Handle convar, const char oldValue[], const char newValue[])
 {
     g_EnableBits = GetConVarInt(cvEnableBits);
 } 
@@ -252,7 +252,7 @@ public Cvar_enabled(Handle:convar, const char[]oldValue[], const char[]newValue[
 public OnMapStart()
 { 
     // reset object list
-    for (new i=0; i<=MAXPLAYERS; i++)
+    for (int i=0; i<=MAXPLAYERS; i++)
     {
         gThrow[i] = 0.0;
         gGrabTime[i] = 0.0;
@@ -270,7 +270,7 @@ public OnMapEnd()
 }
 
 // When a new client is put in the server we reset their status
-public boolOnClientConnect(client, String:rejectmsg[], maxlen)
+public bool OnClientConnect(client, char[] rejectmsg, maxlen)
 {
     if (client && !IsFakeClient(client))
     {
@@ -289,14 +289,14 @@ public OnClientDisconnect(client)
         Command_UnGrab(client, 0);
 }
 
-public ActionOnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:angles[3], &weapon)
+public Action OnPlayerRunCmd(client, &buttons, &impulse, float vel[3], float angles[3], &weapon)
 {
     // running GetConVarBool every frame is not good...
     if (g_EnableBits) 
     {
         if (TF2_GetPlayerClass(client)==TFClass_Engineer) 
         {
-            charwpn[32];
+            char wpn[32];
             GetClientWeapon(client, wpn, sizeof(wpn));
 
             if ((g_EnableBits & ENABLE_ALT_SHOTGUN) &&
@@ -342,9 +342,9 @@ public ActionOnPlayerRunCmd(client, &buttons, &impulse, Float:vel[3], Float:angl
     return Plugin_Continue;
 }  
 
-public ActionPlayerSpawn(Handle event, const char[]name[], bool dontBroadcast)
+public Action PlayerSpawn(Handle event, const char name[], bool dontBroadcast)
 {
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));
 
     // reset object held
     gThrow[client] = 0.0;
@@ -360,7 +360,7 @@ public ActionPlayerSpawn(Handle event, const char[]name[], bool dontBroadcast)
     if (!gNativeOverride)
     {
         // check team restrictions
-        new restrict = GetConVarInt(cvTeamRestrict);
+        int restrict = GetConVarInt(cvTeamRestrict);
         if (restrict == 0 || restrict != GetClientTeam(client))
         {
             gThrowSpeed[client] = GetConVarFloat(cvThrowSpeed);
@@ -411,7 +411,7 @@ public ActionPlayerSpawn(Handle event, const char[]name[], bool dontBroadcast)
     return Plugin_Continue;
 }
 
-public ActionPlayerDeath(Handle event, const char[]name[], bool dontBroadcast)
+public Action PlayerDeath(Handle event, const char name[], bool dontBroadcast)
 {
     if (GameType == tf2)
     {
@@ -427,7 +427,7 @@ public ActionPlayerDeath(Handle event, const char[]name[], bool dontBroadcast)
         }
     }
 
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));
 
     // Still holding an object?
     if (gObj[client] != INVALID_ENT_REFERENCE)
@@ -446,7 +446,7 @@ public ActionPlayerDeath(Handle event, const char[]name[], bool dontBroadcast)
     return Plugin_Continue;
 }
 
-public ActionCommand_Rotate(client, args)
+public Action Command_Rotate(client, args)
 {
     // check if EngiButtonDown is true
     if (g_ReloadButtonDown[client] == true)
@@ -463,7 +463,7 @@ public ActionCommand_Rotate(client, args)
     return Plugin_Handled;
 }
 
-public ActionCommand_Grab(client, args)
+public Action Command_Grab(client, args)
 {
     // check if EngiButtonDown is true
     if (g_EngiButtonDown[client] == true)
@@ -481,10 +481,10 @@ public ActionCommand_Grab(client, args)
     else if (!(gPermissions[client] & HAS_GRABBER))
         return Plugin_Handled;
 
-    boolgroundmode = GetConVarBool(cvGround);
+    bool groundmode = GetConVarBool(cvGround);
 
     // find entity
-    new ent = TraceToEntity(client);
+    int ent = TraceToEntity(client);
     if (ent == -1)
     {
         if (!groundmode)
@@ -493,12 +493,12 @@ public ActionCommand_Grab(client, args)
         return Plugin_Handled;
     }
 
-    new builder=0;
-    new grabType:grab = GetGrabType(ent);
+    int builder=0;
+    int grabType:grab = GetGrabType(ent);
 
     if (ent > 0 && GetConVarBool(cvDebug))
     {
-        charedictname[128];
+        char edictname[128];
         GetEdictClassname(ent, edictname, 128);
         if (GameType == tf2 && strncmp(edictname, "obj_", 4) == 0)
         {
@@ -534,7 +534,7 @@ public ActionCommand_Grab(client, args)
             }
             else
             {
-                floatcomplete = GetEntPropFloat(ent, Prop_Send, "m_flPercentageConstructed");
+                float complete = GetEntPropFloat(ent, Prop_Send, "m_flPercentageConstructed");
                 if (complete < 1.0)
                 {
                     if (!groundmode)
@@ -583,7 +583,7 @@ public ActionCommand_Grab(client, args)
     if (grab < none)
     {
         // check if another player is holding it
-        for (new j=1; j<=MaxClients; j++)
+        for (int j=1; j<=MaxClients; j++)
         {
             if (EntRefToEntIndex(gObj[j]) == ent)
             {
@@ -604,7 +604,7 @@ public ActionCommand_Grab(client, args)
             }
         }
 
-        new Action:res = Plugin_Continue;
+        int Action:res = Plugin_Continue;
         Call_StartForward(fwdOnPickupObject);
         Call_PushCell(client);
         Call_PushCell(builder);
@@ -613,7 +613,7 @@ public ActionCommand_Grab(client, args)
 
         if (res == Plugin_Continue)
         {
-            boolmoveFlag=GetConVarBool(cvMovetype);
+            bool moveFlag=GetConVarBool(cvMovetype);
 
             // grab entity
             gObj[client] = EntIndexToEntRef(ent);
@@ -629,7 +629,7 @@ public ActionCommand_Grab(client, args)
             {
                 gHealth[client] = GetEntProp(ent, Prop_Send, "m_iHealth");
 
-                Handletimer = gTrackTimers[ent];
+                Handle timer = gTrackTimers[ent];
                 if (timer != null)
                 {
                     gTrackTimers[ent] = null;
@@ -664,11 +664,11 @@ public ActionCommand_Grab(client, args)
 
             if (!groundmode)
             {
-                floatvecPos[3];
+                float vecPos[3];
                 GetEntPropVector(ent, Prop_Send, "m_vecOrigin", vecPos);
 
                 // and "rotate it to match where the client is facing.
-                floatvecAngles[3];
+                float vecAngles[3];
                 GetClientAbsAngles(client, vecAngles);
                 vecAngles[1] += gRotation[client];
                 if (vecAngles[1] < -180.0)
@@ -683,10 +683,10 @@ public ActionCommand_Grab(client, args)
 
                     // Check if client is within same area(x,y) as object.
                     /*
-                    floatclientPos[3];
+                    float clientPos[3];
                     GetClientAbsOrigin(client, clientPos);
 
-                    floatsize[3];
+                    float size[3];
                     GetEntPropVector(ent, Prop_Send, "m_vecBuildMaxs", size);
                     size[0] /= 2.0;
                     size[1] /= 2.0;
@@ -733,7 +733,7 @@ public ActionCommand_Grab(client, args)
     return Plugin_Handled;
 }
 
-public ActionCommand_UnGrab(client, args)
+public Action Command_UnGrab(client, args)
 {
     if (gThrow[client]>0.0)
         PrintHintText(client, " ");
@@ -747,7 +747,7 @@ public ActionCommand_UnGrab(client, args)
 
 Drop(client, bool:throwIt)
 {
-    boolgroundmode = GetConVarBool(cvGround);
+    bool groundmode = GetConVarBool(cvGround);
     if (!groundmode) // no sound in ground mode
     {
         StopSound(client, SNDCHAN_AUTO, gSound);
@@ -756,8 +756,8 @@ Drop(client, bool:throwIt)
             StopSound(client, SNDCHAN_AUTO, gBuildingSound);
     }
 
-    new ref = gObj[client];
-    new ent = EntRefToEntIndex(ref);
+    int ref = gObj[client];
+    int ent = EntRefToEntIndex(ref);
     if (ent > 0)
     {
         if (!throwIt)
@@ -765,21 +765,21 @@ Drop(client, bool:throwIt)
             if (!groundmode)
                 PrepareAndEmitSoundToAll(gDropSound, client);
 
-            floatdropGravity = GetConVarFloat(cvDropGravity);
+            float dropGravity = GetConVarFloat(cvDropGravity);
             if (dropGravity != gGravity[client])
                 SetEntityGravity(ent, dropGravity);
 
             if (GetConVarBool(cvMovetype))
                 SetEntityMoveType(ent, MOVETYPE_FLYGRAVITY);
 
-            static const Float:speed[3] = { 0.0, 0.0, -1.0 };
+            static const float speed[3] = { 0.0, 0.0, -1.0 };
             TeleportEntity(ent, NULL_VECTOR, NULL_VECTOR, speed);
         }
 
-        new grabType:gt = gType[client];
+        int grabType:gt = gType[client];
         if (gt >= dispenser && gt <= teleporter_exit)
         {
-            booldisable = gDisabled[ent];
+            bool disable = gDisabled[ent];
             if (throwIt && !disable && (gt >= dispenser && gt <= teleporter_exit) &&
                 !(gPermissions[client] & CAN_THROW_ENABLED_BUILDINGS) &&
                 GetEntProp(ent, Prop_Send, "m_iTeamNum") == GetClientTeam(client))
@@ -789,11 +789,11 @@ Drop(client, bool:throwIt)
                     SetEntProp(ent, Prop_Send, "m_bDisabled", 1);
             }
 
-            Handlepack;
+            Handle pack;
             gTrackTimers[ent] = CreateDataTimer(0.2,TrackObject,pack,TIMER_REPEAT);
             if (gTrackTimers[ent] != null)
             {
-                floatvecPos[3];
+                float vecPos[3];
                 GetEntPropVector(ent, Prop_Send, "m_vecOrigin", vecPos);
                 WritePackCell(pack, ent);
                 WritePackCell(pack, ref);
@@ -825,7 +825,7 @@ Drop(client, bool:throwIt)
     gObj[client] = INVALID_ENT_REFERENCE;
 }
 
-public ActionCommand_UnGrab2(client, args)
+public Action Command_UnGrab2(client, args)
 {
     // changed so Commmand_Ungrab is called from Command_Grab if an object is already held
     // so we need to handle -grab with this function
@@ -833,7 +833,7 @@ public ActionCommand_UnGrab2(client, args)
     return Plugin_Handled;
 }
 
-public ActionCommand_Throw(client, args)
+public Action Command_Throw(client, args)
 {
     // make sure client is not spectating
     if (!client || !IsClientInGame(client) || !IsPlayerAlive(client))
@@ -853,7 +853,7 @@ public ActionCommand_Throw(client, args)
     return Plugin_Handled;
 }
 
-public ActionCommand_UnThrow(client, args)
+public Action Command_UnThrow(client, args)
 {
     // return if the Throw grabbed the object
     if (gJustGrabbed[client])
@@ -867,11 +867,11 @@ public ActionCommand_UnThrow(client, args)
         return Plugin_Handled;
 
     // client doesn't have an object?
-    new ent = EntRefToEntIndex(gObj[client]);
+    int ent = EntRefToEntIndex(gObj[client]);
     if (ent > 0)
     {
         // is it the same object and can it be thrown? 
-        new grabType:grab = gType[client];
+        int grabType:grab = gType[client];
         if (grab != GetGrabType(ent) ||
             ((grab >= dispenser && grab <= sentrygun) &&
              !(gPermissions[client] & CAN_THROW_BUILDINGS)))
@@ -879,7 +879,7 @@ public ActionCommand_UnThrow(client, args)
             return Command_UnGrab(client, args);
         }
 
-        new Action:res = Plugin_Continue;
+        int Action:res = Plugin_Continue;
         Call_StartForward(fwdOnThrowObject);
         Call_PushCell(client);
         Call_PushCell(ent);
@@ -888,12 +888,12 @@ public ActionCommand_UnThrow(client, args)
         if (res == Plugin_Continue)
         {
             // throw object
-            floatthrowtime = GetConVarFloat(cvThrowTime);
-            floatthrowmintime = GetConVarFloat(cvThrowMinTime);
-            floatthrowspeed = gThrowSpeed[client];
-            floatthrowgravity = gThrowGravity[client];
-            floattime = GetEngineTime();
-            floatpercent;
+            float throwtime = GetConVarFloat(cvThrowTime);
+            float throwmintime = GetConVarFloat(cvThrowMinTime);
+            float throwspeed = gThrowSpeed[client];
+            float throwgravity = gThrowGravity[client];
+            float time = GetEngineTime();
+            float percent;
 
             time -= gThrow[client];
             if (time < throwmintime)
@@ -908,10 +908,10 @@ public ActionCommand_UnThrow(client, args)
             if (throwspeed <= 0.0)
                 return Command_UnGrab(client, args);
 
-            floatstart[3];
+            float start[3];
             GetClientEyePosition(client, start);
-            floatangle[3];
-            floatspeed[3];
+            float angle[3];
+            float speed[3];
             GetClientEyeAngles(client, angle);
             GetAngleVectors(angle, speed, NULL_VECTOR, NULL_VECTOR);
             ScaleVector(speed, throwspeed);
@@ -935,49 +935,49 @@ public ActionCommand_UnThrow(client, args)
     return Plugin_Handled;
 }
 
-public ActionTrackObject(Handle timer, Handle pack)
+public Action TrackObject(Handle timer, Handle pack)
 {
     ResetPack(pack);
-    new ent = ReadPackCell(pack);
-    new ref = ReadPackCell(pack);
+    int ent = ReadPackCell(pack);
+    int ref = ReadPackCell(pack);
 
     // check if the object is still the same type we picked up
     if (EntRefToEntIndex(ref) == ent)
     {
-        new grabType:gt = grabType:ReadPackCell(pack);
-        new MoveType:mt = MoveType:ReadPackCell(pack);
-        floatgravity = ReadPackFloat(pack);
+        int grabType:gt = grabType:ReadPackCell(pack);
+        int MoveType:mt = MoveType:ReadPackCell(pack);
+        float gravity = ReadPackFloat(pack);
 
-        floatlastPos[3];
+        float lastPos[3];
         lastPos[0] = ReadPackFloat(pack);
         lastPos[1] = ReadPackFloat(pack);
         lastPos[2] = ReadPackFloat(pack);
 
-        floatlastSpeed = ReadPackFloat(pack);
-        new stopCount = ReadPackCell(pack);
+        float lastSpeed = ReadPackFloat(pack);
+        int stopCount = ReadPackCell(pack);
 
-        floatvecPos[3];
+        float vecPos[3];
         GetEntPropVector(ent, Prop_Send, "m_vecOrigin", vecPos);
 
-        floatvecVel[3];
+        float vecVel[3];
         SubtractVectors(lastPos, vecPos, vecVel);
 
-        floatvecGround[3];
+        float vecGround[3];
         vecGround[0] = vecPos[0];
         vecGround[1] = vecPos[1];
         vecGround[2] = vecPos[2];
 
-        floatstopSpeed = GetConVarFloat(cvStopSpeed);
-        floatspeed = vecVel[0] + vecVel[1] + vecVel[2];
+        float stopSpeed = GetConVarFloat(cvStopSpeed);
+        float speed = vecVel[0] + vecVel[1] + vecVel[2];
         if (speed < 0)
             speed *= -1.0;
 
-        boolbStop = (speed < stopSpeed);
-        floatheight = 0.0;
-        floatvecBelow[3];
-        floatvecCheckBelow[3];
+        bool bStop = (speed < stopSpeed);
+        float height = 0.0;
+        float vecBelow[3];
+        float vecCheckBelow[3];
 
-        boolbGround = ((GetEntityFlags(ent) & FL_ONGROUND) != 0);
+        bool bGround = ((GetEntityFlags(ent) & FL_ONGROUND) != 0);
         //if (!bGround) // F_ONGROUND flag lies!!!
         {
             //Check below the object for the ground
@@ -1031,8 +1031,8 @@ public ActionTrackObject(Handle timer, Handle pack)
                     {
                         // it's stuck, try to knock it loose.
                         stopSpeed *= 5.0;
-                        floatnegSpeed = stopSpeed * -1.0;
-                        floatvecKnock[3];
+                        float negSpeed = stopSpeed * -1.0;
+                        float vecKnock[3];
                         vecKnock[0]= GetRandomFloat(negSpeed, stopSpeed);
                         vecKnock[1]= GetRandomFloat(negSpeed, stopSpeed);
                         vecKnock[2]= GetRandomFloat(negSpeed, stopSpeed);
@@ -1048,7 +1048,7 @@ public ActionTrackObject(Handle timer, Handle pack)
 
         if (bStop || bGround || height <= 0.0)
         {
-            floatvecAngles[3];
+            float vecAngles[3];
             GetEntPropVector(ent, Prop_Send, "m_angRotation", vecAngles);
             if (vecAngles[0] != 0.0 || vecAngles[2] != 0.0)
             {
@@ -1170,7 +1170,7 @@ public ActionTrackObject(Handle timer, Handle pack)
                         vecGround[2] = vecBelow[2];
                 }
 
-                floatdelta = vecPos[2] - vecGround[2];
+                float delta = vecPos[2] - vecGround[2];
                 if (delta > 5.0)
                 {
                     // Move building down to ground (or whatever it hit).
@@ -1208,24 +1208,24 @@ public ActionTrackObject(Handle timer, Handle pack)
     return Plugin_Stop;
 }
 
-public boolTraceRayObject(entity, mask, any:data)
+public bool TraceRayObject(entity, mask, any data)
 {
     // Check if the TraceRay hit itself or a player.
     return (entity != data && (entity <= 0 || entity > MaxClients));
 }
 
-public ActionUpdateObjects(Handle timer)
+public Action UpdateObjects(Handle timer)
 {
-    new ent;
-    floatviewang[3];                                       // angles
-    floatvecDir[3], Float:vecPos[3], Float:vecVel[3];      // vectors
-    floatthrowmintime = GetConVarFloat(cvThrowMinTime);
-    floatthrowtime = GetConVarFloat(cvThrowTime);
-    floatdistance = GetConVarFloat(cvDistance);
-    boolgroundmode = GetConVarBool(cvGround);
-    floatspeed = GetConVarFloat(cvSpeed);
-    floattime = GetEngineTime();
-    for (new i=0; i<=MaxClients; i++)
+    int ent;
+    float viewang[3];                                       // angles
+    float vecDir[3], float vecPos[3], float vecVel[3];      // vectors
+    float throwmintime = GetConVarFloat(cvThrowMinTime);
+    float throwtime = GetConVarFloat(cvThrowTime);
+    float distance = GetConVarFloat(cvDistance);
+    bool groundmode = GetConVarBool(cvGround);
+    float speed = GetConVarFloat(cvSpeed);
+    float time = GetEngineTime();
+    for (int i=0; i<=MaxClients; i++)
     {
         ent = EntRefToEntIndex(gObj[i]);
         if (ent > 0)
@@ -1289,7 +1289,7 @@ public ActionUpdateObjects(Handle timer)
                 }
             }
 
-            floatgrabTime = gGrabTime[i];
+            float grabTime = gGrabTime[i];
             new Action:res = Plugin_Continue;
             Call_StartForward(fwdOnCarryObject);
             Call_PushCell(i);
@@ -1316,10 +1316,10 @@ public ActionUpdateObjects(Handle timer)
 
             /*if (permissions & CAN_JUMP_WHILE_HOLDING)
             {
-                floatclientPos[3];
+                float clientPos[3];
                 GetClientAbsOrigin(i, clientPos);
 
-                floatsize[3];
+                float size[3];
                 GetEntPropVector(ent, Prop_Send, "m_vecBuildMaxs", size);
                 size[0] /= 2.0;
                 size[1] /= 2.0;
@@ -1371,14 +1371,14 @@ public ActionUpdateObjects(Handle timer)
             // update throw time
             if (gThrow[i] > 0.0)
             {
-                floatthetime = time - gThrow[i];
+                float thetime = time - gThrow[i];
                 if (thetime > throwmintime)
                     ShowBar(i, thetime, throwtime);
             }
             else if  (gMaxDuration[i] > 0.0 &&
                     (gType[i] >= dispenser && gType[i] <= sentrygun))
             {
-                floatthetime = time - grabTime;
+                float thetime = time - grabTime;
                 if (thetime > gMaxDuration[i])
                     Command_UnGrab(i, 0);
             }
@@ -1394,7 +1394,7 @@ public ActionUpdateObjects(Handle timer)
 
 TraceToEntity(client)
 {
-    floatvecClientEyePos[3], Float:vecClientEyeAng[3];
+    float vecClientEyePos[3], float vecClientEyeAng[3];
     GetClientEyePosition(client, vecClientEyePos); // Get the position of the player's eyes
     GetClientEyeAngles(client, vecClientEyeAng); // Get the angle the player is looking    
 
@@ -1404,10 +1404,10 @@ TraceToEntity(client)
 
     if (TR_DidHit(null))
     {
-        new TRIndex = TR_GetEntityIndex(null);
+        int TRIndex = TR_GetEntityIndex(null);
 
         // check max distance
-        floatpos[3];
+        float pos[3];
         GetEntPropVector(TRIndex, Prop_Send, "m_vecOrigin", pos);
         if (GetVectorDistance(vecClientEyePos, pos)>GetConVarFloat(cvMaxDistance))
             return -1;
@@ -1418,19 +1418,19 @@ TraceToEntity(client)
     return -1;
 }
 
-public boolTraceRayDontHitSelf(entity, mask, any:data)
+public bool TraceRayDontHitSelf(entity, mask, any data)
 {
     return (entity != data); // Check if the TraceRay hit itself.
 }
 
 // show a progres bar via hint text
-ShowBar(client, Float:curTime, Float:totTime)
+ShowBar(client, float curTime, float totTime)
 {
-    chargauge[30] = "[=====================]";
-    floatpercent = curTime/totTime;
+    char gauge[30] = "[=====================]";
+    float percent = curTime/totTime;
     if (percent < 1.0)
     {
-        new pos = RoundFloat(percent * 20.0) + 1;
+        int pos = RoundFloat(percent * 20.0) + 1;
         if (pos < 21)
         {
             gauge[pos] = ']';
@@ -1444,7 +1444,7 @@ grabType:GetGrabType(ent)
 {
     if (ent > 0 && IsValidEdict(ent) && IsValidEntity(ent))
     {
-        charedictname[128];
+        char edictname[128];
         GetEdictClassname(ent, edictname, 128);
 
         if (strcmp("obj_dispenser", edictname, false)==0)
@@ -1472,11 +1472,11 @@ public Native_ControlZtf2grab(Handle plugin,numParams)
 
 public Native_GiveGravgun(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
 
-    gMaxDuration[client] = (numParams >= 2) ? (Float:GetNativeCell(2)) : -1.0;
-    gThrowSpeed[client] = (numParams >= 3) ? (Float:GetNativeCell(3)) : -1.0;
-    gThrowGravity[client] = (numParams >= 4) ? (Float:GetNativeCell(4)) : -1.0;
+    gMaxDuration[client] = (numParams >= 2) ? (float GetNativeCell(2)) : -1.0;
+    gThrowSpeed[client] = (numParams >= 3) ? (float GetNativeCell(3)) : -1.0;
+    gThrowGravity[client] = (numParams >= 4) ? (float GetNativeCell(4)) : -1.0;
     gPermissions[client] = (numParams >= 5) ? GetNativeCell(5) : -1;
 
     if (gMaxDuration[client] < 0.0)
@@ -1555,17 +1555,17 @@ public Native_RotateObject(Handle plugin,numParams)
 
 public Native_DropEntity(Handle plugin,numParams)
 {
-    new ent = GetNativeCell(1);
+    int ent = GetNativeCell(1);
     if (ent > 0 && IsValidEdict(ent) && IsValidEntity(ent))
     {
-        floatspeed[3] = { 0.0, 0.0, -1.0 };
-        floatgravity = (numParams >= 3) ? (Float:GetNativeCell(3)) : GetConVarFloat(cvDropGravity);
-        floatoldGravity = GetEntityGravity(ent);
-        new grabType:gt = GetGrabType(ent);
-        new MoveType:mt = GetEntityMoveType(ent);
+        float speed[3] = { 0.0, 0.0, -1.0 };
+        float gravity = (numParams >= 3) ? (float GetNativeCell(3)) : GetConVarFloat(cvDropGravity);
+        float oldGravity = GetEntityGravity(ent);
+        int grabType:gt = GetGrabType(ent);
+        int MoveType:mt = GetEntityMoveType(ent);
 
         if (numParams >= 2)
-            speed[2] = Float:GetNativeCell(2);
+            speed[2] = float GetNativeCell(2);
 
         if (gravity != oldGravity)
             SetEntityGravity(ent, gravity);
@@ -1575,11 +1575,11 @@ public Native_DropEntity(Handle plugin,numParams)
 
         TeleportEntity(ent, NULL_VECTOR, NULL_VECTOR, speed);
 
-        Handlepack;
+        Handle pack;
         gTrackTimers[ent] = CreateDataTimer(0.2,TrackObject,pack,TIMER_REPEAT);
         if (gTrackTimers[ent] != null)
         {
-            floatvecPos[3];
+            float vecPos[3];
             GetEntPropVector(ent, Prop_Send, "m_vecOrigin", vecPos);
 
             new ref = EntIndexToEntRef(ent);
@@ -1599,7 +1599,7 @@ public Native_DropEntity(Handle plugin,numParams)
 
 public Native_HasObject(Handle plugin,numParams)
 {
-    new ref = gObj[GetNativeCell(1)];
+    int ref = gObj[GetNativeCell(1)];
     if (GetNativeCell(2))
         return ref;
     else

@@ -108,9 +108,9 @@ stock SHShowCRMenuIfCanChoose(client){
 stock SH_CooldownMGR(client,float cooldownTime,ttheroID,bool resetOnSpawn=true,bool printMsgOnExpireByTime=true){
 	War3_CooldownMGR(client,float cooldownTime,ttheroID,1,resetOnSpawn, printMsgOnExpireByTime);  
 } 
-stock SH_SetBuff(client,W3Buff:buffindex,heroid,any:value){
+stock SH_SetBuff(client,W3Buff:buffindex,heroid,any value){
 	if(SH()){
-		War3_SetBuff(client,W3Buff:buffindex,heroid,any:value);
+		War3_SetBuff(client,W3Buff:buffindex,heroid,any value);
 	}
 }
 

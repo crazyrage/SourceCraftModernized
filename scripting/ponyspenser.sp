@@ -67,7 +67,7 @@ public Plugin myinfo = {
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
-	//forward OnPonyspenserMusic(client, char path[],&float time);
+	//forward OnPonyspenserMusic(client, char path[],float & time);
 	OnMusic=CreateGlobalForward("OnPonyspenserMusic",ET_Hook,Param_Cell,Param_String, Param_FloatByRef);
 	return APLRes_Success;
 }
@@ -335,7 +335,7 @@ public Action Timer_EnablePony(Handle hTimer, Handle data)
 	int owner=GetEntPropEnt(ent, Prop_Send, "m_hBuilder");
 	if (owner<1 || !bPony[owner])
 		return Plugin_Continue;
-	/*decl bool usefd;
+	/*bool usefd;
 	if (!FD_Enabled)
 		usefd=false;
 	else

@@ -43,14 +43,14 @@ Handle hAdminMenu = null;
 float g_pos[3];
 float g_fVotesNeeded;
 
-new g_eyeBossModel = 0;
-new g_eyeRocketModel = 0;
-new g_iLetsChangeThisEvent = 0;
+int g_eyeBossModel = 0;
+int g_eyeRocketModel = 0;
+int g_iLetsChangeThisEvent = 0;
 
-new g_iVotes = 0;
-new g_Voters = 0;
-new g_VotesNeeded = 0;
-new g_voteDelayTime;
+int g_iVotes = 0;
+int g_Voters = 0;
+int g_VotesNeeded = 0;
+int g_voteDelayTime;
 
 bool g_bIsEnabled = true;
 bool g_bVotesStarted = false;
@@ -244,7 +244,7 @@ public Action Command_VoteSpawnEyeboss(client, args)
 	
 	if(g_voteDelayTime > GetTime())
 	{
-		new timeleft = g_voteDelayTime - GetTime();
+		int timeleft = g_voteDelayTime - GetTime();
 		
 		PrintToChat(client, "\x01[SM] There are %d seconds remaining before another Monoculus vote is allowed.", timeleft);
 		return Plugin_Handled;
@@ -298,7 +298,7 @@ public Action GreatBallRockets(client, args)
         return Plugin_Stop;
     }
 
-    new iLevel = 0;
+    int iLevel = 0;
     if (args >= 1)
     {
         char buffer[15];
@@ -361,7 +361,7 @@ SpawnEyeBoss(client, iLevel, const char[] model)
     if (!g_bSoundsPrecached)
         PrepareEyebossSounds();
 
-    new entity = CreateEntityByName("eyeball_boss");
+    int entity = CreateEntityByName("eyeball_boss");
     if (entity > 0 && IsValidEntity(entity))
     {
         SetEntProp(entity, Prop_Data, "m_iTeamNum", 5);
@@ -373,11 +373,11 @@ SpawnEyeBoss(client, iLevel, const char[] model)
 
             if (iLevel > 1)
             {
-                new iHP = GetConVarInt(v_BaseHP_Level2);
+                int iHP = GetConVarInt(v_BaseHP_Level2);
 
                 iHP += (iLevel - 2) * GetConVarInt(v_HP_Per_Level);
 
-                new iNumPlayers = GetClientCount(true);
+                int iNumPlayers = GetClientCount(true);
                 if (iNumPlayers > 10)
                     iHP += (iNumPlayers - 10) * GetConVarInt(v_HP_Per_Player);
 
@@ -397,11 +397,11 @@ SpawnEyeBoss(client, iLevel, const char[] model)
 
 SetTeleportEndPoint(client)
 {
-	decl float vAngles[3];
-	decl float vOrigin[3];
-	decl float vBuffer[3];
-	decl float vStart[3];
-	decl float Distance;
+	float vAngles[3];
+	float vOrigin[3];
+	float vBuffer[3];
+	float vStart[3];
+	float Distance;
 	
 	GetClientEyePosition(client,vOrigin);
 	GetClientEyeAngles(client, vAngles);
@@ -508,10 +508,10 @@ SummonEyeBoss(client, const char[] model)
 public Colorize(client, color[4])
 {	
 	//Colorize the weapons
-	new m_hMyWeapons = FindSendPropOffs("CBasePlayer", "m_hMyWeapons");	
+	int m_hMyWeapons = FindSendPropOffs("CBasePlayer", "m_hMyWeapons");	
 	char classname[256];
-	new type;
-	new TFClassType:class = TF2_GetPlayerClass(client);
+	int type;
+	int TFClassType:class = TF2_GetPlayerClass(client);
 	
 	for (int i = 0, weapon; i < 47; i += 4)
 	{
@@ -544,7 +544,7 @@ public Colorize(client, color[4])
 
 SetWearablesRGBA_Impl( client,  const char[] entClass, const char[] serverClass, color[4])
 {
-	new ent = -1;
+	int ent = -1;
 	while( (ent = FindEntityByClassname(ent, entClass)) != -1 )
 	{
 		if ( IsValidEntity(ent) )
@@ -562,7 +562,7 @@ InvisibleHideFixes(client, TFClassType:class, type)
 {
 	if(class == TFClass_DemoMan)
 	{
-		new decapitations = GetEntProp(client, Prop_Send, "m_iDecapitations");
+		int decapitations = GetEntProp(client, Prop_Send, "m_iDecapitations");
 		if(decapitations >= 1)
 		{
 			if(!type)
@@ -579,19 +579,19 @@ InvisibleHideFixes(client, TFClassType:class, type)
 	}
 	else if(class == TFClass_Spy)
 	{
-		new disguiseWeapon = GetEntPropEnt(client, Prop_Send, "m_hDisguiseWeapon");
+		int disguiseWeapon = GetEntPropEnt(client, Prop_Send, "m_hDisguiseWeapon");
 		if(IsValidEntity(disguiseWeapon))
 		{
 			if(!type)
 			{
 				SetEntityRenderMode(disguiseWeapon , RENDER_TRANSCOLOR);
-				new color[4] = INVIS;
+				int color[4] = INVIS;
 				SetEntityRenderColor(disguiseWeapon , color[0], color[1], color[2], color[3]);
 			}
 			else
 			{
 				SetEntityRenderMode(disguiseWeapon , RENDER_TRANSCOLOR);
-				new color[4] = NORMAL;
+				int color[4] = NORMAL;
 				SetEntityRenderColor(disguiseWeapon , color[0], color[1], color[2], color[3]);
 			}
 		}
@@ -666,7 +666,7 @@ public OnAdminMenuReady(Handle topmenu)
 	{
 		hAdminMenu = topmenu;
 
-		new TopMenuObject:server_commands = FindTopMenuCategory(hAdminMenu, ADMINMENU_SERVERCOMMANDS);
+		TopMenuObject server_commands = FindTopMenuCategory(hAdminMenu, ADMINMENU_SERVERCOMMANDS);
 		if (server_commands != INVALID_TOPMENUOBJECT)
 		{
 			AddToTopMenu(hAdminMenu,

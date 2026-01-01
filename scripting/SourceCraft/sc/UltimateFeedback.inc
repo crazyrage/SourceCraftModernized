@@ -80,10 +80,10 @@ stock UltimateFeedback(client, raceId, upgradeId, level, float feedbackRange[])
         GetClientAbsOrigin(client, lastLoc);
         lastLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
-        new last;
-        new count=0;
-        new team=GetClientTeam(client);
-        new target = GetClientAimTarget(client);
+        int last;
+        int count=0;
+        int team=GetClientTeam(client);
+        int target = GetClientAimTarget(client);
         if (target > 0) 
         {
             last=target;
@@ -127,14 +127,14 @@ stock UltimateFeedback(client, raceId, upgradeId, level, float feedbackRange[])
 
         PrepareAndEmitSoundToAll(ultimateFeedbackSound,client);
         
-        new lightning  = Lightning();
-        new beamSprite = BeamSprite();
-        new haloSprite = PlasmaHaloSprite();
+        int lightning  = Lightning();
+        int beamSprite = BeamSprite();
+        int haloSprite = PlasmaHaloSprite();
 
-        new b_count=0;
-        new alt_count=0;
-        new list[MaxClients+1];
-        new alt_list[MaxClients+1];
+        int b_count=0;
+        int alt_count=0;
+        int list[MaxClients+1];
+        int alt_list[MaxClients+1];
         SetupOBeaconLists(list, alt_list, b_count, alt_count, client);
 
         if (b_count > 0)
@@ -153,7 +153,7 @@ stock UltimateFeedback(client, raceId, upgradeId, level, float feedbackRange[])
             TE_Send(alt_list, alt_count, 0.0);
         }
         
-        for (new index=1;index<=MaxClients;index++)
+        for (int index=1;index<=MaxClients;index++)
         {
             if (client != index && client != target && IsClientInGame(index) &&
                 IsPlayerAlive(index) && GetClientTeam(index) != team)

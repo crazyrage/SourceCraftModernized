@@ -16,10 +16,10 @@ enum ClientInfo
     Restriction:ClientInfo_Restrictions,
     Attribute:ClientInfo_Attributes,
     ClientInfo_Race,
-    Float:ClientInfo_Energy,
-    Float:ClientInfo_EnergyRate,
-    Float:ClientInfo_EnergyLimit,
-    Float:ClientInfo_InitialEnergy,
+    float ClientInfo_Energy,
+    float ClientInfo_EnergyRate,
+    float ClientInfo_EnergyLimit,
+    float ClientInfo_InitialEnergy,
     ClientInfo_EnergyFlags,
     ClientInfo_Crystals,
     ClientInfo_Vespene,
@@ -30,19 +30,19 @@ enum ClientInfo
     ClientInfo_DatabaseIdent,
     DataStatus:ClientInfo_DatabaseLoaded,
     bool:ClientInfo_DatabaseSaved,
-    Float:ClientInfo_DatabaseSaveTime,
+    float ClientInfo_DatabaseSaveTime,
     PlayerStatus:ClientInfo_PlayerStatus,
-    Handle:ClientInfo_Properties,
-    Handle:ClientInfo_ShopItems,
-    Handle:ClientInfo_RaceData,
-    Handle:ClientInfo_TechData
+    Handle ClientInfo_Properties,
+    Handle ClientInfo_ShopItems,
+    Handle ClientInfo_RaceData,
+    Handle ClientInfo_TechData
 };
 
 enum RaceInfo
 {
     RaceInfo_XP = 0,
     RaceInfo_Level,
-    Float:RaceInfo_AccumulatedEnergy,
+    float RaceInfo_AccumulatedEnergy,
     RaceInfo_ActiveUltimate1,
     RaceInfo_ActiveUltimate2,
     RaceInfo_ActiveUltimate3,
@@ -82,17 +82,17 @@ enum TechInfo
 
 enum PropInfo
 {
-    Handle:PropInfo_PluginHandle = 0,
+    Handle PropInfo_PluginHandle = 0,
     PropInfo_Identifier,
-    Float:PropInfo_OverrideSpeed,
-    Float:PropInfo_OverrideGravity,
+    float PropInfo_OverrideSpeed,
+    float PropInfo_OverrideGravity,
     PropInfo_OverrideVisibility,
-    Float:PropInfo_Speed,
-    Float:PropInfo_Gravity,
+    float PropInfo_Speed,
+    float PropInfo_Gravity,
     PropInfo_Visibility,
     VisibilityType:PropInfo_VisibilityType,
-    Float:PropInfo_VisibilityFactor1,
-    Float:PropInfo_VisibilityFactor2,
+    float PropInfo_VisibilityFactor1,
+    float PropInfo_VisibilityFactor2,
     RenderMode:PropInfo_VisibilityMode,
     RenderFx:PropInfo_Visibility_FX,
     PropInfo_Visibility_R,
@@ -101,16 +101,16 @@ enum PropInfo
     PropInfo_Weapon_VisAlpha,
     bool:PropInfo_VisibilityWeapons,
     VisibilityPriority:PropInfo_VisibilityPriority,
-    Float:PropInfo_VisibilityTime,
+    float PropInfo_VisibilityTime,
     Immunity:PropInfo_Immunities,
     Restriction:PropInfo_Restrictions,
     MoveType:PropInfo_MoveType,
     RegenFlags:PropInfo_RegenHealthFlags,
     RegenFlags:PropInfo_RegenShieldFlags,
-    Float:PropInfo_RegenHealth,
-    Float:PropInfo_RegenShield,
-    Float:PropInfo_PhysicalArmor,
-    Float:PropInfo_MagicalArmor
+    float PropInfo_RegenHealth,
+    float PropInfo_RegenShield,
+    float PropInfo_PhysicalArmor,
+    float PropInfo_MagicalArmor
 };
 
 enum DataStatus
@@ -284,7 +284,7 @@ char m_ArmorName[MAXPLAYERS+1][NAME_STRING_LENGTH];
 #define GetRaceInfoLevel(%1)                    GetArrayCell(%1,_:RaceInfo_Level)
 #define SetRaceInfoLevel(%1,%2)                 SetArrayCell(%1,_:RaceInfo_Level,%2)
 
-#define GetRaceInfoAccumulatedEnergy(%1)        Float:GetArrayCell(%1,_:RaceInfo_AccumulatedEnergy)
+#define GetRaceInfoAccumulatedEnergy(%1)        float GetArrayCell(%1,_:RaceInfo_AccumulatedEnergy)
 #define SetRaceInfoAccumulatedEnergy(%1,%2)     SetArrayCell(%1,_:RaceInfo_AccumulatedEnergy,%2)
 
 #define GetRaceInfoActiveUltimate1(%1)          GetArrayCell(%1,_:RaceInfo_ActiveUltimate1)
@@ -436,7 +436,7 @@ stock Handle GetRaceInfoHandle(client,int race)
             raceInfo=GetArrayCell(raceData,race);
         else
         {
-            //decl String:rname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
+            //char rname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
             //LogError("ERROR: Player %d:%N's race %s(%d) data is missing!",
             //         client, ValidClientIndex(client), rname, race);
             LogError("ERROR: Player %d:%N's race %d data is missing!",

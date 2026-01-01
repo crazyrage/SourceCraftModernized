@@ -77,7 +77,7 @@ native TakeUberShield(client);
  * @param duration  The duration of the shield (in seconds, 0 = infinite, < 0 to use convar).
  * @return			none
  */
-native UberShieldTarget(client,Float duration=-1.0,
+native UberShieldTarget(client,float duration=-1.0,
                         ShieldFlags:flags=ShieldDefault);
 
 /**
@@ -88,7 +88,7 @@ native UberShieldTarget(client,Float duration=-1.0,
  * @param duration  The duration of the shield (in seconds, 0 = infinite, < 0 to use convar).
  * @return			none
  */
-native UberShieldLocation(client,Float duration=-1.0,
+native UberShieldLocation(client,float duration=-1.0,
                           ShieldFlags:flags=ShieldDefault);
 
 /**
@@ -102,8 +102,8 @@ native UberShieldLocation(client,Float duration=-1.0,
  * @param duration  The duration of the shield (in seconds, 0 = infinite, < 0 to use convar).
  * @return			none
  */
-native UberShield(client,target=0,const Float pos[3]=NULL_VECTOR,
-                  Float duration=-1.0,
+native UberShield(client,target=0,const float pos[3]=NULL_VECTOR,
+                  float duration=-1.0,
                   ShieldFlags:flags=ShieldDefault);
 
 /**
@@ -119,8 +119,8 @@ native UberShield(client,target=0,const Float pos[3]=NULL_VECTOR,
 native SetAlternateShieldSound(const char[] startSound = "",
                                const char[] activeSound = "",
                                const char[] stopSound = "",
-                               Float startTime=2.0,
-                               Float stopTime=2.0);
+                               float startTime=2.0,
+                               float stopTime=2.0);
 
 /**
  * Gets called when an ubershield is deployed

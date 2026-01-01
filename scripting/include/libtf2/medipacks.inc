@@ -34,11 +34,11 @@ native SetMedipack(client, enable=3, amount=0, TFHoliday:type=TFHoliday:0);
  * Drop a Medipack.
  *
  * @param index 	Client index
- * @param charge    Set to amount of uber to use for medipack (-1=use actual uber level).
+ * @param char ge    Set to amount of uber to use for medipack (-1=use actual uber level).
  * @param type      What type of medipack to drop (0=default | TFHoliday_Birthday | TFHoliday_Halloween)
  * @return			true if a medipack was successfully dropped
  */
-native bool DropMedipack(client, charge=-1, TFHoliday:type=TFHoliday:0);
+native bool DropMedipack(client, char ge=-1, TFHoliday:type=TFHoliday:0);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

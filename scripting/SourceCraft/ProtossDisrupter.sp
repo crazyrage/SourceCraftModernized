@@ -289,7 +289,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
 public OnItemPurchase(client,item)
 {
-    new race=GetRace(client);
+    int race=GetRace(client);
     if (race == raceID && IsValidClientAlive(client))
     {
         if (g_bootsItem < 0)
@@ -430,7 +430,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
 public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
                                 attacker_race, damage, absorbed, bool from_sc)
 {
-    new Action returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
 
     if (victim_race == raceID)
     {
@@ -446,7 +446,7 @@ public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacke
         attacker_index != victim_index &&
         attacker_race == raceID)
     {
-        new float amount = GetUpgradeEnergy(raceID,hallucinationID);
+        int float amount = GetUpgradeEnergy(raceID,hallucinationID);
         int level = GetUpgradeLevel(attacker_index,raceID,hallucinationID);
         if (Hallucinate(victim_index, attacker_index, level, amount, g_HallucinateChance))
         {
@@ -481,11 +481,11 @@ public Action OnPlayerAssistEvent(Handle event, victim_index, victim_race,
                                   assister_index, assister_race, damage,
                                   absorbed)
 {
-    new Action returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
 
     if (assister_race == raceID)
     {
-        new float amount = GetUpgradeEnergy(raceID,hallucinationID);
+        int float amount = GetUpgradeEnergy(raceID,hallucinationID);
         int level = GetUpgradeLevel(assister_index,raceID,hallucinationID);
         if (Hallucinate(victim_index, assister_index, level, amount, g_HallucinateChance))
         {
@@ -565,7 +565,7 @@ void InvokeDisruption(client, level)
     }
 }
 
-public Action EndDisruption(Handle timer,any:userid)
+public Action EndDisruption(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (client > 0 && m_DisruptionActive[client])
@@ -622,9 +622,9 @@ bool Disruption(client, target, damage)
         for(int x=1;x<=MaxClients;x++)
             m_HasBeenDisrupted[client][x]=false;
 
-        new float energy = GetEnergy(client);
-        new float amount = GetUpgradeRecurringEnergy(raceID,disruptionID);
-        new level=GetUpgradeLevel(client,raceID,disruptionID);
+        int float energy = GetEnergy(client);
+        int float amount = GetUpgradeRecurringEnergy(raceID,disruptionID);
+        int level=GetUpgradeLevel(client,raceID,disruptionID);
         DoDisruption(client,g_DisruptionRadius[level],damage,target,level*3, amount, energy);
         SetEnergy(client, energy);
         return true;
@@ -632,13 +632,13 @@ bool Disruption(client, target, damage)
     return false;
 }
 
-void DoDisruption(client,float distance,dmg,last,count, float amount, &float energy)
+void DoDisruption(client,float distance,dmg,last,count, float amount, float & energy)
 {
-    new team=GetClientTeam(client);
+    int team=GetClientTeam(client);
     float lastLoc[3];
     GetEntityAbsOrigin(last,lastLoc);
 
-    new target=-1;
+    int target=-1;
     while (target <= 0)
     {
         for(int index=1;index<=MaxClients;index++)
@@ -720,7 +720,7 @@ void NullVoid(client, level)
                 TF2_RemovePlayerDisguise(client);
         }
 
-        new float radius = g_NullVoidRadius[level];
+        int float radius = g_NullVoidRadius[level];
         float targetLoc[3];
         TraceAimPosition(client, targetLoc, true);
 
@@ -737,9 +737,9 @@ void NullVoid(client, level)
             beamColor[0]=0;beamColor[1]=0;beamColor[2]=255;beamColor[3]=255;
         }
 
-        new count=0;
-        new b_count=0;
-        new alt_count=0;
+        int count=0;
+        int b_count=0;
+        int alt_count=0;
         int list[MaxClients+1];
         int alt_list[MaxClients+1];
         SetupOBeaconLists(list, alt_list, b_count, alt_count, client);
@@ -835,8 +835,8 @@ void NullVoid(client, level)
                         if (energyDrinkMeter > 0.0 && energyDrinkMeter <= 100.0)
                             TF2_SetEnergyDrinkMeter(index, 0.0);
 
-                        new float chargeMeter = TF2_GetChargeMeter(index);
-                        if (chargeMeter > 0.0 && chargeMeter <= 100.0)
+                        new float char geMeter = TF2_GetChargeMeter(index);
+                        if (char geMeter > 0.0 && char geMeter <= 100.0)
                             TF2_SetChargeMeter(index, 0.0);
 
                         new float rageMeter = TF2_GetRageMeter(index);
@@ -926,7 +926,7 @@ void NullVoid(client, level)
     }
 }
 
-public Action EnableObject(Handle timer, any:ref)
+public Action EnableObject(Handle timer, any ref)
 {
     int ent = EntRefToEntIndex(ref);
     if (ent > 0 && IsValidEntity(ent) && IsValidEdict(ent))
@@ -961,7 +961,7 @@ void SetupUberShield(client, force_field_level, guardian_shield_level)
 
 ShieldFlags:GetGuardianShieldFlags(level)
 {
-    new ShieldFlags:flags = Shield_Target_Self  | Shield_Reload_Self |
+    int ShieldFlags:flags = Shield_Target_Self  | Shield_Reload_Self |
                             Shield_With_Medigun;
     switch (level)
     {

@@ -446,7 +446,7 @@ public OnClientPostAdminCheck(client)
 	int ibFlags = ReadFlagString(g_strAdminFlags);
 
 	// Test and setup flag if so.
-	new AdminId:admin = GetUserAdmin(client);
+	int AdminId:admin = GetUserAdmin(client);
 	if (admin == INVALID_ADMIN_ID) return;
 	if (GetAdminFlags(admin, Access_Effective) & (ibFlags|ADMFLAG_ROOT))	g_iPlayerFlags[client] |= PLAYER_ADMIN;
 }
@@ -490,7 +490,7 @@ public Event_EquipItem(Handle hEvent, char strName[], bool bDontBroadcast)
 	}
 }
 
-public Action Timer_EquipItem(Handle hTimer, any:userid)
+public Action Timer_EquipItem(Handle hTimer, any userid)
 {
 	int client = GetClientOfUserId(userid);
 	if (!IsValidClient(client)) return Plugin_Continue;
@@ -982,7 +982,7 @@ Item_RetrieveSlotCookie(client)
 	if (!AreClientCookiesCached(client)) return -1;
 
 	// Retrieve current class
-	new TFClassType:Class = TF2_GetPlayerClass(client);
+	int TFClassType:Class = TF2_GetPlayerClass(client);
 	if (Class == TFClass_Unknown) return -1;
 
 	// Retrieve the class cookie
@@ -1006,7 +1006,7 @@ Item_SetSlotCookie(client)
 	if (!AreClientCookiesCached(client)) return;
 
 	// Retrieve current class
-	new TFClassType:Class;
+	int TFClassType:Class;
 	if (IsPlayerAlive(client)) Class = TF2_GetPlayerClass(client);
 	else Class = TFClassType:GetEntProp(client, Prop_Send, "m_iDesiredPlayerClass");
 	if (Class == TFClass_Unknown) return;
@@ -1025,7 +1025,7 @@ Item_SetSlotCookie(client)
 // ------------------------------------------------------------------------
 Client_ClassFlags(client)
 {
-	new TFClassType:class;
+	int TFClassType:class;
 	if (IsPlayerAlive(client)) class = TF2_GetPlayerClass(client);
 	else class = TFClassType:GetEntProp(client, Prop_Send, "m_iDesiredPlayerClass");
 	switch(class)
@@ -1320,8 +1320,8 @@ public Action Cmd_EquipItem(client, args)
 
 	// Process the targets
 	char strTargetName[MAX_TARGET_LENGTH];
-	decl iTargetList[MAXPLAYERS], iTargetCount;
-	decl bool bTargetTranslate;
+	int iTargetList[MAXPLAYERS], iTargetCount;
+	bool bTargetTranslate;
 
 	if ((iTargetCount = ProcessTargetString(strTarget, client, iTargetList, MAXPLAYERS, COMMAND_FILTER_CONNECTED,
 	strTargetName, sizeof(strTargetName), bTargetTranslate)) <= 0)
@@ -1364,8 +1364,8 @@ public Action Cmd_RemoveItem(client, args)
 
 	// Process the targets
 	char strTargetName[MAX_TARGET_LENGTH];
-	decl iTargetList[MAXPLAYERS], iTargetCount;
-	decl bool bTargetTranslate;
+	int iTargetList[MAXPLAYERS], iTargetCount;
+	bool bTargetTranslate;
 
 	if ((iTargetCount = ProcessTargetString(strTarget, client, iTargetList, MAXPLAYERS, COMMAND_FILTER_CONNECTED,
 	strTargetName, sizeof(strTargetName), bTargetTranslate)) <= 0)
@@ -1402,8 +1402,8 @@ public Action Cmd_LockEquipment(client, args)
 
 	// Process the targets
 	char strTargetName[MAX_TARGET_LENGTH];
-	decl iTargetList[MAXPLAYERS], iTargetCount;
-	decl bool bTargetTranslate;
+	int iTargetList[MAXPLAYERS], iTargetCount;
+	bool bTargetTranslate;
 
 	if ((iTargetCount = ProcessTargetString(strTarget, client, iTargetList, MAXPLAYERS, COMMAND_FILTER_CONNECTED,
 	strTargetName, sizeof(strTargetName), bTargetTranslate)) <= 0)
@@ -1452,8 +1452,8 @@ public Action Cmd_OverrideEquipment(client, args)
 
 	// Process the targets
 	char strTargetName[MAX_TARGET_LENGTH];
-	decl iTargetList[MAXPLAYERS], iTargetCount;
-	decl bool bTargetTranslate;
+	int iTargetList[MAXPLAYERS], iTargetCount;
+	bool bTargetTranslate;
 
 	if ((iTargetCount = ProcessTargetString(strTarget, client, iTargetList, MAXPLAYERS, COMMAND_FILTER_CONNECTED,
 	strTargetName, sizeof(strTargetName), bTargetTranslate)) <= 0)
@@ -1513,7 +1513,7 @@ public Action Cmd_Reload(client, args)
 // ------------------------------------------------------------------------
 // Timer_Welcome
 // ------------------------------------------------------------------------
-public Action Timer_Welcome(Handle hTimer, any:userid)
+public Action Timer_Welcome(Handle hTimer, any userid)
 {
 	int client = GetClientOfUserId(userid);
 	if (!IsValidClient(client)) return Plugin_Stop;
@@ -1549,7 +1549,7 @@ public Action Timer_Announce(Handle hTimer)
 // ------------------------------------------------------------------------
 stock CleanString(char strBuffer[])
 {
-	// Cleanup any illegal characters
+	// Cleanup any illegal char acters
 	int Length = strlen(strBuffer);
 	for(int iPos=0; iPos<Length; iPos++)
 	{
@@ -1596,7 +1596,7 @@ CalculateBodyGroups(client)
 
 	if (g_iPlayerItem[client] != -1)
 		iItemGroups |= g_iItemBodygroupFlags[g_iPlayerItem[client]];
-	new TFClassType:class = TF2_GetPlayerClass(client);
+	int TFClassType:class = TF2_GetPlayerClass(client);
 	switch(class)
 	{
 		case TFClass_Scout:

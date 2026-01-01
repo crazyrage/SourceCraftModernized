@@ -13,7 +13,7 @@ Handle g_hWardOwner = null; // Who owns this ward?
 Handle g_hWardRadius = null; // How big is the ward radius?
 Handle g_hWardLocation = null; // Where is this ward?
 Handle g_hWardTarget = null; // What does this ward target?
-Handle g_hWardInterval = null; // In which interval does this ward pulse?
+Handle g_hWardInterval = null; // In which int erval does this ward pulse?
 Handle g_hWardDisableOnDeath = null; // Bool: Should this ward be disabled when the owner dies?
 
 // Modular ward data
@@ -241,7 +241,7 @@ public int Native_War3_CreateWardMod(Handle plugin, numParams)
         int iWardSkill = GetNativeCell(7);
         PushArrayCell(g_hWardSkill, iWardSkill);
 
-        new any:data[MAXWARDDATA];
+        int any data[MAXWARDDATA];
         GetNativeArray(8, data ,MAXWARDDATA);
         PushArrayArray(g_hWardData, data);
         

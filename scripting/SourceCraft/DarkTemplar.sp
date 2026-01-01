@@ -43,10 +43,10 @@
 #include "effect/HaloSprite"
 #include "effect/SendEffects"
 
-new const char[] spawnWav[]         = "sc/pdtrdy00.wav";
-new const char[] deathWav[]         = "sc/pdtdth00.wav";
-new const char[] teleportWav[]      = "sc/ptemov00.wav";
-new const char[] g_PsiBladesSound[] = "sc/uzefir00.wav";
+static const char[] spawnWav[]         = "sc/pdtrdy00.wav";
+static const char[] deathWav[]         = "sc/pdtdth00.wav";
+static const char[] teleportWav[]      = "sc/ptemov00.wav";
+static const char[] g_PsiBladesSound[] = "sc/uzefir00.wav";
 
 new raceID, immunityID, legID, shieldsID, cloakID, regenID;
 new meleeID, teleportID, darkArchonID, deathID;
@@ -260,7 +260,7 @@ public Action OnRaceDeselected(client,oldrace,newrace)
             TakeDeath(client);
 
         // Turn off Immunities
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, false);
 
         return Plugin_Handled;
@@ -288,10 +288,10 @@ public Action OnRaceSelected(client,oldrace,newrace)
     {
         m_CloakRegenTime[client] = 0.0;
 
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
-        new cloak_level=GetUpgradeLevel(client,raceID,cloakID);
+        int cloak_level=GetUpgradeLevel(client,raceID,cloakID);
         AlphaCloak(client, cloak_level, false);
 
         int leg_level = GetUpgradeLevel(client,raceID,legID);
@@ -375,7 +375,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
 public OnItemPurchase(client,item)
 {
-    new race=GetRace(client);
+    int race=GetRace(client);
     if (race == raceID && IsValidClientAlive(client))
     {
         if (g_bootsItem < 0)
@@ -465,14 +465,14 @@ public OnUltimateCommand(client,race,bool pressed,arg)
     }
 }
 
-public Action RecloakPlayer(Handle timer,any:userid)
+public Action RecloakPlayer(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (client)
     {
         SetOverrideVisiblity(client, -1);
 
-        new cloak_level=GetUpgradeLevel(client,raceID,cloakID);
+        int cloak_level=GetUpgradeLevel(client,raceID,cloakID);
         AlphaCloak(client, cloak_level, true);
     }
     return Plugin_Stop;
@@ -489,10 +489,10 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         GetClientAbsOrigin(client,spawnLoc[client]);
         ResetTeleport(client);
 
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
-        new cloak_level=GetUpgradeLevel(client,raceID,cloakID);
+        int cloak_level=GetUpgradeLevel(client,raceID,cloakID);
         AlphaCloak(client, cloak_level, false);
 
         int leg_level = GetUpgradeLevel(client,raceID,legID);
@@ -523,7 +523,7 @@ public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacke
         if (blink_level && cfgAllowTeleport)
             TeleporterAttacked(attacker_index,raceID,teleportID);
 
-        new blades_level=GetUpgradeLevel(attacker_index,raceID,meleeID);
+        int blades_level=GetUpgradeLevel(attacker_index,raceID,meleeID);
         if (blades_level > 0)
         {
             if (MeleeAttack(raceID, meleeID, blades_level, event, damage+absorbed,
@@ -659,7 +659,7 @@ void SummonDarkArchon(client)
     }
 }
 
-public Action Regeneration(Handle timer, any:userid)
+public Action Regeneration(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client) && GetRace(client) == raceID &&
@@ -692,8 +692,8 @@ public Action Regeneration(Handle timer, any:userid)
                 if (amt > 0.0)
                 {
                     float lastTime = m_CloakRegenTime[client];
-                    float interval = GetGameTime() - lastTime;
-                    if ((lastTime == 0.0 || interval >= 2.00) && cloak + amt <= 100.0)
+                    float int erval = GetGameTime() - lastTime;
+                    if ((lastTime == 0.0 || int erval >= 2.00) && cloak + amt <= 100.0)
                     {
                         DecrementEnergy(client, amt);
                         m_CloakRegenTime[client] = GetGameTime();

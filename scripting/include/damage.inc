@@ -25,7 +25,7 @@ stock DamagePlayer(victim,damage,attacker=0,dmg_type=DMG_GENERIC,const char[] we
         char dmg_type_str[32];
         IntToString(dmg_type,dmg_type_str,sizeof(dmg_type_str));
 
-        new pointHurt = EntRefToEntIndex(g_damagePointRef);
+        int pointHurt = EntRefToEntIndex(g_damagePointRef);
         if (pointHurt < 1)
         {
             if (!IsEntLimitReached(.message="Unable to create point_hurt in DamagePlayer()"))
@@ -91,7 +91,7 @@ stock DamageEntity(victim,damage,attacker=0,dmg_type=DMG_GENERIC,const char[] we
         char dmg_type_str[32];
         IntToString(dmg_type,dmg_type_str,sizeof(dmg_type_str));
 
-        new pointHurt = EntRefToEntIndex(g_damagePointRef);
+        int pointHurt = EntRefToEntIndex(g_damagePointRef);
         if (pointHurt < 1)
         {
             if (!IsEntLimitReached(.message="Unable to create point_hurt in DamageEntity()"))
@@ -150,7 +150,7 @@ stock CleanupDamageEntity()
 {
     if (g_damagePointRef != INVALID_ENT_REFERENCE)
     {
-        new pointHurt = EntRefToEntIndex(g_damagePointRef);
+        int pointHurt = EntRefToEntIndex(g_damagePointRef);
         if (pointHurt > 0)
             AcceptEntityInput(pointHurt, "kill");
 

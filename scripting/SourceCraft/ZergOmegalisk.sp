@@ -598,7 +598,7 @@ public SetupTentacle(client, level)
     }
 }
 
-public Action Regeneration(Handle timer, any:userid)
+public Action Regeneration(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client) && GetRace(client) == raceID &&

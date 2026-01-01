@@ -582,7 +582,7 @@ public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_inde
     }
 }
 
-public Action CreepTimer(Handle timer, any:userid)
+public Action CreepTimer(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientNotSpec(client))

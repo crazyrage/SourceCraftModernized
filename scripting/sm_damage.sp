@@ -147,7 +147,7 @@ public OnEntityCreated(entity, const char[] classname)
 	SDKHook(entity, SDKHook_OnTakeDamage, OnTakeDamage);
 }
 
-public Action OnTakeDamage(victim, &attacker, &inflictor, &float damage, &damagetype)
+public Action OnTakeDamage(victim, &attacker, &inflictor, float & damage, &damagetype)
 {
 	if(!GetConVarBool(g_enabled)) return Plugin_Handled; // is this thing even on?
 
@@ -287,9 +287,9 @@ public Action CmdDamage(client, args){
 		GetCmdArg(2,multiplier,19);
 		
 		char target_name[MAX_TARGET_LENGTH];
-		decl target_list[MAXPLAYERS];
+		int target_list[MAXPLAYERS];
 		int target_count;
-		decl bool tn_is_ml;
+		bool tn_is_ml;
 		char name[256];
 
 		if ((target_count = ProcessTargetString(player,client,target_list,MAXPLAYERS,0,target_name,sizeof(target_name),tn_is_ml)) <= 0) {

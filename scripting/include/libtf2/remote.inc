@@ -48,7 +48,7 @@ native ControlRemote(bool plugin_only=true);
  * @param jump_speed    Speed used when Remote Controlled objects jump.
  * @return		    	none
  */
-native SetRemoteControl(client, permissions=-1, Float speed=-1.0, Float fall_speed=-1.0, Float jump_speed=-1.0);
+native SetRemoteControl(client, permissions=-1, float speed=-1.0, float fall_speed=-1.0, float jump_speed=-1.0);
 
 /**
  * Remote Control an object
@@ -105,10 +105,10 @@ forward Action OnBuildObject(client,TFExtObjectType:type);
  * @param flPercentage      Value to use for flPercentageConstructed
  * @return			        entity index of new Sentry
  */
-native BuildSentry(iBuilder, const Float fOrigin[3], const Float fAngle[3], iLevel=1,
+native BuildSentry(iBuilder, const float fOrigin[3], const float fAngle[3], iLevel=1,
                    bool bDisabled=false, bool bMini=false, bool bShielded=false,
                    iHealth=-1, iMaxHealth=-1, iShells=-1, iRockets=-1,
-                   Float flPercentage=1.0);
+                   float flPercentage=1.0);
 
 /**
  * Build a Dispenser
@@ -126,9 +126,9 @@ native BuildSentry(iBuilder, const Float fOrigin[3], const Float fAngle[3], iLev
  * @return			        entity index of new Dispenser
  */
 
-native BuildDispenser(iBuilder, const Float fOrigin[3], const Float fAngle[3], iLevel=1,
+native BuildDispenser(iBuilder, const float fOrigin[3], const float fAngle[3], iLevel=1,
                       bool iDisabled=false, iHealth=-1, iMaxHealth=-1, iMetal=-1,
-                      Float flPercentage=1.0, TFExtObjectType:type=TFExtObject_Dispenser);
+                      float flPercentage=1.0, TFExtObjectType:type=TFExtObject_Dispenser);
 
 /**
  * Build a Teleporter Entry
@@ -143,9 +143,9 @@ native BuildDispenser(iBuilder, const Float fOrigin[3], const Float fAngle[3], i
  * @param flPercentage      Value to use for flPercentageConstructed
  * @return			        entity index of new Teleporter Entry
  */
-native BuildTeleporterEntry(iBuilder, const Float fOrigin[3], const Float fAngle[3],
+native BuildTeleporterEntry(iBuilder, const float fOrigin[3], const float fAngle[3],
                             iLevel=1, bool iDisabled=false, iHealth=-1, iMaxHealth=-1,
-                            Float flPercentage=1.0);
+                            float flPercentage=1.0);
 
 /**
  * Build a Teleporter Exit
@@ -160,9 +160,9 @@ native BuildTeleporterEntry(iBuilder, const Float fOrigin[3], const Float fAngle
  * @param flPercentage      Value to use for flPercentageConstructed
  * @return			        entity index of new Teleporter Exit
  */
-native BuildTeleporterExit(iBuilder, const Float fOrigin[3], const Float fAngle[3],
+native BuildTeleporterExit(iBuilder, const float fOrigin[3], const float fAngle[3],
                            iLevel=1, bool iDisabled=false, iHealth=-1, iMaxHealth=-1,
-                           Float flPercentage=1.0);
+                           float flPercentage=1.0);
 
 /**
  * Build an object where the client is standing
@@ -183,8 +183,8 @@ native BuildTeleporterExit(iBuilder, const Float fOrigin[3], const Float fAngle[
  */
 native BuildObject(client, TFExtObjectType:type, iLevel=1, bool bMini=false,
                    bool bShielded=false, bool bDisabled=true, iHealth=-1,
-                   iMaxHealth=-1, Float flPercentage=1.0, bool remote=false,
-                   bool drop=true, bool check=true, Float pos[3]={0.0});
+                   iMaxHealth=-1, float flPercentage=1.0, bool remote=false,
+                   bool drop=true, bool check=true, float pos[3]={0.0});
 
 /**
  * Counts buildings of all classes owned by client

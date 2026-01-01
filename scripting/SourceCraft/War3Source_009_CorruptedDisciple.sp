@@ -112,7 +112,7 @@ public void OnWar3LoadRaceOrItemOrdered(num)
         SetUpgradeCategory(thisRaceID, SKILL_TIDE, 2);
         SetUpgradeCost(thisRaceID, SKILL_TIDE, 30);
 
-        new float cooldown = GetUpgradeCooldown(thisRaceID,SKILL_CONDUIT);
+        int float cooldown = GetUpgradeCooldown(thisRaceID,SKILL_CONDUIT);
         SetUpgradeEnergy(thisRaceID, SKILL_CONDUIT, cooldown);
         SetUpgradeCooldown(thisRaceID, SKILL_CONDUIT, cooldown);
         ConduitCooldown = RoundToNearest(cooldown);
@@ -179,7 +179,7 @@ public OnAbilityCommand(client,ability,bool pressed)
 {
     if(/*War3_GetRace(client)==thisRaceID &&*/ ability==0 && pressed && ValidPlayer(client, true))
     {
-        new skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_TIDE);
+        int skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_TIDE);
         if(skill_level>0)
         {
             if(!Silenced(client)&&War3_SkillNotInCooldown(client,thisRaceID,SKILL_TIDE,true))
@@ -213,28 +213,28 @@ public OnAbilityCommand(client,ability,bool pressed)
     }
 }
 
-public Action SecondRing(Handle timer,any:userid)
+public Action SecondRing(Handle timer,any userid)
 {
-    new client=GetClientOfUserId(userid);
+    int client=GetClientOfUserId(userid);
     TE_SetupBeamRingPoint(ElectricTideOrigin[client], ElectricTideRadius+50,20.0, BeamSprite, HaloSprite, 0, 5, 0.5, 10.0, 1.0, {255,0,255,133}, 60, 0);
     TE_SendToAll();
 }
-public Action BurnLoop(Handle timer,any:userid)
+public Action BurnLoop(Handle timer,any userid)
 {
-    new attacker=GetClientOfUserId(userid);
+    int attacker=GetClientOfUserId(userid);
     if(ValidPlayer(attacker) && ElectricTideLoopCountdown[attacker]>0)
     {
         int team = GetClientTeam(attacker);
         //War3_DealDamage(victim,damage,attacker,DMG_BURN);
         CreateTimer(0.1,BurnLoop,userid);
         
-        new float damagingRadius=(1.0-FloatAbs(float(ElectricTideLoopCountdown[attacker])-10.0)/10.0)*ElectricTideRadius;
+        int float damagingRadius=(1.0-FloatAbs(float(ElectricTideLoopCountdown[attacker])-10.0)/10.0)*ElectricTideRadius;
         
         //PrintToChatAll("distance to damage %f",damagingRadius);
         
         ElectricTideLoopCountdown[attacker]--;
         
-        new float otherVec[3];
+        int float otherVec[3];
         for(int i=1;i<=MaxClients;i++)
         {
             if(ValidPlayer(i,true)&&GetClientTeam(i)!=team&&!W3HasImmunity(i,Immunity_Skills))
@@ -283,7 +283,7 @@ public OnUltimateCommand(client,race,bool pressed)
     {
         //if(
         
-        new skill=War3_GetSkillLevel(client,thisRaceID,ULT_OVERLOAD);
+        int skill=War3_GetSkillLevel(client,thisRaceID,ULT_OVERLOAD);
         if(skill>0)
         {
             if(!Silenced(client)&&War3_SkillNotInCooldown(client,thisRaceID,ULT_OVERLOAD,true))
@@ -314,18 +314,18 @@ public OnUltimateCommand(client,race,bool pressed)
         }
     }
 }
-public Action UltimateLoop(Handle timer,any:userid)
+public Action UltimateLoop(Handle timer,any userid)
 {
-    new attacker=GetClientOfUserId(userid);
+    int attacker=GetClientOfUserId(userid);
     if(ValidPlayer(attacker) && UltimateZapsRemaining[attacker]>0&&IsPlayerAlive(attacker))
     {
         UltimateZapsRemaining[attacker]--;
-        new float pos[3];
-        new float otherpos[3];
+        int float pos[3];
+        int float otherpos[3];
         GetClientEyePosition(attacker,pos);
         int team = GetClientTeam(attacker);
-        new lowesthp=99999;
-        new besttarget=0;
+        int lowesthp=99999;
+        int besttarget=0;
 
         for(int i=1;i<=MaxClients;i++){
             if(ValidPlayer(i,true)){
@@ -385,14 +385,14 @@ public Action UltimateLoop(Handle timer,any:userid)
         UltimateZapsRemaining[attacker]=0;
     }
 }
-public Action UltStateSound(Handle t,any:attacker){
+public Action UltStateSound(Handle t,any attacker){
     if(ValidPlayer(attacker,true)&&UltimateZapsRemaining[attacker]>0){
         W3EmitSoundToAll(overloadstate,attacker);
         CreateTimer(3.7,UltStateSound,attacker);
     }
 }
 
-public bool CanHitThis(entity, mask, any:data)
+public bool CanHitThis(entity, mask, any data)
 {
     if(entity == data)
     {// Check if the TraceRay hit the itself.
@@ -411,8 +411,8 @@ public OnW3TakeDmgAllPre(victim,attacker,float damage)
 {
     if(IS_PLAYER(victim)&&IS_PLAYER(attacker)&&victim>0&&attacker>0&&attacker!=victim)
     {
-        new vteam=GetClientTeam(victim);
-        new ateam=GetClientTeam(attacker);
+        int vteam=GetClientTeam(victim);
+        int ateam=GetClientTeam(attacker);
         if(vteam!=ateam)
         {
             new race_attacker=War3_GetRace(attacker);
@@ -432,9 +432,9 @@ public OnW3TakeDmgAllPre(victim,attacker,float damage)
 
 public PlayerHurtEvent(Handle event,const char[] name[],bool dontBroadcast)
 {
-    new userid=GetEventInt(event,"userid");
-    new attacker_userid=GetEventInt(event,"attacker");
-    new dmg=GetEventInt(event,"dmg_health");
+    int userid=GetEventInt(event,"userid");
+    int attacker_userid=GetEventInt(event,"attacker");
+    int dmg=GetEventInt(event,"dmg_health");
     //new weaponidTF;
     if(War3_GetGame()==Game_TF){
         dmg=GetEventInt(event,"damageamount");
@@ -443,8 +443,8 @@ public PlayerHurtEvent(Handle event,const char[] name[],bool dontBroadcast)
     }
     if(userid&&attacker_userid&&userid!=attacker_userid)
     {
-        new victim=GetClientOfUserId(userid);
-        new attacker=GetClientOfUserId(attacker_userid);
+        int victim=GetClientOfUserId(userid);
+        int attacker=GetClientOfUserId(attacker_userid);
         if(victim>0&&attacker>0)
         {
             /*new race_attacker=War3_GetRace(attacker);*/
@@ -488,7 +488,7 @@ public PlayerHurtEvent(Handle event,const char[] name[],bool dontBroadcast)
                         ConduitLastTime[victim]=GetGameTime();
                         if(heal>=0){
                             if(War3_GetGame()==Game_TF){
-                                decl float pos[3];
+                                float pos[3];
                                 GetClientEyePosition(victim, pos);
                                 pos[2] += 4.0;
                                 War3_TF_ParticleToClient(attacker, "miss_text", pos); //to the attacker at the enemy pos
@@ -538,9 +538,9 @@ public PlayerHurtEvent(Handle event,const char[] name[],bool dontBroadcast)
 
 
 
-public Action CalcConduit(Handle timer,any:userid)
+public Action CalcConduit(Handle timer,any userid)
 {
-    new float time = GetGameTime();
+    int float time = GetGameTime();
     for(int i=1;i<=MaxClients;i++){
         if(time>ConduitUntilTime[i]){
             ConduitUntilTime[i]=0.0;

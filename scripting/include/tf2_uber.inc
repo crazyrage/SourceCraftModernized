@@ -15,25 +15,25 @@
 
 stock TF2_IsUberCharge(client)
 {
-    new index = GetPlayerWeaponSlot(client, 1);
+    int index = GetPlayerWeaponSlot(client, 1);
     if (index > 0)
 		return GetEntProp(index, Prop_Send, "m_bChargeRelease", 1);
     else
         return 0;
 }
 
-stock Float TF2_GetUberLevel(client)
+stock float TF2_GetUberLevel(client)
 {
-    new index = GetPlayerWeaponSlot(client, 1);
+    int index = GetPlayerWeaponSlot(client, 1);
     if (index > 0)
         return GetEntPropFloat(index, Prop_Send, "m_flChargeLevel");
     else
         return 0.0;
 }
 
-stock TF2_SetUberLevel(client, Float uberlevel)
+stock TF2_SetUberLevel(client, float uberlevel)
 {
-    new index = GetPlayerWeaponSlot(client, 1);
+    int index = GetPlayerWeaponSlot(client, 1);
     if (index > 0)
 		SetEntPropFloat(index, Prop_Send, "m_flChargeLevel", uberlevel);
 }
@@ -42,7 +42,7 @@ stock TF2_ExIsUberCharge(client)
 {
     if (TF2_GetPlayerClass(client) == TFClass_Medic)
     {
-        new index = GetPlayerWeaponSlot(client, 1);
+        int index = GetPlayerWeaponSlot(client, 1);
         if (index > 0)
         {
             char classname[50];
@@ -56,11 +56,11 @@ stock TF2_ExIsUberCharge(client)
     return 0;
 }
 
-stock Float TF2_ExGetUberLevel(client)
+stock float TF2_ExGetUberLevel(client)
 {
     if (TF2_GetPlayerClass(client) == TFClass_Medic)
     {
-        new index = GetPlayerWeaponSlot(client, 1);
+        int index = GetPlayerWeaponSlot(client, 1);
         if (index > 0)
         {
             char classname[50];
@@ -74,11 +74,11 @@ stock Float TF2_ExGetUberLevel(client)
     return 0.0;
 }
 
-stock bool TF2_ExSetUberLevel(client, Float uberlevel)
+stock bool TF2_ExSetUberLevel(client, float uberlevel)
 {
     if (TF2_GetPlayerClass(client) == TFClass_Medic)
     {
-        new index = GetPlayerWeaponSlot(client, 1);
+        int index = GetPlayerWeaponSlot(client, 1);
         if (index > 0)
         {
             char classname[50];
@@ -104,12 +104,12 @@ stock TF2_GetNumHealers(client)
  * @param client 	Client
  * @return			none
  */
-stock TF2_GetHealingTarget(client, &bool ubered = false)
+stock TF2_GetHealingTarget(client, bool & ubered = false)
 {
     if (GetGameType() == tf2 && IsClientConnected(client) &&
         IsClientInGame(client))
     {
-        new weapon = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+        int weapon = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
         if (weapon > 0 && IsValidEntity(weapon) && IsValidEdict(weapon))
         {
             char classname[64];

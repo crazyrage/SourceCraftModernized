@@ -75,7 +75,7 @@ public RocketThinkHook(entity)
     {
         int target = EntRefToEntIndex(g_iTarget[entity]);
 
-        decl float rocketposition[3], float targetpos[3], float vecangle[3], float angle[3];
+        float rocketposition[3], float targetpos[3], float vecangle[3], float angle[3];
         GetEntPropVector(entity, Prop_Send, "m_vecOrigin", rocketposition);
 
         //로켓포지션에서 추적 위치로 가는 벡터를 구한다
@@ -88,7 +88,7 @@ public RocketThinkHook(entity)
         MakeVectorFromPoints(rocketposition, targetpos, vecangle);
         NormalizeVector(vecangle, vecangle);
         GetVectorAngles(vecangle, angle);
-        decl float speed[3];
+        float speed[3];
         GetEntPropVector(entity, Prop_Data, "m_vecVelocity", speed);
         ScaleVector(vecangle, GetVectorLength(speed));
         TeleportEntity(entity, NULL_VECTOR, angle, vecangle);
@@ -205,10 +205,10 @@ bool isTargetTraceable(entity, targetentref)
     if (targetvalid)
     {
         //타겟까지 트레이스가 가능한가
-        decl float entityposition[3];
+        float entityposition[3];
         GetEntPropVector(entity, Prop_Send, "m_vecOrigin", entityposition);
 
-        decl float clientpos[3];
+        float clientpos[3];
         GetClientEyePosition(target, clientpos);
 
         if (!g_bToHead[entity])
@@ -231,7 +231,7 @@ bool isTargetTraceable(entity, targetentref)
 }
 
 //트레이스레이필터
-public bool tracerayfilterdefault(entity, mask, any:data)
+public bool tracerayfilterdefault(entity, mask, any data)
 {
     return (entity != data);
 }

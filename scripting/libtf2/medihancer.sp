@@ -28,14 +28,14 @@ char Charged[3][] = { "vo/medic_autochargeready01.wav",
                             "vo/medic_autochargeready03.wav"};
 
 // Basic color arrays for temp entities
-new redColor[4] = {255, 75, 75, 255};
-new greenColor[4] = {75, 255, 75, 255};
-new blueColor[4] = {75, 75, 255, 255};
-new greyColor[4] = {128, 128, 128, 255};
+int redColor[4] = {255, 75, 75, 255};
+int greenColor[4] = {75, 255, 75, 255};
+int blueColor[4] = {75, 75, 255, 255};
+int greyColor[4] = {128, 128, 128, 255};
 
 // Following are model indexes for temp entities
-new g_BeamSprite;
-new g_HaloSprite;
+int g_BeamSprite;
+int g_HaloSprite;
 
 float g_ChargeDelay = 5.0;
 float g_BeaconDelay = 3.0;
@@ -53,7 +53,7 @@ Handle g_TimerHandle = null;
 bool ConfigsExecuted = false;
 bool NativeControl = false;
 bool NativeMedicEnabled[MAXPLAYERS + 1] = { false, ...};
-new NativeAmount[MAXPLAYERS + 1];
+int NativeAmount[MAXPLAYERS + 1];
 
 public bool AskPluginLoad(Handle myself,bool late,char error[],err_max)
 {
@@ -67,15 +67,15 @@ public bool AskPluginLoad(Handle myself,bool late,char error[],err_max)
 public OnPluginStart()
 {
     g_IsMedihancerOn = CreateConVar("sm_medihancer","1","Enable/Disable medihancer");
-    g_ChargeAmount = CreateConVar("sm_medihancer_charge_amount", "3", "Sets the amount of uber charge to add time for medihancer.");
-    g_ChargeTimer = CreateConVar("sm_medihancer_charge_timer", "3.0", "Sets the time interval for medihancer.");
+    g_ChargeAmount = CreateConVar("sm_medihancer_charge_amount", "3", "Sets the amount of uber char ge to add time for medihancer.");
+    g_ChargeTimer = CreateConVar("sm_medihancer_charge_timer", "3.0", "Sets the time int erval for medihancer.");
 
     g_EnableBeacon = CreateConVar("sm_medihancer_beacon","1","Enable/Disable medihancer beacon");
-    g_BeaconTimer = CreateConVar("sm_medihancer_beacon_timer","3.0","Sets the time interval of beacons for medihancer");
+    g_BeaconTimer = CreateConVar("sm_medihancer_beacon_timer","3.0","Sets the time int erval of beacons for medihancer");
     g_BeaconRadius = CreateConVar("sm_medihancer_beacon_radius", "375", "Sets the radius for medic enhancer beacon's light rings.", 0, true, 50.0, true, 1500.0);
 
     g_EnablePing = CreateConVar("sm_medihancer_ping","1","Enable/Disable medihancer ping");
-    g_PingTimer = CreateConVar("sm_medihancer_ping_timer", "12.0", "Sets the time interval of pings for medihancer.");
+    g_PingTimer = CreateConVar("sm_medihancer_ping_timer", "12.0", "Sets the time int erval of pings for medihancer.");
 
     // Execute the config file
     AutoExecConfig(true, "sm_medihancer");
@@ -128,7 +128,7 @@ public ConVarChange_IsMedihancerOn(Handle convar, const char[] oldValue, const c
             g_TimerHandle = CreateTimer(CalcDelay(), Medic_Timer, _, TIMER_REPEAT);
 
         if (!NativeControl)
-            PrintToChatAll("[SM] Medics will auto-charge uber (and will beacon while charging)");
+            PrintToChatAll("[SM] Medics will auto-char ge uber (and will beacon while char ging)");
     }
     else
     {
@@ -148,11 +148,11 @@ public Action Medic_Timer(Handle timer)
     static float lastPingTime;
 
     float gameTime = GetGameTime();
-    bool charge    = (gameTime - lastChargeTime >= g_ChargeDelay);
+    bool char ge    = (gameTime - lastChargeTime >= g_ChargeDelay);
     bool beacon    = (gameTime - lastBeaconTime >= g_BeaconDelay);
     bool ping      = (gameTime - lastPingTime >= g_PingDelay);
 
-    if (charge)
+    if (char ge)
         lastChargeTime = gameTime;
 
     if (beacon)
@@ -161,14 +161,14 @@ public Action Medic_Timer(Handle timer)
     if (ping)
         lastPingTime = gameTime;
 
-    new maxclients = GetMaxClients();
+    int maxclients = GetMaxClients();
     for (int client = 1; client <= maxclients; client++)
     {
         if (!NativeControl || NativeMedicEnabled[client])
         {
             if (IsClientInGame(client) && IsPlayerAlive(client))
             {
-                new team = GetClientTeam(client);
+                int team = GetClientTeam(client);
                 if (team >= 2 && team <= 3)
                 {
                     if (TF2_GetPlayerClass(client) == TFClass_Medic)
@@ -177,17 +177,17 @@ public Action Medic_Timer(Handle timer)
                         TF_GetCurrentWeaponClass(client, classname, sizeof(classname));
                         if(StrEqual(classname, "CWeaponMedigun"))
                         {
-                            new UberCharge = TF_GetUberLevel(client);
+                            int UberCharge = TF_GetUberLevel(client);
                             if (UberCharge < 100)
                             {
-                                if (charge)
+                                if (char ge)
                                 {
-                                    new amt = NativeAmount[client];
+                                    int amt = NativeAmount[client];
                                     UberCharge += (amt > 0) ? amt : GetConVarInt(g_ChargeAmount);
                                     if (UberCharge >= 100)
                                     {
                                         UberCharge = 100;
-                                        new num=GetRandomInt(0,2);
+                                        int num=GetRandomInt(0,2);
                                         EmitSoundToAll(Charged[num],client);
                                     }
                                     TF_SetUberLevel(client, UberCharge);
@@ -218,7 +218,7 @@ public Action Medic_Timer(Handle timer)
 
 BeaconPing(client,bool ping)
 {
-    new team = GetClientTeam(client);
+    int team = GetClientTeam(client);
 
     float vec[3];
     GetClientAbsOrigin(client, vec);
@@ -251,14 +251,14 @@ BeaconPing(client,bool ping)
 
 public Action Event_RoundStart(Handle event, const char[] name, bool dontBroadcast)
 {
-    new MedihancerOn = GetConVarInt(g_IsMedihancerOn);
+    int MedihancerOn = GetConVarInt(g_IsMedihancerOn);
     if (MedihancerOn && !NativeControl)
-        PrintToChatAll("[SM] Medics will auto-charge uber (and will beacon while charging)");
+        PrintToChatAll("[SM] Medics will auto-char ge uber (and will beacon while char ging)");
 }
 
 stock TF_IsUberCharge(client)
 {
-    new index = GetPlayerWeaponSlot(client, 1);
+    int index = GetPlayerWeaponSlot(client, 1);
     if (index > 0)
 		return GetEntProp(index, Prop_Send, "m_bChargeRelease", 1);
     else
@@ -267,7 +267,7 @@ stock TF_IsUberCharge(client)
 
 stock TF_GetUberLevel(client)
 {
-    new index = GetPlayerWeaponSlot(client, 1);
+    int index = GetPlayerWeaponSlot(client, 1);
     if (index > 0)
 		return RoundFloat(GetEntPropFloat(index, Prop_Send, "m_flChargeLevel")*100);
     else
@@ -276,14 +276,14 @@ stock TF_GetUberLevel(client)
 
 stock TF_SetUberLevel(client, uberlevel)
 {
-    new index = GetPlayerWeaponSlot(client, 1);
+    int index = GetPlayerWeaponSlot(client, 1);
     if (index > 0)
 		SetEntPropFloat(index, Prop_Send, "m_flChargeLevel", uberlevel*0.01);
 }
 
 stock TF_GetCurrentWeaponClass(client, char name[], maxlength)
 {
-    new index = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+    int index = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
     if (index > 0)
         GetEntityNetClass(index, name, maxlength);
 }
@@ -318,7 +318,7 @@ public Native_SetMedicEnhancement(Handle plugin,numParams)
 {
     if(numParams >= 1 && numParams <= 3)
     {
-        new client = GetNativeCell(1);
+        int client = GetNativeCell(1);
         NativeMedicEnabled[client] = (numParams >= 2) ? GetNativeCell(2) : true;
         NativeAmount[client] = (numParams >= 3) ? GetNativeCell(3) : 0;
     }

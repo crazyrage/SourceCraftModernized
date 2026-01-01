@@ -45,7 +45,7 @@ static const char[] g_ChargeAttackSound[][] = { "sc/pzeatt00.wav" ,
                                              "sc/pzeatt01.wav" ,
                                              "sc/pzehit00.wav" };
 
-int raceID, immunityID, legID, shieldsID, chargeID;
+int raceID, immunityID, legID, shieldsID, char geID;
 int meleeID, dragoonID, immortalID, stalkerID;
 
 float g_ChargePercent[]         = { 0.10, 0.25, 0.50, 0.75, 1.00 };
@@ -78,7 +78,7 @@ public Plugin myinfo =
 public void OnPluginStart()
 {
     LoadTranslations("sc.common.phrases.txt");
-    LoadTranslations("sc.charge.phrases.txt");
+    LoadTranslations("sc.char ge.phrases.txt");
     LoadTranslations("sc.zealot.phrases.txt");
 
     if (IsSourceCraftLoaded())
@@ -96,7 +96,7 @@ public OnSourceCraftReady()
     meleeID     = AddUpgrade(raceID, "blades", .energy=5.0, .cost_crystals=20);
 
     // Ultimate 1
-    chargeID = AddUpgrade(raceID, "charge", 1, 8,
+    char geID = AddUpgrade(raceID, "char ge", 1, 8,
                           .energy=200.0, .cooldown=30.0,
                           .accumulated=true, .cost_crystals=30);
 
@@ -134,7 +134,7 @@ public OnSourceCraftReady()
                         g_SpeedLevels, raceID, legID);
 
     GetConfigFloatArray("damage_percent", g_ChargePercent, sizeof(g_ChargePercent),
-                        g_ChargePercent, raceID, chargeID);
+                        g_ChargePercent, raceID, char geID);
 }
 
 public void OnMapStart()
@@ -300,9 +300,9 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                             SummonDragoon(client);
                         else
                         {
-                            int charge_level = GetUpgradeLevel(client,race,chargeID);
-                            if (charge_level)
-                                Charge(client, race, chargeID, charge_level, 0, 10, 75.0, 50.0);
+                            int char ge_level = GetUpgradeLevel(client,race,char geID);
+                            if (char ge_level)
+                                Charge(client, race, char geID, char ge_level, 0, 10, 75.0, 50.0);
                         }
                     }
                 }
@@ -319,9 +319,9 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                         SummonDragoon(client);
                     else
                     {
-                        int charge_level=GetUpgradeLevel(client,race,chargeID);
-                        if (charge_level)
-                            Charge(client, race, chargeID, charge_level, 0, 10, 75.0, 50.0);
+                        int char ge_level=GetUpgradeLevel(client,race,char geID);
+                        if (char ge_level)
+                            Charge(client, race, char geID, char ge_level, 0, 10, 75.0, 50.0);
                         else
                         {
                             int stalker_level = GetUpgradeLevel(client,race,stalkerID);
@@ -338,9 +338,9 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                     SummonDragoon(client);
                 else
                 {
-                    int charge_level=GetUpgradeLevel(client,race,chargeID);
-                    if (charge_level)
-                        Charge(client, race, chargeID, charge_level, 0, 10, 75.0, 50.0);
+                    int char ge_level=GetUpgradeLevel(client,race,char geID);
+                    if (char ge_level)
+                        Charge(client, race, char geID, char ge_level, 0, 10, 75.0, 50.0);
                     else
                     {
                         int immortal_level = GetUpgradeLevel(client,race,immortalID);
@@ -357,9 +357,9 @@ public OnUltimateCommand(client,race,bool pressed,arg)
             }
             default:
             {
-                int charge_level=GetUpgradeLevel(client,race,chargeID);
-                if (charge_level)
-                    Charge(client, race, chargeID, charge_level, 0, 10, 75.0, 50.0);
+                int char ge_level=GetUpgradeLevel(client,race,char geID);
+                if (char ge_level)
+                    Charge(client, race, char geID, char ge_level, 0, 10, 75.0, 50.0);
                 else
                 {
                     int dragoon_level = GetUpgradeLevel(client,race,dragoonID);

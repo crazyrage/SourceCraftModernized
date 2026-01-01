@@ -522,7 +522,7 @@ public int OnPlayerSpawnEvent(Handle event, int client, int race)
     {
         m_ScarabAttackTime[client] = 0.0;
 
-        new cloaking_level=GetUpgradeLevel(client,raceID,cloakID);
+        int cloaking_level=GetUpgradeLevel(client,raceID,cloakID);
         if (cloaking_level > 0 && cfgAllowInvisibility)
         {
             PrepareAndEmitSoundToAll(cloakReadyWav,client);
@@ -531,7 +531,7 @@ public int OnPlayerSpawnEvent(Handle event, int client, int race)
         int shields_level = GetUpgradeLevel(client,raceID,shieldsID);
         SetupShields(client, shields_level, g_InitialShields, g_ShieldsPercent);
 
-        new detecting_level=GetUpgradeLevel(client,raceID,sensorID);
+        int detecting_level=GetUpgradeLevel(client,raceID,sensorID);
         if (detecting_level > 0 || shields_level > 0 ||
             (cloaking_level > 0 && cfgAllowInvisibility))
         {
@@ -639,8 +639,8 @@ bool ScarabAttack(int damage, int victim_index, int index)
             !IsInvulnerable(victim_index))
         {
             float lastTime = m_ScarabAttackTime[index];
-            float interval = GetGameTime() - lastTime;
-            if (lastTime == 0.0 || interval > 0.25)
+            float int erval = GetGameTime() - lastTime;
+            if (lastTime == 0.0 || int erval > 0.25)
             {
                 if (GetRandomInt(1,100) <= g_ScrabChance[rs_level])
                 {
@@ -649,7 +649,7 @@ bool ScarabAttack(int damage, int victim_index, int index)
                     {
                         if (CanInvokeUpgrade(index, raceID, scarabID, .notify=false))
                         {
-                            if (interval == 0.0 || interval >= 2.0)
+                            if (int erval == 0.0 || int erval >= 2.0)
                             {
                                 float Origin[3];
                                 GetEntityAbsOrigin(victim_index, Origin);

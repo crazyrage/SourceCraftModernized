@@ -44,7 +44,7 @@ enum SolidType_t
     SOLID_BBOX          = 2,    // an AABB
     SOLID_OBB           = 3,    // an OBB (not implemented yet)
     SOLID_OBB_YAW       = 4,    // an OBB, constrained so that it can only yaw
-    SOLID_CUSTOM        = 5,    // Always call into the entity for tests
+    SOLID_CUSTOM        = 5,    // Always call int o the entity for tests
     SOLID_VPHYSICS      = 6,    // solid vphysics object, get vcollide from the model and collide with that
     SOLID_LAST,
 };
@@ -70,14 +70,14 @@ enum SolidType_t
 #define BeamModel           "materials/sprites/laser.vmt"
 #define HaloModel           "materials/sprites/halo01.vmt"
 
-new g_BeamSprite;
-new g_HaloSprite;
+int g_BeamSprite;
+int g_HaloSprite;
 
 bool DontAsk[MAXPLAYERS+1]       = { false, ... };
 bool NearAmplifier[MAXPLAYERS+1] = { false, ... };
-new EngiAssists[MAXPLAYERS+1]        = { 0, ... };
-new Revenges[MAXPLAYERS+1]           = { 0, ... };              //for Engineers with Frontier Justice
-new GetPar[MAXPLAYERS+1]             = { INVALID_ENT_REFERENCE, ... };
+int EngiAssists[MAXPLAYERS+1]        = { 0, ... };
+int Revenges[MAXPLAYERS+1]           = { 0, ... };              //for Engineers with Frontier Justice
+int GetPar[MAXPLAYERS+1]             = { INVALID_ENT_REFERENCE, ... };
 
 Handle cvarUpgradeStationEnabled = null;
 
@@ -112,10 +112,10 @@ bool AmplifierEnabled = true;
 bool AmplifierUpgradable = true;
 bool UpgradeStationEnabled = true;
 bool RepairNodeEnabled = true;
-new DefaultRockets = 2;
-new DefaultRegen[4] = { 0, 15, 20, 30 };
-new DefaultShells[4] = { 0, 0, 5, 10 };
-new TFCond:DefaultCondition = TFCond_Kritzkrieged;
+int DefaultRockets = 2;
+int DefaultRegen[4] = { 0, 15, 20, 30 };
+int DefaultShells[4] = { 0, 0, 5, 10 };
+TFCond DefaultCondition = TFCond_Kritzkrieged;
 float DefaultAmplifierRange[4] = { 0.0, 100.0, 200.0, 300.0 };
 float DefaultRepairNodeRange[4] = { 0.0, 300.0, 400.0, 500.0 };
 bool RepairNodeMetal = true;
@@ -124,25 +124,25 @@ bool DefaultMini = false;
 bool ShowParticle = true;
 bool MiniCritToSG = true;
 bool WallBlock = false;
-new RepairNodePercent = 100;
-new AmplifierPercent = 100;
-new AmplifierMetal = 5;
+int RepairNodePercent = 100;
+int AmplifierPercent = 100;
+int AmplifierMetal = 5;
 
-new MetalRegeneration = 10;
-new MetalMax = 400;
+int MetalRegeneration = 10;
+int MetalMax = 400;
 
 bool NativeControl = false;
 bool NativeAmplifier[MAXPLAYERS+1];
 bool NativeRepairNode[MAXPLAYERS+1];
 bool NativeUpgradeStation[MAXPLAYERS+1];
-new TFCond:NativeCondition[MAXPLAYERS+1];
+TFCond NativeCondition[MAXPLAYERS+1];
 float NativeAmplifierRange[MAXPLAYERS+1][4];
 float NativeRepairNodeRange[MAXPLAYERS+1][4];
-new NativeRepairNodePercent[MAXPLAYERS+1];
-new NativeAmplifierPercent[MAXPLAYERS+1];
-new NativeRegen[MAXPLAYERS+1][4];
-new NativeShells[MAXPLAYERS+1][4];
-new NativeRockets[MAXPLAYERS+1];
+int NativeRepairNodePercent[MAXPLAYERS+1];
+int NativeAmplifierPercent[MAXPLAYERS+1];
+int NativeRegen[MAXPLAYERS+1][4];
+int NativeShells[MAXPLAYERS+1][4];
+int NativeRockets[MAXPLAYERS+1];
 
 public Plugin myinfo = {
     name = "amp_node",
@@ -151,21 +151,21 @@ public Plugin myinfo = {
     version = PLUGIN_VERSION,
 };
 
-new TFExtObjectType:BuildingType[MAXENTITIES] = { TFExtObject_Unknown, ... };
+TFExtObjectType BuildingType[MAXENTITIES] = { TFExtObject_Unknown, ... };
 float BuildingRange[MAXENTITIES][4];
 bool BuildingOn[MAXENTITIES]=false;
-new BuildingPercent[MAXENTITIES];
-new BuildingProp[MAXENTITIES]                 = { INVALID_ENT_REFERENCE, ... };
-new BuildingRef[MAXENTITIES]                  = { INVALID_ENT_REFERENCE, ... };
+int BuildingPercent[MAXENTITIES];
+int BuildingProp[MAXENTITIES]                 = { INVALID_ENT_REFERENCE, ... };
+int BuildingRef[MAXENTITIES]                  = { INVALID_ENT_REFERENCE, ... };
 
 bool ConditionApplied[MAXENTITIES][MAXPLAYERS+1];
-new TFCond:AmplifierCondition[MAXENTITIES];
+TFCond AmplifierCondition[MAXENTITIES];
 
-new RepairNodeTarget[MAXENTITIES]             = { INVALID_ENT_REFERENCE, ... };
-new RepairNodeRockets[MAXENTITIES];
-new RepairNodeRegen[MAXENTITIES][4];
-new RepairNodeShells[MAXENTITIES][4];
-new RepairNodeParticle[MAXENTITIES][2];
+int RepairNodeTarget[MAXENTITIES]             = { INVALID_ENT_REFERENCE, ... };
+int RepairNodeRockets[MAXENTITIES];
+int RepairNodeRegen[MAXENTITIES][4];
+int RepairNodeShells[MAXENTITIES][4];
+int RepairNodeParticle[MAXENTITIES][2];
 bool RepairNodeTeam[MAXENTITIES];
 bool RepairNodeMini[MAXENTITIES];
 
@@ -541,7 +541,7 @@ public Action Event_player_spawn(Handle event, const char[] name, bool dontBroad
 {
     if (!NativeControl && SpawnMenu)
     {
-        new client=GetClientOfUserId(GetEventInt(event, "userid"));
+        int client=GetClientOfUserId(GetEventInt(event, "userid"));
         if (!DontAsk[client])
             AmpPanel(client);
     }
@@ -750,10 +750,10 @@ public Action BuildingTimer(Handle hTimer)
 {
     float Pos[3];
     float BuildingPos[3];
-    new TFTeam:clientTeam;
-    new TFTeam:team;
-    new i,client;
-    new maxEntities = GetMaxEntities();
+    int TFTeam:clientTeam;
+    int TFTeam:team;
+    int i,client;
+    int maxEntities = GetMaxEntities();
     for (client=1; client<=MaxClients; client++)
     {
         if (IsClientInGame(client)) 
@@ -768,24 +768,24 @@ public Action BuildingTimer(Handle hTimer)
                 for (i=MaxClients+1; i<maxEntities; i++)
                 {
                     //If Building Exists, is Active and is not Sapped
-                    new ent = EntRefToEntIndex(BuildingRef[i]);
+                    int ent = EntRefToEntIndex(BuildingRef[i]);
                     if (ent > 0 && BuildingOn[ent] && BuildingType[ent] == TFExtObject_Amplifier &&
                         !GetEntProp(ent, Prop_Send, "m_bHasSapper"))
                     {
                         ResetModel(ent);
 
                         // Check Metal
-                        new metal = GetEntProp(ent, Prop_Send, "m_iAmmoMetal");
+                        int metal = GetEntProp(ent, Prop_Send, "m_iAmmoMetal");
                         if (metal < AmplifierMetal && AmplifierMetal > 0)
                             continue;
 
                         // Check Percent Chance
-                        new percent = BuildingPercent[ent];
+                        int percent = BuildingPercent[ent];
                         if (percent >= 0 && percent < 100 && (ConditionApplied[ent][client] || GetRandomInt(1,100) > percent))
                             continue;
 
                         bool enableParticle;
-                        new TFCond:Condition = AmplifierCondition[ent];
+                        TFCond Condition = AmplifierCondition[ent];
                         switch (Condition)
                         {
                             case TFCond_Ubercharged, TFCond_Kritzkrieged, TFCond_Buffed, TFCond_CritCola, TFCond_DemoBuff,
@@ -824,14 +824,14 @@ public Action BuildingTimer(Handle hTimer)
 
                         GetEntPropVector(ent, Prop_Send, "m_vecOrigin", BuildingPos);
 
-                        new level = GetEntProp(ent, Prop_Send, "m_iUpgradeLevel");
+                        int level = GetEntProp(ent, Prop_Send, "m_iUpgradeLevel");
 
                         if (clientTeam==team &&
                             GetVectorDistance(Pos,BuildingPos) <= BuildingRange[ent][level] &&
                             (!WallBlock || TraceTargetIndex(ent, client, BuildingPos, Pos)))
                         {
-                            new Action:res = Plugin_Continue;
-                            new builder = GetEntPropEnt(ent, Prop_Send, "m_hBuilder");
+                            Action res = Plugin_Continue;
+                            int builder = GetEntPropEnt(ent, Prop_Send, "m_hBuilder");
 
                             Call_StartForward(fwdOnAmplify);
                             Call_PushCell(builder);
@@ -846,7 +846,7 @@ public Action BuildingTimer(Handle hTimer)
                             if (enableParticle)
                             {
                                 //If Crit Effect does NOT Exist
-                                new particle = EntRefToEntIndex(GetPar[client]);
+                                int particle = EntRefToEntIndex(GetPar[client]);
                                 if (particle <= 0 || !IsValidEntity(particle))
                                 {
                                     //Create Buffed Effect
@@ -954,7 +954,7 @@ public Action BuildingTimer(Handle hTimer)
                                         TF2_RemoveCondition(client, TFCond_Slowed);
                                     }
 
-                                    new melee = GetPlayerWeaponSlot(client, TFWeaponSlot_Melee);
+                                    int melee = GetPlayerWeaponSlot(client, TFWeaponSlot_Melee);
                                     if (melee > MaxClients && IsValidEntity(melee))
                                     {
                                         SetEntPropEnt(client, Prop_Send, "m_hActiveWeapon", melee);
@@ -1035,7 +1035,7 @@ public Action BuildingTimer(Handle hTimer)
             if ((i==maxEntities) || !IsPlayerAlive(client))
             {
                 //if player has crit effect - delete it
-                new particle = EntRefToEntIndex(GetPar[client]);
+                int particle = EntRefToEntIndex(GetPar[client]);
                 if (particle > 0 && IsValidEntity(particle))
                 {
                     AcceptEntityInput(particle, "kill");
@@ -1048,15 +1048,15 @@ public Action BuildingTimer(Handle hTimer)
     //Check all Entities
     for (i=MaxClients+1; i<maxEntities; i++)
     {
-        new ref = BuildingRef[i];
+        int ref = BuildingRef[i];
         if (ref != INVALID_ENT_REFERENCE)
         {
-            new ent = EntRefToEntIndex(ref);
+            int ent = EntRefToEntIndex(ref);
             if (ent > 0 && IsValidEntity(ent))
             {
                 if (BuildingOn[ent] && !GetEntProp(ent, Prop_Send, "m_bHasSapper"))
                 {
-                    new metal;
+                    int metal;
                     if (MetalRegeneration > 0)
                     {
                         metal = GetEntProp(ent, Prop_Send, "m_iAmmoMetal") + MetalRegeneration;
@@ -1066,7 +1066,7 @@ public Action BuildingTimer(Handle hTimer)
                     else
                         metal = 255;
 
-                    new level = GetEntProp(ent, Prop_Send, "m_iUpgradeLevel");
+                    int level = GetEntProp(ent, Prop_Send, "m_iUpgradeLevel");
 
                     if (BuildingType[ent] == TFExtObject_Amplifier)
                     {
@@ -1076,7 +1076,7 @@ public Action BuildingTimer(Handle hTimer)
 
                         if (!AmplifierUpgradable)
                         {
-                            new upgradeMetal = GetEntProp(ent, Prop_Send, "m_iUpgradeMetal");
+                            int upgradeMetal = GetEntProp(ent, Prop_Send, "m_iUpgradeMetal");
                             if (upgradeMetal > 0)
                             {
                                 SetEntProp(ent, Prop_Send, "m_iUpgradeMetal",0);
@@ -1090,7 +1090,7 @@ public Action BuildingTimer(Handle hTimer)
                             continue;
 
                         //Amplifier's waves
-                        new beamColor[4];
+                        int beamColor[4];
                         switch (AmplifierCondition[ent])
                         {
                             case TFCond_Slowed, TFCond_Zoomed, TFCond_TeleportedGlow, TFCond_Taunting,
@@ -1131,8 +1131,8 @@ public Action BuildingTimer(Handle hTimer)
                         client = GetEntPropEnt(ent, Prop_Send, "m_hBuilder");
                         if (client > 0)
                         {
-                            new obj = -1;
-                            new minMetal = RepairNodeRegen[ent][level];
+                            int obj = -1;
+                            int minMetal = RepairNodeRegen[ent][level];
                             while ((!RepairNodeMetal || metal >= minMetal) &&
                                     (obj = FindEntityByClassname(obj, "obj_sentrygun")) != -1)
                             {
@@ -1237,14 +1237,14 @@ CheckObject(client, ent, obj, float Pos[3], level, &metal, bool isSentry)
             TraceTargetIndex(ent, obj, BuildingPos, Pos))
         {
             // Check Percent Chance (if any)
-            new percent = BuildingPercent[ent];
+            int percent = BuildingPercent[ent];
             if (percent >= 0 && percent < 100 && GetRandomInt(1,100) > percent)
                 return;
 
             if (RepairNodeParticle[obj][0] == INVALID_ENT_REFERENCE)
             {
-                new pref = BuildingProp[ent];
-                new prop = EntRefToEntIndex(pref);
+                int pref = BuildingProp[ent];
+                int prop = EntRefToEntIndex(pref);
                 if (prop <= 0)
                 {
                     // Make an invisible dispenser prop to attach the heal beam to
@@ -1282,7 +1282,7 @@ CheckObject(client, ent, obj, float Pos[3], level, &metal, bool isSentry)
                         LogError("Unable to create prop_dynamic for repair node %d", ent);
                 }
 
-                new p, p2;
+                int p, p2;
                 if (TFTeam:GetEntProp(ent, Prop_Send, "m_iTeamNum")==TFTeam_Red)
                 {
 #if 1
@@ -1307,11 +1307,11 @@ CheckObject(client, ent, obj, float Pos[3], level, &metal, bool isSentry)
                 RepairNodeTarget[obj] = EntIndexToEntRef(ent);
             }
 
-            new regen = RepairNodeRegen[ent][level];
+            int regen = RepairNodeRegen[ent][level];
             if (regen > 0 && metal > 0)
             {
-                new max = GetEntProp(obj, Prop_Data, "m_iMaxHealth");
-                new health = GetEntProp(obj, Prop_Send, "m_iHealth");
+                int max = GetEntProp(obj, Prop_Data, "m_iMaxHealth");
+                int health = GetEntProp(obj, Prop_Send, "m_iHealth");
                 if (health + regen > max)
                     regen = max - health;
 
@@ -1327,11 +1327,11 @@ CheckObject(client, ent, obj, float Pos[3], level, &metal, bool isSentry)
 
             if (isSentry)
             {
-                new shells = RepairNodeShells[ent][level];
+                int shells = RepairNodeShells[ent][level];
                 if (shells > 0 && metal > 0)
                 {
-                    new maxAmmo = TF2_MaxSentryShells[level];
-                    new ammo = GetEntProp(obj, Prop_Send, "m_iAmmoShells");
+                    int maxAmmo = TF2_MaxSentryShells[level];
+                    int ammo = GetEntProp(obj, Prop_Send, "m_iAmmoShells");
                     if (ammo + shells > maxAmmo)
                         shells = maxAmmo - ammo;
 
@@ -1345,13 +1345,13 @@ CheckObject(client, ent, obj, float Pos[3], level, &metal, bool isSentry)
                     }
                 }
 
-                new maxRockets = TF2_MaxSentryRockets[level];
+                int maxRockets = TF2_MaxSentryRockets[level];
                 if (maxRockets > 0)
                 {
-                    new amt = RepairNodeRockets[ent];
+                    int amt = RepairNodeRockets[ent];
                     if (amt > 0 && metal > 0)
                     {
-                        new rockets = GetEntProp(obj, Prop_Send, "m_iAmmoRockets");
+                        int rockets = GetEntProp(obj, Prop_Send, "m_iAmmoRockets");
                         if (rockets + amt > maxRockets)
                             amt = maxRockets - rockets;
 
@@ -1378,11 +1378,11 @@ CheckObject(client, ent, obj, float Pos[3], level, &metal, bool isSentry)
 
 public Void:SetHealthOfEnt(any ent, any health)
 {
-    new entvalue = GetEntProp(ent, Prop_Send, "m_iHealth");
+    int entvalue = GetEntProp(ent, Prop_Send, "m_iHealth");
     if (entvalue < 200)
     {
-        new Maxhealth = GetEntProp(ent, Prop_Send, "m_iMaxHealth");
-        new newhealth = entvalue + health;
+        int Maxhealth = GetEntProp(ent, Prop_Send, "m_iMaxHealth");
+        int newhealth = entvalue + health;
         if (newhealth < Maxhealth)
         {
             //SetEntityHealth(ent, newhealth);
@@ -1488,14 +1488,14 @@ public Action event_player_death(Handle event, const char[] name, bool dontBroad
 {
     //float Pos[3];
     //float BuildingPos[3];
-    new Victim = GetClientOfUserId(GetEventInt(event,"userid"));
-    new Attacker = GetClientOfUserId(GetEventInt(event, "attacker"));
+    int Victim = GetClientOfUserId(GetEventInt(event,"userid"));
+    int Attacker = GetClientOfUserId(GetEventInt(event, "attacker"));
     if (NearAmplifier[Attacker] || NearAmplifier[Victim])
     {
-        new maxEntities = GetMaxEntities();
+        int maxEntities = GetMaxEntities();
         for (int i =MaxClients+1; i<maxEntities; i++)
         {
-            new ent = EntRefToEntIndex(BuildingRef[i]);
+            int ent = EntRefToEntIndex(BuildingRef[i]);
             if (ent > 0 && BuildingOn[ent] && Attacker != i &&
                 !GetEntProp(ent, Prop_Send, "m_bHasSapper"))
             {
@@ -1515,7 +1515,7 @@ public Action event_player_death(Handle event, const char[] name, bool dontBroad
 
                 if (assist)
                 {
-                    new builder = GetEntPropEnt(ent, Prop_Send, "m_hBuilder");
+                    int builder = GetEntPropEnt(ent, Prop_Send, "m_hBuilder");
                     if (builder > 0)
                     {
                         EngiAssists[builder]++;
@@ -1557,7 +1557,7 @@ public OnEntityDestroyed(ent)
 
 public Action Event_Remove(Handle event, const char[] name, bool dontBroadcast)
 {
-    new ent = GetEventInt(event, "index");
+    int ent = GetEventInt(event, "index");
     TraceInto("amp_node", "Event_Remove", "ent=0x%08x", ent);
     if (ent > 0)
     {
@@ -1606,7 +1606,7 @@ DisableBuilding(ent)
     else if (BuildingType[ent] == TFExtObject_RepairNode)
     {
         // Remove any healing beams
-        new maxEntities = GetMaxEntities();
+        int maxEntities = GetMaxEntities();
         for (int obj =MaxClients+1; obj<maxEntities; obj++)
         {
             if (EntRefToEntIndex(RepairNodeTarget[obj]) == ent)
@@ -1617,7 +1617,7 @@ DisableBuilding(ent)
     // If there is a prod, or a func, for the entity, kill it
     if (BuildingProp[ent] != INVALID_ENT_REFERENCE)
     {
-        new prop = EntRefToEntIndex(BuildingProp[ent]);
+        int prop = EntRefToEntIndex(BuildingProp[ent]);
         if (prop > 0 && IsValidEntity(prop))
         {
             AcceptEntityInput(prop, "kill");
@@ -1631,7 +1631,7 @@ DisableBuilding(ent)
 //Detect upgrading of buildings
 public Action Event_Upgrade(Handle event, const char[] name, bool dontBroadcast)
 {
-    new ent = GetEventInt(event, "index");
+    int ent = GetEventInt(event, "index");
     TraceInto("amp_node", "Event_Upgrade", "ent=0x%08x, type=%d", ent, \
               (ent >= 0 && ent < sizeof(BuildingType)) ? BuildingType[ent] : TFExtObjectType:-2);
 
@@ -1641,13 +1641,13 @@ public Action Event_Upgrade(Handle event, const char[] name, bool dontBroadcast)
             BuildingType[ent] == TFExtObject_RepairNode ||
             BuildingType[ent] == TFExtObject_UpgradeStation)
         {
-            new particle;
+            int particle;
             if (TFTeam:GetEntProp(ent, Prop_Send, "m_iTeamNum")==TFTeam_Red)
                 AttachParticle(ent,"teleported_red",particle); //Create Effect of TP
             else
                 AttachParticle(ent,"teleported_blue",particle); //Create Effect of TP
 
-            new level = GetEntProp(ent, Prop_Send, "m_iHighestUpgradeLevel");
+            int level = GetEntProp(ent, Prop_Send, "m_iHighestUpgradeLevel");
             Trace("Event_Upgrade: ent=0x%08x, type=%d, level=%d, BuildingUpdateDelay=%f", ent, BuildingType[ent], level, BuildingUpdateDelay[level]);
             CreateTimer(BuildingUpdateDelay[level], DelayedActivate, EntIndexToEntRef(ent));
         }
@@ -1659,7 +1659,7 @@ public Action Event_Upgrade(Handle event, const char[] name, bool dontBroadcast)
 
 public Action Event_Carry(Handle event, const char[] name, bool dontBroadcast)
 {
-    new ent = GetEventInt(event, "index");
+    int ent = GetEventInt(event, "index");
     TraceInto("amp_node", "Event_Carry", "ent=0x%08x, type=%d", ent, \
               (ent >= 0 && ent < sizeof(BuildingType)) ? BuildingType[ent] : TFExtObjectType:-2);
 
@@ -1674,7 +1674,7 @@ public Action Event_Carry(Handle event, const char[] name, bool dontBroadcast)
 
             /*
             // Set the model back to the dispenser model
-            new level = GetEntProp(ent, Prop_Send, "m_iUpgradeLevel");
+            int level = GetEntProp(ent, Prop_Send, "m_iUpgradeLevel");
             if (level <= 1)
                 SetEntityModel(ent,DispenserModel);
             else
@@ -1693,7 +1693,7 @@ public Action Event_Carry(Handle event, const char[] name, bool dontBroadcast)
 
 public Action Event_Drop(Handle event, const char[] name, bool dontBroadcast)
 {
-    new ent = GetEventInt(event, "index");
+    int ent = GetEventInt(event, "index");
     TraceInto("amp_node", "Event_Drop", "ent=0x%08x, type=%d", ent, \
               (ent >= 0 && ent < sizeof(BuildingType)) ? BuildingType[ent] : TFExtObjectType:-2);
 
@@ -1703,7 +1703,7 @@ public Action Event_Drop(Handle event, const char[] name, bool dontBroadcast)
             BuildingType[ent] == TFExtObject_RepairNode ||
             BuildingType[ent] == TFExtObject_UpgradeStation)
         {
-            new level = GetEntProp(ent, Prop_Send, "m_iHighestUpgradeLevel");
+            int level = GetEntProp(ent, Prop_Send, "m_iHighestUpgradeLevel");
             Trace("Event_Drop: ent=0x%08x, type=%d, level=%d, BuildingDropDelay=%f", ent, BuildingType[ent], level, BuildingDropDelay[level]);
             CreateTimer(BuildingDropDelay[level], DelayedActivate, EntIndexToEntRef(ent));
         }
@@ -1716,7 +1716,7 @@ public Action Event_Drop(Handle event, const char[] name, bool dontBroadcast)
 // Spa sappin' mah Amplifier!!!!11
 public Action Event_Sapped(Handle event, const char[] name, bool dontBroadcast)
 {
-    new ent = GetEventInt(event, "object");
+    int ent = GetEventInt(event, "object");
     TraceInto("amp_node", "Event_Sapped", "ent=0x%08x, type=%d", ent, \
               (ent >= 0 && ent < sizeof(BuildingType)) ? BuildingType[ent] : TFExtObjectType:-2);
 
@@ -1729,7 +1729,7 @@ public Action Event_Sapped(Handle event, const char[] name, bool dontBroadcast)
             Trace("Event_Sapped: ent=0x%08x, type=%d", ent, (ent >= 0 && ent < sizeof(BuildingType)) ? BuildingType[ent] : TFExtObjectType:-2);
 
             // Set the model back to the dispenser model so the sapper is visible
-            new level = GetEntProp(ent, Prop_Send, "m_iUpgradeLevel");
+            int level = GetEntProp(ent, Prop_Send, "m_iUpgradeLevel");
             if (level <= 1)
                 SetEntityModel(ent,DispenserModel);
             else
@@ -1750,7 +1750,7 @@ public Action Event_Sapped(Handle event, const char[] name, bool dontBroadcast)
 
 public Action CheckSapper(Handle hTimer,any ref)
 {
-    new ent = EntRefToEntIndex(ref);
+    int ent = EntRefToEntIndex(ref);
     TraceInto("amp_node", "CheckSapper", "ent=0x%08x, type=%d", ent, \
               (ent >= 0 && ent < sizeof(BuildingType)) ? BuildingType[ent] : TFExtObjectType:-2);
 
@@ -1772,7 +1772,7 @@ public Action CheckSapper(Handle hTimer,any ref)
 //Detect building of, err, buildings
 public Action Event_Build(Handle event, const char[] name, bool dontBroadcast)
 {
-    new ent = GetEventInt(event, "index");
+    int ent = GetEventInt(event, "index");
     TraceInto("amp_node", "Event_Build", "ent=0x%08x, type=%d", ent, \
               (ent >= 0 && ent < sizeof(BuildingType)) ? BuildingType[ent] : TFExtObjectType:-2);
 
@@ -1785,7 +1785,7 @@ public Action Event_Build(Handle event, const char[] name, bool dontBroadcast)
 //if building is dispenser
 CheckDisp(ent, client)
 {
-    new TFExtObjectType:type = BuildingType[ent];
+    int TFExtObjectType:type = BuildingType[ent];
     TraceInto("amp_node", "CheckDisp", "client=%d:%N, ent=0x%08x, type=%d", \
               client, ValidClientIndex(client), ent, type);
 
@@ -1793,8 +1793,8 @@ CheckDisp(ent, client)
         type == TFExtObject_RepairNode ||
         type == TFExtObject_UpgradeStation)
     {
-        new ref = EntIndexToEntRef(ent);
-        new level = GetEntProp(ent, Prop_Send, "m_iHighestUpgradeLevel");
+        int ref = EntIndexToEntRef(ent);
+        int level = GetEntProp(ent, Prop_Send, "m_iHighestUpgradeLevel");
         Trace("CheckDisp-DelayedActivate: ent=0x%08x, type=%d, level=%d, BuildingUpdateDelay=%f", ent, BuildingType[ent], level, BuildingUpdateDelay[level]);
         CreateTimer(BuildingBuildDelay[level], DelayedActivate, ref);
     }
@@ -1896,7 +1896,7 @@ CheckDisp(ent, client)
             else if (ampEnabled || rnEnabled || usEnabled)
             {
                 // Display a menu for the engineer to pick what to build
-                new ref = EntIndexToEntRef(ent);
+                int ref = EntIndexToEntRef(ent);
                 char str[256], char info[64];
                 Handle menu = CreateMenu(BuildMenu);
                 SetMenuTitle(menu, "%t","Build");
@@ -1929,7 +1929,7 @@ CheckDisp(ent, client)
 
 ConvertToAmplifier(ent, percent, const float range[4], TFCond:condition)
 {
-    new ref = BuildingRef[ent] = EntIndexToEntRef(ent);
+    int ref = BuildingRef[ent] = EntIndexToEntRef(ent);
     TraceInto("amp_node", "ConvertToAmplifier", "ref=0x%08x, ent=0x%08x", ref, ent);
 
     AmplifierCondition[ent] = condition;
@@ -1952,7 +1952,7 @@ ConvertToAmplifier(ent, percent, const float range[4], TFCond:condition)
 
     if (GetEntPropFloat(ent, Prop_Send, "m_flPercentageConstructed") < 1.0)
     {
-        new level = GetEntProp(ent, Prop_Send, "m_iHighestUpgradeLevel");
+        int level = GetEntProp(ent, Prop_Send, "m_iHighestUpgradeLevel");
         Trace("ConvertToAmplifier: ent=0x%08x, type=%d, level=%d, BuildingBuildDelay=%f", ent, BuildingType[ent], level, BuildingBuildDelay[level]);
         CreateTimer(BuildingBuildDelay[level], DelayedActivate, ref);
     }
@@ -1967,7 +1967,7 @@ ConvertToAmplifier(ent, percent, const float range[4], TFCond:condition)
 ConvertToRepairNode(ent, percent, const float range[4], const regen[4],
                     const shells[4], rockets, team, mini)
 {
-    new ref = BuildingRef[ent] = EntIndexToEntRef(ent);
+    int ref = BuildingRef[ent] = EntIndexToEntRef(ent);
     TraceInto("amp_node", "ConvertToRepairNode", "ref=0x%08x, ent=0x%08x", ref, ent);
 
     RepairNodeTeam[ent]  = (team < 0) ? DefaultTeam : bool team;
@@ -2001,7 +2001,7 @@ ConvertToRepairNode(ent, percent, const float range[4], const regen[4],
     if (GetEntPropFloat(ent, Prop_Send, "m_flPercentageConstructed") >= 1.0)
     {
         //char modelname[128];
-        new level = GetEntProp(ent, Prop_Send, "m_iUpgradeLevel");
+        int level = GetEntProp(ent, Prop_Send, "m_iUpgradeLevel");
         Format(modelname,sizeof(modelname),"%s%d%s",RepairNodeModel,level,".mdl");
 
         SetEntityModel(ent,modelname);
@@ -2012,7 +2012,7 @@ ConvertToRepairNode(ent, percent, const float range[4], const regen[4],
     //CreateTimer(delay, stageFunc, ref, flags);
     if (GetEntPropFloat(ent, Prop_Send, "m_flPercentageConstructed") < 1.0)
     {
-        new level = GetEntProp(ent, Prop_Send, "m_iHighestUpgradeLevel");
+        int level = GetEntProp(ent, Prop_Send, "m_iHighestUpgradeLevel");
         Trace("ConvertToRepairNode: ent=0x%08x, type=%d, level=%d, BuildingBuildDelay=%f", ent, BuildingType[ent], level, BuildingBuildDelay[level]);
         CreateTimer(BuildingBuildDelay[level], DelayedActivate, ref);
     }
@@ -2026,31 +2026,31 @@ ConvertToRepairNode(ent, percent, const float range[4], const regen[4],
 
 ConvertToUpgradeStation(ent) // float delay, Timer:stageFunc, flags=0)
 {
-    new ref = BuildingRef[ent] = EntIndexToEntRef(ent);
+    int ref = BuildingRef[ent] = EntIndexToEntRef(ent);
     TraceInto("amp_node", "ConvertToUpgradeStation", "ref=0x%08x, ent=0x%08x", ref, ent);
 
-    new func = CreateEntityByName("func_upgradestation");
+    int func = CreateEntityByName("func_upgradestation");
     if (func > 0 && IsValidEdict(func))
     {
         DispatchKeyValue(func, "StartDisabled", "0");
         DispatchSpawn(func);
         ActivateEntity(func);
 
-        decl float objpos[3];
+        float objpos[3];
         GetEntPropVector(ent, Prop_Send, "m_vecOrigin", objpos);
 
-        //decl float objang[3];
+        //float objang[3];
         //GetEntPropVector(ent, Prop_Send, "m_vecAngles", objang);
         //objang[1] += 90.0;
 
         TeleportEntity(func, objpos, NULL_VECTOR, NULL_VECTOR);
         SetEntityModel(func, UpgradeStationModel);
 
-        SetEntPropVector(func, Prop_Send, "m_vecMins", Float:{-30.0, -30.0, 0.0}); 
-        SetEntPropVector(func, Prop_Send, "m_vecMaxs", Float:{30.0, 30.0, 100.0}); 
+        SetEntPropVector(func, Prop_Send, "m_vecMins", view_as<float>({-30.0, -30.0, 0.0}); 
+        SetEntPropVector(func, Prop_Send, "m_vecMaxs", view_as<float>({30.0, 30.0, 100.0}); 
         SetEntProp(func, Prop_Send, "m_nSolidType", SOLID_BBOX);
 
-        new enteffects = GetEntProp(func, Prop_Send, "m_fEffects");
+        int enteffects = GetEntProp(func, Prop_Send, "m_fEffects");
         enteffects |= 32;
         SetEntProp(func, Prop_Send, "m_fEffects", enteffects);
 
@@ -2069,7 +2069,7 @@ ConvertToUpgradeStation(ent) // float delay, Timer:stageFunc, flags=0)
 
         if (GetEntPropFloat(ent, Prop_Send, "m_flPercentageConstructed") < 1.0)
         {
-            new level = GetEntProp(ent, Prop_Send, "m_iHighestUpgradeLevel");
+            int level = GetEntProp(ent, Prop_Send, "m_iHighestUpgradeLevel");
             Trace("ConvertToUpgradeStation: ent=0x%08x, type=%d, level=%d, BuildingBuildDelay=%f", ent, BuildingType[ent], level, BuildingBuildDelay[level]);
             CreateTimer(BuildingBuildDelay[level], DelayedActivate, ref);
         }
@@ -2091,8 +2091,8 @@ public BuildMenu(Handle menu,MenuAction:action,client,selection)
         GetMenuItem(menu,selection,SelectionInfo,sizeof(SelectionInfo));
         ExplodeString(SelectionInfo,",",SelectionPart,sizeof(SelectionPart), sizeof(SelectionPart[]));
 
-        new ref = StringToInt(SelectionPart[0]);
-        new ent = EntRefToEntIndex(ref);
+        int ref = StringToInt(SelectionPart[0]);
+        int ent = EntRefToEntIndex(ref);
         if (ent > 0 && IsValidEntity(ent))
         {
             switch(StringToInt(SelectionPart[1]))
@@ -2169,7 +2169,7 @@ public BuildMenu(Handle menu,MenuAction:action,client,selection)
 // Wait over stage, Transition to the complete stage
 public Action DelayedActivate(Handle hTimer,any ref)
 {
-    new ent = EntRefToEntIndex(ref);
+    int ent = EntRefToEntIndex(ref);
     TraceInto("amp_node", "", "ref=0x%08x, ent=0x%08x", ref, ent);
     if (ent > 0)
     {
@@ -2184,7 +2184,7 @@ public Action DelayedActivate(Handle hTimer,any ref)
 // Complete stage, change the model and show a particle fountain
 public Action Activate(Handle hTimer, any ref)
 {
-    new ent = EntRefToEntIndex(ref);
+    int ent = EntRefToEntIndex(ref);
     TraceInto("amp_node", "Activate", "hTimer=0x%08x, ref=0x%08x, ent=0x%08x", hTimer, ref, ent);
 
     if (ent > 0 && IsValidEntity(ent))
@@ -2199,7 +2199,7 @@ public Action Activate(Handle hTimer, any ref)
             BuildingOn[ent] = true;
             ResetModel(ent);
 
-            new particle;
+            int particle;
             if (TFTeam:GetEntProp(ent, Prop_Send, "m_iTeamNum")==TFTeam_Red)
                 AttachParticle(ent,"teleported_red",particle); //Create Effect of TP
             else
@@ -2233,14 +2233,14 @@ public ResetModel(ent)
     else if (BuildingType[ent] == TFExtObject_RepairNode)
     {
         // If there's a prop, make sure it stays invisible.
-        new prop = EntRefToEntIndex(BuildingProp[ent]);
+        int prop = EntRefToEntIndex(BuildingProp[ent]);
         if (prop > 0 && IsValidEdict(prop))
         {
             //DispatchKeyValue(prop, "rendermode", "10");
             SetEntityRenderMode(prop, RENDER_NONE);
         }
 
-        new level = GetEntProp(ent, Prop_Send, "m_iUpgradeLevel");
+        int level = GetEntProp(ent, Prop_Send, "m_iUpgradeLevel");
         Format(modelname,sizeof(modelname),"%s%d%s",RepairNodeModel,level,".mdl");
         Trace("ResetModel: ent=0x%08x, Reset Repair Node Model to %s", ent, modelname);
         SetEntityModel(ent,modelname);
@@ -2257,7 +2257,7 @@ public ResetModel(ent)
 //Wait for kill teleport effect
 public Action RemoveEntityTimer(Handle hTimer,any ref)
 {
-    new ent = EntRefToEntIndex(ref);
+    int ent = EntRefToEntIndex(ref);
     if (ent > 0 && IsValidEntity(ent))
         AcceptEntityInput(ent, "kill");
 
@@ -2293,8 +2293,8 @@ AttachParticle(ent, char particleType[],&particle)
 
 stock CleanString(char strBuffer[])
 {
-    // Cleanup any illegal characters
-    new Length = strlen(strBuffer);
+    // Cleanup any illegal char acters
+    int Length = strlen(strBuffer);
     for (int i =0; i<Length; i++)
     {
         switch(strBuffer[i])
@@ -2320,9 +2320,9 @@ public Native_ControlAmpNode(Handle plugin,numParams)
 
 public Native_SetAmplifier(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
 
-    new TFCond:condition = TFCond:GetNativeCell(2);
+    int TFCond:condition = TFCond:GetNativeCell(2);
     NativeCondition[client] = (condition < TFCond_Slowed) ? DefaultCondition : condition;
 
     float range[4];
@@ -2332,7 +2332,7 @@ public Native_SetAmplifier(Handle plugin,numParams)
     else
         NativeAmplifierRange[client] = range;
 
-    new percent = GetNativeCell(4);
+    int percent = GetNativeCell(4);
     NativeAmplifierPercent[client] = (percent < 0) ? AmplifierPercent : percent;
 
     NativeAmplifier[client] = bool GetNativeCell(5);
@@ -2343,7 +2343,7 @@ public Native_SetAmplifier(Handle plugin,numParams)
 
 public Native_SetRepairNode(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
 
     float range[4];
     GetNativeArray(2, range, sizeof(range));
@@ -2352,7 +2352,7 @@ public Native_SetRepairNode(Handle plugin,numParams)
     else        
         NativeRepairNodeRange[client] = range;
 
-    new rate[4];
+    int rate[4];
     GetNativeArray(3, rate, sizeof(rate));
     if (rate[0] < 0)
         NativeRegen[client] = DefaultRegen;
@@ -2365,16 +2365,16 @@ public Native_SetRepairNode(Handle plugin,numParams)
     else
         NativeShells[client] = rate;
 
-    new rockets = GetNativeCell(5);
+    int rockets = GetNativeCell(5);
     NativeRockets[client] = (rockets < 0) ? DefaultRockets : rockets;
 
-    new team = GetNativeCell(6);
+    int team = GetNativeCell(6);
     RepairNodeTeam[client] = (team < 0) ? DefaultTeam : bool team;
 
-    new mini = GetNativeCell(7);
+    int mini = GetNativeCell(7);
     RepairNodeMini[client] = (mini < 0) ? DefaultMini : bool mini;
 
-    new percent = GetNativeCell(8);
+    int percent = GetNativeCell(8);
     NativeRepairNodePercent[client] = (percent < 0) ? RepairNodePercent : percent;
 
     NativeRepairNode[client] = bool GetNativeCell(9);
@@ -2385,7 +2385,7 @@ public Native_SetRepairNode(Handle plugin,numParams)
 
 public Native_SetUpgradeStation(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
 
     NativeUpgradeStation[client] = bool GetNativeCell(2);
 
@@ -2395,15 +2395,15 @@ public Native_SetUpgradeStation(Handle plugin,numParams)
 
 public Native_CountConvertedBuildings(Handle plugin,numParams)
 {
-    new count = 0;
-    new client = GetNativeCell(1);
-    new TFExtObjectType:type = GetNativeCell(2);
-    new maxEntities = GetMaxEntities();
+    int count = 0;
+    int client = GetNativeCell(1);
+    int TFExtObjectType:type = GetNativeCell(2);
+    int maxEntities = GetMaxEntities();
     for (int i =MaxClients+1; i<maxEntities; i++)
     {
         if (BuildingType[i] == type)
         {
-            new ampent = EntRefToEntIndex(BuildingRef[i]);
+            int ampent = EntRefToEntIndex(BuildingRef[i]);
             if (ampent > 0)
             {
                 if (GetEntPropEnt(ampent, Prop_Send, "m_hBuilder") == client)
@@ -2416,16 +2416,16 @@ public Native_CountConvertedBuildings(Handle plugin,numParams)
 
 public Native_ConvertToAmplifier(Handle plugin,numParams)
 {
-    new ent = GetNativeCell(1);
+    int ent = GetNativeCell(1);
     if (ent > 0 && IsValidEntity(ent))
     {
-        new client = GetNativeCell(2);
-        new TFCond:condition = TFCond:GetNativeCell(3);
+        int client = GetNativeCell(2);
+        int TFCond:condition = TFCond:GetNativeCell(3);
 
         float range[4];
         GetNativeArray(4, range, sizeof(range));
 
-        new percent = GetNativeCell(5);
+        int percent = GetNativeCell(5);
 
         if (BuildingType[ent] != TFExtObject_Amplifier)
         {
@@ -2456,24 +2456,24 @@ public Native_ConvertToAmplifier(Handle plugin,numParams)
 
 public Native_ConvertToRepairNode(Handle plugin,numParams)
 {
-    new ent = GetNativeCell(1);
+    int ent = GetNativeCell(1);
     if (ent > 0 && IsValidEntity(ent))
     {
-        new client = GetNativeCell(2);
+        int client = GetNativeCell(2);
 
         float range[4];
         GetNativeArray(3, range, sizeof(range));
 
-        new regen[4];
+        int regen[4];
         GetNativeArray(4, regen, sizeof(regen));
 
-        new shells[4];
+        int shells[4];
         GetNativeArray(5, shells, sizeof(shells));
 
-        new rockets = GetNativeCell(6);
-        new team = GetNativeCell(7);
-        new mini = GetNativeCell(8);
-        new percent = GetNativeCell(9);
+        int rockets = GetNativeCell(6);
+        int team = GetNativeCell(7);
+        int mini = GetNativeCell(8);
+        int percent = GetNativeCell(9);
 
         if (BuildingType[ent] != TFExtObject_RepairNode)
         {
@@ -2528,7 +2528,7 @@ public Native_ConvertToRepairNode(Handle plugin,numParams)
 
 public Native_ConvertToUpgradeStation(Handle plugin,numParams)
 {
-    new ent = GetNativeCell(1);
+    int ent = GetNativeCell(1);
     if (ent > 0 && IsValidEntity(ent))
     {
         if (BuildingType[ent] != TFExtObject_UpgradeStation)

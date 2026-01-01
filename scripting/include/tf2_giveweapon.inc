@@ -61,8 +61,8 @@ stock bool TF2_WeaponEquip(client, entity)
  */
 stock TF2_RemoveOnlyWeapons(client)
 {
-    new lastSlot;
-    new TFClassType:class = TF2_GetPlayerClass(client);
+    int lastSlot;
+    int TFClassType:class = TF2_GetPlayerClass(client);
     if (class == TFClass_Spy)
     {
         ClientCommand(client, "slot4");
@@ -76,7 +76,7 @@ stock TF2_RemoveOnlyWeapons(client)
     else
         lastSlot = 5;
 
-    for (new i = 0; i <= lastSlot; i++)
+    for (int i = 0; i <= lastSlot; i++)
     {
         TF2_RemoveWeaponSlot(client, i);
     }
@@ -92,7 +92,7 @@ stock TF2_RemoveOnlyWeapons(client)
  */
 stock TF2_RemoveNonMelee(client, bool pda=false)
 {
-    for (new i = 0; i <= 1; i++)
+    for (int i = 0; i <= 1; i++)
     {
         TF2_RemoveWeaponSlot(client, i);
     }
@@ -102,7 +102,7 @@ stock TF2_RemoveNonMelee(client, bool pda=false)
 
     if (!pda)
     {
-        for (new i = 3; i <= 5; i++)
+        for (int i = 3; i <= 5; i++)
         {
             TF2_RemoveWeaponSlot(client, i);
         }
@@ -120,7 +120,7 @@ stock TF2_RemoveNonMelee(client, bool pda=false)
 stock bool TF2_GivePlayerWeapon(client, const char[] weapon)
 {
     //new weaponIndex = GivePlayerItem(client, weapon);
-    new weaponIndex = TF2_GiveNamedItem(client, weapon);
+    int weaponIndex = TF2_GiveNamedItem(client, weapon);
     if (weaponIndex == -1)
         return false;
     else

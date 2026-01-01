@@ -39,12 +39,12 @@
 #include "effect/HaloSprite"
 #include "effect/FlashScreen"
 
-new const char[] deathWav[]      = "sc/pardth00.wav";
-new const char[] summonWav[]     = "sc/pdardy00.wav";
-new const char[] rageReadyWav[]  = "sc/pdapss03.wav";
-new const char[] rageExpireWav[] = "sc/pdawht00.wav";
+static const char[] deathWav[]      = "sc/pardth00.wav";
+static const char[] summonWav[]     = "sc/pdardy00.wav";
+static const char[] rageReadyWav[]  = "sc/pdapss03.wav";
+static const char[] rageExpireWav[] = "sc/pdawht00.wav";
 
-new const char[] archonWav[][]   = { "sc/pdapss00.wav" ,
+static const char[] archonWav[][]   = { "sc/pdapss00.wav" ,
                                      "sc/pdapss01.wav" ,
                                      "sc/pdapss02.wav" ,
                                      "sc/pdayes01.wav" ,
@@ -53,7 +53,7 @@ new const char[] archonWav[][]   = { "sc/pdapss00.wav" ,
                                      "sc/pdawht02.wav" ,
                                      "sc/pdawht03.wav" };
 
-new const char[] g_PsiBladesSound[] = "sc/uzefir00.wav";
+static const char[] g_PsiBladesSound[] = "sc/uzefir00.wav";
 
 new raceID, shockwaveID, shieldsID, meleeID, rageID;
 new maelstormID, controlID, ultimateFeedbackID;
@@ -232,7 +232,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
         m_RageActive[client] = false;
 
         //Set Archon Color
-        new r,g,b;
+        int r,g,b;
         if (TFTeam:GetClientTeam(client) == TFTeam_Red)
         { r = 255; g = 0; b = 0; }
         else
@@ -363,7 +363,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         SetEntityHealth(client, health);
 
         //Set Archon Color
-        new r,g,b;
+        int r,g,b;
         if (TFTeam:GetClientTeam(client) == TFTeam_Red)
         { r = 255; g = 0; b = 0; }
         else
@@ -380,7 +380,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
 public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
                                 attacker_race, damage, absorbed, bool from_sc)
 {
-    new Action returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
 
     if (!from_sc && attacker_index > 0 &&
         attacker_index != victim_index &&
@@ -388,7 +388,7 @@ public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacke
     {
         damage += absorbed;
 
-        new blades_level=GetUpgradeLevel(attacker_index,raceID,meleeID);
+        int blades_level=GetUpgradeLevel(attacker_index,raceID,meleeID);
         if (MeleeAttack(raceID, meleeID, blades_level, event, damage,
                         victim_index, attacker_index, g_PsiBladesPercent,
                         g_PsiBladesSound, "sc_blades"))
@@ -443,7 +443,7 @@ public bool PsionicShockwave(damage, victim_index, index)
         !GetImmunity(victim_index, Immunity_Upgrades) &&
         !IsInvulnerable(victim_index))
     {
-        new shockwave_level=GetUpgradeLevel(index,raceID,shockwaveID);
+        int shockwave_level=GetUpgradeLevel(index,raceID,shockwaveID);
         int adj = shockwave_level*10;
         if (GetRandomInt(1,100) <= GetRandomInt(10+adj,100-adj))
         {
@@ -493,17 +493,17 @@ public Maelstorm(client, level)
 
         float range = g_MaelstormRange[level];
 
-        new count=0;
+        int count=0;
         float indexLoc[3];
         float clientLoc[3];
         GetClientAbsOrigin(client, clientLoc);
         clientLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
-        new lightning  = Lightning();
+        int lightning  = Lightning();
         int haloSprite = HaloSprite();
         static const color[4] = { 0, 255, 0, 255 };
 
-        new team=GetClientTeam(client);
+        int team=GetClientTeam(client);
         for (int index=1;index<=MaxClients;index++)
         {
             if (client != index && IsClientInGame(index) &&
@@ -594,7 +594,7 @@ public Maelstorm(client, level)
     }
 }
 
-public Action RecloakPlayer(Handle timer,any:userid)
+public Action RecloakPlayer(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (client > 0)
@@ -652,7 +652,7 @@ void DoMindControl(client,level)
     }
 }
 
-public Action Exclaimation(Handle timer, any:userid) // Every 3.0 seconds
+public Action Exclaimation(Handle timer, any userid) // Every 3.0 seconds
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client))

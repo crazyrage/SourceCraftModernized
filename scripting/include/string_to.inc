@@ -1,7 +1,7 @@
 /**
  * vim: set ai et ts=4 sw=4 syntax=sourcepawn :
  * File: string_to.inc
- * Description: Functions to convert Strings To integers, floats, arrays, etc...
+ * Description: Functions to convert Strings To int egers, float s, arrays, etc...
  * Author: Naris (Murray Wilson)
  */
 
@@ -12,9 +12,9 @@
 
 stock StringToIntegerArray(const char[] buffer, Handle array)
 {
-    new count=0;
+    int count=0;
     char num[16];
-    for (new index=0, pos=0; index >= 0; pos += index)
+    for (int index=0, pos=0; index >= 0; pos += index)
     {
         index = BreakString(buffer[pos], num, sizeof(num));
         PushArrayCell(array,StringToInt(num));
@@ -25,9 +25,9 @@ stock StringToIntegerArray(const char[] buffer, Handle array)
 
 stock StringToFloatArray(const char[] buffer, Handle array)
 {
-    new count=0;
+    int count=0;
     char num[16];
-    for (new index=0, pos=0; index >= 0; pos += index)
+    for (int index=0, pos=0; index >= 0; pos += index)
     {
         index = BreakString(buffer[pos], num, sizeof(num));
         PushArrayCell(array,StringToFloat(num));
@@ -38,9 +38,9 @@ stock StringToFloatArray(const char[] buffer, Handle array)
 
 stock StringToIntegers(const char[] buffer, array[], size)
 {
-    new count=0;
+    int count=0;
     char num[16];
-    for (new index=0, pos=0; index >= 0; pos += index)
+    for (int index=0, pos=0; index >= 0; pos += index)
     {
         index = BreakString(buffer[pos], num, sizeof(num));
         array[count] = StringToInt(num);
@@ -50,11 +50,11 @@ stock StringToIntegers(const char[] buffer, array[], size)
     return count;
 }
 
-stock StringToFloats(const char[] buffer, Float array[], size)
+stock StringToFloats(const char[] buffer, float[] array, size)
 {
-    new count=0;
+    int count=0;
     char num[16];
-    for (new index=0, pos=0; index >= 0; pos += index)
+    for (int index=0, pos=0; index >= 0; pos += index)
     {
         index = BreakString(buffer[pos], num, sizeof(num));
         array[count] = StringToFloat(num);

@@ -71,7 +71,7 @@ public Action Event_PlayerBuiltObject(Handle event, const char[] name, bool dont
 	SDKHook(iObject, SDKHook_OnTakeDamage, OnTakeDamage);
 }
 
-public Action OnTakeDamage(victim, &attacker, &inflictor, &float damage, &damagetype) {
+public Action OnTakeDamage(victim, &attacker, &inflictor, float & damage, &damagetype) {
 	if(attacker > 0 && attacker <= MaxClients && (damagetype & DMG_ACID)) {
 		char sNetclass[32];
 		GetEntityNetClass(victim, sNetclass, sizeof(sNetclass));
@@ -90,7 +90,7 @@ public Action OnTakeDamage(victim, &attacker, &inflictor, &float damage, &damage
 				}
 
 				if(g_bShowParticle) {
-					decl float pos[3];
+					float pos[3];
 					GetEntPropVector(victim,Prop_Send,"m_vecOrigin",pos);
 					pos[2] += 64.0;
 					TE_ParticleToClient(attacker, "crit_text", pos);

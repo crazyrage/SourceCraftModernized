@@ -59,26 +59,26 @@ new gasRadius[MAXPLAYERS+1];
 new gasAmount[MAXPLAYERS+1];
 new gasEveryone[MAXPLAYERS+1];
 new gasAllocation[MAXPLAYERS+1];
-boolgasEnabled[MAXPLAYERS+1];
-floatg_LastAttack[MAXPLAYERS+1];
-Handletimer_handle[MAXPLAYERS+1][128];
-Handlehurtdata[MAXPLAYERS+1][128];
-boolgNativeControl = false;
-boolg_roundstart = false;
+bool gasEnabled[MAXPLAYERS+1];
+float g_LastAttack[MAXPLAYERS+1];
+Handle timer_handle[MAXPLAYERS+1][128];
+Handle hurtdata[MAXPLAYERS+1][128];
+bool gNativeControl = false;
+bool g_roundstart = false;
 
-Handleg_Cvar_GasAmount = null;
-Handleg_Cvar_Red       = null;
-Handleg_Cvar_Green     = null;
-Handleg_Cvar_Blue      = null;
-Handleg_Cvar_Random    = null;
-Handleg_Cvar_Damage    = null;
-Handleg_Cvar_Admins    = null;
-Handleg_Cvar_Time      = null;
-Handleg_Cvar_Enable    = null;
-Handleg_Cvar_Delay     = null;
-Handleg_Cvar_Msg       = null;
-Handleg_Cvar_Radius    = null;
-Handleg_Cvar_Whoosh    = null;
+Handle g_Cvar_GasAmount = null;
+Handle g_Cvar_Red       = null;
+Handle g_Cvar_Green     = null;
+Handle g_Cvar_Blue      = null;
+Handle g_Cvar_Random    = null;
+Handle g_Cvar_Damage    = null;
+Handle g_Cvar_Admins    = null;
+Handle g_Cvar_Time      = null;
+Handle g_Cvar_Enable    = null;
+Handle g_Cvar_Delay     = null;
+Handle g_Cvar_Msg       = null;
+Handle g_Cvar_Radius    = null;
+Handle g_Cvar_Whoosh    = null;
 
 public Plugin myinfo = 
 {
@@ -89,7 +89,7 @@ public Plugin myinfo =
     url = "http://www.theville.org"
 }
 
-public APLResAskPluginLoad2(Handle myself, bool late, char[] error, err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, err_max)
 {
     // Register Natives
     CreateNative("ControlGas",Native_ControlGas);
@@ -164,9 +164,9 @@ public OnMapEnd()
     CleanupDamageEntity();
 }
 
-public PlayerSpawnEvent(Handle event, const char[]name[], bool dontBroadcast)
+public PlayerSpawnEvent(Handle event, const char name[], bool dontBroadcast)
 {
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));
 
     if (gNativeControl)
         gasAmount[client] = gasAllocation[client];
@@ -193,7 +193,7 @@ public PlayerSpawnEvent(Handle event, const char[]name[], bool dontBroadcast)
         CreateTimer(GetConVarFloat(g_Cvar_Delay), SetGas, client);
 }
 
-public PlayerDeathEvent(Handle event, const char[]name[], bool dontBroadcast)
+public PlayerDeathEvent(Handle event, const char name[], bool dontBroadcast)
 {
 	if (gNativeControl || GetConVarInt(g_Cvar_Enable))
     {
@@ -211,18 +211,18 @@ public PlayerDeathEvent(Handle event, const char[]name[], bool dontBroadcast)
             }
         }
 
-        new client = GetClientOfUserId(GetEventInt(event, "userid"));
+        int client = GetClientOfUserId(GetEventInt(event, "userid"));
         gasAmount[client] = 0;
     }
 }
 
-public PlayerDisconnectEvent(Handle event, const char[]name[], bool dontBroadcast)
+public PlayerDisconnectEvent(Handle event, const char name[], bool dontBroadcast)
 {
 	if (gNativeControl || GetConVarInt(g_Cvar_Enable))
 	{
 		new client = GetClientOfUserId(GetEventInt(event, "userid"));
 
-		for (new i = GetConVarInt(g_Cvar_GasAmount); i > 0 ; i--)
+		for (int i = GetConVarInt(g_Cvar_GasAmount); i > 0 ; i--)
 		{
 			if (timer_handle[client][i] != null)
 			{
@@ -234,16 +234,16 @@ public PlayerDisconnectEvent(Handle event, const char[]name[], bool dontBroadcas
 	}
 }
 
-public RoundStartEvent(Handle event, const char[]name[], bool dontBroadcast)
+public RoundStartEvent(Handle event, const char name[], bool dontBroadcast)
 {
 	if (gNativeControl || GetConVarInt(g_Cvar_Enable))
 	{
 		g_roundstart = true;
 		CreateTimer(1.0, Reset, 0);
 		
-		for (new klient = 1; klient <= 64; klient++)
+		for (int klient = 1; klient <= 64; klient++)
 		{
-			for (new i = GetConVarInt(g_Cvar_GasAmount); i > 0 ; i--)
+			for (int i = GetConVarInt(g_Cvar_GasAmount); i > 0 ; i--)
 			{
 				if (timer_handle[klient][i] != null)
 				{
@@ -256,17 +256,17 @@ public RoundStartEvent(Handle event, const char[]name[], bool dontBroadcast)
 	}
 }
 
-public ActionSetGas(Handle timer, any:client)
+public Action SetGas(Handle timer, any client)
 {
 	gasEnabled[client] = true;
 }
 
-public ActionReset(Handle timer, any:client)
+public Action Reset(Handle timer, any client)
 {
 	g_roundstart = false;
 }
 
-public ActionGas(client, args)
+public Action Gas(client, args)
 {
     if (gNativeControl || GetConVarInt(g_Cvar_Enable))
     {
@@ -303,14 +303,14 @@ public ActionGas(client, args)
                 if (gasAmount[client] >= 127)
                     gasAmount[client] = 127;
 
-                floatvAngles[3];
-                floatvOrigin[3];
-                floatpos[3];
+                float vAngles[3];
+                float vOrigin[3];
+                float pos[3];
 
                 GetClientEyePosition(client,vOrigin);
                 GetClientEyeAngles(client, vAngles);
 
-                Handletrace = TR_TraceRayFilterEx(vOrigin, vAngles, MASK_SHOT, RayType_Infinite, TraceEntityFilterPlayer);
+                Handle trace = TR_TraceRayFilterEx(vOrigin, vAngles, MASK_SHOT, RayType_Infinite, TraceEntityFilterPlayer);
 
                 if (TR_DidHit(trace))
                 {
@@ -321,7 +321,7 @@ public ActionGas(client, args)
 
                 PrepareAndEmitSoundToAll(SHOOT, client);
 
-                boolmessage = GetConVarBool(g_Cvar_Msg);
+                bool message = GetConVarBool(g_Cvar_Msg);
                 if (message)
                 {
                     PrintToChat(client, "[SM] Gas has been called in.  Take cover!");
@@ -335,7 +335,7 @@ public ActionGas(client, args)
                 TE_SetupSparks(pos, NULL_VECTOR, 1, 1);
                 TE_SendToAll(1.0);
 
-                floatwhooshtime;
+                float whooshtime;
                 if (GetConVarInt(g_Cvar_Whoosh) == 0)
                 {
                     CreateTimer(2.5, BigWhoosh, client);
@@ -346,7 +346,7 @@ public ActionGas(client, args)
                     whooshtime = 0.1;
                 }
 
-                Handlegasdata = CreateDataPack();
+                Handle gasdata = CreateDataPack();
                 CreateTimer(whooshtime, CreateGas, gasdata);
                 WritePackCell(gasdata, client);
                 WritePackFloat(gasdata, pos[0]);
@@ -371,46 +371,46 @@ public ActionGas(client, args)
     return Plugin_Handled;
 }
 
-public boolTraceEntityFilterPlayer(entity, contentsMask)
+public bool TraceEntityFilterPlayer(entity, contentsMask)
 {
     return entity > MaxClients || !entity;
 } 
 
-public ActionBigWhoosh(Handle timer, any:client)
+public Action BigWhoosh(Handle timer, any client)
 {
     PrepareAndEmitSoundToAll(MORTAR, _, _, _, _, 0.8);
 }
 
-public ActionCreateGas(Handle timer, Handle:gasdata)
+public Action CreateGas(Handle timer, Handle gasdata)
 {
     ResetPack(gasdata);
-    new client = ReadPackCell(gasdata);
+    int client = ReadPackCell(gasdata);
 
     if (IsEntLimitReached(.client=client,.message="unable to spawn gas after launch"))
         return Plugin_Stop;
 
-    floatlocation[3];
+    float location[3];
     location[0] = ReadPackFloat(gasdata);
     location[1] = ReadPackFloat(gasdata);
     location[2] = ReadPackFloat(gasdata);
-    new gasNumber = ReadPackCell(gasdata);
+    int gasNumber = ReadPackCell(gasdata);
     CloseHandle(gasdata);
 
-    new pointHurt = 0;
+    int pointHurt = 0;
 
-    new ff_on = gasEveryone[client];
+    int ff_on = gasEveryone[client];
     if (ff_on == -1)
         ff_on = GetConVarInt(FindConVar("mp_friendlyfire"));
 
-    charoriginData[64];
+    char originData[64];
     Format(originData, sizeof(originData), "%f %f %f", location[0], location[1], location[2]);
 
-    charradius[64];
-    new rad = gasRadius[client];
+    char radius[64];
+    int rad = gasRadius[client];
     Format(radius, sizeof(radius), "%i", (rad > 0) ? rad : GetConVarInt(g_Cvar_Radius));
 
     // Create the Explosion
-    new explosion = CreateEntityByName("env_explosion");
+    int explosion = CreateEntityByName("env_explosion");
     if (explosion > 0 && IsValidEdict(explosion))
     {
         DispatchKeyValue(explosion,"Origin", originData);
@@ -419,8 +419,8 @@ public ActionCreateGas(Handle timer, Handle:gasdata)
         AcceptEntityInput(explosion, "Explode");
         AcceptEntityInput(explosion, "Kill");
 
-        chardamage[64];
-        new dmg = gasDamage[client];
+        char damage[64];
+        int dmg = gasDamage[client];
         Format(damage, sizeof(damage), "%i", (dmg > 0) ? dmg : GetConVarInt(g_Cvar_Damage));
 
         if (ff_on)
@@ -452,7 +452,7 @@ public ActionCreateGas(Handle timer, Handle:gasdata)
             timer_handle[client][gasNumber] = CreateTimer(1.0, Point_Hurt, hurtdata[client][gasNumber], TIMER_REPEAT);
         }
 
-        charcolorData[64];
+        char colorData[64];
         if (GetConVarInt(g_Cvar_Random) == 0)
         {
             Format(colorData, sizeof(colorData), "%i %i %i", GetConVarInt(g_Cvar_Red),
@@ -467,9 +467,9 @@ public ActionCreateGas(Handle timer, Handle:gasdata)
         }
 
         // Create the Gas Cloud
-        chargas_name[128];
+        char gas_name[128];
         Format(gas_name, sizeof(gas_name), "Gas%i", client);
-        new gascloud = CreateEntityByName("env_smokestack");
+        int gascloud = CreateEntityByName("env_smokestack");
         if (gascloud > 0 && IsValidEdict(gascloud))
         {
             DispatchKeyValue(gascloud,"targetname", gas_name);
@@ -490,13 +490,13 @@ public ActionCreateGas(Handle timer, Handle:gasdata)
 
             PrepareAndEmitSoundToAll(GAS_CLOUD, _, _, _, _, 0.8);
 
-            floatlength= GetConVarFloat(g_Cvar_Time);
+            float length= GetConVarFloat(g_Cvar_Time);
             if (length <= 8.0)
                 length = 8.0;
 
             g_LastAttack[client] = GetEngineTime() + length;
 
-            Handleentitypack = CreateDataPack();
+            Handle entitypack = CreateDataPack();
             CreateTimer(length, RemoveGas, entitypack);
             CreateTimer(length + 5.0, KillGas, entitypack);
             WritePackCell(entitypack, EntIndexToEntRef(gascloud));
@@ -513,13 +513,13 @@ public ActionCreateGas(Handle timer, Handle:gasdata)
     return Plugin_Stop;
 }
 
-public ActionRemoveGas(Handle timer, Handle:entitypack)
+public Action RemoveGas(Handle timer, Handle entitypack)
 {
     ResetPack(entitypack);
-    new gascloud = EntRefToEntIndex(ReadPackCell(entitypack));
-    new pointHurt = EntRefToEntIndex(ReadPackCell(entitypack));
-    new gasNumber = ReadPackCell(entitypack);
-    new client = ReadPackCell(entitypack);
+    int gascloud = EntRefToEntIndex(ReadPackCell(entitypack));
+    int pointHurt = EntRefToEntIndex(ReadPackCell(entitypack));
+    int gasNumber = ReadPackCell(entitypack);
+    int client = ReadPackCell(entitypack);
 
     if (gascloud > 0 && IsValidEntity(gascloud))
         AcceptEntityInput(gascloud, "TurnOff");
@@ -535,34 +535,34 @@ public ActionRemoveGas(Handle timer, Handle:entitypack)
     }
 }
 
-public ActionKillGas(Handle timer, Handle:entitypack)
+public Action KillGas(Handle timer, Handle entitypack)
 {
     ResetPack(entitypack);
 
-    new gascloud = EntRefToEntIndex(ReadPackCell(entitypack));
+    int gascloud = EntRefToEntIndex(ReadPackCell(entitypack));
     if (gascloud > 0 && IsValidEntity(gascloud))
         AcceptEntityInput(gascloud, "Kill");
 
-    new pointHurt = EntRefToEntIndex(ReadPackCell(entitypack));
+    int pointHurt = EntRefToEntIndex(ReadPackCell(entitypack));
     if (pointHurt > 0 && IsValidEntity(pointHurt))
         AcceptEntityInput(pointHurt, "Kill");
 
     CloseHandle(entitypack);
 }
 
-public ActionPoint_Hurt(Handle timer, Handle:hurt)
+public Action Point_Hurt(Handle timer, Handle hurt)
 {
 	ResetPack(hurt);
-	new client = ReadPackCell(hurt);
-	new gasNumber = ReadPackCell(hurt);
-	floatlocation[3];
+	int client = ReadPackCell(hurt);
+	int gasNumber = ReadPackCell(hurt);
+	float location[3];
 	location[0] = ReadPackFloat(hurt);
 	location[1] = ReadPackFloat(hurt);
 	location[2] = ReadPackFloat(hurt);
 	
 	if (!g_roundstart)
 	{
-		for (new target = 1; target <= GetMaxClients(); target++)
+		for (int target = 1; target <= GetMaxClients(); target++)
 		{
 			if (IsClientInGame(target))
 			{
@@ -570,10 +570,10 @@ public ActionPoint_Hurt(Handle timer, Handle:hurt)
 				{
 					if (GetClientTeam(client) != GetClientTeam(target))
 					{
-						floattargetVector[3];
+						float targetVector[3];
 						GetClientAbsOrigin(target, targetVector);
 								
-						floatdistance = GetVectorDistance(targetVector, location);
+						float distance = GetVectorDistance(targetVector, location);
 								
 						if (distance < 300)
 						{
@@ -615,8 +615,8 @@ public Native_ControlGas(Handle plugin,numParams)
 
 public Native_GiveGas(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
-    new amount = GetNativeCell(2);
+    int client = GetNativeCell(1);
+    int amount = GetNativeCell(2);
     gasDamage[client] = GetNativeCell(3);
     gasRadius[client] = GetNativeCell(4);
     gasEveryone[client] = GetNativeCell(5);
@@ -626,19 +626,19 @@ public Native_GiveGas(Handle plugin,numParams)
 
 public Native_TakeGas(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     gasAmount[client] = gasAllocation[client] = gasDamage[client] = gasRadius[client] = 0;
 }
 
 public Native_EnableGas(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     gasEnabled[client] = bool:GetNativeCell(2);
 }
 
 public Native_HasGas(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     return GetNativeCell(2) ? gasAllocation[client] : gasAmount[client];
 }
 

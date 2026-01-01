@@ -30,17 +30,17 @@ enum ParticleAttachmentType
 ** type (0 = not attached, 1 = normal attachment, 2 = head attachment). Allows
 ** offsets from the entity's position.
 ** ------------------------------------------------------------------------- */
-stock CreateParticle(const char[] particleType, Float time=5.0, entity=-1,
+stock CreateParticle(const char[] particleType, float time=5.0, entity=-1,
                      ParticleAttachmentType:attach=Attach,
                      const char[] attachToBone="head",
-                     const Float pos[3]=NULL_VECTOR,
-                     const Float ang[3]=NULL_VECTOR,
+                     const float pos[3]=NULL_VECTOR,
+                     const float ang[3]=NULL_VECTOR,
                      target=-1, const char[] targetBone="flag",
                      &target_particle=0,
                      Timer:deleteFunc=Timer:INVALID_FUNCTION,
                      &Handle timerHandle=null)
 {
-    new particle = CreateEntityByName("info_particle_system");
+    int particle = CreateEntityByName("info_particle_system");
     if (particle > 0 && IsValidEdict(particle))
     {
         DispatchKeyValue(particle, "effect_name", particleType);
@@ -142,39 +142,39 @@ stock CreateParticle(const char[] particleType, Float time=5.0, entity=-1,
 }
 
 #define AttachParticleToHead(%1,%2,%3,%4,%5) CreateParticle(%2,%4,%1,Attach,"head",%3)
-//stock AttachParticleToHead(ent, const char[] particleType, Timer:func=Timer:0, Float time=5.0,
-//                     const Float offsetVec[3]=NULL_VECTOR)
+//stock AttachParticleToHead(ent, const char[] particleType, Timer:func=Timer:0, float time=5.0,
+//                     const float offsetVec[3]=NULL_VECTOR)
 //{
 //    return CreateParticle(particleType, time, ent, Attach, "head", offsetVec);
 //}
 
 #define AttachParticleEx(%1,%2,%3,%4,%5) CreateParticle(%2,%3,%1,Attach,"",%4,%5)
-//stock AttachParticleEx(ent, const char[] particleType, Float time, Float addPos[3]=NULL_VECTOR, Float addAngle[3]=NULL_VECTOR)
+//stock AttachParticleEx(ent, const char[] particleType, float time, float addPos[3]=NULL_VECTOR, float addAngle[3]=NULL_VECTOR)
 //{
 //    return CreateParticle(particleType, time, ent, Attach, "", addPos, addAngle);
 //}
 
 #define AttachParticleBone(%1,%2,%3,%4,%5,%6) CreateParticle(%2,%4,%1,Attach,%3,%5,%6)
-//stock AttachParticleBone(ent, const char[] particleType, char[] attachBone, Float time,
-//                         Float addPos[3]=NULL_VECTOR, Float addAngle[3]=NULL_VECTOR)
+//stock AttachParticleBone(ent, const char[] particleType, char[] attachBone, float time,
+//                         float addPos[3]=NULL_VECTOR, float addAngle[3]=NULL_VECTOR)
 //{
 //    return CreateParticle(particleType, time, ent, Attach, attachBone, addPos, addAngle);
 //}
 
 #define ShowParticle(%1,%2,%3,%4) CreateParticle(%2,%3,0,NoAttach,"",%1,NULL_VECTOR,NULL_VECTOR,%4)
-//stock ShowParticle(Float pos[3], const char[] particleType, Float time, Timer:func)
+//stock ShowParticle(float pos[3], const char[] particleType, float time, Timer:func)
 //{
 //    return CreateParticle(particleType, time, 0, NoAttach, "", pos,NULL_VECTOR,NULL_VECTOR,func);
 //}
 
 #define ShowParticleEx(%1,%2,%3,%4,%5) CreateParticle(%2,%3,0,NoAttach,"",%1,%4,%5)
-//stock ShowParticleEx(const char[] particlename, Float time, Float pos[3], Float ang[3]=NULL_VECTOR)
+//stock ShowParticleEx(const char[] particlename, float time, float pos[3], float ang[3]=NULL_VECTOR)
 //{
 //    return CreateParticle(particleType, time, 0, NoAttach, "", pos, ang);
 //}
 
 #define ShowParticleEntity(%1,%2,%3,%4,%5) CreateParticle(%2,%3,%1,Attach,"",%4,%5)
-//stock ShowParticleEntity(ent, const char[] particleType, Float time, Float addPos[3]=NULL_VECTOR, Float addAngle[3]=NULL_VECTOR)
+//stock ShowParticleEntity(ent, const char[] particleType, float time, float addPos[3]=NULL_VECTOR, float addAngle[3]=NULL_VECTOR)
 //{
 //    return CreateParticle(particleType, time, ent, Attach, "", pos, ang);
 //}
@@ -185,7 +185,7 @@ stock DeleteParticle(&particleRef)
 {
     if (particleRef != INVALID_ENT_REFERENCE)
     {
-        new particle = EntRefToEntIndex(particleRef);
+        int particle = EntRefToEntIndex(particleRef);
         if (particle > 0 && IsValidEntity(particle))
             AcceptEntityInput(particle, "kill");
 
@@ -200,12 +200,12 @@ public Action RemoveParticle(Handle timer, any particleRef)
     return Plugin_Stop;
 }
 
-stock TE_SetupParticle(const char[] Name, const Float origin[3]=NULL_VECTOR,
-                       const Float start[3]=NULL_VECTOR, const Float angles[3]=NULL_VECTOR,
+stock TE_SetupParticle(const char[] Name, const float origin[3]=NULL_VECTOR,
+                       const float start[3]=NULL_VECTOR, const float angles[3]=NULL_VECTOR,
                        entindex=-1, attachtype=-1, attachpoint=-1, bool resetParticles=true)
 {
     // find string table
-    new tblidx = FindStringTable("ParticleEffectNames");
+    int tblidx = FindStringTable("ParticleEffectNames");
     if (tblidx==INVALID_STRING_TABLE) 
     {
         LogError("Could not find string table: ParticleEffectNames");
@@ -214,9 +214,9 @@ stock TE_SetupParticle(const char[] Name, const Float origin[3]=NULL_VECTOR,
     
     // find particle index
     char tmp[256];
-    new count = GetStringTableNumStrings(tblidx);
-    new stridx = INVALID_STRING_INDEX;
-    new i;
+    int count = GetStringTableNumStrings(tblidx);
+    int stridx = INVALID_STRING_INDEX;
+    int i;
     for (i=0; i<count; i++)
     {
         ReadStringTable(tblidx, i, tmp, sizeof(tmp));
@@ -254,10 +254,10 @@ stock TE_SetupParticle(const char[] Name, const Float origin[3]=NULL_VECTOR,
     TE_WriteNum("m_bResetParticles", resetParticles);    
 }
 
-stock TE_Particle(const char[] Name, const Float origin[3]=NULL_VECTOR,
-                  const Float start[3]=NULL_VECTOR, const Float angles[3]=NULL_VECTOR,
+stock TE_Particle(const char[] Name, const float origin[3]=NULL_VECTOR,
+                  const float start[3]=NULL_VECTOR, const float angles[3]=NULL_VECTOR,
                   entindex=-1, attachtype=-1, attachpoint=-1, bool resetParticles=true,
-                  Float delay=0.0)
+                  float delay=0.0)
 {
     TE_SetupParticle(Name, origin, start, angles, entindex,
                      attachtype, attachpoint, resetParticles);

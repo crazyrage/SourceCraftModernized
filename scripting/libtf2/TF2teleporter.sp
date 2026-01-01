@@ -25,14 +25,14 @@ public Plugin myinfo =
 bool NativeControl = false;
 float TeleporterTime[ MAXPLAYERS+1 ] = { 0.0, ...};
 
-new TeleporterList[ MAXPLAYERS+1 ][ 2 ];
+int TeleporterList[ MAXPLAYERS+1 ][ 2 ];
 
 Handle g_cvarEnabled = null;
 Handle g_cvarBlueTime = null;
 Handle g_cvarRedTime = null;
 Handle g_cvarTime = null;
 
-new g_Enabled;         // plugin status enabled/disabled
+int g_Enabled;         // plugin status enabled/disabled
 float g_BlueTime;  // blue team recharge time
 float g_RedTime;   // red team recharge time
 float g_Time;      // global recharge time
@@ -88,7 +88,7 @@ public TF2ConfigsChanged(Handle convar, const char[] oldValue, const char[] newV
         {
             //plugin change status disabled -> enabled
             //must collect all existing teleports
-            new owner;
+            int owner;
             char classname[19];
 
             for (int i = GetMaxClients() + 1; i <= GetMaxEntities(); i++)
@@ -116,10 +116,10 @@ public Action Event_player_builtobject(Handle event, const char[] name, bool don
     if ( GetEventInt(event, "object") != 1)
         return Plugin_Continue;
 
-    new entity = GetEventInt(event, "index");
+    int entity = GetEventInt(event, "index");
     if (IsValidEntity(entity))
     {
-        new owner = GetClientOfUserId(GetEventInt(event, "userid"));
+        int owner = GetClientOfUserId(GetEventInt(event, "userid"));
 
         //check for entrance (0 = entrance, 1 = exit)
         if (GetEntProp(entity, Prop_Send, "m_iObjectMode") == 0)
@@ -135,8 +135,8 @@ public Action event_player_teleported(Handle event, const char[] name, bool dont
 {
     if(g_Enabled)
     {
-        new owner = GetClientOfUserId(GetEventInt(event, "builderid"));
-        new entity = TeleporterList[owner][ LIST_OBJECT ];
+        int owner = GetClientOfUserId(GetEventInt(event, "builderid"));
+        int entity = TeleporterList[owner][ LIST_OBJECT ];
         if(IsValidEntity(entity))
         {
             float time;

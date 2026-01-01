@@ -61,11 +61,11 @@ public Action Command_Spawn(client, args)
 
 SetTeleportEndPoint(client)
 {
-	decl float vAngles[3];
-	decl float vOrigin[3];
-	decl float vBuffer[3];
-	decl float vStart[3];
-	decl float Distance;
+	float vAngles[3];
+	float vOrigin[3];
+	float vBuffer[3];
+	float vStart[3];
+	float Distance;
 	
 	GetClientEyePosition(client,vOrigin);
 	GetClientEyeAngles(client, vAngles);

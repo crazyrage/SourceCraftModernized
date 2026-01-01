@@ -13,7 +13,7 @@ public Plugin myinfo =
 
 	int thisRaceID;
 
-new m_vecVelocity_0, m_vecVelocity_1, m_vecBaseVelocity; //offsets
+int m_vecVelocity_0, m_vecVelocity_1, m_vecBaseVelocity; //offsets
 
 bool bTrapped[MAXPLAYERSCUSTOM];
 
@@ -152,10 +152,10 @@ public void OnWar3LoadRaceOrItemOrdered(num)
 
 public PlayerJumpEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    new client=GetClientOfUserId(GetEventInt(event,"userid"));
+    int client=GetClientOfUserId(GetEventInt(event,"userid"));
 
     if(ValidPlayer(client,true)){
-        new race=War3_GetRace(client);
+        int race=War3_GetRace(client);
         if (race==thisRaceID)
         {
             
@@ -214,7 +214,7 @@ public Action OnPlayerRunCmd(client, &buttons, &impulse, float vel[3], float ang
                     
                     
                     
-                    decl float velocity[3]; 
+                    float velocity[3]; 
                     GetEntDataVector(client, m_vecVelocity_0, velocity); //gets all 3
                     
                     /*if he is not in speed ult
@@ -277,7 +277,7 @@ public OnUltimateCommand(client,race,bool pressed)
 {
     if(race==thisRaceID && IsPlayerAlive(client) && pressed)
     {
-        new skill_level=War3_GetSkillLevel(client,race,ULT_SPHERE);
+        int skill_level=War3_GetSkillLevel(client,race,ULT_SPHERE);
         if(skill_level>0)
         {
             
@@ -348,10 +348,10 @@ public OnUltimateCommand(client,race,bool pressed)
         }
     }
 }
-public Action sphereLoop(Handle h,any:client){
+public Action sphereLoop(Handle h,any client){
     if(hasSphere[client]&&SphereEndTime[client]>GetGameTime()){
         float victimpos[3];
-        new team=GetClientTeam(client);
+        int team=GetClientTeam(client);
         for(int i=1;i<=MaxClients;i++){
             if(ValidPlayer(i,true)&&GetClientTeam(i)!=team&&!bTrapped[i]&&!W3HasImmunity(i,Immunity_Ultimates)){
                 GetClientEyePosition(i,victimpos);
@@ -385,7 +385,7 @@ public Action sphereLoop(Handle h,any:client){
 
     
 }
-public Action unBashUlt(Handle h,any:client){
+public Action unBashUlt(Handle h,any client){
     War3_SetBuff(client,bBashed,thisRaceID,false);
     War3_SetBuff(client,fAttackSpeed,thisRaceID,1.0);
     bTrapped[client]=false;
@@ -393,7 +393,7 @@ public Action unBashUlt(Handle h,any:client){
     War3_SetBuff(client,bImmunityUltimates,thisRaceID,false);
     
 }
-public Action sphereend(Handle h,any:client){
+public Action sphereend(Handle h,any client){
     hasSphere[client]=false;
     
 }
@@ -463,7 +463,7 @@ public void OnWar3EventPostHurt(victim, attacker, float damage, const char[] wea
     if(ValidPlayer(victim,true)&&ValidPlayer(attacker,true))
     {    
         
-        new skilllevel=War3_GetSkillLevel(victim,thisRaceID,SKILL_REWIND);
+        int skilllevel=War3_GetSkillLevel(victim,thisRaceID,SKILL_REWIND);
         //we do a chance roll here, and if its less than our limit (RewindChance) we proceede i a with u
         // allow self damage rewind
         if(War3_GetRace(victim)==thisRaceID && skilllevel>0&& War3_Chance(RewindChance[skilllevel]) && !W3HasImmunity(attacker,Immunity_Skills)&&!Hexed(victim)) //chance roll, and attacker isnt immune to skills
@@ -481,7 +481,7 @@ public void OnWar3EventPostHurt(victim, attacker, float damage, const char[] wea
         }
         
         
-        new race_attacker=War3_GetRace(attacker);
+        int race_attacker=War3_GetRace(attacker);
         skilllevel=War3_GetSkillLevel(attacker,thisRaceID,SKILL_TIMELOCK);
         if(race_attacker==thisRaceID && skilllevel > 0 && victim!=attacker)
         {
@@ -509,7 +509,7 @@ public void OnWar3EventPostHurt(victim, attacker, float damage, const char[] wea
 }
 
 
-public Action UnfreezeStun(Handle h,any:client) //always keep timer data generic
+public Action UnfreezeStun(Handle h,any client) //always keep timer data generic
 {
     War3_SetBuff(client,bStunned,thisRaceID,false);
 }

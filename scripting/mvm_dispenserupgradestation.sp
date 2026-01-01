@@ -54,12 +54,12 @@ public Action OnBuiltObject(Handle hEvent, char strEventName[], bool bDontBroadc
 	DispatchSpawn(entindex);
 	ActivateEntity(entindex);
 	
-	decl float objpos[3]; GetEntPropVector(entity, Prop_Data, "m_vecOrigin", objpos);
+	float objpos[3]; GetEntPropVector(entity, Prop_Data, "m_vecOrigin", objpos);
 	TeleportEntity(entindex, objpos, NULL_VECTOR, NULL_VECTOR);
 	SetEntityModel(entindex, "models/props_hydro/road_bumper01.mdl");
 
-	SetEntPropVector(entindex, Prop_Send, "m_vecMins", Float:{-30.0, -30.0, 0.0}); 
-	SetEntPropVector(entindex, Prop_Send, "m_vecMaxs", Float:{30.0, 30.0, 100.0}); 
+	SetEntPropVector(entindex, Prop_Send, "m_vecMins", view_as<float>({-30.0, -30.0, 0.0}); 
+	SetEntPropVector(entindex, Prop_Send, "m_vecMaxs", view_as<float>({30.0, 30.0, 100.0}); 
 	SetEntProp(entindex, Prop_Send, "m_nSolidType", SOLID_BBOX);
 	
 	int enteffects = GetEntProp(entindex, Prop_Send, "m_fEffects");

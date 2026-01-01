@@ -22,9 +22,9 @@ enum VecAngle
 }
 
 /**
- * Makes a negative integer number to a positive integer number.
- * This is faster than Sourcemod's native FloatAbs() for integers.
- * Use FloatAbs() for Float numbers.
+ * Makes a negative int eger number to a positive int eger number.
+ * This is faster than Sourcemod's native FloatAbs() for int egers.
+ * Use FloatAbs() for float numbers.
  *
  * @param number		A number that can be positive or negative.
  * @return				Positive number.
@@ -43,7 +43,7 @@ stock Math_Abs(value)
  * @param tolerance 	If you want to check that those vectors are somewhat even. 0.0 means they are 100% even if this function returns true.
  * @return				True if vectors are equal, false otherwise.
  */
-stock bool Math_VectorsEqual(Float vec1[3], Float vec2[3], Float tolerance=0.0)
+stock bool Math_VectorsEqual(float vec1[3], float vec2[3], float tolerance=0.0)
 {
 	float distance = GetVectorDistance(vec1, vec2, true);
 
@@ -123,8 +123,8 @@ stock bool Math_IsInBounds(any value, any min, any max)
 
 /**
  * Let's the specified value "overflow" if it is outside the given limit.
- * This is like with integers when it reaches a value above the max possible
- * integer size.
+ * This is like with int egers when it reaches a value above the max possible
+ * int eger size.
  *
  * @param value			Value
  * @param min			Min value used as lower border
@@ -148,7 +148,7 @@ stock any Math_Overflow(any value, any min, any max)
  */
 stock Math_GetRandomInt(min, max)
 {
-	new random = GetURandomInt();
+	int random = GetURandomInt();
 
 	if (random == 0) {
 		random++;
@@ -158,15 +158,15 @@ stock Math_GetRandomInt(min, max)
 }
 
 /**
- * Returns a random, uniform Float number in the specified (inclusive) range.
+ * Returns a random, uniform float number in the specified (inclusive) range.
  * This is safe to use multiple times in a function.
  * The seed is set automatically for each plugin.
  *
  * @param min			Min value used as lower border
  * @param max			Max value used as upper border
- * @return				Random Float number between min and max
+ * @return				Random float number between min and max
  */
-stock Float Math_GetRandomFloat(Float min, Float max)
+stock float Math_GetRandomFloat(float min, float max)
 {
 	return (GetURandomFloat() * (max  - min)) + min;
 }
@@ -185,15 +185,15 @@ stock Math_GetPercentage(value, all) {
 }
 
 /**
- * Gets the percentage of amount in all as Float where
+ * Gets the percentage of amount in all as float where
  * amount and all are numbers and amount usually
  * is a subset of all.
  *
- * @param value			Float value
- * @param all			Float value
- * @return				A Float value between 0.0 and 100.0 (inclusive).
+ * @param value			float value
+ * @param all			float value
+ * @return				A float value between 0.0 and 100.0 (inclusive).
  */
-stock Float Math_GetPercentageFloat(Float value, Float all) {
+stock float Math_GetPercentageFloat(float value, float all) {
 	return (value / all) * 100.0;
 }
 
@@ -208,7 +208,7 @@ stock Float Math_GetPercentageFloat(Float value, Float all) {
  * @param output		Output vector
  * @noreturn
  */
-stock Math_MoveVector(const Float start[3], const Float end[3], Float scale, Float output[3])
+stock Math_MoveVector(const float start[3], const float end[3], float scale, float output[3])
 {
 	SubtractVectors(end,start,output);
 	ScaleVector(output,scale);
@@ -216,15 +216,15 @@ stock Math_MoveVector(const Float start[3], const Float end[3], Float scale, Flo
 }
 
 /**
- * Puts x, y and z into a vector.
+ * Puts x, y and z int o a vector.
  *
- * @param x				Float value.
- * @param y				Float value.
- * @param z				Float value.
+ * @param x				float value.
+ * @param y				float value.
+ * @param z				float value.
  * @param result		Output vector.
  * @noreturn
  */
-stock Math_MakeVector(const Float x, const Float y, const Float z, Float result[3])
+stock Math_MakeVector(const float x, const float y, const float z, float result[3])
 {
 	result[0] = x;
 	result[1] = y;
@@ -244,10 +244,10 @@ stock Math_MakeVector(const Float x, const Float y, const Float z, Float result[
  * @param result		Output vector.
  * @noreturn
  */
-stock Math_RotateVector(const Float vec[3], const Float angles[3], Float result[3])
+stock Math_RotateVector(const float vec[3], const float angles[3], float result[3])
 {
 	// First the angle/radiant calculations
-	decl Float rad[3];
+	float rad[3];
 	// I don't really know why, but the alpha, beta, gamma order of the angles are messed up...
 	// 2 = xAxis
 	// 0 = yAxis
@@ -265,8 +265,8 @@ stock Math_RotateVector(const Float vec[3], const Float angles[3], Float result[
 	float sinGamma = Sine(rad[2]);
 
 	// 3D rotation matrix for more information: http://en.wikipedia.org/wiki/Rotation_matrix#In_three_dimensions
-	float x = vec[0], Float y = vec[1], Float z = vec[2];
-	float newX, Float newY, Float newZ;
+	float x = vec[0], float y = vec[1], float z = vec[2];
+	float newX, float newY, float newZ;
 	newY = cosAlpha*y - sinAlpha*z;
 	newZ = cosAlpha*z + sinAlpha*y;
 	y = newY;
@@ -291,10 +291,10 @@ stock Math_RotateVector(const Float vec[3], const Float angles[3], Float result[
 /**
  * Converts Source Game Units to metric Meters
  *
- * @param units			Float value
- * @return				Meters as Float value.
+ * @param units			float value
+ * @return				Meters as float value.
  */
-stock Float Math_UnitsToMeters(Float units)
+stock float Math_UnitsToMeters(float units)
 {
 	return (units * GAMEUNITS_TO_METERS);
 }
@@ -302,10 +302,10 @@ stock Float Math_UnitsToMeters(Float units)
 /**
  * Converts Source Game Units to Meters
  *
- * @param units			Float value
- * @return				Feet as Float value.
+ * @param units			float value
+ * @return				Feet as float value.
  */
-stock Float Math_UnitsToFeet(Float units)
+stock float Math_UnitsToFeet(float units)
 {
 	return (Math_UnitsToMeters(units) * METERS_TO_FEET);
 }
@@ -313,10 +313,10 @@ stock Float Math_UnitsToFeet(Float units)
 /**
  * Converts Source Game Units to Centimeters
  *
- * @param units			Float value
- * @return				Centimeters as Float value.
+ * @param units			float value
+ * @return				Centimeters as float value.
  */
-stock Float Math_UnitsToCentimeters(Float units)
+stock float Math_UnitsToCentimeters(float units)
 {
 	return (Math_UnitsToMeters(units) * 100.0);
 }
@@ -324,10 +324,10 @@ stock Float Math_UnitsToCentimeters(Float units)
 /**
  * Converts Source Game Units to Kilometers
  *
- * @param units			Float value
- * @return				Kilometers as Float value.
+ * @param units			float value
+ * @return				Kilometers as float value.
  */
-stock Float Math_UnitsToKilometers(Float units)
+stock float Math_UnitsToKilometers(float units)
 {
 	return (Math_UnitsToMeters(units) / 1000.0);
 }
@@ -335,10 +335,10 @@ stock Float Math_UnitsToKilometers(Float units)
 /**
  * Converts Source Game Units to Miles
  *
- * @param units			Float value
- * @return				Miles as Float value.
+ * @param units			float value
+ * @return				Miles as float value.
  */
-stock Float Math_UnitsToMiles(Float units)
+stock float Math_UnitsToMiles(float units)
 {
 	return (Math_UnitsToKilometers(units) * KILOMETERS_TO_MILES);
 }

@@ -287,7 +287,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
 public OnItemPurchase(client,item)
 {
-    new race=GetRace(client);
+    int race=GetRace(client);
     if (race == raceID && IsValidClientAlive(client))
     {
         if (g_bootsItem < 0)
@@ -381,7 +381,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
 public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
                                 attacker_race, damage, absorbed, bool from_sc)
 {
-    new Action returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
 
     if (!from_sc && attacker_race == raceID && attacker_index != victim_index &&
         IsClient(attacker_index) && IsClient(victim_index) )
@@ -459,7 +459,7 @@ public Action OnPlayerAssistEvent(Handle event, victim_index, victim_race,
                                   assister_index, assister_race, damage,
                                   absorbed)
 {
-    new Action returnCode = Plugin_Continue;
+    int Action returnCode = Plugin_Continue;
 
     if (assister_race == raceID && IsClient(assister_index) && IsClient(victim_index))
     {
@@ -539,7 +539,7 @@ public Action OnJetpack(client)
     return Plugin_Continue;
 }
 
-public Action EnsnareExpire(Handle timer,any:userid)
+public Action EnsnareExpire(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (client > 0)
@@ -569,7 +569,7 @@ public Action OnPlayerRestored(client)
     return Plugin_Continue;
 }
 
-public Action Parasite(Handle timer, any:client)
+public Action Parasite(Handle timer, any client)
 {
     if (IsValidClientAlive(client))
     {
@@ -742,7 +742,7 @@ public Action Parasite(Handle timer, any:client)
 
 void ResetParasite(client)
 {
-    new Handle timer = m_ParasiteTimer[client];
+    int Handle timer = m_ParasiteTimer[client];
     if (timer != null)
     {
         m_ParasiteTimer[client] = null;	

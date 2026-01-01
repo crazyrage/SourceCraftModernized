@@ -32,8 +32,8 @@ enum Collision_Group_t
     COLLISION_GROUP_NONE  = 0,
     COLLISION_GROUP_DEBRIS,             // Collides with nothing but world and static stuff
     COLLISION_GROUP_DEBRIS_TRIGGER,     // Same as debris, but hits triggers
-    COLLISION_GROUP_INTERACTIVE_DEB,    // RIS, // Collides with everything except other interactive debris or debris
-    COLLISION_GROUP_INTERACTIVE,        // Collides with everything except interactive debris or debris
+    COLLISION_GROUP_INTERACTIVE_DEB,    // RIS, // Collides with everything except other int eractive debris or debris
+    COLLISION_GROUP_INTERACTIVE,        // Collides with everything except int eractive debris or debris
     COLLISION_GROUP_PLAYER,
     COLLISION_GROUP_BREAKABLE_GLASS,
     COLLISION_GROUP_VEHICLE,
@@ -67,8 +67,8 @@ enum Collision_Group_t
 #if !defined SolidFlags_t
 enum SolidFlags_t
 {
-    FSOLID_CUSTOMRAYTEST        = 0x0001,   // Ignore solid type + always call into the entity for ray tests
-    FSOLID_CUSTOMBOXTEST        = 0x0002,   // Ignore solid type + always call into the entity for swept box tests
+    FSOLID_CUSTOMRAYTEST        = 0x0001,   // Ignore solid type + always call int o the entity for ray tests
+    FSOLID_CUSTOMBOXTEST        = 0x0002,   // Ignore solid type + always call int o the entity for swept box tests
     FSOLID_NOT_SOLID            = 0x0004,   // Are we currently not solid?
     FSOLID_TRIGGER              = 0x0008,   // This is something may be collideable but fires touch functions
                                             // even when it's not collideable (when the FSOLID_NOT_SOLID flag is set)
@@ -91,7 +91,7 @@ enum SolidType_t
     SOLID_BBOX          = 2,    // an AABB
     SOLID_OBB           = 3,    // an OBB (not implemented yet)
     SOLID_OBB_YAW       = 4,    // an OBB, constrained so that it can only yaw
-    SOLID_CUSTOM        = 5,    // Always call into the entity for tests
+    SOLID_CUSTOM        = 5,    // Always call int o the entity for tests
     SOLID_VPHYSICS      = 6,    // solid vphysics object, get vcollide from the model and collide with that
     SOLID_LAST
 };

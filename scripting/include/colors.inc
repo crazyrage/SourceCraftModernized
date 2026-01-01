@@ -65,7 +65,7 @@ stock CPrintToChat(client, const char[] szMessage, any ...)
 	Format(szBuffer, sizeof(szBuffer), "\x01%s", szMessage);
 	VFormat(szCMessage, sizeof(szCMessage), szBuffer, 3);
 	
-	new index = CFormat(szCMessage, sizeof(szCMessage));
+	int index = CFormat(szCMessage, sizeof(szCMessage));
 	if (index == NO_INDEX)
 	{
 		PrintToChat(client, szCMessage);
@@ -129,7 +129,7 @@ stock CPrintToChatEx(client, author, const char[] szMessage, any ...)
 	Format(szBuffer, sizeof(szBuffer), "\x01%s", szMessage);
 	VFormat(szCMessage, sizeof(szCMessage), szBuffer, 4);
 	
-	new index = CFormat(szCMessage, sizeof(szCMessage), author);
+	int index = CFormat(szCMessage, sizeof(szCMessage), author);
 	if (index == NO_INDEX)
 	{
 		PrintToChat(client, szCMessage);
@@ -181,7 +181,7 @@ stock CPrintToChatAllEx(author, const char[] szMessage, any ...)
  */
 stock CRemoveTags(char[] szMessage, maxlength)
 {
-	for (new i = 0; i < MAX_COLORS; i++)
+	for (int i = 0; i < MAX_COLORS; i++)
 	{
 		ReplaceString(szMessage, maxlength, CTag[i], "", false);
 	}
@@ -246,7 +246,7 @@ stock CFormat(char[] szMessage, maxlength, author=NO_INDEX)
 	}
 
 	/* For other color tags we need a loop */
-	for (new i = 0; i < MAX_COLORS; i++)
+	for (int i = 0; i < MAX_COLORS; i++)
 	{
 		/* If tag not found - skip */
 		if (StrContains(szMessage, CTag[i], false) == -1)

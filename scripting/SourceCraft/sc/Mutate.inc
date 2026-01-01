@@ -1,7 +1,7 @@
 /**
  * vim: set ai et ts=4 sw=4 syntax=sourcepawn :
  * File: Mutate.inc
- * Description: SourceCraft Upgrade to Mutate into buildings.
+ * Description: SourceCraft Upgrade to Mutate int o buildings.
  * Author(s): -=|JFH|=-Naris
  */
  
@@ -157,20 +157,20 @@ stock Mutate(client, level, raceId, upgradeId, maxUpgradeID=-1,
         Handle menu=CreateMenu(Mutate_Selected);
         SetMenuTitle(menu, "[SC] %T", "MutateTitle", client);
 
-        new maxCount=(maxUpgradeID >= 0) ? GetUpgradeLevel(client,raceId,maxUpgradeID) + 1 : 1;
+        int maxCount=(maxUpgradeID >= 0) ? GetUpgradeLevel(client,raceId,maxUpgradeID) + 1 : 1;
         if (maxCount > maxObjects)
             maxCount = maxObjects;
 
         float energy      = GetEnergy(client);
         float energy_cost = GetUpgradeEnergy(raceId, upgradeId);
 
-        new vespene           = GetVespene(client);
-        new vespene_cost      = GetUpgradeVespene(raceId, upgradeId);
+        int vespene           = GetVespene(client);
+        int vespene_cost      = GetUpgradeVespene(raceId, upgradeId);
 
         bool ok           = (energy >= energy_cost && vespene >= vespene_cost);
 
-        new counts[TFOBJECT_COUNT];
-        new sum = CountBuildings(client, counts);
+        int counts[TFOBJECT_COUNT];
+        int sum = CountBuildings(client, counts);
 
         AddMenuItemT(menu,"6","MiniSentry", client, (ok && counts[TFObject_Sentry] < maxCount) ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
 
@@ -183,7 +183,7 @@ stock Mutate(client, level, raceId, upgradeId, maxUpgradeID=-1,
             AddMenuItemT(menu,"2","SentryRequiresLevel2", client, ITEMDRAW_DISABLED);
         }
 
-        new dispenserOK = (ok && counts[TFObject_Dispenser] < maxCount);
+        int dispenserOK = (ok && counts[TFObject_Dispenser] < maxCount);
 
         if (m_AmpNodeAvailable)
         {
@@ -297,12 +297,12 @@ stock MutateInto(client, raceId, upgradeId, maxUpgradeID, maxObjects=5,
             return;
         }
 
-        new maxCount = (maxUpgradeID >= 0) ? GetUpgradeLevel(client,raceId,maxUpgradeID) + 1 : 1;
+        int maxCount = (maxUpgradeID >= 0) ? GetUpgradeLevel(client,raceId,maxUpgradeID) + 1 : 1;
         if (maxCount > maxObjects)
             maxCount = maxObjects;
 
-        new numBuilt = CountObjects(client, TF2_ObjectClassNames[type]);
-        new costNum = numBuilt+1;
+        int numBuilt = CountObjects(client, TF2_ObjectClassNames[type]);
+        int costNum = numBuilt+1;
 
         if (numBuilt >= maxCount)
         {
@@ -316,8 +316,8 @@ stock MutateInto(client, raceId, upgradeId, maxUpgradeID, maxObjects=5,
         float energy = GetEnergy(client);
         float energy_cost = GetUpgradeEnergy(raceId, upgradeId);
 
-        new vespene = GetVespene(client);
-        new vespene_cost = GetUpgradeVespene(raceId, upgradeId);
+        int vespene = GetVespene(client);
+        int vespene_cost = GetUpgradeVespene(raceId, upgradeId);
 
         if (costNum > 1)
         {
@@ -349,7 +349,7 @@ stock MutateInto(client, raceId, upgradeId, maxUpgradeID, maxObjects=5,
         }
 
         float pos[3];
-        new ent = BuildObject(client, type, (bMini || type == TFExtObject_MiniSentry) ? 1 : level,
+        int ent = BuildObject(client, type, (bMini || type == TFExtObject_MiniSentry) ? 1 : level,
                               bMini, bShielded, .iHealth=GetClientHealth(client),
                               .pos=pos, .check=false, .bDisabled=bDisabled);
         if (ent > 0)

@@ -95,7 +95,7 @@ native W3ForceDamageIsBullet();
 //get the depth of the damage stack, usually 1 or more
 native W3GetDamageStack();
 
-stock War3_DealDamageDelayed(victim,attacker,damage,String:classname[32],float delay=0.0,bool showDamage=false,showDamage_skill=0) {
+stock War3_DealDamageDelayed(victim,attacker,damage,char classname[32],float delay=0.0,bool showDamage=false,showDamage_skill=0) {
     Handle pack;
     CreateDataTimer(delay, _war3source_Timer_DealDamage, pack);
     WritePackCell(pack, victim);
@@ -347,7 +347,7 @@ stock bool War3_DecreaseHP(client, amount)
     return nsEntity_SetHealth(client, iHealth);
 }
 
-// The actual internal setHealth function. Returns if the health has changed
+// The actual int ernal setHealth function. Returns if the health has changed
 stock bool nsEntity_SetHealth(entity, health) 
 {
     int currenthp = GetEntProp(entity, Prop_Data, "m_iHealth");

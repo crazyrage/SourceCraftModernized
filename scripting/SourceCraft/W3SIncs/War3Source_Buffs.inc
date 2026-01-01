@@ -12,31 +12,31 @@
 
 // THESE PERMAMENTLY links to the player's skill level and changes the buffs acordingly
 // If player has race/skill, the value[] corresponding to the level is applied on the buff
-// values = array (usually length 5, with 0th index included, zeroth index is ignored however, internally it calls a resetbuff function to restore default value)
+// values = array (usually length 5, with 0th index included, zeroth index is ignored however, int ernally it calls a resetbuff function to restore default value)
 // of values to set the buff as, CELLS please (int or float, determined by buff itself)
 // MAX LENGTH of values is 32
 // RECALL safe
 // no return
-native War3_AddSkillBuff(raceID, skill_ID, W3Buff:buff, any:values[]);
+native War3_AddSkillBuff(raceID, skill_ID, W3Buff:buff, any values[]);
 
 // THESE PERMAMENTLY links to the player's skill level and changes the buffs acordingly
 // If player has race/skill, the value[] corresponding to the level is applied on the buff
-// values = array (usually length 5, with 0th index included, zeroth index is ignored however, internally it calls a resetbuff function to restore default value)
+// values = array (usually length 5, with 0th index included, zeroth index is ignored however, int ernally it calls a resetbuff function to restore default value)
 // of values to set the buff as, CELLS please (int or float, determined by buff itself)
 // MAX LENGTH of values is 32
 // RECALL safe
 // no return
-native War3_AddItemBuff(item_ID, W3Buff:buff, any:value);
+native War3_AddItemBuff(item_ID, W3Buff:buff, any value);
 
 // THESE PERMAMENTLY links to the player's skill level and changes the buffs acordingly
 // If player has race/skill, the value[] corresponding to the level is applied on the buff
-// values = array (usually length 5, with 0th index included, zeroth index is ignored however, internally it calls a resetbuff function to restore default value)
+// values = array (usually length 5, with 0th index included, zeroth index is ignored however, int ernally it calls a resetbuff function to restore default value)
 // of values to set the buff as, CELLS please (int or float, determined by buff itself)
 // Beware of duplicate aura short names
 // MAX LENGTH of values is 32
 // RECALL safe
 // no return
-native War3_AddAuraSkillBuff(race_ID, skill_ID, W3Buff:buff, any:values[], 
+native War3_AddAuraSkillBuff(race_ID, skill_ID, W3Buff:buff, any values[], 
                              char[] auraShortName, float distance, 
                              bool trackotherteam);
 
@@ -55,14 +55,14 @@ stock ValidBuff(W3Buff:buffindex) {
  * value can be int float bool, but has to be consistant, agreed upon by war3 main plugin
  * 
  */
-native War3_SetBuff(client,W3Buff:buffindex,raceid,any:value);
-native War3_SetBuffItem2(client,W3Buff:buffindex,itemid,any:value);
+native War3_SetBuff(client,W3Buff:buffindex,raceid,any value);
+native War3_SetBuffItem2(client,W3Buff:buffindex,itemid,any value);
 
 /*
  * set a buff, identified as coming from a item
  * 
  */
-native War3_SetBuffItem(client,W3Buff:buffindex,itemid,any:value);
+native War3_SetBuffItem(client,W3Buff:buffindex,itemid,any value);
 
 native W3BuffCustomOFFSET(); //get offset for custom buff modifier indexes. use War3_SetBuffItem(client,buffindex,W3BuffCustomOFFSET() + NUMBER,value) (YES, ITEM)
 
@@ -75,7 +75,7 @@ native W3ResetBuffItem(client, W3Buff:buffindex, itemid);
 ///RESETS ALL BUFFS PERTAINGIN TO THIS CLIENT AND RACE, basically fully getting rid if all buffs attatched to this player from your race
 native W3ResetAllBuffRace(client, raceid);
 
-//set player shell glowish color (blood mage, shadow hunter), highest override priority takes effect, all integers
+//set player shell glowish color (blood mage, shadow hunter), highest override priority takes effect, all int egers
 stock W3SetPlayerColor(client, raceid, r, g, b, a = 255,
         overridepriority = GLOW_DEFAULT) {
 #if !defined SOURCECRAFT
@@ -101,7 +101,7 @@ stock W3ResetPlayerColor(client, raceid) {
 
 //getting buffs
 native W3GetBuffLoopLimit(); //buff loop size , item count + race count + others, loop from 0 to <this return value
-native any:W3GetBuff(client,W3Buff:buffindex,RaceIDorItemID,IPassedItemID=false);
+native any W3GetBuff(client,W3Buff:buffindex,RaceIDorItemID,IPassedItemID=false);
 native bool W3GetBuffHasTrue(client,W3Buff:buffindex); //does this buff have one true (activated?)
 native W3GetBuffSumInt(client,W3Buff:buffindex);
 native float W3GetBuffStackedFloat(client,W3Buff:buffindex); //get buff stacked value of an buff, use appropriately
@@ -255,13 +255,13 @@ stock bool Perplexed(client,printmsg=true) {
     return perplexed;
 }
 
-//simple buff application which the plugin does internal tracking so you don't have to
+//simple buff application which the plugin does int ernal tracking so you don't have to
 //given a race, buffindex, and its value, applies that buff for a certain duration then calls buffReset 
 //@allowReapplyToExtendDuration if true, means a int call to the same race-buff combination will renew its duration, otherwise it will be blocked and the existing duration is kept
 #if !defined SOURCECRAFT
-native W3ApplyBuffSimple(client,W3Buff:buffindex,raceid,any:appliedBuffValue,float duration,bool allowReapplyToExtendDuration=true);
+native W3ApplyBuffSimple(client,W3Buff:buffindex,raceid,any appliedBuffValue,float duration,bool allowReapplyToExtendDuration=true);
 #else
-stock W3ApplyBuffSimple(client,W3Buff:buffindex,raceid,any:initialbuffvalue,float duration,bool allowReapplyToExtendDuration=true)
+stock W3ApplyBuffSimple(client,W3Buff:buffindex,raceid,any initialbuffvalue,float duration,bool allowReapplyToExtendDuration=true)
 {
     #pragma unused allowReapplyToExtendDuration
     War3_SetBuff(client,buffindex,raceid,initialbuffvalue);
@@ -276,7 +276,7 @@ stock W3ApplyBuffSimple(client,W3Buff:buffindex,raceid,any:initialbuffvalue,floa
     }
 }
 
-public Action ResetBuffTimer(Handle timer,any:pack)
+public Action ResetBuffTimer(Handle timer,any pack)
 {
     if (pack != null)
     {

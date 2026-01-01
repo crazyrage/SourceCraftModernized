@@ -40,12 +40,12 @@ new raceID, burrowID, degenerationID, meleeID, attackID;
 float g_BroodlingAttackRange[]      = { 1000.0, 800.0, 800.0, 800.0, 800.0 };
 float g_AdrenalGlandsPercent[]      = { 0.0, 0.15, 0.35, 0.55, 0.65 };
 
-new const char[] g_AdrenalGlandsSound[] = "sc/zbratt00.wav";
+static const char[] g_AdrenalGlandsSound[] = "sc/zbratt00.wav";
 
-new const char[] spawnWav[]             = "sc/zbrrdy00.wav";
-new const char[] deathWav[]             = "sc/zbrdth00.wav";
+static const char[] spawnWav[]             = "sc/zbrrdy00.wav";
+static const char[] deathWav[]             = "sc/zbrdth00.wav";
 
-new const char[] broodlingWav[][]       = { "sc/zbrwht00.wav" ,
+static const char[] broodlingWav[][]       = { "sc/zbrwht00.wav" ,
                                             "sc/zbrwht01.wav" ,
                                             "sc/zbrwht02.wav" ,
                                             "sc/zbrwht03.wav" ,
@@ -279,7 +279,7 @@ public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_inde
     }
 }
 
-public Action Degeneration(Handle timer, any:userid)
+public Action Degeneration(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client) && GetRace(client) == raceID)
@@ -288,14 +288,14 @@ public Action Degeneration(Handle timer, any:userid)
         GetClientAbsOrigin(client, clientLoc);
         clientLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
-        new degeneration_level=GetUpgradeLevel(client,raceID,degenerationID);
+        int degeneration_level=GetUpgradeLevel(client,raceID,degenerationID);
         HurtPlayer(client,8-degeneration_level,client,"sc_degeneration",
                    .type=DMG_POISON);
 
         FlashScreen(client,RGBA_COLOR_RED);
         TF2_AddCondition(client, TFCond_Jarated, 1.0);
 
-        new attack_level=GetUpgradeLevel(client,raceID,attackID);
+        int attack_level=GetUpgradeLevel(client,raceID,attackID);
         if (attack_level > 0)
         {
             float indexLoc[3];
@@ -380,7 +380,7 @@ public Action Degeneration(Handle timer, any:userid)
     return Plugin_Stop;
 }
 
-public Action Exclaimation(Handle timer, any:client)
+public Action Exclaimation(Handle timer, any client)
 {
     if (IsValidClientAlive(client))
     {
@@ -402,11 +402,11 @@ public Action Exclaimation(Handle timer, any:client)
     return Plugin_Stop;
 }
 
-stock CreateExclaimTimer(client, float interval, Timer:func,
+stock CreateExclaimTimer(client, float int erval, Timer:func,
                          flags=TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE)
 {
     if (m_ExclaimTimers[client] == null)
-        m_ExclaimTimers[client] = CreateTimer(interval,func,client,flags);
+        m_ExclaimTimers[client] = CreateTimer(int erval,func,client,flags);
 }
 
 stock KillExclaimTimer(client)

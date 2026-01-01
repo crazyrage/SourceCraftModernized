@@ -27,7 +27,7 @@ stock bool ConCommand_HasFlags(const char[] command, const flags)
  */
 stock ConCommand_AddFlags(const char[] command, const flags)
 {
-    new newFlags = GetCommandFlags(command);
+    int newFlags = GetCommandFlags(command);
     newFlags |= flags;
     SetCommandFlags(command, newFlags);
 }
@@ -41,7 +41,7 @@ stock ConCommand_AddFlags(const char[] command, const flags)
  */
 stock ConCommand_RemoveFlags(const char[] command, const flags)
 {
-    new newFlags = GetCommandFlags(command);
+    int newFlags = GetCommandFlags(command);
     newFlags &= ~flags;
     SetCommandFlags(command, newFlags);
 }

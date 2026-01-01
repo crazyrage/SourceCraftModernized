@@ -110,7 +110,7 @@ enum SocketOption {
  */
 	SocketLinger,
 /**
- * If this option is set out-of-band data will be inlined into the normal receive stream. This is a
+ * If this option is set out-of-band data will be inlined int o the normal receive stream. This is a
  * wrapper for setting SO_OOBINLINE.
  *
  * @param bool	whether to inline out-of-band data or not
@@ -225,9 +225,9 @@ funcenum SocketIncomingCB
  * triggered if a socket receives data
  *
  * @note This is binary safe if you always use dataSize for operations on receiveData[]
- * @note packets may be split up into multiple chunks -> multiple calls to the receive callback
+ * @note packets may be split up int o multiple chunks -> multiple calls to the receive callback
  * @note if not set otherwise by SocketSetOption(..., ConcatenateCallbacks, ...) receiveData will
- *       never be longer than 4096 characters including \0 terminator
+ *       never be longer than 4096 char acters including \0 terminator
  *
  * @param Handle	socket		The socket handle pointing to the calling socket
  * @param String	receiveData	The data which arrived, 0-terminated at receiveData[dataSize]

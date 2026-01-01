@@ -258,7 +258,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
         int boost_level = GetUpgradeLevel(client,raceID,boostID);
         SetSpeedBoost(client, boost_level, true, g_SpeedLevels);
 
-        new regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
+        int regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
         SetHealthRegen(client, float(regeneration_level));
 
         int carapace_level = GetUpgradeLevel(client,raceID,carapaceID);
@@ -296,7 +296,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
 public OnItemPurchase(client,item)
 {
-    new race=GetRace(client);
+    int race=GetRace(client);
     if (race == raceID && IsValidClientAlive(client))
     {
         if (g_bootsItem < 0)
@@ -408,7 +408,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         int boost_level = GetUpgradeLevel(client,raceID,boostID);
         SetSpeedBoost(client, boost_level, true, g_SpeedLevels);
 
-        new regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
+        int regeneration_level=GetUpgradeLevel(client,raceID,regenerationID);
         SetHealthRegen(client, float(regeneration_level));
 
         TraceReturn();
@@ -422,7 +422,7 @@ public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacke
         attacker_index != victim_index &&
         attacker_race == raceID)
     {
-        new adrenal_glands_level=GetUpgradeLevel(attacker_index,raceID,meleeID);
+        int adrenal_glands_level=GetUpgradeLevel(attacker_index,raceID,meleeID);
         int bloodlust = m_BloodlustActive[attacker_index];
         if (bloodlust && !GetRestriction(attacker_index,Restriction_NoUltimates) &&
             !GetRestriction(attacker_index,Restriction_Stunned))

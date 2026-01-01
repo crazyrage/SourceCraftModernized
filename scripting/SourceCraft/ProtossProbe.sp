@@ -563,7 +563,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         int shields_level = GetUpgradeLevel(client,raceID,shieldsID);
         SetupShields(client, shields_level, g_InitialShields, g_ShieldsPercent);
 
-        new battery_level=GetUpgradeLevel(client,raceID,batteriesID);
+        int battery_level=GetUpgradeLevel(client,raceID,batteriesID);
         if (shields_level ||
             (battery_level && GameType == tf2 &&
              TF2_GetPlayerClass(client) == TFClass_Engineer))
@@ -683,7 +683,7 @@ public PlayerUpgradedObject(Handle event,const char[] name,bool dontBroadcast)
     }
 }
 
-public Action ForgeTimer(Handle timer,any:ref)
+public Action ForgeTimer(Handle timer,any ref)
 {
     int obj = EntRefToEntIndex(ref);
     if (obj > 0 && IsValidEntity(obj) && IsValidEdict(obj))
@@ -752,7 +752,7 @@ public Action ForgeTimer(Handle timer,any:ref)
     return Plugin_Stop;
 }
 
-public Action BatteryTimer(Handle timer, any:userid)
+public Action BatteryTimer(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientNotSpec(client) && GetRace(client) == raceID &&
@@ -872,8 +872,8 @@ bool PhotonCannon(damage, victim_index, index)
             !IsInvulnerable(victim_index))
         {
             new float lastTime = m_CannonTime[index];
-            new float interval = GetGameTime() - lastTime;
-            if (lastTime == 0.0 || interval > 0.25)
+            new float int erval = GetGameTime() - lastTime;
+            if (lastTime == 0.0 || int erval > 0.25)
             {
                 if (GetRandomInt(1,100) <= g_CannonChance[cannon_level])
                 {
@@ -882,7 +882,7 @@ bool PhotonCannon(damage, victim_index, index)
                     {
                         if (CanInvokeUpgrade(index, raceID, cannonID, .notify=false))
                         {
-                            if (interval == 0.0 || interval >= 2.0)
+                            if (int erval == 0.0 || int erval >= 2.0)
                             {
                                 float Origin[3];
                                 GetEntityAbsOrigin(victim_index, Origin);
@@ -968,7 +968,7 @@ void DarkPylon(client, level)
     }
 }
 
-public Action ResetDarkPylon(Handle timer,any:userid)
+public Action ResetDarkPylon(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (client > 0)
@@ -1037,7 +1037,7 @@ void SummonPhasePrism(client)
 public Action OnAmplify(builder,client,TFCond:condition)
 {
     int from;
-    new float amount;
+    int float amount;
     switch (condition)
     {
         case TFCond_Slowed, TFCond_Zoomed:

@@ -31,7 +31,7 @@ Handle g_Glow;
 Handle v_HP_Base = null;
 Handle v_HP_Per_Player = null;
 
-new g_merasmusModel = 0;
+int g_merasmusModel = 0;
 
 Handle hAdminMenu = null;
 
@@ -90,7 +90,7 @@ public OnMapStart()
 
 public Convar_Changer(Handle convar, const char[] oldValue, const char[] newValue)
 {
-	new i = -1;
+	int i = -1;
 	while ((i = FindEntityByClassname(i, "merasmus")) != -1)
 	{
 		//sets scale/glow...works pretty well with scale...
@@ -119,7 +119,7 @@ public Action Meras(client, args)
         return Plugin_Stop;
     }
 
-    new iLevel = 0;
+    int iLevel = 0;
     if (args >= 1)
     {
         char buffer[15];
@@ -185,7 +185,7 @@ SpawnMerasmus(client, iLevel, const char[] model)
     if (!g_bSoundsPrecached)
         CacheSounds();
 
-    new entity = CreateEntityByName("merasmus");
+    int entity = CreateEntityByName("merasmus");
     if (entity > 0 && IsValidEntity(entity))
     {
         if (DispatchSpawn(entity))
@@ -196,12 +196,12 @@ SpawnMerasmus(client, iLevel, const char[] model)
             bool def = (iLevel < 0);
             if (def || iLevel > 1)
             {
-                new iBaseHP = (def) ? GetConVarInt(v_HP_Base) : 17000;
-                new iHPPerLevel = (def) ? 0 : 3000;
-                new iHPPerPlayer = (def) ? GetConVarInt(v_HP_Per_Player) : 400;
-                new iNumPlayers = GetClientCount(true);
+                int iBaseHP = (def) ? GetConVarInt(v_HP_Base) : 17000;
+                int iHPPerLevel = (def) ? 0 : 3000;
+                int iHPPerPlayer = (def) ? GetConVarInt(v_HP_Per_Player) : 400;
+                int iNumPlayers = GetClientCount(true);
 
-                new iHP = iBaseHP;
+                int iHP = iBaseHP;
                 if (iHPPerLevel > 0)
                     iHP = (iHP + ((iLevel - 2) * iHPPerLevel));
                 if (iNumPlayers > 10)
@@ -221,11 +221,11 @@ SpawnMerasmus(client, iLevel, const char[] model)
 
 SetTeleportEndPoint(client)
 {
-	decl float vAngles[3];
-	decl float vOrigin[3];
-	decl float vBuffer[3];
-	decl float vStart[3];
-	decl float Distance;
+	float vAngles[3];
+	float vOrigin[3];
+	float vBuffer[3];
+	float vStart[3];
+	float Distance;
 
 	GetClientEyePosition(client,vOrigin);
 	GetClientEyeAngles(client, vAngles);
@@ -668,7 +668,7 @@ public OnAdminMenuReady(Handle topmenu)
 	{
 		hAdminMenu = topmenu;
 
-		new TopMenuObject:server_commands = FindTopMenuCategory(hAdminMenu, ADMINMENU_SERVERCOMMANDS);
+		TopMenuObject server_commands = FindTopMenuCategory(hAdminMenu, ADMINMENU_SERVERCOMMANDS);
 		if (server_commands != INVALID_TOPMENUOBJECT)
 		{
 			AddToTopMenu(hAdminMenu,

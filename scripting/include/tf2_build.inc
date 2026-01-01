@@ -12,19 +12,19 @@
 
 #include <tf2_objects>
 
-stock BuildSentry(hBuilder, const Float fOrigin[3], const Float fAngle[3], iLevel=1,
+stock BuildSentry(hBuilder, const float fOrigin[3], const float fAngle[3], iLevel=1,
                   bool bDisabled=false, bool bMini=false, bool bShielded=false,
                   iHealth=-1, iMaxHealth=-1, iShells=-1, iRockets=-1,
-                  Float flPercentage=1.0)
+                  float flPercentage=1.0)
 {
-    static const Float fBuildMaxs[3] = { 24.0, 24.0, 66.0 };
-    //static const Float fMdlWidth[3] = { 1.0, 0.5, 0.0 };
+    static const float fBuildMaxs[3] = { 24.0, 24.0, 66.0 };
+    //static const float fMdlWidth[3] = { 1.0, 0.5, 0.0 };
 
-    new iTeam = GetClientTeam(hBuilder);
+    int iTeam = GetClientTeam(hBuilder);
 
-    new iSentryHealth;
-    new iMaxSentryShells;
-    new iMaxSentryRockets;
+    int iSentryHealth;
+    int iMaxSentryShells;
+    int iMaxSentryRockets;
     if (iLevel >= 1 && iLevel <= 3)
     {
         iSentryHealth = TF2_SentryHealth[iLevel];
@@ -65,7 +65,7 @@ stock BuildSentry(hBuilder, const Float fOrigin[3], const Float fAngle[3], iLeve
     if (iHealth < 0 || iHealth > iMaxHealth)
         iHealth = iMaxHealth;
 
-    new iSentry = CreateEntityByName(TF2_ObjectClassNames[TFObject_Sentry]);
+    int iSentry = CreateEntityByName(TF2_ObjectClassNames[TFObject_Sentry]);
     if (iSentry > 0 && IsValidEdict(iSentry))
     {
         DispatchSpawn(iSentry);
@@ -149,13 +149,13 @@ stock BuildSentry(hBuilder, const Float fOrigin[3], const Float fAngle[3], iLeve
     return iSentry;
 }
 
-stock BuildDispenser(hBuilder, const Float fOrigin[3], const Float fAngle[3], iLevel=1,
+stock BuildDispenser(hBuilder, const float fOrigin[3], const float fAngle[3], iLevel=1,
                      bool iDisabled=false, iHealth=-1, iMaxHealth=-1, iMetal=-1,
-                     Float flPercentage=1.0, TFExtObject:type=TFExtObject:TFExtObject_Dispenser)
+                     float flPercentage=1.0, TFExtObject:type=TFExtObject:TFExtObject_Dispenser)
 {
-    static const Float fBuildMaxs[3] = { 24.0, 24.0, 66.0 };
+    static const float fBuildMaxs[3] = { 24.0, 24.0, 66.0 };
 
-    new iTeam = GetClientTeam(hBuilder);
+    int iTeam = GetClientTeam(hBuilder);
 
     if (iMaxHealth < 0)
         iMaxHealth = 150;
@@ -171,7 +171,7 @@ stock BuildDispenser(hBuilder, const Float fOrigin[3], const Float fAngle[3], iL
     else if (iLevel > 3)
         iLevel = 3;
 
-    new iDispenser = CreateEntityByName(TF2_ObjectClassNames[TFObject_Dispenser]);
+    int iDispenser = CreateEntityByName(TF2_ObjectClassNames[TFObject_Dispenser]);
     if (iDispenser > 0 && IsValidEdict(iDispenser))
     {
         DispatchSpawn(iDispenser);
@@ -255,14 +255,14 @@ stock BuildDispenser(hBuilder, const Float fOrigin[3], const Float fAngle[3], iL
     return iDispenser;
 }
 
-stock BuildTeleporterEntry(hBuilder, const Float fOrigin[3], const Float fAngle[3],
+stock BuildTeleporterEntry(hBuilder, const float fOrigin[3], const float fAngle[3],
                            iLevel=1, bool iDisabled=false, iHealth=-1, iMaxHealth=-1,
-                           Float flPercentage=1.0)
+                           float flPercentage=1.0)
 {
-    static const Float fBuildMaxs[3] = { 28.0, 28.0, 66.0 };
-    //static const Float fMdlWidth[3] = { 1.0, 0.5, 0.0 };
+    static const float fBuildMaxs[3] = { 28.0, 28.0, 66.0 };
+    //static const float fMdlWidth[3] = { 1.0, 0.5, 0.0 };
 
-    new iTeam = GetClientTeam(hBuilder);
+    int iTeam = GetClientTeam(hBuilder);
 
     if (iMaxHealth < 0)
         iMaxHealth = 150;
@@ -275,7 +275,7 @@ stock BuildTeleporterEntry(hBuilder, const Float fOrigin[3], const Float fAngle[
     else if (iLevel > 3)
         iLevel = 3;
 
-    new iTeleporter = CreateEntityByName(TF2_ObjectClassNames[TFObject_Teleporter]);
+    int iTeleporter = CreateEntityByName(TF2_ObjectClassNames[TFObject_Teleporter]);
     if (iTeleporter > 0 && IsValidEdict(iTeleporter))
     {
         DispatchSpawn(iTeleporter);
@@ -336,13 +336,13 @@ stock BuildTeleporterEntry(hBuilder, const Float fOrigin[3], const Float fAngle[
     return iTeleporter;
 }
 
-stock BuildTeleporterExit(hBuilder, const Float fOrigin[3], const Float fAngle[3],
+stock BuildTeleporterExit(hBuilder, const float fOrigin[3], const float fAngle[3],
                           iLevel=1, bool iDisabled=false, iHealth=-1, iMaxHealth=-1,
-                          Float flPercentage=1.0)
+                          float flPercentage=1.0)
 {
-    static const Float fBuildMaxs[3] = { 28.0, 28.0, 66.0 };
+    static const float fBuildMaxs[3] = { 28.0, 28.0, 66.0 };
 
-    new iTeam = GetClientTeam(hBuilder);
+    int iTeam = GetClientTeam(hBuilder);
 
     if (iMaxHealth < 0)
         iMaxHealth = 150;
@@ -355,7 +355,7 @@ stock BuildTeleporterExit(hBuilder, const Float fOrigin[3], const Float fAngle[3
     else if (iLevel > 3)
         iLevel = 3;
 
-    new iTeleporter = CreateEntityByName(TF2_ObjectClassNames[TFObject_Teleporter]);
+    int iTeleporter = CreateEntityByName(TF2_ObjectClassNames[TFObject_Teleporter]);
     if (iTeleporter > 0 && IsValidEdict(iTeleporter))
     {
         DispatchSpawn(iTeleporter);

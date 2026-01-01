@@ -117,10 +117,10 @@ public void OnMapStart()
 
 public OnUltimateCommand(client,race,bool pressed)
 {
-    new userid=GetClientUserId(client);
+    int userid=GetClientUserId(client);
     if(race==thisRaceID && pressed && userid>1 && IsPlayerAlive(client) )
     {
-        new ult_level=War3_GetSkillLevel(client,race,ULTIMATE_DARKORB);
+        int ult_level=War3_GetSkillLevel(client,race,ULTIMATE_DARKORB);
         if(ult_level>0)
         {
             if(!Silenced(client)&&War3_SkillNotInCooldown(client,thisRaceID,ULTIMATE_DARKORB,true))
@@ -156,8 +156,8 @@ public OnW3TakeDmgBulletPre(victim,attacker,float damage)
 {
     if(IS_PLAYER(victim)&&IS_PLAYER(attacker)&&victim>0&&attacker>0&&attacker!=victim)
     {
-        new vteam=GetClientTeam(victim);
-        new ateam=GetClientTeam(attacker);
+        int vteam=GetClientTeam(victim);
+        int ateam=GetClientTeam(attacker);
         if(vteam!=ateam)
         {
             new race_victim=War3_GetRace(victim);
@@ -184,7 +184,7 @@ public OnW3TakeDmgBulletPre(victim,attacker,float damage)
     }
 }
 
-public Action FadeTimer(Handle timer,any:victim)
+public Action FadeTimer(Handle timer,any victim)
 {
 
     War3_SetBuff(victim,fInvisibilitySkill,thisRaceID,1.0);
@@ -234,14 +234,14 @@ public OnAbilityCommand(client,ability,bool pressed)
 }
 
 /*
-public Action TribunalTimer(Handle timer,any:client)
+public Action TribunalTimer(Handle timer,any client)
 {
     War3_SetBuff(client,fMaxSpeed,thisRaceID,1.0);
     War3_SetBuff(client,fHPDecay,thisRaceID,0.0);
     W3ResetPlayerColor(client,thisRaceID);
 }*/
 
-public Action SlowfallTimer(Handle timer,any:zclient)
+public Action SlowfallTimer(Handle timer,any zclient)
 {
     for(int client=1; client <= MaxClients; client++)
     {
@@ -256,7 +256,7 @@ public Action SlowfallTimer(Handle timer,any:zclient)
         
     }
 }
-public Action Slowfall2Timer(Handle timer,any:client)
+public Action Slowfall2Timer(Handle timer,any client)
 {
     if(ValidPlayer(client, true)){
         GetClientAbsOrigin(client,darkvec);

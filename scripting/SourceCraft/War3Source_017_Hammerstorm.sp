@@ -24,7 +24,7 @@ new float BoltStunDuration=0.3;
 new float StormCooldownTime=15.0;
 
 
-new const StormCol[4] = {255, 255, 255, 155}; // Color of the beacon
+static const StormCol[4] = {255, 255, 255, 155}; // Color of the beacon
 
 
 
@@ -258,7 +258,7 @@ public OnAbilityCommand(client,ability,bool pressed)
     }
 }
 
-public Action UnstunPlayer(Handle timer,any:client)
+public Action UnstunPlayer(Handle timer,any client)
 {
     War3_SetBuff(client,bStunned,thisRaceID,false);
     W3ResetPlayerColor(client, thisRaceID);
@@ -292,7 +292,7 @@ public OnUltimateCommand(client,race,bool pressed)
 }
 
 
-public Action stopUltimate(Handle t,any:client){
+public Action stopUltimate(Handle t,any client){
     bStrengthActivated[client] = false;
     if(ValidPlayer(client,true)){
         PrintHintText(client,"%T","You feel less powerful",client);

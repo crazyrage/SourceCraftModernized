@@ -6,9 +6,9 @@
 
 compute_hash(const char[] input)
 {
-	new res = 0xFFFFFFFF;
+	int res = 0xFFFFFFFF;
 
-	for (new i = 0; input[i]; ++i)
+	for (int i = 0; input[i]; ++i)
 	{
 		if (input[i] == '\0')
 		{
@@ -49,16 +49,16 @@ compute_hash(const char[] input)
 
 CalcInitialHashes()
 {
-	for (new i = 0; i < MAX_LOG_WEAPONS; ++i)
+	for (int i = 0; i < MAX_LOG_WEAPONS; ++i)
 	{
 		g_weapon_hashes[i] = compute_hash(g_weapon_list[i]);
 	}
 	#if defined TF2
-		for (new i = 0; i < SHOOTAUXCOUNT; ++i)
+		for (int i = 0; i < SHOOTAUXCOUNT; ++i)
 		{
 			g_weapon_hashes_shootaux[i] = compute_hash(g_weapon_list_shootaux[i]);
 		}
-		for (new i = 0; i < HITAUXCOUNT; ++i)
+		for (int i = 0; i < HITAUXCOUNT; ++i)
 		{
 			g_weapon_hashes_hitaux[i] = compute_hash(g_weapon_list_hitaux[i]);
 		}
@@ -69,17 +69,17 @@ dump_player_stats(client)
 {
 	if (IsClientInGame(client) && IsClientConnected(client))
 	{
-		char  player_authid[64];
+		char player_authid[64];
 		if (!GetClientAuthString(client, player_authid, sizeof(player_authid)))
 		{
 			strcopy(player_authid, sizeof(player_authid), "UNKNOWN");
 		}
-		new player_team_index = GetClientTeam(client);
+		int player_team_index = GetClientTeam(client);
 
-		new player_userid = GetClientUserId(client);
+		int player_userid = GetClientUserId(client);
 
-		new is_logged;
-		for (new i = 0; (i < MAX_LOG_WEAPONS); i++)
+		int is_logged;
+		for (int i = 0; (i < MAX_LOG_WEAPONS); i++)
 		{
 			#if defined INS
 			if (g_weapon_stats[client][i][LOG_HIT_HITS] > 0)
@@ -111,7 +111,7 @@ dump_player_stats(client)
 
 reset_player_stats(client)
 {
-	for (new i = 0; (i < MAX_LOG_WEAPONS); i++)
+	for (int i = 0; (i < MAX_LOG_WEAPONS); i++)
 	{
 		g_weapon_stats[client][i][LOG_HIT_SHOTS]     = 0;
 		g_weapon_stats[client][i][LOG_HIT_HITS]      = 0;
@@ -133,11 +133,11 @@ reset_player_stats(client)
 	}
 }
 
-stock get_weapon_index(const String: weapon_name[], tf2aux = 0)
+stock int get_weapon_index(const char[] weapon_name, int tf2aux = 0)
 {
-	new hash = compute_hash(weapon_name);
-	new loop_break = 0;
-	new index = 0;
+	int hash = compute_hash(weapon_name);
+	int loop_break = 0;
+	int index = 0;
 	while ((loop_break == 0) && (index < MAX_LOG_WEAPONS))
 	{
 		if (g_weapon_hashes[index] == hash)
@@ -199,7 +199,7 @@ stock get_weapon_index(const String: weapon_name[], tf2aux = 0)
 
 WstatsDumpAll()
 {
-	for (new i = 1; i <= MaxClients; i++)
+	for (int i = 1; i <= MaxClients; i++)
 	{
 		dump_player_stats(i);
 	}

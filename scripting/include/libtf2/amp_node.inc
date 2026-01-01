@@ -32,7 +32,7 @@ native ControlAmpNode(bool plugin_only=true);
  * @return		    none
  */
 native SetAmplifier(client, TFCond:condition=TFCond:-1,
-                    const Float range[4]={-1.0,-1.0,-1.0,-1.0},
+                    const float range[4]={-1.0,-1.0,-1.0,-1.0},
                     percent=-1, bool enable=true, bool select=false);
 
 /**
@@ -50,7 +50,7 @@ native SetAmplifier(client, TFCond:condition=TFCond:-1,
  * @param select    Set true to set player's BuildingType to Repair Node
  * @return		    none
  */
-native SetRepairNode(client, const Float range[4]={-1.0,-1.0,-1.0,-1.0},
+native SetRepairNode(client, const float range[4]={-1.0,-1.0,-1.0,-1.0},
                      const regen[4]={-1,-1,-1,-1},  const shells[4]={-1,-1,-1,-1},
                      const rockets=-1, team=-1, mini=-1, percent=-1,
                      bool enable=true, bool select=false);
@@ -75,7 +75,7 @@ native SetUpgradeStation(client, bool enable=true, bool select=false);
 native CountConvertedBuildings(client, TFExtObjectType:type);
 
 /**
- * Converts a dispenser into an Amplifier
+ * Converts a dispenser int o an Amplifier
  *
  * @param entity    Dispenser Entity to convert.
  * @param client 	Client index of the owner.
@@ -85,11 +85,11 @@ native CountConvertedBuildings(client, TFExtObjectType:type);
  * @return			none
  */
 native ConvertToAmplifier(entity, client, TFCond:condition=TFCond:-1,
-                          const Float range[4]={-1.0,-1.0,-1.0,-1.0},
+                          const float range[4]={-1.0,-1.0,-1.0,-1.0},
                           percent=-1);
 
 /**
- * Converts a dispenser into a Repair Node
+ * Converts a dispenser int o a Repair Node
  *
  * @param entity    Dispenser Entity to convert.
  * @param client 	Client index of the owner.
@@ -102,12 +102,12 @@ native ConvertToAmplifier(entity, client, TFCond:condition=TFCond:-1,
  * @param percent   Percent (0-100) chance of repairing the building (-1=use convar)
  * @return			none
  */
-native ConvertToRepairNode(entity, client, const Float range[4]={-1.0,-1.0,-1.0,-1.0},
+native ConvertToRepairNode(entity, client, const float range[4]={-1.0,-1.0,-1.0,-1.0},
                            const regen[4]={-1,-1,-1,-1}, const shells[4]={-1,-1,-1,-1},
                            const rockets=-1, team=-1, mini=-1, percent=-1);
 
 /**
- * Converts a dispenser into an Upgrade Station
+ * Converts a dispenser int o an Upgrade Station
  *
  * @param entity    Dispenser Entity to convert.
  * @return			none

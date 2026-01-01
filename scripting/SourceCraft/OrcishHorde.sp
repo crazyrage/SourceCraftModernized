@@ -264,7 +264,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
 // Events
 public RoundEndEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    for (new index=1;index<=MaxClients;index++)
+    for (int index=1;index<=MaxClients;index++)
     {
         m_HasRespawned[index]=false;
         m_IsRespawning[index]=false;
@@ -557,7 +557,7 @@ bool AcuteStrike(damage, victim_index, index)
 void ChainLightning(client,ultlevel)
 {
     int factor = ultlevel * 10;
-    new dmg=GetRandomInt(10+factor,30+(factor*2));
+    int dmg=GetRandomInt(10+factor,30+(factor*2));
     float range = g_ChainRange[ultlevel];
 
     float lastLoc[3];
@@ -567,12 +567,12 @@ void ChainLightning(client,ultlevel)
     clientLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
     lastLoc = clientLoc;
 
-    new lightning  = Lightning();
+    int lightning  = Lightning();
     int haloSprite = HaloSprite();
     static const lightningColor[4] = { 10, 200, 255, 255 };
 
-    new b_count=0;
-    new alt_count=0;
+    int b_count=0;
+    int alt_count=0;
     int list[MaxClients+1];
     int alt_list[MaxClients+1];
     SetupOBeaconLists(list, alt_list, b_count, alt_count, client);
@@ -595,9 +595,9 @@ void ChainLightning(client,ultlevel)
     
     PrepareAndEmitSoundToAll(thunderWav,client);
 
-    new count=0;
-    new last=client;
-    new team=GetClientTeam(client);
+    int count=0;
+    int last=client;
+    int team=GetClientTeam(client);
     bool hitVector[MAXPLAYERS] = {false, ...};
 
     do
@@ -611,7 +611,7 @@ void ChainLightning(client,ultlevel)
                                0, 15, 1.0, 40.0,40.0,0,40.0,lightningColor,40);
             TE_SendQEffectToAll(last,index);
 
-            decl float vecAngles[3];
+            float vecAngles[3];
             GetClientEyeAngles(index,vecAngles);
             TE_SetupBloodSprite(indexLoc, vecAngles, {200, 20, 20, 255}, 28, BloodSpray(), BloodDrop());
             TE_SendEffectToAll();

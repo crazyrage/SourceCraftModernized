@@ -985,7 +985,7 @@ void CleanMessage(char[] buffer, int maxlen)
     ReplaceString(buffer, maxlen, "{olive}", "", false);
     ReplaceString(buffer, maxlen, "{custom}", "", false);
 
-    // Convert control characters (color codes) to spaces
+    // Convert control char acters (color codes) to spaces
     for (int i = strlen(buffer)-1; i >= 0; i--)
     {
         if (buffer[i] < ' ')

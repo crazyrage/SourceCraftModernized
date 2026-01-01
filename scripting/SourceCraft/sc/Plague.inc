@@ -151,7 +151,7 @@ public Action PlagueTimer(Handle timer, Handle pack)
     if (pack != null)
     {
         ResetPack(pack);
-        new client=ReadPackCell(pack);
+        int client=ReadPackCell(pack);
         if (IsClientInGame(client))
         {
             if (GetRace(client) == m_raceId)
@@ -170,7 +170,7 @@ public Action PlagueTimer(Handle timer, Handle pack)
 
                     float indexLoc[3];
                     new team = GetClientTeam(client);
-                    for (new index=1;index<=MaxClients;index++)
+                    for (int index=1;index<=MaxClients;index++)
                     {
                         if (index != client && IsClientInGame(index) &&
                             IsPlayerAlive(index) && GetClientTeam(index) != team)
@@ -203,8 +203,8 @@ public Action PlagueTimer(Handle timer, Handle pack)
 public Action RemovePlague(Handle timer, Handle entitypack)
 {
     ResetPack(entitypack);
-    new cloud = EntRefToEntIndex(ReadPackCell(entitypack));
-    new client = ReadPackCell(entitypack);
+    int cloud = EntRefToEntIndex(ReadPackCell(entitypack));
+    int client = ReadPackCell(entitypack);
 
     ResetPlague(client);
 
@@ -219,7 +219,7 @@ public Action KillPlague(Handle timer, Handle entitypack)
 {
     ResetPack(entitypack);
 
-    new cloud = EntRefToEntIndex(ReadPackCell(entitypack));
+    int cloud = EntRefToEntIndex(ReadPackCell(entitypack));
     if (cloud > 0 && IsValidEntity(cloud))
         AcceptEntityInput(cloud, "Kill");
 

@@ -138,7 +138,7 @@ public OnRaceChanged(client,oldrace,newrace)
 {
     if(newrace==thisRaceID)
     {
-        new level=War3_GetSkillLevel(client,thisRaceID,SKILL_HEALINGWAVE);
+        int level=War3_GetSkillLevel(client,thisRaceID,SKILL_HEALINGWAVE);
         W3SetAuraFromPlayer(AuraID,client,level>0?true:false,level);
 
     }
@@ -163,10 +163,10 @@ public OnSkillLevelChanged(client,race,skill,newskilllevel)
 
 public OnUltimateCommand(client,race,bool pressed)
 {
-    new userid=GetClientUserId(client);
+    int userid=GetClientUserId(client);
     if(race==thisRaceID && pressed && userid>1 && IsPlayerAlive(client) )
     {
-        new ult_level=War3_GetSkillLevel(client,race,ULT_VOODOO);
+        int ult_level=War3_GetSkillLevel(client,race,ULT_VOODOO);
         if(ult_level>0)
         {
             if(!Silenced(client)&&War3_SkillNotInCooldown(client,thisRaceID,ULT_VOODOO,true))
@@ -208,7 +208,7 @@ public OnAbilityCommand(client,ability,bool pressed)
 {
     if(War3_GetRace(client)==thisRaceID && ability==0 && pressed && IsPlayerAlive(client))
     {
-        new skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_WARD);
+        int skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_WARD);
         if(skill_level>0)
         {
             if(!Silenced(client)&&War3_GetWardCount(client)<MaximumWards[skill_level])
@@ -276,8 +276,8 @@ public OnW3TakeDmgAllPre(victim,attacker,float damage)
             War3_DamageModPercent(0.0);
             return;
         }
-        new vteam=GetClientTeam(victim);
-        new ateam=GetClientTeam(attacker);
+        int vteam=GetClientTeam(victim);
+        int ateam=GetClientTeam(attacker);
 
 
         if(vteam!=ateam)

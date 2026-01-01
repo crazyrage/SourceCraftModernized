@@ -42,7 +42,7 @@
 static const char[] spawnWav[]     = "sc/tvurdy00.wav";  // Spawn sound
 static const char[] deathWav[]     = "sc/tvudth00.wav";  // Death sound
 
-intraceID, supplyID, thrustersID, platingID, weaponsID, mineID, tripmineID, nadeID;
+int raceID, supplyID, thrustersID, platingID, weaponsID, mineID, tripmineID, nadeID;
 
 static const char[] g_ArmorName[]  = "Plating";
 float g_InitialArmor[]      = { 0.0, 0.10, 0.25, 0.50, 0.75 };
@@ -210,28 +210,28 @@ public Action OnRaceSelected(int client, int oldrace, int newrace)
 {
     if (newrace == raceID)
     {
-        intplating_level = GetUpgradeLevel(client,raceID,platingID);
+        int plating_level = GetUpgradeLevel(client,raceID,platingID);
         SetupArmor(client, plating_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        intthrusters_level = GetUpgradeLevel(client,raceID,thrustersID);
+        int thrusters_level = GetUpgradeLevel(client,raceID,thrustersID);
         SetSpeedBoost(client, thrusters_level, true, g_SpeedLevels);
 
         if (m_FireminesAvailable)
         {
-            intmine_level=GetUpgradeLevel(client,raceID,mineID);
+            int mine_level=GetUpgradeLevel(client,raceID,mineID);
             GiveMines(client, mine_level*3, mine_level*3, mine_level*2);
         }
 
         if (m_TripminesAvailable)
         {
-            inttripmine_level=GetUpgradeLevel(client,raceID,tripmineID);
+            int tripmine_level=GetUpgradeLevel(client,raceID,tripmineID);
             GiveTripmines(client, tripmine_level, tripmine_level, tripmine_level);
         }
 
         if (m_NadesAvailable)
         {
-            intnade_level=GetUpgradeLevel(client,raceID,nadeID);
+            int nade_level=GetUpgradeLevel(client,raceID,nadeID);
             GiveNades(client, nade_level*2, nade_level*2,
                       nade_level*2, nade_level*2, false,
                       DefaultNade, _:DamageFrom_Ultimates);
@@ -241,7 +241,7 @@ public Action OnRaceSelected(int client, int oldrace, int newrace)
         {
             PrepareAndEmitSoundToAll(spawnWav,client);
 
-            intsupply_level=GetUpgradeLevel(client,raceID,supplyID);
+            int supply_level=GetUpgradeLevel(client,raceID,supplyID);
             if (supply_level > 0)
             {
                 CreateClientTimer(client, 5.0, SupplyDepot,
@@ -311,7 +311,7 @@ public OnItemPurchase(client,item)
 
         if (item == g_bootsItem)
         {
-            intthrusters_level = GetUpgradeLevel(client,raceID,thrustersID);
+            int thrusters_level = GetUpgradeLevel(client,raceID,thrustersID);
             if (thrusters_level > 0)
                 SetSpeedBoost(client, thrusters_level, true, g_SpeedLevels);
         }
@@ -326,7 +326,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
         {
             case 4:
             {
-                intnade_level = GetUpgradeLevel(client,race,nadeID);
+                int nade_level = GetUpgradeLevel(client,race,nadeID);
                 if (nade_level > 0)
                 {
                     if (m_NadesAvailable)
@@ -351,7 +351,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
             }
             case 3:
             {
-                intnade_level = GetUpgradeLevel(client,race,nadeID);
+                int nade_level = GetUpgradeLevel(client,race,nadeID);
                 if (nade_level > 0)
                 {
                     if (m_NadesAvailable)
@@ -376,7 +376,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
             }
             case 2:
             {
-                inttripmine_level = GetUpgradeLevel(client,race,tripmineID);
+                int tripmine_level = GetUpgradeLevel(client,race,tripmineID);
                 if (tripmine_level > 0)
                 {
                     if (pressed)
@@ -410,7 +410,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                 }
                 else
                 {
-                    intnade_level = GetUpgradeLevel(client,race,nadeID);
+                    int nade_level = GetUpgradeLevel(client,race,nadeID);
                     if (nade_level > 0)
                     {
                         if (m_NadesAvailable)
@@ -436,7 +436,7 @@ public OnUltimateCommand(client,race,bool pressed,arg)
             }
             default:
             {
-                intmine_level = GetUpgradeLevel(client,race,mineID);
+                int mine_level = GetUpgradeLevel(client,race,mineID);
                 if (mine_level > 0)
                 {
                     if (!pressed)
@@ -481,14 +481,14 @@ public OnPlayerSpawnEvent(Handle event, client, race)
     {
         PrepareAndEmitSoundToAll(spawnWav,client);
 
-        intplating_level = GetUpgradeLevel(client,raceID,platingID);
+        int plating_level = GetUpgradeLevel(client,raceID,platingID);
         SetupArmor(client, plating_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        intthrusters_level = GetUpgradeLevel(client,raceID,thrustersID);
+        int thrusters_level = GetUpgradeLevel(client,raceID,thrustersID);
         SetSpeedBoost(client, thrusters_level, true, g_SpeedLevels);
 
-        intsupply_level=GetUpgradeLevel(client,raceID,supplyID);
+        int supply_level=GetUpgradeLevel(client,raceID,supplyID);
         if (supply_level > 0)
         {
             CreateClientTimer(client, 5.0, SupplyDepot,
@@ -538,7 +538,7 @@ public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_inde
 
 bool VehicleWeapons(damage, victim_index, index)
 {
-    intweapons_level = GetUpgradeLevel(index, raceID, weaponsID);
+    int weapons_level = GetUpgradeLevel(index, raceID, weaponsID);
     if (weapons_level > 0 &&
         !GetRestriction(index,Restriction_NoUpgrades) &&
         !GetRestriction(index,Restriction_Stunned) &&
@@ -548,7 +548,7 @@ bool VehicleWeapons(damage, victim_index, index)
     {
         if (GetRandomInt(1,100) <= GetRandomInt(30,60))
         {
-            intdmgamt = RoundFloat(float(damage)*g_WeaponsPercent[weapons_level]);
+            int dmgamt = RoundFloat(float(damage)*g_WeaponsPercent[weapons_level]);
             if (dmgamt > 0 && CanInvokeUpgrade(index, raceID, weaponsID, .notify=false))
             {
                 HurtPlayer(victim_index, dmgamt, index,
@@ -576,14 +576,14 @@ bool VehicleWeapons(damage, victim_index, index)
 
 public Action SupplyDepot(Handle timer, any userid)
 {
-    intclient = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client))
     {
         if (GetRace(client) == raceID &&
             !GetRestriction(client, Restriction_NoUpgrades) ||
             !GetRestriction(client, Restriction_Stunned))
         {
-            intsupply_level = GetUpgradeLevel(client,raceID,supplyID);
+            int supply_level = GetUpgradeLevel(client,raceID,supplyID);
             if (supply_level > 0)
             {
                 SupplyAmmo(client, supply_level,

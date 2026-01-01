@@ -68,7 +68,7 @@ public void OnWar3LoadRaceOrItemOrdered(num)
 #if defined SOURCECRAFT
         raceID=CreateRace("succubus", .name="Succubus Hunter",
                           .required_level=80, .faction=Hellbourne, .type=Undead,
-                          .switch_message="You transformed into a Succubus Hunter.",
+                          .switch_message="You transformed int o a Succubus Hunter.",
                           .pending_message="Night is approaching: You will awake as a Succubus Hunter when you die.");
 #else
         raceID=War3_CreateNewRace("Succubus Hunter", "succubus");
@@ -143,10 +143,10 @@ public void OnPluginStart()
 
 public void OnWar3EventSpawn(client)
 {
-    new race=War3_GetRace(client); 
+    int race=War3_GetRace(client); 
     if (race==raceID) 
     {
-        new totem_level=War3_GetSkillLevel(client,race,totemID); 
+        int totem_level=War3_GetSkillLevel(client,race,totemID); 
         if (totem_level>0 && !m_IsChangingClass[client])
         {
             int maxhp = War3_GetMaxHP(client);
@@ -340,7 +340,7 @@ public void OnWar3EventDeath(victim, attacker, deathrace)
                 new bool decap = false;
                 if (g_GameType == Game_TF)
                 {
-                    decl char weapon[128];
+                    char weapon[128];
                     GetEventString(event, "weapon", weapon, sizeof(weapon));
 
                     for (int i = 0; i < sizeof(tf2_decap_weapons); i++)
@@ -360,7 +360,7 @@ public void OnWar3EventDeath(victim, attacker, deathrace)
 #endif
                 if (headshot || decap || GetRandomInt(1,SkullChance)<=hunter_level)
                 {
-                    decl float Origin[3], float Direction[3];
+                    float Origin[3], float Direction[3];
                     GetClientAbsOrigin(victim, Origin);
                     Direction[0] = GetRandomFloat(-1.0, 1.0);
                     Direction[1] = GetRandomFloat(-1.0, 1.0);
@@ -384,11 +384,11 @@ public void OnWar3EventDeath(victim, attacker, deathrace)
 
 public PlayerJumpEvent(Handle event,const char[] name[],bool dontBroadcast)
 {
-    new client=GetClientOfUserId(GetEventInt(event,"userid"));
-    new race=War3_GetRace(client);
+    int client=GetClientOfUserId(GetEventInt(event,"userid"));
+    int race=War3_GetRace(client);
     if (race==raceID)
     {
-        new assault_level=War3_GetSkillLevel(client,race,assaultID);
+        int assault_level=War3_GetSkillLevel(client,race,assaultID);
         if (assault_level>0)
         {
             assaultskip[client]--;
@@ -411,7 +411,7 @@ public PlayerJumpEvent(Handle event,const char[] name[],bool dontBroadcast)
                 if (m_IsTransformed[client])
                     color[1] = 100;
 
-                decl char wpnstr[32];
+                char wpnstr[32];
                 GetClientWeapon(client, wpnstr, sizeof(wpnstr));
                 for(int slot=0;slot<10;slot++)
                 {
@@ -469,7 +469,7 @@ public Action OnPlayerRunCmd(client, &buttons, &impulse, float vel[3], float ang
             new assault_level=War3_GetSkillLevel(client,raceID,assaultID);
             if (assault_level>0 && !Hexed(client) && War3_SkillNotInCooldown(client,raceID,assaultID))
             {
-                decl float velocity[3];
+                float velocity[3];
                 GetEntPropVector(client, Prop_Data, "m_vecVelocity", velocity);
 
                 if (!(GetEntityFlags(client) & FL_ONGROUND))
@@ -586,7 +586,7 @@ public OnUltimateCommand(client,race,bool pressed)
 {
     if(pressed && race==raceID && ValidPlayer(client,true))
     {
-        new trans_level=War3_GetSkillLevel(client,raceID,transID);
+        int trans_level=War3_GetSkillLevel(client,raceID,transID);
         if (trans_level>0) // Deamonic Transformation
         {
             if (War3_SkillNotInCooldown(client,raceID,transID,true))
@@ -624,9 +624,9 @@ public OnUltimateCommand(client,race,bool pressed)
     }
 }
 
-public Action FinishTrans(Handle timer,any:userid)
+public Action FinishTrans(Handle timer,any userid)
 {
-    new client=GetClientOfUserId(userid);
+    int client=GetClientOfUserId(userid);
     if (m_IsTransformed[client] && ValidPlayer(client))
     {
         m_IsTransformed[client]=false;
@@ -659,7 +659,7 @@ stock Gib(float Origin[3], float Direction[3], char Model[])
     }
 }
 
-public Action RemoveGib(Handle Timer, any:Ref)
+public Action RemoveGib(Handle Timer, any Ref)
 {
     int Ent = EntRefToEntIndex(Ref);
     if (Ent > 0 && IsValidEdict(Ent))
@@ -699,13 +699,13 @@ public Action SayCommand(client, const char[] command[], argc)
 {
     if (client > 0 && IsClientInGame(client))
     {
-        decl char text[128];
+        char text[128];
         GetCmdArg(1,text,sizeof(text));
 
-        decl char arg[2][64];
+        char arg[2][64];
         ExplodeString(text, " ", arg, 2, 64);
 
-        new char firstChar[] = " ";
+        int char firstChar[] = " ";
         firstChar[0] = arg[0][0];
         if (StrContains("!/\\",firstChar) >= 0)
             strcopy(arg[0], sizeof(arg[]), arg[0][1]);

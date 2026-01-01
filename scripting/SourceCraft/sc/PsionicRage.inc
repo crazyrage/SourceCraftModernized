@@ -58,9 +58,9 @@ PsionicRage(client, raceId, upgradeId, level,
     }
 }
 
-public Action EndRage(Handle timer,any:userid)
+public Action EndRage(Handle timer,any userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (IsValidClient(client) && m_RageActive[client])
     {
         m_RageActive[client]=false;

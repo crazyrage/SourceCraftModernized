@@ -50,8 +50,8 @@ public Action Command_Blink(Client, Arguments)
 	}
 
 	//Declare:
-	decl Handle TraceRay;
-	decl float StartOrigin[3], float Angles[3];
+	Handle TraceRay;
+	float StartOrigin[3], float Angles[3];
 
 	//Initialize:
 	GetClientEyeAngles(Client, Angles);
@@ -65,8 +65,8 @@ public Action Command_Blink(Client, Arguments)
 	{
 
 		//Declare:
-		decl float Distance;
-		decl float PositionBuffer[3], float EndOrigin[3], float CeilingBuffer[3];
+		float Distance;
+		float PositionBuffer[3], float EndOrigin[3], float CeilingBuffer[3];
 
 		//Retrieve:
 		TR_GetEndPosition(EndOrigin, TraceRay);

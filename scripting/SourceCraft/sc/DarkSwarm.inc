@@ -66,7 +66,7 @@ stock DarkSwarm(client, raceId, upgradeId, level, float swarmRange[])
         char name[128];
         Format(size, sizeof(size), "%1.0f", swarmRange[level]);
         Format(name, sizeof(name), "DarkSwarm%i", client);
-        new cloud = CreateEntityByName("env_smokestack");
+        int cloud = CreateEntityByName("env_smokestack");
         if (cloud > 0 && IsValidEdict(cloud))
         {
             DispatchKeyValue(cloud,"targetname", name);
@@ -121,13 +121,13 @@ public Action DarkSwarmTimer(Handle timer, Handle pack)
     if (pack != null)
     {
         ResetPack(pack);
-        new client = ReadPackCell(pack);
+        int client = ReadPackCell(pack);
         float range = ReadPackFloat(pack);
 
-        new team = GetClientTeam(client);
+        int team = GetClientTeam(client);
         if (team > 1)
         {
-            for (new index=1;index<=MaxClients;index++)
+            for (int index=1;index<=MaxClients;index++)
             {
                 if (IsClientInGame(index) && IsPlayerAlive(index) &&
                     (index == client || GetClientTeam(index) == team))
@@ -174,7 +174,7 @@ stock ResetDarkSwarm(client)
         m_DarkSwarmTimers[client] = null;	
     }
 
-    for (new index=1;index<=MaxClients;index++)
+    for (int index=1;index<=MaxClients;index++)
     {
         SetImmunity(index,Immunity_RangedAttacks,false);
         if (m_Swarmed[client][index])
@@ -192,7 +192,7 @@ stock ResetProtected(index)
     {
         SetImmunity(index,Immunity_RangedAttacks,false);
 
-        for (new client=1;client<=MaxClients;client++)
+        for (int client=1;client<=MaxClients;client++)
         m_Swarmed[client][index] = false;
     }
 }
@@ -200,8 +200,8 @@ stock ResetProtected(index)
 public Action RemoveDarkSwarm(Handle timer, Handle entitypack)
 {
     ResetPack(entitypack);
-    new cloud = EntRefToEntIndex(ReadPackCell(entitypack));
-    new client = ReadPackCell(entitypack);
+    int cloud = EntRefToEntIndex(ReadPackCell(entitypack));
+    int client = ReadPackCell(entitypack);
     float length = ReadPackFloat(entitypack);
 
     ResetDarkSwarm(client);
@@ -217,7 +217,7 @@ public Action KillDarkSwarm(Handle timer, Handle entitypack)
 {
     ResetPack(entitypack);
 
-    new cloud = EntRefToEntIndex(ReadPackCell(entitypack));
+    int cloud = EntRefToEntIndex(ReadPackCell(entitypack));
     if (cloud > 0 && IsValidEntity(cloud))
         AcceptEntityInput(cloud, "Kill");
 

@@ -33,8 +33,8 @@
 
 #define MAXAURAS 100 // [1- ] ignore zeroth index
 
-#define SHORTNAMELEN 16 //item or race shotnames, 15 characters
-#define FULLNAMELEN 32 //item or race full names, 31 characters. RUSSIAN and other characters require more than 1 byte to store a displayed character
+#define SHORTNAMELEN 16 //item or race shotnames, 15 char acters
+#define FULLNAMELEN 32 //item or race full names, 31 char acters. RUSSIAN and other char acters require more than 1 byte to store a displayed char acter
 
 #define MAXCATS 20 //max race categories
 
@@ -307,7 +307,7 @@ enum W3SkillProp
 
 enum W3BuffProperties
 {
-	any:DefaultValue=0, //array index 1
+	any DefaultValue=0, //array index 1
 	BuffStackCacheType:BuffStackType=1, //array index 1
 }
 
@@ -712,7 +712,7 @@ enum W3HintPriorityMultiType{
 	HINT_TYPE_QUEUE,	//queue each one
 }
 //functio to retreve these constants
-stock any:W3GetHintPriorityType(W3HintPriority:priority){
+stock any W3GetHintPriorityType(W3HintPriority:priority){
 	switch(priority){
 		case HINT_NORMAL:  return HINT_TYPE_ALL;
 		case HINT_SKILL_STATUS: return HINT_TYPE_ALL;
@@ -748,7 +748,7 @@ stock any:W3GetHintPriorityType(W3HintPriority:priority){
 
 #if !defined FFADE_IN
 // The following are from the SourceSDK, used for the optional flags field of War3_FlashScreen
-#define FFADE_IN			0x0001		// Just here so we don't pass 0 into the function, YOUR SCREEN DECAYS AND YOU SEE CLEARLY SLOWLY
+#define FFADE_IN			0x0001		// Just here so we don't pass 0 int o the function, YOUR SCREEN DECAYS AND YOU SEE CLEARLY SLOWLY
 #define FFADE_OUT			0x0002		// Fade out (not in)
 #define FFADE_MODULATE		0x0004		// Modulate (don't blend)
 #define FFADE_STAYOUT		0x0008		// ignores the duration, stays faded out until int ScreenFade message received

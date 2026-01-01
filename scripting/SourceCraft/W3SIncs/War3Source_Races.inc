@@ -122,12 +122,12 @@ native War3_GetRaceIDByShortname(char[] raceshortname);
 native W3GetRaceAccessFlagStr(raceid,char[] ret,maxlen);
 native W3GetRaceItemRestrictionsStr(raceid,char[] ret,maxlen);
 native W3GetRaceMaxLimitTeam(raceid, team);
-native W3GetRaceMaxLimitTeamCvar(raceid, team); //returns the internal cvar id (int not handle)
+native W3GetRaceMaxLimitTeamCvar(raceid, team); //returns the int ernal cvar id (int not handle)
 native W3GetRaceMinLevelRequired(raceid);
 native W3IsRaceTranslated(raceid);
 
 native W3GetRaceCell(raceid,ENUM_RaceObject:property);
-native W3SetRaceCell(raceid,ENUM_RaceObject:property,any:somevalue);
+native W3SetRaceCell(raceid,ENUM_RaceObject:property,any somevalue);
 #endif
 
 //probably usefull since it allready gots a getbyshortname brother

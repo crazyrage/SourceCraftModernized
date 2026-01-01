@@ -33,7 +33,7 @@ stock ClearDetectedHud(client)
 
 stock ResetDetection(client)
 {
-    for (new index=1;index<=MaxClients;index++)
+    for (int index=1;index<=MaxClients;index++)
     {
         if (IsClientInGame(index))
         {
@@ -58,7 +58,7 @@ stock ResetDetected(index)
         if (m_SidewinderAvailable && IsClientInGame(index))
             SidewinderDetectClient(index, false);
 
-        for (new client=1;client<=MaxClients;client++)
+        for (int client=1;client<=MaxClients;client++)
         {
             if (m_Detected[client][index])
             {

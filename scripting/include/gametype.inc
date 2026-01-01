@@ -105,7 +105,7 @@ stock Mode GetGameMode(bool forceUpdate=false)
 
 stock Mode GetTF2GameMode()
 {
-    new entity = FindEntityByClassname(-1, "tf_logic_mann_vs_machine");
+    int entity = FindEntityByClassname(-1, "tf_logic_mann_vs_machine");
     if (entity > MaxClients && IsValidEntity(entity))
         return MvM;
     else

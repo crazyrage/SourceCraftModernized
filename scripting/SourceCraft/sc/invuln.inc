@@ -40,9 +40,9 @@ stock SetInvulnerability(client, float duration)
     }
 }
 
-public Action ResetInvuln(Handle timer,any:userid)
+public Action ResetInvuln(Handle timer,any userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (IsValidClient(client))
         ResetInvulnerability(client);
 

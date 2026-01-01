@@ -16,11 +16,11 @@
 
 stock Handle g_ClientTimers[MAXPLAYERS+1];
 
-stock CreateClientTimer(client, float interval, Timer:func,
+stock CreateClientTimer(client, float int erval, Timer:func,
                         flags=TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE)
 {
     if (IsClient(client) && g_ClientTimers[client] == null)
-        g_ClientTimers[client] = CreateTimer(interval,func,GetClientUserId(client),flags);
+        g_ClientTimers[client] = CreateTimer(int erval,func,GetClientUserId(client),flags);
 }
 
 stock KillClientTimer(client)
@@ -38,12 +38,12 @@ stock KillClientTimer(client)
 
 stock KillAllClientTimers()
 {
-    for (new i = 1; i <= MaxClients; i++)
+    for (int i = 1; i <= MaxClients; i++)
         KillClientTimer(i);
 }
 
 stock ResetAllClientTimers()
 {
-    for (new i = 1; i <= MaxClients; i++)
+    for (int i = 1; i <= MaxClients; i++)
         ResetClientTimer(i);
 }

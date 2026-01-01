@@ -22,7 +22,7 @@ stock CGetTeamColor(client) {
 	if(!IsClientInGame(client)) {
 		ThrowError("Client %i is not in game", client);
 	}
-	new value;
+	int value;
 	switch(GetClientTeam(client)) {
 		case 1: {
 			value = COLOR_GRAY;

@@ -12,7 +12,7 @@
 
 stock bool TF2_HasTheFlag(client)
 {
-    new ent = -1;
+    int ent = -1;
     while ((ent = FindEntityByClassname(ent, "item_teamflag")) != -1)
     {
         if (GetEntPropEnt(ent, Prop_Send, "m_hOwnerEntity")==client)
@@ -23,10 +23,10 @@ stock bool TF2_HasTheFlag(client)
 
 stock TF2_GetFlagCarrier(team)
 {
-    new ent = -1;
+    int ent = -1;
     while ((ent = FindEntityByClassname(ent, "item_teamflag")) != -1)
     {
-        new owner = GetEntPropEnt(ent, Prop_Send, "m_hOwnerEntity");
+        int owner = GetEntPropEnt(ent, Prop_Send, "m_hOwnerEntity");
         if (owner > 0)
         {
             if (GetClientTeam(owner) == team)

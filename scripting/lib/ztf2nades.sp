@@ -4,7 +4,7 @@
  * Description: dis is z tf2nades.
  * Author(s): L. Duke
  * Modified by: -=|JFH|=-Naris (Murray Wilson)
- *              -- Added native interface
+ *              -- Added native int erface
  */
 
 #pragma semicolon 1
@@ -151,7 +151,7 @@ enum HoldType
 #define SND_IMPACT  "player/pl_impact_airblast2.wav"
 #define SND_SAPPER  "weapons/sapper_removed.wav"
 
-charsndPain[][] = 
+char sndPain[][] = 
 {   "player/pl_pain5.wav",
     "player/pl_pain6.wav",
     "player/pl_pain7.wav",
@@ -166,16 +166,16 @@ charsndPain[][] =
 // *************************************************
 
 // global data for current nade
-floatgnSpeed;
-floatgnDelay;
-chargnSkin[16];
-chargnModel[256];
-chargnParticle[256];
+float gnSpeed;
+float gnDelay;
+char gnSkin[16];
+char gnModel[256];
+char gnParticle[256];
 
-boolgCanRun = false;
-boolgWaitOver = false;
-floatgMapStart;
-floatgHoldingArea[3] = {-10000.0, -10000.0, -10000.0}; // point to store unused objects
+bool gCanRun = false;
+bool gWaitOver = false;
+float gMapStart;
+float gHoldingArea[3] = {-10000.0, -10000.0, -10000.0}; // point to store unused objects
 new gNade[MAX_PLAYERS+1] = { INVALID_ENT_REFERENCE, ... };  // pointer to the player's nade
 new gKilledBy[MAX_PLAYERS+1];                               // player that killed
 new gTargeted[MAX_PLAYERS+1];                               // flag is player is targetted and by whom.
@@ -183,12 +183,12 @@ new gCountdown[MAX_PLAYERS+1];                              // countdown before 
 new gRemaining1[MAX_PLAYERS+1];                             // how many nades player has this spawn
 new gRemaining2[MAX_PLAYERS+1];                             // how many nades player has this spawn
 new HoldType:gHolding[MAX_PLAYERS+1];                       // what kind of nade player is holding
-HandlegNadeTimer[MAX_PLAYERS+1];                       // pointer to nade timer
-HandlegNadeTimer2[MAX_PLAYERS+1];                      // pointer to 2nd nade timer
-boolgTriggerTimer[MAX_PLAYERS+1];                      // flags that timer was triggered
-floatPlayersInRange[MAX_PLAYERS+1];                    // players are in radius ?
-chargKillWeapon[MAX_PLAYERS+1][STRLENGTH];           // weapon that killed
-floatgKillTime[MAX_PLAYERS+1];                         // time plugin requested kill
+Handle gNadeTimer[MAX_PLAYERS+1];                       // pointer to nade timer
+Handle gNadeTimer2[MAX_PLAYERS+1];                      // pointer to 2nd nade timer
+bool gTriggerTimer[MAX_PLAYERS+1];                      // flags that timer was triggered
+float PlayersInRange[MAX_PLAYERS+1];                    // players are in radius ?
+char gKillWeapon[MAX_PLAYERS+1][STRLENGTH];           // weapon that killed
+float gKillTime[MAX_PLAYERS+1];                         // time plugin requested kill
 new gStopInfoPanel[MAX_PLAYERS+1];                          // flag to disable help
 new gRingModel;                                             // model for beams
 new gNapalmSprite;                                          // sprite index
@@ -197,91 +197,91 @@ new gEmpSprite;
 new gSmokeSprite;
 new gExplosionSprite;
 
-new g_FragModelIndex;
-new g_ConcModelIndex;
-new g_NailModelIndex;
-new g_DroneModelIndex;
-new g_Mirv1ModelIndex;
-new g_Mirv2ModelIndex;
-new g_HealthModelIndex;
-new g_NapalmModelIndex;
-new g_HallucModelIndex;
-new g_SmokeModelIndex;
-new g_TrapModelIndex;
-new g_EmpModelIndex;
-new g_GasModelIndex;
+int g_FragModelIndex;
+int g_ConcModelIndex;
+int g_NailModelIndex;
+int g_DroneModelIndex;
+int g_Mirv1ModelIndex;
+int g_Mirv2ModelIndex;
+int g_HealthModelIndex;
+int g_NapalmModelIndex;
+int g_HallucModelIndex;
+int g_SmokeModelIndex;
+int g_TrapModelIndex;
+int g_EmpModelIndex;
+int g_GasModelIndex;
 
 #pragma unused g_TrapModelIndex, g_SmokeModelIndex, g_GasModelIndex
 
 // global "temps"
-chartName[256];
+char tName[256];
 
 // *************************************************
 // convars
 // *************************************************
-HandlecvNadeType[CLS_MAX];
-HandlecvFragNum[CLS_MAX];
-HandlecvFragRadius = null;
-HandlecvFragDamage = null;
-HandlecvConcNum = null;
-HandlecvConcRadius = null;
-HandlecvConcForce = null;
-HandlecvConcDamage = null;
-HandlecvNailNum = null;
-HandlecvNailRadius = null;
-HandlecvNailDamageNail = null;
-HandlecvNailDamageExplode = null;
-HandlecvMirvNum = null;
-HandlecvMirvRadius = null;
-HandlecvMirvDamage1 = null;
-HandlecvMirvDamage2 = null;
-HandlecvMirvSpread = null;
-HandlecvHealthNum = null;
-HandlecvHealthRadius = null;
-HandlecvHealthDelay = null;
-HandlecvNapalmNum = null;
-HandlecvNapalmRadius = null;
-HandlecvNapalmDamage = null;
-HandlecvHallucNum = null;
-HandlecvHallucRadius = null;
-HandlecvHallucDelay = null;
-HandlecvHallucDamage = null;
-HandlecvTrapNum = null;
-HandlecvTrapRadius = null;
-HandlecvTrapDamage = null;
-HandlecvTrapDelay = null;
-HandlecvBombNum = null;
-HandlecvBombRadius = null;
-HandlecvBombDamage = null;
-HandlecvEmpNum = null;
-HandlecvEmpRadius = null;
-HandlecvDroneRadius = null;
-HandlecvDroneDamage = null;
-HandlecvSmokeNum = null;
-HandlecvSmokeRadius = null;
-HandlecvSmokeDelay = null;
-HandlecvGasNum = null;
-HandlecvGasRadius = null;
-HandlecvGasDelay = null;
-HandlecvGasDamage = null;
-HandlecvWaitPeriod = null;
-HandlecvCountdown = null;
-HandlecvHelpLink = null;
-HandlecvShowHelp = null;
-HandlecvAnnounce = null;
-HandlecvRestock = null;
+Handle cvNadeType[CLS_MAX];
+Handle cvFragNum[CLS_MAX];
+Handle cvFragRadius = null;
+Handle cvFragDamage = null;
+Handle cvConcNum = null;
+Handle cvConcRadius = null;
+Handle cvConcForce = null;
+Handle cvConcDamage = null;
+Handle cvNailNum = null;
+Handle cvNailRadius = null;
+Handle cvNailDamageNail = null;
+Handle cvNailDamageExplode = null;
+Handle cvMirvNum = null;
+Handle cvMirvRadius = null;
+Handle cvMirvDamage1 = null;
+Handle cvMirvDamage2 = null;
+Handle cvMirvSpread = null;
+Handle cvHealthNum = null;
+Handle cvHealthRadius = null;
+Handle cvHealthDelay = null;
+Handle cvNapalmNum = null;
+Handle cvNapalmRadius = null;
+Handle cvNapalmDamage = null;
+Handle cvHallucNum = null;
+Handle cvHallucRadius = null;
+Handle cvHallucDelay = null;
+Handle cvHallucDamage = null;
+Handle cvTrapNum = null;
+Handle cvTrapRadius = null;
+Handle cvTrapDamage = null;
+Handle cvTrapDelay = null;
+Handle cvBombNum = null;
+Handle cvBombRadius = null;
+Handle cvBombDamage = null;
+Handle cvEmpNum = null;
+Handle cvEmpRadius = null;
+Handle cvDroneRadius = null;
+Handle cvDroneDamage = null;
+Handle cvSmokeNum = null;
+Handle cvSmokeRadius = null;
+Handle cvSmokeDelay = null;
+Handle cvGasNum = null;
+Handle cvGasRadius = null;
+Handle cvGasDelay = null;
+Handle cvGasDamage = null;
+Handle cvWaitPeriod = null;
+Handle cvCountdown = null;
+Handle cvHelpLink = null;
+Handle cvShowHelp = null;
+Handle cvAnnounce = null;
+Handle cvRestock = null;
 
 // *************************************************
-// native interface variables
+// native int erface variables
 // *************************************************
 
 new gAllowed1[MAX_PLAYERS+1];               // how many frag nades player given each spawn
 new gAllowed2[MAX_PLAYERS+1];               // how many special nades player given each spawn
-boolgCanRestock[MAX_PLAYERS+1];        // is the player allowed to restock at a cabinet
+bool gCanRestock[MAX_PLAYERS+1];        // is the player allowed to restock at a cabinet
 new NadeType:gSpecialType[MAX_PLAYERS+1];   // what nade type the special nade is
 
-boolgNativeOverride = false;
-boolgTargetOverride = false;
+bool gNativeOverride = false;
+bool gTargetOverride = false;
 
 // *************************************************
 // SourceCraft variables
@@ -289,11 +289,11 @@ boolgTargetOverride = false;
 
 #if defined SOURCECRAFT
     stock bool:m_SourceCraftAvailable = false;
-    new DamageFrom:gCategory[MAX_PLAYERS+1];// what category to use in HurtPlayer()
+    int DamageFrom:gCategory[MAX_PLAYERS+1];// what category to use in HurtPlayer()
 #endif
 
 // forwards
-HandlefwdOnNadeExplode = null;
+Handle fwdOnNadeExplode = null;
 
 // *************************************************
 // main plugin
@@ -455,7 +455,7 @@ public OnPluginStart()
 }
 
 #if defined SOURCECRAFT
-public OnLibraryAdded(const char[]name[])
+public OnLibraryAdded(const char name[])
 {
     if (StrEqual(name, "SourceCraft"))
     {
@@ -464,7 +464,7 @@ public OnLibraryAdded(const char[]name[])
     }
 }
 
-public OnLibraryRemoved(const char[]name[])
+public OnLibraryRemoved(const char name[])
 {
     if (StrEqual(name, "SourceCraft"))
         m_SourceCraftAvailable = false;
@@ -507,7 +507,7 @@ public OnMapStart()
     SetupSound(SND_IMPACT, true, DONT_DOWNLOAD);
     SetupSound(SND_SAPPER, true, DONT_DOWNLOAD);
 
-    for(new i=0;i<sizeof(sndPain);i++)
+    for (int i=0;i<sizeof(sndPain);i++)
       SetupSound(sndPain[i], true, DONT_DOWNLOAD);
     
     // reset status
@@ -558,7 +558,7 @@ public OnClientPutInServer(client)
     }
 
     // Reset the targeted flags
-    for (new index=1;index<=MaxClients;index++)
+    for (int index=1;index<=MaxClients;index++)
     {
         if (gTargeted[index] == client)
             gTargeted[index] = 0;
@@ -568,7 +568,7 @@ public OnClientPutInServer(client)
         CreateTimer(45.0, Timer_Anounce, client);
 }
 
-public ActionTimer_Anounce(Handle timer, any:client)
+public Action Timer_Anounce(Handle timer, any client)
 {
     if (IsClientConnected(client) && IsClientInGame(client))
     {
@@ -581,7 +581,7 @@ public ActionTimer_Anounce(Handle timer, any:client)
     }
 }
 
-public ActionMainEvents(Handle event, const char[]name[], bool dontBroadcast)
+public Action MainEvents(Handle event, const char name[], bool dontBroadcast)
 {
     if (StrEqual(name,"dod_warmup_begins", false))
     {
@@ -643,7 +643,7 @@ public ActionMainEvents(Handle event, const char[]name[], bool dontBroadcast)
     }
 
     // reset players
-    for (new i=1;i<=MAX_PLAYERS;i++)
+    for (int i=1;i<=MAX_PLAYERS;i++)
     {
         // nades
         gNade[i]=INVALID_ENT_REFERENCE;
@@ -656,27 +656,27 @@ public ActionMainEvents(Handle event, const char[]name[], bool dontBroadcast)
     }
 
     // Reset the all the targeted flags
-    for (new index=1;index<=MaxClients;index++)
+    for (int index=1;index<=MaxClients;index++)
             gTargeted[index] = 0;
 
     return Plugin_Continue;
 }
 
-public ActionRoundEnd(Handle event, const char[]name[], bool dontBroadcast)
+public Action RoundEnd(Handle event, const char name[], bool dontBroadcast)
 {
     gCanRun = false;
 }
 
 
-public ActionPlayerSpawn(Handle event, const char[]name[], bool dontBroadcast)
+public Action PlayerSpawn(Handle event, const char name[], bool dontBroadcast)
 {
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));
     
     gHolding[client]=HoldNone;
     
     if (!gStopInfoPanel[client])
     {
-        charhelplink[512]; helplink[0] = '\0';
+        char helplink[512]; helplink[0] = '\0';
         GetConVarString(cvHelpLink, helplink, sizeof(helplink));
         if (helplink[0] != '\0')
             ShowMOTDPanel(client, "TF2NADES", helplink, MOTDPANEL_TYPE_URL);
@@ -695,7 +695,7 @@ public ActionPlayerSpawn(Handle event, const char[]name[], bool dontBroadcast)
     }
 
     // client info
-    charclientname[32]; clientname[0] = '\0';
+    char clientname[32]; clientname[0] = '\0';
     Format(clientname, sizeof(clientname), "tf2player%d", client);
     DispatchKeyValue(client, "targetname", clientname);
 
@@ -705,9 +705,9 @@ public ActionPlayerSpawn(Handle event, const char[]name[], bool dontBroadcast)
     gNadeTimer[client]=null;
 
     // Remove any leftover nade entities for this player
-    charedictname[128];
-    new ents = GetMaxEntities();
-    for (new i=MaxClients+1; i<ents; i++)
+    char edictname[128];
+    int ents = GetMaxEntities();
+    for (int i=MaxClients+1; i<ents; i++)
     {
         if (IsValidEdict(i) && IsValidEntity(i))
         {
@@ -729,11 +729,11 @@ public ActionPlayerSpawn(Handle event, const char[]name[], bool dontBroadcast)
     return Plugin_Continue;
 }
 
-public ActionPlayerHurt(Handle event,const char[]name[],bool dontBroadcast)
+public Action PlayerHurt(Handle event,const char name[],bool dontBroadcast)
 {
     if (!gTargetOverride)
     {
-        new victim = GetClientOfUserId(GetEventInt(event,"userid"));
+        int victim = GetClientOfUserId(GetEventInt(event,"userid"));
         if (victim > 0)
         {
             new client = gTargeted[victim];
@@ -748,18 +748,18 @@ public ActionPlayerHurt(Handle event,const char[]name[],bool dontBroadcast)
     return Plugin_Continue;
 }
 
-public EntityOutput_OnAnimationBegun(const char[]output[], caller, activator, Float:delay)
+public EntityOutput_OnAnimationBegun(const char output[], caller, activator, float delay)
 {
     if (IsValidEntity(caller))
     {
-        charmodelname[128]; modelname[0] = '\0';
+        char modelname[128]; modelname[0] = '\0';
         GetEntPropString(caller, Prop_Data, "m_ModelName", modelname, 128);
         if (StrEqual(modelname, "models/props_gameplay/resupply_locker.mdl"))
         {
-            floatpos[3];
+            float pos[3];
             GetEntPropVector(caller, Prop_Send, "m_vecOrigin", pos);
             FindPlayersInRange(pos, 128.0, 0, -1, false, -1);
-            for (new j=1;j<=MaxClients;j++)
+            for (int j=1;j<=MaxClients;j++)
             {
                 if (PlayersInRange[j]>0.0)
                 {
@@ -771,7 +771,7 @@ public EntityOutput_OnAnimationBegun(const char[]output[], caller, activator, Fl
     }
 }
 
-public ActionPlayerDeath(Handle event, const char[]name[], bool dontBroadcast)
+public Action PlayerDeath(Handle event, const char name[], bool dontBroadcast)
 {
     if (GameType == tf2)
     {
@@ -787,13 +787,13 @@ public ActionPlayerDeath(Handle event, const char[]name[], bool dontBroadcast)
         }
     }
 
-    new client;
+    int client;
     client = GetClientOfUserId(GetEventInt(event, "userid"));
     gRemaining1[client] = 0;
     gRemaining2[client] = 0;
     gHolding[client] = HoldNone;
     
-    new weaponid = GetEventInt(event, "weaponid");
+    int weaponid = GetEventInt(event, "weaponid");
     
     /*
     PrintToServer("userid %d", GetEventInt(event, "userid"));
@@ -829,9 +829,9 @@ public ActionPlayerDeath(Handle event, const char[]name[], bool dontBroadcast)
     return Plugin_Continue;
 }
 
-public ActionChangeClass(Handle event, const char[]name[], bool dontBroadcast)
+public Action ChangeClass(Handle event, const char name[], bool dontBroadcast)
 {
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));
+    int client = GetClientOfUserId(GetEventInt(event, "userid"));
     //new class = GetEventInt(event, "class");
     gRemaining1[client] = 0;
     gRemaining2[client] = 0;
@@ -840,7 +840,7 @@ public ActionChangeClass(Handle event, const char[]name[], bool dontBroadcast)
     FireTimers(client);
 }
 
-public ActionCommand_Nade1(client, args) 
+public Action Command_Nade1(client, args) 
 {
     if (gHolding[client]>HoldNone)
         return Plugin_Handled;
@@ -891,7 +891,7 @@ public ActionCommand_Nade1(client, args)
     return Plugin_Handled;
 }
 
-public ActionCommand_UnNade1(client, args)
+public Action Command_UnNade1(client, args)
 {
     if (gHolding[client]!=HoldFrag)
         return Plugin_Handled;
@@ -902,7 +902,7 @@ public ActionCommand_UnNade1(client, args)
     return Plugin_Handled;
 }
 
-public ActionCommand_Nade2(client, args) 
+public Action Command_Nade2(client, args) 
 {
     if (gHolding[client]>HoldNone)
         return Plugin_Handled;
@@ -953,7 +953,7 @@ public ActionCommand_Nade2(client, args)
     return Plugin_Handled;
 }
 
-public ActionCommand_UnNade2(client, args)
+public Action Command_UnNade2(client, args)
 {
     if (gHolding[client]!=HoldSpecial)
         return Plugin_Handled;
@@ -964,15 +964,15 @@ public ActionCommand_UnNade2(client, args)
     return Plugin_Handled;
 }
 
-public ActionCommand_Stop(client, args) 
+public Action Command_Stop(client, args) 
 {
     gStopInfoPanel[client] = true;
     return Plugin_Handled;
 }
 
-public ActionCommand_NadeInfo(client, args) 
+public Action Command_NadeInfo(client, args) 
 {
-    charhelplink[512]; helplink[0] = '\0';
+    char helplink[512]; helplink[0] = '\0';
     GetConVarString(cvHelpLink, helplink, sizeof(helplink));
     if (helplink[0] != '\0')
         ShowMOTDPanel(client, "TF2NADES", helplink, MOTDPANEL_TYPE_URL);
@@ -982,8 +982,8 @@ public ActionCommand_NadeInfo(client, args)
 GetNade(client)
 {
     // spawn the nade entity if required
-    boolmakenade = false;
-    new nade = EntRefToEntIndex(gNade[client]);
+    bool makenade = false;
+    int nade = EntRefToEntIndex(gNade[client]);
     if (nade > 0 && IsValidEntity(nade))
     {
         GetEntPropString(nade, Prop_Data, "m_iName", tName, sizeof(tName));
@@ -1023,11 +1023,11 @@ GetNade(client)
 
 ThrowNade(client, bool:Setup=false, HoldType:hold=HoldSpecial, NadeType:type=DefaultNade)
 {
-    new team = GetClientTeam(client);
+    int team = GetClientTeam(client);
     if (team < 2) // dont allow spectators to throw nades!
         return;
 
-    new nade;
+    int nade;
     if (Setup)
     {
         // save priming status
@@ -1048,7 +1048,7 @@ ThrowNade(client, bool:Setup=false, HoldType:hold=HoldSpecial, NadeType:type=Def
     if (nade > 0 && IsValidEntity(nade))
     {
         // get nade type
-        boolspecial = (hold >= HoldSpecial);
+        bool special = (hold >= HoldSpecial);
         if (special && type <= DefaultNade) // setup nade variables based on player class
         {
             type = (gNativeOverride) ? gSpecialType[client] : DefaultNade;
@@ -1060,7 +1060,7 @@ ThrowNade(client, bool:Setup=false, HoldType:hold=HoldSpecial, NadeType:type=Def
                     case tf2: class = _:TF2_GetPlayerClass(client);
                     case dod: class = _:DOD_GetPlayerClass(client); 
                 }
-                HandletypeVar = cvNadeType[class];
+                Handle typeVar = cvNadeType[class];
                 type = typeVar ? (NadeType:GetConVarInt(typeVar)) : (NadeType:class);
             }
         }
@@ -1069,7 +1069,7 @@ ThrowNade(client, bool:Setup=false, HoldType:hold=HoldSpecial, NadeType:type=Def
 
         if (Setup)
         {
-            Handlepack;
+            Handle pack;
             new userid = GetClientUserId(client);
             gNadeTimer[client] = CreateDataTimer(gnDelay, NadeExplode, pack);
             WritePackCell(pack, userid);
@@ -1091,11 +1091,11 @@ ThrowNade(client, bool:Setup=false, HoldType:hold=HoldSpecial, NadeType:type=Def
             gHolding[client] = HoldNone;
 
             // get position and angles
-            floatstartpt[3];
+            float startpt[3];
             GetClientEyePosition(client, startpt);
-            floatangle[3];
-            floatspeed[3];
-            floatplayerspeed[3];
+            float angle[3];
+            float speed[3];
+            float playerspeed[3];
             GetClientEyeAngles(client, angle);
             GetAngleVectors(angle, speed, NULL_VECTOR, NULL_VECTOR);
             speed[2]+=0.2;
@@ -1127,12 +1127,12 @@ ThrowNade(client, bool:Setup=false, HoldType:hold=HoldSpecial, NadeType:type=Def
     }
 }
 
-public ActionNadeCountdown(Handle timer, any:userid)
+public Action NadeCountdown(Handle timer, any userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (client > 0 && IsClientInGame(client))
     {
-        new flag = GetConVarInt(cvCountdown);
+        int flag = GetConVarInt(cvCountdown);
         if (gHolding[client] != HoldNone)
         {
             if (flag & 1)
@@ -1166,13 +1166,13 @@ public ActionNadeCountdown(Handle timer, any:userid)
     return Plugin_Stop;
 }
 
-public ActionNadeExplode(Handle timer, Handle pack)
+public Action NadeExplode(Handle timer, Handle pack)
 {
     ResetPack(pack);
-    new userid = ReadPackCell(pack);
-    new client = ReadPackCell(pack);
-    new team = ReadPackCell(pack);
-    new nade = EntRefToEntIndex(ReadPackCell(pack));
+    int userid = ReadPackCell(pack);
+    int client = ReadPackCell(pack);
+    int team = ReadPackCell(pack);
+    int nade = EntRefToEntIndex(ReadPackCell(pack));
     
     gNadeTimer[client]=null;
 
@@ -1187,7 +1187,7 @@ public ActionNadeExplode(Handle timer, Handle pack)
         else
         {
             new NadeType:type = NadeType:ReadPackCell(pack);
-            boolspecial = bool:ReadPackCell(pack);
+            bool special = bool:ReadPackCell(pack);
             ExplodeNade(client, team, type, special);
         }
     }
@@ -1195,7 +1195,7 @@ public ActionNadeExplode(Handle timer, Handle pack)
 
 public NadeType:GiveFullNades(client)
 {
-    new class = 0;
+    int class = 0;
     switch (GameType)
     {
         case tf2: class = _:TF2_GetPlayerClass(client);
@@ -1204,9 +1204,9 @@ public NadeType:GiveFullNades(client)
     if (class < 0)
         class = 0;
 
-    new NadeType:type;
-    HandlefragVar = cvFragNum[class];
-    HandletypeVar = cvNadeType[class];
+    int NadeType:type;
+    Handle fragVar = cvFragNum[class];
+    Handle typeVar = cvNadeType[class];
 
     if (gNativeOverride)
     {
@@ -1239,9 +1239,9 @@ ExplodeNade(client, team, NadeType:type, bool:special)
         ThrowNade(client, false, gHolding[client], DefaultNade);
     }
 
-    floatradius;
-    floatcenter[3];
-    new nade = EntRefToEntIndex(gNade[client]);
+    float radius;
+    float center[3];
+    int nade = EntRefToEntIndex(gNade[client]);
     if (nade <= 0)
     {
         //LogError("Invalid nade %d in ExplodeNade()", gNade[client]);
@@ -1250,7 +1250,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
 
     if (!special || type >= FragNade)
     {
-        new damage = GetConVarInt(cvFragDamage);
+        int damage = GetConVarInt(cvFragDamage);
         radius = GetConVarFloat(cvFragRadius);
         GetEntPropVector(nade, Prop_Send, "m_vecOrigin", center);
 
@@ -1274,9 +1274,9 @@ ExplodeNade(client, team, NadeType:type, bool:special)
         }
 
         // player damage
-        new oteam  = (team==3) ? 2 : 3;
+        int oteam  = (team==3) ? 2 : 3;
         FindPlayersInRange(center, radius, oteam, client, true, nade);
-        for (new j=1;j<=MaxClients;j++)
+        for (int j=1;j<=MaxClients;j++)
         {
             if (PlayersInRange[j]>0.0)
             {
@@ -1314,10 +1314,10 @@ ExplodeNade(client, team, NadeType:type, bool:special)
 
                 new oteam = (team==3) ? 2 : 3;
                 FindPlayersInRange(center, radius, oteam, client, true, nade);
-                floatplay[3];
-                floatplayerspeed[3];
-                floatdistance;
-                for (new j=1;j<=MaxClients;j++)
+                float play[3];
+                float playerspeed[3];
+                float distance;
+                for (int j=1;j<=MaxClients;j++)
                 {
                     if (PlayersInRange[j]>0.0)
                     {
@@ -1342,17 +1342,17 @@ ExplodeNade(client, team, NadeType:type, bool:special)
             {
                 radius = GetConVarFloat(cvTrapRadius);
                 new damage = GetConVarInt(cvTrapDamage);
-                floatdelay=GetConVarFloat(cvTrapDelay);
+                float delay=GetConVarFloat(cvTrapDelay);
                 GetEntPropVector(nade, Prop_Send, "m_vecOrigin", center);
 
-                boolentLimitOK = !IsEntLimitReached(.client=client, .message="unable to create bear trap particles");
+                bool entLimitOK = !IsEntLimitReached(.client=client, .message="unable to create bear trap particles");
                 if (GameType == tf2 && entLimitOK)
                 {
                     ShowParticle(center, "Explosions_MA_Dustup_2", 2.0);
                 }
                 else
                 {
-                    floatdir[3];
+                    float dir[3];
                     dir[0] = 0.0;
                     dir[1] = 0.0;
                     dir[2] = 2.0;
@@ -1390,7 +1390,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
 
                 new oteam = (team==3) ? 2 : 3;
                 FindPlayersInRange(center, radius, oteam, client, true, nade);
-                for (new j=1;j<=MaxClients;j++)
+                for (int j=1;j<=MaxClients;j++)
                 {
                     if (PlayersInRange[j]>0.0)
                     {
@@ -1409,12 +1409,12 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                 GetEntPropVector(nade, Prop_Send, "m_vecOrigin", center);
                 SetupNade(NailNade, team, true);
 
-                boolentLimitOK = !IsEntLimitReached(.client=client, .message="unable to explode nail nade");
+                bool entLimitOK = !IsEntLimitReached(.client=client, .message="unable to explode nail nade");
                 if (GameType == tf2 && entLimitOK)
                     ShowParticle(center, "Explosions_MA_Dustup_2", 2.0);
                 else
                 {
-                    floatdir[3];
+                    float dir[3];
                     dir[0] = 0.0;
                     dir[1] = 0.0;
                     dir[2] = 2.0;
@@ -1429,7 +1429,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                     new ent = CreateEntityByName("prop_dynamic_override");
                     if (ent > 0 && IsValidEntity(ent))
                     {
-                        floatangles[3] = {0.0,0.0,0.0};
+                        float angles[3] = {0.0,0.0,0.0};
                         SetEntPropEnt(ent, Prop_Send, "m_hOwnerEntity", client);
                         SetEntityModel(ent,gnModel);
                         SetEntProp(ent, Prop_Send, "m_CollisionGroup", 1);
@@ -1447,7 +1447,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                         PrepareAndEmitSoundToAll(SND_NADE_NAIL, 0, SNDCHAN_WEAPON, SNDLEVEL_TRAFFIC, SND_NOFLAGS,
                                                  SNDVOL_NORMAL, 100, _, center, NULL_VECTOR, false, 0.0);
 
-                        Handlepack;
+                        Handle pack;
                         new nadeRef = EntIndexToEntRef(ent);
                         new userid = GetClientUserId(client);
                         gNadeTimer2[client] = CreateDataTimer(4.5, SoldierNadeFinish, pack); 
@@ -1464,7 +1464,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                 radius = GetConVarFloat(cvMirvRadius);
                 GetEntPropVector(nade, Prop_Send, "m_vecOrigin", center);
 
-                boolentLimitOK = !IsEntLimitReached(.client=client, .message="unable to fragment mirv nade");
+                bool entLimitOK = !IsEntLimitReached(.client=client, .message="unable to fragment mirv nade");
                 if (GameType == tf2 && entLimitOK)
                 {
                     ShowParticle(center, "ExplosionCore_MidAir", 2.0);
@@ -1484,7 +1484,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
 
                 new oteam = (team==3) ? 2 : 3;
                 FindPlayersInRange(center, radius, oteam, client, true, nade);
-                for (new j=1;j<=MaxClients;j++)
+                for (int j=1;j<=MaxClients;j++)
                 {
                     if(PlayersInRange[j]>0.0)
                     {
@@ -1499,17 +1499,17 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                 {
                     PrepareModel(MDL_MIRV2, g_Mirv2ModelIndex, true);
 
-                    floatspread;
-                    floatvel[3], Float:angle[3], Float:rand;
+                    float spread;
+                    float vel[3], float angle[3], float rand;
                     Format(gnSkin, sizeof(gnSkin), "%d", team-2);
 
-                    Handlepack;
+                    Handle pack;
                     gNadeTimer[client] = CreateDataTimer(gnDelay, MirvExplode2, pack);
                     WritePackCell(pack, client);
                     WritePackCell(pack, GetClientUserId(client));
                     WritePackCell(pack, team);
 
-                    for (new k=0;k<MIRV_PARTS;k++)
+                    for (int k=0;k<MIRV_PARTS;k++)
                     {
                         new ent = CreateEntityByName("prop_physics");
                         if (ent > 0 && IsValidEntity(ent))
@@ -1565,9 +1565,9 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                                          SNDVOL_NORMAL, 100, _, center, NULL_VECTOR, false, 0.0);
 
                 new health;
-                boolentLimitOK = !IsEntLimitReached(.client=client, .message="unable to create health particles");
+                bool entLimitOK = !IsEntLimitReached(.client=client, .message="unable to create health particles");
                 FindPlayersInRange(center, radius, team, client, true, nade);
-                for (new j=1;j<=MaxClients;j++)
+                for (int j=1;j<=MaxClients;j++)
                 {
                     if (PlayersInRange[j]>0.0)
                     {
@@ -1613,7 +1613,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
 
                 new oteam = (team==3) ? 2 : 3;
                 FindPlayersInRange(center, radius, oteam, client, true, nade);
-                for (new j=1;j<=MaxClients;j++)
+                for (int j=1;j<=MaxClients;j++)
                 {
                     if (PlayersInRange[j]>0.0)
                     {
@@ -1638,7 +1638,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
             {
                 radius = GetConVarFloat(cvHallucRadius);
                 new damage = GetConVarInt(cvHallucDamage);
-                floatdelay = GetConVarFloat(cvHallucDelay);
+                float delay = GetConVarFloat(cvHallucDelay);
                 GetEntPropVector(nade, Prop_Send, "m_vecOrigin", center);
 
                 if (GameType == tf2 &&
@@ -1665,8 +1665,8 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                 new oteam = (team==3) ? 2 : 3;
                 FindPlayersInRange(center, radius, oteam, client, true, nade);
                 new rand1;
-                floatangles[3];
-                for (new j=1;j<=MaxClients;j++)
+                float angles[3];
+                for (int j=1;j<=MaxClients;j++)
                 {
                     if (PlayersInRange[j]>0.0)
                     {
@@ -1694,7 +1694,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                 radius = GetConVarFloat(cvEmpRadius);
                 GetEntPropVector(nade, Prop_Send, "m_vecOrigin", center);
 
-                boolentLimitOK = !IsEntLimitReached(.client=client, .message="unable to create emp particles");
+                bool entLimitOK = !IsEntLimitReached(.client=client, .message="unable to create emp particles");
                 if (GameType == tf2 && entLimitOK)
                     ShowParticle(center, "ExplosionCore_sapperdestroyed", 2.0);
                 else
@@ -1735,7 +1735,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
 
                 if (GameType == tf2)
                 {
-                    for (new j=1;j<=MaxClients;j++)
+                    for (int j=1;j<=MaxClients;j++)
                     {
                         if(PlayersInRange[j]>0.0)
                         {
@@ -1759,8 +1759,8 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                     }
 
                     radius = radius * radius;
-                    floatorig[3], Float:distance, Float:effectPos[3];
-                    for (new i=MaxClients+1; i<GetMaxEntities(); i++)
+                    float orig[3], float distance, float effectPos[3];
+                    for (int i=MaxClients+1; i<GetMaxEntities(); i++)
                     {
                         if (IsValidEdict(i) && IsValidEntity(i))
                         {
@@ -1807,7 +1807,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                                     distance = orig[0]+orig[1]+orig[2];
                                     if (distance<radius)
                                     {
-                                        floatSapperPos[3];
+                                        float SapperPos[3];
                                         GetEntPropVector(i, Prop_Data, "m_vecAbsOrigin", SapperPos);
 
                                         if (entLimitOK)
@@ -1864,7 +1864,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                 }
                 else
                 {
-                    for (new j=1;j<=MaxClients;j++)
+                    for (int j=1;j<=MaxClients;j++)
                     {
                         if (PlayersInRange[j]>0.0)
                             FakeClientCommandEx(j, "drop"); // drop weapon
@@ -1899,7 +1899,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                 new damage = GetConVarInt(cvBombDamage);
                 new oteam = (team == 3) ? 2 : 3;
                 FindPlayersInRange(center, radius, oteam, client, true, nade);
-                for (new j=1;j<=MaxClients;j++)
+                for (int j=1;j<=MaxClients;j++)
                 {
                     if(PlayersInRange[j]>0.0)
                     {
@@ -1919,12 +1919,12 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                 radius = GetConVarFloat(cvDroneRadius);
                 GetEntPropVector(nade, Prop_Send, "m_vecOrigin", center);
 
-                boolentLimitOK = !IsEntLimitReached(.client=client, .message="unable to explode targeting drone");
+                bool entLimitOK = !IsEntLimitReached(.client=client, .message="unable to explode targeting drone");
                 if (GameType == tf2 && entLimitOK)
                     ShowParticle(center, "Explosions_MA_Dustup_2", 2.0);
                 else
                 {
-                    floatdir[3];
+                    float dir[3];
                     dir[0] = 0.0;
                     dir[1] = 0.0;
                     dir[2] = 2.0;
@@ -1941,7 +1941,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                     {
                         SetupNade(TargetingDrone, team, true);
 
-                        floatangles[3] = {0.0,0.0,0.0};
+                        float angles[3] = {0.0,0.0,0.0};
                         SetEntProp(ent, Prop_Data, "m_MoveType", MOVETYPE_FLY);
                         SetEntPropEnt(ent, Prop_Send, "m_hOwnerEntity", client);
                         SetEntPropFloat(ent, Prop_Data, "m_flGravity", 0.0);
@@ -1961,7 +1961,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                         PrepareAndEmitSoundToAll(SND_NADE_NAIL, 0, SNDCHAN_WEAPON, SNDLEVEL_TRAFFIC, SND_NOFLAGS,
                                                  SNDVOL_NORMAL, 100, _, center, NULL_VECTOR, false, 0.0);
 
-                        Handlepack;
+                        Handle pack;
                         new nadeRef = EntIndexToEntRef(ent);
                         new userid = GetClientUserId(client);
                         gNadeTimer2[client] = CreateDataTimer(20.0, DroneFinish, pack); 
@@ -1975,7 +1975,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
             case SmokeNade:
             {
                 radius = GetConVarFloat(cvSmokeRadius);
-                floatdelay = GetConVarFloat(cvSmokeDelay);
+                float delay = GetConVarFloat(cvSmokeDelay);
                 GetEntPropVector(nade, Prop_Send, "m_vecOrigin", center);
 
                 TE_SetupSparks(center, NULL_VECTOR, 2, 1);
@@ -1989,13 +1989,13 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                                          SNDVOL_NORMAL, 100, _, center, NULL_VECTOR, false, 0.0);
                 
                 // Create the Smoke Cloud
-                charoriginData[64];
+                char originData[64];
                 Format(originData, sizeof(originData), "%f %f %f", center[0], center[1], center[2]);
 
                 if (IsEntLimitReached(.client=client, .message="unable to explode smoke nade"))
                 {
-                    charsize[5];
-                    charname[128];
+                    char size[5];
+                    char name[128];
                     Format(size, sizeof(size), "%f", radius);
                     Format(name, sizeof(name), "Smoke%i", client);
                     new cloud = CreateEntityByName("env_smokestack");
@@ -2025,7 +2025,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
             {
                 radius = GetConVarFloat(cvGasRadius);
                 new damage = GetConVarInt(cvGasDamage);
-                floatdelay = GetConVarFloat(cvGasDelay);
+                float delay = GetConVarFloat(cvGasDelay);
                 GetEntPropVector(nade, Prop_Send, "m_vecOrigin", center);
 
                 TE_SetupSparks(center, NULL_VECTOR, 2, 1);
@@ -2041,13 +2041,13 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                 if (IsEntLimitReached(.client=client, .message="unable to explode gas nade"))
                 {
                     // Create the PointHurt
-                    charoriginData[64];
+                    char originData[64];
                     Format(originData, sizeof(originData), "%f %f %f", center[0], center[1], center[2]);
 
-                    chardamageData[64];
+                    char damageData[64];
                     Format(damageData, sizeof(damageData), "%i", damage);
 
-                    charradiusData[64];
+                    char radiusData[64];
                     Format(radiusData, sizeof(radiusData), "%f", radius);
 
                     new pointHurt = CreateEntityByName("point_hurt");
@@ -2062,7 +2062,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                         AcceptEntityInput(pointHurt, "TurnOn");
 
                         // Create the Gas Cloud
-                        chargas_name[128];
+                        char gas_name[128];
                         Format(gas_name, sizeof(gas_name), "Gas%i", client);
 
                         new gascloud = CreateEntityByName("env_smokestack");
@@ -2085,7 +2085,7 @@ ExplodeNade(client, team, NadeType:type, bool:special)
                             AcceptEntityInput(gascloud, "TurnOn");
                         }
 
-                        Handleentitypack = CreateDataPack();
+                        Handle entitypack = CreateDataPack();
                         CreateTimer(delay, RemoveGas, entitypack);
                         CreateTimer(delay + 5.0, KillGas, entitypack);
                         WritePackCell(entitypack, EntIndexToEntRef(gascloud));
@@ -2308,7 +2308,7 @@ GetNumNades(NadeType:type)
 FireTimers(client)
 {
     // nades
-    Handletimer = gNadeTimer[client];
+    Handle timer = gNadeTimer[client];
     if (timer != null)
     {
         gTriggerTimer[client] = true;
@@ -2316,7 +2316,7 @@ FireTimers(client)
         gTriggerTimer[client] = false;
     }
 
-    Handletimer2 = gNadeTimer2[client];
+    Handle timer2 = gNadeTimer2[client];
     if (timer2 != null)
     {
         gTriggerTimer[client] = true;
@@ -2325,9 +2325,9 @@ FireTimers(client)
     }
 }
 
-public ActionRemoveSmoke(Handle timer, any:ref)
+public Action RemoveSmoke(Handle timer, any ref)
 {
-    new entity = EntRefToEntIndex(ref);
+    int entity = EntRefToEntIndex(ref);
     if (entity > 0 && IsValidEntity(entity))
     {
         AcceptEntityInput(entity, "TurnOff");
@@ -2335,44 +2335,44 @@ public ActionRemoveSmoke(Handle timer, any:ref)
     }
 }
 
-public ActionKillSmoke(Handle timer, any:ref)
+public Action KillSmoke(Handle timer, any ref)
 {
-    new entity = EntRefToEntIndex(ref);
+    int entity = EntRefToEntIndex(ref);
     if (entity > 0 && IsValidEntity(entity))
         AcceptEntityInput(entity, "Kill");
 }
 
-public ActionRemoveGas(Handle timer, Handle:entitypack)
+public Action RemoveGas(Handle timer, Handle entitypack)
 {
     ResetPack(entitypack);
 
-    new gascloud = EntRefToEntIndex(ReadPackCell(entitypack));
+    int gascloud = EntRefToEntIndex(ReadPackCell(entitypack));
     if (gascloud > 0 && IsValidEntity(gascloud))
         AcceptEntityInput(gascloud, "TurnOff");
 
-    new pointHurt = EntRefToEntIndex(ReadPackCell(entitypack));
+    int pointHurt = EntRefToEntIndex(ReadPackCell(entitypack));
     if (pointHurt > 0 && IsValidEntity(pointHurt))
         AcceptEntityInput(pointHurt, "TurnOff");
 }
 
-public ActionKillGas(Handle timer, Handle:entitypack)
+public Action KillGas(Handle timer, Handle entitypack)
 {
     ResetPack(entitypack);
 
-    new gascloud = EntRefToEntIndex(ReadPackCell(entitypack));
+    int gascloud = EntRefToEntIndex(ReadPackCell(entitypack));
     if (gascloud > 0 && IsValidEntity(gascloud))
         AcceptEntityInput(gascloud, "Kill");
 
-    new pointHurt = EntRefToEntIndex(ReadPackCell(entitypack));
+    int pointHurt = EntRefToEntIndex(ReadPackCell(entitypack));
     if (pointHurt > 0 && IsValidEntity(pointHurt))
         AcceptEntityInput(pointHurt, "Kill");
 
     CloseHandle(entitypack);
 }
 
-public ActionActivate(Handle timer,any:ref)
+public Action Activate(Handle timer,any ref)
 {
-    new obj = EntRefToEntIndex(ref);
+    int obj = EntRefToEntIndex(ref);
     if (obj > 0 && IsValidEdict(obj) && IsValidEntity(obj))
     {
         SetEntProp(obj, Prop_Send, "m_bDisabled", 0);
@@ -2381,22 +2381,22 @@ public ActionActivate(Handle timer,any:ref)
     return Plugin_Stop;
 }
 
-public ActionSoldierNadeThink(Handle timer, any:pack)
+public Action SoldierNadeThink(Handle timer, any pack)
 {
     ResetPack(pack);
-    new ref = ReadPackCell(pack);
-    new client = ReadPackCell(pack);
-    new userid = ReadPackCell(pack);
+    int ref = ReadPackCell(pack);
+    int client = ReadPackCell(pack);
+    int userid = ReadPackCell(pack);
 
-    new ent = EntRefToEntIndex(ref);
+    int ent = EntRefToEntIndex(ref);
     if (ent > 0 && IsValidEdict(ent) && IsValidEntity(ent) &&
         GetClientOfUserId(userid) == client)
     {
         // effects
-        floatcenter[3];
+        float center[3];
         GetEntPropVector(ent, Prop_Send, "m_vecOrigin", center);
 
-        new rand = GetRandomInt(1, 3);
+        int rand = GetRandomInt(1, 3);
         switch (rand)
         {
             case 1:  Format(tName, sizeof(tName), "%s", SND_NADE_NAIL_SHOOT1);
@@ -2407,7 +2407,7 @@ public ActionSoldierNadeThink(Handle timer, any:pack)
         PrepareAndEmitSoundToAll(tName, 0, SNDCHAN_WEAPON, SNDLEVEL_TRAFFIC, SND_NOFLAGS,
                                  SNDVOL_NORMAL, 100, _, center, NULL_VECTOR, false, 0.0);
 
-        floatdir[3];
+        float dir[3];
         dir[0] = GetRandomFloat(-1.0, 1.0);
         dir[1] = GetRandomFloat(-1.0, 1.0);
         dir[2] = GetRandomFloat(-1.0, 1.0);
@@ -2415,10 +2415,10 @@ public ActionSoldierNadeThink(Handle timer, any:pack)
         TE_SendToAll();
 
         // player damage
-        new damage = GetConVarInt(cvNailDamageNail);
-        new oteam = (GetClientTeam(client)==3) ? 2 : 3;
+        int damage = GetConVarInt(cvNailDamageNail);
+        int oteam = (GetClientTeam(client)==3) ? 2 : 3;
         FindPlayersInRange(center, GetConVarFloat(cvNailRadius), oteam, client, true, ent);
-        for (new j=1;j<=MaxClients;j++)
+        for (int j=1;j<=MaxClients;j++)
         {
             if (PlayersInRange[j]>0.0)
             {
@@ -2430,19 +2430,19 @@ public ActionSoldierNadeThink(Handle timer, any:pack)
 
     gNadeTimer[client] = null;
 
-    HandlefinishTimer = gNadeTimer2[client];
+    Handle finishTimer = gNadeTimer2[client];
     if (finishTimer != null)
         TriggerTimer(finishTimer);
 
     return Plugin_Stop;
 }
 
-public ActionSoldierNadeFinish(Handle timer, any:pack)
+public Action SoldierNadeFinish(Handle timer, any pack)
 {
     ResetPack(pack);
-    new ref = ReadPackCell(pack);
-    new client = ReadPackCell(pack);
-    new userid = ReadPackCell(pack);
+    int ref = ReadPackCell(pack);
+    int client = ReadPackCell(pack);
+    int userid = ReadPackCell(pack);
 
     gNadeTimer2[client] = null;
 
@@ -2452,15 +2452,15 @@ public ActionSoldierNadeFinish(Handle timer, any:pack)
         gNadeTimer[client] = null;
     }
 
-    new ent = EntRefToEntIndex(ref);
+    int ent = EntRefToEntIndex(ref);
     if (ent > 0 && IsValidEdict(ent) && IsValidEntity(ent))
     {
         StopSound(ent, SNDCHAN_WEAPON, SND_NADE_NAIL);
         if (GetClientOfUserId(userid) == client)
         {
             // effects
-            floatcenter[3];
-            floatradius = GetConVarFloat(cvNailRadius);
+            float center[3];
+            float radius = GetConVarFloat(cvNailRadius);
             GetEntPropVector(ent, Prop_Send, "m_vecOrigin", center);
 
             if (GameType == tf2 &&
@@ -2485,7 +2485,7 @@ public ActionSoldierNadeFinish(Handle timer, any:pack)
             new damage = GetConVarInt(cvNailDamageExplode);
             new oteam = (GetClientTeam(client) == 3) ? 2 : 3;
             FindPlayersInRange(center, radius, oteam, client, true, ent);
-            for (new j=1;j<=MaxClients;j++)
+            for (int j=1;j<=MaxClients;j++)
             {
                 if (PlayersInRange[j]>0.0)
                 {
@@ -2502,21 +2502,21 @@ public ActionSoldierNadeFinish(Handle timer, any:pack)
     return Plugin_Stop;
 }
 
-public ActionMirvExplode2(Handle timer, Handle pack)
+public Action MirvExplode2(Handle timer, Handle pack)
 {
-    floatcenter[3];
-    floatradius = GetConVarFloat(cvMirvRadius);
+    float center[3];
+    float radius = GetConVarFloat(cvMirvRadius);
 
     ResetPack(pack);
-    new client = ReadPackCell(pack);
-    new userid = ReadPackCell(pack);
-    new team = ReadPackCell(pack);
+    int client = ReadPackCell(pack);
+    int userid = ReadPackCell(pack);
+    int team = ReadPackCell(pack);
 
     gNadeTimer[client] = null;
 
-    boolemitSoundOK = true;
-    boolentLimitOK = !IsEntLimitReached(.client=client, .message="unable to create mirv explode particles");
-    boolclientInGame = GetClientOfUserId(userid) == client;
+    bool emitSoundOK = true;
+    bool entLimitOK = !IsEntLimitReached(.client=client, .message="unable to create mirv explode particles");
+    bool clientInGame = GetClientOfUserId(userid) == client;
     if (clientInGame)
     {
         if (GameType == tf2)
@@ -2528,9 +2528,9 @@ public ActionMirvExplode2(Handle timer, Handle pack)
         }
     }
 
-    for (new k=0;k<MIRV_PARTS;k++)
+    for (int k=0;k<MIRV_PARTS;k++)
     {
-        new ent = EntRefToEntIndex(ReadPackCell(pack));
+        int ent = EntRefToEntIndex(ReadPackCell(pack));
         if (ent > 0 && IsValidEntity(ent))
         {
             if (clientInGame)
@@ -2545,7 +2545,7 @@ public ActionMirvExplode2(Handle timer, Handle pack)
                     if (emitSoundOK)
                     {
                         EmitSoundToAll(SND_NADE_MIRV2_TF2, 0, SNDCHAN_WEAPON, SNDLEVEL_TRAFFIC, SND_NOFLAGS,
-                                       SNDVOL_NORMAL, 100, _, center, NULL_VECTOR, false, Float:k * 0.25);
+                                       SNDVOL_NORMAL, 100, _, center, NULL_VECTOR, false, float k * 0.25);
                     }
                 }
                 else
@@ -2564,7 +2564,7 @@ public ActionMirvExplode2(Handle timer, Handle pack)
                 new damage = GetConVarInt(cvMirvDamage2);
                 new oteam = (team == 3) ? 2 : 3;
                 FindPlayersInRange(center, radius, oteam, client, true, ent);
-                for (new j=1;j<=MaxClients;j++)
+                for (int j=1;j<=MaxClients;j++)
                 {
                     if (PlayersInRange[j]>0.0)
                     {
@@ -2581,20 +2581,20 @@ public ActionMirvExplode2(Handle timer, Handle pack)
     return Plugin_Stop;
 }
 
-public ActionDroneThink(Handle timer, any:pack)
+public Action DroneThink(Handle timer, any pack)
 {
     ResetPack(pack);
-    new ref = ReadPackCell(pack);
-    new client = ReadPackCell(pack);
-    new userid = ReadPackCell(pack);
+    int ref = ReadPackCell(pack);
+    int client = ReadPackCell(pack);
+    int userid = ReadPackCell(pack);
 
     if (GetClientOfUserId(userid) == client)
     {
-        new ent = EntRefToEntIndex(ref);
+        int ent = EntRefToEntIndex(ref);
         if (ent > 0 && IsValidEdict(ent) && IsValidEntity(ent))
         {
-            floatrange=2000.0;
-            floatcenter[3];
+            float range=2000.0;
+            float center[3];
             GetEntPropVector(ent, Prop_Send, "m_vecOrigin", center);
 
             PrepareModel(MDL_BEAM_SPRITE, gBeamSprite, true);
@@ -2607,8 +2607,8 @@ public ActionDroneThink(Handle timer, any:pack)
                 targetColor[2] = 255;
 
             // Find players to target
-            floatindexLoc[3];
-            for (new index=1;index<=MaxClients;index++)
+            float indexLoc[3];
+            for (int index=1;index<=MaxClients;index++)
             {
                 if (client != index && IsClientInGame(index) &&
                     IsPlayerAlive(index) && GetClientTeam(index) != team)
@@ -2617,7 +2617,7 @@ public ActionDroneThink(Handle timer, any:pack)
                     if (IsPointInRange(center,indexLoc,range) &&
                             TraceTargetIndex(ent, index, center, indexLoc))
                     {
-                        floatvector[3], Float:angles[3];
+                        float vector[3], float angles[3];
                         MakeVectorFromPoints(center, indexLoc, vector);
                         NormalizeVector(vector, vector);
                         GetVectorAngles(vector, angles);
@@ -2635,7 +2635,7 @@ public ActionDroneThink(Handle timer, any:pack)
                     gTargeted[index] = 0;
             }
 
-            static const Float:vel[3] = {0.0,0.0,105.0};
+            static const float vel[3] = {0.0,0.0,105.0};
             TeleportEntity(ent, NULL_VECTOR, NULL_VECTOR, vel);
             return Plugin_Continue;
         }
@@ -2643,13 +2643,13 @@ public ActionDroneThink(Handle timer, any:pack)
 
     gNadeTimer[client] = null;
 
-    HandlefinishTimer = gNadeTimer2[client];
+    Handle finishTimer = gNadeTimer2[client];
     if (finishTimer != null)
         TriggerTimer(finishTimer);
     else
     {
         // Reset the targeted flags
-        for (new index=1;index<=MaxClients;index++)
+        for (int index=1;index<=MaxClients;index++)
         {
             if (gTargeted[index] == client)
                 gTargeted[index] = 0;
@@ -2659,12 +2659,12 @@ public ActionDroneThink(Handle timer, any:pack)
     return Plugin_Stop;
 }
 
-public ActionDroneFinish(Handle timer, any:pack)
+public Action DroneFinish(Handle timer, any pack)
 {
     ResetPack(pack);
-    new ref = ReadPackCell(pack);
-    new client = ReadPackCell(pack);
-    new userid = ReadPackCell(pack);
+    int ref = ReadPackCell(pack);
+    int client = ReadPackCell(pack);
+    int userid = ReadPackCell(pack);
 
     gNadeTimer2[client] = null;
 
@@ -2674,14 +2674,14 @@ public ActionDroneFinish(Handle timer, any:pack)
         gNadeTimer[client] = null;
     }
 
-    new ent = EntRefToEntIndex(ref);
+    int ent = EntRefToEntIndex(ref);
     if (ent > 0 && IsValidEdict(ent) && IsValidEntity(ent))
     {
         StopSound(ent, SNDCHAN_WEAPON, SND_NADE_NAIL);
         if (GetClientOfUserId(userid) == client)
         {
             // effects
-            floatcenter[3];
+            float center[3];
             GetEntPropVector(ent, Prop_Send, "m_vecOrigin", center);
 
             if (GameType == tf2 &&
@@ -2691,7 +2691,7 @@ public ActionDroneFinish(Handle timer, any:pack)
             }
             else
             {
-                floatradius = GetConVarFloat(cvNailRadius);
+                float radius = GetConVarFloat(cvNailRadius);
                 PrepareModel(MDL_EXPLOSION_SPRITE, gExplosionSprite, true);
                 TE_SetupExplosion(center, gExplosionSprite, 2.0, 1, 4, RoundToCeil(radius), 0);
                 TE_SendToAll();
@@ -2704,7 +2704,7 @@ public ActionDroneFinish(Handle timer, any:pack)
     }
 
     // Reset the targeted flags
-    for (new index=1;index<=MaxClients;index++)
+    for (int index=1;index<=MaxClients;index++)
     {
         if (gTargeted[index] == client)
             gTargeted[index] = 0;
@@ -2713,12 +2713,12 @@ public ActionDroneFinish(Handle timer, any:pack)
     return Plugin_Stop;
 }
 
-public ActionResetPlayerView(Handle timer, any:userid)
+public Action ResetPlayerView(Handle timer, any userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (client > 0)
     {
-        floatangles[3];
+        float angles[3];
         GetClientEyeAngles(client, angles);
         angles[2] = 0.0;
         TeleportEntity(client, NULL_VECTOR, angles, NULL_VECTOR);
@@ -2726,9 +2726,9 @@ public ActionResetPlayerView(Handle timer, any:userid)
     }
 }
 
-public ActionResetPlayerMotion(Handle timer, any:userid)
+public Action ResetPlayerMotion(Handle timer, any userid)
 {
-    new client = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (client > 0)
         SetEntityMoveType(client,MOVETYPE_WALK); // Unfreeze client
 }
@@ -2763,7 +2763,7 @@ SetupNadeModels()
 // show a health sign above client's head
 ShowHealthParticle(client)
 {
-    new particle = CreateEntityByName("info_particle_system");
+    int particle = CreateEntityByName("info_particle_system");
     if (particle > 0 && IsValidEntity(particle))
     {
         GetEntPropString(client, Prop_Data, "m_iName", tName, sizeof(tName));
@@ -2792,16 +2792,16 @@ ShowHealthParticle(client)
     }
 }
 
-public ActionDeleteParticles(Handle timer, any:ref)
+public Action DeleteParticles(Handle timer, any ref)
 {
-    new particle = EntRefToEntIndex(ref);
+    int particle = EntRefToEntIndex(ref);
     if (particle > 0 && IsValidEntity(particle))
         AcceptEntityInput(particle, "kill");
 }
 
-stock ShowParticle(Float:pos[3], String:particlename[], Float:time, Float:ang[3]=NULL_VECTOR)
+stock ShowParticle(float pos[3], char[] particlename, float time, float ang[3]=NULL_VECTOR)
 {
-    new particle = CreateEntityByName("info_particle_system");
+    int particle = CreateEntityByName("info_particle_system");
     if (particle > 0 && IsValidEntity(particle))
     {
         TeleportEntity(particle, pos, ang, NULL_VECTOR);
@@ -2816,13 +2816,13 @@ stock ShowParticle(Float:pos[3], String:particlename[], Float:time, Float:ang[3]
     }   
 }
 
-stock ShowParticleEntity(ent, String:particleType[], Float:time, Float:addPos[3]=NULL_VECTOR, Float:addAngle[3]=NULL_VECTOR)
+stock ShowParticleEntity(ent, char[] particleType, float time, float addPos[3]=NULL_VECTOR, float addAngle[3]=NULL_VECTOR)
 {
-    new particle = CreateEntityByName("info_particle_system");
+    int particle = CreateEntityByName("info_particle_system");
     if (particle > 0 && IsValidEntity(particle))
     {
-        floatpos[3];
-        floatang[3];
+        float pos[3];
+        float ang[3];
         GetEntPropVector(ent, Prop_Send, "m_vecOrigin", pos);
         AddVectors(pos, addPos, pos);
         GetEntPropVector(ent, Prop_Send, "m_angRotation", ang);
@@ -2846,12 +2846,12 @@ stock ShowParticleEntity(ent, String:particleType[], Float:time, Float:addPos[3]
     }
 }
 
-AttachParticle(ent, String:particleType[], Float:time)
+AttachParticle(ent, char[] particleType, float time)
 {
-    new particle = CreateEntityByName("info_particle_system");
+    int particle = CreateEntityByName("info_particle_system");
     if (particle > 0 && IsValidEntity(particle))
     {
-        floatpos[3];
+        float pos[3];
         GetEntPropVector(ent, Prop_Send, "m_vecOrigin", pos);
         TeleportEntity(particle, pos, NULL_VECTOR, NULL_VECTOR);
         GetEntPropString(ent, Prop_Data, "m_iName", tName, sizeof(tName));
@@ -2872,13 +2872,13 @@ AttachParticle(ent, String:particleType[], Float:time)
 }
 
 // players in range setup  (self = 0 if doesn't affect self)
-FindPlayersInRange(Float:location[3], Float:radius, team, self, bool:trace, donthit)
+FindPlayersInRange(float location[3], float radius, team, self, bool:trace, donthit)
 {
-    floatrsquare = radius*radius;
-    floatorig[3];
-    floatdistance;
-    Handletr;
-    new j;
+    float rsquare = radius*radius;
+    float orig[3];
+    float distance;
+    Handle tr;
+    int j;
     for (j=1;j<=MaxClients;j++)
     {
         PlayersInRange[j] = 0.0;
@@ -2923,13 +2923,13 @@ FindPlayersInRange(Float:location[3], Float:radius, team, self, bool:trace, dont
     }
 }
 
-SetupHudMsg(Float:time)
+SetupHudMsg(float time)
 {
     SetHudTextParams(-1.0, 0.8, time, 255, 255, 255, 64, 1, 0.5, 0.0, 0.5);
 }
 
 
-NadeKillPlayer(client, attacker, const char[]weapon[])
+NadeKillPlayer(client, attacker, const char weapon[])
 {
     if (gKilledBy[client] == 0)
     {
@@ -2956,7 +2956,7 @@ NadeKillPlayer(client, attacker, const char[]weapon[])
                 DispatchKeyValue(ent, "spawnflags", "3964");
                 DispatchSpawn(ent);
 
-                floatpos[3];
+                float pos[3];
                 GetClientAbsOrigin(client, pos);
                 TeleportEntity(ent, pos, NULL_VECTOR, NULL_VECTOR);
                 AcceptEntityInput(ent, "explode", client, client);
@@ -2966,15 +2966,15 @@ NadeKillPlayer(client, attacker, const char[]weapon[])
     }
 }
 
-public ActionRemoveExplosion(Handle timer, any:ref)
+public Action RemoveExplosion(Handle timer, any ref)
 {
-    new ent = EntRefToEntIndex(ref);
+    int ent = EntRefToEntIndex(ref);
     if (ent > 0 && IsValidEdict(ent) && IsValidEntity(ent))
         AcceptEntityInput(ent, "kill");
 }
 
-bool:NadeHurtPlayer(client, attacker, damage, NadeType:type, const char[]weapon[],
-                    Float:pos[3] = NULL_VECTOR, Float:knockbackmult = 4.0,
+bool:NadeHurtPlayer(client, attacker, damage, NadeType:type, const char weapon[],
+                    float pos[3] = NULL_VECTOR, float knockbackmult = 4.0,
                     bool:explosion=false, bool:napalm=false, bool:hold=false,
                     bool:halluc=false)
 {
@@ -2998,7 +2998,7 @@ bool:NadeHurtPlayer(client, attacker, damage, NadeType:type, const char[]weapon[
         }
     #endif
 
-    new Action:res = Plugin_Continue;
+    int Action:res = Plugin_Continue;
     Call_StartForward(fwdOnNadeExplode);
     Call_PushCell(client);
     Call_PushCell(attacker);
@@ -3010,7 +3010,7 @@ bool:NadeHurtPlayer(client, attacker, damage, NadeType:type, const char[]weapon[
     {
         if (explosion)
         {
-            floatplay[3], Float:playerspeed[3], Float:distance;
+            float play[3], float playerspeed[3], float distance;
             GetClientAbsOrigin(client, play);
             SubtractVectors(play, pos, play);
             distance = GetVectorLength(play);
@@ -3071,21 +3071,21 @@ bool:NadeHurtPlayer(client, attacker, damage, NadeType:type, const char[]weapon[
         return false;
 }
 
-DamageBuildings(attacker, Float:start[3], Float:radius, damage, nade, bool:trace)
+DamageBuildings(attacker, float start[3], float radius, damage, nade, bool:trace)
 {
     if (GameType != tf2)
         return;
 
-    floatpos[3];
+    float pos[3];
     pos[0]=start[0];pos[1]=start[1];pos[2]=start[2]+16.0;
-    new count = GetMaxEntities();
-    floatobj[3], Float:objcalc[3];
-    floatrad = radius * radius;
-    floatdistance;
-    Handletr;
-    new team = IsClientInGame(attacker) ? GetClientTeam(attacker) : 0;
-    new objteam;
-    for (new i=MaxClients+1; i<count; i++)
+    int count = GetMaxEntities();
+    float obj[3], float objcalc[3];
+    float rad = radius * radius;
+    float distance;
+    Handle tr;
+    int team = IsClientInGame(attacker) ? GetClientTeam(attacker) : 0;
+    int objteam;
+    for (int i=MaxClients+1; i<count; i++)
     {
         if (IsValidEdict(i) && IsValidEntity(i))
         {
@@ -3134,7 +3134,7 @@ DamageBuildings(attacker, Float:start[3], Float:radius, damage, nade, bool:trace
     }
 }
 
-public boolTraceRayDontHitSelfOrPlayers(entity, mask, any:startent)
+public bool TraceRayDontHitSelfOrPlayers(entity, mask, any startent)
 {
     if(entity == startent)
     {
@@ -3149,7 +3149,7 @@ public boolTraceRayDontHitSelfOrPlayers(entity, mask, any:startent)
     return true; 
 }
 
-public boolTraceRayDontHitObjOrPlayers(entity, mask, any:startent)
+public bool TraceRayDontHitObjOrPlayers(entity, mask, any startent)
 {
     if(entity == startent)
     {
@@ -3176,16 +3176,16 @@ public boolTraceRayDontHitObjOrPlayers(entity, mask, any:startent)
     return true; 
 }
 
-TagsCheck(const char[]tag[])
+TagsCheck(const char tag[])
 {
-    HandlehTags = FindConVar("sv_tags");
+    Handle hTags = FindConVar("sv_tags");
     
-    chartags[255];
+    char tags[255];
     GetConVarString(hTags, tags, sizeof(tags));
 
     if (!(StrContains(tags, tag, false)>-1))
     {
-        charnewTags[255];
+        char newTags[255];
         Format(newTags, sizeof(newTags), "%s,%s", tags, tag);
         SetConVarString(hTags, newTags);
         GetConVarString(hTags, tags, sizeof(tags));
@@ -3194,12 +3194,12 @@ TagsCheck(const char[]tag[])
     CloseHandle(hTags);
 } 
 
-public ActionSayCommand(client,args)
+public Action SayCommand(client,args)
 {
-    charcommand[128];
+    char command[128];
     GetCmdArg(1,command,sizeof(command));
 
-    chararg[2][64];
+    char arg[2][64];
     ExplodeString(command, " ", arg, 2, 64);
 
     if (CommandCheck(arg[0],"nadeinfo") ||
@@ -3217,13 +3217,13 @@ public ActionSayCommand(client,args)
     return Plugin_Continue;
 }
 
-bool:CommandCheck(const char[]compare[], const char[]command[])
+bool:CommandCheck(const char compare[], const char command[])
 {
     if(!strcmp(compare,command,false))
         return true;
     else
     {
-        charfirstChar[] = " ";
+        char firstChar[] = " ";
         firstChar[0] = compare[0];
         if (StrContains("!/\\",firstChar) >= 0)
             return !strcmp(compare[1],command,false);
@@ -3233,10 +3233,10 @@ bool:CommandCheck(const char[]compare[], const char[]command[])
 }
 
 // *************************************************
-// native interface
+// native int erface
 // *************************************************
 
-public APLResAskPluginLoad2(Handle myself, bool late, char[] error, err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, err_max)
 {
     // Register Natives
     CreateNative("ControlNades",Native_ControlNades);
@@ -3270,10 +3270,10 @@ public Native_ControlNades(Handle plugin,numParams)
 
 public Native_GiveNades(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (client > 0 && client <= MaxClients)
     {
-        new NadeType:old_type = gSpecialType[client];
+        int NadeType:old_type = gSpecialType[client];
         gRemaining1[client] = GetNativeCell(2);
         gAllowed1[client] = GetNativeCell(3);
         gRemaining2[client] = GetNativeCell(4);
@@ -3299,7 +3299,7 @@ public Native_GiveNades(Handle plugin,numParams)
                         case tf2: class = _:TF2_GetPlayerClass(client);
                         case dod: class = _:DOD_GetPlayerClass(client); 
                     }
-                    HandletypeVar = cvNadeType[class];
+                    Handle typeVar = cvNadeType[class];
                     type = typeVar ? (NadeType:GetConVarInt(typeVar)) : (NadeType:class);
                 }
 
@@ -3317,7 +3317,7 @@ public Native_GiveNades(Handle plugin,numParams)
 
 public Native_TakeNades(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (client > 0 && client <= MaxClients)
     {
         gSpecialType[client] = DefaultNade;
@@ -3335,7 +3335,7 @@ public Native_TakeNades(Handle plugin,numParams)
 
 public Native_AddFragNades(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (client > 0 && client <= MaxClients)
     {
         gRemaining1[client] += GetNativeCell(2);
@@ -3348,7 +3348,7 @@ public Native_AddFragNades(Handle plugin,numParams)
 
 public Native_SubFragNades(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (client > 0 && client <= MaxClients)
     {
         gRemaining1[client] -= GetNativeCell(2);
@@ -3359,7 +3359,7 @@ public Native_SubFragNades(Handle plugin,numParams)
 
 public Native_HasFragNades(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (client > 0 && client <= MaxClients)
     {
         switch (GetNativeCell(2))
@@ -3377,7 +3377,7 @@ public Native_HasFragNades(Handle plugin,numParams)
 
 public Native_AddSpecialNades(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (client > 0 && client <= MaxClients)
     {
         gRemaining2[client] += GetNativeCell(2);
@@ -3390,7 +3390,7 @@ public Native_AddSpecialNades(Handle plugin,numParams)
 
 public Native_SubSpecialNades(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (client > 0 && client <= MaxClients)
     {
         gRemaining2[client] -= GetNativeCell(2);
@@ -3401,7 +3401,7 @@ public Native_SubSpecialNades(Handle plugin,numParams)
 
 public Native_HasSpecialNades(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (client > 0 && client <= MaxClients)
     {
         switch (GetNativeCell(2))
@@ -3419,7 +3419,7 @@ public Native_HasSpecialNades(Handle plugin,numParams)
 
 public Native_ThrowFragNade(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (client > 0 && client <= MaxClients)
     {
         if (GetNativeCell(2))
@@ -3431,7 +3431,7 @@ public Native_ThrowFragNade(Handle plugin,numParams)
 
 public Native_ThrowSpecialNade(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (client > 0 && client <= MaxClients)
     {
         if (GetNativeCell(2))
@@ -3443,26 +3443,26 @@ public Native_ThrowSpecialNade(Handle plugin,numParams)
 
 public Native_DamageBuildings(Handle plugin,numParams)
 {
-    new attacker = GetNativeCell(1);
+    int attacker = GetNativeCell(1);
     if (attacker > 0 && attacker <= MaxClients)
     {
-        floatstart[3];
+        float start[3];
         GetNativeArray(2, start, 3); 
 
-        floatradius = Float:GetNativeCell(3);
-        new damage = GetNativeCell(4);
-        new ent = GetNativeCell(5);
-        booltrace = bool:GetNativeCell(6);
+        float radius = float GetNativeCell(3);
+        int damage = GetNativeCell(4);
+        int ent = GetNativeCell(5);
+        bool trace = bool:GetNativeCell(6);
         DamageBuildings(attacker, start, radius, damage, ent, trace);
     }
 }
 
 public Native_ThrowNade(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (client > 0 && client <= MaxClients)
     {
-        new NadeType:type = NadeType:GetNativeCell(3);
+        int NadeType:type = NadeType:GetNativeCell(3);
         if (GetNativeCell(2)) // setup - button pressed
         {
             if (gHolding[client]>HoldNone)
@@ -3515,7 +3515,7 @@ public Native_ThrowNade(Handle plugin,numParams)
 
 public Native_IsTargeted(Handle plugin,numParams)
 {
-    new client = GetNativeCell(1);
+    int client = GetNativeCell(1);
     if (client > 0 && client <= MaxClients)
     {
         return  gTargeted[client];
@@ -3529,7 +3529,7 @@ public Native_IsTargeted(Handle plugin,numParams)
  */
 #tryinclude "sc/range"
 #if !defined _range_included
-    stock bool:IsPointInRange(const Float:start[3], const Float:end[3],Float:maxdistance)
+    stock bool:IsPointInRange(const float start[3], const float end[3],float maxdistance)
     {
         return (GetVectorDistance(start,end)<maxdistance);
     }
@@ -3540,7 +3540,7 @@ public Native_IsTargeted(Handle plugin,numParams)
  */
 #tryinclude <raytrace>
 #if !defined _raytrace_included
-    stock bool:TraceTargetIndex(client, target, Float:clientLoc[3], Float:targetLoc[3])
+    stock bool:TraceTargetIndex(client, target, float clientLoc[3], float targetLoc[3])
     {
         targetLoc[2] += 50.0; // Adjust trace position of target
         TR_TraceRayFilter(clientLoc, targetLoc, MASK_SOLID,
@@ -3554,7 +3554,7 @@ public Native_IsTargeted(Handle plugin,numParams)
      *Trace Filters*
     ****************/
 
-    public boolTraceRayDontHitSelf(entity, mask, any:data)
+    public bool TraceRayDontHitSelf(entity, mask, any data)
     {
         return (entity != data); // Check if the TraceRay hit the owning entity.
     }

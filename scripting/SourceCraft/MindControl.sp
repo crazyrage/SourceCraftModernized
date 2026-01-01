@@ -30,7 +30,7 @@
 
 enum command { update, remove, reset, find_controller, find_builder };
 
-new const char[] controlWav[] = "sc/pteSum00.wav";
+static const char[] controlWav[] = "sc/pteSum00.wav";
 
 Handle m_StolenObjectList[MAXPLAYERS+1] = { null, ... };
 
@@ -104,7 +104,7 @@ public ObjectDestroyed(Handle event,const char[] name[],bool dontBroadcast)
 {
     int index = GetClientOfUserId(GetEventInt(event,"userid"));
     int obj = GetEventInt(event,"index");
-    new TFExtObjectType:type = TFExtObjectType:GetEventInt(event,"objecttype");
+    int TFExtObjectType:type = TFExtObjectType:GetEventInt(event,"objecttype");
     ProcessMindControlledObjects(remove, obj, index, type, null);
 }
 
@@ -434,7 +434,7 @@ bool ControlObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject
     return false;
 }
 
-public Action CheckSentries(Handle timer,any:ref)
+public Action CheckSentries(Handle timer,any ref)
 {
     int obj = EntRefToEntIndex(ref);
     if (obj > 0 && IsValidEdict(obj) && IsValidEntity(obj))
@@ -596,7 +596,7 @@ public int Native_MindControl(Handle plugin,numParams)
     float range = float GetNativeCell(2);
     int percent = GetNativeCell(3);
     int builder = GetNativeCellRef(4);
-    new TFExtObjectType:type = GetNativeCellRef(5);
+    int TFExtObjectType:type = GetNativeCellRef(5);
     bool replace = GetNativeCell(6);
     bool success = MindControl(client,range,percent, builder, type, replace);
     if (success)
@@ -612,7 +612,7 @@ public int Native_ControlObject(Handle plugin,numParams)
     int client = GetNativeCell(1);
     int target = GetNativeCell(2);
     int builder = GetNativeCellRef(3);
-    new TFExtObjectType:type = GetNativeCellRef(4);
+    int TFExtObjectType:type = GetNativeCellRef(4);
     bool success = ControlObject(client,target, builder, type);
     if (success)
     {
@@ -627,7 +627,7 @@ public int Native_ReplaceObject(Handle plugin,numParams)
     int client = GetNativeCell(1);
     int target = GetNativeCell(2);
     int builder = GetNativeCellRef(3);
-    new TFExtObjectType:type = GetNativeCellRef(4);
+    int TFExtObjectType:type = GetNativeCellRef(4);
     bool success = ReplaceObject(client,target, builder, type);
     if (success)
     {

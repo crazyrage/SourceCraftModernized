@@ -39,22 +39,22 @@
 #include "effect/SendEffects"
 #include "effect/FlashScreen"
 
-new raceID, weaponsID, armorID, stimpacksID, jetpackID, bunkerID, chargeID;
+new raceID, weaponsID, armorID, stimpacksID, jetpackID, bunkerID, char geID;
 
-static const charg_ArmorName[]  = "Armor";
-floatg_InitialArmor[]      = { 0.0, 0.20, 0.30, 0.40, 0.50 };
-floatg_ArmorPercent[][2]   = { {0.00, 0.00},
+static const char g_ArmorName[]  = "Armor";
+float g_InitialArmor[]      = { 0.0, 0.20, 0.30, 0.40, 0.50 };
+float g_ArmorPercent[][2]   = { {0.00, 0.00},
                                     {0.00, 0.05},
                                     {0.00, 0.15},
                                     {0.05, 0.30},
                                     {0.10, 0.40} };
 
 	int g_JetpackFuel[]             = { 0, 40, 50, 70, 90 };
-floatg_JetpackRefuelTime[] = { 0.0, 45.0, 35.0, 25.0, 15.0 };
+float g_JetpackRefuelTime[] = { 0.0, 45.0, 35.0, 25.0, 15.0 };
 
-floatg_WeaponsPercent[]    = { 0.00, 0.15, 0.30, 0.40, 0.50 };
-floatg_BunkerPercent[]     = { 0.00, 0.20, 0.30, 0.40, 0.50 };
-floatg_SpeedLevels[]       = { -1.0, 1.10, 1.15, 1.20, 1.25 };
+float g_WeaponsPercent[]    = { 0.00, 0.15, 0.30, 0.40, 0.50 };
+float g_BunkerPercent[]     = { 0.00, 0.20, 0.30, 0.40, 0.50 };
+float g_SpeedLevels[]       = { -1.0, 1.10, 1.15, 1.20, 1.25 };
 
 public Plugin myinfo = 
 {
@@ -127,11 +127,11 @@ public OnSourceCraftReady()
     bunkerID    = AddBunkerUpgrade(raceID, 2);
 
     // Ultimate 3 & 4
-    chargeID    = AddUpgrade(raceID, "d8charge", 3, 16, .cost_crystals=30);
+    char geID    = AddUpgrade(raceID, "d8charge", 3, 16, .cost_crystals=30);
 
     if (!IsTNTAvailable())
     {
-        SetUpgradeDisabled(raceID, chargeID, true);
+        SetUpgradeDisabled(raceID, char geID, true);
         LogMessage("Disabling Terran Reaper:D8 Charge due to sm_tnt is not available");
     }
 
@@ -139,9 +139,9 @@ public OnSourceCraftReady()
     GetConfigFloatArray("armor_amount", g_InitialArmor, sizeof(g_InitialArmor),
                         g_InitialArmor, raceID, armorID);
 
-    for (intlevel=0; level < sizeof(g_ArmorPercent); level++)
+    for (int level=0; level < sizeof(g_ArmorPercent); level++)
     {
-        charkey[32];
+        char key[32];
         Format(key, sizeof(key), "armor_percent_level_%d", level);
         GetConfigFloatArray(key, g_ArmorPercent[level], sizeof(g_ArmorPercent[]),
                             g_ArmorPercent[level], raceID, armorID);
@@ -165,7 +165,7 @@ public OnSourceCraftReady()
     TraceReturn();
 }
 
-public OnLibraryAdded(const char[]name[])
+public OnLibraryAdded(const char name[])
 {
     TraceInto("TerranReaper", "OnLibraryAdded", "name=%d", name);
 
@@ -179,7 +179,7 @@ public OnLibraryAdded(const char[]name[])
     TraceReturn();
 }
 
-public OnLibraryRemoved(const char[]name[])
+public OnLibraryRemoved(const char name[])
 {
     TraceInto("TerranReaper", "OnLibraryRemoved", "name=%d", name);
 
@@ -203,7 +203,7 @@ public void OnMapStart()
     SetupDeniedSound();
 }
 
-public ActionOnRaceDeselected(client,oldrace,newrace)
+public Action OnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
@@ -235,24 +235,24 @@ public ActionOnRaceDeselected(client,oldrace,newrace)
         return Plugin_Continue;
 }
 
-public ActionOnRaceSelected(client,oldrace,newrace)
+public Action OnRaceSelected(client,oldrace,newrace)
 {
     if (newrace == raceID)
     {
         TraceInto("TerranReaper", "OnRaceSelected", "client=%d:%N, oldrace=%d, newrace=%d", \
                   client,ValidClientIndex(client), oldrace, newrace);
 
-        intarmor_level = GetUpgradeLevel(client,raceID,armorID);
+        int armor_level = GetUpgradeLevel(client,raceID,armorID);
         SetupArmor(client, armor_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        intjetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
+        int jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
         SetupJetpack(client, jetpack_level);
 
-        intcharge_level=GetUpgradeLevel(client,raceID,chargeID);
-        SetupTNT(client, charge_level);
+        int char ge_level=GetUpgradeLevel(client,raceID,char geID);
+        SetupTNT(client, char ge_level);
 
-        intstimpacks_level = GetUpgradeLevel(client,raceID,stimpacksID);
+        int stimpacks_level = GetUpgradeLevel(client,raceID,stimpacksID);
         SetSpeedBoost(client, stimpacks_level, true, g_SpeedLevels);
 
         if (m_ROFAvailable)
@@ -295,7 +295,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
         if (upgrade==jetpackID)
             SetupJetpack(client, new_level);
-        else if (upgrade==chargeID)
+        else if (upgrade==char geID)
             SetupTNT(client, new_level);
         else if (upgrade==armorID)
         {
@@ -344,7 +344,7 @@ public OnItemPurchase(client,item)
 
         if (item == g_bootsItem)
         {
-            intlevel = GetUpgradeLevel(client,raceID,stimpacksID);
+            int level = GetUpgradeLevel(client,raceID,stimpacksID);
             if (level > 0)
                 SetSpeedBoost(client, level, true, g_SpeedLevels);
         }
@@ -359,8 +359,8 @@ public OnUltimateCommand(client,race,bool pressed,arg)
         {
             case 4: // Detonate or Defuse D8 Charge
             {
-                intcharge_level = GetUpgradeLevel(client,race,chargeID);
-                if (charge_level > 0)
+                int char ge_level = GetUpgradeLevel(client,race,char geID);
+                if (char ge_level > 0)
                 {
                     if (m_TNTAvailable && pressed)
                     {
@@ -380,8 +380,8 @@ public OnUltimateCommand(client,race,bool pressed,arg)
             }
             case 3: // Plant D8 Charge
             {
-                intcharge_level = GetUpgradeLevel(client,race,chargeID);
-                if (charge_level > 0)
+                int char ge_level = GetUpgradeLevel(client,race,char geID);
+                if (char ge_level > 0)
                 {
                     if (m_TNTAvailable && pressed)
                     {
@@ -401,12 +401,12 @@ public OnUltimateCommand(client,race,bool pressed,arg)
             }
             case 2: // Enter Bunker
             {
-                intbunker_level = GetUpgradeLevel(client,race,bunkerID);
+                int bunker_level = GetUpgradeLevel(client,race,bunkerID);
                 if (bunker_level > 0)
                 {
                     if (pressed)
                     {
-                        intarmor = RoundToNearest(float(GetPlayerMaxHealth(client))
+                        int armor = RoundToNearest(float(GetPlayerMaxHealth(client))
                                                    * g_BunkerPercent[bunker_level]);
 
                         EnterBunker(client, armor, raceID, bunkerID);
@@ -414,22 +414,22 @@ public OnUltimateCommand(client,race,bool pressed,arg)
                 }
                 else
                 {
-                    intjetpack_level = GetUpgradeLevel(client,race,jetpackID);
+                    int jetpack_level = GetUpgradeLevel(client,race,jetpackID);
                     if (jetpack_level > 0)
                         Jetpack(client, pressed);
                 }
             }
             default: // Jetpack or Bunker
             {
-                intjetpack_level = GetUpgradeLevel(client,race,jetpackID);
+                int jetpack_level = GetUpgradeLevel(client,race,jetpackID);
                 if (jetpack_level > 0)
                     Jetpack(client, pressed);
                 else if (pressed)
                 {
-                    intbunker_level = GetUpgradeLevel(client,race,bunkerID);
+                    int bunker_level = GetUpgradeLevel(client,race,bunkerID);
                     if (bunker_level > 0)
                     {
-                        intarmor = RoundToNearest(float(GetPlayerMaxHealth(client))
+                        int armor = RoundToNearest(float(GetPlayerMaxHealth(client))
                                                    * g_BunkerPercent[bunker_level]);
 
                         EnterBunker(client, armor, raceID, bunkerID);
@@ -448,17 +448,17 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         TraceInto("TerranReaper", "OnPlayerSpawnEvent", "client=%d:%N, raceID=%d", \
                   client,ValidClientIndex(client), raceID);
 
-        intarmor_level = GetUpgradeLevel(client,raceID,armorID);
+        int armor_level = GetUpgradeLevel(client,raceID,armorID);
         SetupArmor(client, armor_level, g_InitialArmor,
                    g_ArmorPercent, g_ArmorName);
 
-        intjetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
+        int jetpack_level=GetUpgradeLevel(client,raceID,jetpackID);
         SetupJetpack(client, jetpack_level);
 
-        intcharge_level=GetUpgradeLevel(client,raceID,chargeID);
-        SetupTNT(client, charge_level);
+        int char ge_level=GetUpgradeLevel(client,raceID,char geID);
+        SetupTNT(client, char ge_level);
 
-        intstimpacks_level = GetUpgradeLevel(client,raceID,stimpacksID);
+        int stimpacks_level = GetUpgradeLevel(client,raceID,stimpacksID);
         SetSpeedBoost(client, stimpacks_level, true, g_SpeedLevels);
 
         if (m_ROFAvailable)
@@ -492,7 +492,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
     }
 }
 
-public ActionOnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
+public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker_index,
                                 attacker_race, damage, absorbed, bool from_sc)
 {
     if (!from_sc && attacker_index > 0 &&
@@ -506,7 +506,7 @@ public ActionOnPlayerHurtEvent(Handle event, victim_index, victim_race, attacker
     return Plugin_Continue;
 }
 
-public ActionOnPlayerAssistEvent(Handle event, victim_index, victim_race,
+public Action OnPlayerAssistEvent(Handle event, victim_index, victim_race,
                                   assister_index, assister_race, damage,
                                   absorbed)
 {
@@ -519,9 +519,9 @@ public ActionOnPlayerAssistEvent(Handle event, victim_index, victim_race,
     return Plugin_Continue;
 }
 
-bool InfantryWeapons(Handleevent, damage, victim_index, index)
+bool InfantryWeapons(Handle event, damage, victim_index, index)
 {
-    intweapons_level = GetUpgradeLevel(index, raceID, weaponsID);
+    int weapons_level = GetUpgradeLevel(index, raceID, weaponsID);
     if (weapons_level > 0)
     {
         if (!GetRestriction(index,Restriction_NoUpgrades) &&
@@ -532,18 +532,18 @@ bool InfantryWeapons(Handleevent, damage, victim_index, index)
         {
             if (GetRandomInt(1,100)<=25)
             {
-                charweapon[64];
-                boolis_equipment=GetWeapon(event,index,weapon,sizeof(weapon));
+                char weapon[64];
+                bool is_equipment=GetWeapon(event,index,weapon,sizeof(weapon));
                 if (!IsMelee(weapon, is_equipment,index,victim_index))
                 {
-                    inthealth_take = RoundFloat(float(damage)*g_WeaponsPercent[weapons_level]);
+                    int health_take = RoundFloat(float(damage)*g_WeaponsPercent[weapons_level]);
                     if (health_take > 0 && CanInvokeUpgrade(index, raceID, weaponsID, .notify=false))
                     {
-                        floatindexLoc[3];
+                        float indexLoc[3];
                         GetClientAbsOrigin(index, indexLoc);
                         indexLoc[2] += 50.0;
 
-                        floatvictimLoc[3];
+                        float victimLoc[3];
                         GetEntityAbsOrigin(victim_index, victimLoc);
                         victimLoc[2] += 50.0;
 
@@ -586,7 +586,7 @@ void Jetpack(client, bool pressed)
     }
     else if (pressed)
     {
-        charupgradeName[64];
+        char upgradeName[64];
         GetUpgradeName(raceID, jetpackID, upgradeName, sizeof(upgradeName), client);
         PrintHintText(client,"%t", "IsNotAvailable", upgradeName);
         PrepareAndEmitSoundToClient(client,deniedWav);
@@ -627,7 +627,7 @@ void SetupTNT(client, level)
     }
 }
 
-public ActionOnTNTBombed(tnt,owner,victim)
+public Action OnTNTBombed(tnt,owner,victim)
 {
     if (GetRace(owner) != raceID)
         return Plugin_Continue;
@@ -646,9 +646,9 @@ public ActionOnTNTBombed(tnt,owner,victim)
     }
 }
 
-public RoundStartEvent(Handle event,const char[]name[],bool dontBroadcast)
+public RoundStartEvent(Handle event,const char name[],bool dontBroadcast)
 {
-    for (intindex=1;index<=MaxClients;index++)
+    for (int index=1;index<=MaxClients;index++)
     {
         if (GetRace(index) == raceID && IsClientInGame(index))
         {
@@ -659,14 +659,14 @@ public RoundStartEvent(Handle event,const char[]name[],bool dontBroadcast)
     }
 }
 
-public ActionResetRateOfFire(Handle timer,any:userid)
+public Action ResetRateOfFire(Handle timer,any userid)
 {
-    intclient = GetClientOfUserId(userid);
+    int client = GetClientOfUserId(userid);
     if (IsValidClient(client))
     {
         if (GetRace(client) == raceID)
         {
-            intstimpacks_level = GetUpgradeLevel(client,raceID,stimpacksID);
+            int stimpacks_level = GetUpgradeLevel(client,raceID,stimpacksID);
             SetSpeedBoost(client, stimpacks_level, true, g_SpeedLevels);
 
             if (m_ROFAvailable)

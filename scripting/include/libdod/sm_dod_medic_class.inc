@@ -41,7 +41,7 @@ native ControlMedic(bool control=true, max_health=-1, self_health=-1, restrict_c
  * @param num_nades         The amount of nades to give to the Medic (-1 = use convar).
  * @return		    	    none
  */
-native AssignMedic(client, bool keep_weapon, bool pickup, Float speed=-1.0, Float weight=-1.0,
+native AssignMedic(client, bool keep_weapon, bool pickup, float speed=-1.0, float weight=-1.0,
                    health=-1, heal=-1, packs=-1, weapon=-1, ammo=-1, nades=-1, num_nades=-1);
 
 /**
@@ -58,7 +58,7 @@ native UnassignMedic(client);
  * @param client 	        Client index
  * @return		    	    none
  */
-native Float GetMedicSpeed(client);
+native float GetMedicSpeed(client);
 
 /**
  * Gets the specified medic's speed.
@@ -66,7 +66,7 @@ native Float GetMedicSpeed(client);
  * @param client 	        Client index
  * @return		    	    none
  */
-native Float GetMedicWeight(client);
+native float GetMedicWeight(client);
 
 /**
  * Command for Medic to Heal a patient (player Medic is looking at).

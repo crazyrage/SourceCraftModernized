@@ -175,7 +175,7 @@ public void OnMapStart() {
 #if !defined SOURCECRAFT
 public W3CvarCooldownHandler(Handle cvar, const char[] oldValue[], const char[] newValue[]) 
 { 
-    new float value = StringToFloat(newValue);
+    int float value = StringToFloat(newValue);
     if(value>0.0)
     W3SkillCooldownOnSpawn( thisRaceID, ULT_RIFT, value );
 }
@@ -206,7 +206,7 @@ public RemoveFlames(client)
     CurrentFlameCount[client]=0;
 }
 
-public Action Flame(Handle timer,any:userid)
+public Action Flame(Handle timer,any userid)
 {
     int client;
     for(int i=0;i<MAXWARDS;i++)
@@ -229,23 +229,23 @@ public Action Flame(Handle timer,any:userid)
 
 public FlameLoop(owner,wardindex)
 {
-    new ownerteam=GetClientTeam(owner);
-    new float start_pos[3];
-    new float end_pos[3];
-    new float tempVec1[]={0.0,0.0,WARDBELOW};
-    new float tempVec2[]={0.0,0.0,WARDABOVE};
+    int ownerteam=GetClientTeam(owner);
+    int float start_pos[3];
+    int float end_pos[3];
+    int float tempVec1[]={0.0,0.0,WARDBELOW};
+    int float tempVec2[]={0.0,0.0,WARDABOVE};
     AddVectors(WardLocation[wardindex],tempVec1,start_pos);
     AddVectors(WardLocation[wardindex],tempVec2,end_pos);
     //TE_SetupGlowSprite(start_pos,SimpleFire,0.26,1.00,212);
     //TE_SendToAll();
-    new float BeamXY[3];
+    int float BeamXY[3];
     for(int x=0;x<3;x++) BeamXY[x]=start_pos[x];
-    new float BeamZ= BeamXY[2];
+    int float BeamZ= BeamXY[2];
     BeamXY[2]=0.0;
     
     
-    new float VictimPos[3];
-    new float tempZ;
+    int float VictimPos[3];
+    int float tempZ;
     for(int i=1;i<=MaxClients;i++)
     {
         if(ValidPlayer(i,true)&& GetClientTeam(i)!=ownerteam )
@@ -279,13 +279,13 @@ public FlameLoop(owner,wardindex)
     }
 }
 
-public Action StopSlow( Handle timer, any:client )
+public Action StopSlow( Handle timer, any client )
 {
     War3_SetBuff(client,fSlow,thisRaceID,1.0);
     if (ValidPlayer(client))
     {
         PrintToConsole(client,"[W3S] Slowdown is fading away...");
-        new float startpos[3];
+        int float startpos[3];
         GetClientAbsOrigin(client,startpos);
         TE_SetupBeamRingPoint(startpos,120.1,20.0,BeamSprite,BeamSprite,0,15,1.20,27.0,12.0,{255,120,120,255},0,0);
 #if defined SOURCECRAFT
@@ -323,9 +323,9 @@ public void OnWar3EventSpawn(client)
     if (user_race == thisRaceID)
     { 
         RemoveFlames(client);
-        new float iVec[3];
+        int float iVec[3];
         GetClientAbsOrigin(client, float iVec);
-        new float iVec2[3];
+        int float iVec2[3];
         GetClientAbsOrigin(client, float iVec2);
         iVec[2]+=100;
         iVec2[2]+=100;
@@ -412,8 +412,8 @@ public OnW3TakeDmgBullet(victim,attacker,float damage)
 {
     if(IS_PLAYER(victim)&&IS_PLAYER(attacker)&&victim>0&&attacker>0&&attacker!=victim)
     {
-        new vteam=GetClientTeam(victim);
-        new ateam=GetClientTeam(attacker);
+        int vteam=GetClientTeam(victim);
+        int ateam=GetClientTeam(attacker);
         if(vteam!=ateam)
         {
             new race_attacker=War3_GetRace(attacker);
@@ -541,8 +541,8 @@ public void OnWar3EventDeath(victim, attacker, deathrace)
 {
     if(IS_PLAYER(victim)&&IS_PLAYER(attacker)&&victim>0&&attacker>0&&attacker!=victim)
     {
-        new vteam=GetClientTeam(victim);
-        new ateam=GetClientTeam(attacker);
+        int vteam=GetClientTeam(victim);
+        int ateam=GetClientTeam(attacker);
         if(vteam!=ateam)
         {
             new race_attacker=War3_GetRace(attacker);
@@ -613,7 +613,7 @@ public DoExplosion(magnitude,maxdmg,client,target)
     //Destination = Owner
     //Vec = Fireball
     //Origin = Victim
-    new float Destination[3];
+    int float Destination[3];
     GetClientAbsOrigin(client,Destination);
     int AttackerTeam = GetClientTeam(client);
     TE_SetupBeamRingPoint(Destination,1.0,9000.0,HaloSprite,HaloSprite,0,15,2.8,10.0,2.0,{255,120,120,255},0,0);
@@ -675,7 +675,7 @@ public DoExplosion(magnitude,maxdmg,client,target)
 
 public IgniteExplosion(mindmg,maxdmg,client,target)
 {
-    new float Destination[3];
+    int float Destination[3];
     GetClientAbsOrigin(target,Destination);
     int AttackerTeam = GetClientTeam(client);
     EmitSoundToClient(client, catchsnd);
@@ -730,7 +730,7 @@ public OnUltimateCommand(client,race,bool pressed)
 {
     if(race==thisRaceID && pressed && IsPlayerAlive(client))
     {
-        new skill=War3_GetSkillLevel(client,race,ULT_RIFT);
+        int skill=War3_GetSkillLevel(client,race,ULT_RIFT);
         if(skill>0)
         {
             if(War3_SkillNotInCooldown(client,thisRaceID,ULT_RIFT,true)&&!Silenced(client))
@@ -773,7 +773,7 @@ public OnAbilityCommand(client,ability,bool pressed)
 {
     if(War3_GetRace(client)==thisRaceID && pressed && IsPlayerAlive(client))
     {
-        new skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_PIT);
+        int skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_PIT);
         if(skill_level>0)
         {
             if(!Silenced(client))
@@ -881,12 +881,12 @@ public OnAbilityCommand(client,ability,bool pressed)
     }
 }
 
-public Action Timer_Rift(Handle timer, any:client)
+public Action Timer_Rift(Handle timer, any client)
 {
-    new skill=War3_GetSkillLevel(client,thisRaceID,ULT_RIFT);
+    int skill=War3_GetSkillLevel(client,thisRaceID,ULT_RIFT);
     if(skill>0)
     {
-        new float iVec[3];
+        int float iVec[3];
         GetClientAbsOrigin(client,iVec);  
         War3_SpawnPlayer(client,true);
         //War3_SpawnPlayer(client,false);
@@ -915,14 +915,14 @@ public Action Timer_Rift(Handle timer, any:client)
 #else
         TE_SendToAll();
 #endif
-        new morehealth=pithp[skill];
+        int morehealth=pithp[skill];
         SetEntityHealth(client,GetClientHealth(client)+morehealth);
         PrintToChat(client,"\x03Dark Rift : \x02 A Rift opens, gained +%d HP",morehealth);
         EmitSoundToAll(riftsnd, SOUND_FROM_WORLD, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, 500, -1, iVec, NULL_VECTOR, true, 0.0);
     }
 }
 
-public Action Timer_DeSelect(Handle timer, any:client)
+public Action Timer_DeSelect(Handle timer, any client)
 {
     if(ValidPlayer(client,true))
     {
@@ -930,7 +930,7 @@ public Action Timer_DeSelect(Handle timer, any:client)
     }
 }
 
-public Action Timer_Extinguish(Handle timer, any:client)
+public Action Timer_Extinguish(Handle timer, any client)
 {
     if(ValidPlayer(client,true))
     {

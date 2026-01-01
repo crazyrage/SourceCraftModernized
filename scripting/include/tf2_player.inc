@@ -13,17 +13,17 @@
 #include <tf2_stocks>
 #include "weapons"
 
-stock const String:TF2_TeamName[/*TFTeam*/][] = { "Unassigned", "Spectator", "Red", "Blue" };
+stock const char TF2_TeamName[/*TFTeam*/][] = { "Unassigned", "Spectator", "Red", "Blue" };
 #define TF2_GetTeamName(%1) TF2_TeamName[%1]
 
-stock const String:TF2_ClassName[/*TFClassType*/][] = {"", "Scout", "Sniper", "Soldier", "Demoman", "Medic",
+stock const char TF2_ClassName[/*TFClassType*/][] = {"", "Scout", "Sniper", "Soldier", "Demoman", "Medic",
                                         "Heavy", "Pyro", "Spy", "Engineer" };
 #define TF2_GetClassName(%1) TF2_ClassName[%1]
 
 stock const TF2_ClassHealth[/*TFClassType*/] = { 0, 125, 125, 200, 175, 150, 300, 175, 125, 125 };
 #define TF2_GetClassHealth(%1) TF2_ClassHealth[%1]
 
-stock const Float TF2_ClassSpeed[/*TFClassType*/] = { 0.0, 400.0, 300.0, 240.0, 280.0, 320.0, 230.0, 300.0, 300.0, 300.0 };
+stock const float TF2_ClassSpeed[/*TFClassType*/] = { 0.0, 400.0, 300.0, 240.0, 280.0, 320.0, 230.0, 300.0, 300.0, 300.0 };
 #define TF2_GetClassSpeed(%1) TF2_ClassSpeed[%1]
 
 #define TF2_IsPlayerSlowed(%1)              TF2_IsPlayerInCondition(%1,TFCond_Slowed)
@@ -82,10 +82,10 @@ stock const Float TF2_ClassSpeed[/*TFClassType*/] = { 0.0, 400.0, 300.0, 240.0, 
  * @param client		Player's index.
  * @return				Player's estimated speed
  */
-stock Float TF2_GetPlayerSpeed(client)
+stock float TF2_GetPlayerSpeed(client)
 {
     float speed;
-    new TFClassType:class = TF2_GetPlayerClass(client);
+    int TFClassType:class = TF2_GetPlayerClass(client);
     switch (class)
     {
         case TFClass_Sniper:
@@ -194,7 +194,7 @@ stock Float TF2_GetPlayerSpeed(client)
  */
 stock TF2_GetPlayerMaxHealth(client)
 {
-    new TFClassType:class = TF2_GetPlayerClass(client);
+    int TFClassType:class = TF2_GetPlayerClass(client);
     switch (class)
     {
         case TFClass_Scout:

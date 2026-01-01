@@ -46,7 +46,7 @@ native ControlZtf2grab(bool plugin_only=true);
  * @param permissions   Permissions to use (default=-1 to use ConVars)
  * @return		    	none
  */
-native GiveGravgun(client, Float duration=-1.0, Float throw_speed=-1.0, Float throw_gravity=-1.0, permissions=-1);
+native GiveGravgun(client, float duration=-1.0, float throw_speed=-1.0, float throw_gravity=-1.0, permissions=-1);
 
 /**
  * Take the gravgun from the player
@@ -106,7 +106,7 @@ native RotateObject(client);
  * @param gravity 	gravity to set object to (-1.0 to leave unchanged)
  * @return			none
  */
-native DropEntity(entity, Float speed=-1.0, Float gravity=10.0);
+native DropEntity(entity, float speed=-1.0, float gravity=10.0);
 
 /**
  * Returns reference to object client is holding with the gravgun
@@ -144,7 +144,7 @@ forward Action OnThrowObject(client,ent);
  * @param time:     The EngineTime() when the object was picked up.
  * @return		    Plugin_Stop will cause the object to be dropped.
  */
-forward Action OnCarryObject(client,ent,Float time);
+forward Action OnCarryObject(client,ent,float time);
 
 /**
  * Gets called when an object is dropped

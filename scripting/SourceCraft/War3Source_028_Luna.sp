@@ -152,7 +152,7 @@ public OnW3PlayerAuraStateChanged(client,aura,bool inAura,level)
         {
             if(inAura == true && ValidPlayer(client, true)) 
             {
-                decl float client_pos[3];
+                float client_pos[3];
                 GetClientAbsOrigin(client, client_pos);
                 TE_SetupGlowSprite(client_pos, LightModel, 2.0, 1.0, 255);
                 TE_SendToAll();
@@ -179,8 +179,8 @@ public OnW3TakeDmgBullet( victim, attacker, float damage )
                 {
                     MoonBeamDamageAndEffect(victim, attacker, LucentBeamMin[skill_level], LucentBeamMax[skill_level]);
 
-                    /*        decl float start_pos[3];
-                     decl float target_pos[3];
+                    /*        float start_pos[3];
+                     float target_pos[3];
                      GetClientAbsOrigin(attacker,start_pos);
                      GetClientAbsOrigin(victim,target_pos);
                      target_pos[2]+=60.0;
@@ -214,8 +214,8 @@ public OnW3TakeDmgBullet( victim, attacker, float damage )
                     int lunadmg = GlaiveDamage[skill_level2];
                     new float sparkdir[3] = {0.0,0.0,90.0};
                     new float maxdist = GlaiveRadius[skill_level2];
-                    decl float start_pos[3];
-                    decl float end_pos2[3];
+                    float start_pos[3];
+                    float end_pos2[3];
                     GetClientAbsOrigin(victim,start_pos);
                     GetClientAbsOrigin(victim,end_pos2);
                     end_pos2[2]+=1000.0;
@@ -225,7 +225,7 @@ public OnW3TakeDmgBullet( victim, attacker, float damage )
                     //TE_SendToAll(2.0);
                     for (int i = 1; i <= MaxClients; i++) {
                         if(ValidPlayer(i,true) && GetClientTeam(i) != GetClientTeam(attacker)&&!W3HasImmunity(i,Immunity_Wards)) {
-                            decl float TargetPos[3];
+                            float TargetPos[3];
                             GetClientAbsOrigin(i, TargetPos);
                             if (GetVectorDistance(start_pos, TargetPos) <= maxdist) {
                                 TE_SetupSparks(TargetPos, sparkdir, 90, 90);
@@ -265,7 +265,7 @@ public OnUltimateCommand( client, race, bool pressed )
 
                 CreateTimer( 0.15, Timer_EclipseLoop, client);
 
-                decl float StartPos[3];
+                float StartPos[3];
                 GetClientAbsOrigin(client, StartPos);
                 StartPos[2]+=400.0;
                 TE_SetupGlowSprite(StartPos, MoonSprite, 5.0, 3.0, 255);
@@ -303,7 +303,7 @@ public OnUltimateCommand( client, race, bool pressed )
     }
 }
 
-public Action Timer_EclipseLoop( Handle timer, any:attacker )
+public Action Timer_EclipseLoop( Handle timer, any attacker )
 {
 
     EclipseAmountLeft[attacker]--;
@@ -311,11 +311,11 @@ public Action Timer_EclipseLoop( Handle timer, any:attacker )
     {
         //get list of players
         int playerlist[MAXPLAYERSCUSTOM];
-        new playercount=0;
-        new teamattacker=GetClientTeam(attacker);
-        decl float AttackerPos[3];
+        int playercount=0;
+        int teamattacker=GetClientTeam(attacker);
+        float AttackerPos[3];
         GetClientAbsOrigin(attacker,AttackerPos);
-        decl float TargetPos[3];
+        float TargetPos[3];
         for (int i = 1; i <= MaxClients; i++) {
 
             if(ValidPlayer(i,true)&&!W3HasImmunity( i, Immunity_Ultimates )&&teamattacker != GetClientTeam(i) && teamattacker!=GetApparentTeam(i) && W3LOS(attacker,i)) {
@@ -337,20 +337,20 @@ public Action Timer_EclipseLoop( Handle timer, any:attacker )
             W3FlashScreen(victim, RGBA_COLOR_WHITE);
         }
         if(EclipseAmountLeft[attacker] > 0) {
-            CreateTimer(0.5, Timer_EclipseLoop, any:attacker);
+            CreateTimer(0.5, Timer_EclipseLoop, any attacker);
         }
 
     }
 }
 
-public Action Timer_EclipseStop(Handle timer, any:victim)
+public Action Timer_EclipseStop(Handle timer, any victim)
 {
     EclipseOwner[victim] = -1;
 }
 
 MoonBeamDamageAndEffect(victim, attacker, min, max) {
-    decl float start_pos[3];
-    decl float end_pos2[3];
+    float start_pos[3];
+    float end_pos2[3];
 
     GetClientAbsOrigin(victim, start_pos);
     GetClientAbsOrigin(victim, end_pos2);

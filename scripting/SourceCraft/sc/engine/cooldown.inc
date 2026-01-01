@@ -7,15 +7,15 @@
 
 #include "sc/cooldown"
 
-// Handles
+// Handle s
 Handle g_OnCooldownExpiredHandle = null;
 Handle m_PlayerCooldownTrie[MAXPLAYERS+1];
 Handle m_PlayerCooldownArray[MAXPLAYERS+1];
 
 // Place to stash the last cooldown type
-new m_CooldownExpireRace;
-new m_CooldownExpireClient;
-new m_CooldownExpireUpgrade;
+int m_CooldownExpireRace;
+int m_CooldownExpireClient;
+int m_CooldownExpireUpgrade;
 new CooldownType:m_CooldownExpireType;
 
 float GetCooldownExpireTime(client, race, upgrade, Handle &pack=null)
@@ -23,7 +23,7 @@ float GetCooldownExpireTime(client, race, upgrade, Handle &pack=null)
     Handle trie = m_PlayerCooldownTrie[client];
     if (trie != null)
     {
-        charkey[SHORT_STRING_LENGTH];
+        char key[SHORT_STRING_LENGTH];
         Format(key, sizeof(key), "%d-%d", race, upgrade);
 
         if (GetTrieValue(trie, key, pack))
@@ -74,7 +74,7 @@ bool HasCooldownExpired(client, race, upgrade, bool notify=true)
         if (notify)
         {
             ReadPackCell(pack); // CooldownType:type
-            ReadPackCell(pack); // Handle:timerHandle
+            ReadPackCell(pack); // Handle timerHandle
 
             char name[NAME_STRING_LENGTH];
             ReadPackString(pack, name, sizeof(name));
@@ -142,8 +142,8 @@ bool HasCooldownExpired(client, race, upgrade, bool notify=true)
     }
 }
 
-CreateCooldown(client, race, upgrade, Float:cooldown, const String:name[],
-               CooldownType:type, const String:expireSound[])
+CreateCooldown(client, race, upgrade, float cooldown, const char[] name,
+               CooldownType:type, const char[] expireSound)
 {
     TraceInto("Cooldown", "CreateCooldown", "client=%d:%N, race=%d, upgrade=%d", \
               client, ValidClientIndex(client), race, upgrade);
@@ -152,7 +152,7 @@ CreateCooldown(client, race, upgrade, Float:cooldown, const String:name[],
     {
         if (name[0] && (type & Cooldown_CreateNotify) == Cooldown_CreateNotify)
         {
-            floatminutes = cooldown / 60.0;
+            float minutes = cooldown / 60.0;
             if (minutes > 1.0)
             {
                 new seconds = RoundToFloor(FloatFraction(minutes) * 60.0);
@@ -237,7 +237,7 @@ CreateCooldown(client, race, upgrade, Float:cooldown, const String:name[],
                              client,trie);
             }
 
-            charkey[SHORT_STRING_LENGTH];
+            char key[SHORT_STRING_LENGTH];
             Format(key, sizeof(key), "%d-%d", race, upgrade);
 
             // Check if there is already a cooldown for this client/race/upgrade.
@@ -254,7 +254,7 @@ CreateCooldown(client, race, upgrade, Float:cooldown, const String:name[],
                 ReadPackCell(oldPack); // upgrade
                 ReadPackFloat(oldPack); // expireTime
                 ReadPackCell(oldPack); // CooldownType:type
-                Handle oldTimerHandle = Handle:ReadPackCell(oldPack);
+                Handle oldTimerHandle = Handle ReadPackCell(oldPack);
 
                 new item = FindValueInArray(array, oldPack);
                 if (item >= 0)
@@ -292,10 +292,10 @@ CreateCooldown(client, race, upgrade, Float:cooldown, const String:name[],
 public Action CooldownExpireTimer(Handle timer,any pack)
 {
     ResetPack(pack);
-    new index  = ReadPackCell(pack);
-    new userid = ReadPackCell(pack);
-    new race = ReadPackCell(pack);
-    new upgrade = ReadPackCell(pack);
+    int index  = ReadPackCell(pack);
+    int userid = ReadPackCell(pack);
+    int race = ReadPackCell(pack);
+    int upgrade = ReadPackCell(pack);
 
     TraceInto("Cooldown", "CooldownExpireTimer", \
               "timer=0x%08x, pack=0x%08x, userid=%d, index=%d:%N, race=%d, upgrade=%d", \
@@ -304,7 +304,7 @@ public Action CooldownExpireTimer(Handle timer,any pack)
     Handle trie = m_PlayerCooldownTrie[index];
     if (trie != null)
     {
-        charkey[SHORT_STRING_LENGTH];
+        char key[SHORT_STRING_LENGTH];
         Format(key, sizeof(key), "%d-%d", race, upgrade);
         RemoveFromTrie(trie, key);
     }
@@ -312,7 +312,7 @@ public Action CooldownExpireTimer(Handle timer,any pack)
     Handle array = m_PlayerCooldownArray[index];
     if (array != null)
     {
-        new item = FindValueInArray(array, pack);
+        int item = FindValueInArray(array, pack);
         if (item >= 0)
             RemoveFromArray(array, item);
     }
@@ -320,8 +320,8 @@ public Action CooldownExpireTimer(Handle timer,any pack)
     if (GetClientOfUserId(userid) == index)
     {
         ReadPackFloat(pack); // expireTime
-        new CooldownType:type = CooldownType:ReadPackCell(pack);
-        ReadPackCell(pack); // Handle:timerHandle
+        int CooldownType:type = CooldownType:ReadPackCell(pack);
+        ReadPackCell(pack); // Handle timerHandle
 
         // Stash the cooldown type
         m_CooldownExpireRace    = race;
@@ -329,7 +329,7 @@ public Action CooldownExpireTimer(Handle timer,any pack)
         m_CooldownExpireUpgrade = upgrade;
         m_CooldownExpireType    = type;
 
-        new Action:result = Plugin_Continue;
+        int Action:result = Plugin_Continue;
         Call_StartForward(g_OnCooldownExpiredHandle);
         Call_PushCell(index);
         Call_PushCell(race);
@@ -345,10 +345,10 @@ public Action CooldownExpireTimer(Handle timer,any pack)
                 if ((type & Cooldown_AlwaysNotify) != Cooldown_TimerOnly ||
                     GetRace(index) == race)
                 {
-                    charname[NAME_STRING_LENGTH];
+                    char name[NAME_STRING_LENGTH];
                     ReadPackString(pack, name, sizeof(name));
 
-                    charexpireSound[LONG_STRING_LENGTH];
+                    char expireSound[LONG_STRING_LENGTH];
                     ReadPackString(pack, expireSound, sizeof(expireSound));
 
                     if (!name[0])
@@ -397,20 +397,20 @@ public Action CooldownExpireTimer(Handle timer,any pack)
 
 CooldownSpawn(client)
 {
-    new race = GetRace(client);
+    int race = GetRace(client);
     if (race > 0)
     {
         Handle raceHandle = GetRaceHandle(race);
-        new upgradeCount=GetUpgradeCount(raceHandle);
-        for (new upgrade=0;upgrade<upgradeCount;upgrade++)
+        int upgradeCount=GetUpgradeCount(raceHandle);
+        for (int upgrade=0;upgrade<upgradeCount;upgrade++)
         {
             new CooldownType:type = GetUpgradeCooldownType(raceHandle,upgrade);
             if ((type & Cooldown_CreateOnSpawn) == Cooldown_CreateOnSpawn)
             {
-                floatcooldown = GetUpgradeCooldownDuration(raceHandle,upgrade);
+                float cooldown = GetUpgradeCooldownDuration(raceHandle,upgrade);
                 if (cooldown > 0.0)
                 {
-                    charname[64];
+                    char name[64];
                     GetUpgradeName(raceHandle, upgrade, name, sizeof(name), client);
                     CreateCooldown(client, race, upgrade, cooldown, name, type, "");
                 }
@@ -428,20 +428,20 @@ CooldownEvent(client, CooldownType:resetBits)
     if (array != null)
     {
         // Iterate backwards since we will be removing elements.
-        for (new i = GetArraySize(array)-1; i >= 0 ; i--)
+        for (int i = GetArraySize(array)-1; i >= 0 ; i--)
         {
-            Handle pack = Handle:GetArrayCell(array, i);
+            Handle pack = Handle GetArrayCell(array, i);
             ResetPack(pack);
 
             ReadPackCell(pack); // index
             new userid = ReadPackCell(pack);
             new race = ReadPackCell(pack);
             new upgrade = ReadPackCell(pack);
-            floatexpireTime = ReadPackFloat(pack);
+            float expireTime = ReadPackFloat(pack);
             new CooldownType:type = CooldownType:ReadPackCell(pack);
-            Handle timerHandle = Handle:ReadPackCell(pack);
+            Handle timerHandle = Handle ReadPackCell(pack);
 
-            boolremove = (GetClientOfUserId(userid) != client);
+            bool remove = (GetClientOfUserId(userid) != client);
             if (remove || ((type & resetBits) != Cooldown_TimerOnly &&
                            expireTime > GetGameTime()))
             {
@@ -458,7 +458,7 @@ CooldownEvent(client, CooldownType:resetBits)
                     Handle trie = m_PlayerCooldownTrie[client];
                     if (trie != null)
                     {
-                        charkey[SHORT_STRING_LENGTH];
+                        char key[SHORT_STRING_LENGTH];
                         Format(key, sizeof(key), "%d-%d", race, upgrade);
                         RemoveFromTrie(trie, key);
                     }
@@ -507,9 +507,9 @@ CooldownDisconnect(client)
     if (array != null)
     {
         // Iterate backwards for consistency.
-        for (new i = GetArraySize(array)-1; i >= 0 ; i--)
+        for (int i = GetArraySize(array)-1; i >= 0 ; i--)
         {
-            Handle pack = Handle:GetArrayCell(array, i);
+            Handle pack = Handle GetArrayCell(array, i);
             ResetPack(pack);
             ReadPackCell(pack); // index
             ReadPackCell(pack); // userid
@@ -517,7 +517,7 @@ CooldownDisconnect(client)
             new upgrade = ReadPackCell(pack); // upgrade
             ReadPackFloat(pack); // expireTime
             ReadPackCell(pack); // CooldownType:type
-            Handle timerHandle = Handle:ReadPackCell(pack);
+            Handle timerHandle = Handle ReadPackCell(pack);
 
             #if !defined _TRACE
                 #pragma unused race, upgrade
@@ -552,7 +552,7 @@ CooldownDisconnect(client)
 
 ResetAllCooldowns()
 {
-    for (new i = 1; i <= MaxClients; i++)
+    for (int i = 1; i <= MaxClients; i++)
         CooldownDisconnect(i);
 }
 
@@ -564,7 +564,7 @@ ResetCooldown(client, race, upgrade, bool:notify)
     Handle trie = m_PlayerCooldownTrie[client];
     if (trie != null)
     {
-        charkey[SHORT_STRING_LENGTH];
+        char key[SHORT_STRING_LENGTH];
         Format(key, sizeof(key), "%d-%d", race, upgrade);
 
         Handle pack;
@@ -577,7 +577,7 @@ ResetCooldown(client, race, upgrade, bool:notify)
             ReadPackCell(pack); // upgrade
             ReadPackFloat(pack); // expireTime
             new CooldownType:type = CooldownType:ReadPackCell(pack);
-            Handle timerHandle = Handle:ReadPackCell(pack);
+            Handle timerHandle = Handle ReadPackCell(pack);
 
             new Action:result = Plugin_Continue;
             Call_StartForward(g_OnCooldownExpiredHandle);

@@ -43,7 +43,7 @@ new char trans_back[] = "npc/dog/dog_footstep_run6.wav";
 new char mark_sound[] = "bot/market.wav";
 // Other
 new ValveGameEnum:g_GameType;
-new m_vecBaseVelocity, m_vecVelocity_0, m_vecVelocity_1;
+int m_vecBaseVelocity, m_vecVelocity_0, m_vecVelocity_1;
 new BeamSprite, pfaden, GlowSprite;
 new bool bIsWolf[MAXPLAYERS];
 new SKILL_FAR_SEER, SKILL_CHAINLGHT, SKILL_FERAL, ULT_QUAKE;
@@ -97,7 +97,7 @@ public void OnWar3PluginReady()
 
     SKILL_FAR_SEER = War3_AddRaceSkill( thisRaceID, "Far Seer", "Marks a target enemy hero(ability1)", false, 4 );
     SKILL_CHAINLGHT = War3_AddRaceSkill( thisRaceID, "Chain Lightning", "Casts bolt of damaging lightning to jump at each enemy in your near.\nEach jump deals less damage.", false, 4 );   
-    SKILL_FERAL = War3_AddRaceSkill( thisRaceID, "Feral Spirit", "Transforms yourself into a Spirit Wolf(ability)", false, 4 );
+    SKILL_FERAL = War3_AddRaceSkill( thisRaceID, "Feral Spirit", "Transforms yourself int o a Spirit Wolf(ability)", false, 4 );
     ULT_QUAKE = War3_AddRaceSkill( thisRaceID, "Earthquake", "Makes the ground tremble and break, cause 50 damage and slows units down within area of effect", true, 4 );
     
 #if defined SOURCECRAFT
@@ -178,7 +178,7 @@ public OnAbilityCommand(client,ability,bool pressed)
 {
     if(War3_GetRace(client)==thisRaceID && ability==0 && pressed && IsPlayerAlive(client))
     {
-        new skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_FERAL);
+        int skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_FERAL);
         if(skill_level>0)
         {
             if(War3_SkillNotInCooldown(client,thisRaceID,SKILL_FERAL,true))
@@ -210,7 +210,7 @@ public OnAbilityCommand(client,ability,bool pressed)
     }
     if(War3_GetRace(client)==thisRaceID && ability==1 && pressed && IsPlayerAlive(client))
     {
-        new skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_FAR_SEER);
+        int skill_level=War3_GetSkillLevel(client,thisRaceID,SKILL_FAR_SEER);
         if(skill_level>0)
         {
             if(War3_SkillNotInCooldown(client,thisRaceID,SKILL_FAR_SEER,true))
@@ -244,7 +244,7 @@ public OnAbilityCommand(client,ability,bool pressed)
     }
 }
 
-public Action W3_TransformBackFromWolf(Handle timer, any:client)
+public Action W3_TransformBackFromWolf(Handle timer, any client)
 {      
     bIsWolf[client]=false;
 
@@ -285,10 +285,10 @@ public void OnWar3EventPostHurt(victim, attacker, float damage, const char[] wea
 public DoChain(client,float distance,dmg,bool first_call,last_target)
 {
     if(client>0&&last_target>0) {
-        new target=0;
-        new float target_dist=distance+1.0;
-        new caster_team=GetClientTeam(client);
-        new float start_pos[3];
+        int target=0;
+        int float target_dist=distance+1.0;
+        int caster_team=GetClientTeam(client);
+        int float start_pos[3];
         GetClientAbsOrigin(client,start_pos);
         GetClientAbsOrigin(last_target,start_pos);
         for(int x=1;x<=MaxClients;x++)
@@ -422,10 +422,10 @@ void FarSeerUltimate( client )
     if( client > 0 && IsPlayerAlive( client ) )
     {
         int ult_level = War3_GetSkillLevel( client, thisRaceID, ULT_QUAKE );
-        new float startpos[3];
-        new float endpos[3];
-        new float localvector[3];
-        new float velocity[3];
+        int float startpos[3];
+        int float endpos[3];
+        int float localvector[3];
+        int float velocity[3];
         
         GetClientAbsOrigin( client, startpos );
         GetClientAbsOrigin( client, endpos );

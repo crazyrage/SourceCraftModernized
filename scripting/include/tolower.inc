@@ -11,7 +11,7 @@
 #define _tolower_included
 
 /**
- * Replaces lowercase characters in a string with uppercase characters.
+ * Replaces lowercase char acters in a string with uppercase char acters.
  *
  * @param text			String to modify (in place).
  * @param maxlength		Maximum length of the string buffer (0 to calculate using strlen().
@@ -22,9 +22,9 @@ stock StringToLower(char[] text, maxlength=0)
     if (maxlength == 0)
         maxlength = strlen(text);
         
-    for(new i = 0; i < maxlength; i++)
+    for (int i = 0; i < maxlength; i++)
     {
-        new chr = text[i];
+        int chr = text[i];
         if (i == '\0')
             break;
         else if (IsCharUpper(chr))

@@ -32,7 +32,7 @@ native ControlHookGrabRope(bool plugin_only=true);
  * @param flags     Not used yet.
  * @return			none
  */
-native GiveHook(client,duration=0,Float range=0.0,Float cooldown=0.0,flags=0);
+native GiveHook(client,duration=0,float range=0.0,float cooldown=0.0,flags=0);
 //native HGR_ClientAccess(client, access=0, action=0);
 
 /**
@@ -54,7 +54,7 @@ native TakeHook(client);
  * @param flags     1==Puller (drag victim closer), 0==Grabber (keep distance constant {more or less}) (default 0)
  * @return			none
  */
-native GiveGrab(client,duration=0,Float range=0.0,Float cooldown=0.0,flags=0);
+native GiveGrab(client,duration=0,float range=0.0,float cooldown=0.0,flags=0);
 //native HGR_ClientAccess(client, access=0, action=1);
 
 /**
@@ -76,7 +76,7 @@ native TakeGrab(client);
  * @param flags     Not used yet.
  * @return			none
  */
-native GiveRope(client,duration=0,Float range=0.0,Float cooldown=0.0,flags=0);
+native GiveRope(client,duration=0,float range=0.0,float cooldown=0.0,flags=0);
 //native HGR_ClientAccess(client, access=0, action=2);
 
 /**

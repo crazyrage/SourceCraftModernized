@@ -63,7 +63,7 @@ stock bool War3_IsUbered(client)
 }
 
 /**
- * Is player carrying intellegence
+ * Is player carrying int ellegence
  * @param client:
  * @return: true false
  */

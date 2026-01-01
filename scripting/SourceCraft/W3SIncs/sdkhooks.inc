@@ -195,8 +195,8 @@ funcenum SDKHookCB
 	
 	// OnTakeDamage
 	// Note: Force application is dependent on game and damage type(s)
-	Action:public(victim, &attacker, &inflictor, &float damage, &damagetype),
-	Action:public(victim, &attacker, &inflictor, &float damage, &damagetype, &weapon, float damageForce[3], float damagePosition[3]),
+	Action:public(victim, &attacker, &inflictor, float & damage, &damagetype),
+	Action:public(victim, &attacker, &inflictor, float & damage, &damagetype, &weapon, float damageForce[3], float damagePosition[3]),
 	
 	// OnTakeDamagePost
 	public(victim, attacker, inflictor, float damage, damagetype),
@@ -206,7 +206,7 @@ funcenum SDKHookCB
 	public(client, shots, const char weaponname[]),
 	
 	// TraceAttack
-	Action:public(victim, &attacker, &inflictor, &float damage, &damagetype, &ammotype, hitbox, hitgroup),
+	Action:public(victim, &attacker, &inflictor, float & damage, &damagetype, &ammotype, hitbox, hitgroup),
 	
 	// TraceAttackPost
 	public(victim, attacker, inflictor, float damage, damagetype, ammotype, hitbox, hitgroup),
@@ -245,7 +245,7 @@ forward OnEntityDestroyed(entity);
  * @param		gameDesc		Game description
  * @noreturn
  */
-forward Action OnGetGameDescription(String:gameDesc[64]);
+forward Action OnGetGameDescription(char gameDesc[64]);
 
 /**
  * @brief When the level is initialized
@@ -254,7 +254,7 @@ forward Action OnGetGameDescription(String:gameDesc[64]);
  * @param		mapEntities	Entities of the map
  * @noreturn
  */
-forward Action OnLevelInit(const char mapName[], String:mapEntities[2097152]);
+forward Action OnLevelInit(const char mapName[], char mapEntities[2097152]);
 
 /**
  * @brief Hooks an entity

@@ -37,8 +37,8 @@
 #include "effect/FlashScreen"
 #include "effect/Shake"
 
-new const char[] allahWav[] = "sc/allahuakbar.wav";
-new const char[] kaboomWav[] = "sc/iraqi_engaging.wav";
+static const char[] allahWav[] = "sc/allahuakbar.wav";
+static const char[] kaboomWav[] = "sc/iraqi_engaging.wav";
 
 	int g_ReincarnationChance[] = { 0, 9, 22, 36, 53 };
 
@@ -562,17 +562,17 @@ public OnPlayerDeathEvent(Handle event,victim_index,victim_race, attacker_index,
     }
 }
 
-public Action MadBomber(Handle timer,any:userid)
+public Action MadBomber(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (client > 0)
     {
-        new ult_level=GetUpgradeLevel(client,raceID,bomberID);
+        int ult_level=GetUpgradeLevel(client,raceID,bomberID);
         if (ult_level > 0)
         {
-            float interval = GetGameTime() - m_BomberTime[client];
+            float int erval = GetGameTime() - m_BomberTime[client];
             m_BomberTime[client] = GetGameTime();
-            if (interval < 0.18 || GetRandomInt(1,100)<=g_BomberChance[ult_level])
+            if (int erval < 0.18 || GetRandomInt(1,100)<=g_BomberChance[ult_level])
             {
                 m_Suicided[client]=true;
                 PrepareAndEmitSoundToAll(kaboomWav,client);
@@ -586,12 +586,12 @@ public Action MadBomber(Handle timer,any:userid)
     return Plugin_Stop;
 }
 
-public Action Kaboom(Handle timer,any:userid)
+public Action Kaboom(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (client > 0)
     {
-        new suicide_level=GetUpgradeLevel(client,raceID,suicideID);
+        int suicide_level=GetUpgradeLevel(client,raceID,suicideID);
         Bomber(client,suicide_level,true);
     }
     return Plugin_Stop;
@@ -613,7 +613,7 @@ public Bomber(client,level,bool ondeath)
     }
 }
 
-public Action FlamingWrath(Handle timer, any:userid)
+public Action FlamingWrath(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client))

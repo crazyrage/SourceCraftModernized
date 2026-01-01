@@ -206,7 +206,7 @@ public Action OnRaceDeselected(client,oldrace,newrace)
             TakeUberShield(client);
 
         // Turn off Immunities
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, false);
     }
     return Plugin_Continue;
@@ -222,10 +222,10 @@ public Action OnRaceSelected(client,oldrace,newrace)
         SetSpeedBoost(client, speed_level, false, g_SpeedLevels);
 
         // Turn on Immunities
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
-        new null_flux_level=GetUpgradeLevel(client,raceID,nullFluxGeneratorID);
+        int null_flux_level=GetUpgradeLevel(client,raceID,nullFluxGeneratorID);
         if (null_flux_level > 0)
             SetupUberShield(client, null_flux_level);
 
@@ -267,7 +267,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
 public OnItemPurchase(client,item)
 {
-    new race=GetRace(client);
+    int race=GetRace(client);
     if (race == raceID && IsValidClientAlive(client))
     {
         if (g_bootsItem < 0)
@@ -342,7 +342,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
         int speed_level = GetUpgradeLevel(client,raceID,speedID);
         SetSpeedBoost(client, speed_level, true, g_SpeedLevels);
 
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
         int armor_level = GetUpgradeLevel(client,raceID,armorID);
@@ -369,7 +369,7 @@ public Action OnPlayerHurtEvent(Handle event, victim_index, victim_race, attacke
         attacker_index != victim_index &&
         attacker_race == raceID)
     {
-        new weapons_level=GetUpgradeLevel(attacker_index,raceID,missileID);
+        int weapons_level=GetUpgradeLevel(attacker_index,raceID,missileID);
         if (weapons_level > 0)
         {
             if (MissileAttack(raceID, missileID, weapons_level, event, damage + absorbed, victim_index,
@@ -433,7 +433,7 @@ void SetupUberShield(client, level)
 
 ShieldFlags:GetShieldFlags(level)
 {
-    new ShieldFlags:flags = Shield_Target_Self  | Shield_Reload_Self |
+    int ShieldFlags:flags = Shield_Target_Self  | Shield_Reload_Self |
                             Shield_With_Medigun;
     switch (level)
     {
@@ -577,7 +577,7 @@ void ThermalLance(client, level)
     }
     else if (CanInvokeUpgrade(client, raceID, lanceID))
     {
-        new float range = g_LanceRange[GetUpgradeLevel(client,raceID,extendedID)];
+        int float range = g_LanceRange[GetUpgradeLevel(client,raceID,extendedID)];
         int dmg = GetRandomInt(g_LanceDamage[level][0], g_LanceDamage[level][1]);
 
         float indexLoc[3];
@@ -585,15 +585,15 @@ void ThermalLance(client, level)
         float clientLoc[3];
         GetClientEyePosition(client, clientLoc);
 
-        new lightning  = Lightning();
+        int lightning  = Lightning();
         int haloSprite = HaloSprite();
         int beamSprite = BeamSprite();
         static const lanceColor[4] = {139, 69, 19, 255};
 
-        new count   = 0;
+        int count   = 0;
         int xplevel = level+5;
-        new team    = GetClientTeam(client);
-        new target  = GetClientAimTarget(client);
+        int team    = GetClientTeam(client);
+        int target  = GetClientAimTarget(client);
         if (target > 0)
         {
             GetClientAbsOrigin(target, targetLoc);
@@ -633,8 +633,8 @@ void ThermalLance(client, level)
             targetLoc = clientLoc;
         }
 
-        new b_count=0;
-        new alt_count=0;
+        int b_count=0;
+        int alt_count=0;
         int list[MaxClients+1];
         int alt_list[MaxClients+1];
         SetupOBeaconLists(list, alt_list, b_count, alt_count, client);

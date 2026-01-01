@@ -10,8 +10,8 @@
 #include <entlimit>
 #include <tf2_uber>
 
-Handlem_PackageTimer[MAXENTITIES];
-floatm_PackageEnergy[MAXENTITIES];
+Handle m_PackageTimer[MAXENTITIES];
+float m_PackageEnergy[MAXENTITIES];
 int m_PackageRefs[MAXENTITIES];
 int m_PackageVictim[MAXENTITIES];
 int m_PackageCrystals[MAXENTITIES];
@@ -58,7 +58,7 @@ bool HookEvents()
     return true;
 }
 
-public OnEntityCreated(entity, const String:classname[])
+public OnEntityCreated(entity, const char[] classname)
 {
     if (GameType == tf2)
     {
@@ -112,7 +112,7 @@ public PlayerSpawnEvent(Handle event,const char name[],bool dontBroadcast)
         PendingCheck(client);
 
         int race=GetRace(client);
-        HandleraceHandle = (race > 0) ? GetRaceHandle(race) : null;
+        Handle raceHandle = (race > 0) ? GetRaceHandle(race) : null;
 
         if (IsFakeClient(client))
         {
@@ -127,7 +127,7 @@ public PlayerSpawnEvent(Handle event,const char name[],bool dontBroadcast)
                     if (count >= 0 )
                     {
                         // Count the current upgrade levels
-                        for(intupgrade=0;upgrade<count;upgrade++)
+                        for(int upgrade=0;upgrade<count;upgrade++)
                         {
                             level -= GetUpgradeLevel(client, race, upgrade);
                         }
@@ -170,7 +170,7 @@ public PlayerSpawnEvent(Handle event,const char name[],bool dontBroadcast)
             }
         }
 
-        floatinitial = GetInitialEnergy(client);
+        float initial = GetInitialEnergy(client);
 
         Trace("%d:%N's initial energy is %1.0f", \
               client, ValidClientIndex(client), initial);
@@ -180,7 +180,7 @@ public PlayerSpawnEvent(Handle event,const char name[],bool dontBroadcast)
             initial = GetRaceInitialEnergy(raceHandle);
 
             #if defined _TRACE
-                charrname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
+                char rname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
                 Trace("Race %d:%s's initial energy is %d", race, rname, initial);
             #endif
         }
@@ -214,7 +214,7 @@ public PlayerSpawnEvent(Handle event,const char name[],bool dontBroadcast)
             if (GameType == tf2)
             {
                 int hp = m_BaseHealth[client] = m_SpawnHealth[client] = GetClientHealth(client);
-                floatspeed = m_BaseSpeed[client] = m_SpawnSpeed[client] = GetEntPropFloat(client, Prop_Send, "m_flMaxspeed");
+                float speed = m_BaseSpeed[client] = m_SpawnSpeed[client] = GetEntPropFloat(client, Prop_Send, "m_flMaxspeed");
                 TraceCat("Speed", "%d:%N spawned with %d hp and speed=%1.0f", client, ValidClientIndex(client), hp, speed);
             }
         #endif
@@ -232,7 +232,7 @@ public PlayerSpawnEvent(Handle event,const char name[],bool dontBroadcast)
 
         CooldownSpawn(client);
 
-        Actionresult;
+        Action result;
         Call_StartForward(g_OnPlayerSpawnEventHandle);
         Call_PushCell(event);
         Call_PushCell(client);
@@ -268,12 +268,12 @@ public Action OnWeaponSwitch(client, weapon)
     #if defined _TRACE
         if (weapon > 0)
         {
-            charsWeapon[32];
+            char sWeapon[32];
             GetEdictClassname(weapon, sWeapon, sizeof(sWeapon));
             Trace("weapon class=%s", sWeapon);
         }
 
-        floatspeed = m_BaseSpeed[client] = GetEntPropFloat(client, Prop_Send, "m_flMaxspeed");
+        float speed = m_BaseSpeed[client] = GetEntPropFloat(client, Prop_Send, "m_flMaxspeed");
         TraceCat("Speed", "%d:%N's speed=%1.0f", client, ValidClientIndex(client), speed);
     #endif
 
@@ -286,10 +286,10 @@ public Action OnWeaponSwitch(client, weapon)
     return Plugin_Continue;
 }
 
-public Action OnTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype)
+public Action OnTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetype)
 {
     static bool:inTakeDamage = false;
-    new    Action:result     = Plugin_Continue;
+    int    Action:result     = Plugin_Continue;
 
     #if defined _TRACE
         static count = 0;
@@ -312,7 +312,7 @@ public Action OnTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype
 
             if (GameType == tf2 && GetGameMode() != MvM)
             {
-                decl Float:pos[3];
+                float pos[3];
                 GetClientEyePosition(victim, pos);
                 pos[2] += 4.0;
                 TE_SetupParticle("miss_text", pos);
@@ -388,10 +388,10 @@ public Action OnTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype
     return result;
 }
 
-public Action OnEntityTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype)
+public Action OnEntityTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetype)
 {
     static bool:inTakeDamage = false;
-    new    Action:result     = Plugin_Continue;
+    int    Action:result     = Plugin_Continue;
 
     #if defined _TRACE
         static count = 0;
@@ -432,10 +432,10 @@ public Action OnEntityTakeDamage(victim,&attacker,&inflictor,&float damage,&dama
     return result;
 }
 
-public Action OnObjectTakeDamage(victim,&attacker,&inflictor,&float damage,&damagetype)
+public Action OnObjectTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetype)
 {
     static bool:inTakeDamage = false;
-    new    Action:result     = Plugin_Continue;
+    int    Action:result     = Plugin_Continue;
 
     #if defined _TRACE
         static count = 0;
@@ -491,7 +491,7 @@ ProcessEntityHurt(Handle event, victim_index, attacker_index, damage)
     TraceInto("Events", "ProcessEntityHurt", "victim=%d:%L, attacker=%d:%L, damage=%f", \
               victim_index, ValidClientIndex(victim_index), attacker_index, ValidClientIndex(attacker_index), damage);
 
-    Actionresult = Plugin_Continue;
+    Action result = Plugin_Continue;
     int attacker_race = GetRace(attacker_index);
 
     if (IsValidClient(victim_index))
@@ -524,7 +524,7 @@ ProcessEntityHurt(Handle event, victim_index, attacker_index, damage)
         if (CheckAssist(attacker_index, assister_index, assister_race) &&
             assister_index > 0)
         {
-            Actionrcassist = Plugin_Continue;
+            Action rcassist = Plugin_Continue;
             if (IsValidClient(victim_index))
             {
                 Call_StartForward(g_OnPlayerAssistEventHandle);
@@ -568,7 +568,7 @@ bool CheckAssist(attacker_index, &assister_index, &assister_race)
         TF2_IsPlayerKritzkrieged(attacker_index) ||
         TF2_IsPlayerHealing(attacker_index))
     {
-        for(intindex=1;index<=MaxClients;index++)
+        for(int index=1;index<=MaxClients;index++)
         {
             if (IsClientInGame(index))
             {
@@ -635,7 +635,7 @@ public Action PlayerHurtPreEvent(Handle event,const char name[],bool dontBroadca
 
 public Action PlayerHurtEvent(Handle event,const char name[],bool dontBroadcast)
 {
-    Actionresult = Plugin_Continue;
+    Action result = Plugin_Continue;
     int victim_index = GetClientOfUserId(GetEventInt(event,"userid"));
     if (IsClient(victim_index))
     {
@@ -723,7 +723,7 @@ public Action PlayerHurtEvent(Handle event,const char name[],bool dontBroadcast)
 
             int victim_race   = GetRace(victim_index);
             int attacker_race = (attacker_index > 0) ? GetRace(attacker_index) : 0;
-            boolfrom_sc  = (injured_by == attacker_index) ||
+            bool from_sc  = (injured_by == attacker_index) ||
                                 GetEventBool(event, "sourcecraft");
 
             Call_StartForward(g_OnPlayerHurtEventHandle);
@@ -797,8 +797,8 @@ public PlayerDeathEvent(Handle event,const char name[],bool dontBroadcast)
     {
         int customkill;
         int deathFlags;
-        boolbackstab;
-        boolheadshot;
+        bool backstab;
+        bool headshot;
 
         g_InjuredBy[victim_index] = 0;
         g_KilledBy[victim_index] = 0;
@@ -852,8 +852,8 @@ public PlayerDeathEvent(Handle event,const char name[],bool dontBroadcast)
         int assister_index=GetClientOfUserId(GetEventInt(event,"assister"));
         int assister_race=(assister_index > 0) ? GetRace(assister_index) : -1;
 
-        charweapon[64];
-        boolis_equipment = GetWeapon(event, attacker_index,
+        char weapon[64];
+        bool is_equipment = GetWeapon(event, attacker_index,
                                           weapon, sizeof(weapon));
 
         KillHUDTimer(victim_index);
@@ -871,12 +871,12 @@ public PlayerDeathEvent(Handle event,const char name[],bool dontBroadcast)
         m_HudMessage[victim_index][0] = '\0';
         ClearSyncHud(victim_index, m_HudSynch[3]);
 
-        new damage     = GetDamage(event, victim_index);
-        boolmelee = backstab || IsMelee(weapon, is_equipment,
+        int damage     = GetDamage(event, victim_index);
+        bool melee = backstab || IsMelee(weapon, is_equipment,
                                              attacker_index,
                                              victim_index);
 
-        Actionresult;
+        Action result;
         Call_StartForward(g_OnPlayerDeathEventHandle);
         Call_PushCell(event);
         Call_PushCell(victim_index);
@@ -959,8 +959,8 @@ public PlayerDeathEvent(Handle event,const char name[],bool dontBroadcast)
                 }
             }
 
-            floatenergy = GetEnergy(victim_index);
-            floatdrop_energy = (energy >= g_fMinPackageEnergy)
+            float energy = GetEnergy(victim_index);
+            float drop_energy = (energy >= g_fMinPackageEnergy)
                                   ? ((energy <= g_fMaxPackageEnergy && g_fMaxPackageEnergy > 0.0) ? energy : g_fMaxPackageEnergy)
                                   : 0.0;
 
@@ -988,13 +988,13 @@ public PlayerDeathEvent(Handle event,const char name[],bool dontBroadcast)
                     SetEntityModel(pkg, mdlPackage[drop_model]);
                     DispatchSpawn(pkg);
 
-                    floatorigin[3];
+                    float origin[3];
                     GetClientAbsOrigin(victim_index, origin);
 
-                    floatangles[3];
+                    float angles[3];
                     GetClientEyeAngles(victim_index, angles);
 
-                    floatvelocity[3];
+                    float velocity[3];
                     GetAngleVectors(angles, velocity, NULL_VECTOR, NULL_VECTOR);
                     NormalizeVector(velocity,velocity);
                     ScaleVector(velocity,350.0);
@@ -1108,12 +1108,12 @@ public PlayerDeathEvent(Handle event,const char name[],bool dontBroadcast)
 
         if (victim_index > 0)
         {
-            floatinitial = GetInitialEnergy(victim_index);
+            float initial = GetInitialEnergy(victim_index);
             if (initial < 0.0 && victim_race > 0)
                 initial = GetRaceInitialEnergy(GetRaceHandle(victim_race));
 
             // Accumulate energy and zero the players active energy.
-            floatenergy = GetEnergy(victim_index) - initial;
+            float energy = GetEnergy(victim_index) - initial;
             if (energy > 0.0 && victim_race > 0)
                 IncrementAccumulatedEnergy(victim_index, victim_race, energy);
 
@@ -1125,7 +1125,7 @@ public PlayerDeathEvent(Handle event,const char name[],bool dontBroadcast)
             {
                 if (PendingCheck(victim_index) < 0)
                 {
-                    HandleraceHandle = GetRaceHandle(race);
+                    Handle raceHandle = GetRaceHandle(race);
                     int parentRace = GetRaceParentId(raceHandle);
                     if (parentRace > 0)
                     {
@@ -1161,7 +1161,7 @@ public PlayerDeathEvent(Handle event,const char name[],bool dontBroadcast)
                 int mole = FindShopItem("mole");
                 if (mole >= 0)
                 {
-                    HandlemoleHandle = GetShopItemHandle(mole);
+                    Handle moleHandle = GetShopItemHandle(mole);
                     if (moleHandle && amount >= GetItemCrystals(moleHandle))
                         PurchaseShopItem(victim_index, mole);
                 }
@@ -1182,7 +1182,7 @@ public Action OnPackageTouched(pkg, client)
         m_PackageRefs[pkg] = INVALID_ENT_REFERENCE;
         g_PackageCount--;
 
-        Handletimer = m_PackageTimer[pkg];
+        Handle timer = m_PackageTimer[pkg];
         if (timer != null)
         {
             PrepareAndEmitSoundToClient(client, sndPickup, .channel=SNDCHAN_WEAPON);
@@ -1224,8 +1224,8 @@ public Action OnPackageTouched(pkg, client)
                     m_PackagePCrystals[pkg] = 0;
                 }
 
-                floatenergy = m_PackageEnergy[pkg];
-                floatextra  = GetRandomFloat(0.0, 10.0) - GetEnergy(client);
+                float energy = m_PackageEnergy[pkg];
+                float extra  = GetRandomFloat(0.0, 10.0) - GetEnergy(client);
                 if (extra > 0)
                     energy += extra;
 
@@ -1288,7 +1288,7 @@ public Action RemoveDroppedPackage(Handle timer, any pkg)
 
 public Action CorrectDeathEvent(Handle event,const char name[],bool dontBroadcast)
 {
-    new victim_index=GetClientOfUserId(GetEventInt(event,"userid"));
+    int victim_index=GetClientOfUserId(GetEventInt(event,"userid"));
     if (victim_index > 0)
     {
         // Don't allow double kills/deaths!
@@ -1312,10 +1312,10 @@ public Action CorrectDeathEvent(Handle event,const char name[],bool dontBroadcas
 
 public PlayerChangeClassEvent(Handle event,const char name[],bool dontBroadcast)
 {
-    new userid = GetEventInt(event,"userid");
+    int userid = GetEventInt(event,"userid");
     if (userid > 0)
     {
-        new index = GetClientOfUserId(userid);
+        int index = GetClientOfUserId(userid);
         if (IsValidClient(index))
         {
             TraceInto("Events", "PlayerChangeClassEvent", "index=%d:%L", \
@@ -1325,7 +1325,7 @@ public PlayerChangeClassEvent(Handle event,const char name[],bool dontBroadcast)
                 m_IsChangingClass[index] = true;
 
             // Reset energy when changing class
-            floatinitial = GetInitialEnergy(index);
+            float initial = GetInitialEnergy(index);
 
             Trace("%d:%N's initial energy is %1.0f", \
                   index, ValidClientIndex(index), initial);
@@ -1333,13 +1333,13 @@ public PlayerChangeClassEvent(Handle event,const char name[],bool dontBroadcast)
             new race = GetRace(index);
             if (race > 0)
             {
-                HandleraceHandle = GetRaceHandle(race);
+                Handle raceHandle = GetRaceHandle(race);
                 if (raceHandle && initial < 0.0)
                 {
                     initial = GetRaceInitialEnergy(raceHandle);
 
                     #if defined _TRACE
-                        charrname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
+                        char rname[64]; GetRaceName(GetRaceHandle(race),rname,sizeof(rname));
                         Trace("Race %d:%s's initial energy is %1.0f", race, rname, initial);
                     #endif
                 }
@@ -1364,10 +1364,10 @@ public RoundStart(Handle event,const char name[],bool dontBroadcast)
 
     if (GameType == cstrike)
     {
-        HandlefreezeTimeCvar=FindConVar("mp_freezetime");
+        Handle freezeTimeCvar=FindConVar("mp_freezetime");
         if (freezeTimeCvar)
         {
-            floatfFreezeTime=GetConVarFloat(freezeTimeCvar);
+            float fFreezeTime=GetConVarFloat(freezeTimeCvar);
             if (fFreezeTime>0.0)
             {
                 CreateTimer(fFreezeTime,EndFreezeTime,g_iRoundNumber);
@@ -1380,7 +1380,7 @@ public RoundStart(Handle event,const char name[],bool dontBroadcast)
         LogRoundEvent(event,name,dontBroadcast);
     #endif
 
-    for(intindex=1;index<=MaxClients;index++)
+    for(int index=1;index<=MaxClients;index++)
     {
         if (IsClientInGame(index))
             ResetInvulnerability(index);
@@ -1401,7 +1401,7 @@ public EventRoundActive(Handle event,const char name[],bool dontBroadcast)
         LogRoundEvent(event,name,dontBroadcast);
     #endif
 
-    for(intindex=1;index<=MaxClients;index++)
+    for(int index=1;index<=MaxClients;index++)
     {
         if (IsClientInGame(index))
             ResetInvulnerability(index);
@@ -1416,7 +1416,7 @@ public EventRoundSuddenDeath(Handle event,const char name[],bool dontBroadcast)
         LogRoundEvent(event,name,dontBroadcast);
     #endif
 
-    for(intindex=1;index<=MaxClients;index++)
+    for(int index=1;index<=MaxClients;index++)
     {
         m_IsChangingClass[index]=false;
         if (IsClientInGame(index))
@@ -1432,7 +1432,7 @@ public EventRoundOver(Handle event,const char name[],bool dontBroadcast)
         LogRoundEvent(event,name,dontBroadcast);
     #endif
 
-    for(intindex=1;index<=MaxClients;index++)
+    for(int index=1;index<=MaxClients;index++)
     {
         m_IsChangingClass[index]=false;
         if (IsClientInGame(index))
@@ -1448,8 +1448,8 @@ public EventRoundWin(Handle event,const char name[],bool dontBroadcast)
         LogRoundEvent(event,name,dontBroadcast);
     #endif
 
-    new team  = GetEventInt(event,"team");
-    for(intindex=1;index<=MaxClients;index++)
+    int team  = GetEventInt(event,"team");
+    for(int index=1;index<=MaxClients;index++)
     {
         m_IsChangingClass[index]=false;
         if (IsClientInGame(index))
@@ -1479,7 +1479,7 @@ public EventGameOver(Handle event,const char name[],bool dontBroadcast)
 
 public BombPlantedEvent(Handle event,const char name[],bool dontBroadcast)
 {
-    new index = GetClientOfUserId(GetEventInt(event,"userid"));
+    int index = GetClientOfUserId(GetEventInt(event,"userid"));
     if (index > 0)
     {
         GivePlantXP(index);
@@ -1489,7 +1489,7 @@ public BombPlantedEvent(Handle event,const char name[],bool dontBroadcast)
 
 public BombDefusedEvent(Handle event,const char name[],bool dontBroadcast)
 {
-    new index = GetClientOfUserId(GetEventInt(event,"userid"));
+    int index = GetClientOfUserId(GetEventInt(event,"userid"));
     if (index > 0)
     {
         GiveDefuseXP(index);
@@ -1499,7 +1499,7 @@ public BombDefusedEvent(Handle event,const char name[],bool dontBroadcast)
 
 public BombExplodedEvent(Handle event,const char name[],bool dontBroadcast)
 {
-    new index = GetClientOfUserId(GetEventInt(event,"userid"));
+    int index = GetClientOfUserId(GetEventInt(event,"userid"));
     if (index > 0)
     {
         GiveExplodeXP(index);

@@ -75,7 +75,7 @@ float m_ScarabAttackTime[MAXPLAYERS+1];
 bool m_SiegeActive[MAXPLAYERS+1];
 	int m_ScarabCount[MAXPLAYERS+1];
 
-float gThrow[MAXPLAYERS+1];         // throw charge state 
+float gThrow[MAXPLAYERS+1];         // throw char ge state 
 new Handle g_ScarabTimers[MAXPLAYERS+1];
 new Handle gTrackTimers[MAXENTITIES+1]; // entity track timers
 
@@ -235,7 +235,7 @@ public void OnClientDisconnect(client)
 {
     Detonate(client);
 
-    new Handle timer=g_ScarabTimers[client];
+    int Handle timer=g_ScarabTimers[client];
     if (timer != null)
     {
         g_ScarabTimers[client] = null;
@@ -247,7 +247,7 @@ public Action OnRaceDeselected(client,oldrace,newrace)
 {
     if (oldrace == raceID)
     {
-        new Handle timer=g_ScarabTimers[client];
+        int Handle timer=g_ScarabTimers[client];
         if (timer != null)
         {
             g_ScarabTimers[client] = null;
@@ -263,7 +263,7 @@ public Action OnRaceDeselected(client,oldrace,newrace)
         Detonate(client);
 
         // Turn off Immunities
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, false);
     }
     return Plugin_Continue;
@@ -367,7 +367,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
 
 public OnItemPurchase(client,item)
 {
-    new race=GetRace(client);
+    int race=GetRace(client);
     if (race == raceID && IsValidClientAlive(client))
     {
         if (g_bootsItem < 0)
@@ -469,7 +469,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
 
         PrepareAndEmitSoundToAll(spawnWav, client);
 
-        new immunity_level=GetUpgradeLevel(client,raceID,immunityID);
+        int immunity_level=GetUpgradeLevel(client,raceID,immunityID);
         DoImmunity(client, immunity_level, true);
 
         int speed_level = GetUpgradeLevel(client,raceID,speedID);
@@ -535,7 +535,7 @@ public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_inde
         if (m_SiegeActive[victim_index])
             DeactivateSiege(null, GetClientUserId(victim_index));
 
-        new Handle timer=g_ScarabTimers[victim_index];
+        int Handle timer=g_ScarabTimers[victim_index];
         if (timer != null)
         {
             g_ScarabTimers[victim_index] = null;
@@ -574,8 +574,8 @@ bool ScarabAttack(damage, victim_index, index)
             !IsInvulnerable(victim_index))
         {
             new float lastTime = m_ScarabAttackTime[index];
-            new float interval = GetGameTime() - lastTime;
-            if (lastTime == 0.0 || interval > 0.25)
+            new float int erval = GetGameTime() - lastTime;
+            if (lastTime == 0.0 || int erval > 0.25)
             {
                 if (GetRandomInt(1,100) <= g_ScrabAttackChance[rs_level])
                 {
@@ -584,7 +584,7 @@ bool ScarabAttack(damage, victim_index, index)
                     {
                         if (CanInvokeUpgrade(index, raceID, scarabAttackID, .notify=false))
                         {
-                            if (interval == 0.0 || interval >= 2.0)
+                            if (int erval == 0.0 || int erval >= 2.0)
                             {
                                 float Origin[3];
                                 GetEntityAbsOrigin(victim_index, Origin);
@@ -630,7 +630,7 @@ void DoImmunity(client, level, bool value)
     }
 }
 
-public Action BuildScarab(Handle timer, any:userid)
+public Action BuildScarab(Handle timer, any userid)
 {
     int client = GetClientOfUserId(userid);
     if (IsValidClientAlive(client) && GetRace(client) == raceID &&
@@ -696,12 +696,12 @@ void LaunchScarab(client, level, model, pressed)
     else if (CanInvokeUpgrade(client, raceID, scarabID))
     {
         // throw scarab
-        new bool siege = m_SiegeActive[client];
-        new float throwspeed = float(GetUpgradeLevel(client,raceID,velocityID)+1)*1000.0;
+        int bool siege = m_SiegeActive[client];
+        int float throwspeed = float(GetUpgradeLevel(client,raceID,velocityID)+1)*1000.0;
         if (siege)
             throwspeed *= 5.0;
 
-        new float time = GetEngineTime() - gThrow[client];
+        int float time = GetEngineTime() - gThrow[client];
         if (time < cfgThrowTime)
             throwspeed *= time / cfgThrowTime;
 
@@ -776,7 +776,7 @@ void LaunchScarab(client, level, model, pressed)
     }
 }
 
-public Action UpdateBar(Handle timer,any:client)
+public Action UpdateBar(Handle timer,any client)
 {
     if (gThrow[client] > 0.0 && IsValidClientAlive(client))
     {
@@ -792,8 +792,8 @@ public Action UpdateBar(Handle timer,any:client)
 void ShowBar(client, float curTime, float totTime)
 {
     char gauge[30] = "[=====================]";
-    new float percent = curTime/totTime;
-    new bool partial = (percent < 1.0);
+    int float percent = curTime/totTime;
+    int bool partial = (percent < 1.0);
     if (partial)
     {
         int pos = RoundFloat(percent * 20.0) + 1;
@@ -816,20 +816,20 @@ public Action TrackObject(Handle timer, Handle pack)
     // check if the object is still the same type we picked up
     if (ent > 0 && IsValidEntity(ent) && IsValidEdict(ent))
     {
-        decl float lastPos[3];
+        float lastPos[3];
         lastPos[0] = ReadPackFloat(pack);
         lastPos[1] = ReadPackFloat(pack);
         lastPos[2] = ReadPackFloat(pack);
 
-        new float lastSpeed = ReadPackFloat(pack);
+        int float lastSpeed = ReadPackFloat(pack);
         int stopCount = ReadPackCell(pack);
-        new float fuseTime = ReadPackFloat(pack);
+        int float fuseTime = ReadPackFloat(pack);
         int client = ReadPackCell(pack);
 
-        decl float vecPos[3];
+        float vecPos[3];
         GetEntPropVector(ent, Prop_Send, "m_vecOrigin", vecPos);
 
-        decl float vecVel[3];
+        float vecVel[3];
         SubtractVectors(lastPos, vecPos, vecVel);
 
         float vecGround[3];
@@ -837,17 +837,17 @@ public Action TrackObject(Handle timer, Handle pack)
         vecGround[1] = vecPos[1];
         vecGround[2] = vecPos[2];
 
-        new float stopSpeed = cfgStopSpeed;
-        new float speed = vecVel[0] + vecVel[1] + vecVel[2];
+        int float stopSpeed = cfgStopSpeed;
+        int float speed = vecVel[0] + vecVel[1] + vecVel[2];
         if (speed < 0)
             speed *= -1.0;
 
-        new bool bStop = (speed < stopSpeed);
-        new float height = 0.0;
-        decl float vecBelow[3];
-        decl float vecCheckBelow[3];
+        int bool bStop = (speed < stopSpeed);
+        int float height = 0.0;
+        float vecBelow[3];
+        float vecCheckBelow[3];
 
-        new bool bGround = ((GetEntityFlags(ent) & FL_ONGROUND) != 0);
+        int bool bGround = ((GetEntityFlags(ent) & FL_ONGROUND) != 0);
         //if (!bGround) // F_ONGROUND flag lies!!!
         {
             //Check below the object for the ground
@@ -893,7 +893,7 @@ public Action TrackObject(Handle timer, Handle pack)
                         // it's stuck, try to knock it loose.
                         stopSpeed *= 5.0;
                         new float negSpeed = stopSpeed * -1.0;
-                        decl float vecKnock[3];
+                        float vecKnock[3];
                         vecKnock[0]= GetRandomFloat(negSpeed, stopSpeed);
                         vecKnock[1]= GetRandomFloat(negSpeed, stopSpeed);
                         vecKnock[2]= GetRandomFloat(negSpeed, stopSpeed);
@@ -1072,7 +1072,7 @@ public Action TrackObject(Handle timer, Handle pack)
     return Plugin_Stop;
 }
 
-public Action DetonateTimer(Handle timer,any:ref)
+public Action DetonateTimer(Handle timer,any ref)
 {
     int ent = EntRefToEntIndex(ref);
     if (ent > 0)
@@ -1123,7 +1123,7 @@ void Siege(client, level)
     }
 }
 
-public Action DeactivateSiege(Handle timer,any:userid)
+public Action DeactivateSiege(Handle timer,any userid)
 {
     int client = GetClientOfUserId(userid);
     if (client > 0)

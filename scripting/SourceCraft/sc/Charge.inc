@@ -109,15 +109,15 @@ Charge(client, race, upgrade, level, immunity, damage, float force, float impuls
     }
 }
 
-public Action ChargeTimer(Handle timer,any:pack)
+public Action ChargeTimer(Handle timer,any pack)
 {
     static const char geColor[4] = {139, 69, 19, 255};
 
     if (pack != null)
     {
         ResetPack(pack);
-        new count=ReadPackCell(pack);
-        new client=ReadPackCell(pack);
+        int count=ReadPackCell(pack);
+        int client=ReadPackCell(pack);
         if (m_ChargeActive[client] && IsValidClientAlive(client) &&
             !GetRestriction(client,Restriction_NoUltimates) &&
             !GetRestriction(client,Restriction_Stunned))
@@ -170,7 +170,7 @@ public Action ChargeTimer(Handle timer,any:pack)
             clientLoc[2] += 50.0; // Adjust trace position to the middle of the person instead of the feet.
 
             new team = GetClientTeam(client);
-            for (new index=1;index<=MaxClients;index++)
+            for (int index=1;index<=MaxClients;index++)
             {
                 if (client != index && IsClientInGame(index) &&
                     IsPlayerAlive(index) && GetClientTeam(index) != team)
@@ -232,7 +232,7 @@ public Action ChargeTimer(Handle timer,any:pack)
                 //
                 float pos[3];
                 new maxents = GetMaxEntities();
-                for (new ent = MaxClients; ent < maxents; ent++)
+                for (int ent = MaxClients; ent < maxents; ent++)
                 {
                     if (IsValidEdict(ent) && IsValidEntity(ent))
                     {

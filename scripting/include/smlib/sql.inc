@@ -33,19 +33,19 @@ stock SQL_TQueryF(Handle database, SQLTCallback:callback, any data, DBPriority:p
 }
 
 /**
- * Fetches an integer from a field in the current row of a result set (See: SQL_FetchInt)
+ * Fetches an int eger from a field in the current row of a result set (See: SQL_FetchInt)
  *
  * @param query			A query (or statement) Handle.
  * @param field			The field index (starting from 0).
  * @param result		Optional variable to store the status of the return value.
- * @return				An integer value.
+ * @return				An int eger value.
  * @error				Invalid query Handle or field index, invalid
  *						type conversion requested from the database,
  *						or no current result set.
  */
 stock SQL_FetchIntByName(Handle query, char[] fieldName, &DBResult:result=DBVal_Error) {
 
-	new fieldNum;
+	int fieldNum;
 	SQL_FieldNameToNum(query, fieldName, fieldNum);
 
 	return SQL_FetchInt(query, fieldNum, result);
@@ -78,9 +78,9 @@ stock bool SQL_FetchBoolByName(Handle query, char[] fieldName, &DBResult:result=
  *						type conversion requested from the database,
  *						or no current result set.
  */
-stock Float SQL_FetchFloatByName(Handle query, char[] fieldName, &DBResult:result=DBVal_Error) {
+stock float SQL_FetchFloatByName(Handle query, char[] fieldName, &DBResult:result=DBVal_Error) {
 
-	new fieldNum;
+	int fieldNum;
 	SQL_FieldNameToNum(query, fieldName, fieldNum);
 
 	return SQL_FetchFloat(query, fieldNum, result);
@@ -101,7 +101,7 @@ stock Float SQL_FetchFloatByName(Handle query, char[] fieldName, &DBResult:resul
  */
 stock SQL_FetchStringByName(Handle query, char[] fieldName, char[] buffer, maxlength, &DBResult:result=DBVal_Error) {
 
-	new fieldNum;
+	int fieldNum;
 	SQL_FieldNameToNum(query, fieldName, fieldNum);
 
 	return SQL_FetchString(query, fieldNum, buffer, maxlength, result);
