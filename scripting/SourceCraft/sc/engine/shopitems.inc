@@ -130,10 +130,10 @@ ClearShopVector()
             Handle item=GetArrayCell(shopVector,x);
             Handle stringsHandle=GetArrayCell(item,_:ItemInfo_Strings);
             ClearArray(stringsHandle);
-            CloseHandle(stringsHandle);
+            delete stringsHandle;
 
             ClearArray(item);
-            CloseHandle(item);
+            delete item;
 
             SetTraceCategory("Array");
             Trace("CloseArray itemStringsHandle[%d]=0x%08x", x, stringsHandle);
@@ -146,11 +146,11 @@ ClearShopVector()
     Trace("CloseArray shopIndex=0x%08x", shopIndex);
 
     ClearArray(shopVector);
-    CloseHandle(shopVector);
+    delete shopVector;
     shopVector = null;
 
     ClearArray(shopIndex);
-    CloseHandle(shopIndex);
+    delete shopIndex;
     shopIndex = null;
 
     TraceReturn();

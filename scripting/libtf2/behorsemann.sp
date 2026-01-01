@@ -499,7 +499,7 @@ stock void GiveAxe(int client)
 
         int weapon = TF2Items_GiveNamedItem(client, hWeapon);
         EquipPlayerWeapon(client, weapon);
-        CloseHandle(hWeapon);
+        delete hWeapon;
         SetEntProp(weapon, Prop_Send, "m_iWorldModelIndex", PrecacheModel(AXE));
         SetEntProp(weapon, Prop_Send, "m_nModelIndexOverrides", PrecacheModel(AXE), _, 0);
     }

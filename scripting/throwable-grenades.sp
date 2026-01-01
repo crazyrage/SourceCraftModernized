@@ -560,7 +560,7 @@ public MenuHandler_SetPlayerNadeTimerSound(Handle menu, MenuAction action, clien
 	}
 	else if (action == MenuAction_End)
         {
-		CloseHandle(menu);
+		delete menu;
 	}
 }
 ////////////////////////////////////////////////////// S T O C K S ///////////////////////////////////////////////////////////////
@@ -603,7 +603,7 @@ stock ClearTimer(&Handle Timer)
 {
 	if (Timer != null)
 	{
-		CloseHandle(Timer);
+		delete Timer;
 		Timer = null;
 	}
 }

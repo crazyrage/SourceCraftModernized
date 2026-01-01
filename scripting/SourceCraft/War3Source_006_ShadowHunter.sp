@@ -237,7 +237,7 @@ public OnAbilityCommand(client,ability,bool pressed)
                         }
                     }
                     if(size_arr>0)
-                        CloseHandle(hCheckEntities);
+                        delete hCheckEntities;
                 }
                 if(conf_found)
                 {

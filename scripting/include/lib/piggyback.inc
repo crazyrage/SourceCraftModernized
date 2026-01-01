@@ -70,7 +70,7 @@ forward Action OnPlayerPiggyback(rider, carrier, bool pickedup, float distance);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_piggyback = 
+public SharedPlugin __pl_piggyback = 
 {
 	name = "piggyback",
 	file = "piggyback.smx",

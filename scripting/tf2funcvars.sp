@@ -287,7 +287,7 @@ public MenuHandler_Grav(Handle menu, MenuAction action, int param1, int param2)
 	// param1 = client, param2 = grav
 	if (action == MenuAction_End)
 	{
-		CloseHandle(menu);
+		delete menu;
 	}
 	else if (action == MenuAction_Cancel)
 	{
@@ -332,7 +332,7 @@ public MenuHandler_RST(Handle menu, MenuAction action, int param1, int param2)
 	// param1 = client, param2 = grav
 	if (action == MenuAction_End)
 	{
-		CloseHandle(menu);
+		delete menu;
 	}
 	else if (action == MenuAction_Cancel)
 	{

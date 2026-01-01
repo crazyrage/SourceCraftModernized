@@ -224,7 +224,7 @@ bool isTargetTraceable(entity, targetentref)
         {
             traceable = true;
         }
-        CloseHandle(traceresult);
+        delete traceresult;
     }
 
     return targetvalid && traceable;

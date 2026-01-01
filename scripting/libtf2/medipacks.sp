@@ -590,7 +590,7 @@ stock TF_SpawnMedipack(client, char name[], bool cmd, TFHoliday:holiday)
 
             Handle TraceEx = TR_TraceRayFilterEx(PlayerPosition, PlayerPosAway, MASK_SOLID, RayType_EndPoint, MedipackTraceFilter);
             TR_GetEndPosition(PlayerPosition, TraceEx);
-            CloseHandle(TraceEx);
+            delete TraceEx;
         }
 
         float Direction[3];
@@ -601,7 +601,7 @@ stock TF_SpawnMedipack(client, char name[], bool cmd, TFHoliday:holiday)
 
         float MediPos[3];
         TR_GetEndPosition(MediPos, Trace);
-        CloseHandle(Trace);
+        delete Trace;
         MediPos[2] += 4;
 
         int Medipack = CreateEntityByName(name);

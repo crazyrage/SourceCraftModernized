@@ -3,7 +3,7 @@
 #endif
 #define _serverredirect_included_
 
-public SharedPlugin:__pl_serverredir = 
+public SharedPlugin __pl_serverredir = 
 {
 	name = "serverredir",
 	file = "serverredirect.smx",

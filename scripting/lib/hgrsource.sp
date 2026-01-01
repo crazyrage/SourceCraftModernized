@@ -1079,7 +1079,7 @@ Action _Hook(client)
                             // Create a ray that tells where the player is looking
                             Handle hTrace = TR_TraceRayFilterEx(clientloc,clientang,MASK_SOLID,RayType_Infinite,TraceRayTryToHit);
                             TR_GetEndPosition(gHookEndloc[client], hTrace); // Get the end xyz coordinate of where a player is looking
-                            CloseHandle(hTrace);
+                            delete hTrace;
 
                             float limit=gAllowedRange[client][ACTION_GRAB];
                             float distance=GetVectorDistance(clientloc,gHookEndloc[client]);
@@ -1506,7 +1506,7 @@ public Action GrabSearch(Handle timer,any userid)
                             CreateTimer(0.1, Grabbing, GetClientUserId(index),
                                         TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
 
-                            CloseHandle(hTrace);
+                            delete hTrace;
                             TraceReturn("Stop Searching and Start Grabbing");
                             return Plugin_Stop;
                         }
@@ -1527,7 +1527,7 @@ public Action GrabSearch(Handle timer,any userid)
                                     COLOR_GREEN,COLOR_DEFAULT);
                     }
 
-                    CloseHandle(hTrace);
+                    delete hTrace;
                     TraceReturn("Stop Searching");
                     return Plugin_Stop;
                 }
@@ -1551,7 +1551,7 @@ public Action GrabSearch(Handle timer,any userid)
                 }
             }
 
-            CloseHandle(hTrace);
+            delete hTrace;
             TraceReturn("Continue Searching");
             return Plugin_Handled;
         }
@@ -1723,7 +1723,7 @@ public Action Grabbing(Handle timer,any userid)
                 // Find where the player is aiming
                 Handle hTrace = TR_TraceRayFilterEx(clientloc,clientang,MASK_ALL,RayType_Infinite,TraceRayTryToHit);
                 TR_GetEndPosition(endvec, hTrace); // Get the end position of the trace ray
-                CloseHandle(hTrace);
+                delete hTrace;
 
                 distance[0]=endvec[0]-clientloc[0];
                 distance[1]=endvec[1]-clientloc[1];
@@ -1876,7 +1876,7 @@ Action _Rope(client)
                             // Create a ray that tells where the player is looking
                             Handle hTrace = TR_TraceRayFilterEx(clientloc,clientang,MASK_ALL,RayType_Infinite,TraceRayTryToHit);
                             TR_GetEndPosition(gRopeEndloc[client], hTrace); // Get the end xyz coordinate of where a player is looking
-                            CloseHandle(hTrace);
+                            delete hTrace;
 
                             float limit=gAllowedRange[client][ACTION_ROPE];
                             float dist=GetVectorDistance(clientloc,gRopeEndloc[client]);
@@ -2175,7 +2175,7 @@ FindMatchingPlayers(const char matchstr[],clients[])
     return count;
 }
 
-stock bool:IsPlayerStuck(client)
+stock bool IsPlayerStuck(client)
 {
     float vecMin[3], float vecMax[3], float vecOrigin[3];
     GetClientMins(client, vecMin);
@@ -2185,7 +2185,7 @@ stock bool:IsPlayerStuck(client)
                                              MASK_PLAYERSOLID, TraceRayHitCollidable,
                                              client);
     int entity = TR_GetEntityIndex(hTrace);
-    CloseHandle(hTrace);
+    delete hTrace;
     return (entity > 0);
 }
 

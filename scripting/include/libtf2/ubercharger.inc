@@ -30,7 +30,7 @@ native SetUberCharger(client,bool arm=true,float amount=0.0);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_ubercharger = 
+public SharedPlugin __pl_ubercharger = 
 {
 	name = "ubercharger",
 	file = "ubercharger.smx",

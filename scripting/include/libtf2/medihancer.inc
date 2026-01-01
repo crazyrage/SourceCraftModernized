@@ -30,7 +30,7 @@ native SetMedicEnhancement(client,bool arm=true,amount=0);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_medihancer = 
+public SharedPlugin __pl_medihancer = 
 {
 	name = "medihancer",
 	file = "medihancer.smx",

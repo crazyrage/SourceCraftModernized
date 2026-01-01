@@ -1417,7 +1417,7 @@ bool ParseSettings()
         if (!KvJumpToKey(g_SourceCraftConfigHandle, "long_term", true))
         {
             LogError("Unable to create long_term section in configs/sourcecraft.cfg!");
-            CloseHandle(g_SourceCraftConfigHandle);
+            delete g_SourceCraftConfigHandle;
             g_SourceCraftConfigHandle=null;
             g_SourceCraftConfigLoaded=ConfigNotLoaded;
             TraceReturn("return false");
@@ -1440,7 +1440,7 @@ bool ParseSettings()
         LogError("Insufficient levels defined for long_term required_xp in configs/sourcecraft.cfg, %d of 16!",
                  count);
 
-        CloseHandle(g_SourceCraftConfigHandle);
+        delete g_SourceCraftConfigHandle;
         g_SourceCraftConfigHandle=null;
         g_SourceCraftConfigLoaded=ConfigNotLoaded;
         TraceReturn("return false");
@@ -1462,7 +1462,7 @@ bool ParseSettings()
         LogError("Insufficient levels defined for long_term kill_xp in configs/sourcecraft.cfg, %d of 16!",
                  count);
 
-        CloseHandle(g_SourceCraftConfigHandle);
+        delete g_SourceCraftConfigHandle;
         g_SourceCraftConfigHandle=null;
         g_SourceCraftConfigLoaded=ConfigNotLoaded;
         TraceReturn("return false");
@@ -1483,7 +1483,7 @@ bool ParseSettings()
         if (!KvJumpToKey(g_SourceCraftConfigHandle, "short_term", true))
         {
             LogError("Unable to create short_term section in configs/sourcecraft.cfg!");
-            CloseHandle(g_SourceCraftConfigHandle);
+            delete g_SourceCraftConfigHandle;
             g_SourceCraftConfigHandle=null;
             g_SourceCraftConfigLoaded=ConfigNotLoaded;
             TraceReturn("return false");
@@ -1508,7 +1508,7 @@ bool ParseSettings()
         LogError("Insufficient levels defined for short_term required_xp in configs/sourcecraft.cfg, %d of 16!",
                  count);
 
-        CloseHandle(g_SourceCraftConfigHandle);
+        delete g_SourceCraftConfigHandle;
         g_SourceCraftConfigHandle=null;
         g_SourceCraftConfigLoaded=ConfigNotLoaded;
         TraceReturn("return false");
@@ -1530,7 +1530,7 @@ bool ParseSettings()
         LogError("Insufficient levels defined for short_term kill_xp in configs/sourcecraft.cfg, %d of 16!",
                  count);
 
-        CloseHandle(g_SourceCraftConfigHandle);
+        delete g_SourceCraftConfigHandle;
         g_SourceCraftConfigHandle=null;
         g_SourceCraftConfigLoaded=ConfigNotLoaded;
         TraceReturn("return false");
@@ -1691,7 +1691,7 @@ void CompleteConfigs()
         if (g_ItemConfigLoaded != ConfigWasLoaded)
             SaveConfig(g_ItemConfigHandle, "shopitems");
 
-        CloseHandle(g_ItemConfigHandle);
+        delete g_ItemConfigHandle;
         g_ItemConfigHandle = null;
         g_ItemConfigLoaded = ConfigNotLoaded;
     }
@@ -1711,7 +1711,7 @@ void CompleteConfigs()
                 LogError("Unable to save settings in %s", path);
         }
 
-        CloseHandle(g_SourceCraftConfigHandle);
+        delete g_SourceCraftConfigHandle;
         g_SourceCraftConfigHandle=null;
         g_SourceCraftConfigLoaded=ConfigNotLoaded;
     }

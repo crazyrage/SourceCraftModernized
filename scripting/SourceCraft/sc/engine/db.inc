@@ -24,7 +24,7 @@
 
 #define CONNECTING                      (Handle -1)
 
-#define CloseDbHandle(%1)       CloseHandle(g_DbHandle[%1]); g_DbHandle[%1] = null
+#define CloseDbHandle(%1)       delete g_DbHandle[%1]; g_DbHandle[%1] = null
 #define DatabaseHandle(%1)      ((g_DbHandle[%1] == null) ? ConnectToDatabase(%1, false) : g_DbHandle[%1])
 #define DatabaseConnected(%1)   (g_DbHandle[%1] != CONNECTING && g_DbHandle[%1] != null)
 #define DatabaseAvailable(%1)   (g_DbHandle[%1] != CONNECTING && DatabaseHandle(%1) != null && g_DbHandle[%1] != CONNECTING)
@@ -59,13 +59,13 @@ ClearDatabase()
 
     if (g_SaveThreadsInFlight != null)
     {
-        CloseHandle(g_SaveThreadsInFlight);
+        delete g_SaveThreadsInFlight;
         g_SaveThreadsInFlight = null;
     }
 
     if (g_PlayersToReload != null)
     {
-        CloseHandle(g_PlayersToReload);
+        delete g_PlayersToReload;
         g_PlayersToReload = null;
     }
 }
@@ -209,7 +209,7 @@ public Action CloseDatabaseTimer(Handle timer,Handle dbHandle)
     {
         // Close the old database handle
         LogToGame("Closing Database connection %08x", dbHandle);
-        CloseHandle(dbHandle);
+        delete dbHandle;
     }
 }
 
@@ -230,7 +230,7 @@ bool SQL_CheckItemTable(Handle dbHandle)
             LogError("sc_items table not found in Database!");
             return true;
         }
-        CloseHandle(query);
+        delete query;
     }
     return false;
 }
@@ -277,7 +277,7 @@ bool SQL_CheckRaceTable(Handle dbHandle)
         {
             g_bCreate = true;
         }
-        CloseHandle(query);
+        delete query;
     }
     return g_bCreate;
 }
@@ -411,7 +411,7 @@ public SQL_PlayersChecked(Handle owner, Handle hndl, const char[] error[], any d
             LogError("sc_players table not found in Database!");
             CreatePlayerTables(dbHandle);
         }
-        CloseHandle(hndl);
+        delete hndl;
     }
 }
 
@@ -660,7 +660,7 @@ LoadItemIdent(const char[] shortName[])
                 {
                     item_ident = SQL_FetchInt(query,0);
                 }
-                CloseHandle(query);
+                delete query;
             }
 
             SQL_UnlockDatabase(g_DbHandle[DB_MAIN]);
@@ -746,7 +746,7 @@ LoadRaceIdent(const char[] shortName[])
                 {
                     race_ident = SQL_FetchInt(query,0);
                 }
-                CloseHandle(query);
+                delete query;
             }
 
             SQL_UnlockDatabase(g_DbHandle[DB_MAIN]);
@@ -785,7 +785,7 @@ LoadRaceData(const char[] shortName[], &Faction:faction, &UnitType:type)
                     faction = Faction:SQL_FetchInt(query,1);
                     type = UnitType:SQL_FetchInt(query,2);
                 }
-                CloseHandle(query);
+                delete query;
             }
 
             SQL_UnlockDatabase(g_DbHandle[DB_MAIN]);
@@ -1005,7 +1005,7 @@ QueryRaceDescription(race_ident, char[] description, maxlength)
                 description[0] = '\0';
             }
 
-            CloseHandle(query);
+            delete query;
         }
         else
         {
@@ -1046,7 +1046,7 @@ QueryRaceImage(race_ident, char[] image, maxlength)
                 image[0] = '\0';
             }
 
-            CloseHandle(query);
+            delete query;
         }
         else
         {
@@ -1089,7 +1089,7 @@ QueryUpgradeImage(race_ident, upgrade, char[] image, maxlength)
                 image[0] = '\0';
             }
 
-            CloseHandle(query);
+            delete query;
         }
         else
         {
@@ -1318,7 +1318,7 @@ public SQL_LoadPlayerData(Handle owner, Handle query, const char[] error[], any 
                 }
             }
         }
-        CloseHandle(query);
+        delete query;
     }
 
     TraceReturn();
@@ -1412,7 +1412,7 @@ public SQL_LoadPlayerRaceData(Handle owner, Handle query, const char[] error[], 
     int userid = ReadPackCell(data); 
     int client = GetClientOfUserId(userid); 
     int raceId = ReadPackCell(data);
-    CloseHandle(data);
+    delete data;
 
     TraceInto("DB", "SQL_LoadPlayerRaceData", "client=%d:%L, raceId=%d", \
               client, ValidClientIndex(client), raceId);
@@ -1526,7 +1526,7 @@ public SQL_LoadPlayerRaceData(Handle owner, Handle query, const char[] error[], 
                 ShowEnergy(client);
             }
         }
-        CloseHandle(query);
+        delete query;
     }
 
     TraceReturn();
@@ -1537,7 +1537,7 @@ public Action Retry_LoadPlayerRaceData(Handle timer,Handle data)
     ResetPack(data);
     int client = GetClientOfUserId(ReadPackCell(data)); 
     int raceId = ReadPackCell(data);
-    CloseHandle(data);
+    delete data;
 
     // Retry to load the player's race data
     if (IsValidClient(client))
@@ -1550,7 +1550,7 @@ public SQL_LoadPlayerUpgradeData(Handle owner, Handle query, const char[] error[
     int userid = ReadPackCell(data); 
     int client = GetClientOfUserId(userid); 
     int raceId = ReadPackCell(data);
-    CloseHandle(data);
+    delete data;
 
     TraceInto("DB", "SQL_LoadPlayerUpgradeData", "client=%d:%L, raceId=%d", \
               client, ValidClientIndex(client), raceId);
@@ -1599,7 +1599,7 @@ public SQL_LoadPlayerUpgradeData(Handle owner, Handle query, const char[] error[
                 SetRaceInfoLoaded(raceInfo,DataLoaded);
             }
         }
-        CloseHandle(query);
+        delete query;
     }
 
     TraceReturn();
@@ -1666,7 +1666,7 @@ public SQL_LoadPlayerTechData(Handle owner, Handle query, const char[] error[], 
     int userid = ReadPackCell(data); 
     int client = GetClientOfUserId(userid); 
     int Faction:techId = Faction:ReadPackCell(data);
-    CloseHandle(data);
+    delete data;
 
     if (query == null || error[0] != '\0')
     {
@@ -2056,7 +2056,7 @@ public SQL_UpdatePlayer(Handle owner, Handle hndl, const char[] error[], any dat
                 }
             }
         }
-        CloseHandle(data);
+        delete data;
     }
 
     TraceReturn();
@@ -2096,7 +2096,7 @@ public SQL_UpdateAlias(Handle owner, Handle hndl, const char[] error[], any data
             LogError("Unable to update %d:%L's (ident=%d) alias data: %s",
                      client, ValidClientIndex(client), player_ident, error);
         }
-        CloseHandle(data);
+        delete data;
     }
 
     TraceReturn();
@@ -2230,7 +2230,7 @@ InsertPlayerData(client, bool threaded)
                         LogError("Unable to query %d:%L's ident: %s\nSQL:%s",
                                   client, ValidClientIndex(client), error, SQLString);
                     }
-                    CloseHandle(ident_query);
+                    delete ident_query;
                 }
                 else
                 {
@@ -2521,7 +2521,7 @@ public SQL_SavePlayerRaceData(Handle owner, Handle hndl, const char[] error[], a
                 }
             }
         }
-        CloseHandle(data);
+        delete data;
     }
 
     TraceReturn();
@@ -2537,7 +2537,7 @@ public Action Retry_SavePlayerRaceData(Handle timer,Handle data)
     char key[CLASS_STRING_LENGTH];
     ReadPackString(data, key, sizeof(key));
 
-    CloseHandle(data);
+    delete data;
 
     // Retry to save the player's race data
     if (IsValidClient(client))
@@ -2706,7 +2706,7 @@ public SQL_SavePlayerTechData(Handle owner, Handle hndl, const char[] error[], a
                 g_DbHandle[DB_THREAD] = null;
             }
         }
-        CloseHandle(data);
+        delete data;
     }
 
     TraceReturn();
@@ -2830,7 +2830,7 @@ bool SavePlayerUpgrades(client, player_ident, race_ident, raceId,
                 }
             }
 
-            CloseHandle(dbReplaceUpgradeStmtHandle);
+            delete dbReplaceUpgradeStmtHandle;
         }
 
         SQL_UnlockDatabase(g_DbHandle[DB_MAIN]);
@@ -2966,7 +2966,7 @@ public SQL_SavePlayerUpgrades(Handle owner, Handle hndl, const char[] error[], a
             else if (g_SaveThreadsInFlight != null)
                 RemoveFromTrie(g_SaveThreadsInFlight, key);
         }
-        CloseHandle(data);
+        delete data;
     }
 
     TraceReturn();
@@ -2984,7 +2984,7 @@ public Action Retry_SavePlayerUpgradeData(Handle timer,Handle data)
     char key[CLASS_STRING_LENGTH];
     ReadPackString(data, key, sizeof(key));
 
-    CloseHandle(data);
+    delete data;
 
     if (raceId > 0)
     {
@@ -3085,7 +3085,7 @@ public SQL_DisablePlayer(Handle owner, Handle hndl, const char[] error[], any da
     char steamid[ID_STRING_LENGTH];
     ReadPackString(data, steamid, sizeof(steamid));
 
-    CloseHandle(data);
+    delete data;
 
     if (hndl == null || error[0] != '\0')
     {
@@ -3185,7 +3185,7 @@ public SQL_EnablePlayer(Handle owner, Handle hndl, const char[] error[], any dat
     char steamid[ID_STRING_LENGTH];
     ReadPackString(data, steamid, sizeof(steamid));
 
-    CloseHandle(data);
+    delete data;
 
     if (hndl == null || error[0] != '\0')
     {
@@ -3287,7 +3287,7 @@ public SQL_DeletePlayer(Handle owner, Handle hndl, const char[] error[], any dat
     char steamid[ID_STRING_LENGTH];
     ReadPackString(data, steamid, sizeof(steamid));
 
-    CloseHandle(data);
+    delete data;
 
     if (hndl == null || error[0] != '\0')
     {

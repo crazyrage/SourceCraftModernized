@@ -271,7 +271,7 @@ CreateCooldown(client, race, upgrade, float cooldown, const char[] name,
                 }
                 else
                 {
-                    CloseHandle(oldPack);
+                    delete oldPack;
 
                     TraceCat("Array", "CloseDataPack Cooldown[%d,%d,%d]=0x%08x; pack=0x%08x", \
                              client, race, upgrade, oldTimerHandle, oldPack);
@@ -474,7 +474,7 @@ CooldownEvent(client, CooldownType:resetBits)
                     }
                     else
                     {
-                        CloseHandle(pack);
+                        delete pack;
 
                         TraceCat("Array", "CloseDataPack Cooldown[%d,%d,%d]=0x%08x; pack=0x%08x", \
                                  client, race, upgrade, timerHandle, pack);
@@ -496,7 +496,7 @@ CooldownDisconnect(client)
     if (trie != null)
     {
         ClearTrie(trie);
-        CloseHandle(trie);
+        delete trie;
         m_PlayerCooldownTrie[client] = null;
 
         TraceCat("Array", "CloseTrie m_PlayerCooldownTrie[%d]=0x%08x", \
@@ -532,7 +532,7 @@ CooldownDisconnect(client)
             }
             else
             {
-                CloseHandle(pack);
+                delete pack;
 
                 TraceCat("Array", "CloseDataPack Cooldown[%d,%d,%d]=0x%08x; pack=0x%08x", \
                          client, race, upgrade, timerHandle, pack);
@@ -540,7 +540,7 @@ CooldownDisconnect(client)
         }
 
         ClearArray(array);
-        CloseHandle(array);
+        delete array;
         m_PlayerCooldownArray[client] = null;
 
         TraceCat("Array", "CloseArray m_PlayerCooldownArray[%d]=0x%08x", \
@@ -656,7 +656,7 @@ ResetCooldown(client, race, upgrade, bool:notify)
                 }
                 else
                 {
-                    CloseHandle(pack);
+                    delete pack;
 
                     TraceCat("Array", "CloseDataPack Cooldown[%d,%d,%d]=0x%08x; pack=0x%08x", \
                              client, race, upgrade, timerHandle, pack);

@@ -97,7 +97,7 @@ stock ReadConfigFile()
 	
 	if (!KvGotoFirstSubKey(kvProjectiles))
 	{
-		CloseHandle(kvProjectiles);
+		delete kvProjectiles;
 		return;
 	}
 	
@@ -138,7 +138,7 @@ stock ReadConfigFile()
 		
 	} while (KvGotoNextKey(kvProjectiles));
 	
-	CloseHandle(kvProjectiles);
+	delete kvProjectiles;
 }
 
 stock LoadModels()
@@ -208,7 +208,7 @@ stock ClearReplacementArrays()
 		Handle replacements;
 		GetTrieValue(g_Replacements, classname, replacements);
 		
-		CloseHandle(replacements);
+		delete replacements;
 	}
 	
 	ClearArray(g_ReplacementClasses);

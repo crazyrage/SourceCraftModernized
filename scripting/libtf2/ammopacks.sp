@@ -436,7 +436,7 @@ stock TF_SpawnAmmopack(client, char name[], bool cmd)
 
             Handle TraceEx = TR_TraceRayFilterEx(PlayerPosition, PlayerPosAway, MASK_SOLID, RayType_EndPoint, AmmopackTraceFilter);
             TR_GetEndPosition(PlayerPosition, TraceEx);
-            CloseHandle(TraceEx);
+            delete TraceEx;
         }
 
         float Direction[3];
@@ -447,7 +447,7 @@ stock TF_SpawnAmmopack(client, char name[], bool cmd)
 
         float AmmoPos[3];
         TR_GetEndPosition(AmmoPos, Trace);
-        CloseHandle(Trace);
+        delete Trace;
         AmmoPos[2] += 4;
 
         int Ammopack = CreateEntityByName(name);

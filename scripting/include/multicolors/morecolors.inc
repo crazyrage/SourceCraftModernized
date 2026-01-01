@@ -247,7 +247,7 @@ stock void MC_ReplaceColorCodes(char[] buffer, int author = 0, bool removeTags =
 	Handle regex = CompileRegex("{[#a-zA-Z0-9]+}");
 	for(int i = 0; i < 1000; i++) { // The RegEx extension is quite flaky, so we have to loop here :/. This loop is supposed to be infinite and broken by return, but conditions have been added to be safe.
 		if(MatchRegex(regex, buffer[cursor]) < 1) {
-			CloseHandle(regex);
+			delete regex;
 			strcopy(buffer, maxlen, output);
 			return;
 		}

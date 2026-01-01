@@ -442,7 +442,7 @@ stock bool WasResourceManagerAdded(const char[] name)
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_ResourceManager = 
+public SharedPlugin __pl_ResourceManager = 
 {
     name = "ResourceManager",
     file = "ResourceManager.smx",

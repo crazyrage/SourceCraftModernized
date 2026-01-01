@@ -99,7 +99,7 @@ public Admin_Selected(Handle menu,MenuAction:action,client,selection)
             Admin_Player(client,target);
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 Admin_Player(client,target)
@@ -174,7 +174,7 @@ public Admin_Player_Select(Handle menu,MenuAction:action,client,selection)
         AdminMenu(client,0);
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 Admin_Reset(client,target)
@@ -306,7 +306,7 @@ public Admin_XP_Select(Handle menu,MenuAction:action,client,selection)
             Admin_Return(menu,client);
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 Admin_GiveShopItem(client,target)
@@ -431,7 +431,7 @@ public Admin_Category_Selected(Handle menu,MenuAction:action,client,selection)
             Admin_Return(menu,client);
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 public Admin_Item_Selected(Handle menu,MenuAction:action,client,selection)
@@ -505,7 +505,7 @@ public Admin_Item_Selected(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 Admin_SetRace(client,target)
@@ -588,7 +588,7 @@ public Admin_Faction_Selected(Handle menu,MenuAction:action,client,selection)
             Admin_Return(menu,client);
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 public Admin_SetRace_Select(Handle menu,MenuAction:action,client,selection)
@@ -633,7 +633,7 @@ public Admin_SetRace_Select(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 AdminFactionMenu(client, target, start)
@@ -757,7 +757,7 @@ public Admin_Level_Select(Handle menu,MenuAction:action,client,selection)
             Admin_Return(menu,client);
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 Admin_Crystals(client,target)
@@ -858,7 +858,7 @@ public Admin_Crystals_Select(Handle menu,MenuAction:action,client,selection)
             Admin_Return(menu,client);
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 Admin_Vespene(client,target)
@@ -962,7 +962,7 @@ public Admin_Vespene_Select(Handle menu,MenuAction:action,client,selection)
             Admin_Return(menu,client);
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 Admin_Energy(client,target)
@@ -1065,7 +1065,7 @@ public Admin_Energy_Select(Handle menu,MenuAction:action,client,selection)
             Admin_Return(menu,client);
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 Admin_Disable(client,target)
@@ -1156,7 +1156,7 @@ public Admin_Disable_Confirm(Handle menu,MenuAction:action,client,selection)
             Admin_Return(menu,client);
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 Admin_Delete(client,target)
@@ -1226,5 +1226,5 @@ public Admin_Delete_Confirm(Handle menu,MenuAction:action,client,selection)
             Admin_Return(menu,client);
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }

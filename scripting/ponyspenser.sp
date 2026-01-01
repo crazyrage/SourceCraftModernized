@@ -157,7 +157,7 @@ public OnClientPutInServer(int client)
 	Handle kv = CreateKeyValues("ponyspenser_list");
 	FileToKeyValues(kv, path);
 	bPony[client]=view_as<bool>(KvGetNum(kv,s,0));
-	CloseHandle(kv);
+	delete kv;
 }
 
 public Action event_player_spawn(Handle event, const char[] name, bool dontBroadcast)
@@ -200,7 +200,7 @@ public Action SelectPony(int client, int Args)
 	else
 		KvSetNum(kv,s,0);
 	KeyValuesToFile(kv, path);
-	CloseHandle(kv);	
+	delete kv;	
 	return Plugin_Handled;	
 }
 

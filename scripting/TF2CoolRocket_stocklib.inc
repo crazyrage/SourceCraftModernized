@@ -691,7 +691,7 @@ stock SendTopLeftText(client, r, g, b, a, level, time, const char[] text[], any:
 		
 	}
 	
-	CloseHandle(kv);
+	delete kv;
 	
 }
 
@@ -784,7 +784,7 @@ stock bool EndRound(float time = 5.0, reason = ROUNDEND_ROUND_DRAW){
 			virtualroundend = EndPrepSDKCall();
 			
 			//goodbye, configfile
-			CloseHandle(conffile);
+			delete conffile;
 			
 		}
 		
@@ -836,7 +836,7 @@ stock bool getClientAimPosition(client, float maxtracedistance, float resultvecp
 			resultvecpos[1] = endpos[1];
 			resultvecpos[2] = endpos[2];
 			
-			CloseHandle(traceresulthandle);
+			delete traceresulthandle;
 			return true;
 			
 		}else{
@@ -847,14 +847,14 @@ stock bool getClientAimPosition(client, float maxtracedistance, float resultvecp
 			
 			AddVectors(cleyepos, eyeanglevector, resultvecpos);
 			
-			CloseHandle(traceresulthandle);
+			delete traceresulthandle;
 			return true;
 			
 		}
 		
 	}
 	
-	CloseHandle(traceresulthandle);
+	delete traceresulthandle;
 	return false;
 	
 }
@@ -877,13 +877,13 @@ stock GetClientAimEntity(client, float & distancetoentity){
 		distancetoentity = GetVectorDistance(cleyepos, endpos);
 		new entindextoreturn = TR_GetEntityIndex(traceresulthandle); 
 		
-		CloseHandle(traceresulthandle);
+		delete traceresulthandle;
 		
 		return entindextoreturn;
 		
 	}
 	
-	CloseHandle(traceresulthandle);
+	delete traceresulthandle;
 	
 	return -1;
 
@@ -915,13 +915,13 @@ stock GetClientAimEntity3(client, float & distancetoentity, float endpos[3]){
 		distancetoentity = GetVectorDistance(cleyepos, endpos);
 		new entindextoreturn = TR_GetEntityIndex(traceresulthandle); 
 		
-		CloseHandle(traceresulthandle);
+		delete traceresulthandle;
 		
 		return entindextoreturn;
 		
 	}
 	
-	CloseHandle(traceresulthandle);
+	delete traceresulthandle;
 	
 	return -1;
 
@@ -939,7 +939,7 @@ stock setTakeDamage(entity, type){
 }
 
 //트레이스레이필터
-public bool:tracerayfilterdefault(entity, mask, any data){
+public bool tracerayfilterdefault(entity, mask, any data){
 	
 	if(entity != data){
 		
@@ -953,7 +953,7 @@ public bool:tracerayfilterdefault(entity, mask, any data){
 	
 }
 
-public bool:tracerayfilteronlyone(entity, mask, any data){
+public bool tracerayfilteronlyone(entity, mask, any data){
 	
 	if(entity == data && mask & CONTENTS_HITBOX){
 		
@@ -968,7 +968,7 @@ public bool:tracerayfilteronlyone(entity, mask, any data){
 }
 
 //트레이스레이필터로켓
-public bool:tracerayfilterrocket(entity, mask, any data){
+public bool tracerayfilterrocket(entity, mask, any data){
 	
 	//로켓을 쏜 사람이 아니고, 그 사람의 물건도 아닐때만 필터에 감지한다
 	int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");//닿은 물건의 주인을 구한다
@@ -985,7 +985,7 @@ public bool:tracerayfilterrocket(entity, mask, any data){
 }
 
 //트레이스레이필터, 플레이어는 감지하지 않는다
-public bool:tracerayfilternoplayer(entity, mask, any data){
+public bool tracerayfilternoplayer(entity, mask, any data){
 	
 	if(!isClientConnectedIngameAlive(entity)){
 		
@@ -1000,7 +1000,7 @@ public bool:tracerayfilternoplayer(entity, mask, any data){
 }
 
 //0번 엔티티만 감지한다
-public bool:tracerayfilteronlyworld(entity, mask, any data){
+public bool tracerayfilteronlyworld(entity, mask, any data){
 	
 	if(entity == 0){
 		

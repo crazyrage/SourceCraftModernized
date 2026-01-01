@@ -234,7 +234,7 @@ public OnConfigsExecuted()
 public Handle InfectionChange(Handle convar, const char[] oldValue, const char[] newValue)
 {
     if (InfectionTimer != null)
-        CloseHandle(InfectionTimer);
+        delete InfectionTimer;
 
     InfectionTimer = CreateTimer(StringToFloat(newValue), Handle Infection, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 }
@@ -444,7 +444,7 @@ public OnGameFrame()
 public Handle MediChange(Handle convar, const char[] oldValue, const char[] newValue)
 {
     if (MediTimer != null)
-        CloseHandle(MediTimer);
+        delete MediTimer;
 
     float val = StringToFloat(newValue);
     if(val > 0.0)
@@ -567,7 +567,7 @@ public MedicInfect(to, from, bool friendlyInfect, bool irradiate)
 public Handle SpreadChange(Handle convar, const char[] oldValue, const char[] newValue)
 {
     if (SpreadTimer != null)
-        CloseHandle(SpreadTimer);
+        delete SpreadTimer;
 
     float val = StringToFloat(newValue);
     if(val > 0.0)

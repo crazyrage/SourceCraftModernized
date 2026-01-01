@@ -987,7 +987,7 @@ public Action KillGas(Handle timer, Handle entitypack)
         AcceptEntityInput(filter, "Kill");
     */
 
-    CloseHandle(entitypack);
+    delete entitypack;
 }
 
 void TheNipple(int client, int level)

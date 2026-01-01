@@ -96,7 +96,7 @@ forward Action OnTripmineExplode(client);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_tripmines = 
+public SharedPlugin __pl_tripmines = 
 {
 	name = "tripmines",
 	file = "tripmines.smx",

@@ -86,7 +86,7 @@ forward Action OnMedicHealed(client, patient, amount);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_medic_class = 
+public SharedPlugin __pl_medic_class = 
 {
 	name = "medic_class",
 	file = "sm_dod_medic_class.smx",

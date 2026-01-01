@@ -80,7 +80,7 @@ forward Action OnPlayerFlamed(attacker,victim);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_sm_flamethrower = 
+public SharedPlugin __pl_sm_flamethrower = 
 {
 	name = "sm_flame",
 	file = "sm_flamethrower.smx",

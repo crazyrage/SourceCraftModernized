@@ -302,7 +302,7 @@ forward EGCResults SteamWorks_GCRetrieveMessage(punMsgType, const char[] pubDest
 
 native EGCResults SteamWorks_SendMessageToGC(unMsgType, const char[] pubData, cubData);
 
-public Extension:__ext_SteamWorks = 
+public Extension __ext_SteamWorks = 
 {
 	name = "SteamWorks",
 	file = "SteamWorks.ext",

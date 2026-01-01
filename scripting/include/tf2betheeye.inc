@@ -28,7 +28,7 @@ forward TF2BTE_OnEyeStunned( iEye, iAttacker );
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-public SharedPlugin:__pl_tf2bte = 
+public SharedPlugin __pl_tf2bte = 
 {
 	name = "tf2betheeye",
 	file = "tf2betheeye.smx",

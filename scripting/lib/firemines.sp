@@ -745,7 +745,7 @@ int TF_SpawnFiremine(int client, DropType cmd)
             Handle TraceEx = TR_TraceRayFilterEx(PlayerPosition, PlayerPosAway, MASK_SOLID,
                                                  RayType_EndPoint, FiremineTraceFilter);
             TR_GetEndPosition(PlayerPosition, TraceEx);
-            CloseHandle(TraceEx);
+            delete TraceEx;
         }
 
         float Direction[3];
@@ -757,7 +757,7 @@ int TF_SpawnFiremine(int client, DropType cmd)
 
         float MinePos[3];
         TR_GetEndPosition(MinePos, Trace);
-        CloseHandle(Trace);
+        delete Trace;
         MinePos[2] += 1;
 
         //int fireMine = CreateEntityByName("prop_physics_multiplayer");

@@ -40,7 +40,7 @@ native ControlMonoculus(bool plugin_only=true);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_MonoSpawn = 
+public SharedPlugin __pl_MonoSpawn = 
 {
 	name = "MonoSpawn",
 	file = "MonoSpawn.smx",

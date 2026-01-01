@@ -91,7 +91,7 @@ public Action Command_Blink(Client, Arguments)
 	}
 
 	//End:
-	CloseHandle(TraceRay);
+	delete TraceRay;
 
 	//Return:
 	return Plugin_Handled;

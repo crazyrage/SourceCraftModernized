@@ -1187,7 +1187,7 @@ public Action OnPackageTouched(pkg, client)
         {
             PrepareAndEmitSoundToClient(client, sndPickup, .channel=SNDCHAN_WEAPON);
 
-            CloseHandle(m_PackageTimer[pkg]);
+            delete m_PackageTimer[pkg];
             m_PackageTimer[pkg] = null;
 
             int origin = GetClientOfUserId(m_PackageVictim[pkg]);

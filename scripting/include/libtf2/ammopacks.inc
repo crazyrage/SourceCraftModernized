@@ -39,7 +39,7 @@ native bool DropAmmopack(client,char ge=-1);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_ammopacks = 
+public SharedPlugin __pl_ammopacks = 
 {
 	name = "ammopacks",
 	file = "ammopacks.smx",

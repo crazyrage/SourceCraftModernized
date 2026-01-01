@@ -55,7 +55,7 @@ forward OnWeaponFired(int index);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_RateOfFire = 
+public SharedPlugin __pl_RateOfFire = 
 {
 	name = "RateOfFire",
 	file = "RateOfFire.smx",

@@ -283,7 +283,7 @@ public Spawn_Selected(Handle menu,MenuAction action,int client,int selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 stock SpawnIt(int client, TFExtObjectType type, int raceId, int upgradeId, int level,

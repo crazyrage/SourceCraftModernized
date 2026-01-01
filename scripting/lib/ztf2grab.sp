@@ -266,7 +266,7 @@ public OnMapStart()
 
 public OnMapEnd()
 {
-    CloseHandle(gTimer);
+    delete gTimer;
 }
 
 // When a new client is put in the server we reset their status

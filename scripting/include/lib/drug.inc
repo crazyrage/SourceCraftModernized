@@ -43,7 +43,7 @@ native PerformBlind(target, amount);
  * Do not edit below this line!
  */
 
-public SharedPlugin:__pl_drug = 
+public SharedPlugin __pl_drug = 
 {
 	name = "drug",
 	file = "drug.smx",

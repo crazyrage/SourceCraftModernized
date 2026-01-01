@@ -165,7 +165,7 @@ forward OnObjectStop(ent);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_ztf2grab = 
+public SharedPlugin __pl_ztf2grab = 
 {
 	name = "ztf2grab",
 	file = "ztf2grab.smx",

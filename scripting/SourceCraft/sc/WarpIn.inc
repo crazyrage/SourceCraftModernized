@@ -251,5 +251,5 @@ public Amplifier_Selected(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }

@@ -55,7 +55,7 @@ public View_Selected(Handle menu,MenuAction action,client,selection)
             PlayerInfoMenu(client,gPlayerInfoMenuMode[client]);
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 public PlayerInfo(client,target,MenuMode:mode)
@@ -252,7 +252,7 @@ public PlayerInfo_Select(Handle menu,MenuAction action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 UpgradesInfo(client,target,race,MenuMode:mode)
@@ -424,7 +424,7 @@ public UpgradesInfo_Selected(Handle menu,MenuAction action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 stock AddMenuLines(Handle menu, char[] item)
@@ -646,7 +646,7 @@ public UpgradesInfo_Back(Handle menu,MenuAction action,client,selection)
     }
     else if (action == MenuAction_End)
     {
-        CloseHandle(menu);
+        delete menu;
     }
 
     TraceReturn();

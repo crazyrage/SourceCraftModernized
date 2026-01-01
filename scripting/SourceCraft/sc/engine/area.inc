@@ -174,7 +174,7 @@ AreaEvent(client, AreaType:resetBits)
                     }
                     else
                     {
-                        CloseHandle(pack);
+                        delete pack;
 
                         TraceCat("Array", "CloseDataPack Area[%d,%d,%d]=0x%08x; pack=0x%08x", \
                                  client, race, upgrade, timerHandle, pack);
@@ -196,7 +196,7 @@ AreaDisconnect(client)
     if (trie != null)
     {
         ClearTrie(trie);
-        CloseHandle(trie);
+        delete trie;
         m_PlayerAreaTrie[client] = null;
 
         TraceCat("Array", "CloseTrie m_PlayerAreaTrie[%d]=0x%08x", \
@@ -232,7 +232,7 @@ AreaDisconnect(client)
             }
             else
             {
-                CloseHandle(pack);
+                delete pack;
 
                 TraceCat("Array", "CloseDataPack Area[%d,%d,%d]=0x%08x; pack=0x%08x", \
                          client, race, upgrade, timerHandle, pack);
@@ -240,7 +240,7 @@ AreaDisconnect(client)
         }
 
         ClearArray(array);
-        CloseHandle(array);
+        delete array;
         m_PlayerAreaArray[client] = null;
 
         TraceCat("Array", "CloseArray m_PlayerAreaArray[%d]=0x%08x", \
@@ -347,7 +347,7 @@ ResetArea(client, race, upgrade, bool:notify)
                 }
                 else
                 {
-                    CloseHandle(pack);
+                    delete pack;
 
                     TraceCat("Array", "CloseDataPack Area[%d,%d,%d]=0x%08x; pack=0x%08x", \
                              client, race, upgrade, timerHandle, pack);

@@ -28,7 +28,7 @@ bool AssignAttribute(client, const char[] attrName, Handle data)
     Handle value = null;
     if (GetTrieValue(attrTrie[client], attrName, value) && value != null)
     {
-        CloseHandle(value);
+        delete value;
 
         Handle attrData = attrDataArray[client];
         if (attrData != null)
@@ -50,7 +50,7 @@ RemoveAttribute(client, const char[] attrName)
         Handle value = null;
         if (GetTrieValue(attrTrie[client], attrName, value) && value != null)
         {
-            CloseHandle(value);
+            delete value;
 
             Handle attrData = attrDataArray[client];
             if (attrData != null)
@@ -77,7 +77,7 @@ RemoveAllAttributes(client)
         {
             Handle data = Handle GetArrayCell(attrData, i);
             if (data != null)
-                CloseHandle(data);
+                delete data;
         }
         ClearArray(attrData);
     }
@@ -232,7 +232,7 @@ public NWar3_UseGenericSkill(Handle plugin,numParams)
                            GenericSkill[i][raceskilldatahandle][j] !=genericSkillData)
                         {
 							//DP("ERROR POSSIBLE HANDLE LEAK, NEW GENERIC SKILL DATA HANDLE PASSED, CLOSING OLD GENERIC DATA HANDLE");
-							CloseHandle(GenericSkill[i][raceskilldatahandle][j]);
+							delete GenericSkill[i][raceskilldatahandle][j];
 							GenericSkill[i][raceskilldatahandle][j]=genericSkillData;
 						}	
 					}

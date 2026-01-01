@@ -1412,11 +1412,11 @@ ClearPlayer(client)
                 #endif
 
                 ClearArray(propInfo);
-                CloseHandle(propInfo);
+                delete propInfo;
             }
         }
         ClearArray(propData);
-        CloseHandle(propData);
+        delete propData;
         SetPropData(client, null);
 
         TraceCat("Array", "CloseArray playerArray[%d,INFO_PROPERTIES]=0x%08x", \
@@ -1427,7 +1427,7 @@ ClearPlayer(client)
     if (shopitems != null)
     {
         ClearArray(shopitems);
-        CloseHandle(shopitems);
+        delete shopitems;
         SetShopitems(client, null);
 
         TraceCat("Array", "CloseArray playerArray[%d,INFO_SHOPITEMS]=0x%08x", \
@@ -1444,7 +1444,7 @@ ClearPlayer(client)
             if (raceInfo != null)
             {
                 ClearArray(raceInfo);
-                CloseHandle(raceInfo);
+                delete raceInfo;
 
                 TraceCat("Array", "CloseArray playerRaceInfo[%d,%d]=0x%08x", \
                          client, race, raceInfo);
@@ -1452,7 +1452,7 @@ ClearPlayer(client)
         }
 
         ClearArray(raceData);
-        CloseHandle(raceData);
+        delete raceData;
         SetRaceData(client, null);
 
         TraceCat("Array", "CloseArray playerArray[%d,INFO_RACEDATA]=0x%08x", \
@@ -1469,7 +1469,7 @@ ClearPlayer(client)
             if (techInfo != null)
             {
                 ClearArray(techInfo);
-                CloseHandle(techInfo);
+                delete techInfo;
 
                 TraceCat("Array", "CloseArray playerTechInfo[%d,%d]=0x%08x", \
                          client, techId, techInfo);
@@ -1477,7 +1477,7 @@ ClearPlayer(client)
         }
 
         ClearArray(techData);
-        CloseHandle(techData);
+        delete techData;
         SetTechData(client, null);
 
         TraceCat("Array", "CloseArray playerArray[%d,INFO_TECHDATA]=0x%08x", \

@@ -130,7 +130,7 @@ public bool LoadConfigFile()
         loaded = true;
     }
     
-    CloseHandle(traceConfigHandle);
+    delete traceConfigHandle;
     return loaded;
 }
 

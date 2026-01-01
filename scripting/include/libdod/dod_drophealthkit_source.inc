@@ -32,7 +32,7 @@ native SetHealthkit(client,enable=3,rule=0,count=1);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_healthkit = 
+public SharedPlugin __pl_healthkit = 
 {
 	name = "healthkit",
 	file = "dod_drophealthkit_source.smx",

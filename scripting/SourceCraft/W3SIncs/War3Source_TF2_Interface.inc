@@ -108,7 +108,7 @@ stock Handle War3_NearBuilding(client,float distance=150.0)
         WritePackString(hEnts,"obj_teleporter_entrance");
         WritePackString(hEnts,"obj_teleporter_exit");
         Handle result=War3_NearEntsByName(client,hEnts,4,distance);
-        CloseHandle(hEnts);
+        delete hEnts;
         return result;
     }
     return null;

@@ -131,10 +131,10 @@ public OnPluginStart()
 }
 
 public OnPluginEnd(){
-	CloseHandle(g_version);
-	CloseHandle(g_enabled);
-	CloseHandle(g_info);
-	CloseHandle(g_init);
+	delete g_version;
+	delete g_enabled;
+	delete g_info;
+	delete g_init;
 }
 
 public OnClientPutInServer(client){

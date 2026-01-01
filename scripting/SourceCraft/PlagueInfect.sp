@@ -62,7 +62,7 @@ public Plugin myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public APLRes:AskPluginLoad2(Handle myself, bool late, char error[], err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char error[], err_max)
 {
     // Register Natives
     CreateNative("PlagueInfect",Native_PlagueInfect);

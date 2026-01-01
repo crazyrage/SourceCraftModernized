@@ -291,7 +291,7 @@ public OnMapStart()
 
 public OnMapEnd()
 {
-    CloseHandle(gTimer);
+    delete gTimer;
 }
 
 public RemoteCvarChange(Handle convar, const char[] oldValue, const char[] newValue)
@@ -1084,7 +1084,7 @@ public BuildSelected(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 BuildSelectedObject(client, TFExtObjectType:type, iLevel=1, bool mini=false,
@@ -1564,7 +1564,7 @@ public ObjectSelected(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 bool control(client, objectid, TFExtObjectType:type)

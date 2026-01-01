@@ -156,7 +156,7 @@ forward Action OnSidewinderSeek(client, target, projectile, bool critical);
 /**
  * Do not edit below this line!
  */
-public SharedPlugin:__pl_sidewinder = 
+public SharedPlugin __pl_sidewinder = 
 {
 	name = "sidewinder",
 	file = "sidewinder.smx",

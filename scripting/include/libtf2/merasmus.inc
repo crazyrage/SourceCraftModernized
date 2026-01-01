@@ -30,7 +30,7 @@ native ControlMerasmus(bool plugin_only=true);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_merasmus = 
+public SharedPlugin __pl_merasmus = 
 {
 	name = "merasmus",
 	file = "merasmus.smx",

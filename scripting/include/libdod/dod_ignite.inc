@@ -25,7 +25,7 @@ native DOD_IgniteEntity(entity, float time, bool npc=false, float size=0.0, bool
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_dod_ignite = 
+public SharedPlugin __pl_dod_ignite = 
 {
 	name = "dod_ignite",
 	file = "dod_ignite.smx",

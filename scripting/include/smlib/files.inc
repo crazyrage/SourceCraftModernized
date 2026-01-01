@@ -177,7 +177,7 @@ stock File_AddToDownloadsTable(const char[] path, bool recursive=true, const cha
 			File_AddToDownloadsTable(dirEntry, recursive, ignoreExts, size);
 		}
 
-		CloseHandle(__dir);
+		delete __dir;
 	}
 	else if (FindCharInString(path, '*', true)) {
 
@@ -207,7 +207,7 @@ stock File_AddToDownloadsTable(const char[] path, bool recursive=true, const cha
 				}
 			}
 
-			CloseHandle(__dir);
+			delete __dir;
 		}
 	}
 
@@ -260,7 +260,7 @@ stock File_ReadDownloadList(const char[] path)
 		File_AddToDownloadsTable(buffer);
 	}
 
-	CloseHandle(file);
+	delete file;
 }
 
 /*
@@ -316,7 +316,7 @@ stock File_ToString(const char[] path, char[] buffer, size)
 	}
 
 	int num_bytes_written = ReadFileString(file, buffer, size);
-	CloseHandle(file);
+	delete file;
 
 	return num_bytes_written;
 }
@@ -337,7 +337,7 @@ stock bool File_StringToFile(const char[] path, char[] str)
 	}
 
 	bool success = WriteFileString(file, str, false);
-	CloseHandle(file);
+	delete file;
 
 	return success;
 }
@@ -361,7 +361,7 @@ stock bool File_Copy(const char[] source, const char[] destination)
 	Handle file_destination = OpenFile(destination, "wb");
 
 	if (file_destination == null) {
-		CloseHandle(file_source);
+		delete file_source;
 		return false;
 	}
 
@@ -373,8 +373,8 @@ stock bool File_Copy(const char[] source, const char[] destination)
 		WriteFile(file_destination, buffer, cache, 1);
 	}
 
-	CloseHandle(file_source);
-	CloseHandle(file_destination);
+	delete file_source;
+	delete file_destination;
 
 	return true;
 }
@@ -440,13 +440,13 @@ static stock bool Sub_File_CopyRecursive(const char[] path, const char[] destina
 			else if (type == FileType_Directory) {
 
 				if (!File_CopyRecursive(source_buffer, destination_buffer, stop_on_error, dirMode) && stop_on_error) {
-					CloseHandle(directory);
+					delete directory;
 					return false;
 				}
 			}
 		}
 
-		CloseHandle(directory);
+		delete directory;
 	}
 	else if (fileType == FileType_Unknown) {
 		return false;

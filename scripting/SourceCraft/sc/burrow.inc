@@ -99,7 +99,7 @@ native BurrowStructure(client, float amount, flags=BURROW_OWN_STRUCTURES);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_Burrow = 
+public SharedPlugin __pl_Burrow = 
 {
 	name = "Burrow",
 	file = "Burrow.smx",

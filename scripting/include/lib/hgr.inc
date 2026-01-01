@@ -357,7 +357,7 @@ native bool HGR_StopRope(client);
  */
 native bool HGR_StopPush(client);
 
-public SharedPlugin:__pl_hookgrabrope =
+public SharedPlugin __pl_hookgrabrope =
 {
     name = "hookgrabrope",
     file = "hookgrabrope.smx",

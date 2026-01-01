@@ -55,7 +55,7 @@ forward Action OnHorsemannScare(client,target);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_behorsemann = 
+public SharedPlugin __pl_behorsemann = 
 {
 	name = "behorsemann",
 	file = "behorsemann.smx",

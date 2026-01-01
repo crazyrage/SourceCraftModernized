@@ -334,7 +334,7 @@ KillHealthKitTimer(healthkit)
     Handle timer = HealthKitDropTimer[healthkit];
     if (timer != null)
     {
-        CloseHandle(HealthKitDropTimer[healthkit]);
+        delete HealthKitDropTimer[healthkit];
         HealthKitDropTimer[healthkit] = null;
     }
 }

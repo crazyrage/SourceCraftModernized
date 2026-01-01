@@ -119,7 +119,7 @@ native GetTraceMethod(char[] name, maxlength);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_trace = 
+public SharedPlugin __pl_trace = 
 {
 	name = "trace",
 	file = "trace.smx",

@@ -42,7 +42,7 @@ native bool DropMedipack(client, char ge=-1, TFHoliday:type=TFHoliday:0);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_medipacks = 
+public SharedPlugin __pl_medipacks = 
 {
 	name = "medipacks",
 	file = "medipacks.smx",

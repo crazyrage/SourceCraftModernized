@@ -223,7 +223,7 @@ public Action KillPlague(Handle timer, Handle entitypack)
     if (cloud > 0 && IsValidEntity(cloud))
         AcceptEntityInput(cloud, "Kill");
 
-    CloseHandle(entitypack);
+    delete entitypack;
 }
 
 stock ResetPlague(client)

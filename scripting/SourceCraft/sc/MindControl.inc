@@ -62,7 +62,7 @@ native ResetMindControlledObjects(client, bool remove);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_MindControl = 
+public SharedPlugin __pl_MindControl = 
 {
 	name = "MindControl",
 	file = "MindControl.smx",

@@ -167,7 +167,7 @@ public MenuHandlerJetPack(Handle menu, MenuAction action, param1, param2)
     } 
     else if(action == MenuAction_End)
     {
-        CloseHandle(menu);
+        delete menu;
     }
 }
 
@@ -402,7 +402,7 @@ public OnGameFrame()
                                                     else
                                                         fVelocity[2] *= (GetConVarFloat(g_JetPackFall));
 
-                                                    CloseHandle(TraceEx);
+                                                    delete TraceEx;
                                                 }
 
                                                 /* This seems to have no purpose ?
@@ -961,7 +961,7 @@ stock bool CanSeeTarget( any origin, float pos[3], any target, float targetPos[3
                 GetEntPropVector( hitEnt, Prop_Data, "m_vecAbsOrigin", pos );
                 if(GetVectorDistanceMeter( pos, targetPos ) > 1.0)
                 {
-					CloseHandle(TraceEx);
+					delete TraceEx;
                     g_FilteredEntity = hitEnt;
                     TraceEx = TR_TraceRayFilterEx( hitPos, targetPos, MASK_PLAYERSOLID, RayType_EndPoint, TraceFilter );
                     hitEnt = TR_GetEntityIndex(TraceEx);
@@ -970,7 +970,7 @@ stock bool CanSeeTarget( any origin, float pos[3], any target, float targetPos[3
                 else
                     pos = targetPos;
             }
-            CloseHandle(TraceEx);
+            delete TraceEx;
         }
         if( throughBuild )
         {
@@ -986,7 +986,7 @@ stock bool CanSeeTarget( any origin, float pos[3], any target, float targetPos[3
                 GetEntPropVector( hitEnt, Prop_Data, "m_vecAbsOrigin", pos );
                 if(GetVectorDistanceMeter( pos, targetPos ) > 1.0)
                 {
-					CloseHandle(TraceEx);
+					delete TraceEx;
                     g_FilteredEntity = hitEnt;
                     (TraceEx) = TR_TraceRayFilterEx( hitPos, targetPos, MASK_PLAYERSOLID, RayType_EndPoint, TraceFilter );
                     hitEnt = TR_GetEntityIndex(TraceEx);
@@ -998,7 +998,7 @@ stock bool CanSeeTarget( any origin, float pos[3], any target, float targetPos[3
         }		
     }
 
-	CloseHandle(TraceEx);
+	delete TraceEx;
 
     if( GetVectorDistanceMeter( hitPos, targetPos ) <= 1.0 )
     {

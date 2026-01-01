@@ -48,7 +48,7 @@ public MenuHandler_CrazyDrug(Handle menu, MenuAction action, param1, param2)
 {
 	if (action == MenuAction_End)
 	{
-		CloseHandle(menu);
+		delete menu;
 	}
 	else if (action == MenuAction_Cancel)
 	{

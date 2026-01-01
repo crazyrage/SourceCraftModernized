@@ -670,7 +670,7 @@ public Native_SetUpgradeCost(Handle plugin,numParams)
                     if (GetRaceConfigIsLoaded(raceHandle) != ConfigWasLoaded)
                         SaveConfig(raceConfig, short);
 
-                    CloseHandle(raceConfig);
+                    delete raceConfig;
                     SetRaceConfigHandle(raceHandle,null);
                     SetRaceConfigIsLoaded(raceHandle,ConfigNotLoaded);
                 }
@@ -756,7 +756,7 @@ public Native_SetUpgradeCooldown(Handle plugin,numParams)
                     if (GetRaceConfigIsLoaded(raceHandle) != ConfigWasLoaded)
                         SaveConfig(raceConfig, short);
 
-                    CloseHandle(raceConfig);
+                    delete raceConfig;
                     SetRaceConfigHandle(raceHandle,null);
                     SetRaceConfigIsLoaded(raceHandle,ConfigNotLoaded);
                 }
@@ -1354,7 +1354,7 @@ public Native_SetUpgradeEnergy(Handle plugin,numParams)
                     if (GetRaceConfigIsLoaded(raceHandle) != ConfigWasLoaded)
                         SaveConfig(raceConfig, short);
 
-                    CloseHandle(raceConfig);
+                    delete raceConfig;
                     SetRaceConfigHandle(raceHandle,null);
                     SetRaceConfigIsLoaded(raceHandle,ConfigNotLoaded);
                 }
@@ -1455,7 +1455,7 @@ public N_SetUpgradeRecurringEnergy(Handle plugin,numParams)
                     if (GetRaceConfigIsLoaded(raceHandle) != ConfigWasLoaded)
                         SaveConfig(raceConfig, short);
 
-                    CloseHandle(raceConfig);
+                    delete raceConfig;
                     SetRaceConfigHandle(raceHandle,null);
                     SetRaceConfigIsLoaded(raceHandle,ConfigNotLoaded);
                 }
@@ -1556,7 +1556,7 @@ public Native_SetUpgradeVespene(Handle plugin,numParams)
                     if (GetRaceConfigIsLoaded(raceHandle) != ConfigWasLoaded)
                         SaveConfig(raceConfig, short);
 
-                    CloseHandle(raceConfig);
+                    delete raceConfig;
                     SetRaceConfigHandle(raceHandle,null);
                     SetRaceConfigIsLoaded(raceHandle,ConfigNotLoaded);
                 }
@@ -1657,7 +1657,7 @@ public Native_SetUpgradeCrystals(Handle plugin,numParams)
                     if (GetRaceConfigIsLoaded(raceHandle) != ConfigWasLoaded)
                         SaveConfig(raceConfig, short);
 
-                    CloseHandle(raceConfig);
+                    delete raceConfig;
                     SetRaceConfigHandle(raceHandle,null);
                     SetRaceConfigIsLoaded(raceHandle,ConfigNotLoaded);
                 }
@@ -1758,7 +1758,7 @@ public Native_SetUpgradeRequiredLevel(Handle plugin,numParams)
                     if (GetRaceConfigIsLoaded(raceHandle) != ConfigWasLoaded)
                         SaveConfig(raceConfig, short);
 
-                    CloseHandle(raceConfig);
+                    delete raceConfig;
                     SetRaceConfigHandle(raceHandle,null);
                     SetRaceConfigIsLoaded(raceHandle,ConfigNotLoaded);
                 }

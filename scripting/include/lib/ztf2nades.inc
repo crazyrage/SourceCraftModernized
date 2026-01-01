@@ -193,7 +193,7 @@ forward Action OnNadeExplode(victim, attacker, &damage, NadeType:type, const flo
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_ztf2nades = 
+public SharedPlugin __pl_ztf2nades = 
 {
 	name = "ztf2nades",
 	file = "ztf2nades.smx",

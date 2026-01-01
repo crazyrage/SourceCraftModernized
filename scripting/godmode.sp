@@ -73,7 +73,7 @@ public Action ApplyGodMode(Handle timer, any Packhead)
 	ResetPack(Packhead);
 	int client = ReadPackCell(Packhead);
 	int saved = ReadPackCell(Packhead);
-	//CloseHandle(Packhead);
+	//delete Packhead;
 	
 	if (client > 0 && client <= MaxClients && IsClientConnected(client) && IsClientInGame(client) && IsPlayerAlive(client))
 	{

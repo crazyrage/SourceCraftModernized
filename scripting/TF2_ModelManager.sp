@@ -410,9 +410,9 @@ public OnMapStart()
 public OnMapEnd()
 {
 	// Destroy menus
-	if (g_hMenuMain   != null) { CloseHandle(g_hMenuMain);   g_hMenuMain   = null; }
-//	if (g_hMenuEquip  != null) { CloseHandle(g_hMenuEquip);  g_hMenuEquip  = null; }
-//	if (g_hMenuRemove != null) { CloseHandle(g_hMenuRemove); g_hMenuRemove = null; }
+	if (g_hMenuMain   != null) { delete g_hMenuMain;   g_hMenuMain   = null; }
+//	if (g_hMenuEquip  != null) { delete g_hMenuEquip;  g_hMenuEquip  = null; }
+//	if (g_hMenuRemove != null) { delete g_hMenuRemove; g_hMenuRemove = null; }
 }
 
 // ------------------------------------------------------------------------
@@ -745,7 +745,7 @@ Item_ParseList()
 				}
 
 				// Close file
-				CloseHandle(hStream);
+				delete hStream;
 			}
 			PrecacheModel(g_strItemModel[g_iItemCount], true);
 		}
@@ -755,7 +755,7 @@ Item_ParseList()
 	}
 	while (KvGotoNextKey(kvItemList));
 
-	CloseHandle(kvItemList);
+	delete kvItemList;
 	#if defined DEBUG
 	LogMessage("}");
 	#endif
@@ -1210,7 +1210,7 @@ public Menu_Manager(Handle hMenu, MenuAction maState, iParam1, iParam2)
 		case MenuAction_End:
 		{
 			if (hMenu != g_hMenuMain)
-				CloseHandle(hMenu);
+				delete hMenu;
 		}
 	}
 

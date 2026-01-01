@@ -471,7 +471,7 @@ native SocketGetHostName(char[] dest, destLen);
 /**
  * _________________Do not edit below this line!_______________________
  */
-public Extension:__ext_smsock = 
+public Extension __ext_smsock = 
 {
 	name = "Socket",
 	file = "socket.ext",

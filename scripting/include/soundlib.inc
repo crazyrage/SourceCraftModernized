@@ -1,7 +1,7 @@
 /**
  * Do not edit below this line!
  */
-public Extension:__ext_geoip = 
+public Extension __ext_geoip = 
 {
 	name = "Sound Info Library",
 	file = "soundlib.ext",

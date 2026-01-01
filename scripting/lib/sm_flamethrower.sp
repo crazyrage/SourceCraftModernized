@@ -245,7 +245,7 @@ public Action Flame(client, args)
                         {
                             TR_GetEndPosition(EndPoint, trace);
                         }
-                        CloseHandle(trace);
+                        delete trace;
 
                         PrepareAndEmitAmbientSound(g_flameSound, vOrigin, client, SNDLEVEL_NORMAL);
                         //PrepareAndEmitSoundToAll(g_flameSound, client, _, _, _, _, 0.7);
@@ -401,7 +401,7 @@ public Action Flame(client, args)
     return Plugin_Handled;
 }
 
-stock bool:TraceTargetIndex(client, target, float clientLoc[3], float targetLoc[3])
+stock bool TraceTargetIndex(client, target, float clientLoc[3], float targetLoc[3])
 {
     targetLoc[2] += 50.0; // Adjust trace position of target
     TR_TraceRayFilter(clientLoc, targetLoc, MASK_SOLID, RayType_EndPoint,
@@ -419,7 +419,7 @@ public Action KillFlame(Handle timer, Handle flamedata)
     ResetPack(flamedata);
     int ent1 = EntRefToEntIndex(ReadPackCell(flamedata));
     int ent2 = EntRefToEntIndex(ReadPackCell(flamedata));
-    CloseHandle(flamedata);
+    delete flamedata;
 
     char classname[256];
 

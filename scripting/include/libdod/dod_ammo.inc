@@ -40,7 +40,7 @@ native Restock(client);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_dod_ammo = 
+public SharedPlugin __pl_dod_ammo = 
 {
 	name = "dod_ammo",
 	file = "dod_ammo.smx",

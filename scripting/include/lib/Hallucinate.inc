@@ -22,7 +22,7 @@ native PerformBlind(target, amount);
  * Do not edit below this line!
  */
 
-public SharedPlugin:__pl_Hallucinate = 
+public SharedPlugin __pl_Hallucinate = 
 {
 	name = "Hallucinate",
 	file = "Hallucinate.smx",

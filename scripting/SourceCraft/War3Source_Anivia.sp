@@ -92,7 +92,7 @@ new char crystallize[] = "physics/concrete/boulder_impact_hard1.wav";//"ui/freez
 new char glacial[] = "ambient/levels/canals/windmill_wind_loop1.wav";
 
 #if !defined SOURCECRAFT
-public APLRes:AskPluginLoad2Custom(Handle myself,bool late,char error[],err_max)
+public APLRes AskPluginLoad2Custom(Handle myself,bool late,char error[],err_max)
 {
     MarkNativeAsOptional("W3GetMana");
     MarkNativeAsOptional("W3SetMana");

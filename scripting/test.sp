@@ -194,7 +194,7 @@ public Action InterceptLog(const char[] message)
             else
                 LogMessage("NO MATCH:%s", message);
 
-            CloseHandle(re);
+            delete re;
         }
         else
             LogMessage("Invalid Regex!");

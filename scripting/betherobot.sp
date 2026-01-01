@@ -628,7 +628,7 @@ stock SpawnWeapon(client, char name[], itemIndex, level, qual, char att[])
 	if (hWeapon == null)
 	return -1;
 	int entity = TF2Items_GiveNamedItem(client, hWeapon);
-	CloseHandle(hWeapon);
+	delete hWeapon;
 	EquipPlayerWeapon(client, entity);
 	return entity;
 }

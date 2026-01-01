@@ -481,7 +481,7 @@ KillAmmoPackTimer(ammopack)
 	Handle timer = AmmoPackTimer[ammopack];
 	if (timer != null)
 	{
-		CloseHandle(AmmoPackTimer[ammopack]);
+		delete AmmoPackTimer[ammopack];
 		AmmoPackTimer[ammopack] = null;
 	}
 }

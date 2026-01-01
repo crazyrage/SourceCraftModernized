@@ -2309,7 +2309,7 @@ stock bool Client_IsLookingAtWall(client, float distance=40.0) {
 	if (TR_DidHit(trace)) {
 
 		if (TR_GetEntityIndex(trace) > 0) {
-			CloseHandle(trace);
+			delete trace;
 			return false;
 		}
 
@@ -2322,7 +2322,7 @@ stock bool Client_IsLookingAtWall(client, float distance=40.0) {
 		}
 	}
 
-	CloseHandle(trace);
+	delete trace;
 
 	return isClientLookingAtWall;
 }
@@ -2972,9 +2972,7 @@ stock bool Client_PrintToTopRaw(client, r=255, g=255, b=255, a=255, float durati
 
 	CreateDialog(client, keyValue, DialogType_Msg);
 
-	if (!CloseHandle(keyValue)) {
-		return false;
-	}
+	delete keyValue;
 	return true;
 }
 

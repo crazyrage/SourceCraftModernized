@@ -228,7 +228,7 @@ public PlayerDisconnectEvent(Handle event, const char name[], bool dontBroadcast
 			{
 				KillTimer(timer_handle[client][i]);
 				timer_handle[client][i] = null;
-				CloseHandle(hurtdata[client][i]);
+				delete hurtdata[client][i];
 			}
 		}
 	}
@@ -249,7 +249,7 @@ public RoundStartEvent(Handle event, const char name[], bool dontBroadcast)
 				{
 					KillTimer(timer_handle[klient][i]);
 					timer_handle[klient][i] = null;
-					CloseHandle(hurtdata[klient][i]);
+					delete hurtdata[klient][i];
 				}
 			}
 		}
@@ -317,7 +317,7 @@ public Action Gas(client, args)
                     TR_GetEndPosition(pos, trace);
                     pos[2] += 10.0;
                 }
-                CloseHandle(trace);
+                delete trace;
 
                 PrepareAndEmitSoundToAll(SHOOT, client);
 
@@ -394,7 +394,7 @@ public Action CreateGas(Handle timer, Handle gasdata)
     location[1] = ReadPackFloat(gasdata);
     location[2] = ReadPackFloat(gasdata);
     int gasNumber = ReadPackCell(gasdata);
-    CloseHandle(gasdata);
+    delete gasdata;
 
     int pointHurt = 0;
 
@@ -531,7 +531,7 @@ public Action RemoveGas(Handle timer, Handle entitypack)
     {
         KillTimer(timer_handle[client][gasNumber]);
         timer_handle[client][gasNumber] = null;
-        CloseHandle(hurtdata[client][gasNumber]);
+        delete hurtdata[client][gasNumber];
     }
 }
 
@@ -547,7 +547,7 @@ public Action KillGas(Handle timer, Handle entitypack)
     if (pointHurt > 0 && IsValidEntity(pointHurt))
         AcceptEntityInput(pointHurt, "Kill");
 
-    CloseHandle(entitypack);
+    delete entitypack;
 }
 
 public Action Point_Hurt(Handle timer, Handle hurt)
@@ -604,7 +604,7 @@ public Action Point_Hurt(Handle timer, Handle hurt)
 	{
 		KillTimer(timer);
 		timer_handle[client][gasNumber] = null;
-		CloseHandle(hurt);
+		delete hurt;
 	}
 }
 

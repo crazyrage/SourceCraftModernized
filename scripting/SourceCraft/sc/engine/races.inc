@@ -319,9 +319,9 @@ ClearRaceArray()
                 int Handle upgradeStringHandle=GetArrayCell(upgradeHandle,_:UpgradeData_Strings);
 
                 ClearArray(upgradeHandle);
-                CloseHandle(upgradeHandle);
+                delete upgradeHandle;
                 ClearArray(upgradeStringHandle);
-                CloseHandle(upgradeStringHandle);
+                delete upgradeStringHandle;
 
                 TraceCat("Array", "CloseArray raceUpgradeHandle[%d,%d]=0x%08x", \
                          race, upgrade, upgradeHandle);
@@ -332,17 +332,17 @@ ClearRaceArray()
 
             int Handle stringsHandle=GetRaceStringHandle(raceHandle);
             ClearArray(stringsHandle);
-            CloseHandle(stringsHandle);
+            delete stringsHandle;
 
             int Handle messagesHandle=GetRaceMessageHandle(raceHandle);
             ClearArray(messagesHandle);
-            CloseHandle(messagesHandle);
+            delete messagesHandle;
 
             ClearArray(upgradeListHandle);
-            CloseHandle(upgradeListHandle);
+            delete upgradeListHandle;
 
             ClearArray(raceHandle);
-            CloseHandle(raceHandle);
+            delete raceHandle;
 
             TraceCat("Array", "CloseArray raceStringsHandle[%d]=0x%08x", \
                      race, stringsHandle);
@@ -361,11 +361,11 @@ ClearRaceArray()
         TraceCat("Array", "CloseArray raceIndex=0x%08x", raceIndex);
 
         ClearArray(raceArray);
-        CloseHandle(raceArray);
+        delete raceArray;
         raceArray = null;
 
         ClearArray(raceIndex);
-        CloseHandle(raceIndex);
+        delete raceIndex;
         raceIndex = null;
     }
 
@@ -510,7 +510,7 @@ CreateRace(const char[] short[], required_level=0, tech_level=0, max_level=16,
         // Toss out the old config handle, if any.
         int Handle oldConfig = GetRaceConfigHandle(raceHandle);
         if (oldConfig != null)
-            CloseHandle(oldConfig);
+            delete oldConfig;
 
         // Assign the new values
         SetRaceRequiredLevel(raceHandle,required_level);
@@ -731,7 +731,7 @@ RaceComplete(race, const char[] desc[]="", const char[] image[]="")
                 SaveConfig(raceConfig, short);
             }
 
-            CloseHandle(raceConfig);
+            delete raceConfig;
             SetRaceConfigHandle(raceHandle,null);
             SetRaceConfigIsLoaded(raceHandle,ConfigNotLoaded);
         }
@@ -2289,7 +2289,7 @@ bool FileContains(const char[] fileName[], const char[] string[])
                 }
             }
         }
-        CloseHandle(file);
+        delete file;
     }
     return found;
 }

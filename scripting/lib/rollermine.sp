@@ -819,7 +819,7 @@ stock bool Entity_Cansee(int iEnt, int iClient)
 		if(TR_DidHit(hTrace))
 			bSee = false;
 			
-		CloseHandle(hTrace);
+		delete hTrace;
 	}
 	
 	return bSee;

@@ -433,7 +433,7 @@ static stock Color_ChatInitialize()
 				checkTeamPlay = StrEqual(buffer, "true");
 			}
 
-			CloseHandle(gamedata);
+			delete gamedata;
 		}
 	}
 

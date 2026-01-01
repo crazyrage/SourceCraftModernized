@@ -126,7 +126,7 @@ forward Action OnAmplify(builder,client,TFCond:condition);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_amp_node = 
+public SharedPlugin __pl_amp_node = 
 {
 	name = "amp_node",
 	file = "amp_node.smx",

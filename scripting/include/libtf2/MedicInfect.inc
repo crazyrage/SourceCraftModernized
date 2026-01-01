@@ -112,7 +112,7 @@ native HookInfectionHurt(OnInfectionHurtFunc:func);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_MedicInfect = 
+public SharedPlugin __pl_MedicInfect = 
 {
 	name = "MedicInfect",
 	file = "MedicInfect.smx",

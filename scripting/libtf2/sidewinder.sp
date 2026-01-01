@@ -651,7 +651,7 @@ bool isTargetTraceable(entity, target)
         {
             traceable = true;
         }
-        CloseHandle(traceresult);
+        delete traceresult;
     }
 
     return traceable;

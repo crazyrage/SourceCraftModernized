@@ -245,7 +245,7 @@ stock bool IsIPLocal(ip)
 stock ClearHandle(&Handle handle)
 {
 	if (handle != null) {
-		CloseHandle(handle);
+		delete handle;
 		handle = null;
 	}
 }

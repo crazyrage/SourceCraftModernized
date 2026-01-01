@@ -246,7 +246,7 @@ Sleep(client){
 public Action EndSleep(Handle t,any client){
 
     SleepTimer[client]=null;
-    CloseHandle(SleepHandle[client]);
+    delete SleepHandle[client];
     SleepHandle[client]=null;
     
     UnSleep(client);
@@ -336,7 +336,7 @@ CleanUP(client){
         UnSleep(client);
         KillTimer(SleepTimer[client]);
         SleepTimer[client]=null;
-        CloseHandle(SleepHandle[client]);
+        delete SleepHandle[client];
         SleepHandle[client]=null;
         
     }

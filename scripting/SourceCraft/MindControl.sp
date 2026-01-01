@@ -43,7 +43,7 @@ public Plugin myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public APLRes:AskPluginLoad2(Handle myself, bool late, char error[], err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char error[], err_max)
 {
     // Only load when running TF2
     if (GetGameType() == tf2)
@@ -487,14 +487,14 @@ ProcessMindControlledObjects(command:cmd, obj=-1, builder=-1,
                         {
                             if (cmd == remove || pack_target < 0)
                             {
-                                CloseHandle(pack);
+                                delete pack;
                                 RemoveFromArray(m_StolenObjectList[client], index);
                                 if (pack_timer != null && pack_target > 0)
                                     KillTimer(pack_timer);
                             }
                             else if (cmd == reset)
                             {
-                                CloseHandle(pack);
+                                delete pack;
                                 RemoveFromArray(m_StolenObjectList[client], index);
                                 ResetObject(-1, pack_target, pack_builder, false);
                                 if (pack_timer != null && pack_target > 0)
@@ -503,7 +503,7 @@ ProcessMindControlledObjects(command:cmd, obj=-1, builder=-1,
                             else if (cmd == update)
                             {
                                 // Update the tracking package
-                                CloseHandle(pack);
+                                delete pack;
                                 pack = CreateDataPack();
                                 WritePackCell(pack, pack_ref);
                                 WritePackCell(pack, -1);
@@ -535,7 +535,7 @@ ResetMindControlledObjects(client, bool kill)
                 int target = EntRefToEntIndex(ReadPackCell(pack));
                 int builder = ReadPackCell(pack);
                 Handle timer = Handle ReadPackCell(pack);
-                CloseHandle(pack);
+                delete pack;
 
                 ResetObject(client, target, builder, kill);
                 //SetArrayCell(m_StolenObjectList[client], index, null);
@@ -544,7 +544,7 @@ ResetMindControlledObjects(client, bool kill)
             }
         }
         ClearArray(m_StolenObjectList[client]);
-        CloseHandle(m_StolenObjectList[client]);
+        delete m_StolenObjectList[client];
         m_StolenObjectList[client] = null;
     }
 }

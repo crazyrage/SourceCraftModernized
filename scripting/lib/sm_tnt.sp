@@ -540,7 +540,7 @@ public Action plant(client, args)
                         {
                             PrintToChat(client, "[SM] Too far away to plant");
                         }
-                        CloseHandle(trace);
+                        delete trace;
                     }
                     else
                     {
@@ -573,7 +573,7 @@ public Action Prime(Handle timer, Handle tntpack)
     int owner = ReadPackCell(tntpack);
     int tntnumber = ReadPackCell(tntpack);
     int ref = ReadPackCell(tntpack);
-    CloseHandle(tntpack);
+    delete tntpack;
 
     int entity = EntRefToEntIndex(ref);
     if (entity > 0 && IsValidEntity(entity))
@@ -775,7 +775,7 @@ public Break(const char output[], caller, activator, float delay)
     AcceptEntityInput(caller,"kill");
 }
 
-stock bool:TraceTarget(client, target, float clientLoc[3], float targetLoc[3])
+stock bool TraceTarget(client, target, float clientLoc[3], float targetLoc[3])
 {
     TR_TraceRayFilter(clientLoc, targetLoc, MASK_SOLID,
                       RayType_EndPoint, TraceRayDontHitSelf,

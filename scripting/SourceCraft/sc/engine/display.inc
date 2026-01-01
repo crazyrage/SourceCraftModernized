@@ -930,7 +930,7 @@ void SubmitHint(int client, HintSlot slot=HintSlot_Generic, bool exclusive=false
         {
             if (exclusive)
             {
-                CloseHandle(cell);
+                delete cell;
             }
             else
             {

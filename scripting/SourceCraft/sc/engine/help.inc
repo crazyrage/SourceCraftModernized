@@ -30,7 +30,7 @@ ClearHelpVector()
         TraceCat("Array", "CloseArray vecHelpCommands=0x%08x", vecHelpCommands);
 
         ClearArray(vecHelpCommands);
-        CloseHandle(vecHelpCommands);
+        delete vecHelpCommands;
         vecHelpCommands = null;
     }
 
@@ -114,7 +114,7 @@ public HelpMenu_Selected(Handle menu,MenuAction:action,client,selection)
             HelpMenu_Command(client,command);
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 public HelpMenu_Command(client,command)
@@ -148,7 +148,7 @@ public HM_Command_Select(Handle menu,MenuAction:action,client,selection)
     }
     else if (action == MenuAction_End)
     {
-        CloseHandle(menu);
+        delete menu;
         if (selection == MenuEnd_ExitBack)
         {
             PrepareAndEmitSoundToClient(client,buttonWav);
@@ -156,6 +156,6 @@ public HM_Command_Select(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 

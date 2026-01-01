@@ -130,7 +130,7 @@ public Action KillSound(Handle timer, Handle pack)
             new channel = ReadPackCell(pack);
             StopSound(entity,channel,FIRE_SMALL_LOOP2);
         }
-        CloseHandle(pack);
+        delete pack;
     }
     return Plugin_Stop;
 }

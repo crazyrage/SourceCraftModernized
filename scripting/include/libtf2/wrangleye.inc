@@ -29,7 +29,7 @@ native ControlWrangleMonoculus(bool plugin_only=true);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_wrangleye = 
+public SharedPlugin __pl_wrangleye = 
 {
     name = "wrangleye",
     file = "wrangleye.smx",

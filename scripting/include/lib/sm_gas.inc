@@ -74,7 +74,7 @@ native GasAttack(client);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_sm_gas = 
+public SharedPlugin __pl_sm_gas = 
 {
 	name = "sm_gas",
 	file = "sm_gas.smx",

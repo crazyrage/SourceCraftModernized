@@ -28,7 +28,7 @@ forward Action TF2BTG_CanBeScared( iGhost, iClient );
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-public SharedPlugin:__pl_tf2btg = 
+public SharedPlugin __pl_tf2btg = 
 {
 	name = "tf2betheghost",
 	file = "tf2betheghost.smx",

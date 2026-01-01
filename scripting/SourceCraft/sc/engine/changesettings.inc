@@ -533,7 +533,7 @@ public int Settings_Select(Handle menu, MenuAction action, int client, int selec
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 
     return 0;
 }

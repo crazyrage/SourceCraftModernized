@@ -145,7 +145,7 @@ CloseHud()
     {
         for (int h=0; h < sizeof(m_HudSynch); h++)
         {
-            CloseHandle(m_HudSynch[h]);
+            delete m_HudSynch[h];
             m_HudSynch[h] = null;
         }
     }
@@ -851,7 +851,7 @@ public Action PlayerProperties(Handle timer, any userid)
                     if (time > expiretime)
                     {
                         // remove it
-                        CloseHandle(pack);
+                        delete pack;
                         RemoveFromArray(hintSlot, index);
                         index--;
                         size--;

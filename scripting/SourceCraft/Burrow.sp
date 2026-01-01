@@ -82,7 +82,7 @@ public Plugin myinfo =
     url = "http://jigglysfunhouse.net/"
 };
 
-public APLRes:AskPluginLoad2(Handle myself, bool late, char error[], err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char error[], err_max)
 {
     // Register Natives
     CreateNative("Burrow",Native_Burrow);
@@ -1382,7 +1382,7 @@ public BurrowStructure_Selected(Handle menu,MenuAction action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 void BurrowObjects(client, float amount, const char[] ClassName[])

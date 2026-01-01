@@ -149,7 +149,7 @@ public Plugin myinfo=
     url="http://war3source.com/"
 };
 
-public APLRes:AskPluginLoad2(Handle myself, bool late, char error[], err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char error[], err_max)
 {
     if(!War3Source_InitNatives())
     {
@@ -2044,7 +2044,7 @@ public int NWar3_UseGenericSkill(Handle plugin, int numParams){
                     ){
                         if(GenericSkill[i][raceskilldatahandle][j]!=null && GenericSkill[i][raceskilldatahandle][j] !=genericSkillData){
                             //DP("ERROR POSSIBLE HANDLE LEAK, NEW GENERIC SKILL DATA HANDLE PASSED, CLOSING OLD GENERIC DATA HANDLE");
-                            CloseHandle(GenericSkill[i][raceskilldatahandle][j]);
+                            delete GenericSkill[i][raceskilldatahandle][j];
                             GenericSkill[i][raceskilldatahandle][j]=genericSkillData;
                         }   
                     }

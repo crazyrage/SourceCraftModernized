@@ -379,11 +379,11 @@ SetTeleportEndPoint(client)
 	}
 	else
 	{
-		CloseHandle(trace);
+		delete trace;
 		return false;
 	}
 	
-	CloseHandle(trace);
+	delete trace;
 	return true;
 }
 

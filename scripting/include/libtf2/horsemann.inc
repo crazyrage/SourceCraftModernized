@@ -39,7 +39,7 @@ native ControlHorsemann(bool plugin_only=true);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_horsemann = 
+public SharedPlugin __pl_horsemann = 
 {
 	name = "horsemann",
 	file = "horsemann.smx",

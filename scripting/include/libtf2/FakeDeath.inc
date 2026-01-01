@@ -46,7 +46,7 @@ native FakeDeath(client);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_FakeDeath = 
+public SharedPlugin __pl_FakeDeath = 
 {
 	name = "FakeDeath",
 	file = "FakeDeath.smx",

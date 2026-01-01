@@ -135,10 +135,10 @@ stock bool GetPlayerEye(client, float pos[3])
     if(TR_DidHit(trace))
     {
         TR_GetEndPosition(pos, trace);
-        CloseHandle(trace);
+        delete trace;
         return true;
     }
-    CloseHandle(trace);
+    delete trace;
     return false;
 }
 

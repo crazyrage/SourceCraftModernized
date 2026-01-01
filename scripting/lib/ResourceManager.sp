@@ -378,7 +378,7 @@ public int Native_SetupModel(Handle plugin, int numParams)
                 AddFileToDownloadsTable(file);
         }
 
-        CloseHandle(files);
+        delete files;
         update = true;
     }
 

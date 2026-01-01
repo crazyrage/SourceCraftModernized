@@ -579,7 +579,7 @@ public Action HelpPanel(client, Args)
 
     DrawPanelItem(panel, "Close Menu");  
     SendPanelToClient(panel, client, AmpHelpPanelH, 16);
-    CloseHandle(panel);
+    delete panel;
 }
 
 //Show Panel to Enginner on command
@@ -645,7 +645,7 @@ public AmpPanel(client)
     DrawPanelItem(panel, str, usEnabled ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
 
     SendPanelToClient(panel, client, AmpPanelH, 20);
-    CloseHandle(panel); 
+    delete panel; 
 }
 
 //Panel's Handle Procedure
@@ -1376,7 +1376,7 @@ CheckObject(client, ent, obj, float Pos[3], level, &metal, bool isSentry)
     }
 }
 
-public Void:SetHealthOfEnt(any ent, any health)
+public void SetHealthOfEnt(any ent, any health)
 {
     int entvalue = GetEntProp(ent, Prop_Send, "m_iHealth");
     if (entvalue < 200)
@@ -2160,7 +2160,7 @@ public BuildMenu(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 
     TraceReturn();
 }

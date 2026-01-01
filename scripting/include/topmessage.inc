@@ -22,5 +22,5 @@ stock SendTopMessage(client, level, time, r, g, b, a, char[] text, any:...)
 
 	CreateDialog(client, kv, DialogType_Msg);
 
-	CloseHandle(kv);
+	delete kv;
 }

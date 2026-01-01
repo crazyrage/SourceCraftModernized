@@ -317,7 +317,7 @@ native SDKHooks_DropWeapon(client, weapon, const float vecTarget[3]=NULL_VECTOR,
 
 /** Do Not Edit Below This Line **/
 
-public Extension:__ext_sdkhooks =
+public Extension __ext_sdkhooks =
 {
 	name = "sdkhooks",
 	file = "sdkhooks.ext",

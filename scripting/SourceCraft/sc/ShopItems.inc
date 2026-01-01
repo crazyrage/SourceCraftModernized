@@ -37,7 +37,7 @@ native InvokeMole(int client);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_ShopItems = 
+public SharedPlugin __pl_ShopItems = 
 {
 	name = "ShopItems",
 	file = "ShopItems.smx",

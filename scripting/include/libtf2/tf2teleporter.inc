@@ -29,7 +29,7 @@ native SetTeleporter(client,float recharge);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_teleporter = 
+public SharedPlugin __pl_teleporter = 
 {
 	name = "teleporter",
 	file = "tf2teleporter.smx",

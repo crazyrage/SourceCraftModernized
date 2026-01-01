@@ -81,7 +81,7 @@ stock Respawned(int client,bool reposition)
 
     if (IsChangingClass(client))
     {
-        ResetInvuln(INVALID_HANDLE,client);
+        ResetInvuln(null,client);
         Trace("%N changed class", client);
     }
     else if (m_IsRespawning[client])

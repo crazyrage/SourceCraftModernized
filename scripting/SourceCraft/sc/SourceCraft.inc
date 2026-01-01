@@ -2123,7 +2123,7 @@ forward OnPlayerAuthed(client);
  * @param newrace: The player's new race.
  * @return         Plugin_Stop will block race change.
  */
-forward Action:OnRaceDeselected(client,oldrace,newrace);
+forward Action OnRaceDeselected(client,oldrace,newrace);
 
 /**
  * Gets called when someone changes their race (new race is selected).
@@ -2132,7 +2132,7 @@ forward Action:OnRaceDeselected(client,oldrace,newrace);
  * @param newrace: The player's new race.
  * @return         Plugin_Stop will block race change.
  */
-forward Action:OnRaceSelected(client,oldrace,newrace);
+forward Action OnRaceSelected(client,oldrace,newrace);
 
 /**
  * Gets called when a upgrade level is changed.
@@ -2164,7 +2164,7 @@ forward OnItemPurchase(client,item);
  *                       Plugin_Continue to continue with call to OnItemPurchase()
  *                       (even if the cost was altered),
  */
-forward Action:OnItemPurchaseEx(client,item,bool & use_pcrystals,&cost,&cost_vespene,&cost_xp);
+forward Action OnItemPurchaseEx(client,item,bool & use_pcrystals,&cost,&cost_vespene,&cost_xp);
 
 /**
  * Gets called when a player no longer has an item.
@@ -2191,7 +2191,7 @@ forward OnUltimateCommand(client,race,bool pressed,arg);
  * @param taken:  The amount is to be taken instead of given.
  * @return        Plugin_Stop will block XP.
  */
-forward Action:OnXPGiven(client,&amount,bool taken);
+forward Action OnXPGiven(client,&amount,bool taken);
 
 /**
  * Gets called when crystals are given to a player
@@ -2200,7 +2200,7 @@ forward Action:OnXPGiven(client,&amount,bool taken);
  * @param taken:  The amount is to be taken instead of given.
  * @return        Plugin_Stop will block Crystals.
  */
-forward Action:OnCrystalsGiven(client,&amount,bool taken);
+forward Action OnCrystalsGiven(client,&amount,bool taken);
 
 /**
  * Gets called when vespene is given to a player
@@ -2209,14 +2209,14 @@ forward Action:OnCrystalsGiven(client,&amount,bool taken);
  * @param taken:  The amount is to be taken instead of given.
  * @return        Plugin_Stop will block Vespene.
  */
-forward Action:OnVespeneGiven(client,&amount,bool taken);
+forward Action OnVespeneGiven(client,&amount,bool taken);
 
 /**
  * Gets called when a player has been Restored
  * @param client: The client's index.
  * @return        Plugin_Stop will block Restore.
  */
-forward Action:OnPlayerRestored(client);
+forward Action OnPlayerRestored(client);
 
 /**
  * Called when a player takes damage, requires SDK Hooks.
@@ -2227,7 +2227,7 @@ forward Action:OnPlayerRestored(client);
  * @param damagetype: Type of damage.
  * @return            Plugin_Changed will change the damage and Plugin_Handled will block it.
  */      
-forward Action:OnPlayerTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetype);  
+forward Action OnPlayerTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetype);  
 
 /**
  * Gets called for player_hurt
@@ -2243,7 +2243,7 @@ forward Action:OnPlayerTakeDamage(victim,&attacker,&inflictor,float & damage,&da
  *                        Plugin_Changed to update health, etc. or
  *                        Plugin_Continue if the event was not handled
  */
-forward Action:OnPlayerHurtEvent(Handle event, victim_index, victim_race,
+forward Action OnPlayerHurtEvent(Handle event, victim_index, victim_race,
                                  attacker_index, attacker_race, damage,
                                  absorbed, bool from_sc);
 
@@ -2260,7 +2260,7 @@ forward Action:OnPlayerHurtEvent(Handle event, victim_index, victim_race,
  *                        Plugin_Changed to update health, etc. or
  *                        Plugin_Continue if the event was not handled
  */
-forward Action:OnPlayerAssistEvent(Handle event, victim_index, victim_race,
+forward Action OnPlayerAssistEvent(Handle event, victim_index, victim_race,
                                    assister_index, assister_race, damage,
                                    absorbed);
 
@@ -2298,7 +2298,7 @@ forward OnPlayerDeathEvent(Handle event, victim_index, victim_race,
  * @param damagetype: Type of damage.
  * @return            Plugin_Changed will change the damage and Plugin_Handled will block it.
  */      
-forward Action:OnObjectTakeDamage(victim,builder,&attacker,&inflictor,float & damage,&damagetype);  
+forward Action OnObjectTakeDamage(victim,builder,&attacker,&inflictor,float & damage,&damagetype);  
 
 /**
  * Called when an entity, that is not a player, takes damage, requires SDK Hooks.
@@ -2309,7 +2309,7 @@ forward Action:OnObjectTakeDamage(victim,builder,&attacker,&inflictor,float & da
  * @param damagetype: Type of damage.
  * @return            Plugin_Changed will change the damage and Plugin_Handled will block it.
  */      
-forward Action:OnEntityTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetype);  
+forward Action OnEntityTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetype);  
 
 /**
  * Gets called when an entity, that is not a player, is hurt
@@ -2324,7 +2324,7 @@ forward Action:OnEntityTakeDamage(victim,&attacker,&inflictor,float & damage,&da
  *                        (OnPlayerHurtEvent() will be called if
  *                         Plugin_Continue is returned)
  */
-forward Action:OnEntityHurtEvent(Handle event, victim_index, attacker_index,
+forward Action OnEntityHurtEvent(Handle event, victim_index, attacker_index,
                                  attacker_race, damage);
 
 /**
@@ -2341,7 +2341,7 @@ forward Action:OnEntityHurtEvent(Handle event, victim_index, attacker_index,
  *                        (OnPlayerAssitEvent() will be called if
  *                         Plugin_Continue is returned)
  */
-forward Action:OnEntityAssistEvent(Handle event, victim_index, assister_index,
+forward Action OnEntityAssistEvent(Handle event, victim_index, assister_index,
                                    assister_race, damage);
 
 /**
@@ -2424,7 +2424,7 @@ forward OnCooldownExpired(client,race,upgrade,bool expiredByTime);
  * Do not edit below this line!
  */
 
-public SharedPlugin:__pl_SourceCraft = 
+public SharedPlugin __pl_SourceCraft = 
 {
 	name = "SourceCraft",
 	file = "SourceCraft.smx",

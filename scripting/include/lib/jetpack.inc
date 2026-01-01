@@ -176,7 +176,7 @@ forward Action OnJetpackExplode(victim, client, &damage);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_jetpack = 
+public SharedPlugin __pl_jetpack = 
 {
 	name = "jetpack",
 	file = "jetpack.smx",

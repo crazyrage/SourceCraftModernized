@@ -58,7 +58,7 @@ native bool HasPlayerExploded(int client);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_PlagueInfect = 
+public SharedPlugin __pl_PlagueInfect = 
 {
 	name = "PlagueInfect",
 	file = "PlagueInfect.smx",

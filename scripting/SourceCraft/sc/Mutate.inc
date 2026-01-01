@@ -238,7 +238,7 @@ public Mutate_Selected(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 stock MutateInto(client, raceId, upgradeId, maxUpgradeID, maxObjects=5,

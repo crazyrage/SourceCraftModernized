@@ -549,7 +549,7 @@ native bool curl_hash_string(const char[] input, dataSize, Openssl_Hash algorith
 /**
  * Do not edit below this line!
  */
-public Extension:__ext_curl = 
+public Extension __ext_curl = 
 {
 	name = "curl",
 	file = "curl.ext",

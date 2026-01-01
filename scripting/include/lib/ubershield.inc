@@ -131,7 +131,7 @@ forward Action OnDeployUberShield(client, target);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_ubershield = 
+public SharedPlugin __pl_ubershield = 
 {
 	name = "ubershield",
 	file = "ubershield.smx",

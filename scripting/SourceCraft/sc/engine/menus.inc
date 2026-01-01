@@ -58,7 +58,7 @@ public IntroMenu_Action(Handle menu,MenuAction:action,client,param)
         g_FirstSpawn[client]=false;
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 MainMenu(client)
@@ -148,7 +148,7 @@ public Menu_Select(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 
     TraceReturn();
 }
@@ -270,7 +270,7 @@ public Faction_Selected(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 FactionMenu(client, start=-1)
@@ -394,7 +394,7 @@ public RaceMenu_Selected(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 UpgradeMenu(client, MenuMode:mode, bool:int eractive)
@@ -656,7 +656,7 @@ public UpgradeMenu_Selected(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 
     TraceReturn();
 }
@@ -1013,7 +1013,7 @@ public Category_Selected(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 public ShopMenu_Selected(Handle menu,MenuAction:action,client,selection)
@@ -1058,7 +1058,7 @@ public ShopMenu_Selected(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }
 
 public ShopMenu_Item(client,item)
@@ -1148,5 +1148,5 @@ public ShopMenu_Item_Select(Handle menu,MenuAction:action,client,selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }

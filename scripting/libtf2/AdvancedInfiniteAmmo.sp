@@ -77,7 +77,7 @@ int g_iGlobalFlags[2] = {AMMOFLAG_ALL, AMMOSOURCE_NONE};
 
 bool g_bWaitingForPlayers;
 
-Handle g_hOnAIAChanged = INVALID_HANDLE;
+Handle g_hOnAIAChanged = null;
 
 ConVar g_hAllInfiniteAmmo;
 ConVar g_hRoundWin;

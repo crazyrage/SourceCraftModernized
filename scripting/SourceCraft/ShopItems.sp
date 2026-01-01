@@ -475,7 +475,7 @@ public void OnClientDisconnect(client)
         Handle array = vecPlayerWeapons[client];
         if (array != null)
         {
-            CloseHandle(array);
+            delete array;
             vecPlayerWeapons[client] = null;
 
             TraceCat("Array", "CloseArray vecPlayerWeapons[%d]=%x", \
@@ -2102,7 +2102,7 @@ public Action Ankh(Handle timer, Handle pack)
                 GiveAmmo(client,ammotype,1000,true);
         }
     }
-    CloseHandle(pack);
+    delete pack;
     return Plugin_Stop;
 }
 

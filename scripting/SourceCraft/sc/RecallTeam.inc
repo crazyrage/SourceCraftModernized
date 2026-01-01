@@ -150,5 +150,5 @@ public Recall_Selected(Handle menu,MenuAction action,int index,int selection)
         }
     }
     else if (action == MenuAction_End)
-        CloseHandle(menu);
+        delete menu;
 }

@@ -243,7 +243,7 @@ forward Action OnRope(client);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_hgrsource = 
+public SharedPlugin __pl_hgrsource = 
 {
 	name = "hgrsource",
 	file = "hgrsource.smx",

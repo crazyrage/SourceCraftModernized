@@ -663,7 +663,7 @@ ParseNames()
 				PushArrayString(botnames, buffer);
 			}
 		}
-		CloseHandle(config);
+		delete config;
 	}
 }
 

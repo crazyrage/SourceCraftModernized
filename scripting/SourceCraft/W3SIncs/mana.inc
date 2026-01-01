@@ -84,7 +84,7 @@ native W3PrintMana(client,duration,rgba[4]);
  * Do not edit anything below this line!
  */
 /**
-public Extension:__ext_mana = 
+public Extension __ext_mana = 
 {
 	name = "W3Mana",
 	file = "w3mana.ext",

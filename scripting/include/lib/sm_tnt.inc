@@ -75,7 +75,7 @@ forward Action OnTNTBombed(tnt,owner,victim);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_sm_tnt = 
+public SharedPlugin __pl_sm_tnt = 
 {
 	name = "sm_tnt",
 	file = "sm_tnt.smx",

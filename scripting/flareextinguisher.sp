@@ -70,7 +70,7 @@ public OnConfigsExecuted() {
 
 public OnPluginEnd() {
     if (g_timer != null) {
-	CloseHandle(g_timer);
+	delete g_timer;
 	g_timer = null;
     }
 }
@@ -79,7 +79,7 @@ public OnRateChange(Handle cvar, const char[] oldVal, const char[] newVal) {
     float time = StringToFloat(newVal);
 
     if (g_timer != null) {
-	CloseHandle(g_timer);
+	delete g_timer;
 	g_timer = null;
     }
 
@@ -125,7 +125,7 @@ public Action Timer_ExtinguishFlares2(Handle timer, Handle flares) {
 	    }
 	}
     }
-    CloseHandle(flares);
+    delete flares;
 
     PrintToServer("[FE] Extinguished %d flare(s)", count);
 }

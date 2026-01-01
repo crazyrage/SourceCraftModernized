@@ -308,14 +308,14 @@ stock Handle War3_NearEntsByName(int client, Handle hEnts, int pack_size, float 
       {
         PushArrayCell(hResults,GetArrayCell(result_found,y));
       }
-      CloseHandle(result_found);
+      delete result_found;
     }
   }
   if(GetArraySize(hResults)>0)
     return hResults;
   else
   {
-    CloseHandle(hResults);
+    delete hResults;
     return null;
   }
 }
@@ -347,7 +347,7 @@ stock Handle War3_NearEntByName(int client, char[] ent_name, float distance)
     }
     else
     {
-      CloseHandle(hResults);
+      delete hResults;
     }
   }
   return null;
@@ -1380,7 +1380,7 @@ stock SQLCheckForErrors(Handle hndl, const char[] originalerror, const char[] pr
     if(!GetTrieString(originalqueryTrie,"query",orignalquerystr,sizeof(orignalquerystr))) {
       LogError("SQLCheckForErrors: originalqueryTrie is not null but key 'query' not set from trie");
     }
-    CloseHandle(originalqueryTrie);
+    delete originalqueryTrie;
     //DP("closed");
   }
 
@@ -1414,7 +1414,7 @@ stock bool SQL_War3_NormalQuery(Handle DB, char[] querystr) {
     return false;
   }
   else {
-    CloseHandle(result);
+    delete result;
   }
   return true;
 }
@@ -1763,12 +1763,12 @@ stock Handle FindPluginByFileCustom(const char[] filename)
         //DP("%s",buffer);
         if (StrContains(buffer,filename,false)>-1) //not case sensitive
         {
-            CloseHandle(iter);
+            delete iter;
             return pl;
         }
     }
     
-    CloseHandle(iter);
+    delete iter;
     
     return null;
 }

@@ -300,7 +300,7 @@ forward Action OnBuildCommand(client,TFObjectType:type,mode,count);
 
 /* DO NOT EDIT BELOW THIS LINE */
 
-public SharedPlugin:__pl_remote = 
+public SharedPlugin __pl_remote = 
 {
 	name = "remote",
 	file = "remote.smx",

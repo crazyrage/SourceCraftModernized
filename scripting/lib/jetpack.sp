@@ -217,11 +217,11 @@ Handle fwdOnJetpackBurn;
 Handle fwdOnJetpackExplode;
 
 #if defined _ztf2grab_included
-    stock bool:m_GravgunAvailable = false;
+    stock bool m_GravgunAvailable = false;
 #endif
 
 #if defined SOURCECRAFT
-    stock bool:m_SourceCraftAvailable = false;
+    stock bool m_SourceCraftAvailable = false;
 #endif
 
 public Plugin myinfo =
@@ -1194,7 +1194,7 @@ BurnEnemies(client)
     }
 }
 
-stock bool:CanTarget(origin, const float pos[3], target, const float targetPos[3],
+stock bool CanTarget(origin, const float pos[3], target, const float targetPos[3],
                      float range, float & distance=0.0, bool:throughPlayer=true,
                      bool:throughBuild=false )
 {
@@ -1206,7 +1206,7 @@ stock bool:CanTarget(origin, const float pos[3], target, const float targetPos[3
     Handle hTrace = TR_TraceRayFilterEx(pos, targetPos, MASK_PLAYERSOLID, RayType_EndPoint, TraceFilter);
     if (!TR_DidHit(hTrace))
     {
-        CloseHandle(hTrace);
+        delete hTrace;
         return true;
     }
     else
@@ -1214,19 +1214,19 @@ stock bool:CanTarget(origin, const float pos[3], target, const float targetPos[3
         int hitEnt = TR_GetEntityIndex(hTrace);
         if (hitEnt == target)
         {
-            CloseHandle(hTrace);
+            delete hTrace;
             return true;
         }
         else if (!throughPlayer && !throughBuild)
         {
-            CloseHandle(hTrace);
+            delete hTrace;
             return false;
         }
         else
         {
             float hitPos[3];
             TR_GetEndPosition(hitPos, hTrace);
-            CloseHandle(hTrace);
+            delete hTrace;
 
             if (GetVectorDistance(hitPos, targetPos) <= 50.0)
             {
@@ -1248,7 +1248,7 @@ stock bool:CanTarget(origin, const float pos[3], target, const float targetPos[3
                         g_FilteredEntity = hitEnt;
                         hTrace = TR_TraceRayFilterEx(hitPos, targetPos, MASK_PLAYERSOLID, RayType_EndPoint, TraceFilter);
                         TR_GetEndPosition(hitPos, hTrace);
-                        CloseHandle(hTrace);
+                        delete hTrace;
                     }
 
                     return (GetVectorDistance(hitPos, targetPos) <= 50.0);
@@ -1772,7 +1772,7 @@ public MenuHandler_Jetpack(Handle menu, MenuAction:action, param1, param2)
 
     if (action == MenuAction_End)
     {
-        CloseHandle(menu);
+        delete menu;
     }
     else if (action == MenuAction_Cancel)
     {
@@ -1853,7 +1853,7 @@ public MenuHandler_Prefs(Handle menu, MenuAction:action, client, selection)
     }
     else if (action == MenuAction_End)
     {
-        CloseHandle(menu);
+        delete menu;
     }
 }
 
@@ -1862,7 +1862,7 @@ public MenuHandler_Prefs(Handle menu, MenuAction:action, client, selection)
  */
 #tryinclude <tf2_flag>
 #if !defined _tf2_flag_included
-    stock bool:TF2_HasTheFlag(client)
+    stock bool TF2_HasTheFlag(client)
     {
         int ent = -1;
         while ((ent = FindEntityByClassname(ent, "item_teamflag")) != -1)

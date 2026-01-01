@@ -288,7 +288,7 @@ bool gTargetOverride = false;
 // *************************************************
 
 #if defined SOURCECRAFT
-    stock bool:m_SourceCraftAvailable = false;
+    stock bool m_SourceCraftAvailable = false;
     int DamageFrom:gCategory[MAX_PLAYERS+1];// what category to use in HurtPlayer()
 #endif
 
@@ -1193,7 +1193,7 @@ public Action NadeExplode(Handle timer, Handle pack)
     }
 }
 
-public NadeType:GiveFullNades(client)
+public NadeType GiveFullNades(client)
 {
     int class = 0;
     switch (GameType)
@@ -2367,7 +2367,7 @@ public Action KillGas(Handle timer, Handle entitypack)
     if (pointHurt > 0 && IsValidEntity(pointHurt))
         AcceptEntityInput(pointHurt, "Kill");
 
-    CloseHandle(entitypack);
+    delete entitypack;
 }
 
 public Action Activate(Handle timer,any ref)
@@ -2908,7 +2908,7 @@ FindPlayersInRange(float location[3], float radius, team, self, bool:trace, dont
                                 {
                                     PlayersInRange[j] = SquareRoot(distance)/radius;
                                 }
-                                CloseHandle(tr);
+                                delete tr;
                             }
                             
                         }
@@ -3118,7 +3118,7 @@ DamageBuildings(attacker, float start[3], float radius, damage, nade, bool:trace
                                     SetVariantInt(damage);
                                     AcceptEntityInput(i, "RemoveHealth", attacker, attacker);
                                 }
-                                CloseHandle(tr);
+                                delete tr;
                             }
                             
                         }
@@ -3191,7 +3191,7 @@ TagsCheck(const char tag[])
         GetConVarString(hTags, tags, sizeof(tags));
     }
 
-    CloseHandle(hTags);
+    delete hTags;
 } 
 
 public Action SayCommand(client,args)
@@ -3529,7 +3529,7 @@ public Native_IsTargeted(Handle plugin,numParams)
  */
 #tryinclude "sc/range"
 #if !defined _range_included
-    stock bool:IsPointInRange(const float start[3], const float end[3],float maxdistance)
+    stock bool IsPointInRange(const float start[3], const float end[3],float maxdistance)
     {
         return (GetVectorDistance(start,end)<maxdistance);
     }
@@ -3540,7 +3540,7 @@ public Native_IsTargeted(Handle plugin,numParams)
  */
 #tryinclude <raytrace>
 #if !defined _raytrace_included
-    stock bool:TraceTargetIndex(client, target, float clientLoc[3], float targetLoc[3])
+    stock bool TraceTargetIndex(client, target, float clientLoc[3], float targetLoc[3])
     {
         targetLoc[2] += 50.0; // Adjust trace position of target
         TR_TraceRayFilter(clientLoc, targetLoc, MASK_SOLID,

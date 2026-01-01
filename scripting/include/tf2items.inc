@@ -211,7 +211,7 @@ forward TF2Items_OnGiveNamedItem_Post(client, char[] classname, itemDefinitionIn
 /**
  * Do not edit below this line!
  */
-public Extension:__ext_tf2items = 
+public Extension __ext_tf2items = 
 {
 	name = "TF2Items",
 	file = "tf2items.ext.2.ep2v",
