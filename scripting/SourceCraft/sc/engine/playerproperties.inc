@@ -190,8 +190,8 @@ public Action PlayerHUD(Handle timer, any userid)
             if (rate > 0.0 && (energy < limit || limit < 0.0))
                 SetEnergy(client, energy += rate);
 
-            new Attribute:attrib      = GetAttributeBits(client);
-            new Restriction:restrict  = GetRestrictionBits(client);
+            new Attribute attrib      = GetAttributeBits(client);
+            new Restriction restrict  = GetRestrictionBits(client);
             new ArmorFlags:armorFlags = GetArmorFlags(client);
 
             new bool regenHealthOK = (IsSet(attrib, Attribute_RegenHealth) &&
@@ -422,15 +422,15 @@ public Action PlayerProperties(Handle timer, any userid)
 
                 new visibility=-1,r=-1,g=-1,b=-1,weaponAlpha=-1;
                 new VisibilityType:vistype=NormalVisibility;
-                new RenderMode:mode=RenderMode:-1;
-                new RenderFx:fx=RenderFx:-1;
+                new RenderMode mode=RenderMode:-1;
+                new RenderFx fx=RenderFx:-1;
                 new visibilityRank=-1;
                 float gravity=-1.0;
                 new bool colorWeapons=false;
                 float time=0.0, float colorTime=0.0;
                 new VisibilityPriority:priority=VisibilityPriorityNotSpecified;
                 new VisibilityPriority:colorPty=VisibilityPriorityNotSpecified;
-                new MoveType:mt = MOVETYPE_DEFAULT;
+                new MoveType mt = MOVETYPE_DEFAULT;
 
                 char wepName[128];
                 GetClientWeapon(client, wepName, sizeof(wepName));
@@ -452,8 +452,8 @@ public Action PlayerProperties(Handle timer, any userid)
                     new VisibilityType:type         = GetPropInfoVisibilityType(propInfo);
                     float factor1               = GetPropInfoVisibilityFactor1(propInfo);
                     float factor2               = GetPropInfoVisibilityFactor2(propInfo);
-                    new RenderFx:checkFx            = GetPropInfoVisibilityFx(propInfo);
-                    new RenderMode:checkMode        = GetPropInfoVisibilityMode(propInfo);
+                    new RenderFx checkFx            = GetPropInfoVisibilityFx(propInfo);
+                    new RenderMode checkMode        = GetPropInfoVisibilityMode(propInfo);
                     new checkR                      = GetPropInfoVisibilityR(propInfo);
                     new checkG                      = GetPropInfoVisibilityG(propInfo);
                     new checkB                      = GetPropInfoVisibilityB(propInfo);
@@ -461,7 +461,7 @@ public Action PlayerProperties(Handle timer, any userid)
                     new bool checkWeapons           = GetPropInfoVisibilityWeapons(propInfo);
                     new VisibilityPriority:checkPty = GetPropInfoVisibilityPriority(propInfo);
                     float checkTime             = GetPropInfoVisibilityTime(propInfo);
-                    new MoveType:checkMt            = GetPropInfoMoveType(propInfo);
+                    new MoveType checkMt            = GetPropInfoMoveType(propInfo);
 
                     #if defined _TRACE
                         new id = GetPropInfoId(propInfo);
@@ -533,7 +533,7 @@ public Action PlayerProperties(Handle timer, any userid)
                             m_VisibilityAltered[client]=true;
                         }
                         else if (m_VisibilityAltered[client] || type > DefaultVisibility ||
-                                 checkVisibility >= 0 || _:checkFx >= 0 || _:checkMode >= 0)
+                                 checkVisibility >= 0 || view_as<int>(checkFx) >= 0 || view_as<int>(checkMode) >= 0)
                         {
                             TraceCat("Visibility", "Check %L.%d's %s Visibility=%d,type=%d,fx=%d,mode=%d,still=%d, priority=%d, time=%f", \
                                      client,pluginName,id,checkVisibility,type,checkFx,checkMode, isStill, priority, time);
@@ -935,7 +935,7 @@ bool IsStill(client)
 
 CalculateVisibility(client, const char[] wepName[], bool isStill, &visibility,
                     VisibilityType:type, float factor1, float factor2,
-                    &RenderMode:mode, &RenderFx:fx)
+                    &RenderMode mode, &RenderFx fx)
 {
     SetTraceCategory("Visibility");
     TraceInto("PlayerProperties", "CalculateVisibility", "client=%d:%L,wepName=%s,isStill=%d,visibility=%d,type=%d,factor1=%f,factor2=%f,mode=%d,fx=%d", \
@@ -1041,8 +1041,8 @@ CalculateVisibility(client, const char[] wepName[], bool isStill, &visibility,
         if (mode > RENDER_NORMAL && rank > 0)
             rank--;
 
-        if (fx > RENDERFX_NONE && rank > _:fx)
-            rank -= _:fx;
+        if (fx > RENDERFX_NONE && rank > view_as<int>(fx))
+            rank -= view_as<int>(fx);
 
         if (rank >= 255 && original_visibility < 0)
             rank = original_visibility;
@@ -1054,7 +1054,7 @@ CalculateVisibility(client, const char[] wepName[], bool isStill, &visibility,
     return rank;
 }
 
-SetVisibility(client, visibility, RenderMode:mode, RenderFx:fx,
+SetVisibility(client, visibility, RenderMode mode, RenderFx fx,
               r, g, b, weaponAlpha, bool colorWeapons, VisibilityType:type)
 {
     SetTraceCategory("Visibility");
@@ -1288,7 +1288,7 @@ SetVisibility(client, visibility, RenderMode:mode, RenderFx:fx,
 }
 
 SetWearablesVisibility(client,  const char[] class[], visibility,
-                       RenderMode:mode, RenderFx:fx, r, g, b)
+                       RenderMode mode, RenderFx fx, r, g, b)
 {
     SetTraceCategory("Visibility");
     TraceInto("PlayerProperties", "SetWearablesVisibility", \

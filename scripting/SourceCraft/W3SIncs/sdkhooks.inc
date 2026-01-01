@@ -154,7 +154,7 @@ enum UseType
 	Use_Toggle
 };
 
-funcenum SDKHookCB
+typeset SDKHookCB
 {
 	// PreThink/Post
 	// PostThink/Post
@@ -169,7 +169,7 @@ funcenum SDKHookCB
 	// EndTouch
 	// StartTouch
 	// Touch
-	Action:public(entity, other),
+	Action public(entity, other),
 	
 	// EndTouchPost
 	// StartTouchPost
@@ -177,14 +177,14 @@ funcenum SDKHookCB
 	public(entity, other),
 	
 	// SetTransmit
-	Action:public(entity, client),
+	Action public(entity, client),
 	
 	// WeaponCanSwitchTo
 	// WeaponCanUse
 	// WeaponDrop
 	// WeaponEquip
 	// WeaponSwitch
-	Action:public(client, weapon),
+	Action public(client, weapon),
 	
 	// WeaponCanSwitchToPost
 	// WeaponCanUsePost
@@ -195,8 +195,8 @@ funcenum SDKHookCB
 	
 	// OnTakeDamage
 	// Note: Force application is dependent on game and damage type(s)
-	Action:public(victim, &attacker, &inflictor, float & damage, &damagetype),
-	Action:public(victim, &attacker, &inflictor, float & damage, &damagetype, &weapon, float damageForce[3], float damagePosition[3]),
+	Action public(victim, &attacker, &inflictor, float & damage, &damagetype),
+	Action public(victim, &attacker, &inflictor, float & damage, &damagetype, &weapon, float damageForce[3], float damagePosition[3]),
 	
 	// OnTakeDamagePost
 	public(victim, attacker, inflictor, float damage, damagetype),
@@ -206,7 +206,7 @@ funcenum SDKHookCB
 	public(client, shots, const char weaponname[]),
 	
 	// TraceAttack
-	Action:public(victim, &attacker, &inflictor, float & damage, &damagetype, &ammotype, hitbox, hitgroup),
+	Action public(victim, &attacker, &inflictor, float & damage, &damagetype, &ammotype, hitbox, hitgroup),
 	
 	// TraceAttackPost
 	public(victim, attacker, inflictor, float damage, damagetype, ammotype, hitbox, hitgroup),
@@ -215,7 +215,7 @@ funcenum SDKHookCB
 	bool public(entity, collisiongroup, contentsmask, bool originalResult),
 	
 	// Use
-	Action:public(entity, activator, caller, UseType:type, float value),
+	Action public(entity, activator, caller, UseType:type, float value),
 	
 	// UsePost
 	public(entity, activator, caller, UseType:type, float value)

@@ -314,7 +314,7 @@ public ThrowNade(userid, NadeId)
 {
 	int client = GetClientOfUserId(userid);
 	if (!IsValidClient(client)) return;
-	//new TFClassType:class = TF2_GetPlayerClass(client);
+	//new TFClassType class = TF2_GetPlayerClass(client);
 	if (IsValidEdict(NadeId))
 	{
 		GrenFlags[client] &= ~GRENFLAG_GRENHOLDING;

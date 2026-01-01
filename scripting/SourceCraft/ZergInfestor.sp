@@ -601,7 +601,7 @@ void Corruption(client, level)
                             if (targetTeam != GetClientTeam(client))
                             {
                                 int r,b,g;
-                                if (TFTeam:targetTeam == TFTeam_Red)
+                                if (TFTeam targetTeam == TFTeam_Red)
                                 {
                                     r = 255;
                                     b = 100;

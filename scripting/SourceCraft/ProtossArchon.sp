@@ -243,7 +243,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
 
         //Set Archon Color
         int r,g,b;
-        if (TFTeam:GetClientTeam(client) == TFTeam_Red)
+        if (TFTeam GetClientTeam(client) == TFTeam_Red)
         { r = 255; g = 0; b = 0; }
         else
         { r = 0; g = 0; b = 255; }
@@ -338,7 +338,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
 
         //Set Archon Color
         int r,g,b;
-        if (TFTeam:GetClientTeam(client) == TFTeam_Red)
+        if (TFTeam GetClientTeam(client) == TFTeam_Red)
         { r = 255; g = 0; b = 0; }
         else
         { r = 0; g = 0; b = 255; }

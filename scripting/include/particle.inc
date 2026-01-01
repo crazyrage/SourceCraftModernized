@@ -37,7 +37,7 @@ stock CreateParticle(const char[] particleType, float time=5.0, entity=-1,
                      const float ang[3]=NULL_VECTOR,
                      target=-1, const char[] targetBone="flag",
                      &target_particle=0,
-                     Timer:deleteFunc=Timer:INVALID_FUNCTION,
+                     Timer deleteFunc=Timer INVALID_FUNCTION,
                      &Handle timerHandle=null)
 {
     int particle = CreateEntityByName("info_particle_system");
@@ -142,7 +142,7 @@ stock CreateParticle(const char[] particleType, float time=5.0, entity=-1,
 }
 
 #define AttachParticleToHead(%1,%2,%3,%4,%5) CreateParticle(%2,%4,%1,Attach,"head",%3)
-//stock AttachParticleToHead(ent, const char[] particleType, Timer:func=Timer:0, float time=5.0,
+//stock AttachParticleToHead(ent, const char[] particleType, Timer func=Timer:0, float time=5.0,
 //                     const float offsetVec[3]=NULL_VECTOR)
 //{
 //    return CreateParticle(particleType, time, ent, Attach, "head", offsetVec);
@@ -162,7 +162,7 @@ stock CreateParticle(const char[] particleType, float time=5.0, entity=-1,
 //}
 
 #define ShowParticle(%1,%2,%3,%4) CreateParticle(%2,%3,0,NoAttach,"",%1,NULL_VECTOR,NULL_VECTOR,%4)
-//stock ShowParticle(float pos[3], const char[] particleType, float time, Timer:func)
+//stock ShowParticle(float pos[3], const char[] particleType, float time, Timer func)
 //{
 //    return CreateParticle(particleType, time, 0, NoAttach, "", pos,NULL_VECTOR,NULL_VECTOR,func);
 //}

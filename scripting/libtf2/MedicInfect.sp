@@ -723,7 +723,7 @@ stock Infect(to, from, bool friendly, bool infect, bool irradiate)
 
     if (NativeHooked)
     {
-        int Action:result = Plugin_Continue;
+        int Action result = Plugin_Continue;
         int color[4];
         color[0] = r;
         color[1] = b;
@@ -795,7 +795,7 @@ stock UnInfect(to, from=0)
 
     if (NativeHooked)
     {
-        int Action:result = Plugin_Continue;
+        int Action result = Plugin_Continue;
         static const color[4] = {255, 255, 255, 255};
         Call_StartForward(OnInfectedHandle);
         Call_PushCell(to);
@@ -842,11 +842,11 @@ stock UnInfect(to, from=0)
 // Naris: Retrieve the colors to use for infected players from ConVars.
 stock GetInfectColors(client, &r=0, &b=0, &g=0, &a=0)
 {
-    int TFTeam:team = TFTeam:GetClientTeam(client);
+    int TFTeam team = TFTeam GetClientTeam(client);
     int SameColors = GetConVarInt( Cvar_SameColors );
 
     // Osaka: This branch saves us two comparisons, and eliminates the need to check SameColors twice.
-    if(SameColors > 1) team = TFTeam:SameColors;
+    if(SameColors > 1) team = TFTeam SameColors;
 
     if( SameColors  == 1 )
     {
@@ -880,7 +880,7 @@ stock SetInfectColors(client, r, b, g, a)
     int SameColors = GetConVarInt( Cvar_SameColors );
     if( GetConVarInt(Cvar_GunColors) || SameColors)
     {
-        int TFTeam:team = TFTeam:GetClientTeam(client);
+        int TFTeam team = TFTeam GetClientTeam(client);
         int r2 = (team == TFTeam_Red) ? 255 : 0;
         int b2 = (team == TFTeam_Blue) ? 255: 0;
         int gun = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");

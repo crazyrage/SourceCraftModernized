@@ -42,7 +42,7 @@ IntroMenu(client)
     }
 }
 
-public IntroMenu_Action(Handle menu,MenuAction:action,client,param)
+public IntroMenu_Action(Handle menu,MenuAction action,client,param)
 {
     if (action == MenuAction_Select ||
        (action == MenuAction_Cancel
@@ -102,7 +102,7 @@ MainMenu(client)
     }
 }
 
-public Menu_Select(Handle menu,MenuAction:action,client,selection)
+public Menu_Select(Handle menu,MenuAction action,client,selection)
 {
     TraceInto("Menus", "Menu_Select", "client=%d:%N, menu=%d, action=%d, selection=%d", \
               client, ValidClientIndex(client), menu, action, selection);
@@ -192,11 +192,11 @@ RaceMenu(client,MenuMode:mode)
                 }
             }
             
-            new Faction:lastFaction = Unassigned;
+            new Faction lastFaction = Unassigned;
             for (int index=1; index < indexCount; index++)
             {
                 Handle raceHandle = GetRaceIndexHandle(index);
-                new Faction:faction   = GetRaceFaction(raceHandle);
+                new Faction faction   = GetRaceFaction(raceHandle);
                 if (faction != lastFaction)
                 {
                     new reqLevel = GetRaceRequiredLevel(raceHandle);
@@ -206,7 +206,7 @@ RaceMenu(client,MenuMode:mode)
                         lastFaction = faction;
                         if (index < indexCount)
                         {
-                            new Faction:nextFaction = (index < lastIndex) ? GetRaceFaction(GetRaceIndexHandle(index+1)) : faction;
+                            new Faction nextFaction = (index < lastIndex) ? GetRaceFaction(GetRaceIndexHandle(index+1)) : faction;
                             if (nextFaction != faction || raceCount < g_iRaceMenuThreshold)
                             {
                                 char item[ITEM_STRING_LENGTH];
@@ -249,7 +249,7 @@ RaceMenu(client,MenuMode:mode)
     }
 }
 
-public Faction_Selected(Handle menu,MenuAction:action,client,selection)
+public Faction_Selected(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -286,7 +286,7 @@ FactionMenu(client, start=-1)
         int level              = GetOverallLevel(client);
         bool change        = view_as<bool>(gRaceMenuMode[client] & ChangeRaceMode);
         Handle crMenu      = CreateMenu(RaceMenu_Selected);
-        int Faction:theFaction = GetRaceFaction(GetRaceIndexHandle(start));
+        int Faction theFaction = GetRaceFaction(GetRaceIndexHandle(start));
 
         char factionName[NAME_STRING_LENGTH];
         GetFactionName(theFaction,factionName,sizeof(factionName), client);
@@ -373,7 +373,7 @@ GetRaceMenuItem(char[] item, maxlength, client, Handle raceHandle, reqLevel, boo
     }
 }
 
-public RaceMenu_Selected(Handle menu,MenuAction:action,client,selection)
+public RaceMenu_Selected(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -614,7 +614,7 @@ UpgradeMenu(client, MenuMode:mode, bool int eractive)
     TraceReturn();
 }
 
-public UpgradeMenu_Selected(Handle menu,MenuAction:action,client,selection)
+public UpgradeMenu_Selected(Handle menu,MenuAction action,client,selection)
 {
     TraceInto("Menus", "UpgradeMenu_Selected", "client=%d, menu=%d, action=%d, selection=%d", \
               client, menu, action, selection);
@@ -886,7 +886,7 @@ ShopMenu(client, target, MenuMode:mode)
     }
 }
 
-public Category_Selected(Handle menu,MenuAction:action,client,selection)
+public Category_Selected(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -1016,7 +1016,7 @@ public Category_Selected(Handle menu,MenuAction:action,client,selection)
         delete menu;
 }
 
-public ShopMenu_Selected(Handle menu,MenuAction:action,client,selection)
+public ShopMenu_Selected(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -1113,7 +1113,7 @@ public ShopMenu_Item(client,item)
     DisplayMenu(shopMenu_Item,client,MENU_TIME_FOREVER);
 }
 
-public ShopMenu_Item_Select(Handle menu,MenuAction:action,client,selection)
+public ShopMenu_Item_Select(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {

@@ -495,8 +495,8 @@ public Action ChangeClass(Handle timer, any client)
 	{
 		if (deathcount[client] >= GetConVarInt(cvar4))
 		{
-			new TFTeam:team = TFTeam:GetClientTeam(client);
-			new TFClassType:oldclass;
+			new TFTeam team = TFTeam GetClientTeam(client);
+			new TFClassType oldclass;
 			oldclass == TF2_GetPlayerClass(client)
 			int newclass, iBots = 0, iMaxClients = MaxClients, Team, Teamc, sloop = 0;
 			Teamc = GetClientTeam(client)
@@ -517,7 +517,7 @@ public Action ChangeClass(Handle timer, any client)
 				RecountClasses();
 				if (GetConVarBool(cvar6b))
 				{
-					for (int TFClassType:c=TFClass_Scout; c<=TFClass_Engineer; c++)
+					for (int TFClassType c=TFClass_Scout; c<=TFClass_Engineer; c++)
 					{
 						if (CurrentCount[Teamc][c] == 0)
 							searchforfreeclass = true;
@@ -533,14 +533,14 @@ public Action ChangeClass(Handle timer, any client)
 				{
 					if (searchforfreeclass)
 					{
-						if (CurrentCount[team][TFClassType:newclass] == 0)
+						if (CurrentCount[team][TFClassType newclass] == 0)
 						{
 							pass = true;
 						}
 						else if (CurrentCount[team][oldclass] <= 1)
 						{
 							deathcount[client]--;
-							newclass = _:oldclass;
+							newclass = view_as<int>(oldclass);
 							pass = true;
 						}
 						else
@@ -550,7 +550,7 @@ public Action ChangeClass(Handle timer, any client)
 					}
 					else
 					{
-						if (oldclass == TFClassType:newclass || CurrentCount[team][TFClassType:newclass] >= ClassLimit)
+						if (oldclass == TFClassType newclass || CurrentCount[team][TFClassType newclass] >= ClassLimit)
 						{
 							pass = false;
 						}
@@ -565,7 +565,7 @@ public Action ChangeClass(Handle timer, any client)
 					pass = true;
 				}
 			} while(!pass)				
-			TF2_SetPlayerClass(client, TFClassType:newclass);
+			TF2_SetPlayerClass(client, TFClassType newclass);
 		}
 		else
 		{
@@ -589,7 +589,7 @@ public Action RespawnPlayer(Handle timer, any client)
 
 RecountClasses()
 {
-	for (int TFClassType:c=TFClass_Unknown; c<=TFClass_Engineer; c++)
+	for (int TFClassType c=TFClass_Unknown; c<=TFClass_Engineer; c++)
 	{
 		CurrentCount[TFTeam_Red][c] = 0;
 		CurrentCount[TFTeam_Blue][c] = 0;
@@ -599,7 +599,7 @@ RecountClasses()
 	{
 		if (IsClientInGame(i))
 		{
-			CurrentCount[TFTeam:GetClientTeam(i)][TF2_GetPlayerClass(i)]++;
+			CurrentCount[TFTeam GetClientTeam(i)][TF2_GetPlayerClass(i)]++;
 		}
 	}
 }

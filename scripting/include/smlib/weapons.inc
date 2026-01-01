@@ -170,7 +170,7 @@ stock bool Weapon_FiresUnderWater(weapon)
  */
 stock Weapon_SetFiresUnderWater(weapon, bool can=true)
 {
-	SetEntProp(weapon, Prop_Data, "m_bFiresUnderwater", _:can);
+	SetEntProp(weapon, Prop_Data, "m_bFiresUnderwater", view_as<int>(can));
 }
 
 /*
@@ -193,7 +193,7 @@ stock bool Weapon_FiresUnderWaterAlt(weapon)
  */
 stock Weapon_SetFiresUnderWaterAlt(weapon, bool can=true)
 {
-	SetEntProp(weapon, Prop_Data, "m_bAltFiresUnderwater", _:can);
+	SetEntProp(weapon, Prop_Data, "m_bAltFiresUnderwater", view_as<int>(can));
 }
 
 /*

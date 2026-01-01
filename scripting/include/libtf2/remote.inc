@@ -285,7 +285,7 @@ native ResetBuild(client);
  * @param count     Reference that returns the number of existing buildings
  * @return			true if the building can be built.
  */
-native bool CheckBuild(client,TFObjectType:type,mode=-1,&count=0);
+native bool CheckBuild(client,TFObjectType type,mode=-1,&count=0);
 
 /**
  * Gets called when the build command is issued to build a building
@@ -296,7 +296,7 @@ native bool CheckBuild(client,TFObjectType:type,mode=-1,&count=0);
  * @param count:    The number of that type of building already built by client
  * @return          Plugin_Handled will block building.
  */
-forward Action OnBuildCommand(client,TFObjectType:type,mode,count);
+forward Action OnBuildCommand(client,TFObjectType type,mode,count);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

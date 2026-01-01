@@ -235,9 +235,9 @@ public Spawn_Selected(Handle menu,MenuAction action,int client,int selection)
                     CountObjects(client,TF2_ObjectClassNames[item]) <= 0)
                 {
                     TFObjectType obj;
-                    if (item == _:TFExtObject_MiniSentry)
+                    if (item == view_as<int>(TFExtObject_MiniSentry))
                         obj = TFObject_Sentry;
-                    else if (item == _:TFExtObject_RepairNode)
+                    else if (item == view_as<int>(TFExtObject_RepairNode))
                     {
                         obj = TFObject_Dispenser;
                         if (m_AmpNodeAvailable)
@@ -246,7 +246,7 @@ public Spawn_Selected(Handle menu,MenuAction action,int client,int selection)
                             SetRepairNode(client, .team=(spawn_level>2), .enable=true, .select=true);
                         }
                     }
-                    else if (item == _:TFExtObject_Amplifier)
+                    else if (item == view_as<int>(TFExtObject_Amplifier))
                     {
                         obj = TFObject_Dispenser;
                         if (m_AmpNodeAvailable)
@@ -255,12 +255,12 @@ public Spawn_Selected(Handle menu,MenuAction action,int client,int selection)
                             if (pos > 0)
                             {
                                 BreakString(SelectionInfo[pos], num, sizeof(num));
-                                cond = TFCond:StringToInt(num);
+                                cond = TFCond StringToInt(num);
                             }
                             SetAmplifier(client, cond, .enable=true, .select=true);
                         }
                     }
-                    /*else if (item == _:TFExtObject_UpgradeStation)
+                    /*else if (item == view_as<int>(TFExtObject_UpgradeStation))
                     {
                         obj = TFObject_Dispenser;
                         if (m_AmpNodeAvailable)
@@ -269,7 +269,7 @@ public Spawn_Selected(Handle menu,MenuAction action,int client,int selection)
                         }
                     }*/
                     else
-                        obj = TFObjectType:item;
+                        obj = TFObjectType item;
 
                     ClientCommand(client, "build %d", obj);
                 }
@@ -321,7 +321,7 @@ stock SpawnIt(int client, TFExtObjectType type, int raceId, int upgradeId, int l
         DisplayMessage(client, Display_Ultimate, "%t", "NotAsMole", upgradeName);
         PrepareAndEmitSoundToClient(client,deniedWav);
     }
-    else if (!CheckBuild(client, TFObjectType:type, -1, count))
+    else if (!CheckBuild(client, TFObjectType type, -1, count))
     {
         PrepareAndEmitSoundToClient(client,deniedWav);
         DisplayMessage(client, Display_Ultimate,

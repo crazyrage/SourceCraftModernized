@@ -402,7 +402,7 @@ public Action Exclaimation(Handle timer, any client)
     return Plugin_Stop;
 }
 
-stock CreateExclaimTimer(client, float int erval, Timer:func,
+stock CreateExclaimTimer(client, float int erval, Timer func,
                          flags=TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE)
 {
     if (m_ExclaimTimers[client] == null)

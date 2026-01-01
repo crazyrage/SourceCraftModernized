@@ -274,5 +274,5 @@ public int Native_GetROF(Handle plugin, int numParams)
 {
     int client = GetNativeCell(1);
     SetNativeCellRef(2, m_EnergyAmount[client]);
-    return _:m_ClientRateMult[client];          
+    return view_as<int>(m_ClientRateMult)[client];          
 }

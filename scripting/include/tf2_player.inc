@@ -85,7 +85,7 @@ stock const float TF2_ClassSpeed[/*TFClassType*/] = { 0.0, 400.0, 300.0, 240.0, 
 stock float TF2_GetPlayerSpeed(client)
 {
     float speed;
-    int TFClassType:class = TF2_GetPlayerClass(client);
+    int TFClassType class = TF2_GetPlayerClass(client);
     switch (class)
     {
         case TFClass_Sniper:
@@ -194,7 +194,7 @@ stock float TF2_GetPlayerSpeed(client)
  */
 stock TF2_GetPlayerMaxHealth(client)
 {
-    int TFClassType:class = TF2_GetPlayerClass(client);
+    int TFClassType class = TF2_GetPlayerClass(client);
     switch (class)
     {
         case TFClass_Scout:
@@ -309,7 +309,7 @@ stock TF2_GetPlayerMaxHealth(client)
 #define TF2_IsRegenBuffed(%1)               (((%1) & TF_CONDFLAG_REGENBUFFED) != TF_CONDFLAG_REGENBUFFED)
 #define TF2_IsMarkedForDeath(%1)            (((%1) & TF_CONDFLAG_MARKEDFORDEATH) != TF_CONDFLAG_MARKEDFORDEATH)
 
-#define TF_CONDFLAGEX_SPEEDBUFFALLY         (1 << (_:TFCond_SpeedBuffAlly-32))
+#define TF_CONDFLAGEX_SPEEDBUFFALLY         (1 << (view_as<int>(TFCond_SpeedBuffAlly)-32))
 
 #define TF2_IsSpeedBuffAlly(%1)             (((%1) & TF_CONDFLAGEX_SPEEDBUFFALLY) != TF_CONDFLAGEX_SPEEDBUFFALLY)
 

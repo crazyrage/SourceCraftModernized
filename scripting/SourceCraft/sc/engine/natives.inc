@@ -59,7 +59,7 @@ public Native_IsSourceCraftLoaded(Handle plugin,numParams)
  */
 public Native_GetRoundState(Handle plugin,numParams)
 {
-   return _:g_RoundState;
+   return view_as<int>(g_RoundState);
 }
 
 /**
@@ -70,7 +70,7 @@ public Native_GetRoundState(Handle plugin,numParams)
  */
 public Native_GetType(Handle plugin,numParams)
 {
-   return _:GameType;
+   return view_as<int>(GameType);
 }
 
 /**
@@ -81,7 +81,7 @@ public Native_GetType(Handle plugin,numParams)
  */
 public Native_GetMode(Handle plugin,numParams)
 {
-   return _:GetGameMode();
+   return view_as<int>(GetGameMode)();
 }
 
 /**
@@ -110,7 +110,7 @@ public Native_GetMode(Handle plugin,numParams)
  * @return The return value will be the race index or -1 if there was a problem.
  *
  * native CreateRace(const char[] short, required_level=0, tech_level=0, max_level=16,
- *                   initial_energy=30, energy_limit=100, energy_rate=1, Faction:faction=Generic,
+ *                   initial_energy=30, energy_limit=100, energy_rate=1, Faction faction=Generic,
  *                   UnitType:type=GenericUnit, const char[] parent="", Translation:translation=Translation_Auto,
  *                   const char[] translation_file="", const char[] name="", const char[] switch_message="",
  *                   const char[] pending_message="", const char[] desc="", const char[] image="");
@@ -126,7 +126,7 @@ public Native_CreateRace(Handle plugin,numParams)
     float initial_energy = float GetNativeCell(5);
     float energy_limit   = float GetNativeCell(6);
     float energy_rate    = float GetNativeCell(7);
-    Faction faction      = Faction:GetNativeCell(8);
+    Faction faction      = Faction GetNativeCell(8);
     UnitType type        = UnitType:GetNativeCell(9);
 
     char parent[SHORT_STRING_LENGTH];
@@ -217,7 +217,7 @@ public Native_RaceComplete(Handle plugin,numParams)
  * 
  * native SetRaceAttributes(race, const char[] switch_message="",const char[] pending_message="",
  *                                required_level=-1,tech_level=-1,max_level=-1, initial_energy=-1,energy_limit=-1,
- *                                energy_rate=-1,Faction:faction=Generic, UnitType:type=GenericUnit,
+ *                                energy_rate=-1,Faction faction=Generic, UnitType:type=GenericUnit,
  *                                const char[] short="", const char[] parent="", translation=-1);
  */
 public Native_SetRaceAttributes(Handle plugin,numParams)
@@ -252,7 +252,7 @@ public Native_SetRaceAttributes(Handle plugin,numParams)
         if (energy_rate >= 0)
             SetRaceEnergyRate(raceHandle,energy_rate);
 
-        Faction faction = Faction:GetNativeCell(8);
+        Faction faction = Faction GetNativeCell(8);
         if (faction > Unassigned)
             SetRaceFaction(raceHandle,faction);
 
@@ -263,7 +263,7 @@ public Native_SetRaceAttributes(Handle plugin,numParams)
         char parent[SHORT_STRING_LENGTH];
         GetNativeString(10,parent,sizeof(parent));
         if (parent[0] != '\0')
-            SetArrayString(stringsHandle,_:RaceString_ParentName,parent);
+            SetArrayString(stringsHandle,view_as<int>(RaceString_ParentName),parent);
 
         Translation translation = Translation:GetNativeCell(11);
         if (translation != Translation_Default)
@@ -309,9 +309,9 @@ public Native_GetRacePlugin(Handle plugin,numParams)
 {
     Handle raceHandle = GetRaceHandle(GetNativeCell(1));
     if (raceHandle != null)
-        return _:GetRacePlugin(raceHandle);
+        return view_as<int>(GetRacePlugin)(raceHandle);
     else
-        return _:null;
+        return view_as<int>(null);
 }
 
 /**
@@ -325,9 +325,9 @@ public Native_GetRaceEnergyRate(Handle plugin,numParams)
 {
     Handle raceHandle = GetRaceHandle(GetNativeCell(1));
     if (raceHandle != null)
-        return _:GetRaceEnergyRate(raceHandle);
+        return view_as<int>(GetRaceEnergyRate)(raceHandle);
     else
-        return _:-1.0;
+        return view_as<int>(-1.0);
 }
 
 /**
@@ -359,9 +359,9 @@ public Native_GetRaceEnergyLimit(Handle plugin,numParams)
 {
     Handle raceHandle = GetRaceHandle(GetNativeCell(1));
     if (raceHandle != null)
-        return _:GetRaceEnergyLimit(raceHandle);
+        return view_as<int>(GetRaceEnergyLimit)(raceHandle);
     else
-        return _:-1.0;
+        return view_as<int>(-1.0);
 }
 
 /**
@@ -393,9 +393,9 @@ public Native_GetRaceInitialEnergy(Handle plugin,numParams)
 {
     Handle raceHandle = GetRaceHandle(GetNativeCell(1));
     if (raceHandle != null)
-        return _:GetRaceInitialEnergy(raceHandle);
+        return view_as<int>(GetRaceInitialEnergy)(raceHandle);
     else
-        return _:-1.0;
+        return view_as<int>(-1.0);
 }
 
 /**
@@ -427,7 +427,7 @@ public Native_GetRaceEnergyFlags(Handle plugin,numParams)
 {
     Handle raceHandle = GetRaceHandle(GetNativeCell(1));
     if (raceHandle != null)
-        return _:GetRaceEnergyFlags(raceHandle);
+        return view_as<int>(GetRaceEnergyFlags)(raceHandle);
     else
         return -1;
 }
@@ -786,9 +786,9 @@ public Native_GetUpgradeCooldown(Handle plugin,numParams)
         int upgrade = GetNativeCell(2);
         float cooldown = GetUpgradeCooldown(race, raceHandle, upgrade, cooldown_type);
         SetNativeCellRef(3, cooldown_type);
-        return _:cooldown;
+        return view_as<int>(cooldown);
     }
-    return _:-1.0;
+    return view_as<int>(-1.0);
 }
 
 /**
@@ -901,15 +901,15 @@ public Native_GetRaceParentId(Handle plugin,numParams)
  * @param validate: Set to true to return only valid faction indices (converts Unassigned to Generic)
  * @return The return value will be the Faction of the race
  *
- * native Faction:GetRaceFaction(race,bool validate=true);
+ * native Faction GetRaceFaction(race,bool validate=true);
  */
 public Native_GetRaceFaction(Handle plugin,numParams)
 {
     Handle raceHandle = GetRaceHandle(GetNativeCell(1));
     if (raceHandle != null)
-        return (GetNativeCell(2)) ? (_:GetRaceFactionId(raceHandle)) : (_:GetRaceFaction(raceHandle));
+        return (GetNativeCell(2)) ? (view_as<int>(GetRaceFactionId)(raceHandle)) : (view_as<int>(GetRaceFaction)(raceHandle));
     else
-        return _:Generic;
+        return view_as<int>(Generic);
 }
 
 /**
@@ -937,12 +937,12 @@ public Native_GetUnitTypeName(Handle plugin,numParams)
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  *
- * native GetFactionName(Faction:faction, char[] name, maxlength, lang=LANG_SERVER);
+ * native GetFactionName(Faction faction, char[] name, maxlength, lang=LANG_SERVER);
  */
 public Native_GetFactionName(Handle plugin,numParams)
 {
     char name[NAME_STRING_LENGTH];
-    GetFactionName(Faction:GetNativeCell(1), name, sizeof(name), GetNativeCell(4));
+    GetFactionName(Faction GetNativeCell(1), name, sizeof(name), GetNativeCell(4));
     SetNativeString(2, name, GetNativeCell(3));
 }
 
@@ -954,12 +954,12 @@ public Native_GetFactionName(Handle plugin,numParams)
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  * 
- * native GetFactionDescription(Faction:faction, char[] desc, maxlength, lang=LANG_SERVER);
+ * native GetFactionDescription(Faction faction, char[] desc, maxlength, lang=LANG_SERVER);
  */
 public Native_GetFactionDescription(Handle plugin,numParams)
 {
     char desc[NAME_STRING_LENGTH];
-    GetFactionDescription(Faction:GetNativeCell(1), desc, sizeof(desc), GetNativeCell(4));
+    GetFactionDescription(Faction GetNativeCell(1), desc, sizeof(desc), GetNativeCell(4));
     SetNativeString(2, desc, GetNativeCell(3));
 }
 
@@ -971,12 +971,12 @@ public Native_GetFactionDescription(Handle plugin,numParams)
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  *
- * native GetFactionCrystalSound(Faction:faction, char[] sound, maxlength, lang=LANG_SERVER);
+ * native GetFactionCrystalSound(Faction faction, char[] sound, maxlength, lang=LANG_SERVER);
  */
 public Native_GetFactionCrystalSound(Handle plugin,numParams)
 {
     char sound[NAME_STRING_LENGTH];
-    GetFactionCrystalSound(Faction:GetNativeCell(1), sound, sizeof(sound), GetNativeCell(4));
+    GetFactionCrystalSound(Faction GetNativeCell(1), sound, sizeof(sound), GetNativeCell(4));
     SetNativeString(2, sound, GetNativeCell(3));
 }
 
@@ -986,12 +986,12 @@ public Native_GetFactionCrystalSound(Handle plugin,numParams)
  * @param faction:   The Faction (defaults to client's current faction)
  * @noreturn
  * 
- * native EmitCrystalSoundToClient(client, Faction:f=Unassigned);
+ * native EmitCrystalSoundToClient(client, Faction f=Unassigned);
  */
 public Native_EmitCrystalSoundToClient(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
-    Faction faction = Faction:GetNativeCell(2);
+    Faction faction = Faction GetNativeCell(2);
     if (faction == Unassigned)
     {
         int race = GetRace(client);
@@ -1011,12 +1011,12 @@ public Native_EmitCrystalSoundToClient(Handle plugin,numParams)
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  * 
- * native GetFactionVespeneSound(Faction:f, char[] sound, maxlength, lang=LANG_SERVER);
+ * native GetFactionVespeneSound(Faction f, char[] sound, maxlength, lang=LANG_SERVER);
  */
 public Native_GetFactionVespeneSound(Handle plugin,numParams)
 {
     char sound[NAME_STRING_LENGTH];
-    GetFactionVespeneSound(Faction:GetNativeCell(1), sound, sizeof(sound), GetNativeCell(4));
+    GetFactionVespeneSound(Faction GetNativeCell(1), sound, sizeof(sound), GetNativeCell(4));
     SetNativeString(2, sound, GetNativeCell(3));
 }
 
@@ -1026,12 +1026,12 @@ public Native_GetFactionVespeneSound(Handle plugin,numParams)
  * @param faction:   The Faction (defaults to client's current faction)
  * @noreturn
  * 
- * native EmitVespeneSoundToClient(client, Faction:faction=Unassigned);
+ * native EmitVespeneSoundToClient(client, Faction faction=Unassigned);
  */
 public Native_EmitVespeneSoundToClient(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
-    Faction faction = Faction:GetNativeCell(2);
+    Faction faction = Faction GetNativeCell(2);
     if (faction == Unassigned)
     {
         int race = GetRace(client);
@@ -1051,12 +1051,12 @@ public Native_EmitVespeneSoundToClient(Handle plugin,numParams)
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  * 
- * native GetFactionEnergySound(Faction:f, char[] sound, maxlength, lang=LANG_SERVER);
+ * native GetFactionEnergySound(Faction f, char[] sound, maxlength, lang=LANG_SERVER);
  */
 public Native_GetFactionEnergySound(Handle plugin,numParams)
 {
     char sound[NAME_STRING_LENGTH];
-    GetFactionEnergySound(Faction:GetNativeCell(1), sound, sizeof(sound), GetNativeCell(4));
+    GetFactionEnergySound(Faction GetNativeCell(1), sound, sizeof(sound), GetNativeCell(4));
     SetNativeString(2, sound, GetNativeCell(3));
 }
 
@@ -1066,12 +1066,12 @@ public Native_GetFactionEnergySound(Handle plugin,numParams)
  * @param faction:   The Faction (defaults to client's current faction)
  * @noreturn
  * 
- * native EmitEnergySoundToClient(client, Faction:faction=Unassigned);
+ * native EmitEnergySoundToClient(client, Faction faction=Unassigned);
  */
 public Native_EmitEnergySoundToClient(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
-    Faction faction = Faction:GetNativeCell(2);
+    Faction faction = Faction GetNativeCell(2);
     if (faction == Unassigned)
     {
         int race = GetRace(client);
@@ -1091,12 +1091,12 @@ public Native_EmitEnergySoundToClient(Handle plugin,numParams)
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  * 
- * native GetFactionXPSound(Faction:f, char[] sound, maxlength, lang=LANG_SERVER);
+ * native GetFactionXPSound(Faction f, char[] sound, maxlength, lang=LANG_SERVER);
  */
 public Native_GetFactionXPSound(Handle plugin,numParams)
 {
     char sound[NAME_STRING_LENGTH];
-    GetFactionXPSound(Faction:GetNativeCell(1), sound, sizeof(sound), GetNativeCell(4));
+    GetFactionXPSound(Faction GetNativeCell(1), sound, sizeof(sound), GetNativeCell(4));
     SetNativeString(2, sound, GetNativeCell(3));
 }
 
@@ -1106,12 +1106,12 @@ public Native_GetFactionXPSound(Handle plugin,numParams)
  * @param faction:   The Faction (defaults to client's current faction)
  * @noreturn
  * 
- * native EmitXPEnergySoundToClient(client, Faction:faction=Unassigned);
+ * native EmitXPEnergySoundToClient(client, Faction faction=Unassigned);
  */
 public Native_EmitXPSoundToClient(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
-    Faction faction = Faction:GetNativeCell(2);
+    Faction faction = Faction GetNativeCell(2);
     if (faction == Unassigned)
     {
         int race = GetRace(client);
@@ -1131,12 +1131,12 @@ public Native_EmitXPSoundToClient(Handle plugin,numParams)
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  * 
- * native GetFactionLevelSound(Faction:f, char[] sound, maxlength, lang=LANG_SERVER);
+ * native GetFactionLevelSound(Faction f, char[] sound, maxlength, lang=LANG_SERVER);
  */
 public Native_GetFactionLevelSound(Handle plugin,numParams)
 {
     char sound[NAME_STRING_LENGTH];
-    GetFactionLevelSound(Faction:GetNativeCell(1), sound, sizeof(sound), GetNativeCell(4));
+    GetFactionLevelSound(Faction GetNativeCell(1), sound, sizeof(sound), GetNativeCell(4));
     SetNativeString(2, sound, GetNativeCell(3));
 }
 
@@ -1146,12 +1146,12 @@ public Native_GetFactionLevelSound(Handle plugin,numParams)
  * @param faction:   The Faction (defaults to client's current faction)
  * @noreturn
  * 
- * native EmitLevelSoundToClient(client, Faction:faction=Unassigned);
+ * native EmitLevelSoundToClient(client, Faction faction=Unassigned);
  */
 public Native_EmitLevelSoundToClient(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
-    Faction faction = Faction:GetNativeCell(2);
+    Faction faction = Faction GetNativeCell(2);
     if (faction == Unassigned)
     {
         int race = GetRace(client);
@@ -1277,9 +1277,9 @@ public Native_GetUpgradeEnergy(Handle plugin,numParams)
 {
     Handle raceHandle = GetRaceHandle(GetNativeCell(1));
     if (raceHandle != null)
-        return _:GetUpgradeEnergy(raceHandle, GetNativeCell(2));
+        return view_as<int>(GetUpgradeEnergy)(raceHandle, GetNativeCell(2));
     else
-        return _:-1.0;
+        return view_as<int>(-1.0);
 }
 
 /**
@@ -1378,9 +1378,9 @@ public N_GetUpgradeRecurringEnergy(Handle plugin,numParams)
 {
     Handle raceHandle = GetRaceHandle(GetNativeCell(1));
     if (raceHandle != null)
-        return _:GetUpgradeRecurringEnergy(raceHandle, GetNativeCell(2));
+        return view_as<int>(GetUpgradeRecurringEnergy)(raceHandle, GetNativeCell(2));
     else
-        return _:-1.0;
+        return view_as<int>(-1.0);
 }
 
 /**
@@ -2106,9 +2106,9 @@ public Native_GetItemPlugin(Handle plugin,numParams)
 {
     Handle itemHandle=GetShopItemHandle(GetNativeCell(1));
     if (itemHandle != null)
-        return _:GetItemPlugin(itemHandle);
+        return view_as<int>(GetItemPlugin)(itemHandle);
     else
-        return _:null;
+        return view_as<int>(null);
 }
 
 /**
@@ -2275,8 +2275,8 @@ HurtPlayer(victim, damage, attacker=0, const char[] weapon_name="",
     {
         if (!ignore_immunity && IsClient(victim))
         {
-            int immunities = _:GetImmunityBits(victim);
-            if (_:category & immunities)
+            int immunities = view_as<int>(GetImmunityBits)(victim);
+            if (view_as<int>(category) & immunities)
             {
                 // If the damage category bits have any of the bits in the immunites
 
@@ -2877,7 +2877,7 @@ public Native_DisplayKill(Handle plugin,numParams)
  * @param ...: Format arguments (if any)
  * @noreturn
  *
- * native DisplayMessage(client, flags, const char[] fmt, any:...);
+ * native DisplayMessage(client, flags, const char[] fmt, any ...);
  */
 public Native_DisplayMessage(Handle plugin,numParams)
 {
@@ -2931,7 +2931,7 @@ public Native_DisplayMessage(Handle plugin,numParams)
  * @param ...:          Format arguments (if any)
  * @noreturn
  *
- * native DisplayHint(client, HintSlot:slot, bool exclusive, float duration, const char[] fmt, any:...);
+ * native DisplayHint(client, HintSlot:slot, bool exclusive, float duration, const char[] fmt, any ...);
  */
 public Native_DisplayHint(Handle plugin,numParams)
 {
@@ -2966,7 +2966,7 @@ public Native_DisplayHint(Handle plugin,numParams)
  * @param ...: Format arguments (if any)
  * @noreturn
  *
- * native HudMessage(client, const char[] fmt, any:...);
+ * native HudMessage(client, const char[] fmt, any ...);
  */
 public Native_HudMessage(Handle plugin,numParams)
 {
@@ -3157,7 +3157,7 @@ public Native_GetArmor(Handle plugin,numParams)
  */
 public Native_GetArmorFlags(Handle plugin,numParams)
 {
-    return _:GetArmorFlags(GetNativeCell(1));
+    return view_as<int>(GetArmorFlags)(GetNativeCell(1));
 }
 
 /**
@@ -3437,7 +3437,7 @@ public Native_GetDisplayBits(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsClient(client))
-        return _:GetDisplayBits(client);
+        return view_as<int>(GetDisplayBits)(client);
     else
         return 0;
 }
@@ -3447,13 +3447,13 @@ public Native_GetDisplayBits(Handle plugin,numParams)
  * @param client: The index of the player to get the settings for
  * @return The return value will be all of the client's settings bits.
  *
- * native bool GetDisplaySetting(client,Settings:setting);
+ * native bool GetDisplaySetting(client,Settings setting);
  */
 public Native_GetDisplaySetting(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsClient(client))
-        return _:GetDisplaySetting(client, Display:GetNativeCell(2));
+        return view_as<int>(GetDisplaySetting)(client, Display:GetNativeCell(2));
     else
         return false;
 }
@@ -3463,13 +3463,13 @@ public Native_GetDisplaySetting(Handle plugin,numParams)
  * @param client: The index of the player to get the settings for
  * @return The return value will be all of the client's settings bits.
  *
- * native Settings:GetSettingsBits(client);
+ * native Settings GetSettingsBits(client);
  */
 public Native_GetSettingsBits(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsClient(client))
-        return _:GetSettingsBits(client);
+        return view_as<int>(GetSettingsBits)(client);
     else
         return 0;
 }
@@ -3479,13 +3479,13 @@ public Native_GetSettingsBits(Handle plugin,numParams)
  * @param client: The index of the player to get the settings for
  * @return The return value will be all of the client's settings bits.
  *
- * native bool GetSetting(client,Settings:setting);
+ * native bool GetSetting(client,Settings setting);
  */
 public Native_GetSetting(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsClient(client))
-        return _:GetSetting(client, Settings:GetNativeCell(2));
+        return view_as<int>(GetSetting)(client, Settings GetNativeCell(2));
     else
         return false;
 }
@@ -3878,10 +3878,10 @@ public Native_GetEnergy(Handle plugin,numParams)
         float amount = GetEnergy(client);
         if (GetNativeCell(2))
             amount /= g_fEnergyFactor;
-        return _:amount;
+        return view_as<int>(amount);
     }
     else
-        return _:-1.0;
+        return view_as<int>(-1.0);
 }
 
 /**
@@ -3966,9 +3966,9 @@ public Native_GetEnergyRate(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
-        return _:GetEnergyRate(client);
+        return view_as<int>(GetEnergyRate)(client);
     else
-        return _:-1.0;
+        return view_as<int>(-1.0);
 }
 
 /**
@@ -3997,9 +3997,9 @@ public Native_GetEnergyLimit(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
-        return _:GetEnergyLimit(client);
+        return view_as<int>(GetEnergyLimit)(client);
     else
-        return _:-1.0;
+        return view_as<int>(-1.0);
 }
 
 /**
@@ -4028,9 +4028,9 @@ public Native_GetInitialEnergy(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
-        return _:GetInitialEnergy(client);
+        return view_as<int>(GetInitialEnergy)(client);
     else
-        return _:-1.0;
+        return view_as<int>(-1.0);
 }
 
 /**
@@ -4066,10 +4066,10 @@ public Native_GetAccumulatedEnergy(Handle plugin,numParams)
             race = GetRace(client);
 
         if (race > 0)
-            return _:GetAccumulatedEnergy(client,race);
+            return view_as<int>(GetAccumulatedEnergy)(client,race);
     }
 
-    return _:-1.0;
+    return view_as<int>(-1.0);
 }
 
 /**
@@ -4514,7 +4514,7 @@ public Native_GetAttributeBits(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
-        return _:GetAttributeBits(client);
+        return view_as<int>(GetAttributeBits)(client);
     else
         return 0;
 }
@@ -4547,13 +4547,13 @@ public Native_SetAttributeBits(Handle plugin,numParams)
  * @param attribute: The attribute or attributes you want to check. 
  * @return The return value will be true if the attribute is set or false if it isn't.
  *
- * native bool GetAttribute(client,Attribute:attribute);
+ * native bool GetAttribute(client,Attribute attribute);
  */
 public Native_GetAttribute(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
-        return GetAttribute(client,Attribute:GetNativeCell(2));
+        return GetAttribute(client,Attribute GetNativeCell(2));
     else
         return false;
 }
@@ -4565,7 +4565,7 @@ public Native_GetAttribute(Handle plugin,numParams)
  * @param imm_state: The state to set the attribute to.
  * @noreturn
  *
- * native SetAttribute(client,Attribute:attribute,bool attrib_state=true);
+ * native SetAttribute(client,Attribute attribute,bool attrib_state=true);
  */
 public Native_SetAttribute(Handle plugin,numParams)
 {
@@ -4573,7 +4573,7 @@ public Native_SetAttribute(Handle plugin,numParams)
     if (IsValidClient(client))
     {
         bool attrib_state = (numParams >= 3) ? (view_as<bool>(GetNativeCell(3))) : true;
-        SetAttribute(client,Attribute:GetNativeCell(2),attrib_state);
+        SetAttribute(client,Attribute GetNativeCell(2),attrib_state);
     }
 }
 
@@ -4588,7 +4588,7 @@ public Native_GetImmunityBits(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
-        return _:GetImmunityBits(client);
+        return view_as<int>(GetImmunityBits)(client);
     else
         return 0;
 }
@@ -4621,13 +4621,13 @@ public Native_SetImmunityBits(Handle plugin,numParams)
  * @param immunity: The immunity or immunities you want to check. 
  * @return The return value will be true if they are immune or false if they aren't.
  *
- * native bool GetImmunity(client,Immunity:immunity);
+ * native bool GetImmunity(client,Immunity immunity);
  */
 public Native_GetImmunity(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
-        return GetImmunity(client,Immunity:GetNativeCell(2));
+        return GetImmunity(client,Immunity GetNativeCell(2));
     else
         return false;
 }
@@ -4641,7 +4641,7 @@ public Native_GetImmunity(Handle plugin,numParams)
  * @param pluginid:  Handle of the plugin to set immunity for (defaults to calling plugin)
  * @noreturn
  *
- * native SetImmunity(client,Immunity:immunity,bool imm_state=true,
+ * native SetImmunity(client,Immunity immunity,bool imm_state=true,
  *                    id=0,Handle pluginid=null);
  */
 public Native_SetImmunity(Handle plugin,numParams)
@@ -4649,7 +4649,7 @@ public Native_SetImmunity(Handle plugin,numParams)
     int client = GetNativeCell(1);
     if (IsValidClient(client))
     {
-        Immunity imm = Immunity:GetNativeCell(2);
+        Immunity imm = Immunity GetNativeCell(2);
         bool imm_state = (numParams >= 3) ? (view_as<bool>(GetNativeCell(3))) : true;
 
         Handle propData=GetPropData(client);
@@ -4713,7 +4713,7 @@ public Native_GetRestrictionBits(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
-        return _:GetRestrictionBits(client);
+        return view_as<int>(GetRestrictionBits)(client);
     else
         return 0;
 }
@@ -4746,13 +4746,13 @@ public Native_SetRestrictionBits(Handle plugin,numParams)
  * @param restriction: The restriction or restrictions you want to check. 
  * @return The return value will be true if they are restricted or false if they aren't.
  *
- * native bool GetRestriction(client,Restriction:restriction);
+ * native bool GetRestriction(client,Restriction restriction);
  */
 public Native_GetRestriction(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
-        return GetRestriction(client,Restriction:GetNativeCell(2));
+        return GetRestriction(client,Restriction GetNativeCell(2));
     else        
         return false;
 }
@@ -4766,7 +4766,7 @@ public Native_GetRestriction(Handle plugin,numParams)
  * @param pluginid:         Handle of the plugin to set restriction for (defaults to calling plugin)
  * @noreturn
  *
- * native SetRestriction(client, Restriction:restriction, bool restrict_state=true,
+ * native SetRestriction(client, Restriction restriction, bool restrict_state=true,
  *                       id=0, Handle pluginid=null);
  */
 public Native_SetRestriction(Handle plugin,numParams)
@@ -4774,7 +4774,7 @@ public Native_SetRestriction(Handle plugin,numParams)
     int client = GetNativeCell(1);
     if (IsValidClient(client))
     {
-        Restriction restrict = Restriction:GetNativeCell(2);
+        Restriction restrict = Restriction GetNativeCell(2);
         bool restrict_state = (numParams >= 3) ? (view_as<bool>(GetNativeCell(3))) : true;
 
         Handle propData=GetPropData(client);
@@ -4967,7 +4967,7 @@ public Native_SetGravity(Handle plugin,numParams)
  *
  * native SetVisibility(client, VisibilityType:type=NormalVisibility,
  *                      visibility=-1, float factor1=-1.0, float factor2=-1.0,
- *                      RenderMode:mode=RenderMode:-1, RenderFx:fx=RenderFx:-1,
+ *                      RenderMode mode=RenderMode:-1, RenderFx fx=RenderFx:-1,
  *                      r=-1, g=-1, b=-1, weaponAlpha=-1,bool colorWeapons=false,
  *                      VisibilityPriority:priority=VisibilityPriorityNotSpecified,
  *                      float timestamp=0.0, bool apply=false,
@@ -5265,7 +5265,7 @@ public Native_SetOverrideVisiblity(Handle plugin,numParams)
  * @param pluginid: Handle of the plugin to set MoveType for (defaults to calling plugin)
  * @noreturn
  *
- * native SetMoveType(client, MoveType:mt=MOVETYPE_DEFAULT, bool apply=false,
+ * native SetMoveType(client, MoveType mt=MOVETYPE_DEFAULT, bool apply=false,
  *                    id=0, Handle pluginid=null);
  */
 public Native_SetMoveType(Handle plugin,numParams)
@@ -5276,7 +5276,7 @@ public Native_SetMoveType(Handle plugin,numParams)
         Handle propData=GetPropData(client);
         if (propData != null)
         {
-            MoveType mt     = MoveType:GetNativeCell(2);
+            MoveType mt     = MoveType GetNativeCell(2);
             bool apply      = GetNativeCell(3);
             int id              = GetNativeCell(4);
             Handle pluginid = Handle GetNativeCell(5);
@@ -5382,7 +5382,7 @@ public Native_SetHealthRegen(Handle plugin,numParams)
                     Handle checkInfo=GetArrayCell(propData,x);
                     if (checkInfo != null)
                     {
-                        regen += float GetArrayCell(checkInfo,_:PropInfo_RegenHealth);
+                        regen += float GetArrayCell(checkInfo,view_as<int>(PropInfo_RegenHealth));
                         if (regen != 0.0)
                             break;
                     }
@@ -5407,9 +5407,9 @@ public Native_GetHealthRegenSum(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
-        return _:SumFloatClientProperty(client, PropInfo_RegenHealth);
+        return view_as<int>(SumFloatClientProperty)(client, PropInfo_RegenHealth);
     else
-        return _:0.0;
+        return view_as<int>(0.0);
 }
 
 /**
@@ -5464,7 +5464,7 @@ public Native_SetShieldRegen(Handle plugin,numParams)
                     Handle checkInfo=GetArrayCell(propData,x);
                     if (checkInfo != null)
                     {
-                        regen += float GetArrayCell(checkInfo,_:PropInfo_RegenShield);
+                        regen += float GetArrayCell(checkInfo,view_as<int>(PropInfo_RegenShield));
                         if (regen != 0.0)
                             break;
                     }
@@ -5489,9 +5489,9 @@ public Native_GetShieldRegenSum(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
-        return _:SumFloatClientProperty(client, PropInfo_RegenShield);
+        return view_as<int>(SumFloatClientProperty)(client, PropInfo_RegenShield);
     else
-        return _:0.0;
+        return view_as<int>(0.0);
 }
 
 /**
@@ -5547,9 +5547,9 @@ public Native_GetPhysicalArmorSum(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
-        return _:SumFloatClientProperty(client, PropInfo_PhysicalArmor);
+        return view_as<int>(SumFloatClientProperty)(client, PropInfo_PhysicalArmor);
     else
-        return _:-1.0;
+        return view_as<int>(-1.0);
 }
 
 /**
@@ -5605,9 +5605,9 @@ public Native_GetMagicalArmorSum(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsValidClient(client))
-        return _:SumFloatClientProperty(client, PropInfo_MagicalArmor);
+        return view_as<int>(SumFloatClientProperty)(client, PropInfo_MagicalArmor);
     else
-        return _:-1.0;
+        return view_as<int>(-1.0);
 }
 
 /**
@@ -5745,9 +5745,9 @@ public Native_GetCooldownExpireTime(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsClient(client))
-        return _:GetCooldownExpireTime(client, GetNativeCell(2), GetNativeCell(3));
+        return view_as<int>(GetCooldownExpireTime)(client, GetNativeCell(2), GetNativeCell(3));
     else
-        return _:0.0;
+        return view_as<int>(0.0);
 }
 
 /**
@@ -5763,9 +5763,9 @@ public Native_GetCooldownType(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
     if (IsClient(client))
-        return _:GetCooldownType(client, GetNativeCell(2), GetNativeCell(3));
+        return view_as<int>(GetCooldownType)(client, GetNativeCell(2), GetNativeCell(3));
     else
-        return _:Cooldown_None;
+        return view_as<int>(Cooldown_None);
 }
 
 /**
@@ -6221,7 +6221,7 @@ public Native_GetConfigFloat(Handle plugin,numParams)
     char section[NAME_STRING_LENGTH];
     GetNativeString(5,section,sizeof(section));
 
-    return _:GetConfigFloat(key, float GetNativeCell(2), GetNativeCell(3), GetNativeCell(4), section);
+    return view_as<int>(GetConfigFloat)(key, float GetNativeCell(2), GetNativeCell(3), GetNativeCell(4), section);
 }
 
 /**
@@ -6360,7 +6360,7 @@ public Native_LoadSCTranslations(Handle plugin,numParams)
  * @param immunity:  The immunity or immunities that were invoked.
  * @return The return value will be the result of the Forward.
  *
- * native ImmunityInvoked(client, Immunity:immunity);
+ * native ImmunityInvoked(client, Immunity immunity);
  *
  */
 public Native_ImmunityInvoked(Handle plugin,numParams)

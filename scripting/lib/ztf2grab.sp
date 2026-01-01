@@ -52,7 +52,7 @@ new gObj[MAXPLAYERS+1]                  = { INVALID_ENT_REFERENCE, ... };   // w
 Handle gTrackTimers[MAXENTITIES+1]; // entity track timers
 bool gDisabled[MAXENTITIES+1];      // entity disabled flags
 new grabType:gType[MAXPLAYERS+1];       // type of grabbed object
-new MoveType:gMove[MAXPLAYERS+1];       // movetype of grabbed object
+new MoveType gMove[MAXPLAYERS+1];       // movetype of grabbed object
 float gGrabTime[MAXPLAYERS+1];      // when the object was grabbed
 float gMaxDuration[MAXPLAYERS+1];   // max time allow to hold onto buildings
 bool gJustGrabbed[MAXPLAYERS+1];    // object was grabbed when button was pushed
@@ -604,7 +604,7 @@ public Action Command_Grab(client, args)
             }
         }
 
-        int Action:res = Plugin_Continue;
+        int Action res = Plugin_Continue;
         Call_StartForward(fwdOnPickupObject);
         Call_PushCell(client);
         Call_PushCell(builder);
@@ -797,8 +797,8 @@ Drop(client, bool throwIt)
                 GetEntPropVector(ent, Prop_Send, "m_vecOrigin", vecPos);
                 WritePackCell(pack, ent);
                 WritePackCell(pack, ref);
-                WritePackCell(pack, _:gt);
-                WritePackCell(pack, _:gMove[client]);
+                WritePackCell(pack, view_as<int>(gt));
+                WritePackCell(pack, view_as<int>(gMove)[client]);
                 WritePackFloat(pack, gGravity[client]);
                 WritePackFloat(pack, vecPos[0]);
                 WritePackFloat(pack, vecPos[1]);
@@ -810,7 +810,7 @@ Drop(client, bool throwIt)
 
         if (!throwIt)
         {
-            new Action:res = Plugin_Continue;
+            new Action res = Plugin_Continue;
             Call_StartForward(fwdOnDropObject);
             Call_PushCell(client);
             Call_PushCell(ent);
@@ -879,7 +879,7 @@ public Action Command_UnThrow(client, args)
             return Command_UnGrab(client, args);
         }
 
-        int Action:res = Plugin_Continue;
+        int Action res = Plugin_Continue;
         Call_StartForward(fwdOnThrowObject);
         Call_PushCell(client);
         Call_PushCell(ent);
@@ -945,7 +945,7 @@ public Action TrackObject(Handle timer, Handle pack)
     if (EntRefToEntIndex(ref) == ent)
     {
         int grabType:gt = grabType:ReadPackCell(pack);
-        int MoveType:mt = MoveType:ReadPackCell(pack);
+        int MoveType mt = MoveType ReadPackCell(pack);
         float gravity = ReadPackFloat(pack);
 
         float lastPos[3];
@@ -1178,7 +1178,7 @@ public Action TrackObject(Handle timer, Handle pack)
                 }
             }
 
-            new Action:res = Plugin_Continue;
+            new Action res = Plugin_Continue;
             Call_StartForward(fwdOnObjectStop);
             Call_PushCell(ent);
             Call_Finish(res);
@@ -1188,8 +1188,8 @@ public Action TrackObject(Handle timer, Handle pack)
             ResetPack(pack, true);
             WritePackCell(pack, ent);
             WritePackCell(pack, ref);
-            WritePackCell(pack, _:gt);
-            WritePackCell(pack, _:mt);
+            WritePackCell(pack, view_as<int>(gt));
+            WritePackCell(pack, view_as<int>(mt));
             WritePackFloat(pack, gravity);
             WritePackFloat(pack, vecPos[0]);
             WritePackFloat(pack, vecPos[1]);
@@ -1290,7 +1290,7 @@ public Action UpdateObjects(Handle timer)
             }
 
             float grabTime = gGrabTime[i];
-            new Action:res = Plugin_Continue;
+            new Action res = Plugin_Continue;
             Call_StartForward(fwdOnCarryObject);
             Call_PushCell(i);
             Call_PushCell(ent);
@@ -1562,7 +1562,7 @@ public Native_DropEntity(Handle plugin,numParams)
         float gravity = (numParams >= 3) ? (float GetNativeCell(3)) : GetConVarFloat(cvDropGravity);
         float oldGravity = GetEntityGravity(ent);
         int grabType:gt = GetGrabType(ent);
-        int MoveType:mt = GetEntityMoveType(ent);
+        int MoveType mt = GetEntityMoveType(ent);
 
         if (numParams >= 2)
             speed[2] = float GetNativeCell(2);
@@ -1585,8 +1585,8 @@ public Native_DropEntity(Handle plugin,numParams)
             new ref = EntIndexToEntRef(ent);
             WritePackCell(pack, ent);
             WritePackCell(pack, ref);
-            WritePackCell(pack, _:gt);
-            WritePackCell(pack, _:mt);
+            WritePackCell(pack, view_as<int>(gt));
+            WritePackCell(pack, view_as<int>(mt));
             WritePackFloat(pack, oldGravity);
             WritePackFloat(pack, vecPos[0]);
             WritePackFloat(pack, vecPos[1]);

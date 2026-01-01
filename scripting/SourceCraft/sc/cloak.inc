@@ -31,7 +31,7 @@ stock Cloak(client, level, bool apply=false)
     static const float delayTable[]    = { 0.0, 2.0, 1.5, 1.0, 0.5 };
     static const float durationTable[] = { 0.0, 5.0, 10.0, 15.0, 20.0 }
 
-    static const RenderFx:fx[] = { RENDERFX_NONE,
+    static const RenderFx fx[] = { RENDERFX_NONE,
                                    RENDERFX_FLICKER_FAST,
                                    RENDERFX_STROBE_FAST,
                                    RENDERFX_FLICKER_SLOW,

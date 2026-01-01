@@ -291,7 +291,7 @@ void:PerformTeamCheck( bool switchImmed = false )
         fragDelta,
         scoreDelta,
         levelDelta,
-        AdminId:plAdminID;
+        AdminId plAdminID;
 
     for(int i= 1; i < mc; i++ )
     {
@@ -362,7 +362,7 @@ public Event_PlayerDeath( Handle event, const char[] name, bool dontBroadcast )
         return;
 
     int client = GetClientOfUserId( GetEventInt( event, "userid" ) ),
-        AdminId:plAdminID = GetUserAdmin(client);
+        AdminId plAdminID = GetUserAdmin(client);
 
     if (GetConVarBool(cvarAdminsImmune) &&
         plAdminID != INVALID_ADMIN_ID &&

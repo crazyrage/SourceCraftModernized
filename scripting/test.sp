@@ -97,7 +97,7 @@ public Action TrackVariables(Handle timer)
         {
             if (IsPlayerAlive(client))
             {
-                new TFClassType:tfClass = TF2_GetPlayerClass(client);
+                new TFClassType tfClass = TF2_GetPlayerClass(client);
                 int class = m_OffsetClass>0 ? GetEntData(client,m_OffsetClass) : -99;
                 float cloakMeter = m_OffsetCloakMeter>0 ? GetEntDataFloat(client,m_OffsetCloakMeter) : -99.9;
                 int disguiseTeam = m_OffsetDisguiseTeam>0 ? GetEntData(client,m_OffsetDisguiseTeam) : -99;

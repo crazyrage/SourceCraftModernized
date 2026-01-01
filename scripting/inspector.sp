@@ -60,7 +60,7 @@ public PlayerBuiltObject(Handle event,const char[] name,bool dontBroadcast)
         {
             //new objects:type = unknown;
             int objectid = GetEventInt(event,"index");
-            new TFObjectType:obj = TFObjectType:GetEventInt(event,"object");
+            new TFObjectType obj = TFObjectType GetEventInt(event,"object");
 
             LogMessage("%s: userid=%d:%d:%N, entity=%d, object=%d:%s",
                        name, userid, client, client, objectid, obj,
@@ -81,7 +81,7 @@ public ObjectRemoved(Handle event,const char[] name,bool dontBroadcast)
         {
             //new objects:type = unknown;
             int objectid = GetEventInt(event,"index");
-            new TFObjectType:obj = TFObjectType:GetEventInt(event,"objecttype");
+            new TFObjectType obj = TFObjectType GetEventInt(event,"objecttype");
 
             LogMessage("%s: userid=%d:%d:%N, entity=%d, object=%d:%s",
                        name, userid, client, client, objectid, obj, TF2_ObjectNames[obj]);

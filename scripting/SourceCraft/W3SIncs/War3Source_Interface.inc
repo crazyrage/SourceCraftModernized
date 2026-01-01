@@ -1188,7 +1188,7 @@ stock bool IS_PLAYER(int x)
  There are two ways to get admin
  //need 
  //good if you need the string to admin flag like "o" -> number
- id= native bool GetAdminFlag(AdminId:id, AdminFlag:flag, AdmAccessMode:mode=Access_Effective);
+ id= native bool GetAdminFlag(AdminId id, AdminFlag flag, AdmAccessMode:mode=Access_Effective);
  Admin_RCON,      
  Admin_Root,
  

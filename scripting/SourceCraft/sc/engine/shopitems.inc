@@ -39,59 +39,59 @@ enum ItemStringInfo
 #define GetItemIndexHandle(%1)              (Handle GetArrayCell(shopIndex,%1))
 
 // Accessor Macros for Shop Item Data
-#define GetItemId(%1)                       GetArrayCell(%1,_:ItemInfo_ShopID)
-#define SetItemId(%1,%2)                    SetArrayCell(%1,_:ItemInfo_ShopID,%2)
+#define GetItemId(%1)                       GetArrayCell(%1,view_as<int>(ItemInfo_ShopID))
+#define SetItemId(%1,%2)                    SetArrayCell(%1,view_as<int>(ItemInfo_ShopID),%2)
 
-#define GetItemIdent(%1)                    GetArrayCell(%1,_:ItemInfo_Ident)
-#define SetItemIdent(%1,%2)                 SetArrayCell(%1,_:ItemInfo_Ident,%2)
+#define GetItemIdent(%1)                    GetArrayCell(%1,view_as<int>(ItemInfo_Ident))
+#define SetItemIdent(%1,%2)                 SetArrayCell(%1,view_as<int>(ItemInfo_Ident),%2)
 
-#define GetItemPlugin(%1)                   (Handle GetArrayCell(%1,_:ItemInfo_Plugin))
-#define SetItemPlugin(%1,%2)                SetArrayCell(%1,_:ItemInfo_Plugin,%2)
+#define GetItemPlugin(%1)                   (Handle GetArrayCell(%1,view_as<int>(ItemInfo_Plugin)))
+#define SetItemPlugin(%1,%2)                SetArrayCell(%1,view_as<int>(ItemInfo_Plugin),%2)
 
-#define GetItemCrystals(%1)                 GetArrayCell(%1,_:ItemInfo_Crystals)
-#define SetItemCrystals(%1,%2)              SetArrayCell(%1,_:ItemInfo_Crystals,%2)
+#define GetItemCrystals(%1)                 GetArrayCell(%1,view_as<int>(ItemInfo_Crystals))
+#define SetItemCrystals(%1,%2)              SetArrayCell(%1,view_as<int>(ItemInfo_Crystals),%2)
 
-#define GetItemVespene(%1)                  GetArrayCell(%1,_:ItemInfo_Vespene)
-#define SetItemVespene(%1,%2)               SetArrayCell(%1,_:ItemInfo_Vespene,%2)
+#define GetItemVespene(%1)                  GetArrayCell(%1,view_as<int>(ItemInfo_Vespene))
+#define SetItemVespene(%1,%2)               SetArrayCell(%1,view_as<int>(ItemInfo_Vespene),%2)
 
-#define GetItemCanUsePCrystals(%1)          bool GetArrayCell(%1,_:ItemInfo_CanUsePCrystals)
-#define SetItemCanUsePCrystals(%1,%2)       SetArrayCell(%1,_:ItemInfo_CanUsePCrystals,_:%2)
+#define GetItemCanUsePCrystals(%1)          bool GetArrayCell(%1,view_as<int>(ItemInfo_CanUsePCrystals))
+#define SetItemCanUsePCrystals(%1,%2)       SetArrayCell(%1,view_as<int>(ItemInfo_CanUsePCrystals),view_as<int>(%2))
 
-#define GetItemMoney(%1)                    GetArrayCell(%1,_:ItemInfo_Money)
-#define SetItemMoney(%1,%2)                 SetArrayCell(%1,_:ItemInfo_Money,%2)
+#define GetItemMoney(%1)                    GetArrayCell(%1,view_as<int>(ItemInfo_Money))
+#define SetItemMoney(%1,%2)                 SetArrayCell(%1,view_as<int>(ItemInfo_Money),%2)
 
-#define GetItemXP(%1)                       GetArrayCell(%1,_:ItemInfo_XP)
-#define SetItemXP(%1,%2)                    SetArrayCell(%1,_:ItemInfo_XP,%2)
+#define GetItemXP(%1)                       GetArrayCell(%1,view_as<int>(ItemInfo_XP))
+#define SetItemXP(%1,%2)                    SetArrayCell(%1,view_as<int>(ItemInfo_XP),%2)
 
-#define GetItemMax(%1)                      GetArrayCell(%1,_:ItemInfo_Max)
-#define SetItemMax(%1,%2)                   SetArrayCell(%1,_:ItemInfo_Max,%2)
+#define GetItemMax(%1)                      GetArrayCell(%1,view_as<int>(ItemInfo_Max))
+#define SetItemMax(%1,%2)                   SetArrayCell(%1,view_as<int>(ItemInfo_Max),%2)
 
-#define GetItemRequiredLevel(%1)            GetArrayCell(%1,_:ItemInfo_RequiredLevel)
-#define SetItemRequiredLevel(%1,%2)         SetArrayCell(%1,_:ItemInfo_RequiredLevel,%2)
+#define GetItemRequiredLevel(%1)            GetArrayCell(%1,view_as<int>(ItemInfo_RequiredLevel))
+#define SetItemRequiredLevel(%1,%2)         SetArrayCell(%1,view_as<int>(ItemInfo_RequiredLevel),%2)
 
-#define GetItemTranslation(%1)              (Translation:GetArrayCell(%1,_:ItemInfo_Translation))
-#define SetItemTranslation(%1,%2)           SetArrayCell(%1,_:ItemInfo_Translation,_:%2)
+#define GetItemTranslation(%1)              (Translation:GetArrayCell(%1,view_as<int>(ItemInfo_Translation)))
+#define SetItemTranslation(%1,%2)           SetArrayCell(%1,view_as<int>(ItemInfo_Translation),view_as<int>(%2))
 
-#define GetItemStore(%1)                    GetArrayCell(%1,_:ItemInfo_StoreID)
-#define SetItemStore(%1,%2)                 SetArrayCell(%1,_:ItemInfo_StoreID,%2)
+#define GetItemStore(%1)                    GetArrayCell(%1,view_as<int>(ItemInfo_StoreID))
+#define SetItemStore(%1,%2)                 SetArrayCell(%1,view_as<int>(ItemInfo_StoreID),%2)
 
 // Accessor Macros for Shop Item Strings
-#define GetItemStringHandle(%1)             GetArrayCell(%1,_:ItemInfo_Strings)
+#define GetItemStringHandle(%1)             GetArrayCell(%1,view_as<int>(ItemInfo_Strings))
 
-#define GetItemShortName(%1,%2,%3)          GetArrayString(GetItemStringHandle(%1),_:ItemString_ShortName,%2,%3)
-#define SetItemShortName(%1,%2)             SetArrayString(GetItemStringHandle(%1),_:ItemString_ShortName,%2)
+#define GetItemShortName(%1,%2,%3)          GetArrayString(GetItemStringHandle(%1),view_as<int>(ItemString_ShortName),%2,%3)
+#define SetItemShortName(%1,%2)             SetArrayString(GetItemStringHandle(%1),view_as<int>(ItemString_ShortName),%2)
 
-#define GetItemCategoryString(%1,%2,%3)     GetArrayString(GetItemStringHandle(%1),_:ItemString_Category,%2,%3)
-#define SetItemCategoryString(%1,%2)        SetArrayString(GetItemStringHandle(%1),_:ItemString_Category,%2)
+#define GetItemCategoryString(%1,%2,%3)     GetArrayString(GetItemStringHandle(%1),view_as<int>(ItemString_Category),%2,%3)
+#define SetItemCategoryString(%1,%2)        SetArrayString(GetItemStringHandle(%1),view_as<int>(ItemString_Category),%2)
 
-#define GetItemNameString(%1,%2,%3)         GetArrayString(GetItemStringHandle(%1),_:ItemString_Name,%2,%3)
-#define SetItemName(%1,%2)                  SetArrayString(GetItemStringHandle(%1),_:ItemString_Name,%2)
+#define GetItemNameString(%1,%2,%3)         GetArrayString(GetItemStringHandle(%1),view_as<int>(ItemString_Name),%2,%3)
+#define SetItemName(%1,%2)                  SetArrayString(GetItemStringHandle(%1),view_as<int>(ItemString_Name),%2)
 
-#define GetItemDescriptionString(%1,%2,%3)  GetArrayString(GetItemStringHandle(%1),_:ItemString_Description,%2,%3)
-#define SetItemDescription(%1,%2)           SetArrayString(GetItemStringHandle(%1),_:ItemString_Description,%2)
+#define GetItemDescriptionString(%1,%2,%3)  GetArrayString(GetItemStringHandle(%1),view_as<int>(ItemString_Description),%2,%3)
+#define SetItemDescription(%1,%2)           SetArrayString(GetItemStringHandle(%1),view_as<int>(ItemString_Description),%2)
 
-#define GetItemTranslationFile(%1,%2,%3)    GetArrayString(GetItemStringHandle(%1),_:ItemString_TranslationFile,%2,%3)
-#define SetItemTranslationFile(%1,%2)       SetArrayString(GetItemStringHandle(%1),_:ItemString_TranslationFile,%2)
+#define GetItemTranslationFile(%1,%2,%3)    GetArrayString(GetItemStringHandle(%1),view_as<int>(ItemString_TranslationFile),%2,%3)
+#define SetItemTranslationFile(%1,%2)       SetArrayString(GetItemStringHandle(%1),view_as<int>(ItemString_TranslationFile),%2)
 
 // A vector of shopmenu infomation
 Handle shopVector = null;
@@ -128,7 +128,7 @@ ClearShopVector()
         for(int x=0;x<itemCount;x++)
         {
             Handle item=GetArrayCell(shopVector,x);
-            Handle stringsHandle=GetArrayCell(item,_:ItemInfo_Strings);
+            Handle stringsHandle=GetArrayCell(item,view_as<int>(ItemInfo_Strings));
             ClearArray(stringsHandle);
             delete stringsHandle;
 
@@ -335,11 +335,11 @@ CreateShopItem(const char short[], crystals=0, vespene=0, money=0, bool use_pcry
         SetItemId(itemHandle,shopId);
 
         Handle stringsHandle=GetItemStringHandle(itemHandle);
-        SetArrayString(stringsHandle,_:ItemString_ShortName,short);
-        SetArrayString(stringsHandle,_:ItemString_Category,category);
-        SetArrayString(stringsHandle,_:ItemString_Name,name);
-        SetArrayString(stringsHandle,_:ItemString_Description,desc);
-        SetArrayString(stringsHandle,_:ItemString_TranslationFile,translation_path);
+        SetArrayString(stringsHandle,view_as<int>(ItemString_ShortName),short);
+        SetArrayString(stringsHandle,view_as<int>(ItemString_Category),category);
+        SetArrayString(stringsHandle,view_as<int>(ItemString_Name),name);
+        SetArrayString(stringsHandle,view_as<int>(ItemString_Description),desc);
+        SetArrayString(stringsHandle,view_as<int>(ItemString_TranslationFile),translation_path);
     }
     else
     {
@@ -441,13 +441,13 @@ FindShopItem(const char name[])
     for(int x=0;x<size;x++)
     {
         Handle itemHandle=GetArrayCell(shopVector,x);
-        Handle stringsHandle=GetArrayCell(itemHandle,_:ItemInfo_Strings);
-        GetArrayString(stringsHandle,_:ItemString_ShortName,curName,sizeof(curName));
+        Handle stringsHandle=GetArrayCell(itemHandle,view_as<int>(ItemInfo_Strings));
+        GetArrayString(stringsHandle,view_as<int>(ItemString_ShortName),curName,sizeof(curName));
         if (StrEqual(name,curName,false))
             return x;
         else
         {
-            GetArrayString(stringsHandle,_:ItemString_Name,curName,sizeof(curName));
+            GetArrayString(stringsHandle,view_as<int>(ItemString_Name),curName,sizeof(curName));
             if (StrEqual(name,curName,false))
                 return x;
         }
@@ -611,7 +611,7 @@ bool PurchaseShopItem(client,item)
                 }
                 else if (IsClientInGame(client) && !IsFakeClient(client))
                 {
-                    new Faction:faction;
+                    new Faction faction;
                     int race = GetRace(client);
                     if (race >= 0)
                     {
@@ -627,7 +627,7 @@ bool PurchaseShopItem(client,item)
             }
             else if (IsClientInGame(client) && !IsFakeClient(client))
             {
-                new Faction:faction;
+                new Faction faction;
                 new race = GetRace(client);
                 if (race >= 0)
                 {

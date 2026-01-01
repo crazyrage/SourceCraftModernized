@@ -31,7 +31,7 @@ native ControlAmpNode(bool plugin_only=true);
  * @param select    Set true to set player's BuildingType to Amplifier
  * @return		    none
  */
-native SetAmplifier(client, TFCond:condition=TFCond:-1,
+native SetAmplifier(client, TFCond condition=TFCond:-1,
                     const float range[4]={-1.0,-1.0,-1.0,-1.0},
                     percent=-1, bool enable=true, bool select=false);
 
@@ -84,7 +84,7 @@ native CountConvertedBuildings(client, TFExtObjectType:type);
  * @param percent   Percent (0-100) chance of applying the condition (-1=use convar)
  * @return			none
  */
-native ConvertToAmplifier(entity, client, TFCond:condition=TFCond:-1,
+native ConvertToAmplifier(entity, client, TFCond condition=TFCond:-1,
                           const float range[4]={-1.0,-1.0,-1.0,-1.0},
                           percent=-1);
 
@@ -122,7 +122,7 @@ native ConvertToUpgradeStation(entity);
  * @param condition The condition beign applied to the client.
  * @return		    Plugin_Stop will prevent the client from being affected.
  */
-forward Action OnAmplify(builder,client,TFCond:condition);
+forward Action OnAmplify(builder,client,TFCond condition);
 
 /* DO NOT EDIT BELOW THIS LINE */
 

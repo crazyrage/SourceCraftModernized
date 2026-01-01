@@ -94,171 +94,171 @@ enum ConfigLoadedStatus
 #define GetRaceIndexHandle(%1)                   (Handle GetArrayCell(raceIndex,%1))
 
 // Accessor Macros for Race Data
-#define GetRaceId(%1)                            GetArrayCell(%1,_:RaceData_Id)
-#define SetRaceId(%1,%2)                         SetArrayCell(%1,_:RaceData_Id,%2)
+#define GetRaceId(%1)                            GetArrayCell(%1,view_as<int>(RaceData_Id))
+#define SetRaceId(%1,%2)                         SetArrayCell(%1,view_as<int>(RaceData_Id),%2)
 
-#define GetRacePlugin(%1)                        (Handle GetArrayCell(%1,_:RaceData_Plugin))
-#define SetRacePlugin(%1,%2)                     SetArrayCell(%1,_:RaceData_Plugin,%2)
+#define GetRacePlugin(%1)                        (Handle GetArrayCell(%1,view_as<int>(RaceData_Plugin)))
+#define SetRacePlugin(%1,%2)                     SetArrayCell(%1,view_as<int>(RaceData_Plugin),%2)
 
-#define GetRaceIdent(%1)                         GetArrayCell(%1,_:RaceData_Ident)
-#define SetRaceIdent(%1,%2)                      SetArrayCell(%1,_:RaceData_Ident,%2)
+#define GetRaceIdent(%1)                         GetArrayCell(%1,view_as<int>(RaceData_Ident))
+#define SetRaceIdent(%1,%2)                      SetArrayCell(%1,view_as<int>(RaceData_Ident),%2)
 
-#define GetRaceRequiredLevel(%1)                 GetArrayCell(%1,_:RaceData_RequiredLevel)
-#define SetRaceRequiredLevel(%1,%2)              SetArrayCell(%1,_:RaceData_RequiredLevel,%2)
+#define GetRaceRequiredLevel(%1)                 GetArrayCell(%1,view_as<int>(RaceData_RequiredLevel))
+#define SetRaceRequiredLevel(%1,%2)              SetArrayCell(%1,view_as<int>(RaceData_RequiredLevel),%2)
 
-#define GetRaceTechLevel(%1)                     GetArrayCell(%1,_:RaceData_TechLevel)
-#define SetRaceTechLevel(%1,%2)                  SetArrayCell(%1,_:RaceData_TechLevel,%2)
+#define GetRaceTechLevel(%1)                     GetArrayCell(%1,view_as<int>(RaceData_TechLevel))
+#define SetRaceTechLevel(%1,%2)                  SetArrayCell(%1,view_as<int>(RaceData_TechLevel),%2)
 
-#define GetRaceMaxLevel(%1)                      GetArrayCell(%1,_:RaceData_MaxLevel)
-#define SetRaceMaxLevel(%1,%2)                   SetArrayCell(%1,_:RaceData_MaxLevel,%2)
+#define GetRaceMaxLevel(%1)                      GetArrayCell(%1,view_as<int>(RaceData_MaxLevel))
+#define SetRaceMaxLevel(%1,%2)                   SetArrayCell(%1,view_as<int>(RaceData_MaxLevel),%2)
 
-#define GetRaceInitialEnergy(%1)                 (float GetArrayCell(%1,_:RaceData_InitialEnergy))
-#define SetRaceInitialEnergy(%1,%2)              SetArrayCell(%1,_:RaceData_InitialEnergy,%2)
+#define GetRaceInitialEnergy(%1)                 (float GetArrayCell(%1,view_as<int>(RaceData_InitialEnergy)))
+#define SetRaceInitialEnergy(%1,%2)              SetArrayCell(%1,view_as<int>(RaceData_InitialEnergy),%2)
 
-#define GetRaceEnergyLimit(%1)                   (float GetArrayCell(%1,_:RaceData_EnergyLimit))
-#define SetRaceEnergyLimit(%1,%2)                SetArrayCell(%1,_:RaceData_EnergyLimit,%2)
+#define GetRaceEnergyLimit(%1)                   (float GetArrayCell(%1,view_as<int>(RaceData_EnergyLimit)))
+#define SetRaceEnergyLimit(%1,%2)                SetArrayCell(%1,view_as<int>(RaceData_EnergyLimit),%2)
 
-#define GetRaceEnergyRate(%1)                    (float GetArrayCell(%1,_:RaceData_EnergyRate))
-#define SetRaceEnergyRate(%1,%2)                 SetArrayCell(%1,_:RaceData_EnergyRate,%2)
+#define GetRaceEnergyRate(%1)                    (float GetArrayCell(%1,view_as<int>(RaceData_EnergyRate)))
+#define SetRaceEnergyRate(%1,%2)                 SetArrayCell(%1,view_as<int>(RaceData_EnergyRate),%2)
 
-#define GetRaceEnergyFlags(%1)                   (EnergyFlags:GetArrayCell(%1,_:RaceData_EnergyFlags))
-#define SetRaceEnergyFlags(%1,%2)                SetArrayCell(%1,_:RaceData_EnergyFlags,_:%2)
+#define GetRaceEnergyFlags(%1)                   (EnergyFlags:GetArrayCell(%1,view_as<int>(RaceData_EnergyFlags)))
+#define SetRaceEnergyFlags(%1,%2)                SetArrayCell(%1,view_as<int>(RaceData_EnergyFlags),view_as<int>(%2))
 
-#define GetRaceFaction(%1)                       (Faction:GetArrayCell(%1,_:RaceData_Faction))
-#define SetRaceFaction(%1,%2)                    SetArrayCell(%1,_:RaceData_Faction,_:%2)
+#define GetRaceFaction(%1)                       (Faction GetArrayCell(%1,view_as<int>(RaceData_Faction)))
+#define SetRaceFaction(%1,%2)                    SetArrayCell(%1,view_as<int>(RaceData_Faction),view_as<int>(%2))
 
-#define GetRaceType(%1)                          (UnitType:GetArrayCell(%1,_:RaceData_Type))
-#define SetRaceType(%1,%2)                       SetArrayCell(%1,_:RaceData_Type,_:%2)
+#define GetRaceType(%1)                          (UnitType:GetArrayCell(%1,view_as<int>(RaceData_Type)))
+#define SetRaceType(%1,%2)                       SetArrayCell(%1,view_as<int>(RaceData_Type),view_as<int>(%2))
 
-#define GetRaceIsNew(%1)                         (bool GetArrayCell(%1,_:RaceData_IsNew))
-#define SetRaceIsNew(%1,%2)                      SetArrayCell(%1,_:RaceData_IsNew,%2)
+#define GetRaceIsNew(%1)                         (bool GetArrayCell(%1,view_as<int>(RaceData_IsNew)))
+#define SetRaceIsNew(%1,%2)                      SetArrayCell(%1,view_as<int>(RaceData_IsNew),%2)
 
-#define GetRaceConfigHandle(%1)                  (Handle GetArrayCell(%1,_:RaceData_ConfigHandle))
-#define SetRaceConfigHandle(%1,%2)               SetArrayCell(%1,_:RaceData_ConfigHandle,_:%2)
+#define GetRaceConfigHandle(%1)                  (Handle GetArrayCell(%1,view_as<int>(RaceData_ConfigHandle)))
+#define SetRaceConfigHandle(%1,%2)               SetArrayCell(%1,view_as<int>(RaceData_ConfigHandle),view_as<int>(%2))
 
-#define GetRaceConfigIsLoaded(%1)                (ConfigLoadedStatus:GetArrayCell(%1,_:RaceData_ConfigLoaded))
-#define SetRaceConfigIsLoaded(%1,%2)             SetArrayCell(%1,_:RaceData_ConfigLoaded,_:%2)
+#define GetRaceConfigIsLoaded(%1)                (ConfigLoadedStatus:GetArrayCell(%1,view_as<int>(RaceData_ConfigLoaded)))
+#define SetRaceConfigIsLoaded(%1,%2)             SetArrayCell(%1,view_as<int>(RaceData_ConfigLoaded),view_as<int>(%2))
 
-#define GetRaceHasBeenCompleted(%1)              (bool GetArrayCell(%1,_:RaceData_Completed))
-#define SetRaceHasBeenCompleted(%1,%2)           SetArrayCell(%1,_:RaceData_Completed,%2)
+#define GetRaceHasBeenCompleted(%1)              (bool GetArrayCell(%1,view_as<int>(RaceData_Completed)))
+#define SetRaceHasBeenCompleted(%1,%2)           SetArrayCell(%1,view_as<int>(RaceData_Completed),%2)
 
-#define GetRaceTranslation(%1)                   (Translation:GetArrayCell(%1,_:RaceData_Translation))
-#define SetRaceTranslation(%1,%2)                SetArrayCell(%1,_:RaceData_Translation,_:%2)
+#define GetRaceTranslation(%1)                   (Translation:GetArrayCell(%1,view_as<int>(RaceData_Translation)))
+#define SetRaceTranslation(%1,%2)                SetArrayCell(%1,view_as<int>(RaceData_Translation),view_as<int>(%2))
 
 // Accessor Macros for Race Strings
-#define GetRaceStringHandle(%1)                  (Handle GetArrayCell(%1,_:RaceData_Strings))
+#define GetRaceStringHandle(%1)                  (Handle GetArrayCell(%1,view_as<int>(RaceData_Strings)))
 
-#define GetRaceHShortName(%1,%2,%3)              GetArrayString(%1,_:RaceString_ShortName,%2,%3)
-#define SetRaceHShortName(%1,%2)                 SetArrayString(%1,_:RaceString_ShortName,%2)
+#define GetRaceHShortName(%1,%2,%3)              GetArrayString(%1,view_as<int>(RaceString_ShortName),%2,%3)
+#define SetRaceHShortName(%1,%2)                 SetArrayString(%1,view_as<int>(RaceString_ShortName),%2)
 
 #define GetRaceShortName(%1,%2,%3)               GetRaceHShortName(GetRaceStringHandle(%1),%2,%3)
 #define SetRaceShortName(%1,%2)                  SetRaceHShortName(GetRaceStringHandle(%1),%2)
 
-#define GetRaceHNameString(%1,%2,%3)             GetArrayString(%1,_:RaceString_Name,%2,%3)
-#define SetRaceHName(%1,%2)                      SetArrayString(%1,_:RaceString_Name,%2)
+#define GetRaceHNameString(%1,%2,%3)             GetArrayString(%1,view_as<int>(RaceString_Name),%2,%3)
+#define SetRaceHName(%1,%2)                      SetArrayString(%1,view_as<int>(RaceString_Name),%2)
 
 #define GetRaceNameString(%1,%2,%3)              GetRaceHNameString(GetRaceStringHandle(%1),%2,%3)
 #define SetRaceName(%1,%2)                       SetRaceHName(GetRaceStringHandle(%1),%2)
 
-#define GetRaceHParentName(%1,%2,%3)             GetArrayString(%1,_:RaceString_ParentName,%2,%3)
-#define SetRaceHParentName(%1,%2)                SetArrayString(%1,_:RaceString_ParentName,%2)
+#define GetRaceHParentName(%1,%2,%3)             GetArrayString(%1,view_as<int>(RaceString_ParentName),%2,%3)
+#define SetRaceHParentName(%1,%2)                SetArrayString(%1,view_as<int>(RaceString_ParentName),%2)
 
 #define GetRaceParentName(%1,%2,%3)              GetRaceHParentName(GetRaceStringHandle(%1),%2,%3)
 #define SetRaceParentName(%1,%2)                 SetRaceHParentName(GetRaceStringHandle(%1),%2)
 
 // Accessor Macros for Race Messages
-#define GetRaceMessageHandle(%1)                 (Handle GetArrayCell(%1,_:RaceData_Messages))
+#define GetRaceMessageHandle(%1)                 (Handle GetArrayCell(%1,view_as<int>(RaceData_Messages)))
 
-#define GetRaceHSwitchString(%1,%2,%3)           GetArrayString(%1,_:RaceMessage_Switch,%2,%3)
-#define SetRaceHSwitchString(%1,%2)              SetArrayString(%1,_:RaceMessage_Switch,%2)
+#define GetRaceHSwitchString(%1,%2,%3)           GetArrayString(%1,view_as<int>(RaceMessage_Switch),%2,%3)
+#define SetRaceHSwitchString(%1,%2)              SetArrayString(%1,view_as<int>(RaceMessage_Switch),%2)
 
 #define GetRaceSwitchString(%1,%2,%3)            GetRaceHSwitchString(GetRaceMessageHandle(%1),%2,%3)
 #define SetRaceSwitchString(%1,%2)               SetRaceHSwitchString(GetRaceMessageHandle(%1),%2)
 
-#define GetRaceHSwitchStringDead(%1,%2,%3)       GetArrayString(%1,_:RaceMessage_SwitchDead,%2,%3)
-#define SetRaceHSwitchStringDead(%1,%2)          SetArrayString(%1,_:RaceMessage_SwitchDead,%2)
+#define GetRaceHSwitchStringDead(%1,%2,%3)       GetArrayString(%1,view_as<int>(RaceMessage_SwitchDead),%2,%3)
+#define SetRaceHSwitchStringDead(%1,%2)          SetArrayString(%1,view_as<int>(RaceMessage_SwitchDead),%2)
 
 #define GetRaceSwitchStringDead(%1,%2,%3)        GetRaceHSwitchStringDead(GetRaceMessageHandle(%1),%2,%3)
 #define SetRaceSwitchStringDead(%1,%2)           SetRaceHSwitchStringDead(GetRaceMessageHandle(%1),%2)
 
-#define GetRaceHTranslationFile(%1,%2,%3)        GetArrayString(%1,_:RaceMessage_TranslationFile,%2,%3)
-#define SetRaceHTranslationFile(%1,%2)           SetArrayString(%1,_:RaceMessage_TranslationFile,%2)
+#define GetRaceHTranslationFile(%1,%2,%3)        GetArrayString(%1,view_as<int>(RaceMessage_TranslationFile),%2,%3)
+#define SetRaceHTranslationFile(%1,%2)           SetArrayString(%1,view_as<int>(RaceMessage_TranslationFile),%2)
 
 #define GetRaceTranslationFile(%1,%2,%3)         GetRaceHTranslationFile(GetRaceMessageHandle(%1),%2,%3)
 #define SetRaceTranslationFile(%1,%2)            SetRaceHTranslationFile(GetRaceMessageHandle(%1),%2)
 
 // Accessor Macros for Upgrade Data
-#define GetUpgradeListHandle(%1)                 (Handle GetArrayCell(%1,_:RaceData_Upgrades))
+#define GetUpgradeListHandle(%1)                 (Handle GetArrayCell(%1,view_as<int>(RaceData_Upgrades)))
 #define GetUpgradeHandle(%1,%2)                  (Handle GetArrayCell(GetUpgradeListHandle(%1),%2))
 
-#define GetUpgradeEnergy(%1,%2)                  (float GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Energy))
-#define SetUpgradeEnergy(%1,%2,%3)               SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Energy,%3)
+#define GetUpgradeEnergy(%1,%2)                  (float GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Energy)))
+#define SetUpgradeEnergy(%1,%2,%3)               SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Energy),%3)
 
-#define GetUpgradeRecurringEnergy(%1,%2)         (float GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_RecurringEnergy))
-#define SetUpgradeRecurringEnergy(%1,%2,%3)      SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_RecurringEnergy,%3)
+#define GetUpgradeRecurringEnergy(%1,%2)         (float GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_RecurringEnergy)))
+#define SetUpgradeRecurringEnergy(%1,%2,%3)      SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_RecurringEnergy),%3)
 
-#define GetUpgradeRecurringInterval(%1,%2)       (float GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_RecurringInterval))
-#define SetUpgradeRecurringInterval(%1,%2,%3)    SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_RecurringInterval,%3)
+#define GetUpgradeRecurringInterval(%1,%2)       (float GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_RecurringInterval)))
+#define SetUpgradeRecurringInterval(%1,%2,%3)    SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_RecurringInterval),%3)
 
-#define GetUpgradeCanUseAccumulated(%1,%2)       (bool GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Accumulated))
-#define SetUpgradeUseAccumulated(%1,%2,%3)       SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Accumulated,_:%3)
+#define GetUpgradeCanUseAccumulated(%1,%2)       (bool GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Accumulated)))
+#define SetUpgradeUseAccumulated(%1,%2,%3)       SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Accumulated),view_as<int>(%3))
 
-#define GetUpgradeCrystals(%1,%2)                GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Crystals)
-#define SetUpgradeCrystals(%1,%2,%3)             SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Crystals,%3)
+#define GetUpgradeCrystals(%1,%2)                GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Crystals))
+#define SetUpgradeCrystals(%1,%2,%3)             SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Crystals),%3)
 
-#define GetUpgradeVespene(%1,%2)                 GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Vespene)
-#define SetUpgradeVespene(%1,%2,%3)              SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Vespene,%3)
+#define GetUpgradeVespene(%1,%2)                 GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Vespene))
+#define SetUpgradeVespene(%1,%2,%3)              SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Vespene),%3)
 
-#define GetUpgradeCostCrystals(%1,%2)            GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_CostCrystals)
-#define SetUpgradeCostCrystals(%1,%2,%3)         SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_CostCrystals,%3)
+#define GetUpgradeCostCrystals(%1,%2)            GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_CostCrystals))
+#define SetUpgradeCostCrystals(%1,%2,%3)         SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_CostCrystals),%3)
 
-#define GetUpgradeCostVespene(%1,%2)             GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_CostVespene)
-#define SetUpgradeCostVespene(%1,%2,%3)          SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_CostVespene,%3)
+#define GetUpgradeCostVespene(%1,%2)             GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_CostVespene))
+#define SetUpgradeCostVespene(%1,%2,%3)          SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_CostVespene),%3)
 
-#define GetUpgradeCooldownDuration(%1,%2)        (float GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Cooldown))
-#define SetUpgradeCooldownDuration(%1,%2,%3)     SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Cooldown,_:%3)
+#define GetUpgradeCooldownDuration(%1,%2)        (float GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Cooldown)))
+#define SetUpgradeCooldownDuration(%1,%2,%3)     SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Cooldown),view_as<int>(%3))
 
-#define GetUpgradeCooldownType(%1,%2)            (CooldownType:GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_CooldownType))
-#define SetUpgradeCooldownType(%1,%2,%3)         SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_CooldownType,_:%3)
+#define GetUpgradeCooldownType(%1,%2)            (CooldownType:GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_CooldownType)))
+#define SetUpgradeCooldownType(%1,%2,%3)         SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_CooldownType),view_as<int>(%3))
 
-#define GetUpgradeRequiredLevel(%1,%2)           GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_RequiredLevel)
-#define SetUpgradeRequiredLevel(%1,%2,%3)        SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_RequiredLevel,%3)
+#define GetUpgradeRequiredLevel(%1,%2)           GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_RequiredLevel))
+#define SetUpgradeRequiredLevel(%1,%2,%3)        SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_RequiredLevel),%3)
 
-#define GetUpgradeMaxLevel(%1,%2)                GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_MaxLevel)
-#define SetUpgradeMaxLevel(%1,%2,%3)             SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_MaxLevel,%3)
+#define GetUpgradeMaxLevel(%1,%2)                GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_MaxLevel))
+#define SetUpgradeMaxLevel(%1,%2,%3)             SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_MaxLevel),%3)
 
-#define GetUpgradeCategory(%1,%2)                GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Category)
-#define SetUpgradeCategory(%1,%2,%3)             SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Category,%3)
+#define GetUpgradeCategory(%1,%2)                GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Category))
+#define SetUpgradeCategory(%1,%2,%3)             SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Category),%3)
 
-#define GetUpgradeDisabled(%1,%2)                GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Disabled)
-#define SetUpgradeDisabled(%1,%2,%3)             SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Disabled,%3)
+#define GetUpgradeDisabled(%1,%2)                GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Disabled))
+#define SetUpgradeDisabled(%1,%2,%3)             SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Disabled),%3)
 
-#define GetUpgradeHasBeenCompleted(%1,%2)        GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Completed)
-#define SetUpgradeHasBeenCompleted(%1,%2,%3)     SetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Completed,%3)
+#define GetUpgradeHasBeenCompleted(%1,%2)        GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Completed))
+#define SetUpgradeHasBeenCompleted(%1,%2,%3)     SetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Completed),%3)
 
 // Accessor Macros for Upgrade Strings
-#define GetUpgradeStringHandle(%1,%2)            GetArrayCell(GetUpgradeHandle(%1,%2),_:UpgradeData_Strings)
+#define GetUpgradeStringHandle(%1,%2)            GetArrayCell(GetUpgradeHandle(%1,%2),view_as<int>(UpgradeData_Strings))
 
-#define GetUpgradeShortName(%1,%2,%3,%4)         GetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_ShortName,%3,%4)
-#define SetUpgradeShortName(%1,%2,%3)            SetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_ShortName,%3)
+#define GetUpgradeShortName(%1,%2,%3,%4)         GetArrayString(GetUpgradeStringHandle(%1,%2),view_as<int>(UpgradeString_ShortName),%3,%4)
+#define SetUpgradeShortName(%1,%2,%3)            SetArrayString(GetUpgradeStringHandle(%1,%2),view_as<int>(UpgradeString_ShortName),%3)
 
-#define GetUpgradeNameString(%1,%2,%3,%4)        GetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_Name,%3,%4)
-#define SetUpgradeName(%1,%2,%3)                 SetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_Name,%3)
+#define GetUpgradeNameString(%1,%2,%3,%4)        GetArrayString(GetUpgradeStringHandle(%1,%2),view_as<int>(UpgradeString_Name),%3,%4)
+#define SetUpgradeName(%1,%2,%3)                 SetArrayString(GetUpgradeStringHandle(%1,%2),view_as<int>(UpgradeString_Name),%3)
 
-#define GetUpgradeDescriptionString(%1,%2,%3,%4) GetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_Desc,%3,%4)
-#define SetUpgradeDescription(%1,%2,%3)          SetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_Desc,%3)
+#define GetUpgradeDescriptionString(%1,%2,%3,%4) GetArrayString(GetUpgradeStringHandle(%1,%2),view_as<int>(UpgradeString_Desc),%3,%4)
+#define SetUpgradeDescription(%1,%2,%3)          SetArrayString(GetUpgradeStringHandle(%1,%2),view_as<int>(UpgradeString_Desc),%3)
 
-#define GetUpgradeInvokeString(%1,%2,%3,%4)      GetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_Invoke,%3,%4)
-#define SetUpgradeInvoke(%1,%2,%3)               SetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_Invoke,%3)
+#define GetUpgradeInvokeString(%1,%2,%3,%4)      GetArrayString(GetUpgradeStringHandle(%1,%2),view_as<int>(UpgradeString_Invoke),%3,%4)
+#define SetUpgradeInvoke(%1,%2,%3)               SetArrayString(GetUpgradeStringHandle(%1,%2),view_as<int>(UpgradeString_Invoke),%3)
 
-#define GetUpgradeBindString(%1,%2,%3,%4)        GetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_Bind,%3,%4)
-#define SetUpgradeBind(%1,%2,%3)                 SetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_Bind,%3)
+#define GetUpgradeBindString(%1,%2,%3,%4)        GetArrayString(GetUpgradeStringHandle(%1,%2),view_as<int>(UpgradeString_Bind),%3,%4)
+#define SetUpgradeBind(%1,%2,%3)                 SetArrayString(GetUpgradeStringHandle(%1,%2),view_as<int>(UpgradeString_Bind),%3)
 
-#define GetUpgradeImageString(%1,%2,%3,%4)       GetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_Image,%3,%4)
-#define SetUpgradeImage(%1,%2,%3)                SetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_Image,%3)
+#define GetUpgradeImageString(%1,%2,%3,%4)       GetArrayString(GetUpgradeStringHandle(%1,%2),view_as<int>(UpgradeString_Image),%3,%4)
+#define SetUpgradeImage(%1,%2,%3)                SetArrayString(GetUpgradeStringHandle(%1,%2),view_as<int>(UpgradeString_Image),%3)
 
-#define GetUpgradeParameter(%1,%2,%3,%4,%5)      GetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_Parm+%3,%4,%5)
-#define SetUpgradeParameter(%1,%2,%3,%4)         SetArrayString(GetUpgradeStringHandle(%1,%2),_:UpgradeString_Parm+%3,%4)
+#define GetUpgradeParameter(%1,%2,%3,%4,%5)      GetArrayString(GetUpgradeStringHandle(%1,%2),view_as<int>(UpgradeString_Parm)+%3,%4,%5)
+#define SetUpgradeParameter(%1,%2,%3,%4)         SetArrayString(GetUpgradeStringHandle(%1,%2),view_as<int>(UpgradeString_Parm)+%3,%4)
 
 // A vector of race infomation
 Handle raceArray = null;
@@ -316,7 +316,7 @@ ClearRaceArray()
             for(int upgrade=0;upgrade<upgradeCount;upgrade++)
             {
                 int Handle upgradeHandle=GetArrayCell(upgradeListHandle,upgrade);
-                int Handle upgradeStringHandle=GetArrayCell(upgradeHandle,_:UpgradeData_Strings);
+                int Handle upgradeStringHandle=GetArrayCell(upgradeHandle,view_as<int>(UpgradeData_Strings));
 
                 ClearArray(upgradeHandle);
                 delete upgradeHandle;
@@ -373,7 +373,7 @@ ClearRaceArray()
 }
 
 CreateRace(const char[] short[], required_level=0, tech_level=0, max_level=16,
-           float initial_energy=30.0, float energy_limit=100.0, float energy_rate=1.0, Faction:faction=Generic,
+           float initial_energy=30.0, float energy_limit=100.0, float energy_rate=1.0, Faction faction=Generic,
            UnitType:type=GenericUnit, const char[] parent[]="", Translation:translation=Translation_Auto,
            const char[] translation_file[]="", const char[] name[]="", const char[] switch_message[]="",
            const char[] pending_message[]="", const char[] desc[]="", const char[] image[]="",
@@ -406,10 +406,10 @@ CreateRace(const char[] short[], required_level=0, tech_level=0, max_level=16,
         if (raceLoaded == ConfigNotLoaded)
         {
             if (faction == Unassigned)
-                KvSetNum(raceConfig,"faction", _:faction);
+                KvSetNum(raceConfig,"faction", view_as<int>(faction));
 
             if (type == UnassignedUnit)
-                KvSetNum(raceConfig,"unit_type", _:type);
+                KvSetNum(raceConfig,"unit_type", view_as<int>(type));
 
             if (required_level >= 0)
                 KvSetNum(raceConfig,"required_level", required_level);
@@ -428,8 +428,8 @@ CreateRace(const char[] short[], required_level=0, tech_level=0, max_level=16,
         }
         else
         {
-            faction = Faction:KvGetNum(raceConfig,"faction", _:faction);
-            type = UnitType:KvGetNum(raceConfig,"unit_type", _:type);
+            faction = Faction KvGetNum(raceConfig,"faction", view_as<int>(faction));
+            type = UnitType:KvGetNum(raceConfig,"unit_type", view_as<int>(type));
             required_level = KvGetNum(raceConfig,"required_level", required_level);
             tech_level = KvGetNum(raceConfig,"tech_level", tech_level);
             initial_energy = KvGetFloat(raceConfig,"initial_energy", initial_energy);
@@ -529,14 +529,14 @@ CreateRace(const char[] short[], required_level=0, tech_level=0, max_level=16,
         SetRaceId(raceHandle,raceId);
 
         int Handle messagesHandle=GetRaceMessageHandle(raceHandle);
-        SetArrayString(messagesHandle, _:RaceMessage_Switch,            switch_message);
-        SetArrayString(messagesHandle, _:RaceMessage_SwitchDead,        pending_message);
-        SetArrayString(messagesHandle, _:RaceMessage_TranslationFile,   translation_path);
+        SetArrayString(messagesHandle, view_as<int>(RaceMessage_Switch),            switch_message);
+        SetArrayString(messagesHandle, view_as<int>(RaceMessage_SwitchDead),        pending_message);
+        SetArrayString(messagesHandle, view_as<int>(RaceMessage_TranslationFile),   translation_path);
 
         int Handle stringsHandle=GetRaceStringHandle(raceHandle);
-        SetArrayString(stringsHandle, _:RaceString_Name,       name);
-        SetArrayString(stringsHandle, _:RaceString_ShortName,  short);
-        SetArrayString(stringsHandle, _:RaceString_ParentName, parent);
+        SetArrayString(stringsHandle, view_as<int>(RaceString_Name),       name);
+        SetArrayString(stringsHandle, view_as<int>(RaceString_ShortName),  short);
+        SetArrayString(stringsHandle, view_as<int>(RaceString_ParentName), parent);
     }
     else
     {
@@ -689,7 +689,7 @@ RaceComplete(race, const char[] desc[]="", const char[] image[]="")
         {
             char indexFactionName[NAME_STRING_LENGTH];
             int Handle indexHandle = GetRaceIndexHandle(index);
-            int Faction:indexFaction = GetRaceFaction(indexHandle);
+            int Faction indexFaction = GetRaceFaction(indexHandle);
             GetFactionName(indexFaction,indexFactionName,sizeof(indexFactionName));
             int cmpFaction = strcmp(raceFactionName,indexFactionName,false);
             if (cmpFaction <= 0)
@@ -740,7 +740,7 @@ RaceComplete(race, const char[] desc[]="", const char[] image[]="")
         if (g_bCreate || g_bUpdate)
         {
             int raceIdent = GetRaceIdent(raceHandle);
-            int Faction:faction = GetRaceFaction(raceHandle);
+            int Faction faction = GetRaceFaction(raceHandle);
             if (raceIdent > 0 && faction > Unassigned)
             {
                 int tech_level = GetRaceTechLevel(raceHandle);
@@ -764,7 +764,7 @@ RaceComplete(race, const char[] desc[]="", const char[] image[]="")
                 for(int upgrade=0;upgrade<upgradeCount;upgrade++)
                 {
                     int Handle upgradeHandle=GetUpgradeHandle(raceHandle, upgrade);
-                    if (!GetArrayCell(upgradeHandle, _:UpgradeData_Completed))
+                    if (!GetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Completed)))
                     {
                         char upgradeShortName[NAME_STRING_LENGTH];
                         GetUpgradeShortName(raceHandle, upgrade, upgradeShortName, sizeof(upgradeShortName));
@@ -784,18 +784,18 @@ RaceComplete(race, const char[] desc[]="", const char[] image[]="")
                         char upgradeImage[NAME_STRING_LENGTH];
                         GetUpgradeImage(raceHandle, upgrade, upgradeImage, sizeof(upgradeImage));
 
-                        new upgrade_category         = GetArrayCell(upgradeHandle, _:UpgradeData_Category);
-                        new req_level                = GetArrayCell(upgradeHandle, _:UpgradeData_RequiredLevel);
-                        new max_level                = GetArrayCell(upgradeHandle, _:UpgradeData_MaxLevel);
-                        new float energy             = GetArrayCell(upgradeHandle, _:UpgradeData_Energy);
-                        new float recurring_energy   = GetArrayCell(upgradeHandle, _:UpgradeData_RecurringEnergy);
-                        new float recurring_interval = GetArrayCell(upgradeHandle, _:UpgradeData_RecurringInterval);
-                        new bool accumulated         = GetArrayCell(upgradeHandle, _:UpgradeData_Accumulated);
-                        new crystals                 = GetArrayCell(upgradeHandle, _:UpgradeData_Crystals);
-                        new vespene                  = GetArrayCell(upgradeHandle, _:UpgradeData_Vespene);
-                        new cost_crystals            = GetArrayCell(upgradeHandle, _:UpgradeData_CostCrystals);
-                        new cost_vespene             = GetArrayCell(upgradeHandle, _:UpgradeData_Vespene);
-                        new float cooldown           = GetArrayCell(upgradeHandle, _:UpgradeData_Cooldown);
+                        new upgrade_category         = GetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Category));
+                        new req_level                = GetArrayCell(upgradeHandle, view_as<int>(UpgradeData_RequiredLevel));
+                        new max_level                = GetArrayCell(upgradeHandle, view_as<int>(UpgradeData_MaxLevel));
+                        new float energy             = GetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Energy));
+                        new float recurring_energy   = GetArrayCell(upgradeHandle, view_as<int>(UpgradeData_RecurringEnergy));
+                        new float recurring_interval = GetArrayCell(upgradeHandle, view_as<int>(UpgradeData_RecurringInterval));
+                        new bool accumulated         = GetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Accumulated));
+                        new crystals                 = GetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Crystals));
+                        new vespene                  = GetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Vespene));
+                        new cost_crystals            = GetArrayCell(upgradeHandle, view_as<int>(UpgradeData_CostCrystals));
+                        new cost_vespene             = GetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Vespene));
+                        new float cooldown           = GetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Cooldown));
 
                         // Update database
                         if (InsertUpgrade(GetRaceIdent(raceHandle), upgrade, upgrade_category,
@@ -805,7 +805,7 @@ RaceComplete(race, const char[] desc[]="", const char[] image[]="")
                                           recurring_energy, recurring_interval,
                                           crystals, vespene, cooldown))
                         {
-                            SetArrayCell(upgradeHandle, _:UpgradeData_Completed, true);
+                            SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Completed), true);
                         }
                     }
                 }
@@ -915,32 +915,32 @@ AddUpgrade(race, Handle raceHandle, const char[] short[], upgrade_category=0, re
         int Handle upgradeListHandle=GetUpgradeListHandle(raceHandle);
 
         upgradeHandle=GetArrayCell(upgradeListHandle, upgrade);
-        SetArrayCell(upgradeHandle, _:UpgradeData_Energy,            energy);
-        SetArrayCell(upgradeHandle, _:UpgradeData_RecurringEnergy,   recurring_energy);
-        SetArrayCell(upgradeHandle, _:UpgradeData_RecurringInterval, recurring_interval);
-        SetArrayCell(upgradeHandle, _:UpgradeData_Accumulated,       accumulated);
-        SetArrayCell(upgradeHandle, _:UpgradeData_Crystals,          crystals);
-        SetArrayCell(upgradeHandle, _:UpgradeData_Vespene,           vespene);
-        SetArrayCell(upgradeHandle, _:UpgradeData_Cooldown,          cooldown);
-        SetArrayCell(upgradeHandle, _:UpgradeData_CooldownType,      cooldown_type);
-        SetArrayCell(upgradeHandle, _:UpgradeData_RequiredLevel,     required_level);
-        SetArrayCell(upgradeHandle, _:UpgradeData_MaxLevel,          max_level);
-        SetArrayCell(upgradeHandle, _:UpgradeData_CostCrystals,      cost_crystals);
-        SetArrayCell(upgradeHandle, _:UpgradeData_CostVespene,       cost_vespene);
-        SetArrayCell(upgradeHandle, _:UpgradeData_Category,          upgrade_category);
-        SetArrayCell(upgradeHandle, _:UpgradeData_Disabled,          disabled);
-        SetArrayCell(upgradeHandle, _:UpgradeData_Completed,         false);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Energy),            energy);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_RecurringEnergy),   recurring_energy);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_RecurringInterval), recurring_interval);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Accumulated),       accumulated);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Crystals),          crystals);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Vespene),           vespene);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Cooldown),          cooldown);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_CooldownType),      cooldown_type);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_RequiredLevel),     required_level);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_MaxLevel),          max_level);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_CostCrystals),      cost_crystals);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_CostVespene),       cost_vespene);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Category),          upgrade_category);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Disabled),          disabled);
+        SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Completed),         false);
 
-        upgradeStringHandle=GetArrayCell(upgradeHandle,_:UpgradeData_Strings);
-        SetArrayString(upgradeStringHandle,_:UpgradeString_Name,      name);
-        SetArrayString(upgradeStringHandle,_:UpgradeString_ShortName, short);
-        SetArrayString(upgradeStringHandle,_:UpgradeString_Desc,      desc);
-        SetArrayString(upgradeStringHandle,_:UpgradeString_Invoke,    invoke);
-        SetArrayString(upgradeStringHandle,_:UpgradeString_Bind,      bind);
-        SetArrayString(upgradeStringHandle,_:UpgradeString_Image,     image);
+        upgradeStringHandle=GetArrayCell(upgradeHandle,view_as<int>(UpgradeData_Strings));
+        SetArrayString(upgradeStringHandle,view_as<int>(UpgradeString_Name),      name);
+        SetArrayString(upgradeStringHandle,view_as<int>(UpgradeString_ShortName), short);
+        SetArrayString(upgradeStringHandle,view_as<int>(UpgradeString_Desc),      desc);
+        SetArrayString(upgradeStringHandle,view_as<int>(UpgradeString_Invoke),    invoke);
+        SetArrayString(upgradeStringHandle,view_as<int>(UpgradeString_Bind),      bind);
+        SetArrayString(upgradeStringHandle,view_as<int>(UpgradeString_Image),     image);
 
         // Remove any leftover parameter strings.
-        ResizeArray(upgradeStringHandle, _:UpgradeString_Parm);
+        ResizeArray(upgradeStringHandle, view_as<int>(UpgradeString_Parm));
     }
     else
     {
@@ -1061,7 +1061,7 @@ AddUpgrade(race, Handle raceHandle, const char[] short[], upgrade_category=0, re
                           recurring_energy, recurring_interval,
                           crystals, vespene, cooldown))
         {
-            SetArrayCell(upgradeHandle, _:UpgradeData_Completed, true);
+            SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Completed), true);
         }
     }
 
@@ -1082,9 +1082,9 @@ SetUpgradeCooldown(race, Handle raceHandle, upgrade, float cooldown, CooldownTyp
     #endif
 
     int Handle upgradeHandle=GetUpgradeHandle(raceHandle,   upgrade);
-    SetArrayCell(upgradeHandle, _:UpgradeData_Cooldown,     cooldown);
-    SetArrayCell(upgradeHandle, _:UpgradeData_CooldownType, cooldown_type);
-    SetArrayCell(upgradeHandle, _:UpgradeData_Completed,    false);
+    SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Cooldown),     cooldown);
+    SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_CooldownType), cooldown_type);
+    SetArrayCell(upgradeHandle, view_as<int>(UpgradeData_Completed),    false);
 
     #if defined _TRACE
         TraceReturn();
@@ -1100,11 +1100,11 @@ float GetUpgradeCooldown(race, Handle raceHandle, upgrade, &CooldownType:cooldow
         #pragma unused race
     #endif
 
-    int Handle upgradeListHandle=GetArrayCell(raceHandle,    _:RaceData_Upgrades);
+    int Handle upgradeListHandle=GetArrayCell(raceHandle,    view_as<int>(RaceData_Upgrades));
     int Handle upgradeHandle=GetArrayCell(upgradeListHandle, upgrade);
 
-    cooldown_type = CooldownType:GetArrayCell(upgradeHandle, _:UpgradeData_CooldownType);
-    int float cooldown = float GetArrayCell(upgradeHandle,   _:UpgradeData_Cooldown);
+    cooldown_type = CooldownType:GetArrayCell(upgradeHandle, view_as<int>(UpgradeData_CooldownType));
+    int float cooldown = float GetArrayCell(upgradeHandle,   view_as<int>(UpgradeData_Cooldown));
 
     #if defined _TRACE
         TraceReturn("cooldown=%f,cooldown_type=%d", cooldown, cooldown_type);
@@ -1113,9 +1113,9 @@ float GetUpgradeCooldown(race, Handle raceHandle, upgrade, &CooldownType:cooldow
     return cooldown;
 }
 
-Faction:GetRaceFactionId(Handle raceHandle)
+Faction GetRaceFactionId(Handle raceHandle)
 {
-    int Faction:factionId=GetRaceFaction(raceHandle);
+    int Faction factionId=GetRaceFaction(raceHandle);
     return (factionId < Generic) ? Generic : factionId;
 }
 
@@ -1123,13 +1123,13 @@ GetRaceParentId(Handle raceHandle)
 {
     if (raceHandle != null)
     {
-        int parent = GetArrayCell(raceHandle,_:RaceData_ParentId);
+        int parent = GetArrayCell(raceHandle,view_as<int>(RaceData_ParentId));
         if (parent == 0)
         {
             char name[NAME_STRING_LENGTH]; name[0] = '\0';
             GetRaceParentName(raceHandle, name, sizeof(name));
             parent = (name[0] != '\0') ? FindRace(name) : -1;
-            SetArrayCell(raceHandle,_:RaceData_ParentId,parent);
+            SetArrayCell(raceHandle,view_as<int>(RaceData_ParentId),parent);
         }
         return parent;
     }
@@ -1643,10 +1643,10 @@ GetUpgradeStrings(Handle raceHandle, upgrade, char[] name, maxName,
     TraceInto("Race", "GetUpgradeStrings", "raceHandle=0x%08x, upgrade=%d", raceHandle, upgrade);
 
     int Handle upgradeStringHandle=GetUpgradeStringHandle(raceHandle,upgrade);
-    GetArrayString(upgradeStringHandle, _:UpgradeString_Name, name, maxName);
-    GetArrayString(upgradeStringHandle, _:UpgradeString_Desc, desc, maxDesc);
-    GetArrayString(upgradeStringHandle, _:UpgradeString_Bind, bind, maxBind);
-    GetArrayString(upgradeStringHandle, _:UpgradeString_Invoke, invoke, maxInvoke);
+    GetArrayString(upgradeStringHandle, view_as<int>(UpgradeString_Name), name, maxName);
+    GetArrayString(upgradeStringHandle, view_as<int>(UpgradeString_Desc), desc, maxDesc);
+    GetArrayString(upgradeStringHandle, view_as<int>(UpgradeString_Bind), bind, maxBind);
+    GetArrayString(upgradeStringHandle, view_as<int>(UpgradeString_Invoke), invoke, maxInvoke);
     Trace("name=%s, desc=%s, invoke=%s, bind=%s", name, desc, invoke, bind);
 
     int category = GetUpgradeCategory(raceHandle,upgrade);
@@ -1796,8 +1796,8 @@ FormatUpgradeDescription(Handle raceHandle, upgrade, Translation:translation,
 
         int Handle upgradeListHandle=GetUpgradeListHandle(raceHandle);
         int Handle upgradeHandle=GetArrayCell(upgradeListHandle,upgrade);
-        int Handle upgradeStringHandle=GetArrayCell(upgradeHandle,_:UpgradeData_Strings);
-        int numParms = GetArraySize(upgradeStringHandle) - _:UpgradeString_Parm;
+        int Handle upgradeStringHandle=GetArrayCell(upgradeHandle,view_as<int>(UpgradeData_Strings));
+        int numParms = GetArraySize(upgradeStringHandle) - view_as<int>(UpgradeString_Parm);
         if (numParms > 0)
         {
             Trace("replace %d parms", numParms);
@@ -1885,8 +1885,8 @@ FormatUpgradeDescription(Handle raceHandle, upgrade, Translation:translation,
     {
         int Handle upgradeListHandle=GetUpgradeListHandle(raceHandle);
         int Handle upgradeHandle=GetArrayCell(upgradeListHandle,upgrade);
-        int Handle upgradeStringHandle=GetArrayCell(upgradeHandle,_:UpgradeData_Strings);
-        int numParms = GetArraySize(upgradeStringHandle) - _:UpgradeString_Parm;
+        int Handle upgradeStringHandle=GetArrayCell(upgradeHandle,view_as<int>(UpgradeData_Strings));
+        int numParms = GetArraySize(upgradeStringHandle) - view_as<int>(UpgradeString_Parm);
         if (numParms > 0)
         {
             char parm[8][NAME_STRING_LENGTH];
@@ -1970,13 +1970,13 @@ FormatUpgradeDescription(Handle raceHandle, upgrade, Translation:translation,
 
 GetUpgradeCount(Handle raceHandle)
 {
-    int Handle upgradeListHandle=GetArrayCell(raceHandle,_:RaceData_Upgrades);
+    int Handle upgradeListHandle=GetArrayCell(raceHandle,view_as<int>(RaceData_Upgrades));
     return (upgradeListHandle != null) ? GetArraySize(upgradeListHandle) : 0;
 }
 
 FindUpgrade(Handle raceHandle, const char[] short[])
 {
-    int Handle upgradeListHandle=GetArrayCell(raceHandle,_:RaceData_Upgrades);
+    int Handle upgradeListHandle=GetArrayCell(raceHandle,view_as<int>(RaceData_Upgrades));
     if (upgradeListHandle != null)
     {
         char curName[NAME_STRING_LENGTH];
@@ -1986,10 +1986,10 @@ FindUpgrade(Handle raceHandle, const char[] short[])
             int Handle upgradeHandle=GetArrayCell(upgradeListHandle,upgrade);
             if (upgradeHandle != null)
             {
-                int Handle upgradeStringHandle=GetArrayCell(upgradeHandle,_:UpgradeData_Strings);
+                int Handle upgradeStringHandle=GetArrayCell(upgradeHandle,view_as<int>(UpgradeData_Strings));
                 if (upgradeStringHandle != null)
                 {
-                    GetArrayString(upgradeStringHandle,_:UpgradeString_ShortName, curName, sizeof(curName));
+                    GetArrayString(upgradeStringHandle,view_as<int>(UpgradeString_ShortName), curName, sizeof(curName));
                     if (StrEqual(short,curName,false))
                         return upgrade;
                 }
@@ -2019,7 +2019,7 @@ FindRaceForIdent(ident)
     {
         //if (GetRaceIdent(GetRaceHandle(race)) == ident)
         int Handle raceHandle=GetRaceHandle(race);
-        if (GetArrayCell(raceHandle,_:RaceData_Ident) == ident)
+        if (GetArrayCell(raceHandle,view_as<int>(RaceData_Ident)) == ident)
             return race;
     }
     return -1;
@@ -2113,7 +2113,7 @@ ChangeRace(client, race, Handle raceHandle, bool forceNow=false, bool check=true
 
         if (techLevel > 0)
         {
-            int Faction:techId = GetRaceFaction(raceHandle, false);
+            int Faction techId = GetRaceFaction(raceHandle, false);
             if (techId > Generic)
             {
                 int tlvl = GetTechLevel(client, techId);

@@ -682,7 +682,7 @@ public OnAdminMenuReady(Handle topmenu)
 	}
 }
 
-public AdminMenu_Merasmus(Handle topmenu, TopMenuAction:action, TopMenuObject:object_id, param, char buffer[], maxlength )
+public AdminMenu_Merasmus(Handle topmenu, TopMenuAction action, TopMenuObject object_id, param, char buffer[], maxlength )
 {
 	if (action == TopMenuAction_DisplayOption)
 	{

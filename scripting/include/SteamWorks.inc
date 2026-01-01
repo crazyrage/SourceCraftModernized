@@ -241,21 +241,21 @@ native bool SteamWorks_SetHTTPRequestNetworkActivityTimeout(Handle hHandle, time
 native bool SteamWorks_SetHTTPRequestHeaderValue(Handle hHandle, const char[] sName, const char[] sValue);
 native bool SteamWorks_SetHTTPRequestGetOrPostParameter(Handle hHandle, const char[] sName, const char[] sValue);
 
-funcenum SteamWorksHTTPRequestCompleted
+typeset SteamWorksHTTPRequestCompleted
 {
 	public(Handle hRequest, bool bFailure, bool bRequestSuccessful, EHTTPStatusCode eStatusCode),
 	public(Handle hRequest, bool bFailure, bool bRequestSuccessful, EHTTPStatusCode eStatusCode, any data1),
 	public(Handle hRequest, bool bFailure, bool bRequestSuccessful, EHTTPStatusCode eStatusCode, any data1, any data2)
 };
 
-funcenum SteamWorksHTTPHeadersReceived
+typeset SteamWorksHTTPHeadersReceived
 {
 	public(Handle hRequest, bool bFailure),
 	public(Handle hRequest, bool bFailure, any data1),
 	public(Handle hRequest, bool bFailure, any data1, any data2)
 };
 
-funcenum SteamWorksHTTPDataReceived
+typeset SteamWorksHTTPDataReceived
 {
 	public(Handle hRequest, bool bFailure, offset, bytesreceived),
 	public(Handle hRequest, bool bFailure, offset, bytesreceived, any data1),
@@ -275,7 +275,7 @@ native bool SteamWorks_GetHTTPStreamingResponseBodyData(Handle hRequest, cOffset
 native bool SteamWorks_GetHTTPDownloadProgressPct(Handle hRequest, float & percent);
 native bool SteamWorks_SetHTTPRequestRawPostBody(Handle hRequest, const char[] sContentType, const char[] sBody, bodylen);
 
-funcenum SteamWorksHTTPBodyCallback
+typeset SteamWorksHTTPBodyCallback
 {
 	public(const char[] sData),
 	public(const char[] sData, any value),

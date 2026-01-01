@@ -40,7 +40,7 @@ stock bool Effect_DissolveEntity(entity, DissolveType:dissolveType=DISSOLVE_NORM
 	}
 
 	Entity_PointAtTarget(env_entity_dissolver, entity);
-	SetEntProp(env_entity_dissolver, Prop_Send, "m_nDissolveType", _:dissolveType);
+	SetEntProp(env_entity_dissolver, Prop_Send, "m_nDissolveType", view_as<int>(dissolveType));
 	SetEntProp(env_entity_dissolver, Prop_Send, "m_nMagnitude", magnitude);
 	AcceptEntityInput(env_entity_dissolver,	"Dissolve");
 	Entity_Kill(env_entity_dissolver);
@@ -121,7 +121,7 @@ stock Effect_Fade(entity, fadeOut=true, kill=false, fast=true, EffectCallback:ca
 #if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 7
 		WritePackFunction(dataPack, callback);
 #else
-		WritePackCell(dataPack, _:callback);
+		WritePackCell(dataPack, view_as<int>(callback));
 #endif
 		WritePackCell(dataPack, data);
 		ResetPack(dataPack);
@@ -703,8 +703,8 @@ stock Effect_EnvSprite(
 	float scale=0.25,
 	const char targetName[MAX_NAME_LENGTH]="",
 	parent=-1,
-	RenderMode:renderMode=RENDER_WORLDGLOW,
-	RenderFx:renderFx=RENDERFX_NONE,
+	RenderMode renderMode=RENDER_WORLDGLOW,
+	RenderFx renderFx=RENDERFX_NONE,
 	float glowProxySize=2.0,
 	float framerate=10.0,
 	float hdrColorScale=1.0,

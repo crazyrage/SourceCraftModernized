@@ -16,7 +16,7 @@
 
 stock Handle g_ClientTimers[MAXPLAYERS+1];
 
-stock CreateClientTimer(client, float int erval, Timer:func,
+stock CreateClientTimer(client, float int erval, Timer func,
                         flags=TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE)
 {
     if (IsClient(client) && g_ClientTimers[client] == null)

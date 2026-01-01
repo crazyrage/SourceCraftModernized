@@ -831,7 +831,7 @@ public Action War3Source_AbilityCommand(client,args)
 
     int num = 0;
     if (IsCharNumeric(command[8]))
-        num=_:command[8]-48;
+        num=view_as<int>(command)[8]-48;
 
     int result;
     Call_StartForward(g_OnAbilityCommandHandle);
@@ -899,7 +899,7 @@ public OnPlayerDeathEvent(Handle event,victim_index,victim_race, attacker_index,
 {
     int result;
     W3VarArr[DeathRace]=victim_race;
-    W3VarArr[SmEvent]=_:event; //stacking on stack 
+    W3VarArr[SmEvent]=view_as<int>(event); //stacking on stack 
     Call_StartForward(g_OnWar3EventDeathFH);
     Call_PushCell(victim_index);
     Call_PushCell(attacker_index);
@@ -996,9 +996,9 @@ public int Native_W3ChanceModifier(Handle plugin,numParams)
 {
     int attacker=GetNativeCell(1);
     if(!GameTF()||attacker<=0 || attacker>MaxClients || !IsValidEdict(attacker))
-        return _:1.0;
+        return view_as<int>(1.0);
     else
-        return _:ChanceModifier[attacker];
+        return view_as<int>(ChanceModifier)[attacker];
 }
 
 public int Native_War3_DamageModPercent(Handle plugin,numParams)
@@ -1025,7 +1025,7 @@ public int NW3GetDamageInflictor(Handle plugin, int numParams)
 
 public int NW3GetDamageIsBullet(Handle plugin, int numParams)
 {
-    return _:(!g_CurDamageIsWarcraft ||
+    return view_as<int>(!g_CurDamageIsWarcraft ||
               !GetDamageFromPlayerHurt() ||
               !GetSuppressDamageForward());
 }
@@ -1413,7 +1413,7 @@ public void OnGameFrame()
 void War3Source_InitCVars()
 {
     hUseMetric=CreateConVar("war3_metric_system","0","Do you want use metric system? 1-Yes, 0-No");
-    W3VarArr[hUseMetricCvar]=_:hUseMetric;
+    W3VarArr[hUseMetricCvar]=view_as<int>(hUseMetric);
 
     return true;
 }
@@ -1599,7 +1599,7 @@ public int NWar3_TrackDelayExpired(Handle plugin, int numParams)
 }
 
 public int NW3GetVar(Handle plugin, int numParams){
-    return _:W3VarArr[War3Var:GetNativeCell(1)];
+    return view_as<int>(W3VarArr)[War3Var:GetNativeCell(1)];
 }
 public int NW3SetVar(Handle plugin, int numParams){
     W3VarArr[War3Var:GetNativeCell(1)]=GetNativeCell(2);
@@ -1676,7 +1676,7 @@ public int NWar3_AddRaceSkillT(Handle plugin, int numParams)
             GetNativeString(arg,parm[i],sizeof(parm[]));
     }
 
-    int newskillnum = AddUpgrade(raceid,skillname,_:isult,.max_level=maxskilllevel,
+    int newskillnum = AddUpgrade(raceid,skillname,view_as<int>(isult),.max_level=maxskilllevel,
                                  .p1=parm[0], .p2=parm[1], .p3=parm[2], .p4=parm[3],
                                  .p5=parm[4], .p6=parm[5], .p7=parm[6]);
 
@@ -1684,7 +1684,7 @@ public int NWar3_AddRaceSkillT(Handle plugin, int numParams)
     int category = GetUpgradeDescription(raceid, newskillnum, description, sizeof(description));
 
     category = get_category(category, skillname, description, isult);
-    if (category != _:isult)
+    if (category != view_as<int>(isult))
         SetUpgradeCategory(raceid, newskillnum, category);
 
     return newskillnum;
@@ -1890,7 +1890,7 @@ stock fix_short(char buffer[], maxlength, const char[] short[])
 
 stock fix_ability(char buffer[], maxlength, const char[] desc[], bool isult=false)
 {
-    int category = _:isult;
+    int category = view_as<int>(isult);
     strcopy(buffer, maxlength, desc);
 
     if (ReplaceString(buffer, maxlength, "+ability2", "+ultimate4", false) > 0)
@@ -1924,7 +1924,7 @@ stock fix_ability(char buffer[], maxlength, const char[] desc[], bool isult=fals
 stock get_category(category, const char[] name[], const char[] desc[], bool isult=false)
 {
     if (isult)
-        return _:isult; // probably 1
+        return view_as<int>(isult); // probably 1
     else if (category > 0)
         return category;
     else if (StrContains(desc, "ability2", false) >= 0   ||

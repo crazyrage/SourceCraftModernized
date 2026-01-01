@@ -321,7 +321,7 @@ public Action OnRaceSelected(int client, int oldrace, int newrace)
 
         //Set Hunter Color
         int r,g,b;
-        if (TFTeam:GetClientTeam(client) == TFTeam_Red)
+        if (TFTeam GetClientTeam(client) == TFTeam_Red)
         { r = 255; g = 255; b = 64; }
         else
         { r = 64; g = 255; b = 255; }
@@ -449,7 +449,7 @@ public int OnPlayerSpawnEvent(Handle event, int client, int race)
 
         //Set Hunter Color
         int r,g,b;
-        if (TFTeam:GetClientTeam(client) == TFTeam_Red)
+        if (TFTeam GetClientTeam(client) == TFTeam_Red)
         { r = 255; g = 255; b = 64; }
         else
         { r = 64; g = 255; b = 255; }

@@ -18,14 +18,14 @@ enum TFAmmoTypes
 }
 
 //stock TF2_GetMetalAmount(client)
-#define TF2_GetMetalAmount(%1)    GetEntProp(%1, Prop_Send, "m_iAmmo", .element=_:Metal)
+#define TF2_GetMetalAmount(%1)    GetEntProp(%1, Prop_Send, "m_iAmmo", .element=view_as<int>(Metal))
 
 //stock TF2_SetMetalAmount(client, metal)
-#define TF2_SetMetalAmount(%1,%2) SetEntProp(%1, Prop_Send, "m_iAmmo", %2, .element=_:Metal)
+#define TF2_SetMetalAmount(%1,%2) SetEntProp(%1, Prop_Send, "m_iAmmo", %2, .element=view_as<int>(Metal))
 
 stock TF2_GetAmmoAmount(client,TFAmmoTypes:type=Primary, weapon=0)
 {
-    int ammoType = _:type;
+    int ammoType = view_as<int>(type);
     if (weapon > 0 && IsValidEntity(weapon))
     {
         switch (type)
@@ -35,13 +35,13 @@ stock TF2_GetAmmoAmount(client,TFAmmoTypes:type=Primary, weapon=0)
         }
     }
 
-    //return GetEntData(client, FindDataMapOffs(client, "m_iAmmo") + (_:type * 4), 4);
+    //return GetEntData(client, FindDataMapOffs(client, "m_iAmmo") + (view_as<int>(type) * 4), 4);
     return (ammoType >= 0) ? GetEntProp(client, Prop_Send, "m_iAmmo", .element=ammoType) : -1;
 }
 
 stock TF2_SetAmmoAmount(client, ammo = 999,TFAmmoTypes:type=Primary, weapon=0)
 {
-    int ammoType = _:type;
+    int ammoType = view_as<int>(type);
     if (weapon > 0 && IsValidEntity(weapon))
     {
         switch (type)
@@ -51,7 +51,7 @@ stock TF2_SetAmmoAmount(client, ammo = 999,TFAmmoTypes:type=Primary, weapon=0)
         }
     }
 
-    //SetEntData(client, FindDataMapOffs(client, "m_iAmmo") + (_:type * 4), ammo, 4);
+    //SetEntData(client, FindDataMapOffs(client, "m_iAmmo") + (view_as<int>(type) * 4), ammo, 4);
     if (ammoType >= 0)
         SetEntProp(client, Prop_Send, "m_iAmmo", ammo, .element=ammoType);
 }

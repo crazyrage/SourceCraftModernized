@@ -719,7 +719,7 @@ public __GetHookDistance(Handle plugin, numParams)
     else if(!IsClientInGame(client))
         return ThrowNativeError(SP_ERROR_NATIVE, "Client is not currently ingame [%d]", client);
     if(g_Status[client][Hook])
-        return _:g_Distance[client][0];
+        return view_as<int>(g_Distance)[client][0];
     else
         return -1;
 }
@@ -732,7 +732,7 @@ public __GetGrabDistance(Handle plugin, numParams)
     else if(!IsClientInGame(client))
         return ThrowNativeError(SP_ERROR_NATIVE, "Client is not currently ingame [%d]", client);
     else if(g_Status[client][Grab])
-        return _:g_Distance[client][1];
+        return view_as<int>(g_Distance)[client][1];
     else
         return -1;
 }
@@ -745,7 +745,7 @@ public __GetRopeDistance(Handle plugin, numParams)
     else if(!IsClientInGame(client))
         return ThrowNativeError(SP_ERROR_NATIVE, "Client is not currently ingame [%d]", client);
     else if(g_Status[client][Rope])
-        return _:g_Distance[client][2];
+        return view_as<int>(g_Distance)[client][2];
     else
         return -1;
 }
@@ -758,7 +758,7 @@ public __GetPushDistance(Handle plugin, numParams)
     else if(!IsClientInGame(client))
         return ThrowNativeError(SP_ERROR_NATIVE, "Client is not currently ingame [%d]", client);
     else if(g_Status[client][Hook])
-        return _:g_Distance[client][3];
+        return view_as<int>(g_Distance)[client][3];
     else
         return -1;
 }

@@ -131,7 +131,7 @@ stock Plague(client, raceId, upgradeId, level, PlagueType:type=NormalPlague,
                     if (pack != null)
                     {
                         WritePackCell(pack, client);
-                        WritePackCell(pack, _:type);
+                        WritePackCell(pack, view_as<int>(type));
                         WritePackFloat(pack, plagueRange[level]);
                         WritePackFloat(pack, GetEngineTime() + length);
                         WritePackFloat(pack, targetLoc[0]);

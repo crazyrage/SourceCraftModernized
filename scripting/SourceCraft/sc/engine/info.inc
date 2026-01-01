@@ -72,7 +72,7 @@ public PlayerInfo(client,target,MenuMode:mode)
             char raceName[NAME_STRING_LENGTH];
             GetRaceName(raceHandle, raceName, sizeof(raceName));
 
-            new Faction:techId = GetRaceFactionId(raceHandle);
+            new Faction techId = GetRaceFactionId(raceHandle);
             new UnitType:typeId = GetRaceType(raceHandle);
             if (techId > Generic)
             {

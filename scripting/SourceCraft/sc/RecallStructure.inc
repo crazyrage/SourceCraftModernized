@@ -123,7 +123,7 @@ stock RecallStructure(client, raceId, upgradeId, bool disable, bool engineersOnl
     }
 }
 
-public RecallStructure_Selected(Handle menu,MenuAction:action,client,selection)
+public RecallStructure_Selected(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {

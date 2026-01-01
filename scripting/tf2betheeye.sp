@@ -84,7 +84,7 @@ bool bEyeRage[MAXPLAYERS+1];
 float flEyeRage[MAXPLAYERS+1];
 bool bSkipUpdateCheck[MAXPLAYERS+1];
 int iOriginalTeam[MAXPLAYERS+1];
-new TFClassType:iOriginalClass[MAXPLAYERS+1];
+new TFClassType iOriginalClass[MAXPLAYERS+1];
 float flOriginalMaxSpeed[MAXPLAYERS+1];
 
 /////////////////
@@ -692,7 +692,7 @@ BeTheMonoculus( iClient )
 		return;
 	}
 	
-	int Action:result;
+	int Action result;
 	Call_StartForward( fwdCanPlayAsEye );
 	Call_PushCell( iClient );
 	Call_Finish( result );
@@ -852,7 +852,7 @@ bool ShootRocket( iClient )
 	vecOrigin[1] += flMult * Sine( DegToRad(vecAngles[1]) );
 	vecOrigin[2] += 48.0 - flMult * Sine( DegToRad(vecAngles[0]) );
 	
-	flMult = _:bEyeRage[iClient] ? 1500.0 : 500.0;
+	flMult = view_as<int>(bEyeRage)[iClient] ? 1500.0 : 500.0;
 	GetAngleVectors( vecAngles, vecVelocity, NULL_VECTOR, NULL_VECTOR );
 	NormalizeVector( vecVelocity, vecVelocity );
 	ScaleVector( vecVelocity, flMult );
@@ -961,7 +961,7 @@ public Native_IsPlayerEye( Handle hPlugin, nParams )
 ////////////
 /* Stocks */
 
-stock Error( iFlags = ERROR_NONE, iNativeErrCode = SP_ERROR_NONE, const char[] strMessage, any:... )
+stock Error( iFlags = ERROR_NONE, iNativeErrCode = SP_ERROR_NONE, const char[] strMessage, any ... )
 {
 	char strBuffer[1024];
 	VFormat( strBuffer, sizeof(strBuffer), strMessage, 4 );

@@ -555,7 +555,7 @@ public Action CreepTimer(Handle timer, any userid)
     return Plugin_Continue;
 }
 
-void ReplenishObject(client, obj, TFObjectType:type, amount, num_rockets)
+void ReplenishObject(client, obj, TFObjectType type, amount, num_rockets)
 {
     if (GetEntPropEnt(obj, Prop_Send, "m_hBuilder") == client &&
         GetEntPropFloat(obj, Prop_Send, "m_flPercentageConstructed") >= 1.0)

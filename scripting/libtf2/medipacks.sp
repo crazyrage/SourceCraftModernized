@@ -255,7 +255,7 @@ public Action Command_Medipack(client, args)
     if (MedipacksOn < 2)
         return Plugin_Handled;
 
-    int TFClassType:class = TF2_GetPlayerClass(client);
+    int TFClassType class = TF2_GetPlayerClass(client);
     if (class != TFClass_Medic)
         return Plugin_Handled;
 
@@ -296,7 +296,7 @@ public Action Command_UberCharge(client, args)
         return Plugin_Handled;
     }
 
-    int TFClassType:class = TF2_GetPlayerClass(target);
+    int TFClassType class = TF2_GetPlayerClass(target);
     if (class != TFClass_Medic)
     {
         ReplyToCommand(client, "[SM] %t", "Not a Medic", name);
@@ -451,7 +451,7 @@ public Action Timer_PlayerDefDelay(Handle timer, any client)
     if (!IsClientInGame(client))
         return;
 
-    int TFClassType:class = TF2_GetPlayerClass(client);
+    int TFClassType class = TF2_GetPlayerClass(client);
     if (class != TFClass_Medic)
         return;
 
@@ -463,7 +463,7 @@ public Action Timer_PlayerDefDelay(Handle timer, any client)
 public Action Event_PlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 {
     int client = GetClientOfUserId(GetEventInt(event, "userid"));
-    int TFClassType:class = TF2_GetPlayerClass(client);
+    int TFClassType class = TF2_GetPlayerClass(client);
     if (class != TFClass_Medic)
         return;
 
@@ -501,7 +501,7 @@ public Action Event_PlayerDeath(Handle event, const char[] name, bool dontBroadc
     if (MedipacksOn < 1 || MedipacksOn == 2)
         return;
 
-    int TFClassType:class = TF2_GetPlayerClass(client);
+    int TFClassType class = TF2_GetPlayerClass(client);
     if (class != TFClass_Medic)
         return;
 

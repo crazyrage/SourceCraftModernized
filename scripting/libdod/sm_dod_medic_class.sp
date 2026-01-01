@@ -663,7 +663,7 @@ public Action Heal(client, args)
                                             PrintToChat(patient, "[SM] %s healed you with %ihp", medicName, amount);
                                         }
 
-                                        new Action:result=Plugin_Continue;
+                                        new Action result=Plugin_Continue;
                                         Call_StartForward(g_OnMedicHealedHandle);
                                         Call_PushCell(client);
                                         Call_PushCell(patient);
@@ -986,13 +986,13 @@ public AssignMedic(client)
 public Native_GetMedicSpeed(Handle plugin,numParams)
 {
     float speed = g_MedicSpeed[GetNativeCell(1)]
-    return (speed < 0.0) ? (_:GetConVarFloat(g_Cvar_MedicSpeed)) : (_:speed);
+    return (speed < 0.0) ? (view_as<int>(GetConVarFloat)(g_Cvar_MedicSpeed)) : (view_as<int>(speed));
 }
 
 public Native_GetMedicWeight(Handle plugin,numParams)
 {
     float weight = g_MedicWeight[GetNativeCell(1)]
-    return (weight < 0.0) ? (_:GetConVarFloat(g_Cvar_MedicWeight)) : (_:weight);
+    return (weight < 0.0) ? (view_as<int>(GetConVarFloat)(g_Cvar_MedicWeight)) : (view_as<int>(weight));
 }
 
 public Native_MedicHeal(Handle plugin,numParams)

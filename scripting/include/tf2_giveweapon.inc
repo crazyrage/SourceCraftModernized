@@ -62,7 +62,7 @@ stock bool TF2_WeaponEquip(client, entity)
 stock TF2_RemoveOnlyWeapons(client)
 {
     int lastSlot;
-    int TFClassType:class = TF2_GetPlayerClass(client);
+    int TFClassType class = TF2_GetPlayerClass(client);
     if (class == TFClass_Spy)
     {
         ClientCommand(client, "slot4");
@@ -140,7 +140,7 @@ stock bool TF2_GivePlayerWeapon(client, const char[] weapon)
  * @param class			TFClasssType class symbol.
  * @noreturn
  */
-stock TF2_EquipPlayerClassWeapons(client, TFClassType:class, bool onlyWeapons=false)
+stock TF2_EquipPlayerClassWeapons(client, TFClassType class, bool onlyWeapons=false)
 {
     switch(class)
     {

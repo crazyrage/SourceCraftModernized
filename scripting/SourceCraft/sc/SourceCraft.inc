@@ -89,7 +89,7 @@ native bool IsSourceCraftLoaded();
  * @return                  The return value will be the race index or -1 if there was a problem.
  */         
 native CreateRace(const char short[], required_level=0, tech_level=0, max_level=16,
-                  float initial_energy=30.0, float energy_limit=100.0, float energy_rate=1.0, Faction:faction=Generic,
+                  float initial_energy=30.0, float energy_limit=100.0, float energy_rate=1.0, Faction faction=Generic,
                   UnitType:type=GenericUnit, const char parent[]="", Translation:translation=Translation_Auto,
                   const char translation_file[]="", const char name[]="", const char switch_message[]="",
                   const char pending_message[]="", const char desc[]="", const char image[]="");
@@ -131,7 +131,7 @@ native RaceComplete(race, const char desc[]="", const char image[]="");
  * @noreturn
  */
 native SetRaceAttributes(race, required_level=-1, tech_level=-1, max_level=-1, float initial_energy=-1.0,
-                         float energy_limit=-1.0, float energy_rate=-1.0, Faction:faction=Unassigned,
+                         float energy_limit=-1.0, float energy_rate=-1.0, Faction faction=Unassigned,
                          UnitType:type=UnassignedUnit, const char parent[]="",
                          Translation:translation=Translation_Default,
                          const char translation_file[]="", const char name[]="",
@@ -249,7 +249,7 @@ native GetRaceParentId(race);
  * @param validate: Set to true to return only valid faction indices (converts Unassigned to Generic)
  * @return          The return value will be the Faction of the race
  */
-native Faction:GetRaceFaction(race,bool validate=true);
+native Faction GetRaceFaction(race,bool validate=true);
 
 /**
  * Gets the plugin Handle for a race.
@@ -282,7 +282,7 @@ native GetUnitTypeName(UnitType:type, char name[], maxlength, lang=LANG_SERVER);
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetFactionName(Faction:faction, char name[], maxlength, lang=LANG_SERVER);
+native GetFactionName(Faction faction, char name[], maxlength, lang=LANG_SERVER);
 
 /**
  * Retrieves the description of the faction
@@ -292,7 +292,7 @@ native GetFactionName(Faction:faction, char name[], maxlength, lang=LANG_SERVER)
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetFactionDescription(Faction:faction, char desc[], maxlength, lang=LANG_SERVER);
+native GetFactionDescription(Faction faction, char desc[], maxlength, lang=LANG_SERVER);
 
 /**
  * Retrieves the "Not Enough Crystals" sound for the faction
@@ -302,7 +302,7 @@ native GetFactionDescription(Faction:faction, char desc[], maxlength, lang=LANG_
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetFactionCrystalSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER);
+native GetFactionCrystalSound(Faction faction, char sound[], maxlength, lang=LANG_SERVER);
 
 /**
  * Emits the "Not Enough Crystals" sound to the client
@@ -310,7 +310,7 @@ native GetFactionCrystalSound(Faction:faction, char sound[], maxlength, lang=LAN
  * @param faction:   The Faction (defaults to client's current faction)
  * @noreturn
  */
-native EmitCrystalSoundToClient(client, Faction:faction=Unassigned);
+native EmitCrystalSoundToClient(client, Faction faction=Unassigned);
 
 /**
  * Retrieves the "Not Enough Vespene" sound for the faction
@@ -320,7 +320,7 @@ native EmitCrystalSoundToClient(client, Faction:faction=Unassigned);
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetFactionVespeneSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER);
+native GetFactionVespeneSound(Faction faction, char sound[], maxlength, lang=LANG_SERVER);
 
 /**
  * Emits the "Not Enough Vespene" sound to the client
@@ -328,7 +328,7 @@ native GetFactionVespeneSound(Faction:faction, char sound[], maxlength, lang=LAN
  * @param faction:   The Faction (defaults to client's current faction)
  * @noreturn
  */
-native EmitVespeneSoundToClient(client, Faction:faction=Unassigned);
+native EmitVespeneSoundToClient(client, Faction faction=Unassigned);
 
 /**
  * Retrieves the "Not Enough Energy" sound for the faction
@@ -338,7 +338,7 @@ native EmitVespeneSoundToClient(client, Faction:faction=Unassigned);
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetFactionEnergySound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER);
+native GetFactionEnergySound(Faction faction, char sound[], maxlength, lang=LANG_SERVER);
 
 /**
  * Emits the "Not Enough Energy" sound to the client
@@ -346,7 +346,7 @@ native GetFactionEnergySound(Faction:faction, char sound[], maxlength, lang=LANG
  * @param faction:   The Faction (defaults to client's current faction)
  * @noreturn
  */
-native EmitEnergySoundToClient(client, Faction:faction=Unassigned);
+native EmitEnergySoundToClient(client, Faction faction=Unassigned);
 
 /**
  * Retrieves the "Not Enough XP" sound for the faction
@@ -356,7 +356,7 @@ native EmitEnergySoundToClient(client, Faction:faction=Unassigned);
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetFactionXPSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER);
+native GetFactionXPSound(Faction faction, char sound[], maxlength, lang=LANG_SERVER);
 
 /**
  * Emits the "Not Enough XP" sound to the client
@@ -364,7 +364,7 @@ native GetFactionXPSound(Faction:faction, char sound[], maxlength, lang=LANG_SER
  * @param faction:   The Faction (defaults to client's current faction)
  * @noreturn
  */
-native EmitXPSoundToClient(client, Faction:faction=Unassigned);
+native EmitXPSoundToClient(client, Faction faction=Unassigned);
 
 
 /**
@@ -375,7 +375,7 @@ native EmitXPSoundToClient(client, Faction:faction=Unassigned);
  * @param lang:      Client to translate the name for, if any.
  * @noreturn
  */
-native GetFactionLevelSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER);
+native GetFactionLevelSound(Faction faction, char sound[], maxlength, lang=LANG_SERVER);
 
 /**
  * Emits the "Leveled Up" sound to the client
@@ -383,7 +383,7 @@ native GetFactionLevelSound(Faction:faction, char sound[], maxlength, lang=LANG_
  * @param faction:   The Faction (defaults to client's current faction)
  * @noreturn
  */
-native EmitLevelSoundToClient(client, Faction:faction=Unassigned);
+native EmitLevelSoundToClient(client, Faction faction=Unassigned);
 
 /**
  * Find the Race ID of a race
@@ -888,7 +888,7 @@ native DisplayKill(client, victim, xp=0, const char weapon[],
  * @param ...:          Format arguments (if any)
  * @noreturn
  */
-native DisplayMessage(client, Display:flags, const char fmt[], any:...);
+native DisplayMessage(client, Display:flags, const char fmt[], any ...);
 
 /**
  * Displays a hint message to a player
@@ -901,7 +901,7 @@ native DisplayMessage(client, Display:flags, const char fmt[], any:...);
  * @noreturn
  */
 native DisplayHint(client, HintSlot:slot=HintSlot_Generic, bool exclusive=false,
-                   float duration=5.0, const char fmt[]="", any:...);
+                   float duration=5.0, const char fmt[]="", any ...);
 
 /**
  * Displays a Hud Message to a player
@@ -910,7 +910,7 @@ native DisplayHint(client, HintSlot:slot=HintSlot_Generic, bool exclusive=false,
  * @param ...:          Format arguments (if any)
  * @noreturn
  */
-native HudMessage(client, const char fmt[], any:...);
+native HudMessage(client, const char fmt[], any ...);
 
 /**
  * Clears a client's Hud.
@@ -920,7 +920,7 @@ native HudMessage(client, const char fmt[], any:...);
 *                       the HUD is cleared unconditionally.
  * @noreturn
  */
-native ClearHud(client, const char contains[]="", any:...);
+native ClearHud(client, const char contains[]="", any ...);
 
 /**
  * Retrieves the players HUD Message
@@ -1105,7 +1105,7 @@ native bool GetDisplaySetting(client,Display:setting);
  * @param client:   The index of the player to get the settings for
  * @return          The return value will be all of the client's settings bits.
  */
-native Settings:GetSettingsBits(client);
+native Settings GetSettingsBits(client);
 
 /**
  * Gets the state of a certain setting.
@@ -1113,7 +1113,7 @@ native Settings:GetSettingsBits(client);
  * @param setting:  The setting or settings you want to check. 
  * @return          The return value will be true if they are set or false if they aren't.
  */
-native bool GetSetting(client,Settings:setting);
+native bool GetSetting(client,Settings setting);
 
 /**
  * Returns if the client is changing class
@@ -1542,7 +1542,7 @@ native SetImmunityBits(client, immunities);
  * @param immunity: The immunity or immunities you want to check. 
  * @return          The return value will be true if they are immune or false if they aren't.
  */
-native bool GetImmunity(client,Immunity:imm);
+native bool GetImmunity(client,Immunity imm);
 
 /**
  * Gives the player a specific immunity.
@@ -1553,7 +1553,7 @@ native bool GetImmunity(client,Immunity:imm);
  * @param pluginid:  Handle of the plugin to set immunity for (defaults to calling plugin)
  * @noreturn
  */
-native SetImmunity(client, Immunity:immunity, bool imm_state=true,
+native SetImmunity(client, Immunity immunity, bool imm_state=true,
                    id=0, Handle pluginid=null);
 
 /**
@@ -1577,7 +1577,7 @@ native SetRestrictionBits(client, restrict);
  * @param immunity: The restriction or restrictions you want to check. 
  * @return          The return value will be true if they are restricted or false if they aren't.
  */
-native bool GetRestriction(client,Restriction:restrict);
+native bool GetRestriction(client,Restriction restrict);
 
 /**
  * Gives the player a specific restriction.
@@ -1588,7 +1588,7 @@ native bool GetRestriction(client,Restriction:restrict);
  * @param pluginid:  Handle of the plugin to set restriction for (defaults to calling plugin)
  * @noreturn
  */
-native SetRestriction(client,Restriction:restrict,bool restrict_state=true,
+native SetRestriction(client,Restriction restrict,bool restrict_state=true,
                       id=0, Handle pluginid=null);
 
 /**
@@ -1612,7 +1612,7 @@ native SetAttributeBits(client, attributes);
  * @param attrib:   The attribute or attributes you want to check. 
  * @return          The return value will be true if the attribute is set or false if it isn't.
  */
-native bool GetAttribute(client,Attribute:attrib);
+native bool GetAttribute(client,Attribute attrib);
 
 /**
  * Gives the player a specific attribute.
@@ -1621,7 +1621,7 @@ native bool GetAttribute(client,Attribute:attrib);
  * @param imm_state: The state to set the attribute to.
  * @noreturn
  */
-native SetAttribute(client,Attribute:attrib,bool attrib_state=true);
+native SetAttribute(client,Attribute attrib,bool attrib_state=true);
 
 /**
  * Sets the speed for the player that is handled within the SourceCraft system,
@@ -1680,7 +1680,7 @@ native SetGravity(client, float gravity=-1.0, bool apply=false,
  */
 native SetVisibility(client, VisibilityType:type=NormalVisibility,
                      visibility=-1, float factor1=-1.0, float factor2=-1.0,
-                     RenderMode:mode=RenderMode:-1, RenderFx:fx=RenderFx:-1,
+                     RenderMode mode=RenderMode:-1, RenderFx fx=RenderFx:-1,
                      r=-1, g=-1, b=-1, weaponAlpha=-1,bool colorWeapons=false,
                      VisibilityPriority:priority=VisibilityPriorityNotSpecified,
                      float timestamp=0.0, bool apply=false,
@@ -1738,7 +1738,7 @@ native SetOverrideVisiblity(client, visibility=-1, bool apply=false,
  * @param pluginid: Handle of the plugin to set MoveType for (defaults to calling plugin)
  * @noreturn
  */
-native SetMoveType(client, MoveType:mt=MOVETYPE_DEFAULT, bool apply=false,
+native SetMoveType(client, MoveType mt=MOVETYPE_DEFAULT, bool apply=false,
                    id=0, Handle pluginid=null);
 
 /**
@@ -2092,7 +2092,7 @@ stock AdditionalTranslations(const char file[])
  * @param immunity:  The immunity or immunities that were invoked.
  * @noreturn
  */
-native ImmunityInvoked(client, Immunity:immunity);
+native ImmunityInvoked(client, Immunity immunity);
 
 /**
  *
@@ -2101,7 +2101,7 @@ native ImmunityInvoked(client, Immunity:immunity);
  * @param immunity       The immunity that was invoked
  * @return The return value will be the result of the Forward.
  */
-forward OnImmunityInvoked(client, Immunity:immunity);
+forward OnImmunityInvoked(client, Immunity immunity);
 
 /**
  * Called when SourceCraft is ready.
@@ -2389,7 +2389,7 @@ forward OnPlayerSpawnEvent(Handle event, client, race);
  * @param type:           The type of the object.
  * @noreturn
  */
-forward OnPlayerBuiltObject(Handle event, client, obj, TFObjectType:type);
+forward OnPlayerBuiltObject(Handle event, client, obj, TFObjectType type);
 
 /**
  * Gets called when a health cabinet is used (opened)

@@ -289,7 +289,7 @@ public Action OnWeaponSwitch(client, weapon)
 public Action OnTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetype)
 {
     static bool inTakeDamage = false;
-    int    Action:result     = Plugin_Continue;
+    int    Action result     = Plugin_Continue;
 
     #if defined _TRACE
         static count = 0;
@@ -391,7 +391,7 @@ public Action OnTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetyp
 public Action OnEntityTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetype)
 {
     static bool inTakeDamage = false;
-    int    Action:result     = Plugin_Continue;
+    int    Action result     = Plugin_Continue;
 
     #if defined _TRACE
         static count = 0;
@@ -435,7 +435,7 @@ public Action OnEntityTakeDamage(victim,&attacker,&inflictor,float & damage,&dam
 public Action OnObjectTakeDamage(victim,&attacker,&inflictor,float & damage,&damagetype)
 {
     static bool inTakeDamage = false;
-    int    Action:result     = Plugin_Continue;
+    int    Action result     = Plugin_Continue;
 
     #if defined _TRACE
         static count = 0;

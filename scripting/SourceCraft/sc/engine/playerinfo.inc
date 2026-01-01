@@ -12,9 +12,9 @@
 
 enum ClientInfo
 {
-    Immunity:ClientInfo_Immunities = 0,
-    Restriction:ClientInfo_Restrictions,
-    Attribute:ClientInfo_Attributes,
+    Immunity ClientInfo_Immunities = 0,
+    Restriction ClientInfo_Restrictions,
+    Attribute ClientInfo_Attributes,
     ClientInfo_Race,
     float ClientInfo_Energy,
     float ClientInfo_EnergyRate,
@@ -51,11 +51,11 @@ enum RaceInfo
     RaceInfo_SavedXP
 };
 
-#define RACEINFO_ACTIVE_ULTIMATE_1  _:RaceInfo_ActiveUltimate1
-#define RACEINFO_ACTIVE_ULTIMATE_2  _:RaceInfo_ActiveUltimate2
-#define RACEINFO_ACTIVE_ULTIMATE_3  _:RaceInfo_ActiveUltimate3
-#define RACEINFO_ACTIVE_ULTIMATE_4  _:RaceInfo_ActiveUltimate4
-#define RACEINFO_SIZE               _:RaceInfo
+#define RACEINFO_ACTIVE_ULTIMATE_1  view_as<int>(RaceInfo_ActiveUltimate1)
+#define RACEINFO_ACTIVE_ULTIMATE_2  view_as<int>(RaceInfo_ActiveUltimate2)
+#define RACEINFO_ACTIVE_ULTIMATE_3  view_as<int>(RaceInfo_ActiveUltimate3)
+#define RACEINFO_ACTIVE_ULTIMATE_4  view_as<int>(RaceInfo_ActiveUltimate4)
+#define RACEINFO_SIZE               view_as<int>(RaceInfo)
 
 #define MAX_ULTIMATE_CATEGORY   4
 
@@ -66,8 +66,8 @@ enum UpgradeInfo
     UpgradeInfo_SavedLevel,
 };
 
-#define UPGRADEINFO_SAVED_LEVEL _:UpgradeInfo_SavedLevel
-#define UPGRADEINFO_SIZE        _:UpgradeInfo
+#define UPGRADEINFO_SAVED_LEVEL view_as<int>(UpgradeInfo_SavedLevel)
+#define UPGRADEINFO_SIZE        view_as<int>(UpgradeInfo)
 
 
 enum TechInfo
@@ -77,7 +77,7 @@ enum TechInfo
     DataStatus:TechInfo_DatabaseLoaded
 };
 
-#define TECHINFO_SIZE   _:TechInfo
+#define TECHINFO_SIZE   view_as<int>(TechInfo)
 
 
 enum PropInfo
@@ -93,8 +93,8 @@ enum PropInfo
     VisibilityType:PropInfo_VisibilityType,
     float PropInfo_VisibilityFactor1,
     float PropInfo_VisibilityFactor2,
-    RenderMode:PropInfo_VisibilityMode,
-    RenderFx:PropInfo_Visibility_FX,
+    RenderMode PropInfo_VisibilityMode,
+    RenderFx PropInfo_Visibility_FX,
     PropInfo_Visibility_R,
     PropInfo_Visibility_G,
     PropInfo_Visibility_B,
@@ -102,9 +102,9 @@ enum PropInfo
     bool PropInfo_VisibilityWeapons,
     VisibilityPriority:PropInfo_VisibilityPriority,
     float PropInfo_VisibilityTime,
-    Immunity:PropInfo_Immunities,
-    Restriction:PropInfo_Restrictions,
-    MoveType:PropInfo_MoveType,
+    Immunity PropInfo_Immunities,
+    Restriction PropInfo_Restrictions,
+    MoveType PropInfo_MoveType,
     RegenFlags:PropInfo_RegenHealthFlags,
     RegenFlags:PropInfo_RegenShieldFlags,
     float PropInfo_RegenHealth,
@@ -278,32 +278,32 @@ char m_ArmorName[MAXPLAYERS+1][NAME_STRING_LENGTH];
 
 // Accessor Macros for raceInfo
 
-#define GetRaceInfoXP(%1)                       GetArrayCell(%1,_:RaceInfo_XP)
-#define SetRaceInfoXP(%1,%2)                    SetArrayCell(%1,_:RaceInfo_XP,%2)
+#define GetRaceInfoXP(%1)                       GetArrayCell(%1,view_as<int>(RaceInfo_XP))
+#define SetRaceInfoXP(%1,%2)                    SetArrayCell(%1,view_as<int>(RaceInfo_XP),%2)
 
-#define GetRaceInfoLevel(%1)                    GetArrayCell(%1,_:RaceInfo_Level)
-#define SetRaceInfoLevel(%1,%2)                 SetArrayCell(%1,_:RaceInfo_Level,%2)
+#define GetRaceInfoLevel(%1)                    GetArrayCell(%1,view_as<int>(RaceInfo_Level))
+#define SetRaceInfoLevel(%1,%2)                 SetArrayCell(%1,view_as<int>(RaceInfo_Level),%2)
 
-#define GetRaceInfoAccumulatedEnergy(%1)        float GetArrayCell(%1,_:RaceInfo_AccumulatedEnergy)
-#define SetRaceInfoAccumulatedEnergy(%1,%2)     SetArrayCell(%1,_:RaceInfo_AccumulatedEnergy,%2)
+#define GetRaceInfoAccumulatedEnergy(%1)        float GetArrayCell(%1,view_as<int>(RaceInfo_AccumulatedEnergy))
+#define SetRaceInfoAccumulatedEnergy(%1,%2)     SetArrayCell(%1,view_as<int>(RaceInfo_AccumulatedEnergy),%2)
 
-#define GetRaceInfoActiveUltimate1(%1)          GetArrayCell(%1,_:RaceInfo_ActiveUltimate1)
-#define SetRaceInfoActiveUltimate1(%1,%2)       SetArrayCell(%1,_:RaceInfo_ActiveUltimate1,%2)
+#define GetRaceInfoActiveUltimate1(%1)          GetArrayCell(%1,view_as<int>(RaceInfo_ActiveUltimate1))
+#define SetRaceInfoActiveUltimate1(%1,%2)       SetArrayCell(%1,view_as<int>(RaceInfo_ActiveUltimate1),%2)
 
-#define GetRaceInfoActiveUltimate2(%1)          GetArrayCell(%1,_:RaceInfo_ActiveUltimate2)
-#define SetRaceInfoActiveUltimate2(%1,%2)       SetArrayCell(%1,_:RaceInfo_ActiveUltimate2,%2)
+#define GetRaceInfoActiveUltimate2(%1)          GetArrayCell(%1,view_as<int>(RaceInfo_ActiveUltimate2))
+#define SetRaceInfoActiveUltimate2(%1,%2)       SetArrayCell(%1,view_as<int>(RaceInfo_ActiveUltimate2),%2)
 
-#define GetRaceInfoActiveUltimate3(%1)          GetArrayCell(%1,_:RaceInfo_ActiveUltimate3)
-#define SetRaceInfoActiveUltimate3(%1,%2)       SetArrayCell(%1,_:RaceInfo_ActiveUltimate3,%2)
+#define GetRaceInfoActiveUltimate3(%1)          GetArrayCell(%1,view_as<int>(RaceInfo_ActiveUltimate3))
+#define SetRaceInfoActiveUltimate3(%1,%2)       SetArrayCell(%1,view_as<int>(RaceInfo_ActiveUltimate3),%2)
 
-#define GetRaceInfoActiveUltimate4(%1)          GetArrayCell(%1,_:RaceInfo_ActiveUltimate4)
-#define SetRaceInfoActiveUltimate4(%1,%2)       SetArrayCell(%1,_:RaceInfo_ActiveUltimate4,%2)
+#define GetRaceInfoActiveUltimate4(%1)          GetArrayCell(%1,view_as<int>(RaceInfo_ActiveUltimate4))
+#define SetRaceInfoActiveUltimate4(%1,%2)       SetArrayCell(%1,view_as<int>(RaceInfo_ActiveUltimate4),%2)
 
-#define GetRaceInfoLoaded(%1)                   GetArrayCell(%1,_:RaceInfo_DatabaseLoaded)
-#define SetRaceInfoLoaded(%1,%2)                SetArrayCell(%1,_:RaceInfo_DatabaseLoaded,%2)
+#define GetRaceInfoLoaded(%1)                   GetArrayCell(%1,view_as<int>(RaceInfo_DatabaseLoaded))
+#define SetRaceInfoLoaded(%1,%2)                SetArrayCell(%1,view_as<int>(RaceInfo_DatabaseLoaded),%2)
 
-#define GetRaceInfoSavedXP(%1)                  GetArrayCell(%1,_:RaceInfo_SavedXP)
-#define SetRaceInfoSavedXP(%1,%2)               SetArrayCell(%1,_:RaceInfo_SavedXP,%2)
+#define GetRaceInfoSavedXP(%1)                  GetArrayCell(%1,view_as<int>(RaceInfo_SavedXP))
+#define SetRaceInfoSavedXP(%1,%2)               SetArrayCell(%1,view_as<int>(RaceInfo_SavedXP),%2)
 
 #define GetRaceInfoUpgradePos(%1)               (RACEINFO_SIZE+(%1*UPGRADEINFO_SIZE))
 
@@ -315,104 +315,104 @@ char m_ArmorName[MAXPLAYERS+1][NAME_STRING_LENGTH];
 
 // Accessor Macros for techInfo
 
-#define GetTechInfoCount(%1)                    GetArrayCell(%1,_:TechInfo_Count)
-#define SetTechInfoCount(%1,%2)                 SetArrayCell(%1,_:TechInfo_Count,%2)
+#define GetTechInfoCount(%1)                    GetArrayCell(%1,view_as<int>(TechInfo_Count))
+#define SetTechInfoCount(%1,%2)                 SetArrayCell(%1,view_as<int>(TechInfo_Count),%2)
 
-#define GetTechInfoLevel(%1)                    GetArrayCell(%1,_:TechInfo_Level)
-#define SetTechInfoLevel(%1,%2)                 SetArrayCell(%1,_:TechInfo_Level,%2)
+#define GetTechInfoLevel(%1)                    GetArrayCell(%1,view_as<int>(TechInfo_Level))
+#define SetTechInfoLevel(%1,%2)                 SetArrayCell(%1,view_as<int>(TechInfo_Level),%2)
 
-#define GetTechInfoLoaded(%1)                   GetArrayCell(%1,_:TechInfo_DatabaseLoaded)
-#define SetTechInfoLoaded(%1,%2)                SetArrayCell(%1,_:TechInfo_DatabaseLoaded,%2)
+#define GetTechInfoLoaded(%1)                   GetArrayCell(%1,view_as<int>(TechInfo_DatabaseLoaded))
+#define SetTechInfoLoaded(%1,%2)                SetArrayCell(%1,view_as<int>(TechInfo_DatabaseLoaded),%2)
 
 
 // Accessor Macros for propInfo
 
-#define GetPropInfoPlugin(%1)                   GetArrayCell(%1,_:PropInfo_PluginHandle)
-#define SetPropInfoPlugin(%1,%2)                SetArrayCell(%1,_:PropInfo_PluginHandle,%2)
+#define GetPropInfoPlugin(%1)                   GetArrayCell(%1,view_as<int>(PropInfo_PluginHandle))
+#define SetPropInfoPlugin(%1,%2)                SetArrayCell(%1,view_as<int>(PropInfo_PluginHandle),%2)
 
-#define GetPropInfoId(%1)                       GetArrayCell(%1,_:PropInfo_Identifier)
-#define SetPropInfoId(%1,%2)                    SetArrayCell(%1,_:PropInfo_Identifier,%2)
+#define GetPropInfoId(%1)                       GetArrayCell(%1,view_as<int>(PropInfo_Identifier))
+#define SetPropInfoId(%1,%2)                    SetArrayCell(%1,view_as<int>(PropInfo_Identifier),%2)
 
-#define GetPropInfoOverrideSpeed(%1)            GetArrayCell(%1,_:PropInfo_OverrideSpeed)
-#define SetPropInfoOverrideSpeed(%1,%2)         SetArrayCell(%1,_:PropInfo_OverrideSpeed,%2)
+#define GetPropInfoOverrideSpeed(%1)            GetArrayCell(%1,view_as<int>(PropInfo_OverrideSpeed))
+#define SetPropInfoOverrideSpeed(%1,%2)         SetArrayCell(%1,view_as<int>(PropInfo_OverrideSpeed),%2)
 
-#define GetPropInfoOverrideGravity(%1)          GetArrayCell(%1,_:PropInfo_OverrideGravity)
-#define SetPropInfoOverrideGravity(%1,%2)       SetArrayCell(%1,_:PropInfo_OverrideGravity,%2)
+#define GetPropInfoOverrideGravity(%1)          GetArrayCell(%1,view_as<int>(PropInfo_OverrideGravity))
+#define SetPropInfoOverrideGravity(%1,%2)       SetArrayCell(%1,view_as<int>(PropInfo_OverrideGravity),%2)
 
-#define GetPropInfoOverrideVisibility(%1)       GetArrayCell(%1,_:PropInfo_OverrideVisibility)
-#define SetPropInfoOverrideVisibility(%1,%2)    SetArrayCell(%1,_:PropInfo_OverrideVisibility,%2)
+#define GetPropInfoOverrideVisibility(%1)       GetArrayCell(%1,view_as<int>(PropInfo_OverrideVisibility))
+#define SetPropInfoOverrideVisibility(%1,%2)    SetArrayCell(%1,view_as<int>(PropInfo_OverrideVisibility),%2)
 
-#define GetPropInfoSpeed(%1)                    GetArrayCell(%1,_:PropInfo_Speed)
-#define SetPropInfoSpeed(%1,%2)                 SetArrayCell(%1,_:PropInfo_Speed,%2)
+#define GetPropInfoSpeed(%1)                    GetArrayCell(%1,view_as<int>(PropInfo_Speed))
+#define SetPropInfoSpeed(%1,%2)                 SetArrayCell(%1,view_as<int>(PropInfo_Speed),%2)
 
-#define GetPropInfoGravity(%1)                  GetArrayCell(%1,_:PropInfo_Gravity)
-#define SetPropInfoGravity(%1,%2)               SetArrayCell(%1,_:PropInfo_Gravity,%2)
+#define GetPropInfoGravity(%1)                  GetArrayCell(%1,view_as<int>(PropInfo_Gravity))
+#define SetPropInfoGravity(%1,%2)               SetArrayCell(%1,view_as<int>(PropInfo_Gravity),%2)
 
-#define GetPropInfoVisibility(%1)               GetArrayCell(%1,_:PropInfo_Visibility)
-#define SetPropInfoVisibility(%1,%2)            SetArrayCell(%1,_:PropInfo_Visibility,%2)
+#define GetPropInfoVisibility(%1)               GetArrayCell(%1,view_as<int>(PropInfo_Visibility))
+#define SetPropInfoVisibility(%1,%2)            SetArrayCell(%1,view_as<int>(PropInfo_Visibility),%2)
 
-#define GetPropInfoVisibilityType(%1)           GetArrayCell(%1,_:PropInfo_VisibilityType)
-#define SetPropInfoVisibilityType(%1,%2)        SetArrayCell(%1,_:PropInfo_VisibilityType,%2)
+#define GetPropInfoVisibilityType(%1)           GetArrayCell(%1,view_as<int>(PropInfo_VisibilityType))
+#define SetPropInfoVisibilityType(%1,%2)        SetArrayCell(%1,view_as<int>(PropInfo_VisibilityType),%2)
 
-#define GetPropInfoVisibilityFactor1(%1)        GetArrayCell(%1,_:PropInfo_VisibilityFactor1)
-#define SetPropInfoVisibilityFactor1(%1,%2)     SetArrayCell(%1,_:PropInfo_VisibilityFactor1,%2)
+#define GetPropInfoVisibilityFactor1(%1)        GetArrayCell(%1,view_as<int>(PropInfo_VisibilityFactor1))
+#define SetPropInfoVisibilityFactor1(%1,%2)     SetArrayCell(%1,view_as<int>(PropInfo_VisibilityFactor1),%2)
 
-#define GetPropInfoVisibilityFactor2(%1)        GetArrayCell(%1,_:PropInfo_VisibilityFactor2)
-#define SetPropInfoVisibilityFactor2(%1,%2)     SetArrayCell(%1,_:PropInfo_VisibilityFactor2,%2)
+#define GetPropInfoVisibilityFactor2(%1)        GetArrayCell(%1,view_as<int>(PropInfo_VisibilityFactor2))
+#define SetPropInfoVisibilityFactor2(%1,%2)     SetArrayCell(%1,view_as<int>(PropInfo_VisibilityFactor2),%2)
 
-#define GetPropInfoVisibilityMode(%1)           GetArrayCell(%1,_:PropInfo_VisibilityMode)
-#define SetPropInfoVisibilityMode(%1,%2)        SetArrayCell(%1,_:PropInfo_VisibilityMode,%2)
+#define GetPropInfoVisibilityMode(%1)           GetArrayCell(%1,view_as<int>(PropInfo_VisibilityMode))
+#define SetPropInfoVisibilityMode(%1,%2)        SetArrayCell(%1,view_as<int>(PropInfo_VisibilityMode),%2)
 
-#define GetPropInfoVisibilityFx(%1)             GetArrayCell(%1,_:PropInfo_Visibility_FX)
-#define SetPropInfoVisibilityFx(%1,%2)          SetArrayCell(%1,_:PropInfo_Visibility_FX,%2)
+#define GetPropInfoVisibilityFx(%1)             GetArrayCell(%1,view_as<int>(PropInfo_Visibility_FX))
+#define SetPropInfoVisibilityFx(%1,%2)          SetArrayCell(%1,view_as<int>(PropInfo_Visibility_FX),%2)
 
-#define GetPropInfoVisibilityR(%1)              GetArrayCell(%1,_:PropInfo_Visibility_R)
-#define SetPropInfoVisibilityR(%1,%2)           SetArrayCell(%1,_:PropInfo_Visibility_R,%2)
+#define GetPropInfoVisibilityR(%1)              GetArrayCell(%1,view_as<int>(PropInfo_Visibility_R))
+#define SetPropInfoVisibilityR(%1,%2)           SetArrayCell(%1,view_as<int>(PropInfo_Visibility_R),%2)
 
-#define GetPropInfoVisibilityG(%1)              GetArrayCell(%1,_:PropInfo_Visibility_G)
-#define SetPropInfoVisibilityG(%1,%2)           SetArrayCell(%1,_:PropInfo_Visibility_G,%2)
+#define GetPropInfoVisibilityG(%1)              GetArrayCell(%1,view_as<int>(PropInfo_Visibility_G))
+#define SetPropInfoVisibilityG(%1,%2)           SetArrayCell(%1,view_as<int>(PropInfo_Visibility_G),%2)
 
-#define GetPropInfoVisibilityB(%1)              GetArrayCell(%1,_:PropInfo_Visibility_B)
-#define SetPropInfoVisibilityB(%1,%2)           SetArrayCell(%1,_:PropInfo_Visibility_B,%2)
+#define GetPropInfoVisibilityB(%1)              GetArrayCell(%1,view_as<int>(PropInfo_Visibility_B))
+#define SetPropInfoVisibilityB(%1,%2)           SetArrayCell(%1,view_as<int>(PropInfo_Visibility_B),%2)
 
-#define GetPropInfoVisibilityWeaponAlpha(%1)    GetArrayCell(%1,_:PropInfo_Weapon_VisAlpha)
-#define SetPropInfoVisibilityWeaponAlpha(%1,%2) SetArrayCell(%1,_:PropInfo_Weapon_VisAlpha,%2)
+#define GetPropInfoVisibilityWeaponAlpha(%1)    GetArrayCell(%1,view_as<int>(PropInfo_Weapon_VisAlpha))
+#define SetPropInfoVisibilityWeaponAlpha(%1,%2) SetArrayCell(%1,view_as<int>(PropInfo_Weapon_VisAlpha),%2)
 
-#define GetPropInfoVisibilityWeapons(%1)        GetArrayCell(%1,_:PropInfo_VisibilityWeapons)
-#define SetPropInfoVisibilityWeapons(%1,%2)     SetArrayCell(%1,_:PropInfo_VisibilityWeapons,%2)
+#define GetPropInfoVisibilityWeapons(%1)        GetArrayCell(%1,view_as<int>(PropInfo_VisibilityWeapons))
+#define SetPropInfoVisibilityWeapons(%1,%2)     SetArrayCell(%1,view_as<int>(PropInfo_VisibilityWeapons),%2)
 
-#define GetPropInfoVisibilityPriority(%1)       GetArrayCell(%1,_:PropInfo_VisibilityPriority)
-#define SetPropInfoVisibilityPriority(%1,%2)    SetArrayCell(%1,_:PropInfo_VisibilityPriority,%2)
+#define GetPropInfoVisibilityPriority(%1)       GetArrayCell(%1,view_as<int>(PropInfo_VisibilityPriority))
+#define SetPropInfoVisibilityPriority(%1,%2)    SetArrayCell(%1,view_as<int>(PropInfo_VisibilityPriority),%2)
 
-#define GetPropInfoVisibilityTime(%1)           GetArrayCell(%1,_:PropInfo_VisibilityTime)
-#define SetPropInfoVisibilityTime(%1,%2)        SetArrayCell(%1,_:PropInfo_VisibilityTime,%2)
+#define GetPropInfoVisibilityTime(%1)           GetArrayCell(%1,view_as<int>(PropInfo_VisibilityTime))
+#define SetPropInfoVisibilityTime(%1,%2)        SetArrayCell(%1,view_as<int>(PropInfo_VisibilityTime),%2)
 
-#define GetPropInfoImmunities(%1)               GetArrayCell(%1,_:PropInfo_Immunities)
-#define SetPropInfoImmunities(%1,%2)            SetArrayCell(%1,_:PropInfo_Immunities,%2)
+#define GetPropInfoImmunities(%1)               GetArrayCell(%1,view_as<int>(PropInfo_Immunities))
+#define SetPropInfoImmunities(%1,%2)            SetArrayCell(%1,view_as<int>(PropInfo_Immunities),%2)
 
-#define GetPropInfoRestrictions(%1)             GetArrayCell(%1,_:PropInfo_Restrictions)
-#define SetPropInfoRestrictions(%1,%2)          SetArrayCell(%1,_:PropInfo_Restrictions,%2)
+#define GetPropInfoRestrictions(%1)             GetArrayCell(%1,view_as<int>(PropInfo_Restrictions))
+#define SetPropInfoRestrictions(%1,%2)          SetArrayCell(%1,view_as<int>(PropInfo_Restrictions),%2)
 
-#define GetPropInfoMoveType(%1)                 GetArrayCell(%1,_:PropInfo_MoveType)
-#define SetPropInfoMoveType(%1,%2)              SetArrayCell(%1,_:PropInfo_MoveType,%2)
+#define GetPropInfoMoveType(%1)                 GetArrayCell(%1,view_as<int>(PropInfo_MoveType))
+#define SetPropInfoMoveType(%1,%2)              SetArrayCell(%1,view_as<int>(PropInfo_MoveType),%2)
 
-#define GetPropInfoRegenHealthFlags(%1)         GetArrayCell(%1,_:PropInfo_RegenHealthFlags)
-#define SetPropInfoRegenHealthFlags(%1,%2)      SetArrayCell(%1,_:PropInfo_RegenHealthFlags,%2)
+#define GetPropInfoRegenHealthFlags(%1)         GetArrayCell(%1,view_as<int>(PropInfo_RegenHealthFlags))
+#define SetPropInfoRegenHealthFlags(%1,%2)      SetArrayCell(%1,view_as<int>(PropInfo_RegenHealthFlags),%2)
 
-#define GetPropInfoRegenShieldFlags(%1)         GetArrayCell(%1,_:PropInfo_RegenShieldFlags)
-#define SetPropInfoRegenShieldFlags(%1,%2)      SetArrayCell(%1,_:PropInfo_RegenShieldFlags,%2)
+#define GetPropInfoRegenShieldFlags(%1)         GetArrayCell(%1,view_as<int>(PropInfo_RegenShieldFlags))
+#define SetPropInfoRegenShieldFlags(%1,%2)      SetArrayCell(%1,view_as<int>(PropInfo_RegenShieldFlags),%2)
 
-#define GetPropInfoRegenHealth(%1)              GetArrayCell(%1,_:PropInfo_RegenHealth)
-#define SetPropInfoRegenHealth(%1,%2)           SetArrayCell(%1,_:PropInfo_RegenHealth,%2)
+#define GetPropInfoRegenHealth(%1)              GetArrayCell(%1,view_as<int>(PropInfo_RegenHealth))
+#define SetPropInfoRegenHealth(%1,%2)           SetArrayCell(%1,view_as<int>(PropInfo_RegenHealth),%2)
 
-#define GetPropInfoRegenShield(%1)              GetArrayCell(%1,_:PropInfo_RegenShield)
-#define SetPropInfoRegenShield(%1,%2)           SetArrayCell(%1,_:PropInfo_RegenShield,%2)
+#define GetPropInfoRegenShield(%1)              GetArrayCell(%1,view_as<int>(PropInfo_RegenShield))
+#define SetPropInfoRegenShield(%1,%2)           SetArrayCell(%1,view_as<int>(PropInfo_RegenShield),%2)
 
-#define GetPropInfoPhysicalArmor(%1)            GetArrayCell(%1,_:PropInfo_PhysicalArmor)
-#define SetPropInfoPhysicalArmor(%1,%2)         SetArrayCell(%1,_:PropInfo_PhysicalArmor,%2)
+#define GetPropInfoPhysicalArmor(%1)            GetArrayCell(%1,view_as<int>(PropInfo_PhysicalArmor))
+#define SetPropInfoPhysicalArmor(%1,%2)         SetArrayCell(%1,view_as<int>(PropInfo_PhysicalArmor),%2)
 
-#define GetPropInfoMagicalArmor(%1)             GetArrayCell(%1,_:PropInfo_MagicalArmor)
-#define SetPropInfoMagicalArmor(%1,%2)          SetArrayCell(%1,_:PropInfo_MagicalArmor,%2)
+#define GetPropInfoMagicalArmor(%1)             GetArrayCell(%1,view_as<int>(PropInfo_MagicalArmor))
+#define SetPropInfoMagicalArmor(%1,%2)          SetArrayCell(%1,view_as<int>(PropInfo_MagicalArmor),%2)
 
 
 // Accessor Functions for raceInfo
@@ -454,7 +454,7 @@ stock Handle GetRaceInfoHandle(client,int race)
 #if defined _TRACE
     #define GetTechInfo(%1,%2)                  GetTechInfoHandle(%1,%2)
 #else
-    #define GetTechInfo(%1,%2)                  GetArrayCell(GetTechData(%1),_:%2)
+    #define GetTechInfo(%1,%2)                  GetArrayCell(GetTechData(%1),view_as<int>(%2))
 #endif
 
 stock Handle GetTechInfoHandle(client,Faction techId)
@@ -467,7 +467,7 @@ stock Handle GetTechInfoHandle(client,Faction techId)
     {
         Handle techData = GetTechData(client);
         if (techData != null)
-        techInfo = GetArrayCell(techData,_:techId);
+        techInfo = GetArrayCell(techData,view_as<int>(techId));
     }
 
     TraceReturn("techInfo=0x%08x", techInfo);

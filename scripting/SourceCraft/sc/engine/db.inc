@@ -586,7 +586,7 @@ public SQL_PlayerTechCreated(Handle owner, Handle hndl, const char[] error[], an
 
 CreateFactions(Handle dbHandle)
 {
-    for (int Faction:faction = Terran; faction < Faction:sizeof(g_FactionShortNames); faction++)
+    for (int Faction faction = Terran; faction < Faction sizeof(g_FactionShortNames); faction++)
     {
         char factionName[NAME_STRING_LENGTH];
         GetFactionName(faction, factionName, sizeof(factionName));
@@ -601,7 +601,7 @@ CreateFactions(Handle dbHandle)
     }
 }
 
-InsertFaction(Handle dbHandle, Faction:faction, const char[] longName[],
+InsertFaction(Handle dbHandle, Faction faction, const char[] longName[],
               const char[] description[], const char[] image[])
 {
     TraceInto("DB", "UpdateFaction", "faction=%d, longName=%s, image=%s, description=%s", \
@@ -761,7 +761,7 @@ LoadRaceIdent(const char[] shortName[])
     return race_ident;
 }
 
-LoadRaceData(const char[] shortName[], &Faction:faction, &UnitType:type)
+LoadRaceData(const char[] shortName[], &Faction faction, &UnitType:type)
 {
     TraceInto("DB", "LoadRaceData", "shortName=%s", shortName);
 
@@ -782,7 +782,7 @@ LoadRaceData(const char[] shortName[], &Faction:faction, &UnitType:type)
                     SQL_FetchRow(query))
                 {
                     race_ident = SQL_FetchInt(query,0);
-                    faction = Faction:SQL_FetchInt(query,1);
+                    faction = Faction SQL_FetchInt(query,1);
                     type = UnitType:SQL_FetchInt(query,2);
                 }
                 delete query;
@@ -801,7 +801,7 @@ LoadRaceData(const char[] shortName[], &Faction:faction, &UnitType:type)
 }
 
 InsertRace(const char[] shortName[], const char[] raceName[], required_level,
-           tech_level, const char[] parentName[], Faction:faction, UnitType:type,
+           tech_level, const char[] parentName[], Faction faction, UnitType:type,
            const char[] description[], const char[] image[])
 {
     TraceInto("DB", "InsertRace", "shortName=%s, raceName=%s, required_level=%d, tech_level=%d, parentName=%s, image=%s", \
@@ -854,7 +854,7 @@ InsertRace(const char[] shortName[], const char[] raceName[], required_level,
 }
 
 UpdateRace(race_ident, const char[] shortName[], const char[] raceName[], required_level,
-           tech_level, const char[] parentName[], Faction:faction, UnitType:type,
+           tech_level, const char[] parentName[], Faction faction, UnitType:type,
            const char[] description[], const char[] image[])
 {
     TraceInto("DB", "UpdateRace", "race_ident=%d, shortName=%s, raceName=%s, required_level=%d, tech_level=%d, parentName=%s, faction=%d, type=%d", \
@@ -1232,7 +1232,7 @@ public SQL_LoadPlayerData(Handle owner, Handle query, const char[] error[], any 
                     SetVespene(client,SQL_FetchInt(query,3));
                     SetOverallLevel(client,SQL_FetchInt(query,4));
                     LoadDisplayBits(client,Display:SQL_FetchInt(query,5));
-                    LoadSettingsBits(client,Settings:SQL_FetchInt(query,6));
+                    LoadSettingsBits(client,Settings SQL_FetchInt(query,6));
 
                     SQL_FetchString(query, 7, playerPrevName[client], sizeof(playerPrevName[]));
 
@@ -1369,7 +1369,7 @@ LoadPlayerRaceData(client, raceId)
                          client, ValidClientIndex(client), raceId, raceName, player_ident);
             }
 
-            int Faction:techId = GetRaceFaction(raceHandle);
+            int Faction techId = GetRaceFaction(raceHandle);
             if (techId > Generic)
             {
                 if (GetTechLoaded(client,techId) < DataOK)
@@ -1605,7 +1605,7 @@ public SQL_LoadPlayerUpgradeData(Handle owner, Handle query, const char[] error[
     TraceReturn();
 }
 
-LoadPlayerTechData(client, Faction:techId)
+LoadPlayerTechData(client, Faction techId)
 {
     TraceInto("DB", "LoadPlayerTechData", "client=%d:%L, techId=%d", \
               client, ValidClientIndex(client), techId);
@@ -1616,7 +1616,7 @@ LoadPlayerTechData(client, Faction:techId)
         int Handle techData = GetTechData(client);
         if (techData != null)
         {
-            int Handle techInfo = GetArrayCell(techData,_:techId);
+            int Handle techInfo = GetArrayCell(techData,view_as<int>(techId));
             if (techInfo != null)
             {
                 char SQLString[SHORT_QUERY_STRING_LENGTH];
@@ -1628,7 +1628,7 @@ LoadPlayerTechData(client, Faction:techId)
                 {
                     new Handle dataPack = CreateDataPack();
                     WritePackCell(dataPack, GetClientUserId(client));
-                    WritePackCell(dataPack, _:techId);
+                    WritePackCell(dataPack, view_as<int>(techId));
 
                     SetTechInfoLoaded(techInfo,DataLoading);
                     SQL_TQuery(g_DbHandle[DB_THREAD], SQL_LoadPlayerTechData,
@@ -1665,7 +1665,7 @@ public SQL_LoadPlayerTechData(Handle owner, Handle query, const char[] error[], 
     ResetPack(data);
     int userid = ReadPackCell(data); 
     int client = GetClientOfUserId(userid); 
-    int Faction:techId = Faction:ReadPackCell(data);
+    int Faction techId = Faction ReadPackCell(data);
     delete data;
 
     if (query == null || error[0] != '\0')
@@ -1686,7 +1686,7 @@ public SQL_LoadPlayerTechData(Handle owner, Handle query, const char[] error[], 
         if (client > 0)
         {
             int Handle techData = GetTechData(client);
-            int Handle techInfo = GetArrayCell(techData,_:techId);
+            int Handle techInfo = GetArrayCell(techData,view_as<int>(techId));
             SetTechInfoLoaded(techInfo,DataNotLoaded);
         }
     }
@@ -1697,7 +1697,7 @@ public SQL_LoadPlayerTechData(Handle owner, Handle query, const char[] error[], 
             int Handle techData = GetTechData(client);
             if (techData != null)
             {
-                new Handle techInfo = GetArrayCell(techData,_:techId);
+                new Handle techInfo = GetArrayCell(techData,view_as<int>(techId));
                 if (techInfo != null)
                 {
                     if (SQL_HasResultSet(query) &&
@@ -1753,7 +1753,7 @@ SavePlayerData(client)
         int race              = GetRace(client);
         int Handle raceHandle = GetRaceHandle(race);
         int race_ident        = GetRaceIdent(raceHandle);
-        int Settings:bits     = GetSettingsBits(client);
+        int Settings bits     = GetSettingsBits(client);
         int overall_level     = GetOverallLevel(client);
         int crystals          = GetCrystals(client);
         int vespene           = GetVespene(client);
@@ -2115,7 +2115,7 @@ InsertPlayerData(client, bool threaded)
             int race              = GetRace(client);
             int Handle raceHandle = GetRaceHandle(race);
             int race_ident        = GetRaceIdent(raceHandle);
-            int Settings:bits     = GetSettingsBits(client);
+            int Settings bits     = GetSettingsBits(client);
             int overall_level     = GetOverallLevel(client);
             int crystals          = GetCrystals(client);
             int vespene           = GetVespene(client);
@@ -2420,7 +2420,7 @@ bool SavePlayerRaceData(client, player_ident, race, bool threaded, const char[] 
             success = false;
         }
 
-        int Faction:techId = GetRaceFaction(raceHandle);
+        int Faction techId = GetRaceFaction(raceHandle);
         if (techId > Generic)
         {
             success &= SavePlayerTechData(client, player_ident,
@@ -2544,7 +2544,7 @@ public Action Retry_SavePlayerRaceData(Handle timer,Handle data)
         SavePlayerRaceData(client, player_ident, raceId, true, key);
 }
 
-bool SavePlayerTechData(client, player_ident, Faction:techId, bool threaded, const char[] key[])
+bool SavePlayerTechData(client, player_ident, Faction techId, bool threaded, const char[] key[])
 {
     TraceInto("DB", "SavePlayerTechData", \
               "client=%d:%L, player_ident=%d, tech=%d, threaded=%d", \
@@ -2568,7 +2568,7 @@ bool SavePlayerTechData(client, player_ident, Faction:techId, bool threaded, con
             int Handle dataPack = CreateDataPack();
             WritePackCell(dataPack, GetClientUserId(client));
             WritePackCell(dataPack, player_ident);
-            WritePackCell(dataPack, _:techId);
+            WritePackCell(dataPack, view_as<int>(techId));
             WritePackString(dataPack, key);
 
             UpdateThreadsInFlight(key, 1);
@@ -2668,7 +2668,7 @@ public SQL_SavePlayerTechData(Handle owner, Handle hndl, const char[] error[], a
         int userid            = ReadPackCell(data); 
         int client            = GetClientOfUserId(userid);
         int player_ident      = ReadPackCell(data); 
-        int Faction:techId    = Faction:ReadPackCell(data); 
+        int Faction techId    = Faction ReadPackCell(data); 
 
         char key[CLASS_STRING_LENGTH];
         ReadPackString(data, key, sizeof(key));

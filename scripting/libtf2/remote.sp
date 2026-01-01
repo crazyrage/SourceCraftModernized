@@ -811,17 +811,17 @@ RemoteControl(client, TFExtObjectType:type)
                 if (type == TFExtObject_TeleporterEntry ||
                     type == TFExtObject_TeleporterExit)
                 {
-                    obj = _:TFExtObject_Teleporter;
-                    mode = _:(type - TFExtObject_TeleporterEntry);
+                    obj = view_as<int>(TFExtObject_Teleporter);
+                    mode = view_as<int>(type - TFExtObject_TeleporterEntry);
                 }
                 else if (type == TFExtObject_MiniSentry)
                 {
-                    obj = _:TFExtObject_Sentry;
+                    obj = view_as<int>(TFExtObject_Sentry);
                     mode = 1; // Not sure if this will work?
                 }
                 else
                 {
-                    obj =_:type;
+                    obj =view_as<int>(type);
                     mode = 0;
                 }
                 ClientCommand(client, "build %d %d", obj, mode);
@@ -1001,7 +1001,7 @@ BuildMenu(client, permissions, bool control)
     DisplayMenu(menu,client,MENU_TIME_FOREVER);
 }
 
-public BuildSelected(Handle menu,MenuAction:action,client,selection)
+public BuildSelected(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -1060,17 +1060,17 @@ public BuildSelected(Handle menu,MenuAction:action,client,selection)
                 if (type == TFExtObject_TeleporterEntry ||
                     type == TFExtObject_TeleporterExit)
                 {
-                    obj = _:TFExtObject_Teleporter;
-                    mode = _:(type - TFExtObject_TeleporterEntry);
+                    obj = view_as<int>(TFExtObject_Teleporter);
+                    mode = view_as<int>(type - TFExtObject_TeleporterEntry);
                 }
                 else if (type == TFExtObject_MiniSentry)
                 {
-                    obj = _:TFExtObject_Sentry;
+                    obj = view_as<int>(TFExtObject_Sentry);
                     mode = 1; // Not sure if this will work?
                 }
                 else
                 {
-                    obj =_:type;
+                    obj =view_as<int>(type);
                     mode = 0;
                 }
                 ClientCommand(client, "build %d %d", obj, mode);
@@ -1101,14 +1101,14 @@ BuildSelectedObject(client, TFExtObjectType:type, iLevel=1, bool mini=false,
         else if (TF2_IsPlayerDisguised(client))
             TF2_RemovePlayerDisguise(client);
     }
-    else if (GetClientTeam(client) < _:TFTeam_Red)
+    else if (GetClientTeam(client) < view_as<int>(TFTeam_Red))
         return objectid;
     else if (check && !CheckBuild(client, type))
         return objectid;
     else if (IsEntLimitReached(.client=client, .message="unable to create tf2 building"))
         return objectid;
 
-    int Action:res = Plugin_Continue;
+    int Action res = Plugin_Continue;
     Call_StartForward(fwdOnBuildObject);
     Call_PushCell(client);
     Call_PushCell(type);
@@ -1373,7 +1373,7 @@ bool DestroyBuildingMenu(client)
     }
 }
 
-public Destroy_Selected(Handle menu,MenuAction:action,client,selection)
+public Destroy_Selected(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -1544,7 +1544,7 @@ public Action Activate(Handle timer,any ref)
     return Plugin_Stop;
 }
 
-public ObjectSelected(Handle menu,MenuAction:action,client,selection)
+public ObjectSelected(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -1569,7 +1569,7 @@ public ObjectSelected(Handle menu,MenuAction:action,client,selection)
 
 bool control(client, objectid, TFExtObjectType:type)
 {
-    int Action:res = Plugin_Continue;
+    int Action res = Plugin_Continue;
     Call_StartForward(fwdOnControlObject);
     Call_PushCell(client);
     Call_PushCell(client); // builder);
@@ -1751,7 +1751,7 @@ public OnClientDisconnect(client)
 
 public Action Command_Build(client, args)
 {
-    int Action:iResult = Plugin_Continue;
+    int Action iResult = Plugin_Continue;
 
     if (g_bNativeControl || !client || 
         (GetConVarBool(cvarBuildEnabled) &&
@@ -1767,7 +1767,7 @@ public Action Command_Build(client, args)
         int TFExtObjectType:obj = TFExtObjectType:StringToInt(sObject);
         int mode = StringToInt(sMode);
 
-        int TFTeam:team = TFTeam:GetClientTeam(client);
+        int TFTeam team = TFTeam GetClientTeam(client);
         if (obj < TFExtObject_Dispenser || obj > TFExtObject_TeleporterExit || team < TFTeam_Red)
             return Plugin_Continue;
 
@@ -2137,7 +2137,7 @@ stock BuildSentry(hBuilder, const float fOrigin[3], const float fAngle[3], iLeve
         //SetEntProp(iSentry, Prop_Send, "m_nShieldLevel", 				    bShielded, 2);
         SetEntProp(iSentry, Prop_Send, "m_bPlayerControlled", 				bShielded, 2);
         SetEntProp(iSentry, Prop_Send, "m_bMiniBuilding", 				    bMini, 2);
-        SetEntProp(iSentry, Prop_Send, "m_iObjectType", 				    _:TFExtObject_Sentry, 1);
+        SetEntProp(iSentry, Prop_Send, "m_iObjectType", 				    view_as<int>(TFExtObject_Sentry), 1);
         SetEntProp(iSentry, Prop_Send, "m_iUpgradeLevel", 			        iLevel, 4);
         SetEntProp(iSentry, Prop_Send, "m_iAmmoRockets", 				    iRockets, 4);
         SetEntProp(iSentry, Prop_Send, "m_iAmmoShells" , 				    iShells, 4);
@@ -2189,7 +2189,7 @@ stock BuildSentry(hBuilder, const float fOrigin[3], const float fAngle[3], iLeve
         if (event != null)
         {
             SetEventInt(event, "userid", GetClientUserId(hBuilder));
-            SetEventInt(event, "object", _:TFExtObject_Sentry);
+            SetEventInt(event, "object", view_as<int>(TFExtObject_Sentry));
             SetEventInt(event, "index", iSentry);
             SetEventBool(event, "sourcemod", true);
             FireEvent(event);
@@ -2259,7 +2259,7 @@ stock BuildDispenser(hBuilder, const float fOrigin[3], const float fAngle[3], iL
         SetEntProp(iDispenser, Prop_Send, "m_iHealth", 				            iHealth, 4);
         SetEntProp(iDispenser, Prop_Send, "m_iAmmoMetal", 				        iMetal, 4);
         SetEntProp(iDispenser, Prop_Send, "m_bDisabled", 				        iDisabled, 2);
-        SetEntProp(iDispenser, Prop_Send, "m_iObjectType", 			            _:TFExtObject_Dispenser, 1);
+        SetEntProp(iDispenser, Prop_Send, "m_iObjectType", 			            view_as<int>(TFExtObject_Dispenser), 1);
         SetEntProp(iDispenser, Prop_Send, "m_nSkin", 					        (iTeam-2), 1);
         SetEntProp(iDispenser, Prop_Send, "m_iUpgradeLevel", 			        iLevel, 4);
         SetEntProp(iDispenser, Prop_Send, "m_iObjectMode", 				        0, 2);
@@ -2298,7 +2298,7 @@ stock BuildDispenser(hBuilder, const float fOrigin[3], const float fAngle[3], iL
         if (event != null)
         {
             SetEventInt(event, "userid", GetClientUserId(hBuilder));
-            SetEventInt(event, "object", _:TFExtObject_Dispenser);
+            SetEventInt(event, "object", view_as<int>(TFExtObject_Dispenser));
             SetEventInt(event, "index", iDispenser);
             SetEventBool(event, "sourcemod", true);
             FireEvent(event);
@@ -2363,7 +2363,7 @@ stock BuildTeleporterEntry(hBuilder, const float fOrigin[3], const float fAngle[
         SetEntProp(iTeleporter, Prop_Data, "m_iMaxHealth", 				        iMaxHealth, 4);
         SetEntProp(iTeleporter, Prop_Send, "m_iHealth", 					    iHealth, 4);
         SetEntProp(iTeleporter, Prop_Send, "m_bDisabled", 				        iDisabled, 2);
-        SetEntProp(iTeleporter, Prop_Send, "m_iObjectType", 				    _:TFExtObject_Teleporter, 1);
+        SetEntProp(iTeleporter, Prop_Send, "m_iObjectType", 				    view_as<int>(TFExtObject_Teleporter), 1);
         SetEntProp(iTeleporter, Prop_Send, "m_nSkin", 					        (iTeam-2), 1);
         SetEntProp(iTeleporter, Prop_Send, "m_iUpgradeLevel", 			        iLevel, 4);
         SetEntProp(iTeleporter, Prop_Send, "m_iObjectMode", 				    0, TF2_ObjectModes[TFExtObject_TeleporterEntry]);
@@ -2403,7 +2403,7 @@ stock BuildTeleporterEntry(hBuilder, const float fOrigin[3], const float fAngle[
         if (event != null)
         {
             SetEventInt(event, "userid", GetClientUserId(hBuilder));
-            SetEventInt(event, "object", _:TFExtObject_TeleporterEntry);
+            SetEventInt(event, "object", view_as<int>(TFExtObject_TeleporterEntry));
             SetEventInt(event, "index", iTeleporter);
             SetEventBool(event, "sourcemod", true);
             FireEvent(event);
@@ -2446,7 +2446,7 @@ stock BuildTeleporterExit(hBuilder, const float fOrigin[3], const float fAngle[3
         SetEntProp(iTeleporter, Prop_Data, "m_iMaxHealth", 				        iMaxHealth, 4);
         SetEntProp(iTeleporter, Prop_Send, "m_iHealth", 				        iHealth, 4);
         SetEntProp(iTeleporter, Prop_Send, "m_bDisabled", 				        iDisabled, 2);
-        SetEntProp(iTeleporter, Prop_Send, "m_iObjectType", 			        _:TFExtObject_Teleporter, 1);
+        SetEntProp(iTeleporter, Prop_Send, "m_iObjectType", 			        view_as<int>(TFExtObject_Teleporter), 1);
         SetEntProp(iTeleporter, Prop_Send, "m_nSkin", 					        (iTeam-2), 1);
         SetEntProp(iTeleporter, Prop_Send, "m_iUpgradeLevel", 			        iLevel, 4);
         SetEntProp(iTeleporter, Prop_Send, "m_iObjectMode", 				    1, TF2_ObjectModes[TFExtObject_TeleporterExit]);
@@ -2486,7 +2486,7 @@ stock BuildTeleporterExit(hBuilder, const float fOrigin[3], const float fAngle[3
         if (event != null)
         {
             SetEventInt(event, "userid", GetClientUserId(hBuilder));
-            SetEventInt(event, "object", _:TFExtObject_TeleporterExit);
+            SetEventInt(event, "object", view_as<int>(TFExtObject_TeleporterExit));
             SetEventInt(event, "index", iTeleporter);
             SetEventBool(event, "sourcemod", true);
             FireEvent(event);

@@ -358,28 +358,28 @@ GiveChargeDeployedXP(client)
     GiveXP(client,CHARGE_XP, "DeployUber");
 }
 
-GiveObjectBuiltXP(client,TFObjectType:obj)
+GiveObjectBuiltXP(client,TFObjectType obj)
 {
     // Called when a player builds an object
     GiveXP(client, BUILD_XP, "Building",
            .obj=obj);
 }
 
-GiveObjectUpgradedXP(client,TFObjectType:obj, bool isBuilder)
+GiveObjectUpgradedXP(client,TFObjectType obj, bool isBuilder)
 {
     // Called when a player upgrades an object
     GiveXP(client, isBuilder ? UPGRADE_XP : UPGRADE_XP*2,
            "Upgrading", .obj=obj);
 }
 
-TakeObjectBuiltXP(client,TFObjectType:obj)
+TakeObjectBuiltXP(client,TFObjectType obj)
 {
     // Called when a player destroys their own object
     TakeXP(client,BUILD_XP, "DestroyingOwn",
            .obj=obj);
 }
 
-GiveObjectDestroyedXP(client,TFObjectType:obj)
+GiveObjectDestroyedXP(client,TFObjectType obj)
 {
     // Called when a player destroys an object
     GiveXP(client,DESTROY_XP, "Destroying",
@@ -437,12 +437,12 @@ GiveMvpXP(client, place, points)
 }
 
 GiveXP(client, amount, const char[] phrase, place=-1,
-       points=-1, TFObjectType:obj=TFObject_Unknown)
+       points=-1, TFObjectType obj=TFObject_Unknown)
 {
     if (GetRaceCount() > 1 && GetClientCount() >= g_iMinPlayers)
     {
         // Called when a player is given XP
-        int Action:result = Plugin_Continue;
+        int Action result = Plugin_Continue;
         Call_StartForward(g_OnXPGivenHandle);
         Call_PushCell(client);
         Call_PushCellRef(amount);
@@ -491,11 +491,11 @@ GiveXP(client, amount, const char[] phrase, place=-1,
 }
 
 TakeXP(client, amount, const char[] phrase, place=-1,
-       points=-1, TFObjectType:obj=TFObject_Unknown)
+       points=-1, TFObjectType obj=TFObject_Unknown)
 {
     if (GetRaceCount() > 1 && GetClientCount() >= g_iMinPlayers)
     {
-        int Action:result = Plugin_Continue;
+        int Action result = Plugin_Continue;
         Call_StartForward(g_OnXPGivenHandle);
         Call_PushCell(client);
         Call_PushCellRef(amount);

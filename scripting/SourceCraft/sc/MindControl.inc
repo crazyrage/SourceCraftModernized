@@ -37,7 +37,7 @@ native bool MindControl(client, float range, percent, &builder=0,
  * @return			returns true for sucess.
  */
 native bool ControlObject(client, target, &builder=0,
-                          &TFObjectType:type=TFObject_Unknown);
+                          &TFObjectType type=TFObject_Unknown);
 
 /**
  * Replace a Specified Object with one owned by the client.
@@ -49,7 +49,7 @@ native bool ControlObject(client, target, &builder=0,
  * @return			returns true for sucess.
  */
 native bool ReplaceObject(client, target, &builder=0,
-                          &TFObjectType:type=TFObject_Unknown);
+                          &TFObjectType type=TFObject_Unknown);
 
 /**
  * Reset Mind Controlled Objects.

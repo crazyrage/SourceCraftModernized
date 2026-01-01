@@ -35,30 +35,30 @@ stock DetermineGameMode()
 
     if (StrContains(gameDir, "cstrike", false) == 0) 
     {
-        tValveGame = _:Game_CS;
+        tValveGame = view_as<int>(Game_CS);
         
         // What is this even?
         ServerCommand("sv_allowminmodels 0");
     } 
     else if (StrContains(gameDir, "dod", false) == 0) 
     {
-        tValveGame = _:Game_DOD;
+        tValveGame = view_as<int>(Game_DOD);
     }
     else if(StrContains(gameDir, "tf", false) == 0)
     {
-        tValveGame = _:Game_TF;
+        tValveGame = view_as<int>(Game_TF);
     }
     else if(StrContains(gameDir, "left4dead2", false) == 0)
     {
-        tValveGame = _:Game_L4D2;
+        tValveGame = view_as<int>(Game_L4D2);
     }
     else if(StrContains(gameDir, "left4dead", false) == 0)
     {
-        tValveGame = _:Game_L4D;
+        tValveGame = view_as<int>(Game_L4D);
     }
     else if(StrContains(gameDir, "csgo", false) == 0)
     {
-        tValveGame = _:Game_CSGO;
+        tValveGame = view_as<int>(Game_CSGO);
     }
     else
     {

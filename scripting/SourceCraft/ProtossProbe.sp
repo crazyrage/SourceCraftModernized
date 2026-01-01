@@ -636,7 +636,7 @@ public EventRoundOver(Handle event,const char[] name,bool dontBroadcast)
     }
 }
 
-public OnPlayerBuiltObject(Handle event, client, obj, TFObjectType:type)
+public OnPlayerBuiltObject(Handle event, client, obj, TFObjectType type)
 {
     if (obj > 0 && type != TFObject_Sapper)
     {
@@ -1034,7 +1034,7 @@ void SummonPhasePrism(client)
     }
 }
 
-public Action OnAmplify(builder,client,TFCond:condition)
+public Action OnAmplify(builder,client,TFCond condition)
 {
     int from;
     int float amount;

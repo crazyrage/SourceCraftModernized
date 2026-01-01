@@ -31,7 +31,7 @@ GetUnitTypeName(UnitType:type, char name[], maxlength, lang=LANG_SERVER)
         name[0] = '\0';
 }
 
-GetFactionName(Faction:faction, char name[], maxlength, lang=LANG_SERVER)
+GetFactionName(Faction faction, char name[], maxlength, lang=LANG_SERVER)
 {
     if (faction > Generic)
     {
@@ -42,7 +42,7 @@ GetFactionName(Faction:faction, char name[], maxlength, lang=LANG_SERVER)
         name[0] = '\0';
 }
 
-GetFactionDescription(Faction:faction, char desc[], maxlength, lang=LANG_SERVER)
+GetFactionDescription(Faction faction, char desc[], maxlength, lang=LANG_SERVER)
 {
     if (faction > Generic)
     {
@@ -55,7 +55,7 @@ GetFactionDescription(Faction:faction, char desc[], maxlength, lang=LANG_SERVER)
         desc[0] = '\0';
 }
 
-GetFactionImage(Faction:faction, char image[], maxlength, lang=LANG_SERVER)
+GetFactionImage(Faction faction, char image[], maxlength, lang=LANG_SERVER)
 {
     if (faction > Generic)
     {
@@ -68,7 +68,7 @@ GetFactionImage(Faction:faction, char image[], maxlength, lang=LANG_SERVER)
         image[0] = '\0';
 }
 
-GetFactionCrystalSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER)
+GetFactionCrystalSound(Faction faction, char sound[], maxlength, lang=LANG_SERVER)
 {
     if (faction > Generic)
     {
@@ -81,14 +81,14 @@ GetFactionCrystalSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVE
         strcopy(sound,maxlength,"sc/taderr00.wav");
 }
 
-EmitCrystalSoundToClient(client, Faction:faction)
+EmitCrystalSoundToClient(client, Faction faction)
 {
     char sound[PLATFORM_MAX_PATH];
     GetFactionCrystalSound(faction, sound, sizeof(sound), client);
     PrepareAndEmitSoundToClient(client,sound);
 }
 
-GetFactionVespeneSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER)
+GetFactionVespeneSound(Faction faction, char sound[], maxlength, lang=LANG_SERVER)
 {
     if (faction > Generic)
     {
@@ -101,14 +101,14 @@ GetFactionVespeneSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVE
         strcopy(sound,maxlength,"sc/taderr01.wav");
 }
 
-EmitVespeneSoundToClient(client, Faction:faction)
+EmitVespeneSoundToClient(client, Faction faction)
 {
     char sound[PLATFORM_MAX_PATH];
     GetFactionVespeneSound(faction, sound, sizeof(sound), client);
     PrepareAndEmitSoundToClient(client,sound);
 }
 
-GetFactionEnergySound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER)
+GetFactionEnergySound(Faction faction, char sound[], maxlength, lang=LANG_SERVER)
 {
     if (faction > Generic)
     {
@@ -121,14 +121,14 @@ GetFactionEnergySound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER
         strcopy(sound,maxlength,"sc/taderr06.wav");
 }
 
-EmitEnergySoundToClient(client, Faction:faction)
+EmitEnergySoundToClient(client, Faction faction)
 {
     char sound[PLATFORM_MAX_PATH];
     GetFactionEnergySound(faction, sound, sizeof(sound), client);
     PrepareAndEmitSoundToClient(client,sound);
 }
 
-GetFactionXPSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER)
+GetFactionXPSound(Faction faction, char sound[], maxlength, lang=LANG_SERVER)
 {
     if (faction > Generic)
     {
@@ -143,14 +143,14 @@ GetFactionXPSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER)
         strcopy(sound,maxlength,"sc/perror.wav");
 }
 
-EmitXPSoundToClient(client, Faction:faction)
+EmitXPSoundToClient(client, Faction faction)
 {
     char sound[PLATFORM_MAX_PATH];
     GetFactionXPSound(faction, sound, sizeof(sound), client);
     PrepareAndEmitSoundToClient(client,sound);
 }
 
-GetFactionLevelSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER)
+GetFactionLevelSound(Faction faction, char sound[], maxlength, lang=LANG_SERVER)
 {
     if (faction > Generic)
     {
@@ -163,7 +163,7 @@ GetFactionLevelSound(Faction:faction, char sound[], maxlength, lang=LANG_SERVER)
         strcopy(sound,maxlength,"sc/GenericWarningUpgradeComplete1.mp3");
 }
 
-EmitLevelSoundToClient(client, Faction:faction)
+EmitLevelSoundToClient(client, Faction faction)
 {
     char sound[PLATFORM_MAX_PATH];
     GetFactionLevelSound(faction, sound, sizeof(sound), client);
@@ -172,7 +172,7 @@ EmitLevelSoundToClient(client, Faction:faction)
 
 LoadFactionTranslations()
 {
-    for (Faction faction = Terran; faction < Faction:sizeof(g_FactionShortNames); faction++)
+    for (Faction faction = Terran; faction < Faction sizeof(g_FactionShortNames); faction++)
     {
         char file[PLATFORM_MAX_PATH];
         Format(file,sizeof(file),"sc.%s.phrases.txt",g_FactionShortNames[faction]);

@@ -108,14 +108,14 @@ WarpInAmplifier(client, amp_level, raceId, upgradeId, bool allowKrit)
     }
 }
 
-public Amplifier_Selected(Handle menu,MenuAction:action,client,selection)
+public Amplifier_Selected(Handle menu,MenuAction action,client,selection)
 {
     static const char typeName[][] = { "SlowAmplifier", "JarAmplifier", "FireAmplifier", "TauntAmplifier", "UndisguiseAmplifier",
                                          "DecloakAmplifier", "BuffAmplifier", "KritAmplifier", "UberAmplifier", "MilkAmplifier",
                                          "DefenseAmplifier", "BleedAmplifier", "StunAmplifier", "SlowAmplifier", "RegenAmplifier",
                                          "DeathAmplifier" };
 
-    static const TFCond:condition[] = { TFCond_Slowed,
+    static const TFCond condition[] = { TFCond_Slowed,
                                         TFCond_Jarated,
                                         TFCond_OnFire,
                                         TFCond_Taunting,

@@ -323,7 +323,7 @@ public OnGameFrame()
 public PlayerSpawnEvent(Handle event,const char name[],bool dontBroadcast)
 {
     int client=GetClientOfUserId(GetEventInt(event,"userid")); // Get clients index
-    int TFClassType:class = (GameType == tf2) ? TF2_GetPlayerClass(client) : TFClass_Unknown;
+    int TFClassType class = (GameType == tf2) ? TF2_GetPlayerClass(client) : TFClass_Unknown;
 
     if (gNativeControl)
     {
@@ -459,12 +459,12 @@ public Action OnPlayerRunCmd(client, &buttons, &impulse, float vel[3], float ang
                 new ShieldFlags:flags = gFlags[client];
                 if (GetEntProp(weaponent, Prop_Send, "m_iItemDefinitionIndex") == 35) // Kritzkrieg
                 {
-                    if (_:(flags & Shield_With_Kritzkrieg) == 0)
+                    if (view_as<int>(flags & Shield_With_Kritzkrieg) == 0)
                         return Plugin_Continue;
                 }
                 else // Medigun
                 {
-                    if (_:(flags & Shield_With_Medigun) == 0)
+                    if (view_as<int>(flags & Shield_With_Medigun) == 0)
                         return Plugin_Continue;
                 }
 
@@ -586,7 +586,7 @@ CreateShield(client, target, const float pos[3], ShieldFlags:flags, float Durati
     }
 
     // Check with other plugins/forward (if any)
-    int Action:res = Plugin_Continue;
+    int Action res = Plugin_Continue;
     Call_StartForward(fwdOnDeployUberShield);
     Call_PushCell(client);
     Call_PushCell(target);

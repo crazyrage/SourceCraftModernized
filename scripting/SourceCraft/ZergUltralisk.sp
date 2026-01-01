@@ -490,7 +490,7 @@ void Cleave(client, level)
     }
     else if (CanInvokeUpgrade(client, raceID, cleaveID))
     {
-        int TFClassType:class;
+        int TFClassType class;
         if (GameType == tf2)
         {
             class = TF2_GetPlayerClass(client);

@@ -159,8 +159,8 @@ Handle mp_friendlyfire          = null;
 
 Handle hCookie                  = null;
 Handle hAdminMenu               = null;
-new TopMenuObject:oGiveJetpack      = INVALID_TOPMENUOBJECT;
-new TopMenuObject:oTakeJetpack      = INVALID_TOPMENUOBJECT;
+new TopMenuObject oGiveJetpack      = INVALID_TOPMENUOBJECT;
+new TopMenuObject oTakeJetpack      = INVALID_TOPMENUOBJECT;
 
 int g_JetpackLight[MAXPLAYERS + 1]  = { INVALID_ENT_REFERENCE, ... };
 int g_JetpackParticle[MAXPLAYERS + 1][3];
@@ -485,8 +485,8 @@ public PlayerSpawnEvent(Handle event,const char name[],bool dontBroadcast)
             new class = 0;
             switch (GameType)
             {
-                case tf2: class = _:TF2_GetPlayerClass(index);
-                case dod: class = _:DOD_GetPlayerClass(index); 
+                case tf2: class = view_as<int>(TF2_GetPlayerClass)(index);
+                case dod: class = view_as<int>(DOD_GetPlayerClass)(index); 
             }
             Handle rate_cvar = sm_jetpack_rate[class];
             g_iRate[index] = rate_cvar ? GetConVarInt(rate_cvar) : 1;
@@ -499,7 +499,7 @@ public PlayerSpawnEvent(Handle event,const char name[],bool dontBroadcast)
         // Check for Admin Only
         if (GetConVarBool(sm_jetpack_adminonly))
         {
-            new AdminId:aid = GetUserAdmin(index);
+            new AdminId aid = GetUserAdmin(index);
             if (aid == INVALID_ADMIN_ID || !GetAdminFlag(aid, Admin_Generic, Access_Effective))
             {
                 g_bHasJetpack[index] = false;
@@ -518,8 +518,8 @@ public PlayerSpawnEvent(Handle event,const char name[],bool dontBroadcast)
         int class = 0;
         switch (GameType)
         {
-            case tf2: class = _:TF2_GetPlayerClass(index);
-            case dod: class = _:DOD_GetPlayerClass(index); 
+            case tf2: class = view_as<int>(TF2_GetPlayerClass)(index);
+            case dod: class = view_as<int>(DOD_GetPlayerClass)(index); 
         }
 
         // Check for allowed classes.
@@ -667,7 +667,7 @@ public Action Explode(Handle hTimer, Handle hData)
                         else if (damage > max)
                             damage = max;
 
-                        new Action:res = Plugin_Continue;
+                        new Action res = Plugin_Continue;
                         Call_StartForward(fwdOnJetpackExplode);
                         Call_PushCell(victim);
                         Call_PushCell(index);
@@ -757,7 +757,7 @@ public OnGameFrame()
                         {
                             EmitJetpackSound(null, client);
 
-                            new MoveType:movetype = GetConVarInt(sm_jetpack_gravity) ? MOVETYPE_FLYGRAVITY : MOVETYPE_FLY;
+                            new MoveType movetype = GetConVarInt(sm_jetpack_gravity) ? MOVETYPE_FLYGRAVITY : MOVETYPE_FLY;
                             SetMoveCollideType(client, movetype, MOVECOLLIDE_FLY_BOUNCE);
 
                             AddVelocity(client, GetConVarFloat(sm_jetpack_speed));
@@ -914,7 +914,7 @@ StartJetpack(client)
                 return;
         #endif
 
-        int Action:res = Plugin_Continue;
+        int Action res = Plugin_Continue;
         Call_StartForward(fwdOnJetpack);
         Call_PushCell(client);
         Call_Finish(res);
@@ -924,7 +924,7 @@ StartJetpack(client)
                                (GetConVarBool(tf_weapon_criticals) &&
                                 GetRandomInt(1,100) < 5);
 
-            new MoveType:movetype = GetConVarInt(sm_jetpack_gravity) ? MOVETYPE_FLYGRAVITY : MOVETYPE_FLY;
+            new MoveType movetype = GetConVarInt(sm_jetpack_gravity) ? MOVETYPE_FLYGRAVITY : MOVETYPE_FLY;
             SetMoveCollideType(client, movetype, MOVECOLLIDE_FLY_BOUNCE);
 
             g_bJetpackOn[client] = true;
@@ -957,7 +957,7 @@ StartJetpack(client)
                 {
                     //static const float ang1[3] = { -25.0, 75.0, 0.0 };
 
-                    if (TFTeam:GetClientTeam(client) == TFTeam_Red)
+                    if (TFTeam GetClientTeam(client) == TFTeam_Red)
                     {
                         if (g_bCrits[client])
                         {
@@ -1074,7 +1074,7 @@ StopJetpackSound(client)
         StopSound(client, SNDCHAN_AUTO, g_EmptySound);
 }
 
-SetMoveCollideType(client, MoveType:movetype, movecollide)
+SetMoveCollideType(client, MoveType movetype, movecollide)
 {
     SetEntityMoveType(client,movetype);
     SetEntProp(client, Prop_Data, "m_MoveCollide", movecollide);
@@ -1173,7 +1173,7 @@ BurnEnemies(client)
                     else if (damage > max)
                         damage = max;
 
-                    new Action:res = Plugin_Continue;
+                    new Action res = Plugin_Continue;
                     Call_StartForward(fwdOnJetpackBurn);
                     Call_PushCell(victim);
                     Call_PushCell(client);
@@ -1448,8 +1448,8 @@ public Native_GiveJetpack(Handle plugin,numParams)
             new class = 0;
             switch (GameType)
             {
-                case tf2: class = _:TF2_GetPlayerClass(client);
-                case dod: class = _:DOD_GetPlayerClass(client); 
+                case tf2: class = view_as<int>(TF2_GetPlayerClass)(client);
+                case dod: class = view_as<int>(DOD_GetPlayerClass)(client); 
             }
             Handle rate_cvar = sm_jetpack_rate[class];
             g_iRate[client] = rate_cvar ? GetConVarInt(rate_cvar) : 1;
@@ -1555,8 +1555,8 @@ public Native_SetJetpackRate(Handle plugin,numParams)
             new class = 0;
             switch (GameType)
             {
-                case tf2: class = _:TF2_GetPlayerClass(client);
-                case dod: class = _:DOD_GetPlayerClass(client); 
+                case tf2: class = view_as<int>(TF2_GetPlayerClass)(client);
+                case dod: class = view_as<int>(DOD_GetPlayerClass)(client); 
             }
             Handle rate_cvar = sm_jetpack_rate[class];
             g_iRate[client] = rate_cvar ? GetConVarInt(rate_cvar) : 1;
@@ -1587,7 +1587,7 @@ public Native_GetJetpackRate(Handle plugin,numParams)
 
 public Native_GetJetpackRefuelingTime(Handle plugin,numParams)
 {
-    return _:(g_fRefuelingTime[GetNativeCell(1)]);
+    return view_as<int>(g_fRefuelingTime[GetNativeCell(1)]);
 }
 
 public Native_HasJetpack(Handle plugin,numParams)
@@ -1678,8 +1678,8 @@ public PerformJetpack(client, target, bool enable)
             new class = 0;
             switch (GameType)
             {
-                case tf2: class = _:TF2_GetPlayerClass(client);
-                case dod: class = _:DOD_GetPlayerClass(client); 
+                case tf2: class = view_as<int>(TF2_GetPlayerClass)(client);
+                case dod: class = view_as<int>(DOD_GetPlayerClass)(client); 
             }
 
             Handle rate_cvar = sm_jetpack_rate[class];
@@ -1726,7 +1726,7 @@ public OnAdminMenuReady(Handle topmenu)
 
         if (!g_bNativeOverride)
         {
-            new TopMenuObject:server_commands = FindTopMenuCategory(hAdminMenu, ADMINMENU_PLAYERCOMMANDS);
+            new TopMenuObject server_commands = FindTopMenuCategory(hAdminMenu, ADMINMENU_PLAYERCOMMANDS);
             oGiveJetpack = AddToTopMenu(hAdminMenu, "sm_give_jetpack", TopMenuObject_Item, AdminMenu,
                                         server_commands, "sm_give_jetpack", ADMFLAG_JETPACK);
             oTakeJetpack = AddToTopMenu(hAdminMenu, "sm_take_jetpack", TopMenuObject_Item, AdminMenu,
@@ -1735,7 +1735,7 @@ public OnAdminMenuReady(Handle topmenu)
     }
 }
 
-public AdminMenu(Handle topmenu, TopMenuAction:action, TopMenuObject:object_id, param, char[] buffer, maxlength)
+public AdminMenu(Handle topmenu, TopMenuAction action, TopMenuObject object_id, param, char[] buffer, maxlength)
 {
     if (action == TopMenuAction_DisplayOption)
     {
@@ -1750,7 +1750,7 @@ public AdminMenu(Handle topmenu, TopMenuAction:action, TopMenuObject:object_id, 
     }
 }
 
-JetpackMenu(client, TopMenuObject:object_id)
+JetpackMenu(client, TopMenuObject object_id)
 {
     Handle menu = CreateMenu(MenuHandler_Jetpack);
 
@@ -1765,7 +1765,7 @@ JetpackMenu(client, TopMenuObject:object_id)
     DisplayMenu(menu, client, MENU_TIME_FOREVER);
 }
 
-public MenuHandler_Jetpack(Handle menu, MenuAction:action, param1, param2)
+public MenuHandler_Jetpack(Handle menu, MenuAction action, param1, param2)
 {
     char title[32];
     GetMenuTitle(menu,title,sizeof(title));
@@ -1842,7 +1842,7 @@ public PrefsMenu(client, CookieMenuAction:action, any info, char[] buffer, maxle
     }
 }
 
-public MenuHandler_Prefs(Handle menu, MenuAction:action, client, selection)
+public MenuHandler_Prefs(Handle menu, MenuAction action, client, selection)
 {
     if (action == MenuAction_Select)    
     {

@@ -21,7 +21,7 @@ public __pl_serverredir_SetNTVOptional()
 	MarkNativeAsOptional("LoadServerRedirectListFiltered");
 }
 
-functag OnRedirectServersLoaded public(serverCount, const char[] error, Handle serverList, any data);
+typedef OnRedirectServersLoaded = function void(int serverCount, const char[] error, Handle serverList, any data);
  
 /**
  * Adds two numbers together.

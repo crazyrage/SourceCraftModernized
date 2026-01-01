@@ -658,7 +658,7 @@ BeTheGhost( iClient, bool bInvisibility = false )
 	
 	if( !bInvisibility )
 	{
-		new Action:result;
+		new Action result;
 		Call_StartForward( fwdCanPlayAsGhost );
 		Call_PushCell( iClient );
 		Call_Finish( result );
@@ -762,7 +762,7 @@ ScarePlayer( iGhost, iClient )
 	if( !bGhostEnabled[iGhost] || !IsValidClient(iGhost) || !IsValidClient(iClient)/* || TF2_IsPlayerInCondition( iClient, TFCond_Dazed )*/ )
 		return;
 	
-	int Action:result;
+	int Action result;
 	Call_StartForward( fwdCanBeScared );
 	Call_PushCell( iGhost );
 	Call_PushCell( iClient );
@@ -931,7 +931,7 @@ public Native_IsPlayerGhost( Handle hPlugin, nParams )
 ////////////
 /* Stocks */
 
-stock Error( iFlags = ERROR_NONE, iNativeErrCode = SP_ERROR_NONE, const char[] strMessage, any:... )
+stock Error( iFlags = ERROR_NONE, iNativeErrCode = SP_ERROR_NONE, const char[] strMessage, any ... )
 {
 	char strBuffer[1024];
 	VFormat( strBuffer, sizeof(strBuffer), strMessage, 4 );

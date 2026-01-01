@@ -159,12 +159,12 @@ public int NW3GetBuffSumInt(Handle plugin, int numParams)
 
 //stop complaining that we are returning a float!
 public int NW3GetPhysicalArmorMulti(Handle plugin, int numParams) {
-  return _:PhysicalArmorMulti(GetNativeCell(1));
+  return view_as<int>(PhysicalArmorMulti)(GetNativeCell(1));
 }
 
 public int NW3GetMagicArmorMulti(Handle plugin, int numParams) {
   
-  return _:MagicArmorMulti(GetNativeCell(1));
+  return view_as<int>(MagicArmorMulti)(GetNativeCell(1));
 }
 
 public NW3GetBuffLastValue(Handle plugins,numParams) {
@@ -207,25 +207,25 @@ public int NW3GetBuffHasTrue(Handle plugin, int numParams)
             return GetRestriction(client,Restriction_NoShopItems);
         }
     }
-    return _:GetBuffHasOneTrue(client,buffindex);
+    return view_as<int>(GetBuffHasOneTrue)(client,buffindex);
 #else
     //all one true bool s are cached
-    return _:GetBuffHasOneTrue(GetNativeCell(1),GetNativeCell(2)); //returns bool
+    return view_as<int>(GetBuffHasOneTrue)(GetNativeCell(1),GetNativeCell(2)); //returns bool
 #endif
 }
 public int NW3GetBuffStackedFloat(Handle plugin, int numParams) {
 
-    return _:GetBuffStackedFloat(GetNativeCell(1),GetNativeCell(2)); //returns float usually
+    return view_as<int>(GetBuffStackedFloat)(GetNativeCell(1),GetNativeCell(2)); //returns float usually
 }
 public int NW3GetBuffSumFloat(Handle plugin, int numParams) {
 
-    return _:GetBuffSumFloat(GetNativeCell(1),GetNativeCell(2)); 
+    return view_as<int>(GetBuffSumFloat)(GetNativeCell(1),GetNativeCell(2)); 
 }
 public int NW3GetBuffMinFloat(Handle plugin, int numParams) {
-    return _:GetBuffMinFloat(GetNativeCell(1),GetNativeCell(2)); 
+    return view_as<int>(GetBuffMinFloat)(GetNativeCell(1),GetNativeCell(2)); 
 }
 public int NW3GetBuffMaxFloat(Handle plugin, int numParams) {
-    return _:GetBuffMaxFloat(GetNativeCell(1),GetNativeCell(2)); 
+    return view_as<int>(GetBuffMaxFloat)(GetNativeCell(1),GetNativeCell(2)); 
 }
 public int NW3GetBuffMinInt(Handle plugin, int numParams) {
     return GetBuffMinInt(GetNativeCell(1),GetNativeCell(2)); 

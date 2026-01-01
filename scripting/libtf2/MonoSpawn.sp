@@ -511,7 +511,7 @@ public Colorize(client, color[4])
 	int m_hMyWeapons = FindSendPropOffs("CBasePlayer", "m_hMyWeapons");	
 	char classname[256];
 	int type;
-	int TFClassType:class = TF2_GetPlayerClass(client);
+	int TFClassType class = TF2_GetPlayerClass(client);
 	
 	for (int i = 0, weapon; i < 47; i += 4)
 	{
@@ -558,7 +558,7 @@ SetWearablesRGBA_Impl( client,  const char[] entClass, const char[] serverClass,
 	}
 }
 
-InvisibleHideFixes(client, TFClassType:class, type)
+InvisibleHideFixes(client, TFClassType class, type)
 {
 	if(class == TFClass_DemoMan)
 	{
@@ -680,7 +680,7 @@ public OnAdminMenuReady(Handle topmenu)
 	}
 }
 
-public AdminMenu_eyeboss(Handle topmenu, TopMenuAction:action, TopMenuObject:object_id, param, char buffer[], maxlength )
+public AdminMenu_eyeboss(Handle topmenu, TopMenuAction action, TopMenuObject object_id, param, char buffer[], maxlength )
 {
 	if (action == TopMenuAction_DisplayOption)
 	{

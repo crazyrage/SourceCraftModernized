@@ -720,7 +720,7 @@ stock bool L4D_IsPlayerCalm(client)
  */
 stock L4D_SetPlayerCalmState(client, bool isCalm)
 {
-	SetEntProp(client, Prop_Send, "m_isCalm", _:isCalm);
+	SetEntProp(client, Prop_Send, "m_isCalm", view_as<int>(isCalm));
 }
 
 /**
@@ -745,7 +745,7 @@ stock bool L4D_IsPlayerOnThirdStrike(client)
  */
 stock L4D_SetPlayerThirdStrikeState(client, bool onThirdStrike)
 {
-	SetEntProp(client, Prop_Send, "m_bIsOnThirdStrike", _:onThirdStrike);
+	SetEntProp(client, Prop_Send, "m_bIsOnThirdStrike", view_as<int>(onThirdStrike));
 }
 
 /**
@@ -775,7 +775,7 @@ stock bool L4D_IsPlayerGoingToDie(client)
  */
 stock L4D_SetPlayerIsGoingToDie(client, bool isGoingToDie)
 {
-	SetEntProp(client, Prop_Send, "m_isGoingToDie", _:isGoingToDie);
+	SetEntProp(client, Prop_Send, "m_isGoingToDie", view_as<int>(isGoingToDie));
 }
 
 /**
@@ -788,7 +788,7 @@ stock L4D_SetPlayerIsGoingToDie(client, bool isGoingToDie)
  */
 stock L4D2_SetEntGlow_Flashing(entity, bool flashing)
 {
-	SetEntProp(entity, Prop_Send, "m_bFlashing", _:flashing);
+	SetEntProp(entity, Prop_Send, "m_bFlashing", view_as<int>(flashing));
 }
 
 /**
@@ -872,7 +872,7 @@ stock bool L4D2_SetEntGlow(entity, L4D2GlowType:type, range, minRange, colorOver
  */
 stock L4D2_SetEntGlow_Type(entity, L4D2GlowType:type)
 {
-	SetEntProp(entity, Prop_Send, "m_iGlowType", _:type);
+	SetEntProp(entity, Prop_Send, "m_iGlowType", view_as<int>(type));
 }
 
 /**

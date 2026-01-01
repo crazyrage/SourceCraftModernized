@@ -252,7 +252,7 @@ public OnGameFrame()
                 {	
                     if(GetConVarBool(g_Enable))
                     {
-                        if(!(TF2_IsPlayerInCondition(iClient, TFCond:TF_CONDFLAG_TAUNTING)))
+                        if(!(TF2_IsPlayerInCondition(iClient, TFCond TF_CONDFLAG_TAUNTING)))
                         {
                             if(CheckElapsedTime(iClient, 0.1))
                             {
@@ -298,7 +298,7 @@ public OnGameFrame()
                                             ang[1] = 105.0;
                                             pos[1] = -10.0;
 
-                                            if(TFTeam:GetClientTeam(iClient) == TFTeam_Red)
+                                            if(TFTeam GetClientTeam(iClient) == TFTeam_Red)
                                             {
                                                 if(g_Crits[iClient])
                                                     g_Particle1[iClient] = AttachLoopParticleBone(iClient, EFFECT_BURNER_RED_CRIT, "flag", pos, ang);
@@ -317,7 +317,7 @@ public OnGameFrame()
                                             ang[1] = 75.0;
                                             pos[1] = -2.0;
 
-                                            if(TFTeam:GetClientTeam(iClient) == TFTeam_Red)
+                                            if(TFTeam GetClientTeam(iClient) == TFTeam_Red)
                                             {
                                                 if(g_Crits[iClient])
                                                     g_Particle2[iClient] = AttachLoopParticleBone(iClient, EFFECT_BURNER_RED_CRIT, "flag", pos, ang);

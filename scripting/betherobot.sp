@@ -290,7 +290,7 @@ public bool MakeRobot(client, admin, toggle)
 	float cooldowntime = GetConVarFloat(cvarCooldown);
 	if (client == admin && cooldowntime > 0 && (LastTransform[client] + cooldowntime) > GetGameTime())
 		return false;
-	int TFClassType:class = TF2_GetPlayerClass(client);
+	int TFClassType class = TF2_GetPlayerClass(client);
 	bool allowed = IsAllowedClass(class);
 	if (toggle == 2 || (toggle == 1 && !isRobot[client]))
 	{
@@ -363,7 +363,7 @@ public OnClientConnected(client)
 public Action Event_Inventory(Handle event, const char[] name, bool dontBroadcast)
 {
 	int client = GetClientOfUserId(GetEventInt(event, "userid"));
-	int TFClassType:class = TF2_GetPlayerClass(client);
+	int TFClassType class = TF2_GetPlayerClass(client);
 	bool allowed = IsAllowedClass(class);
 	if (isRobot[client])
 	{
@@ -374,7 +374,7 @@ public Action Event_Inventory(Handle event, const char[] name, bool dontBroadcas
 	return Plugin_Continue;
 }
 
-public bool IsAllowedClass(TFClassType:class)
+public bool IsAllowedClass(TFClassType class)
 {
 	int BannedClasses = GetConVarInt(cvarClasses);
 	switch (class)
@@ -396,7 +396,7 @@ public Action SoundHook(clients[64], &numClients, char sound[PLATFORM_MAX_PATH],
 	if (!GetConVarBool(cvarSounds)) return Plugin_Continue;
 	if (volume == 0.0) return Plugin_Continue;
 	if (!IsValidClient(client)) return Plugin_Continue;
-	int TFClassType:class = TF2_GetPlayerClass(client);
+	int TFClassType class = TF2_GetPlayerClass(client);
 	if (isRobotModel[client])
 	{
 		if (StrContains(sound, "player/footsteps/", false) != -1 && class != TFClass_Engineer && class != TFClass_Medic && GetConVarBool(cvarFootsteps))

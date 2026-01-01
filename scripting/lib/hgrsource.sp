@@ -1195,7 +1195,7 @@ public Action Hooking(Handle timer,any userid)
                 }
             }
 
-            new Action:res = Plugin_Continue;
+            new Action res = Plugin_Continue;
             Call_StartForward(fwdOnHook);
             Call_PushCell(index);
             Call_Finish(res);
@@ -1468,7 +1468,7 @@ public Action GrabSearch(Handle timer,any userid)
                     float limit=gAllowedRange[index][ACTION_GRAB];
                     if (limit <= 0.0 || limit >= distance)
                     {
-                        new Action:res = Plugin_Continue;
+                        new Action res = Plugin_Continue;
                         Call_StartForward(fwdOnGrab);
                         Call_PushCell(index);
                         Call_PushCell(target);
@@ -1682,7 +1682,7 @@ public Action Grabbing(Handle timer,any userid)
                     return Plugin_Stop;
                 }
 
-                new Action:res = Plugin_Continue;
+                new Action res = Plugin_Continue;
                 Call_StartForward(fwdOnDrag);
                 Call_PushCell(index);
                 Call_PushCell(target);
@@ -1829,7 +1829,7 @@ Action _Drop(client)
     else if (HasAccess(client,Grab) && IsClientInGame(client))
         PrintCenterText(client,"");
 
-    int Action:res;
+    int Action res;
     Call_StartForward(fwdOnDrop);
     Call_PushCell(client);
     Call_PushCell(target);
@@ -1962,7 +1962,7 @@ public Action Roping(Handle timer,any userid)
                 }
             }
 
-            new Action:res = Plugin_Continue;
+            new Action res = Plugin_Continue;
             Call_StartForward(fwdOnRope);
             Call_PushCell(index);
             Call_Finish(res);
@@ -2194,8 +2194,8 @@ public bool TraceRayHitCollidable(entity, mask)
     if (entity > MaxClients)
     {
         int m_CollisionGroup = GetEntProp(entity, Prop_Send, "m_CollisionGroup");
-        return (m_CollisionGroup != _:COLLISION_GROUP_DEBRIS &&
-                m_CollisionGroup != _:COLLISION_GROUP_DEBRIS_TRIGGER);
+        return (m_CollisionGroup != view_as<int>(COLLISION_GROUP_DEBRIS) &&
+                m_CollisionGroup != view_as<int>(COLLISION_GROUP_DEBRIS_TRIGGER));
     }
     else
         return false;

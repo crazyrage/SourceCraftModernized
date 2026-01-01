@@ -140,7 +140,7 @@ int g_iPlayerItem[MAXPLAYERS+1];
 int g_iPlayerFlags[MAXPLAYERS+1];
 int g_iPlayerBGroups[MAXPLAYERS+1];
 bool g_bRotationTauntSet[MAXPLAYERS + 1] = { false, ... };
-new TFClassType:g_iPlayerSpawnClass[MAXPLAYERS + 1] = { TFClass_Unknown, ... };
+new TFClassType g_iPlayerSpawnClass[MAXPLAYERS + 1] = { TFClass_Unknown, ... };
 
 // ---- Item variables -------------------------------------------------------------
 //new g_iSlotsCount;
@@ -446,11 +446,11 @@ public OnClientPostAdminCheck(client)
 	int ibFlags = ReadFlagString(g_strAdminFlags);
 
 	// Test and setup flag if so.
-	int AdminId:admin = GetUserAdmin(client);
+	int AdminId admin = GetUserAdmin(client);
 	if (admin == INVALID_ADMIN_ID) return;
 	if (GetAdminFlags(admin, Access_Effective) & (ibFlags|ADMFLAG_ROOT))	g_iPlayerFlags[client] |= PLAYER_ADMIN;
 }
-public TF2_OnConditionAdded(client, TFCond:condition)
+public TF2_OnConditionAdded(client, TFCond condition)
 {
 	if (condition == TFCond_Taunting && GetEntProp(client, Prop_Send, "m_bCustomModelRotates") && !g_bRotationTauntSet[client])
 	{
@@ -458,7 +458,7 @@ public TF2_OnConditionAdded(client, TFCond:condition)
 		g_bRotationTauntSet[client] = true;
 	}
 }
-public TF2_OnConditionRemoved(client, TFCond:condition)
+public TF2_OnConditionRemoved(client, TFCond condition)
 {
 	if (condition == TFCond_Taunting && !GetEntProp(client, Prop_Send, "m_bCustomModelRotates") && g_bRotationTauntSet[client])
 	{
@@ -479,7 +479,7 @@ public Event_EquipItem(Handle hEvent, char strName[], bool bDontBroadcast)
 	int client = GetClientOfUserId(userid);
 	if (IsValidClient(client))
 	{
-		new TFClassType:class = TF2_GetPlayerClass(client);
+		new TFClassType class = TF2_GetPlayerClass(client);
 		if (class != TFClass_Unknown && class != g_iPlayerSpawnClass[client])
 		{
 			Item_Remove(client);
@@ -982,7 +982,7 @@ Item_RetrieveSlotCookie(client)
 	if (!AreClientCookiesCached(client)) return -1;
 
 	// Retrieve current class
-	int TFClassType:Class = TF2_GetPlayerClass(client);
+	int TFClassType Class = TF2_GetPlayerClass(client);
 	if (Class == TFClass_Unknown) return -1;
 
 	// Retrieve the class cookie
@@ -1006,9 +1006,9 @@ Item_SetSlotCookie(client)
 	if (!AreClientCookiesCached(client)) return;
 
 	// Retrieve current class
-	int TFClassType:Class;
+	int TFClassType Class;
 	if (IsPlayerAlive(client)) Class = TF2_GetPlayerClass(client);
-	else Class = TFClassType:GetEntProp(client, Prop_Send, "m_iDesiredPlayerClass");
+	else Class = TFClassType GetEntProp(client, Prop_Send, "m_iDesiredPlayerClass");
 	if (Class == TFClass_Unknown) return;
 
 	// Set the class cookie
@@ -1025,9 +1025,9 @@ Item_SetSlotCookie(client)
 // ------------------------------------------------------------------------
 Client_ClassFlags(client)
 {
-	int TFClassType:class;
+	int TFClassType class;
 	if (IsPlayerAlive(client)) class = TF2_GetPlayerClass(client);
-	else class = TFClassType:GetEntProp(client, Prop_Send, "m_iDesiredPlayerClass");
+	else class = TFClassType GetEntProp(client, Prop_Send, "m_iDesiredPlayerClass");
 	switch(class)
 	{
 		case TFClass_DemoMan:		return CLASS_DEMOMAN;
@@ -1501,7 +1501,7 @@ public Action Cmd_Reload(client, args)
 	{
 		if (!IsValidClient(client)) continue;
 
-		new AdminId:admin = GetUserAdmin(client);
+		new AdminId admin = GetUserAdmin(client);
 		if (admin == INVALID_ADMIN_ID) continue;
 		if (GetAdminFlags(admin, Access_Effective) & (ibFlags|ADMFLAG_ROOT))	g_iPlayerFlags[client] |= PLAYER_ADMIN;
 	}
@@ -1596,7 +1596,7 @@ CalculateBodyGroups(client)
 
 	if (g_iPlayerItem[client] != -1)
 		iItemGroups |= g_iItemBodygroupFlags[g_iPlayerItem[client]];
-	int TFClassType:class = TF2_GetPlayerClass(client);
+	int TFClassType class = TF2_GetPlayerClass(client);
 	switch(class)
 	{
 		case TFClass_Scout:

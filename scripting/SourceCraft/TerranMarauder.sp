@@ -502,7 +502,7 @@ bool GraviticCharge(victim_index, index)
             SetVisibility(victim_index, BasicVisibility,
                           .visibility=192,
                           .mode=RENDER_GLOW,
-                          .r=((GetClientTeam(victim_index) == _:TFTeam_Red) ? 255 : 0),
+                          .r=((GetClientTeam(victim_index) == view_as<int>(TFTeam_Red)) ? 255 : 0),
                           .g=128, .b=255, .apply=true);
 
             CreateTimer(1.5*float(gravitic_level),RestoreSpeed, GetClientUserId(victim_index),TIMER_FLAG_NO_MAPCHANGE);

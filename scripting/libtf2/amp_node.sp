@@ -332,7 +332,7 @@ public CvarChange(Handle convar, const char[] oldValue, const char[] newValue)
     else if (convar == cvarRegeneration)
         MetalRegeneration = StringToInt(newValue);
     else if (convar == cvarCondition)
-        DefaultCondition = TFCond:StringToInt(newValue);
+        DefaultCondition = TFCond StringToInt(newValue);
     else if (convar == cvarAmplifierUpgradable)
         AmplifierUpgradable = bool StringToInt(newValue);
     else if (convar == cvarMiniCritToSG)
@@ -380,7 +380,7 @@ public OnConfigsExecuted()
     AmplifierMetal = GetConVarInt(cvarAmplifierMetal);
 
     AmplifierUpgradable = GetConVarBool(cvarAmplifierUpgradable);
-    DefaultCondition = TFCond:GetConVarInt(cvarCondition);
+    DefaultCondition = TFCond GetConVarInt(cvarCondition);
     MiniCritToSG = GetConVarBool(cvarMiniCritToSG);
     ShowParticle = GetConVarBool(cvarParticle);
     WallBlock = GetConVarBool(cvarWallBlock);
@@ -548,7 +548,7 @@ public Action Event_player_spawn(Handle event, const char[] name, bool dontBroad
     return Plugin_Continue;
 }
 
-public AmpHelpPanelH(Handle menu, MenuAction:action, param1, param2)
+public AmpHelpPanelH(Handle menu, MenuAction action, param1, param2)
 {
     if(action == MenuAction_Select)
         return;   
@@ -649,7 +649,7 @@ public AmpPanel(client)
 }
 
 //Panel's Handle Procedure
-public AmpPanelH(Handle menu, MenuAction:action, param1, param2)
+public AmpPanelH(Handle menu, MenuAction action, param1, param2)
 {
     if (action == MenuAction_Select)
     {
@@ -750,8 +750,8 @@ public Action BuildingTimer(Handle hTimer)
 {
     float Pos[3];
     float BuildingPos[3];
-    int TFTeam:clientTeam;
-    int TFTeam:team;
+    int TFTeam clientTeam;
+    int TFTeam team;
     int i,client;
     int maxEntities = GetMaxEntities();
     for (client=1; client<=MaxClients; client++)
@@ -762,7 +762,7 @@ public Action BuildingTimer(Handle hTimer)
             if (IsPlayerAlive(client) && IsValidEdict(client)) 
             {
                 GetEntPropVector(client, Prop_Send, "m_vecOrigin", Pos);  //Get player's position
-                clientTeam=TFTeam:GetClientTeam(client);
+                clientTeam=TFTeam GetClientTeam(client);
 
                 //Check all Entities/Buildings
                 for (i=MaxClients+1; i<maxEntities; i++)
@@ -798,20 +798,20 @@ public Action BuildingTimer(Handle hTimer)
                                                   Condition != TFCond_DefenseBuffed &&
                                                   Condition != TFCond_RegenBuffed);
 
-                                team = TFTeam:GetEntProp(ent, Prop_Send, "m_iTeamNum");
+                                team = TFTeam GetEntProp(ent, Prop_Send, "m_iTeamNum");
                             }
                             case TFCond_Slowed, TFCond_Zoomed, TFCond_TeleportedGlow, TFCond_Taunting, TFCond_Bonked, TFCond_Dazed,
                                  TFCond_OnFire, TFCond_Jarated, TFCond_Milked, TFCond_MarkedForDeath, TFCond_RestrictToMelee,
                                  TFCond_Disguised, TFCond_Cloaked, TFCond_CloakFlicker, TFCond_Bleeding:
                             {
                                 enableParticle = false;
-                                team = (TFTeam:GetEntProp(ent, Prop_Send, "m_iTeamNum") == TFTeam_Red)
+                                team = (TFTeam GetEntProp(ent, Prop_Send, "m_iTeamNum") == TFTeam_Red)
                                        ? TFTeam_Blue : TFTeam_Red;
                             }
                             default:
                             {
                                 enableParticle = false;
-                                team = TFTeam:GetEntProp(ent, Prop_Send, "m_iTeamNum");
+                                team = TFTeam GetEntProp(ent, Prop_Send, "m_iTeamNum");
                             }
                         }
 
@@ -1102,7 +1102,7 @@ public Action BuildingTimer(Handle hTimer)
                             }
                             default:
                             {
-                                if (TFTeam:GetEntProp(ent, Prop_Send, "m_iTeamNum")==TFTeam_Red)
+                                if (TFTeam GetEntProp(ent, Prop_Send, "m_iTeamNum")==TFTeam_Red)
                                     beamColor = {255, 75, 75, 255}; // Red
                                 else
                                     beamColor = {75, 75, 255, 255}; // Blue
@@ -1283,7 +1283,7 @@ CheckObject(client, ent, obj, float Pos[3], level, &metal, bool isSentry)
                 }
 
                 int p, p2;
-                if (TFTeam:GetEntProp(ent, Prop_Send, "m_iTeamNum")==TFTeam_Red)
+                if (TFTeam GetEntProp(ent, Prop_Send, "m_iTeamNum")==TFTeam_Red)
                 {
 #if 1
                     AttachRepairParticle(obj, "medicgun_beam_red", ent, Pos, prop, p, p2);
@@ -1642,7 +1642,7 @@ public Action Event_Upgrade(Handle event, const char[] name, bool dontBroadcast)
             BuildingType[ent] == TFExtObject_UpgradeStation)
         {
             int particle;
-            if (TFTeam:GetEntProp(ent, Prop_Send, "m_iTeamNum")==TFTeam_Red)
+            if (TFTeam GetEntProp(ent, Prop_Send, "m_iTeamNum")==TFTeam_Red)
                 AttachParticle(ent,"teleported_red",particle); //Create Effect of TP
             else
                 AttachParticle(ent,"teleported_blue",particle); //Create Effect of TP
@@ -1927,7 +1927,7 @@ CheckDisp(ent, client)
     TraceReturn();
 }
 
-ConvertToAmplifier(ent, percent, const float range[4], TFCond:condition)
+ConvertToAmplifier(ent, percent, const float range[4], TFCond condition)
 {
     int ref = BuildingRef[ent] = EntIndexToEntRef(ent);
     TraceInto("amp_node", "ConvertToAmplifier", "ref=0x%08x, ent=0x%08x", ref, ent);
@@ -2024,7 +2024,7 @@ ConvertToRepairNode(ent, percent, const float range[4], const regen[4],
     TraceReturn();
 }
 
-ConvertToUpgradeStation(ent) // float delay, Timer:stageFunc, flags=0)
+ConvertToUpgradeStation(ent) // float delay, Timer stageFunc, flags=0)
 {
     int ref = BuildingRef[ent] = EntIndexToEntRef(ent);
     TraceInto("amp_node", "ConvertToUpgradeStation", "ref=0x%08x, ent=0x%08x", ref, ent);
@@ -2081,7 +2081,7 @@ ConvertToUpgradeStation(ent) // float delay, Timer:stageFunc, flags=0)
     TraceReturn();
 }
 
-public BuildMenu(Handle menu,MenuAction:action,client,selection)
+public BuildMenu(Handle menu,MenuAction action,client,selection)
 {
     TraceInto("amp_node", "BuildMenu", "menu=0x%08x, action=%d, client=%d, selection=%d", menu, action,client,selection);
     if (action == MenuAction_Select)
@@ -2200,7 +2200,7 @@ public Action Activate(Handle hTimer, any ref)
             ResetModel(ent);
 
             int particle;
-            if (TFTeam:GetEntProp(ent, Prop_Send, "m_iTeamNum")==TFTeam_Red)
+            if (TFTeam GetEntProp(ent, Prop_Send, "m_iTeamNum")==TFTeam_Red)
                 AttachParticle(ent,"teleported_red",particle); //Create Effect of TP
             else
                 AttachParticle(ent,"teleported_blue",particle); //Create Effect of TP
@@ -2322,7 +2322,7 @@ public Native_SetAmplifier(Handle plugin,numParams)
 {
     int client = GetNativeCell(1);
 
-    int TFCond:condition = TFCond:GetNativeCell(2);
+    int TFCond condition = TFCond GetNativeCell(2);
     NativeCondition[client] = (condition < TFCond_Slowed) ? DefaultCondition : condition;
 
     float range[4];
@@ -2420,7 +2420,7 @@ public Native_ConvertToAmplifier(Handle plugin,numParams)
     if (ent > 0 && IsValidEntity(ent))
     {
         int client = GetNativeCell(2);
-        int TFCond:condition = TFCond:GetNativeCell(3);
+        int TFCond condition = TFCond GetNativeCell(3);
 
         float range[4];
         GetNativeArray(4, range, sizeof(range));

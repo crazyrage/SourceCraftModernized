@@ -100,7 +100,7 @@ Help(client)
     DisplayMenu(helpMenu,client,MENU_TIME_FOREVER);
 }
 
-public HelpMenu_Selected(Handle menu,MenuAction:action,client,selection)
+public HelpMenu_Selected(Handle menu,MenuAction action,client,selection)
 {
     if(action==MenuAction_Select)
     {
@@ -139,7 +139,7 @@ public HelpMenu_Command(client,command)
     DisplayMenu(helpMenu_Command,client,MENU_TIME_FOREVER);
 }
 
-public HM_Command_Select(Handle menu,MenuAction:action,client,selection)
+public HM_Command_Select(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {

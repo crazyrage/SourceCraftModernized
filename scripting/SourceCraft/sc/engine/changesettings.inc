@@ -271,12 +271,12 @@ public void OnClientCookiesCached(int client)
             if (g_bDisplayCookieFlip[i])
             {
                 if (strCookie[0] != '1')
-                    g_ClientDisplayBits[client] |= Display:(1 << _:i);
+                    g_ClientDisplayBits[client] |= Display:(1 << view_as<int>(i));
             }
             else
             {
                 if (strCookie[0] == '1')
-                    g_ClientDisplayBits[client] |= Display:(1 << _:i);
+                    g_ClientDisplayBits[client] |= Display:(1 << view_as<int>(i));
             }
         }
 
@@ -287,12 +287,12 @@ public void OnClientCookiesCached(int client)
             if (g_bCookieFlip[i])
             {
                 if (strCookie[0] != '1')
-                    g_ClientSettingsBits[client] |= Settings:(1 << _:i);
+                    g_ClientSettingsBits[client] |= Settings:(1 << view_as<int>(i));
             }
             else
             {
                 if (strCookie[0] == '1')
-                    g_ClientSettingsBits[client] |= Settings:(1 << _:i);
+                    g_ClientSettingsBits[client] |= Settings:(1 << view_as<int>(i));
             }
         }
     }

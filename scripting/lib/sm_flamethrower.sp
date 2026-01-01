@@ -358,7 +358,7 @@ public Action Flame(client, args)
                                                 if (GameType == tf2 && TF2_IsPlayerUbercharged(i))
                                                     continue;
 
-                                                new Action:res = Plugin_Continue;
+                                                new Action res = Plugin_Continue;
                                                 Call_StartForward(fwdOnPlayerFlamed);
                                                 Call_PushCell(client);
                                                 Call_PushCell(i);

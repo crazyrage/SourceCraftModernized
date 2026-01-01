@@ -386,8 +386,8 @@ bool ControlObject(client, target, &builder=0, &TFExtObjectType:type=TFExtObject
                         Handle pack = CreateDataPack();
                         WritePackCell(pack, target_ref);
                         WritePackCell(pack, builder);
-                        WritePackCell(pack, _:timer);
-                        WritePackCell(pack, _:type);
+                        WritePackCell(pack, view_as<int>(timer));
+                        WritePackCell(pack, view_as<int>(type));
 
                         // And add it to the list
                         if (m_StolenObjectList[client] == null)
@@ -507,8 +507,8 @@ ProcessMindControlledObjects(command:cmd, obj=-1, builder=-1,
                                 pack = CreateDataPack();
                                 WritePackCell(pack, pack_ref);
                                 WritePackCell(pack, -1);
-                                WritePackCell(pack, _:pack_timer);
-                                WritePackCell(pack, _:type);
+                                WritePackCell(pack, view_as<int>(pack_timer));
+                                WritePackCell(pack, view_as<int>(type));
                                 SetArrayCell(m_StolenObjectList[client], index, pack);
                             }
                             return (cmd == find_controller) ? index : pack_builder;

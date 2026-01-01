@@ -686,7 +686,7 @@ public OnPlayerDeathEvent(Handle event, victim_index, victim_race, attacker_inde
     }
 }
 
-public OnPlayerBuiltObject(Handle event, client, obj, TFObjectType:type)
+public OnPlayerBuiltObject(Handle event, client, obj, TFObjectType type)
 {
     if (obj > 0 && type != TFObject_Sapper && cfgAllowSentries >= 1)
     {

@@ -65,7 +65,7 @@ public OnGameFrame()
 		}
 }
 
-stock _:CreateLightEntity(iEntity, bool bRagdoll=false)
+stock view_as<int>(CreateLightEntity)(iEntity, bool bRagdoll=false)
 {
 	if (IsEntLimitReached())
 		return -1;
@@ -108,7 +108,7 @@ stock _:CreateLightEntity(iEntity, bool bRagdoll=false)
 stock bool IsEntLimitReached(warn=20, critical=16, client=0, const char[] message="entity not created")
 	return EntitiesAvailable(warn, critical, client, message) < warn;
 
-stock _:EntitiesAvailable(warn=20, critical=16, client=0, const char[] message="entity not created")
+stock view_as<int>(EntitiesAvailable)(warn=20, critical=16, client=0, const char[] message="entity not created")
 {
 	int max = GetMaxEntities();
 	int count = GetEntityCount();

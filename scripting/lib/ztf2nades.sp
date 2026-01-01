@@ -1057,8 +1057,8 @@ ThrowNade(client, bool Setup=false, HoldType:hold=HoldSpecial, NadeType:type=Def
                 new class = 0;
                 switch (GameType)
                 {
-                    case tf2: class = _:TF2_GetPlayerClass(client);
-                    case dod: class = _:DOD_GetPlayerClass(client); 
+                    case tf2: class = view_as<int>(TF2_GetPlayerClass)(client);
+                    case dod: class = view_as<int>(DOD_GetPlayerClass)(client); 
                 }
                 Handle typeVar = cvNadeType[class];
                 type = typeVar ? (NadeType:GetConVarInt(typeVar)) : (NadeType:class);
@@ -1076,8 +1076,8 @@ ThrowNade(client, bool Setup=false, HoldType:hold=HoldSpecial, NadeType:type=Def
             WritePackCell(pack, client);
             WritePackCell(pack, team);
             WritePackCell(pack, gNade[client]);
-            WritePackCell(pack, _:type);
-            WritePackCell(pack, _:special);
+            WritePackCell(pack, view_as<int>(type));
+            WritePackCell(pack, view_as<int>(special));
 
             if (GetConVarInt(cvCountdown) != 0)
             {
@@ -1198,8 +1198,8 @@ public NadeType GiveFullNades(client)
     int class = 0;
     switch (GameType)
     {
-        case tf2: class = _:TF2_GetPlayerClass(client);
-        case dod: class = _:DOD_GetPlayerClass(client); 
+        case tf2: class = view_as<int>(TF2_GetPlayerClass)(client);
+        case dod: class = view_as<int>(DOD_GetPlayerClass)(client); 
     }
     if (class < 0)
         class = 0;
@@ -2998,7 +2998,7 @@ bool NadeHurtPlayer(client, attacker, damage, NadeType:type, const char weapon[]
         }
     #endif
 
-    int Action:res = Plugin_Continue;
+    int Action res = Plugin_Continue;
     Call_StartForward(fwdOnNadeExplode);
     Call_PushCell(client);
     Call_PushCell(attacker);
@@ -3296,8 +3296,8 @@ public Native_GiveNades(Handle plugin,numParams)
                     new class = 0;
                     switch (GameType)
                     {
-                        case tf2: class = _:TF2_GetPlayerClass(client);
-                        case dod: class = _:DOD_GetPlayerClass(client); 
+                        case tf2: class = view_as<int>(TF2_GetPlayerClass)(client);
+                        case dod: class = view_as<int>(DOD_GetPlayerClass)(client); 
                     }
                     Handle typeVar = cvNadeType[class];
                     type = typeVar ? (NadeType:GetConVarInt(typeVar)) : (NadeType:class);
@@ -3366,7 +3366,7 @@ public Native_HasFragNades(Handle plugin,numParams)
         {
             case 1:  return gAllowed1[client];
 #if defined SOURCECRAFT
-            case 2:  return _:gCategory[client];
+            case 2:  return view_as<int>(gCategory)[client];
 #endif
         }
         return gRemaining1[client];
@@ -3408,7 +3408,7 @@ public Native_HasSpecialNades(Handle plugin,numParams)
         {
             case 1:  return gAllowed2[client];
 #if defined SOURCECRAFT
-            case 2:  return _:gCategory[client];
+            case 2:  return view_as<int>(gCategory)[client];
 #endif
         }
         return gRemaining2[client];

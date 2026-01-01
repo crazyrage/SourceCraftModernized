@@ -497,7 +497,7 @@ public sentry_build(id) {
 			client_print(id, print_center, "Only Admins can build!");
 			return;
 		}
-		else if( !(abs(get_pcvar_num( sentry_team )) & _:cs_get_user_team(id)) ){
+		else if( !(abs(get_pcvar_num( sentry_team )) & view_as<int>(cs_get_user_team)(id)) ){
 			client_print(id, print_center, "Your team cannot build!");
 			return;
 		}
@@ -568,7 +568,7 @@ IncreaseSentryCount(id, sentryEntity) {
 
 	int name[32];
 	get_user_name(id, name, 31);
-	int CsTeams:builderTeam = cs_get_user_team(id);
+	int CsTeams builderTeam = cs_get_user_team(id);
 	for(int i= 1; i <= g_MAXPLAYERS; i++) {
 		if (!is_user_connected(i) || !is_user_alive(i) || cs_get_user_team(i) != builderTeam || id == i)
 			continue;

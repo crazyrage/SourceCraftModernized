@@ -410,7 +410,7 @@ enum W3Buff
 	MaxBuffLoopLimitTemp, //this is a variable that is for loops, this number is automatically generated fromt the enum. 
 	
 }
-stock MaxBuffLoopLimit=_:MaxBuffLoopLimitTemp;
+stock MaxBuffLoopLimit=view_as<int>(MaxBuffLoopLimitTemp);
 
 
 //create an buffpropertiesarray[W3Buff][W3BuffProperties]; (separate from the array that stores every client's buffs)

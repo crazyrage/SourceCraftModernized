@@ -148,7 +148,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
 
         //Set Infested Color
         int r,g,b;
-        if (TFTeam:GetClientTeam(client) == TFTeam_Red)
+        if (TFTeam GetClientTeam(client) == TFTeam_Red)
         { r = 0; g = 224; b = 208; }
         else
         { r = 255; g = 165; b = 0; }
@@ -240,7 +240,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
 
         //Set Infested Color
         int r,g,b;
-        if (TFTeam:GetClientTeam(client) == TFTeam_Red)
+        if (TFTeam GetClientTeam(client) == TFTeam_Red)
         { r = 0; g = 224; b = 208; }
         else
         { r = 255; g = 165; b = 0; }

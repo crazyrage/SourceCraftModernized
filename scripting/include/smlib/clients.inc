@@ -286,7 +286,7 @@ stock bool Client_SetObserverMode(client, Obs_Mode:mode, bool updateMoveType=tru
 		Client_SetObserverLastMode(client, observerMode);
 	}
 
-	SetEntProp(client, Prop_Send, "m_iObserverMode", _:mode);
+	SetEntProp(client, Prop_Send, "m_iObserverMode", view_as<int>(mode));
 
 	switch (mode) {
 		case OBS_MODE_NONE, OBS_MODE_FIXED, OBS_MODE_DEATHCAM: {
@@ -337,7 +337,7 @@ stock Obs_Mode Client_GetObserverLastMode(client)
  */
 stock Client_SetObserverLastMode(client, Obs_Mode:mode)
 {
-	SetEntProp(client, Prop_Data, "m_iObserverLastMode", _:mode);
+	SetEntProp(client, Prop_Data, "m_iObserverLastMode", view_as<int>(mode));
 }
 
 /**
@@ -570,7 +570,7 @@ stock Client_GetClones(client, cloneList[])
  */
 stock bool Client_IsOnLadder(client)
 {
-	int MoveType:movetype = GetEntityMoveType(client);
+	int MoveType movetype = GetEntityMoveType(client);
 
 	if (movetype == MOVETYPE_LADDER) {
 		return true;
@@ -1712,7 +1712,7 @@ stock Client_GetNextWeapon(client, &index = 0)
  * @param ...			Variable number of format parameters.
  * @return				True on success, false if this usermessage doesn't exist.
  */
-stock bool Client_PrintHintText(client, const char[] format, any:...)
+stock bool Client_PrintHintText(client, const char[] format, any ...)
 {
 	Handle userMessage = StartMessageOne("HintText", client);
 
@@ -1750,7 +1750,7 @@ stock bool Client_PrintHintText(client, const char[] format, any:...)
  * @param ...			Variable number of format parameters.
  * @noreturn
  */
-stock Client_PrintHintTextToAll(const char[] format, any:...)
+stock Client_PrintHintTextToAll(const char[] format, any ...)
 {
 	char buffer[254];
 
@@ -1776,7 +1776,7 @@ stock Client_PrintHintTextToAll(const char[] format, any:...)
  * @param ...			Variable number of format parameters.
  * @return				True on success, false if this usermessage doesn't exist.
  */
-stock bool Client_PrintKeyHintText(client, const char[] format, any:...)
+stock bool Client_PrintKeyHintText(client, const char[] format, any ...)
 {
 	Handle userMessage = StartMessageOne("KeyHintText", client);
 
@@ -1813,7 +1813,7 @@ stock bool Client_PrintKeyHintText(client, const char[] format, any:...)
  * @param ...			Variable number of format parameters.
  * @noreturn
  */
-stock Client_PrintKeyHintTextToAll(const char[] format, any:...)
+stock Client_PrintKeyHintTextToAll(const char[] format, any ...)
 {
 	char buffer[254];
 
@@ -1918,7 +1918,7 @@ stock Client_PrintToChatRaw(client, const char[] message, subject=0, bool isChat
  * @param ...			Variable number of format parameters.
  * @noreturn
  */
-stock Client_PrintToChat(client, bool isChat, const char[] format, any:...)
+stock Client_PrintToChat(client, bool isChat, const char[] format, any ...)
 {
 	char buffer[512],
 		char buffer2[253];
@@ -1955,7 +1955,7 @@ stock Client_PrintToChatExclude(client)
  * @param ...			Variable number of format parameters.
  * @noreturn
  */
-stock Client_PrintToChatAll(bool isChat, const char[] format, any:...)
+stock Client_PrintToChatAll(bool isChat, const char[] format, any ...)
 {
 	char buffer[512],
 		char buffer2[253];
@@ -2003,7 +2003,7 @@ stock Client_PrintToChatAll(bool isChat, const char[] format, any:...)
  * @param ...			Variable number of format parameters.
  * @noreturn
  */
-stock Client_PrintToChatEx(clients[], numClients, bool isChat, const char[] format, any:...)
+stock Client_PrintToChatEx(clients[], numClients, bool isChat, const char[] format, any ...)
 {
 	char buffer[512],
 		char buffer2[253];
@@ -2060,7 +2060,7 @@ enum ClientHudPrint {
  * @param ...			Variable number of format parameters.
  * @noreturn
  */
-stock Client_PrintToConsole(client, const char[] format, any:...)
+stock Client_PrintToConsole(client, const char[] format, any ...)
 {
 	char buffer[512];
 
@@ -2082,7 +2082,7 @@ stock Client_PrintToConsole(client, const char[] format, any:...)
  * @param ...			Variable number of format parameters.
  * @noreturn
  */
-stock Client_Print(client, ClientHudPrint:destination, const char[] format, any:...)
+stock Client_Print(client, ClientHudPrint:destination, const char[] format, any ...)
 {
 	char buffer[512], char buffer2[254];
 
@@ -2116,7 +2116,7 @@ stock Client_Print(client, ClientHudPrint:destination, const char[] format, any:
 	if (GetFeatureStatus(FeatureType_Native, "GetUserMessageType") == FeatureStatus_Available
 		&& GetUserMessageType() == UM_Protobuf) {
 
-		PbSetInt(userMessage,    "msg_dst", _:destination);
+		PbSetInt(userMessage,    "msg_dst", view_as<int>(destination));
 		PbAddString(userMessage, "params",  buffer2);
 		PbAddString(userMessage, "params",  "");
 		PbAddString(userMessage, "params",  "");
@@ -2124,7 +2124,7 @@ stock Client_Print(client, ClientHudPrint:destination, const char[] format, any:
 		PbAddString(userMessage, "params",  "");
 	}
 	else {
-		BfWriteByte(userMessage		, _:destination);
+		BfWriteByte(userMessage		, view_as<int>(destination));
 		BfWriteString(userMessage	, buffer2);
 	}
 
@@ -2142,7 +2142,7 @@ stock Client_Print(client, ClientHudPrint:destination, const char[] format, any:
  * @param ...			Variable number of format parameters.
  * @noreturn
  */
-stock Client_Reply(client, const char[] format, any:...)
+stock Client_Reply(client, const char[] format, any ...)
 {
 	char buffer[255];
 
@@ -2218,7 +2218,7 @@ stock bool Client_Shake(client, command=SHAKE_START, float amplitude=50.0, float
  */
 stock bool Client_IsAdmin(client)
 {
-	int AdminId:adminId = GetUserAdmin(client);
+	int AdminId adminId = GetUserAdmin(client);
 
 	if (adminId == INVALID_ADMIN_ID) {
 		return false;
@@ -2235,7 +2235,7 @@ stock bool Client_IsAdmin(client)
  */
 stock bool Client_HasAdminFlags(client, flags=ADMFLAG_GENERIC)
 {
-	int AdminId:adminId = GetUserAdmin(client);
+	int AdminId adminId = GetUserAdmin(client);
 
 	if (adminId == INVALID_ADMIN_ID) {
 		return false;
@@ -2254,7 +2254,7 @@ stock bool Client_HasAdminFlags(client, flags=ADMFLAG_GENERIC)
  */
 stock bool Client_IsInAdminGroup(client, const char[] groupName, bool caseSensitive=true)
 {
-	int AdminId:adminId = GetUserAdmin(client);
+	int AdminId adminId = GetUserAdmin(client);
 
 	// Validate id.
 	if (adminId == INVALID_ADMIN_ID) {
@@ -2991,7 +2991,7 @@ stock bool Client_PrintToTopRaw(client, r=255, g=255, b=255, a=255, float durati
  * @param ...			Variable number of format parameters.
  * @return				True on success, false if the key value for the dialog couldn't be created or closed.
  */
-stock bool Client_PrintToTop(client, r=255, g=255, b=255, a=255, float duration=10.0, const char[] format, any:...)
+stock bool Client_PrintToTop(client, r=255, g=255, b=255, a=255, float duration=10.0, const char[] format, any ...)
 {
 	char buffer[150];
 	SetGlobalTransTarget(client);
@@ -3014,7 +3014,7 @@ stock bool Client_PrintToTop(client, r=255, g=255, b=255, a=255, float duration=
  * @param ...			Variable number of format parameters.
  * @noreturn
  */
-stock Client_PrintToTopAll(r=255, g=255, b=255, a=255, float duration=10.0, const char[] format, any:...)
+stock Client_PrintToTopAll(r=255, g=255, b=255, a=255, float duration=10.0, const char[] format, any ...)
 {
 	char buffer[150];
 	new
@@ -3061,7 +3061,7 @@ stock Client_PrintToTopAll(r=255, g=255, b=255, a=255, float duration=10.0, cons
  * @param ...			Variable number of format parameters.
  * @noreturn
  */
-stock Client_PrintToTopEx(clients[], numClients, r=255, g=255, b=255, a=255, float duration=10.0, const char[] format, any:...)
+stock Client_PrintToTopEx(clients[], numClients, r=255, g=255, b=255, a=255, float duration=10.0, const char[] format, any ...)
 {
 	char buffer[150];
 	new

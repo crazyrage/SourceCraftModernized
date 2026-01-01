@@ -70,7 +70,7 @@ public OnEntityDestroyed(iEntity)
 	}
 }
 
-stock _:CreateLightEntity(iEntity)
+stock view_as<int>(CreateLightEntity)(iEntity)
 {
 	if (IsEntLimitReached())
 		return -1;

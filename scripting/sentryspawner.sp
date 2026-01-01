@@ -247,7 +247,7 @@ public Action Event_PlayerDeath(Handle event, const char[] name, bool dontBroadc
             SetEntProp(iSentry, Prop_Send, "m_bShielded",                       bShielded, 2);
             SetEntProp(iSentry, Prop_Send, "m_bPlayerControlled",               bShielded, 2);
             SetEntProp(iSentry, Prop_Send, "m_bMiniBuilding",                   bMini, 2);
-            SetEntProp(iSentry, Prop_Send, "m_iObjectType",                     _:TFObject_Sentry, 1);
+            SetEntProp(iSentry, Prop_Send, "m_iObjectType",                     view_as<int>(TFObject_Sentry), 1);
             SetEntProp(iSentry, Prop_Send, "m_iUpgradeLevel",                   iLevel, 4);
             SetEntProp(iSentry, Prop_Send, "m_iAmmoRockets",                    iRockets, 4);
             SetEntProp(iSentry, Prop_Send, "m_iAmmoShells" ,                    iShells, 4);
@@ -299,7 +299,7 @@ public Action Event_PlayerDeath(Handle event, const char[] name, bool dontBroadc
             if (event != null)
             {
                 SetEventInt(event, "userid", GetClientUserId(hBuilder));
-                SetEventInt(event, "object", _:TFObject_Sentry);
+                SetEventInt(event, "object", view_as<int>(TFObject_Sentry));
                 SetEventInt(event, "index", iSentry);
                 SetEventBool(event, "sourcemod", true);
                 FireEvent(event);

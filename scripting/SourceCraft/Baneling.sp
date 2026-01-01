@@ -129,7 +129,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
     {
         //Set Baneling Color
         int r,g,b;
-        if (TFTeam:GetClientTeam(client) == TFTeam_Red)
+        if (TFTeam GetClientTeam(client) == TFTeam_Red)
         { r = 255; g = 165; b = 0; }
         else
         { r = 0; g = 224; b = 208; }
@@ -219,7 +219,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
 
         //Set Baneling Color
         int r,g,b;
-        if (TFTeam:GetClientTeam(client) == TFTeam_Red)
+        if (TFTeam GetClientTeam(client) == TFTeam_Red)
         { r = 255; g = 165; b = 0; }
         else
         { r = 0; g = 224; b = 208; }

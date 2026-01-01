@@ -214,8 +214,8 @@ CreateCooldown(client, race, upgrade, float cooldown, const char[] name,
             WritePackCell(pack, race);
             WritePackCell(pack, upgrade);
             WritePackFloat(pack, GetGameTime() + cooldown);
-            WritePackCell(pack, _:type);
-            WritePackCell(pack, _:timer);
+            WritePackCell(pack, view_as<int>(type));
+            WritePackCell(pack, view_as<int>(timer));
             WritePackString(pack, name);
             WritePackString(pack, expireSound);
 
@@ -329,7 +329,7 @@ public Action CooldownExpireTimer(Handle timer,any pack)
         m_CooldownExpireUpgrade = upgrade;
         m_CooldownExpireType    = type;
 
-        int Action:result = Plugin_Continue;
+        int Action result = Plugin_Continue;
         Call_StartForward(g_OnCooldownExpiredHandle);
         Call_PushCell(index);
         Call_PushCell(race);
@@ -445,7 +445,7 @@ CooldownEvent(client, CooldownType:resetBits)
             if (remove || ((type & resetBits) != Cooldown_TimerOnly &&
                            expireTime > GetGameTime()))
             {
-                new Action:result = Plugin_Continue;
+                new Action result = Plugin_Continue;
                 Call_StartForward(g_OnCooldownExpiredHandle);
                 Call_PushCell(client);
                 Call_PushCell(race);
@@ -579,7 +579,7 @@ ResetCooldown(client, race, upgrade, bool notify)
             new CooldownType:type = CooldownType:ReadPackCell(pack);
             Handle timerHandle = Handle ReadPackCell(pack);
 
-            new Action:result = Plugin_Continue;
+            new Action result = Plugin_Continue;
             Call_StartForward(g_OnCooldownExpiredHandle);
             Call_PushCell(client);
             Call_PushCell(race);

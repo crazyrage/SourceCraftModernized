@@ -303,7 +303,7 @@ CheckPrefix(const char prefix[])
  * @param fmt: The format string for the message
  * @param ...: Format arguments (if any)
  * @noreturn
- * native TraceInto(const char class[], const char method[], const char fmt[], any:...);
+ * native TraceInto(const char class[], const char method[], const char fmt[], any ...);
  */
 public Native_TraceInto(Handle plugin,numParams)
 {
@@ -384,7 +384,7 @@ public Native_TraceInto(Handle plugin,numParams)
  * @param fmt: The format string for the message
  * @param ...: Format arguments (if any)
  * @noreturn
- * native TraceReturn(const char fmt[], any:...);
+ * native TraceReturn(const char fmt[], any ...);
  */
 public Native_TraceReturn(Handle plugin,numParams)
 {
@@ -451,7 +451,7 @@ public Native_TraceReturn(Handle plugin,numParams)
  * @param fmt: The format string for the message
  * @param ...: Format arguments (if any)
  * @noreturn
- * native Trace(const char fmt[], any:...);
+ * native Trace(const char fmt[], any ...);
  */
 public Native_TraceMessage(Handle plugin,numParams)
 {
@@ -502,7 +502,7 @@ public Native_TraceMessage(Handle plugin,numParams)
  * @param fmt: The format string for the message
  * @param ...: Format arguments (if any)
  * @noreturn
- * native TraceDump(const char fmt[], any:...);
+ * native TraceDump(const char fmt[], any ...);
  */
 public Native_TraceDump(Handle plugin,numParams)
 {

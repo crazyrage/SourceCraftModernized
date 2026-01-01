@@ -244,7 +244,7 @@ GiveCrystals(client, amount, const char[] phrase,
 {
     if (GetShopItemCount() >= 1 && GetClientCount() >= g_iMinPlayers)
     {
-        int Action:result = Plugin_Continue;
+        int Action result = Plugin_Continue;
         Call_StartForward(g_OnCrystalsGivenHandle);
         Call_PushCell(client);
         Call_PushCellRef(amount);
@@ -360,7 +360,7 @@ GiveVespene(client, amount, const char[] phrase,
 {
     if (GetShopItemCount() >= 1 && GetClientCount() >= g_iMinPlayers)
     {
-        int Action:result = Plugin_Continue;
+        int Action result = Plugin_Continue;
         Call_StartForward(g_OnVespeneGivenHandle);
         Call_PushCell(client);
         Call_PushCellRef(amount);

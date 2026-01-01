@@ -19,7 +19,7 @@
  * @param ...			Variable number of format parameters.
  * @noreturn
  */
-stock SQL_TQueryF(Handle database, SQLTCallback:callback, any data, DBPriority:priority=DBPrio_Normal, const char[] format, any:...) {
+stock SQL_TQueryF(Handle database, SQLTCallback:callback, any data, DBPriority priority=DBPrio_Normal, const char[] format, any ...) {
 
 	if (database == null) {
 		ThrowError("[SMLIB] Error: Invalid database handle.");
@@ -43,7 +43,7 @@ stock SQL_TQueryF(Handle database, SQLTCallback:callback, any data, DBPriority:p
  *						type conversion requested from the database,
  *						or no current result set.
  */
-stock SQL_FetchIntByName(Handle query, char[] fieldName, &DBResult:result=DBVal_Error) {
+stock SQL_FetchIntByName(Handle query, char[] fieldName, &DBResult result=DBVal_Error) {
 
 	int fieldNum;
 	SQL_FieldNameToNum(query, fieldName, fieldNum);
@@ -62,7 +62,7 @@ stock SQL_FetchIntByName(Handle query, char[] fieldName, &DBResult:result=DBVal_
  *						type conversion requested from the database,
  *						or no current result set.
  */
-stock bool SQL_FetchBoolByName(Handle query, char[] fieldName, &DBResult:result=DBVal_Error) {
+stock bool SQL_FetchBoolByName(Handle query, char[] fieldName, &DBResult result=DBVal_Error) {
 
 	return bool SQL_FetchIntByName(query, fieldName, result);
 }
@@ -78,7 +78,7 @@ stock bool SQL_FetchBoolByName(Handle query, char[] fieldName, &DBResult:result=
  *						type conversion requested from the database,
  *						or no current result set.
  */
-stock float SQL_FetchFloatByName(Handle query, char[] fieldName, &DBResult:result=DBVal_Error) {
+stock float SQL_FetchFloatByName(Handle query, char[] fieldName, &DBResult result=DBVal_Error) {
 
 	int fieldNum;
 	SQL_FieldNameToNum(query, fieldName, fieldNum);
@@ -99,7 +99,7 @@ stock float SQL_FetchFloatByName(Handle query, char[] fieldName, &DBResult:resul
  *						type conversion requested from the database,
  *						or no current result set.
  */
-stock SQL_FetchStringByName(Handle query, char[] fieldName, char[] buffer, maxlength, &DBResult:result=DBVal_Error) {
+stock SQL_FetchStringByName(Handle query, char[] fieldName, char[] buffer, maxlength, &DBResult result=DBVal_Error) {
 
 	int fieldNum;
 	SQL_FieldNameToNum(query, fieldName, fieldNum);

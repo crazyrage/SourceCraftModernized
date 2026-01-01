@@ -68,7 +68,7 @@ public int Native_War3_GetWardBehaviorByShortname(Handle plugin, int numParams)
 {
     char shortname[WARDSNAMELEN];
     GetNativeString(1,shortname,sizeof(shortname));
-    return _:GetWardBehaviorByShortname(shortname);
+    return view_as<int>(GetWardBehaviorByShortname)(shortname);
 }
 
 // Non Native getters :)

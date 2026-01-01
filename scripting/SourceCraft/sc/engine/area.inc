@@ -31,7 +31,7 @@ CreateAura(float distance, float int erval=1.0,
         {
             WritePackFloat(pack, distance);
             WritePackFloat(pack, int erval);
-            WritePackCell(pack, _:type);
+            WritePackCell(pack, view_as<int>(type));
             WritePackCell(pack, priority);
             WritePackString(pack, name);
 
@@ -77,7 +77,7 @@ CreateArea(client, race, upgrade, float distance, float int erval=1.0,
             WritePackCell(pack, upgrade);
             WritePackFloat(pack, distance);
             WritePackFloat(pack, int erval);
-            WritePackCell(pack, _:type);
+            WritePackCell(pack, view_as<int>(type));
             WritePackCell(pack, priority);
             WritePackString(pack, name);
 

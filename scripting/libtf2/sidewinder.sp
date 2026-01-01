@@ -74,7 +74,7 @@ public OnPluginStart()
     CreateConVar("sm_sidewinder_version", PLUGIN_VERSION, "sidewinder plugin version", FCVAR_DONTRECORD | FCVAR_REPLICATED | FCVAR_NOTIFY);
 
     char enableString[64];
-    IntToString(_:g_EnableFlags, enableString, sizeof(enableString));
+    IntToString(view_as<int>(g_EnableFlags), enableString, sizeof(enableString));
 
     g_cvarEnable = CreateConVar("sm_sidewinder_enable", enableString, "Set to 0 to disable homing or set bits to enable individual projectiles globally (1=sentry,2=rocket,4=energy,8=pipe,16=flare,32=arrow,64=syringe,128=bolt,256=bolt,512=ball,1024=jar,2048=milk");
 
@@ -538,7 +538,7 @@ findNewTarget(entity)
         }
 
         // Check with other plugins/forward (if any)
-        int Action:res = Plugin_Continue;
+        int Action res = Plugin_Continue;
         Call_StartForward(g_fwdOnSeek);
         Call_PushCell(owner);
         Call_PushCell(target);

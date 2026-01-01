@@ -207,7 +207,7 @@ stock Mutate(client, level, raceId, upgradeId, maxUpgradeID=-1,
     }
 }
 
-public Mutate_Selected(Handle menu,MenuAction:action,client,selection)
+public Mutate_Selected(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {

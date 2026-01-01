@@ -605,10 +605,10 @@ public Action Command_TripMine(client, args)
     GetConVarString(cvAdmin, adminFlag, sizeof(adminFlag));
     if (adminFlag[0] != '\0')
     {
-        int AdminFlag:flag;
+        int AdminFlag flag;
         if (FindFlagByChar(adminFlag[0], flag))
         {
-            new AdminId:aid = GetUserAdmin(client);
+            new AdminId aid = GetUserAdmin(client);
             if (aid == INVALID_ADMIN_ID || !GetAdminFlag(aid, flag, Access_Effective))
             {
                 PrintHintText(client, "%t", "notallowed");
@@ -645,7 +645,7 @@ bool SetMine(client)
         return false;
     }
 
-    int Action:res = Plugin_Continue;
+    int Action res = Plugin_Continue;
     Call_StartForward(fwdOnSetTripmine);
     Call_PushCell(client);
     Call_Finish(res);
@@ -1173,7 +1173,7 @@ mineExplode(mine_ent)
         GetEntPropVector(mine_ent, Prop_Send, "m_vecOrigin", vecPos);
 
         int owner = GetEntPropEnt(mine_ent, Prop_Send, "m_hOwnerEntity");
-        int Action:res = Plugin_Continue;
+        int Action res = Plugin_Continue;
         Call_StartForward(fwdOnTripmineExplode);
         Call_PushCell(owner);
         Call_Finish(res);

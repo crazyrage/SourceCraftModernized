@@ -28,7 +28,7 @@ Handle CTrie = null;
  * 
  * On error/Errors:		If the client is not connected an error will be thrown.
  */
-stock CPrintToChat(client, const char[] message, any:...) {
+stock CPrintToChat(client, const char[] message, any ...) {
 	CCheckTrie();
 	if(client <= 0 || client > MaxClients) {
 		ThrowError("Invalid client index %i", client);
@@ -52,7 +52,7 @@ stock CPrintToChat(client, const char[] message, any:...) {
  * @param message		Message (formatting rules).
  * @noreturn
  */
-stock CPrintToChatAll(const char[] message, any:...) {
+stock CPrintToChatAll(const char[] message, any ...) {
 	CCheckTrie();
 	char buffer[MAX_MESSAGE_LENGTH], char buffer2[MAX_MESSAGE_LENGTH];
 	for (int i = 1; i <= MaxClients; i++) {
@@ -79,7 +79,7 @@ stock CPrintToChatAll(const char[] message, any:...) {
  * 
  * On error/Errors:		If the client or author are not connected an error will be thrown
  */
-stock CPrintToChatEx(client, author, const char[] message, any:...) {
+stock CPrintToChatEx(client, author, const char[] message, any ...) {
 	CCheckTrie();
 	if(client <= 0 || client > MaxClients) {
 		ThrowError("Invalid client index %i", client);
@@ -111,7 +111,7 @@ stock CPrintToChatEx(client, author, const char[] message, any:...) {
  * 
  * On error/Errors:   If the author is not connected an error will be thrown.
  */
-stock CPrintToChatAllEx(author, const char[] message, any:...) {
+stock CPrintToChatAllEx(author, const char[] message, any ...) {
 	CCheckTrie();
 	if(author <= 0 || author > MaxClients) {
 		ThrowError("Invalid client index %i", author);

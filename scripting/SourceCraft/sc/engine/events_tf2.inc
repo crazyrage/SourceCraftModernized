@@ -586,7 +586,7 @@ public PlayerBuiltObject(Handle event,const char[] name,bool dontBroadcast)
             if (IsValidClient(index))
             {
                 new obj = GetEventInt(event,"index");
-                new TFObjectType:type = TFObjectType:GetEventInt(event,"object");
+                new TFObjectType type = TFObjectType GetEventInt(event,"object");
 
                 TraceInto("Events_TF2", "PlayerBuiltObject", "object=%d,type=%d,userid=%d,%D:%N", \
                           obj, type, userid,index, ValidClientIndex(index));
@@ -596,7 +596,7 @@ public PlayerBuiltObject(Handle event,const char[] name,bool dontBroadcast)
                     GiveObjectBuiltXP(index, type);
                     m_ObjectBuilt[obj] = index;
 
-                    new Action:result = Plugin_Continue;
+                    new Action result = Plugin_Continue;
                     Call_StartForward(g_OnPlayerBuiltObject);
                     Call_PushCell(event);
                     Call_PushCell(index);
@@ -621,7 +621,7 @@ public EventObjectDestroyed(Handle event,const char[] name,bool dontBroadcast)
     {
         int userid = GetEventInt(event,"userid");
         int index  = GetClientOfUserId(userid);
-        int TFObjectType:type = TFObjectType:GetEventInt(event,"objecttype");
+        int TFObjectType type = TFObjectType GetEventInt(event,"objecttype");
 
         int attacker = GetEventInt(event,"attacker"); // user ID who killed
         int attacker_index = GetClientOfUserId(attacker);
@@ -668,7 +668,7 @@ public EventObjectRemoved(Handle event,const char[] name,bool dontBroadcast)
         int index  = GetClientOfUserId(userid);
         if (index > 0)
         {
-            new TFObjectType:type = TFObjectType:GetEventInt(event,"objecttype");
+            new TFObjectType type = TFObjectType GetEventInt(event,"objecttype");
 
             TraceInto("Events_TF2", "EventObjectRemoved", "object=%d,type=%d,userid=%d,%D:%N", \
                     obj, type, userid,index, ValidClientIndex(index));
@@ -686,7 +686,7 @@ public EventObjectUpgraded(Handle event,const char[] name,bool dontBroadcast)
     {
         int userid = GetEventInt(event,"userid");
         int index  = GetClientOfUserId(userid);
-        int TFObjectType:type = TFObjectType:GetEventInt(event,"object");
+        int TFObjectType type = TFObjectType GetEventInt(event,"object");
         bool isBuilder = GetEventBool(event,"isbuilder");
 
         #if defined _TRACE
@@ -1130,7 +1130,7 @@ public EntityOutput_HealthKit(const char[] output, caller, activator, float dela
             SetSavedHealth(activator, GetClientHealth(activator));
         #endif
 
-        int Action:result = Plugin_Continue;
+        int Action result = Plugin_Continue;
         Call_StartForward(g_OnHealthUsedHandle);
         Call_PushCell(activator);
         Call_PushCell(caller);
@@ -1160,7 +1160,7 @@ public EntityOutput_OnAnimationBegun(const char[] output, caller, activator, flo
                             SetSavedHealth(index, GetClientHealth(index));
                         #endif
 
-                        new Action:result = Plugin_Continue;
+                        new Action result = Plugin_Continue;
                         Call_StartForward(g_OnCabinetUsedHandle);
                         Call_PushCell(index);
                         Call_PushCell(caller);
@@ -1184,7 +1184,7 @@ public TF2_OnWaitingForPlayersEnd()
 
 public Action EntityHurtEvent(Handle event,const char[] name,bool dontBroadcast)
 {
-    int Action:result = Plugin_Continue;
+    int Action result = Plugin_Continue;
     int attacker_index = GetClientOfUserId(GetEventInt(event,"attacker_player"));
     int victim_index = GetEventInt(event,"entindex");
     int damage = GetEventInt(event,"damageamount");
@@ -1257,7 +1257,7 @@ public EntityDeathEvent(Handle event,const char[] name,bool dontBroadcast)
 
     if (victim_index > 0)
     {
-        int Action:result;
+        int Action result;
         Call_StartForward(g_OnEntityDeathEventHandle);
         Call_PushCell(event);
         Call_PushCell(victim_index);
@@ -1308,7 +1308,7 @@ public EntityStunnedEvent(Handle event,const char[] name,bool dontBroadcast)
 
     if (victim_index > 0)
     {
-        int Action:result;
+        int Action result;
         Call_StartForward(g_OnEntityStunnedEventHandle);
         Call_PushCell(event);
         Call_PushCell(victim_index);

@@ -42,7 +42,7 @@ native War3_AddAuraSkillBuff(race_ID, skill_ID, W3Buff:buff, any values[],
 
 //is a buff index valid? X > 0 and X <  MaxBuffLoopLimitTemp
 stock ValidBuff(W3Buff:buffindex) {
-    if(_:buffindex>=0&&_:buffindex<MaxBuffLoopLimit) {
+    if(view_as<int>(buffindex)>=0&&view_as<int>(buffindex)<MaxBuffLoopLimit) {
         return true;
 
     }
@@ -271,7 +271,7 @@ stock W3ApplyBuffSimple(client,W3Buff:buffindex,raceid,any initialbuffvalue,floa
     if (pack != null)
     {
         WritePackCell(pack, client);
-        WritePackCell(pack, _:buffindex);
+        WritePackCell(pack, view_as<int>(buffindex));
         WritePackCell(pack, raceid);
     }
 }

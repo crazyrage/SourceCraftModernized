@@ -182,7 +182,7 @@ stock Entity_GetName(entity, char[] buffer, size)
  * @param name				The name you want to give.
  * @return					True on success, false otherwise.
  */
-stock Entity_SetName(entity, const char[] name, any:...)
+stock Entity_SetName(entity, const char[] name, any ...)
 {
 	char format[128];
 	VFormat(format, sizeof(format), name, 3);
@@ -237,7 +237,7 @@ stock Entity_GetTargetName(entity, char[] buffer, size)
  * @param name				The target name you want to set
  * @return					True on success, false otherwise.
  */
-stock Entity_SetTargetName(entity, const char[] name, any:...)
+stock Entity_SetTargetName(entity, const char[] name, any ...)
 {
 	char format[128];
 	VFormat(format, sizeof(format), name, 3);
@@ -265,7 +265,7 @@ stock Entity_GetGlobalName(entity, char[] buffer, size)
  * @param name				The global name you want to set.
  * @return					True on success, false otherwise.
  */
-stock Entity_SetGlobalName(entity, const char[] name, any:...)
+stock Entity_SetGlobalName(entity, const char[] name, any ...)
 {
 	char format[128];
 	VFormat(format, sizeof(format), name, 3);
@@ -293,7 +293,7 @@ stock Entity_GetParentName(entity, char[] buffer, size)
  * @param name				The parent name you want to set.
  * @return					True on success, false otherwise.
  */
-stock Entity_SetParentName(entity, const char[] name, any:...)
+stock Entity_SetParentName(entity, const char[] name, any ...)
 {
 	char format[128];
 	VFormat(format, sizeof(format), name, 3);
@@ -1791,7 +1791,7 @@ stock Entity_ChangeOverTime(entity, float int erval=0.1, Entity_ChangeOverTimeCa
 #if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 7
 	WritePackFunction(dataPack, valueCallback);
 #else
-	WritePackCell(dataPack, _:valueCallback);
+	WritePackCell(dataPack, view_as<int>(valueCallback));
 #endif
 	ResetPack(dataPack);
 	__smlib_Timer_ChangeOverTime(null,dataPack);
@@ -1830,7 +1830,7 @@ public Action __smlib_Timer_ChangeOverTime(Handle Timer, Handle dataPack)
 #if SOURCEMOD_V_MAJOR >= 1 && SOURCEMOD_V_MINOR >= 7
 	WritePackFunction(dataPack, callback);
 #else
-	WritePackCell(dataPack, _:callback);
+	WritePackCell(dataPack, view_as<int>(callback));
 #endif
 	ResetPack(dataPack);
 	CreateTimer(int erval,__smlib_Timer_ChangeOverTime,dataPack);

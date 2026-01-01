@@ -702,7 +702,7 @@ public Break(const char output[], caller, activator, float delay)
                                 {
                                     if (!TF2_IsPlayerUbercharged(target))
                                     {
-                                        new Action:res = Plugin_Continue;
+                                        new Action res = Plugin_Continue;
                                         Call_StartForward(fwdOnTNTBombed);
                                         Call_PushCell(caller);
                                         Call_PushCell(owner);
@@ -724,7 +724,7 @@ public Break(const char output[], caller, activator, float delay)
                                 }
                                 else
                                 {
-                                    new Action:res = Plugin_Continue;
+                                    new Action res = Plugin_Continue;
                                     Call_StartForward(fwdOnTNTBombed);
                                     Call_PushCell(caller);
                                     Call_PushCell(owner);

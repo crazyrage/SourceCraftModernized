@@ -30,13 +30,13 @@ enum TFExtObjectType
 
 #define TFOBJECT_COUNT 11
 
-#define TFObject_Unknown            (TFObjectType:TFExtObject_Unknown)
-#define TFObject_TeleporterEntry    (TFObjectType:TFExtObject_TeleporterEntry)
-#define TFObject_TeleporterExit     (TFObjectType:TFExtObject_TeleporterExit)
-#define TFObject_MiniSentry         (TFObjectType:TFExtObject_MiniSentry)
-#define TFObject_Amplifier          (TFObjectType:TFExtObject_Amplifier)
-#define TFObject_RepairNode         (TFObjectType:TFExtObject_RepairNode)
-#define TFObject_UpgradeStation     (TFObjectType:TFExtObject_UpgradeStation)
+#define TFObject_Unknown            (TFObjectType TFExtObject_Unknown)
+#define TFObject_TeleporterEntry    (TFObjectType TFExtObject_TeleporterEntry)
+#define TFObject_TeleporterExit     (TFObjectType TFExtObject_TeleporterExit)
+#define TFObject_MiniSentry         (TFObjectType TFExtObject_MiniSentry)
+#define TFObject_Amplifier          (TFObjectType TFExtObject_Amplifier)
+#define TFObject_RepairNode         (TFObjectType TFExtObject_RepairNode)
+#define TFObject_UpgradeStation     (TFObjectType TFExtObject_UpgradeStation)
 
 stock const char TF2_ObjectClassNames[/*TFExtObjectType*/][] =
 {

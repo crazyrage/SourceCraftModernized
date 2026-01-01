@@ -200,7 +200,7 @@ enum SocketOption {
  * @param arg		The argument set by SocketSetArg()
  * @noreturn
  */
-funcenum SocketConnectCB
+typeset SocketConnectCB
 {
     public(Handle socket, any arg)
 };
@@ -216,7 +216,7 @@ funcenum SocketConnectCB
  * @param any		arg			The argument set by SocketSetArg() for the listen-socket
  * @noreturn
  */
-funcenum SocketIncomingCB
+typeset SocketIncomingCB
 {
     public(Handle socket, Handle newSocket, const char[] remoteIP, remotePort, any arg)
 };
@@ -235,7 +235,7 @@ funcenum SocketIncomingCB
  * @param any		arg			The argument set by SocketSetArg() for the socket
  * @noreturn
  */
-funcenum SocketReceiveCB
+typeset SocketReceiveCB
 {
     public(Handle socket, const char[] receiveData, const dataSize, any arg)
 };
@@ -247,7 +247,7 @@ funcenum SocketReceiveCB
  * @param any		arg			The argument set by SocketSetArg() for the socket
  * @noreturn
  */
-funcenum SocketSendqueueEmptyCB
+typeset SocketSendqueueEmptyCB
 {
     public(Handle socket, any arg)
 };
@@ -261,7 +261,7 @@ funcenum SocketSendqueueEmptyCB
  * @param any		arg			The argument set by SocketSetArg() for the socket
  * @noreturn
  */
-funcenum SocketDisconnectCB
+typeset SocketDisconnectCB
 {
     public(Handle socket, any arg)
 };
@@ -277,7 +277,7 @@ funcenum SocketDisconnectCB
  * @param any		arg			The argument set by SocketSetArg() for the socket
  * @noreturn
  */
-funcenum SocketErrorCB
+typeset SocketErrorCB
 {
     public(Handle socket, const errorType, const errorNum, any arg)
 };

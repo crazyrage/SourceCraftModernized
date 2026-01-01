@@ -495,12 +495,12 @@ static stock Color_GetChatColorInfo(&index, &subject=CHATCOLOR_NOSUBJECT)
 
 				if (subject > 0 && subject <= MaxClients) {
 
-					if (GetClientTeam(subject) == _:type) {
+					if (GetClientTeam(subject) == view_as<int>(type)) {
 						newSubject = subject;
 					}
 				}
 				else if (subject == CHATCOLOR_NOSUBJECT) {
-					new client = Team_GetAnyClient(_:type);
+					new client = Team_GetAnyClient(view_as<int>(type));
 
 					if (client != -1) {
 						newSubject = client;

@@ -73,7 +73,7 @@ public OnEntityDestroyed(iEntity)
 	}
 }
 
-stock _:CreateLightEntity(iEntity)
+stock view_as<int>(CreateLightEntity)(iEntity)
 {
 	if (IsEntLimitReached())
 		return -1;
@@ -129,7 +129,7 @@ stock _:CreateLightEntity(iEntity)
 stock bool IsEntLimitReached(warn=20, critical=16, client=0, const char[] message="entity not created")
 	return EntitiesAvailable(warn, critical, client, message) < warn;
 
-stock _:EntitiesAvailable(warn=20, critical=16, client=0, const char[] message="entity not created")
+stock view_as<int>(EntitiesAvailable)(warn=20, critical=16, client=0, const char[] message="entity not created")
 {
 	int max = GetMaxEntities();
 	int count = GetEntityCount();

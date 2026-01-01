@@ -168,7 +168,7 @@ public Action PlagueVictimTimer(Handle timer, any client)
             IsClientInGame(m_PlagueInflicter[client]))
         {
             new PlagueType:plagueType = m_PlagueType[client];
-            new Immunity:immunity_flag = ((plagueType & UltimatePlague) == UltimatePlague)
+            new Immunity immunity_flag = ((plagueType & UltimatePlague) == UltimatePlague)
                                          ? Immunity_Upgrades : Immunity_Ultimates;
 
             if (GetImmunity(client,immunity_flag))
@@ -366,7 +366,7 @@ ExplodePlayer(client, inflicter=0, team=0, float radius=500.0, damage=800, build
 
         PrepareAndEmitSoundToAll(explodeWav,client);
 
-        int Immunity:immunity_flag;
+        int Immunity immunity_flag;
         if ((type & UltimateExplosion) == UltimateExplosion)
             immunity_flag = Immunity_Ultimates;
         else if ((type & UpgradeExplosion) == UpgradeExplosion)
@@ -565,7 +565,7 @@ stock TransmitInfection(to,from)
         strcopy(m_PlagueName[to], sizeof(m_PlagueName[]), m_PlagueName[from]);
 
         int r,g,b;
-        if (TFTeam:team == TFTeam_Red)
+        if (TFTeam team == TFTeam_Red)
         {
             r = 255;
             g = 60;
@@ -665,7 +665,7 @@ public int Native_PlagueInfect(Handle plugin,numParams)
             GetNativeString(7,m_PlagueName[index],sizeof(m_PlagueName[]));
 
             new r,b,g;
-            if (TFTeam:GetClientTeam(index) == TFTeam_Red)
+            if (TFTeam GetClientTeam(index) == TFTeam_Red)
             {
                 r = 255;
                 b = 100;

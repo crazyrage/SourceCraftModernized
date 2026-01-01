@@ -149,7 +149,7 @@ enum Openssl_Hash {
  * @ param any		data		Data passed to curl_easy_perform_thread()
  * @ noreturn
  */
-funcenum CURL_OnComplete
+typeset CURL_OnComplete
 {
 	public(Handle hndl, CURLcode code),
 	public(Handle hndl, CURLcode code , any data),
@@ -163,7 +163,7 @@ funcenum CURL_OnComplete
  * @ param any		data				Data passed to curl_easy_send_recv()
  * @ return 								SendRecv_Act
  */
-funcenum CURL_OnSend
+typeset CURL_OnSend
 {
 	SendRecv_Act public(Handle hndl, CURLcode code, const last_sent_dataSize),
 	SendRecv_Act public(Handle hndl, CURLcode code, const last_sent_dataSize, any data),
@@ -177,7 +177,7 @@ funcenum CURL_OnSend
  * @ param any		data		Data passed to curl_easy_send_recv()
  * @ return 						SendRecv_Act
  */
-funcenum CURL_OnReceive
+typeset CURL_OnReceive
 {
 	SendRecv_Act public(Handle hndl, CURLcode code, const char[] receiveData, const dataSize),
 	SendRecv_Act public(Handle hndl, CURLcode code, const char[] receiveData, const dataSize, any data),
@@ -190,14 +190,14 @@ funcenum CURL_OnReceive
  * @ param any		data		Data passed to Openssl_Hash_file()
  * @ noreturn
  */
-funcenum Openssl_Hash_Complete
+typeset Openssl_Hash_Complete
 {
 	public(const bool success, const char[] buffer),
 	public(const bool success, const char[] buffer, any data),
 }
 
 
-funcenum CURL_Function_CB
+typeset CURL_Function_CB
 {
 	// CURLOPT_WRITEFUNCTION
 	public(Handle hndl, const char[] buffer, const bytes, const nmemb),
@@ -243,8 +243,8 @@ native bool curl_easy_setopt_int(Handle hndl, CURLoption opt, value);
  * Set a curl option for CURLOPTTYPE_LONG type
  * @ example"
 	int opt[][2] = {
-		{_:CURLOPT_NOPROGRESS,1},
-		{_:CURLOPT_VERBOSE,0}
+		{view_as<int>(CURLOPT_NOPROGRESS),1},
+		{view_as<int>(CURLOPT_VERBOSE),0}
 	};
  *
  * @ param Handle		hndl		The handle of the curl to be used. May be null if not essential.

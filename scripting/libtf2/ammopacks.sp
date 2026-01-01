@@ -193,7 +193,7 @@ public Action Command_Ammopack(client, args)
     if (AmmopacksOn < 2)
         return Plugin_Handled;
 
-    int TFClassType:class = TF2_GetPlayerClass(client);
+    int TFClassType class = TF2_GetPlayerClass(client);
     if (class != TFClass_Engineer)
         return Plugin_Handled;
 
@@ -234,7 +234,7 @@ public Action Command_MetalAmount(client, args)
         return Plugin_Handled;
     }
 
-    int TFClassType:class = TF2_GetPlayerClass(target);
+    int TFClassType class = TF2_GetPlayerClass(target);
     if (class != TFClass_Engineer)
     {
         ReplyToCommand(client, "[SM] %t", "Not a Engineer", name);
@@ -347,7 +347,7 @@ public Action Event_PlayerDeath(Handle event, const char[] name, bool dontBroadc
     if (AmmopacksOn < 1 || AmmopacksOn == 2)
         return;
 
-    int TFClassType:class = TF2_GetPlayerClass(client);	
+    int TFClassType class = TF2_GetPlayerClass(client);	
     if (class != TFClass_Engineer)
         return;
 

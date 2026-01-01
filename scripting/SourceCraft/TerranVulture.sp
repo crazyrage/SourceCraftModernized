@@ -234,7 +234,7 @@ public Action OnRaceSelected(int client, int oldrace, int newrace)
             int nade_level=GetUpgradeLevel(client,raceID,nadeID);
             GiveNades(client, nade_level*2, nade_level*2,
                       nade_level*2, nade_level*2, false,
-                      DefaultNade, _:DamageFrom_Ultimates);
+                      DefaultNade, view_as<int>(DamageFrom_Ultimates));
         }
 
         if (IsValidClientAlive(client))
@@ -283,7 +283,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
             {
                 GiveNades(client, new_level*2, new_level*2,
                           new_level*2, new_level*2, false,
-                          DefaultNade, _:DamageFrom_Ultimates);
+                          DefaultNade, view_as<int>(DamageFrom_Ultimates));
             }
         }
         else if (upgrade==supplyID)

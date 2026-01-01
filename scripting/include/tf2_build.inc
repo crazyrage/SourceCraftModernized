@@ -89,7 +89,7 @@ stock BuildSentry(hBuilder, const float fOrigin[3], const float fAngle[3], iLeve
         SetEntProp(iSentry, Prop_Send, "m_bMiniBuilding", 				    bMini, 2);
         SetEntProp(iSentry, Prop_Send, "m_bShielded", 				        bShielded, 2);
         SetEntProp(iSentry, Prop_Send, "m_bPlayerControlled", 				bShielded, 2);
-        SetEntProp(iSentry, Prop_Send, "m_iObjectType", 				    _:TFObject_Sentry, 1);
+        SetEntProp(iSentry, Prop_Send, "m_iObjectType", 				    view_as<int>(TFObject_Sentry), 1);
         SetEntProp(iSentry, Prop_Send, "m_iUpgradeLevel", 			        iLevel, 4);
         SetEntProp(iSentry, Prop_Send, "m_iAmmoRockets", 				    iRockets, 4);
         SetEntProp(iSentry, Prop_Send, "m_iAmmoShells" , 				    iShells, 4);
@@ -140,7 +140,7 @@ stock BuildSentry(hBuilder, const float fOrigin[3], const float fAngle[3], iLeve
         if (event != null)
         {
             SetEventInt(event, "userid", GetClientUserId(hBuilder));
-            SetEventInt(event, "object", _:TFObject_Sentry);
+            SetEventInt(event, "object", view_as<int>(TFObject_Sentry));
             SetEventInt(event, "index", iSentry);
             SetEventBool(event, "sourcemod", true);
             FireEvent(event);
@@ -207,7 +207,7 @@ stock BuildDispenser(hBuilder, const float fOrigin[3], const float fAngle[3], iL
         SetEntProp(iDispenser, Prop_Send, "m_iHealth", 				            iHealth, 4);
         SetEntProp(iDispenser, Prop_Send, "m_iAmmoMetal", 				        iMetal, 4);
         SetEntProp(iDispenser, Prop_Send, "m_bDisabled", 				        iDisabled, 2);
-        SetEntProp(iDispenser, Prop_Send, "m_iObjectType", 			            _:TFObject_Dispenser, 1);
+        SetEntProp(iDispenser, Prop_Send, "m_iObjectType", 			            view_as<int>(TFObject_Dispenser), 1);
         SetEntProp(iDispenser, Prop_Send, "m_nSkin", 					        (iTeam-2), 1);
         SetEntProp(iDispenser, Prop_Send, "m_iUpgradeLevel", 			        iLevel, 4);
         SetEntProp(iDispenser, Prop_Send, "m_iObjectMode", 				        0, 2);
@@ -246,7 +246,7 @@ stock BuildDispenser(hBuilder, const float fOrigin[3], const float fAngle[3], iL
         if (event != null)
         {
             SetEventInt(event, "userid", GetClientUserId(hBuilder));
-            SetEventInt(event, "object", _:TFObject_Dispenser);
+            SetEventInt(event, "object", view_as<int>(TFObject_Dispenser));
             SetEventInt(event, "index", iDispenser);
             SetEventBool(event, "sourcemod", true);
             FireEvent(event);
@@ -287,7 +287,7 @@ stock BuildTeleporterEntry(hBuilder, const float fOrigin[3], const float fAngle[
         SetEntProp(iTeleporter, Prop_Data, "m_iMaxHealth", 				        iMaxHealth, 4);
         SetEntProp(iTeleporter, Prop_Send, "m_iHealth", 					    iHealth, 4);
         SetEntProp(iTeleporter, Prop_Send, "m_bDisabled", 				        iDisabled, 2);
-        SetEntProp(iTeleporter, Prop_Send, "m_iObjectType", 				    _:TFObject_Teleporter, 1);
+        SetEntProp(iTeleporter, Prop_Send, "m_iObjectType", 				    view_as<int>(TFObject_Teleporter), 1);
         SetEntProp(iTeleporter, Prop_Send, "m_nSkin", 					        (iTeam-2), 1);
         SetEntProp(iTeleporter, Prop_Send, "m_iUpgradeLevel", 			        iLevel, 4);
         SetEntProp(iTeleporter, Prop_Send, "m_iObjectMode", 				    0, TFObjectMode_Entrance);
@@ -327,7 +327,7 @@ stock BuildTeleporterEntry(hBuilder, const float fOrigin[3], const float fAngle[
         if (event != null)
         {
             SetEventInt(event, "userid", GetClientUserId(hBuilder));
-            SetEventInt(event, "object", _:TFObject_TeleporterEntry);
+            SetEventInt(event, "object", view_as<int>(TFObject_TeleporterEntry));
             SetEventInt(event, "index", iTeleporter);
             SetEventBool(event, "sourcemod", true);
             FireEvent(event);
@@ -367,7 +367,7 @@ stock BuildTeleporterExit(hBuilder, const float fOrigin[3], const float fAngle[3
         SetEntProp(iTeleporter, Prop_Data, "m_iMaxHealth", 				        iMaxHealth, 4);
         SetEntProp(iTeleporter, Prop_Send, "m_iHealth", 				        iHealth, 4);
         SetEntProp(iTeleporter, Prop_Send, "m_bDisabled", 				        iDisabled, 2);
-        SetEntProp(iTeleporter, Prop_Send, "m_iObjectType", 			        _:TFObject_Teleporter, 1);
+        SetEntProp(iTeleporter, Prop_Send, "m_iObjectType", 			        view_as<int>(TFObject_Teleporter), 1);
         SetEntProp(iTeleporter, Prop_Send, "m_nSkin", 					        (iTeam-2), 1);
         SetEntProp(iTeleporter, Prop_Send, "m_iUpgradeLevel", 			        iLevel, 4);
         SetEntProp(iTeleporter, Prop_Send, "m_iObjectMode", 				    1, TFObjectMode_Exit);
@@ -407,7 +407,7 @@ stock BuildTeleporterExit(hBuilder, const float fOrigin[3], const float fAngle[3
         if (event != null)
         {
             SetEventInt(event, "userid", GetClientUserId(hBuilder));
-            SetEventInt(event, "object", _:TFObject_TeleporterExit);
+            SetEventInt(event, "object", view_as<int>(TFObject_TeleporterExit));
             SetEventInt(event, "index", iTeleporter);
             SetEventBool(event, "sourcemod", true);
             FireEvent(event);

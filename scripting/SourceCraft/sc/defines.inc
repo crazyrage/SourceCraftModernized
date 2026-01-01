@@ -34,8 +34,8 @@
 // Utility to check a bit pattern
 #define IsSet(%1,%2)            ((%1 & %2) == %2)
 #define IsNotSet(%1,%2)         ((%1 & %2) != %2)
-#define Bit_IsSet(%1)           ((%1) != any:0)
-#define FlipBit_IsSet(%1)       ((%1) == any:0)
+#define Bit_IsSet(%1)           ((%1) != 0)
+#define FlipBit_IsSet(%1)       ((%1) == 0)
 
 // Race Energy Use Flags used by Set/GetRaceEnergyFlags() natives
 enum EnergyFlags (<<=1)

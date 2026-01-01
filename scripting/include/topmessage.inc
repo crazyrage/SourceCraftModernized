@@ -10,7 +10,7 @@
 #endif
 #define _topmessage_included
 
-stock SendTopMessage(client, level, time, r, g, b, a, char[] text, any:...)
+stock SendTopMessage(client, level, time, r, g, b, a, char[] text, any ...)
 {
 	char message[100];
 	VFormat(message,sizeof(message),text, 9);

@@ -648,7 +648,7 @@ stock SetSavedUpgradeLevel(client,race,upgrade,level)
     TraceReturn();
 }
 
-DataStatus:GetTechLoaded(client,Faction:techId)
+DataStatus:GetTechLoaded(client,Faction techId)
 {
     TraceInto("PlayerTracking", "GetTechLoaded", "client=%d:%N, techId=%d", \
               client, ValidClientIndex(client), techId);
@@ -665,7 +665,7 @@ DataStatus:GetTechLoaded(client,Faction:techId)
     return loaded;
 }
 
-stock SetTechLoaded(client,Faction:techId,loaded)
+stock SetTechLoaded(client,Faction techId,loaded)
 {
     TraceInto("PlayerTracking", "SetTechLoaded", "client=%d:%N, techId=%d, loaded=%d", \
               client, ValidClientIndex(client), techId, loaded);
@@ -680,7 +680,7 @@ stock SetTechLoaded(client,Faction:techId,loaded)
     TraceReturn();
 }
 
-stock GetTechCount(client,Faction:techId)
+stock GetTechCount(client,Faction techId)
 {
     TraceInto("PlayerTracking", "GetTechCount", "client=%d:%N, techId=%d", \
               client, ValidClientIndex(client), techId);
@@ -700,7 +700,7 @@ stock GetTechCount(client,Faction:techId)
     return count;
 }
 
-stock SetTechCount(client,Faction:techId, count)
+stock SetTechCount(client,Faction techId, count)
 {
     TraceInto("PlayerTracking", "GetTechCount", "client=%d:%N, techId=%d", \
               client, ValidClientIndex(client), techId);
@@ -715,7 +715,7 @@ stock SetTechCount(client,Faction:techId, count)
     TraceReturn();
 }
 
-IncrementTechCount(client,Faction:techId, amount)
+IncrementTechCount(client,Faction techId, amount)
 {
     TraceInto("PlayerTracking", "GetTechCount", "client=%d:%N, techId=%d", \
               client, ValidClientIndex(client), techId);
@@ -733,7 +733,7 @@ IncrementTechCount(client,Faction:techId, amount)
     TraceReturn();
 }
 
-GetTechLevel(client,Faction:techId)
+GetTechLevel(client,Faction techId)
 {
     TraceInto("PlayerTracking", "GetTechLevel", "client=%d:%N, techId=%d", \
               client, ValidClientIndex(client), techId);
@@ -753,7 +753,7 @@ GetTechLevel(client,Faction:techId)
     return level;
 }
 
-stock SetTechLevel(client,Faction:techId, level)
+stock SetTechLevel(client,Faction techId, level)
 {
     TraceInto("PlayerTracking", "GetTechLevel", "client=%d:%N, techId=%d", \
               client, ValidClientIndex(client), techId);
@@ -768,7 +768,7 @@ stock SetTechLevel(client,Faction:techId, level)
     TraceReturn();
 }
 
-IncrementTechLevel(client,Faction:techId, amount)
+IncrementTechLevel(client,Faction techId, amount)
 {
     TraceInto("PlayerTracking", "GetTechLevel", "client=%d:%N, techId=%d", \
               client, ValidClientIndex(client), techId);
@@ -1028,7 +1028,7 @@ ResetPlayer(client, bool clear)
     TraceInto("PlayerTracking", "ResetPlayer", "client=%d:%N", \
               client, ValidClientIndex(client));
 
-    int Settings:defaultSettings = Default_Settings;
+    int Settings defaultSettings = Default_Settings;
     
     if (!g_bShowUpgradeInfo)
         defaultSettings |= Show_Upgrade_Info;
@@ -1258,7 +1258,7 @@ ResetPlayer(client, bool clear)
                 {
                     new upgradePos = GetRaceInfoUpgradePos(upgrade);
                     SetArrayCell(raceInfo,upgradePos,0); // Upgrade level
-                    SetArrayCell(raceInfo,upgradePos+_:UPGRADEINFO_SAVED_LEVEL,-1); // Saved level in DB
+                    SetArrayCell(raceInfo,upgradePos+view_as<int>(UPGRADEINFO_SAVED_LEVEL),-1); // Saved level in DB
                 }
 
                 // Perform a sanity check of the race info.
@@ -1305,7 +1305,7 @@ ResetPlayer(client, bool clear)
         TraceCat("Array", "CreateArray playerArray[%d,TechData]=0x%08x", \
                  client, techData);
 
-        for (int Faction:techId=Generic;techId<Faction;techId++)
+        for (int Faction techId=Generic;techId<Faction;techId++)
         {
             Handle techInfo=CreateArray(); // Player's tech info
             PushArrayCell(techInfo,0); // Tech Count
@@ -1338,9 +1338,9 @@ ResetPlayer(client, bool clear)
     else
     {
         techDataCount=GetArraySize(techData);
-        for (int Faction:techId=Generic;techId<Faction:techDataCount;techId++)
+        for (int Faction techId=Generic;techId<Faction techDataCount;techId++)
         {
-            Handle techInfo=GetArrayCell(techData,_:techId); // Player's tech data
+            Handle techInfo=GetArrayCell(techData,view_as<int>(techId)); // Player's tech data
             if (techInfo != null)
             {
                 SetTechInfoCount(techInfo,0); // Tech Count
@@ -1368,7 +1368,7 @@ ResetPlayer(client, bool clear)
     }
 
     // Perform a sanity check of the tech data.
-    if (techDataCount != _:Faction)
+    if (techDataCount != view_as<int>(Faction))
     {
         LogError("ERROR: Player %d:%N's tech data got fubared! %d != %d",
                  client, ValidClientIndex(client), techDataCount, Faction);
@@ -1498,7 +1498,7 @@ float SumFloatClientProperty(client, PropInfo pindex)
         {
             Handle propInfo=GetArrayCell(propData,x);
             if (propInfo != null)
-                sum += float GetArrayCell(propInfo,_:pindex);
+                sum += float GetArrayCell(propInfo,view_as<int>(pindex));
         }
     }
     return sum;

@@ -6,7 +6,7 @@
  */
 
 Handle hTopAdminMenu = null;
-new TopMenuObject:hAdminMenu = INVALID_TOPMENUOBJECT;
+new TopMenuObject hAdminMenu = INVALID_TOPMENUOBJECT;
 
 InitAdminMenu()
 {
@@ -50,7 +50,7 @@ public OnAdminMenuReady(Handle topmenu)
 }
 
 // Handle s the SourceCraft category in the admin menu.
-public AdminCategoryHandler(Handle topmenu, TopMenuAction:action, TopMenuObject:object_id, param,
+public AdminCategoryHandler(Handle topmenu, TopMenuAction action, TopMenuObject object_id, param,
                             char[] buffer, maxlength)
 {
     if (action == TopMenuAction_DisplayTitle || action == TopMenuAction_DisplayOption)
@@ -60,7 +60,7 @@ public AdminCategoryHandler(Handle topmenu, TopMenuAction:action, TopMenuObject:
 }
 
 // Handle s the Admin Player item in the SourceCraft menu
-public AdminPlayerMenu(Handle topmenu, TopMenuAction:action, TopMenuObject:object_id, param, char[] buffer, maxlength)
+public AdminPlayerMenu(Handle topmenu, TopMenuAction action, TopMenuObject object_id, param, char[] buffer, maxlength)
 {
     if (action == TopMenuAction_DisplayOption)
     {
@@ -82,7 +82,7 @@ public Action AdminMenu(client,args)
     return Plugin_Handled;
 }
 
-public Admin_Selected(Handle menu,MenuAction:action,client,selection)
+public Admin_Selected(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -133,7 +133,7 @@ Admin_Player(client,target)
     DisplayMenu(adminMenu_Player,client,MENU_TIME_FOREVER);
 }
 
-public Admin_Player_Select(Handle menu,MenuAction:action,client,selection)
+public Admin_Player_Select(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -242,7 +242,7 @@ Admin_XP(client,target)
     }
 }
 
-public Admin_XP_Select(Handle menu,MenuAction:action,client,selection)
+public Admin_XP_Select(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -360,7 +360,7 @@ Admin_GiveShopItem(client,target)
     }
 }
 
-public Admin_Category_Selected(Handle menu,MenuAction:action,client,selection)
+public Admin_Category_Selected(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -434,7 +434,7 @@ public Admin_Category_Selected(Handle menu,MenuAction:action,client,selection)
         delete menu;
 }
 
-public Admin_Item_Selected(Handle menu,MenuAction:action,client,selection)
+public Admin_Item_Selected(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -518,18 +518,18 @@ Admin_SetRace(client,target)
         SetMenuExitButton(menu,true);
 
         int indexCount = GetRaceIndexCount();
-        int Faction:lastFaction = Unassigned;
+        int Faction lastFaction = Unassigned;
         for (int index=1; index < indexCount; index++)
         {
             Handle raceHandle = GetRaceIndexHandle(index);
-            new Faction:faction   = GetRaceFaction(raceHandle);
+            new Faction faction   = GetRaceFaction(raceHandle);
             if (faction != lastFaction)
             {
                 lastFaction = faction;
                 if (index < indexCount)
                 {
                     Handle nextHandle   = GetRaceIndexHandle(index+1);
-                    new Faction:nextFaction = GetRaceFaction(nextHandle);
+                    new Faction nextFaction = GetRaceFaction(nextHandle);
                     if (nextFaction != faction)
                     {
                         char item[ITEM_STRING_LENGTH];
@@ -566,7 +566,7 @@ Admin_SetRace(client,target)
     }
 }
 
-public Admin_Faction_Selected(Handle menu,MenuAction:action,client,selection)
+public Admin_Faction_Selected(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -580,7 +580,7 @@ public Admin_Faction_Selected(Handle menu,MenuAction:action,client,selection)
         if (index < 0)
             AdminFactionMenu(client, target, -index);
         else            
-            Admin_SetRace_Select(menu,MenuAction:action,client,selection);
+            Admin_SetRace_Select(menu,MenuAction action,client,selection);
     }
     else if (action == MenuAction_Cancel)
     {
@@ -591,7 +591,7 @@ public Admin_Faction_Selected(Handle menu,MenuAction:action,client,selection)
         delete menu;
 }
 
-public Admin_SetRace_Select(Handle menu,MenuAction:action,client,selection)
+public Admin_SetRace_Select(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -642,7 +642,7 @@ AdminFactionMenu(client, target, start)
     if (start > 0 && start < indexCount)
     {
         Handle menu      = CreateMenu(Admin_SetRace_Select);
-        int Faction:theFaction = GetRaceFaction(GetRaceIndexHandle(start));
+        int Faction theFaction = GetRaceFaction(GetRaceIndexHandle(start));
 
         char factionName[NAME_STRING_LENGTH];
         GetFactionName(theFaction,factionName,sizeof(factionName), client);
@@ -696,7 +696,7 @@ Admin_Level(client,target)
     }
 }
 
-public Admin_Level_Select(Handle menu,MenuAction:action,client,selection)
+public Admin_Level_Select(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -791,7 +791,7 @@ Admin_Crystals(client,target)
     }
 }
 
-public Admin_Crystals_Select(Handle menu,MenuAction:action,client,selection)
+public Admin_Crystals_Select(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -893,7 +893,7 @@ Admin_Vespene(client,target)
     }
 }
 
-public Admin_Vespene_Select(Handle menu,MenuAction:action,client,selection)
+public Admin_Vespene_Select(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -998,7 +998,7 @@ Admin_Energy(client,target)
     }
 }
 
-public Admin_Energy_Select(Handle menu,MenuAction:action,client,selection)
+public Admin_Energy_Select(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -1101,7 +1101,7 @@ Admin_Disable(client,target)
     }
 }
 
-public Admin_Disable_Confirm(Handle menu,MenuAction:action,client,selection)
+public Admin_Disable_Confirm(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {
@@ -1184,7 +1184,7 @@ Admin_Delete(client,target)
     }
 }
 
-public Admin_Delete_Confirm(Handle menu,MenuAction:action,client,selection)
+public Admin_Delete_Confirm(Handle menu,MenuAction action,client,selection)
 {
     if (action == MenuAction_Select)
     {

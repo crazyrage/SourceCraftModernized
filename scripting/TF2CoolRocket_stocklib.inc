@@ -33,7 +33,7 @@ enum Touch_t{
 //print to server in server`s language`s translation
 //this function is designed to save your finger against code like this
 //PrintToServer("%T%T%T", "smeffectitemshop:", LANG_SERVER, "attemp", LANG_SERVER, "main db connect", LANG_SERVER);
-stock PrintToServerT(const char[] format[], any:...){
+stock PrintToServerT(const char[] format[], any ...){
 
 	char txt[1024];
 	
@@ -44,7 +44,7 @@ stock PrintToServerT(const char[] format[], any:...){
 
 }
 
-stock LogErrorT(const char[] format[], any:...){
+stock LogErrorT(const char[] format[], any ...){
 
 	char txt[1024];
 	
@@ -542,7 +542,7 @@ stock sendHudMsg(client, channel, float x, float y, r1, g1, b1, a1, r2, g2, b2, 
 }
 
 //this made effect on css, but no effect at hl2mp
-stock sendKeyHintTextMsg(client, char[] msg[], any:...){
+stock sendKeyHintTextMsg(client, char[] msg[], any ...){
 	
 	int Handle hudhandle = null;
 	
@@ -570,7 +570,7 @@ stock sendKeyHintTextMsg(client, char[] msg[], any:...){
 }
 
 //it was same as PrintHintText, but it made differant effect at hl2mp, it can print short single line msg
-stock sendHintTextMsg(client, char[] msg[], any:...){
+stock sendHintTextMsg(client, char[] msg[], any ...){
 	
 	int Handle hudhandle = null;
 	
@@ -598,7 +598,7 @@ stock sendHintTextMsg(client, char[] msg[], any:...){
 }
 
 //this has no effect
-stock sendHudText(client, char[] msg[], any:...){
+stock sendHudText(client, char[] msg[], any ...){
 	
 	int Handle hudhandle = null;
 	
@@ -659,10 +659,10 @@ stock sendTextMsg(client, msgtype, const char[] msgname[], const char[] msg1[] =
 
 /*휴드와 소스모드 함수 매칭
 *DIALOG_ASKCONNECT = DisplayAskConnectBox
-*다른 타입들 = CreateDialog(client, Handle kv, DialogType:type);
+*다른 타입들 = CreateDialog(client, Handle kv, DialogType type);
 */
 //not so useful
-stock SendTopLeftText(client, r, g, b, a, level, time, const char[] text[], any:...){
+stock SendTopLeftText(client, r, g, b, a, level, time, const char[] text[], any ...){
 	
 	char message[100];
 	SetGlobalTransTarget(client);
@@ -696,7 +696,7 @@ stock SendTopLeftText(client, r, g, b, a, level, time, const char[] text[], any:
 }
 
 //세이텍스트올
-stock SayText2ToAll(client, const char[] message[], any:...){ 
+stock SayText2ToAll(client, const char[] message[], any ...){ 
 	
 	int Handle buffer = null;
 	
@@ -728,7 +728,7 @@ stock SayText2ToAll(client, const char[] message[], any:...){
 }
 
 //세이텍스트투
-stock SayText2To(client, target, const char[] message[], any:...){ 
+stock SayText2To(client, target, const char[] message[], any ...){ 
 	
 	int Handle buffer = StartMessageOne("SayText2", target);
 	
@@ -1209,7 +1209,7 @@ stock bool sendRawAudioToAll(client, const char[] sSound[255], iVoicePitch = 100
 //i dunno, what the hell is this magic number mean, i DUNNO!
 #define RADIOTEXT_MAGIC_NUMBER 3
 
-stock bool sendRadioTextTo(client, target, const char[] sText[255], any:...){
+stock bool sendRadioTextTo(client, target, const char[] sText[255], any ...){
 	
 	if(!isClientConnectedIngame(client)){
 		
@@ -1259,7 +1259,7 @@ stock bool sendRadioTextTo(client, target, const char[] sText[255], any:...){
 
 }
 
-stock bool sendRadioTextToAll(client, const char[] sText[255], any:...){
+stock bool sendRadioTextToAll(client, const char[] sText[255], any ...){
 	
 	if(!isClientConnectedIngame(client)){
 		
@@ -1315,7 +1315,7 @@ stock bool sendRadioTextToAll(client, const char[] sText[255], any:...){
 
 }
 
-stock bool sendRadioTextToTeam(client, team, const char[] sText[], any:...){
+stock bool sendRadioTextToTeam(client, team, const char[] sText[], any ...){
 	
 	if(!isClientConnectedIngame(client)){
 		

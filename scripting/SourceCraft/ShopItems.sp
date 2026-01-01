@@ -660,7 +660,7 @@ public OnItemPurchase(client,item)
             if (HasFragNades(client, 2) == 0)
             {
                 GiveNades(client, 1, 0, 1, 0, false, DefaultNade,
-                          _:DamageFrom_ShopItems);
+                          view_as<int>(DamageFrom_ShopItems));
 
                 // Make sure player knows how to use nades
                 PrintToChat(client, "[SC] Bind a key to +nade1 or +item1 to throw a frag nade");
@@ -669,8 +669,8 @@ public OnItemPurchase(client,item)
             }
             else
             {
-                AddFragNades(client, 1, _:DamageFrom_ShopItems);
-                AddSpecialNades(client, 1, _:DamageFrom_ShopItems);
+                AddFragNades(client, 1, view_as<int>(DamageFrom_ShopItems));
+                AddSpecialNades(client, 1, view_as<int>(DamageFrom_ShopItems));
             }
         }
         else
@@ -759,7 +759,7 @@ public OnItemPurchase(client,item)
     }
 
     TraceReturn();
-    return _:returnCode;
+    return view_as<int>(returnCode);
 }
 
 public OnPlayerSpawnEvent(Handle event, client, race)
@@ -899,7 +899,7 @@ public OnPlayerSpawnEvent(Handle event, client, race)
                     if (HasFragNades(client, 2) == 0)
                     {
                         GiveNades(client, 1, 0, 1, 0, false, DefaultNade,
-                                _:DamageFrom_ShopItems);
+                                view_as<int>(DamageFrom_ShopItems));
 
                         // Make sure player knows how to use nades
                         PrintToChat(client, "[SC] Bind a key to +nade1 or +item1 to throw a frag nade");
@@ -908,8 +908,8 @@ public OnPlayerSpawnEvent(Handle event, client, race)
                     }
                     else
                     {
-                        AddFragNades(client, 1, _:DamageFrom_ShopItems);
-                        AddSpecialNades(client, 1, _:DamageFrom_ShopItems);
+                        AddFragNades(client, 1, view_as<int>(DamageFrom_ShopItems));
+                        AddSpecialNades(client, 1, view_as<int>(DamageFrom_ShopItems));
                     }
                 }
             }
@@ -1365,7 +1365,7 @@ public OnCabinetUsed(client,entity)
     }
 }
 
-public OnImmunityInvoked(client, Immunity:immunity)
+public OnImmunityInvoked(client, Immunity immunity)
 {
     if ((immunity & Immunity_Silver) == Immunity_Silver)
         m_UsedSilver[client] = true;
@@ -1577,7 +1577,7 @@ public Action OnPlayerHurtEvent(Handle event, int victim_index, int victim_race,
                         SetVisibility(victim_index, BasicVisibility,
                                       .visibility=192, 
                                       .mode=RENDER_TRANSCOLOR,
-                                      .r=((GetClientTeam(victim_index) == _:TFTeam_Red) ? 255 : 0),
+                                      .r=((GetClientTeam(victim_index) == view_as<int>(TFTeam_Red)) ? 255 : 0),
                                       .g=128, .b=255, .apply=true);
 
                         CreateTimer(5.0,RestoreSpeed, GetClientUserId(victim_index),TIMER_FLAG_NO_MAPCHANGE);
@@ -1727,7 +1727,7 @@ public Action OnPlayerAssistEvent(Handle event, int victim_index, int victim_rac
                     SetVisibility(victim_index, BasicVisibility,
                                   .visibility=192, 
                                   .mode=RENDER_TRANSCOLOR,
-                                  .r=((GetClientTeam(victim_index) == _:TFTeam_Red) ? 255 : 0),
+                                  .r=((GetClientTeam(victim_index) == view_as<int>(TFTeam_Red)) ? 255 : 0),
                                   .g=128, .b=255, .apply=true);
 
                     CreateTimer(5.0,RestoreSpeed, GetClientUserId(victim_index),TIMER_FLAG_NO_MAPCHANGE);
@@ -2000,8 +2000,8 @@ public Action NadeTimer(Handle time, any userid)
         {
             if (m_NadesAvailable)
             {
-                AddFragNades(client, 1, _:DamageFrom_ShopItems);
-                AddSpecialNades(client, 1, _:DamageFrom_ShopItems);
+                AddFragNades(client, 1, view_as<int>(DamageFrom_ShopItems));
+                AddSpecialNades(client, 1, view_as<int>(DamageFrom_ShopItems));
             }
             else if (GameTypeIsCS())
                 GivePlayerItem(client,"weapon_hegrenade");

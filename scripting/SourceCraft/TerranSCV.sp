@@ -465,7 +465,7 @@ public Action OnRaceSelected(client,oldrace,newrace)
             int nade_level=GetUpgradeLevel(client,raceID,nadeID);
             GiveNades(client, nade_level, nade_level, nade_level,
                       nade_level, false, DefaultNade,
-                      _:DamageFrom_Ultimates);
+                      view_as<int>(DamageFrom_Ultimates));
         }
 
         if (m_AmpNodeAvailable)
@@ -569,7 +569,7 @@ public OnUpgradeLevelChanged(client,race,upgrade,new_level)
             {
                 GiveNades(client, new_level, new_level, new_level,
                           new_level, false, DefaultNade,
-                          _:DamageFrom_Ultimates);
+                          view_as<int>(DamageFrom_Ultimates));
             }
         }
         else if (upgrade==supplyID)
@@ -1280,7 +1280,7 @@ void BuildBattlecruiser(client)
     }
 }
 
-public Action OnAmplify(builder,client,TFCond:condition)
+public Action OnAmplify(builder,client,TFCond condition)
 {
     if (condition == TFCond_Buffed && builder > 0 && GetRace(builder) == raceID)
     {
